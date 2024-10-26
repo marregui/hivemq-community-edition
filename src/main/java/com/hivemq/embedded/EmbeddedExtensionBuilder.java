@@ -18,15 +18,15 @@ package com.hivemq.embedded;
 
 import com.hivemq.embedded.internal.EmbeddedExtensionBuilderImpl;
 import com.hivemq.extension.sdk.api.ExtensionMain;
-import com.hivemq.extension.sdk.api.annotations.DoNotImplement;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Florian Limpöck
  * @since CE 2020.5
  */
-@DoNotImplement
+
 public interface EmbeddedExtensionBuilder {
 
     /**

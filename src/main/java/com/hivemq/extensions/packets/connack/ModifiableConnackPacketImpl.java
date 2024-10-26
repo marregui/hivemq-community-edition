@@ -17,9 +17,9 @@ package com.hivemq.extensions.packets.connack;
 
 import com.google.common.base.Preconditions;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.hivemq.extension.sdk.api.packets.connack.ModifiableConnackPacket;
 import com.hivemq.extension.sdk.api.packets.connect.ConnackReasonCode;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -37,7 +37,7 @@ import static com.hivemq.mqtt.message.connack.CONNACK.SESSION_EXPIRY_NOT_SET;
  * @author Lukas Brandl
  * @author Silvio Giebl
  */
-@ThreadSafe
+
 public class ModifiableConnackPacketImpl implements ModifiableConnackPacket {
 
     private @NotNull ConnackReasonCode reasonCode;

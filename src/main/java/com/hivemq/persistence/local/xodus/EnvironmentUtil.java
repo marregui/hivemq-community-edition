@@ -16,7 +16,7 @@
 package com.hivemq.persistence.local.xodus;
 
 import com.hivemq.configuration.service.InternalConfigurations;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.migration.meta.PersistenceType;
 import jetbrains.exodus.env.EnvironmentConfig;
 import org.slf4j.Logger;

@@ -15,9 +15,9 @@
  */
 package com.hivemq.configuration.service.entity;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -29,7 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Georg Held
  * @since 3.0
  */
-@Immutable
+
 public class TcpListener implements Listener {
 
     private int port;

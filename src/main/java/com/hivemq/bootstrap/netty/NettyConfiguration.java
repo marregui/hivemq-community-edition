@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
+
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
@@ -27,7 +27,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Dominik Obermaier
  */
-@Immutable
+
 public class NettyConfiguration {
 
     private final Class<? extends ServerSocketChannel> serverSocketChannelClass;

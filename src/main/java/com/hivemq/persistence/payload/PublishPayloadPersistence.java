@@ -15,8 +15,8 @@
  */
 package com.hivemq.persistence.payload;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 
 public interface PublishPayloadPersistence {

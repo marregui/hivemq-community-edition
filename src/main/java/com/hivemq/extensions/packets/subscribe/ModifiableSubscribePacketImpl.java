@@ -17,8 +17,8 @@ package com.hivemq.extensions.packets.subscribe;
 
 import com.google.common.collect.ImmutableList;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+
 import com.hivemq.extension.sdk.api.packets.subscribe.ModifiableSubscribePacket;
 import com.hivemq.extension.sdk.api.packets.subscribe.ModifiableSubscription;
 import com.hivemq.extensions.packets.general.ModifiableUserPropertiesImpl;
@@ -32,7 +32,7 @@ import static com.hivemq.mqtt.message.subscribe.Mqtt5SUBSCRIBE.DEFAULT_NO_SUBSCR
  * @author Silvio Giebl
  * @since 4.2.0
  */
-@ThreadSafe
+
 public class ModifiableSubscribePacketImpl implements ModifiableSubscribePacket {
 
     private final @NotNull ImmutableList<ModifiableSubscriptionImpl> subscriptions;

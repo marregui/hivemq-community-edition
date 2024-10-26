@@ -15,9 +15,9 @@
  */
 package com.hivemq.extensions.packets.connack;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.connack.ConnackPacket;
 import com.hivemq.extension.sdk.api.packets.connect.ConnackReasonCode;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -36,7 +36,7 @@ import static com.hivemq.mqtt.message.connack.CONNACK.SESSION_EXPIRY_NOT_SET;
  * @author Silvio Giebl
  * @since 4.2.0
  */
-@Immutable
+
 public class ConnackPacketImpl implements ConnackPacket {
 
     final @NotNull ConnackReasonCode reasonCode;

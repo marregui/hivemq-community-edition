@@ -21,8 +21,8 @@ import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.ClientConnectionContext;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.pubcomp.PubcompInboundInterceptor;
 import com.hivemq.extension.sdk.api.interceptor.pubcomp.PubcompOutboundInterceptor;
 import com.hivemq.extension.sdk.api.interceptor.pubcomp.parameter.PubcompInboundInput;
@@ -419,7 +419,7 @@ public class PubcompInterceptorHandlerTest {
         public void onInboundPubcomp(
                 final @NotNull PubcompInboundInput pubcompInboundInput,
                 final @NotNull PubcompInboundOutput pubcompInboundOutput) {
-            @Immutable final ModifiablePubcompPacket pubcompPacket = pubcompInboundOutput.getPubcompPacket();
+             final ModifiablePubcompPacket pubcompPacket = pubcompInboundOutput.getPubcompPacket();
             pubcompPacket.setReasonString("modified");
         }
     }
@@ -462,7 +462,7 @@ public class PubcompInterceptorHandlerTest {
         public void onOutboundPubcomp(
                 final @NotNull PubcompOutboundInput pubcompOutboundInput,
                 final @NotNull PubcompOutboundOutput pubcompOutboundOutput) {
-            @Immutable final ModifiablePubcompPacket pubcompPacket = pubcompOutboundOutput.getPubcompPacket();
+             final ModifiablePubcompPacket pubcompPacket = pubcompOutboundOutput.getPubcompPacket();
             pubcompPacket.setReasonString("modified");
         }
     }

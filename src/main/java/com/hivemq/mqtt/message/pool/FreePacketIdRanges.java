@@ -18,9 +18,9 @@ package com.hivemq.mqtt.message.pool;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.hivemq.mqtt.message.pool.exception.MessageIdUnavailableException;
 import com.hivemq.mqtt.message.pool.exception.NoMessageIdAvailableException;
 
@@ -43,7 +43,7 @@ import com.hivemq.mqtt.message.pool.exception.NoMessageIdAvailableException;
  * href="https://github.com/hivemq/hivemq-mqtt-client/blob/master/src/main/java/com/hivemq/client/internal/util/Ranges.java">The
  * original implementation in the HiveMQ Java Client.</a>
  */
-@ThreadSafe
+
 public class FreePacketIdRanges {
 
     private static final int MIN_ALLOWED_MQTT_PACKET_ID = 1;

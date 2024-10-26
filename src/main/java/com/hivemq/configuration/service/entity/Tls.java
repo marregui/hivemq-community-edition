@@ -15,9 +15,9 @@
  */
 package com.hivemq.configuration.service.entity;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Christoph Schäbel
  * @since 3.0
  */
-@Immutable
+
 public class Tls {
 
     private final @NotNull String keystorePath;

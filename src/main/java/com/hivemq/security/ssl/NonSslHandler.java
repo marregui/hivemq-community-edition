@@ -16,7 +16,7 @@
 package com.hivemq.security.ssl;
 
 import com.google.inject.Inject;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;

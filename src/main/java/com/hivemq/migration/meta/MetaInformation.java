@@ -16,7 +16,7 @@
 package com.hivemq.migration.meta;
 
 
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Christoph Schäbel

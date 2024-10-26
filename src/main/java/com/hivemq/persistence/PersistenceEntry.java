@@ -15,14 +15,14 @@
  */
 package com.hivemq.persistence;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.util.ObjectMemoryEstimation;
 
 /**
  * @author Lukas Brandl
  */
-@Immutable
+
 public class PersistenceEntry<T extends Sizable> implements Sizable {
 
     private final long timestamp;

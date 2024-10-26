@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.payload;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.util.Exceptions;
 
 import java.util.Queue;

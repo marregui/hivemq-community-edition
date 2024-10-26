@@ -15,9 +15,9 @@
  */
 package com.hivemq.mqtt.message.disconnect;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.packets.disconnect.DisconnectPacketImpl;
 import com.hivemq.mqtt.message.MessageType;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
@@ -29,7 +29,7 @@ import com.hivemq.mqtt.message.reason.Mqtt5DisconnectReasonCode;
  * @author Florian Limpöck
  * @since 1.4
  */
-@Immutable
+
 public class DISCONNECT extends MqttMessageWithUserProperties.MqttMessageWithReasonCode<Mqtt5DisconnectReasonCode>
         implements Mqtt3DISCONNECT, Mqtt5DISCONNECT {
 

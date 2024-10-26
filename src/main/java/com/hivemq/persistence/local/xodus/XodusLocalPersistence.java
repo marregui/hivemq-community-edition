@@ -16,7 +16,7 @@
 package com.hivemq.persistence.local.xodus;
 
 import com.hivemq.exceptions.UnrecoverableException;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.FilePersistence;
 import com.hivemq.persistence.LocalPersistence;
 import com.hivemq.persistence.PersistenceStartup;

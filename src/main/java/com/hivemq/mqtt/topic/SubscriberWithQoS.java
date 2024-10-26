@@ -15,9 +15,9 @@
  */
 package com.hivemq.mqtt.topic;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.util.Bytes;
 
 import java.util.Objects;
@@ -28,7 +28,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * This represents a subscriber (client ID) with a Quality of Service Level
  */
-@Immutable
+
 public class SubscriberWithQoS implements Comparable<SubscriberWithQoS> {
 
     private final @NotNull String subscriber;

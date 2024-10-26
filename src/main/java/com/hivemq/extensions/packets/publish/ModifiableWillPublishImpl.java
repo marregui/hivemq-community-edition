@@ -17,9 +17,9 @@ package com.hivemq.extensions.packets.publish;
 
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.hivemq.extension.sdk.api.packets.publish.ModifiableWillPublish;
 
 import java.util.Objects;
@@ -30,7 +30,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  * @author Lukas Brandl
  * @author Silvio Giebl
  */
-@ThreadSafe
+
 public class ModifiableWillPublishImpl extends ModifiablePublishPacketImpl implements ModifiableWillPublish {
 
     private long willDelay;

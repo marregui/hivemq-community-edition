@@ -15,8 +15,8 @@
  */
 package com.hivemq.extensions.client;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.ClientContext;
 import com.hivemq.extension.sdk.api.interceptor.Interceptor;
 import com.hivemq.extension.sdk.api.interceptor.disconnect.DisconnectInboundInterceptor;
@@ -247,97 +247,97 @@ public class ClientContextPluginImpl extends AbstractOutput implements ClientCon
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull Interceptor> getAllInterceptors() {
+    public  @NotNull List<@NotNull Interceptor> getAllInterceptors() {
         return clientContext.getAllInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull PublishInboundInterceptor> getPublishInboundInterceptors() {
+    public  @NotNull List<@NotNull PublishInboundInterceptor> getPublishInboundInterceptors() {
         return clientContext.getPublishInboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull PublishOutboundInterceptor> getPublishOutboundInterceptors() {
+    public  @NotNull List<@NotNull PublishOutboundInterceptor> getPublishOutboundInterceptors() {
         return clientContext.getPublishOutboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull PubackInboundInterceptor> getPubackInboundInterceptors() {
+    public  @NotNull List<@NotNull PubackInboundInterceptor> getPubackInboundInterceptors() {
         return clientContext.getPubackInboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull PubackOutboundInterceptor> getPubackOutboundInterceptors() {
+    public  @NotNull List<@NotNull PubackOutboundInterceptor> getPubackOutboundInterceptors() {
         return clientContext.getPubackOutboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull PubrecInboundInterceptor> getPubrecInboundInterceptors() {
+    public  @NotNull List<@NotNull PubrecInboundInterceptor> getPubrecInboundInterceptors() {
         return clientContext.getPubrecInboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull PubrecOutboundInterceptor> getPubrecOutboundInterceptors() {
+    public  @NotNull List<@NotNull PubrecOutboundInterceptor> getPubrecOutboundInterceptors() {
         return clientContext.getPubrecOutboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull PubrelInboundInterceptor> getPubrelInboundInterceptors() {
+    public  @NotNull List<@NotNull PubrelInboundInterceptor> getPubrelInboundInterceptors() {
         return clientContext.getPubrelInboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull PubrelOutboundInterceptor> getPubrelOutboundInterceptors() {
+    public  @NotNull List<@NotNull PubrelOutboundInterceptor> getPubrelOutboundInterceptors() {
         return clientContext.getPubrelOutboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull PubcompInboundInterceptor> getPubcompInboundInterceptors() {
+    public  @NotNull List<@NotNull PubcompInboundInterceptor> getPubcompInboundInterceptors() {
         return clientContext.getPubcompInboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull PubcompOutboundInterceptor> getPubcompOutboundInterceptors() {
+    public  @NotNull List<@NotNull PubcompOutboundInterceptor> getPubcompOutboundInterceptors() {
         return clientContext.getPubcompOutboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull SubscribeInboundInterceptor> getSubscribeInboundInterceptors() {
+    public  @NotNull List<@NotNull SubscribeInboundInterceptor> getSubscribeInboundInterceptors() {
         return clientContext.getSubscribeInboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull SubackOutboundInterceptor> getSubackOutboundInterceptors() {
+    public  @NotNull List<@NotNull SubackOutboundInterceptor> getSubackOutboundInterceptors() {
         return clientContext.getSubackOutboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull UnsubscribeInboundInterceptor> getUnsubscribeInboundInterceptors() {
+    public  @NotNull List<@NotNull UnsubscribeInboundInterceptor> getUnsubscribeInboundInterceptors() {
         return clientContext.getUnsubscribeInboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull UnsubackOutboundInterceptor> getUnsubackOutboundInterceptors() {
+    public  @NotNull List<@NotNull UnsubackOutboundInterceptor> getUnsubackOutboundInterceptors() {
         return clientContext.getUnsubackOutboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull DisconnectInboundInterceptor> getDisconnectInboundInterceptors() {
+    public  @NotNull List<@NotNull DisconnectInboundInterceptor> getDisconnectInboundInterceptors() {
         return clientContext.getDisconnectInboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull DisconnectOutboundInterceptor> getDisconnectOutboundInterceptors() {
+    public  @NotNull List<@NotNull DisconnectOutboundInterceptor> getDisconnectOutboundInterceptors() {
         return clientContext.getDisconnectOutboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull PingReqInboundInterceptor> getPingReqInboundInterceptors() {
+    public  @NotNull List<@NotNull PingReqInboundInterceptor> getPingReqInboundInterceptors() {
         return clientContext.getPingReqInboundInterceptorsOfExtension(pluginClassloader);
     }
 
     @Override
-    public @Immutable @NotNull List<@NotNull PingRespOutboundInterceptor> getPingRespOutboundInterceptors() {
+    public  @NotNull List<@NotNull PingRespOutboundInterceptor> getPingRespOutboundInterceptors() {
         return clientContext.getPingRespOutboundInterceptorsOfExtension(pluginClassloader);
     }
 

@@ -17,8 +17,8 @@ package com.hivemq.extensions.packets.subscribe;
 
 import com.google.common.base.Preconditions;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.subscribe.ModifiableSubscription;
 import com.hivemq.extension.sdk.api.packets.subscribe.RetainHandling;
@@ -31,7 +31,7 @@ import com.hivemq.util.Topics;
  * @author Silvio Giebl
  * @since 4.2.0
  */
-@ThreadSafe
+
 public class ModifiableSubscriptionImpl implements ModifiableSubscription {
 
     private @NotNull String topicFilter;

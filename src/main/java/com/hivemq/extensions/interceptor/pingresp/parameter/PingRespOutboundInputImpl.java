@@ -15,8 +15,8 @@
  */
 package com.hivemq.extensions.interceptor.pingresp.parameter;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
 import com.hivemq.extension.sdk.api.interceptor.pingresp.parameter.PingRespOutboundInput;
@@ -28,7 +28,7 @@ import java.util.function.Supplier;
  * @author Robin Atherton
  * @author Silvio Giebl
  */
-@Immutable
+
 public class PingRespOutboundInputImpl
         implements PingRespOutboundInput, Supplier<PingRespOutboundInputImpl>, PluginTaskInput {
 

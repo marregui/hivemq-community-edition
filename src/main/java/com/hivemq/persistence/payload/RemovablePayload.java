@@ -15,14 +15,14 @@
  */
 package com.hivemq.persistence.payload;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
+
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Lukas Brandl
  */
-@Immutable
+
 public class RemovablePayload {
 
     private final long id;

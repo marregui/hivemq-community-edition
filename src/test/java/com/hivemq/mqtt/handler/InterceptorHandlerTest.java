@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.handler.ConnackOutboundInterceptorHandler;
 import com.hivemq.extensions.handler.ConnectInboundInterceptorHandler;
 import com.hivemq.extensions.handler.DisconnectInterceptorHandler;

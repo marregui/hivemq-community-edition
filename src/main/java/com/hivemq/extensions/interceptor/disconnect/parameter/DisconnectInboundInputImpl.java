@@ -15,8 +15,8 @@
  */
 package com.hivemq.extensions.interceptor.disconnect.parameter;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
 import com.hivemq.extension.sdk.api.interceptor.disconnect.parameter.DisconnectInboundInput;
@@ -27,7 +27,7 @@ import com.hivemq.extensions.packets.disconnect.DisconnectPacketImpl;
  * @author Robin Atherton
  * @author Silvio Giebl
  */
-@Immutable
+
 public class DisconnectInboundInputImpl implements DisconnectInboundInput, PluginTaskInput {
 
     private final @NotNull ClientInformation clientInformation;

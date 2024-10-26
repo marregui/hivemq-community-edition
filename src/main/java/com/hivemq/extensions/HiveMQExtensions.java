@@ -19,9 +19,9 @@ package com.hivemq.extensions;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.common.annotations.GuardedBy;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.hivemq.extension.sdk.api.client.parameter.ServerInformation;
 import com.hivemq.extensions.parameter.ExtensionStartOutputImpl;
 import com.hivemq.extensions.parameter.ExtensionStartStopInputImpl;
@@ -50,7 +50,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Georg Held
  * @author Silvio Giebl
  */
-@ThreadSafe
+
 @Singleton
 public class HiveMQExtensions {
 

@@ -15,14 +15,14 @@
  */
 package com.hivemq.extensions.auth.parameter;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Christoph Schäbel
  */
-@Immutable
+
 public class TopicPermissionImpl implements InternalTopicPermission {
 
     private final @NotNull String topic;

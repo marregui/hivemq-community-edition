@@ -15,9 +15,9 @@
  */
 package com.hivemq.extensions.packets.pubrel;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.pubrel.PubrelPacket;
 import com.hivemq.extension.sdk.api.packets.pubrel.PubrelReasonCode;
 import com.hivemq.extensions.packets.general.UserPropertiesImpl;
@@ -30,7 +30,7 @@ import java.util.Optional;
  * @author Yannick Weber
  * @author Silvio Giebl
  */
-@Immutable
+
 public class PubrelPacketImpl implements PubrelPacket {
 
     final int packetIdentifier;

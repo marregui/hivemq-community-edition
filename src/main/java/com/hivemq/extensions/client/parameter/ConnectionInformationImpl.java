@@ -17,8 +17,8 @@ package com.hivemq.extensions.client.parameter;
 
 import com.google.common.base.Preconditions;
 import com.hivemq.bootstrap.ClientConnectionContext;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.client.parameter.ClientTlsInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionAttributeStore;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;

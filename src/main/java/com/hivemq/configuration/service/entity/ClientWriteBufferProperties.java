@@ -15,14 +15,14 @@
  */
 package com.hivemq.configuration.service.entity;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
+
 
 /**
  * Allows the customization of write buffer behaviour.
  *
  * @since 3.3
  */
-@Immutable
+
 public class ClientWriteBufferProperties {
 
     private final int highThresholdBytes;

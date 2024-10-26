@@ -1,0 +1,45 @@
+/*
+ * Copyright 2018-present HiveMQ GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.hivemq.extension.sdk.api.auth.parameter;
+
+/**
+ * The enum is used to define how a client is affected by the overload protection.
+ *
+ * @author Lukas Brandl
+ * @since 4.2.0, CE 2020.1
+ */
+public enum OverloadProtectionThrottlingLevel {
+
+    /**
+     * The amount of PUBLISH messages that each client can send is limited based on the resources of the HiveMQ
+     * cluster.
+     *
+     * @since 4.2.0, CE 2020.1
+     */
+    DEFAULT,
+
+    /**
+     * The amount of PUBLISH messages that each client can send is NOT limited by the overload protection.
+     * <p>
+     * <b>ATTENTION:</b> Use this setting with extreme caution. Disabling the Overload Protection Mechanism potentially
+     * decreases the resiliency of HiveMQ against client misbehaviour. Disabling the overload protection may lead to
+     * {@link OutOfMemoryError}.
+     *
+     * @since 4.2.0, CE 2020.1
+     */
+    NONE
+}

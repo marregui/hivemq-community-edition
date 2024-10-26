@@ -31,8 +31,8 @@ import com.hivemq.configuration.service.entity.TlsTcpListener;
 import com.hivemq.configuration.service.entity.TlsWebsocketListener;
 import com.hivemq.configuration.service.entity.WebsocketListener;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.connection.ConnectionPersistence;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -275,7 +275,7 @@ public class HiveMQNettyBootstrap {
         return true;
     }
 
-    @Immutable
+
     private static class UpdateGivenFutureListener implements ChannelFutureListener {
 
         private final @NotNull BindInformation bindInformation;

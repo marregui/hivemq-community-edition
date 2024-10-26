@@ -16,7 +16,7 @@
 package com.hivemq.persistence.payload;
 
 import com.google.common.collect.ImmutableMap;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This class stores the counter for payload references in in-memory data structures.

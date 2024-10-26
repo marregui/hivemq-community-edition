@@ -22,7 +22,7 @@ import com.hivemq.configuration.service.entity.TlsTcpListener;
 import com.hivemq.configuration.service.entity.TlsWebsocketListener;
 import com.hivemq.configuration.service.entity.WebsocketListener;
 import com.hivemq.configuration.service.exception.ConfigurationValidationException;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 

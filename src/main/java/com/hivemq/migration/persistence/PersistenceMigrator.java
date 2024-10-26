@@ -17,7 +17,7 @@
 package com.hivemq.migration.persistence;
 
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.migration.MigrationUnit;
 import com.hivemq.migration.Migrations;
 import com.hivemq.migration.TypeMigration;

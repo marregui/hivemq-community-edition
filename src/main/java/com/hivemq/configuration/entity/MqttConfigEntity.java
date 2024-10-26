@@ -27,7 +27,7 @@ import com.hivemq.configuration.entity.mqtt.SharedSubscriptionsConfigEntity;
 import com.hivemq.configuration.entity.mqtt.SubscriptionIdentifierConfigEntity;
 import com.hivemq.configuration.entity.mqtt.TopicAliasConfigEntity;
 import com.hivemq.configuration.entity.mqtt.WildcardSubscriptionsConfigEntity;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

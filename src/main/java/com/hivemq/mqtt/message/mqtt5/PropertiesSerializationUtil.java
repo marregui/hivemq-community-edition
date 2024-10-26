@@ -17,7 +17,7 @@ package com.hivemq.mqtt.message.mqtt5;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.local.xodus.XodusUtils;
 import com.hivemq.util.Bytes;
 

@@ -15,9 +15,9 @@
  */
 package com.hivemq.extensions.packets.subscribe;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.subscribe.RetainHandling;
 import com.hivemq.extension.sdk.api.packets.subscribe.Subscription;
@@ -30,7 +30,7 @@ import java.util.Objects;
  * @author Silvio Giebl
  * @since 4.0.0
  */
-@Immutable
+
 public class SubscriptionImpl implements Subscription {
 
     final @NotNull String topicFilter;

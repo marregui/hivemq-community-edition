@@ -15,8 +15,8 @@
  */
 package com.hivemq.extensions.services.auth;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.auth.provider.AuthorizerProvider;
 
 import java.util.Map;
@@ -33,7 +33,7 @@ public interface Authorizers {
      *
      * @return a priority ordered map of instantiated Authorizers with their extension id
      */
-    @Immutable @NotNull Map<@NotNull String, @NotNull AuthorizerProvider> getAuthorizerProviderMap();
+     @NotNull Map<@NotNull String, @NotNull AuthorizerProvider> getAuthorizerProviderMap();
 
     /**
      * @return true if any {@link AuthorizerProvider} have been

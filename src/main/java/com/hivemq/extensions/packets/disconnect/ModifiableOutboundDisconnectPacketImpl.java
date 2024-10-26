@@ -17,9 +17,9 @@ package com.hivemq.extensions.packets.disconnect;
 
 import com.google.common.base.Preconditions;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.hivemq.extension.sdk.api.packets.disconnect.DisconnectReasonCode;
 import com.hivemq.extension.sdk.api.packets.disconnect.ModifiableOutboundDisconnectPacket;
 import com.hivemq.extensions.packets.general.ModifiableUserPropertiesImpl;
@@ -34,7 +34,7 @@ import java.util.Optional;
  * @author Robin Atherton
  * @author Silvio Giebl
  */
-@ThreadSafe
+
 public class ModifiableOutboundDisconnectPacketImpl implements ModifiableOutboundDisconnectPacket {
 
     private @NotNull DisconnectReasonCode reasonCode;

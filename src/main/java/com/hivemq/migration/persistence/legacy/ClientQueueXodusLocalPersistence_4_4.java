@@ -19,7 +19,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.configuration.service.InternalConfigurations;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.migration.persistence.legacy.serializer.ClientQueuePersistenceSerializer_4_4;
 import com.hivemq.mqtt.message.MessageWithID;
 import com.hivemq.persistence.PersistenceStartup;

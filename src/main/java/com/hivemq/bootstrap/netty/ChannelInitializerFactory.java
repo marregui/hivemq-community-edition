@@ -21,7 +21,7 @@ import com.hivemq.bootstrap.netty.initializer.TlsTcpChannelInitializer;
 import com.hivemq.bootstrap.netty.initializer.TlsWebsocketChannelInitializer;
 import com.hivemq.bootstrap.netty.initializer.WebsocketChannelInitializer;
 import com.hivemq.configuration.service.entity.Listener;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Interface for {@link ChannelInitializerFactoryImpl}

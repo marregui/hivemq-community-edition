@@ -15,8 +15,8 @@
  */
 package com.hivemq.persistence.local.xodus.clientsession;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
 import com.hivemq.mqtt.message.subscribe.Mqtt5SUBSCRIBE;
@@ -43,7 +43,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @author Dominik Obermaier
  * @author Christoph Schäbel
  */
-@ThreadSafe
+
 public class ClientSessionSubscriptionXodusSerializer {
 
     /**
@@ -54,7 +54,7 @@ public class ClientSessionSubscriptionXodusSerializer {
      *         <code>Topiclength|Topicstring(UTF-8)|Timestamp|QoS|ID|Flags|RetainHandling</code>
      * @throws NullPointerException if the given Topic is <code>null</code>
      */
-    @ThreadSafe
+    
     public byte[] serializeValue(@NotNull final Topic topic, final long timestamp, final long id) {
 
         checkNotNull(topic, "Topic must not be null");
@@ -115,7 +115,7 @@ public class ClientSessionSubscriptionXodusSerializer {
      * @param topic the topic to serialize. Must not be <code>null</code>
      * @return a byte array with the layout of <code>Topiclength|Topicstring(UTF-8)</code>
      */
-    @ThreadSafe
+    
     public byte[] serializeTopic(@NotNull final String topic) {
         checkNotNull(topic, "Topic must not be null");
 
@@ -139,7 +139,7 @@ public class ClientSessionSubscriptionXodusSerializer {
      * @throws NullPointerException     If the given byte array is <code>null</code>
      * @throws IllegalArgumentException if the byte array has a length of 0.
      */
-    @ThreadSafe
+    
     public Topic deserializeValue(@NotNull final byte[] bytes) {
 
         checkNotNull(bytes, "Bytes must not be null");

@@ -15,8 +15,8 @@
  */
 package com.hivemq.extensions.interceptor.suback.parameter;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
 import com.hivemq.extension.sdk.api.interceptor.suback.parameter.SubackOutboundInput;
@@ -27,7 +27,7 @@ import com.hivemq.extensions.packets.suback.SubackPacketImpl;
  * @author Robin Atherton
  * @author Silvio Giebl
  */
-@Immutable
+
 public class SubackOutboundInputImpl implements SubackOutboundInput, PluginTaskInput {
 
     private final @NotNull ClientInformation clientInformation;

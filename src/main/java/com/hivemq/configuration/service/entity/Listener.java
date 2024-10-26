@@ -15,7 +15,7 @@
  */
 package com.hivemq.configuration.service.entity;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A marker interface for a listener. Any listener implementation must implement this interface.

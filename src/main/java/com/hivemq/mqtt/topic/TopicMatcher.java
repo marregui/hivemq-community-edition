@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.topic;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A topic matcher which is useful if you want to match topics manually if they match to specific wildcard topics

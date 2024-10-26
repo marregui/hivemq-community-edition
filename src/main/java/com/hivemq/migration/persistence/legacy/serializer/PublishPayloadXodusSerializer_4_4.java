@@ -15,7 +15,7 @@
  */
 package com.hivemq.migration.persistence.legacy.serializer;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.migration.persistence.legacy.PublishPayloadXodusLocalPersistence_4_4.KeyPair;
 import com.hivemq.util.Bytes;
 

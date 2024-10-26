@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package com.hivemq.security.exception;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Christoph Schäbel

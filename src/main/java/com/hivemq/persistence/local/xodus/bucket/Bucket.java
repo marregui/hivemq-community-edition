@@ -15,14 +15,14 @@
  */
 package com.hivemq.persistence.local.xodus.bucket;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import jetbrains.exodus.env.Environment;
 import jetbrains.exodus.env.Store;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Immutable
+
 public class Bucket {
 
     private final @NotNull Environment environment;

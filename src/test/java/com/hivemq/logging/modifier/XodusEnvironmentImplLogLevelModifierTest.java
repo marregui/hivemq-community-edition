@@ -22,7 +22,7 @@ import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
 import com.hivemq.bootstrap.LoggingBootstrap;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.logging.LogLevelModifierTurboFilter;
 import jetbrains.exodus.env.EnvironmentImpl;
 import org.junit.After;

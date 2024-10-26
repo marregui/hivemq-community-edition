@@ -15,8 +15,8 @@
  */
 package com.hivemq.extensions.interceptor.connack.parameter;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
 import com.hivemq.extension.sdk.api.interceptor.connack.parameter.ConnackOutboundInput;
@@ -28,7 +28,7 @@ import com.hivemq.extensions.packets.connack.ConnackPacketImpl;
  * @author Silvio Giebl
  * @since 4.2.0
  */
-@Immutable
+
 public class ConnackOutboundInputImpl implements ConnackOutboundInput, PluginTaskInput {
 
     private final @NotNull ClientInformation clientInformation;

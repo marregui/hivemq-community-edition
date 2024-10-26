@@ -18,9 +18,9 @@ package com.hivemq.extensions.packets.publish;
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.ImmutableIntArray;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.publish.ModifiablePublishPacket;
 import com.hivemq.extension.sdk.api.packets.publish.PayloadFormatIndicator;
@@ -42,7 +42,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Silvio Giebl
  * @since 4.0.0
  */
-@ThreadSafe
+
 public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
 
     @NotNull String topic;

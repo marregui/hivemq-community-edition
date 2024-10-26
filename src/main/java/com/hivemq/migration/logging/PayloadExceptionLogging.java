@@ -17,8 +17,8 @@ package com.hivemq.migration.logging;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.migration.Migrations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

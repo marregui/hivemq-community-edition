@@ -74,8 +74,6 @@ repositories {
 }
 
 dependencies {
-    api(libs.hivemq.extensionSdk)
-
     // netty
     implementation(libs.netty.buffer)
     implementation(libs.netty.codec)
@@ -139,6 +137,8 @@ dependencies {
 
     /* primitive data structures */
     implementation(libs.eclipse.collections)
+
+    implementation(libs.jetbrains.annotations)
 }
 
 /* ******************** test ******************** */
@@ -154,6 +154,7 @@ dependencies {
     testImplementation(libs.wiremock.jre8.standalone)
     testImplementation(libs.javassist)
     testImplementation(libs.awaitility)
+    testImplementation(libs.jetbrains.annotations)
     testImplementation(libs.stefanBirkner.systemRules) {
         exclude("junit", "junit-dep")
     }

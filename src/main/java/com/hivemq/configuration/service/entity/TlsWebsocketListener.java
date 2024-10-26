@@ -16,9 +16,9 @@
 package com.hivemq.configuration.service.entity;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Christoph Schaebel
  * @since 3.0
  */
-@Immutable
+
 public class TlsWebsocketListener extends WebsocketListener implements TlsListener {
 
     private final @NotNull Tls tls;

@@ -18,9 +18,9 @@ package com.hivemq.mqtt.message.mqtt5;
 import com.google.common.base.Preconditions;
 import com.hivemq.codec.encoder.mqtt5.MqttBinaryData;
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.general.UserProperty;
 import io.netty.buffer.ByteBuf;
 
@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets;
  * @author Silvio Giebl
  * @author Lukas Brandl
  */
-@Immutable
+
 public class MqttUserProperty implements UserProperty {
 
     /**

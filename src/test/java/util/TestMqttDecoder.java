@@ -39,7 +39,7 @@ import com.hivemq.codec.decoder.mqtt5.Mqtt5SubscribeDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5UnsubscribeDecoder;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.limitation.TopicAliasLimiterImpl;
 import com.hivemq.logging.EventLog;
 import com.hivemq.metrics.MetricsHolder;

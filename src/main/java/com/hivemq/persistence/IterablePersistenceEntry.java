@@ -15,8 +15,8 @@
  */
 package com.hivemq.persistence;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.util.ObjectMemoryEstimation;
 
 import java.util.Collection;
@@ -24,7 +24,7 @@ import java.util.Collection;
 /**
  * @author Florian Limpöck
  */
-@Immutable
+
 public class IterablePersistenceEntry<T extends Collection<? extends Sizable>> implements Sizable {
 
     private final long timestamp;

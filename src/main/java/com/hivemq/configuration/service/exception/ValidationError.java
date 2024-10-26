@@ -15,14 +15,14 @@
  */
 package com.hivemq.configuration.service.exception;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
+
 
 /**
  * A concrete validation error
  *
  * @author Dominik Obermaier
  */
-@Immutable
+
 public class ValidationError {
 
     private final String message;

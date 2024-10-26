@@ -17,8 +17,8 @@ package com.hivemq.mqtt.message.unsubscribe;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.packets.unsubscribe.UnsubscribePacketImpl;
 import com.hivemq.mqtt.message.MessageType;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
@@ -33,7 +33,7 @@ import java.util.List;
  * @author Florian Limpöck
  * @since 1.4
  */
-@Immutable
+
 public class UNSUBSCRIBE extends MqttMessageWithUserProperties implements Mqtt3UNSUBSCRIBE, Mqtt5UNSUBSCRIBE {
 
     private final ImmutableList<String> topics;

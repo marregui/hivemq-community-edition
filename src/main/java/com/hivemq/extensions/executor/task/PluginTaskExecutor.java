@@ -23,9 +23,9 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.Striped;
 import com.hivemq.common.annotations.GuardedBy;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.hivemq.extensions.ioc.annotation.PluginTaskQueue;
 import com.hivemq.util.Exceptions;
 import com.hivemq.util.ThreadFactoryUtil;
@@ -56,7 +56,7 @@ import java.util.function.Function;
  *
  * @author Christoph Schäbel
  */
-@ThreadSafe
+
 public class PluginTaskExecutor {
 
     private static final @NotNull AtomicInteger COUNTER = new AtomicInteger();

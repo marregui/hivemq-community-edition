@@ -32,7 +32,7 @@ import com.hivemq.configuration.service.impl.PersistenceConfigurationServiceImpl
 import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.statistics.UsageStatisticsConfigImpl;
 import com.hivemq.util.EnvVarUtil;
 

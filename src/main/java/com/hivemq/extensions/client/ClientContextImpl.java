@@ -17,8 +17,8 @@ package com.hivemq.extensions.client;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Streams;
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.Interceptor;
 import com.hivemq.extension.sdk.api.interceptor.disconnect.DisconnectInboundInterceptor;
 import com.hivemq.extension.sdk.api.interceptor.disconnect.DisconnectOutboundInterceptor;
@@ -235,7 +235,7 @@ public class ClientContextImpl {
         pingRespOutbounds = removeInterceptor(pingRespOutbounds, interceptor);
     }
 
-    public @Immutable @NotNull List<@NotNull Interceptor> getAllInterceptorsOfExtension(
+    public  @NotNull List<@NotNull Interceptor> getAllInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return streamAllInterceptors().filter(interceptor -> interceptor.getClass()
@@ -243,7 +243,7 @@ public class ClientContextImpl {
                 .equals(extensionClassLoader)).collect(ImmutableList.toImmutableList());
     }
 
-    public @Immutable @NotNull List<@NotNull Interceptor> getAllInterceptors() {
+    public  @NotNull List<@NotNull Interceptor> getAllInterceptors() {
         return streamAllInterceptors().sorted(Comparator.comparingInt(this::getExtensionPriority).reversed())
                 .collect(ImmutableList.toImmutableList());
     }
@@ -269,183 +269,183 @@ public class ClientContextImpl {
                 pingRespOutbounds.stream());
     }
 
-    public @Immutable @NotNull List<@NotNull PublishInboundInterceptor> getPublishInboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull PublishInboundInterceptor> getPublishInboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(publishInbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull PublishInboundInterceptor> getPublishInboundInterceptors() {
+    public  @NotNull List<@NotNull PublishInboundInterceptor> getPublishInboundInterceptors() {
         return publishInbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull PublishOutboundInterceptor> getPublishOutboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull PublishOutboundInterceptor> getPublishOutboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(publishOutbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull PublishOutboundInterceptor> getPublishOutboundInterceptors() {
+    public  @NotNull List<@NotNull PublishOutboundInterceptor> getPublishOutboundInterceptors() {
         return publishOutbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull PubackInboundInterceptor> getPubackInboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull PubackInboundInterceptor> getPubackInboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(pubackInbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull PubackInboundInterceptor> getPubackInboundInterceptors() {
+    public  @NotNull List<@NotNull PubackInboundInterceptor> getPubackInboundInterceptors() {
         return pubackInbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull PubackOutboundInterceptor> getPubackOutboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull PubackOutboundInterceptor> getPubackOutboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(pubackOutbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull PubackOutboundInterceptor> getPubackOutboundInterceptors() {
+    public  @NotNull List<@NotNull PubackOutboundInterceptor> getPubackOutboundInterceptors() {
         return pubackOutbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull PubrecInboundInterceptor> getPubrecInboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull PubrecInboundInterceptor> getPubrecInboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(pubrecInbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull PubrecInboundInterceptor> getPubrecInboundInterceptors() {
+    public  @NotNull List<@NotNull PubrecInboundInterceptor> getPubrecInboundInterceptors() {
         return pubrecInbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull PubrecOutboundInterceptor> getPubrecOutboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull PubrecOutboundInterceptor> getPubrecOutboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(pubrecOutbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull PubrecOutboundInterceptor> getPubrecOutboundInterceptors() {
+    public  @NotNull List<@NotNull PubrecOutboundInterceptor> getPubrecOutboundInterceptors() {
         return pubrecOutbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull PubrelInboundInterceptor> getPubrelInboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull PubrelInboundInterceptor> getPubrelInboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(pubrelInbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull PubrelInboundInterceptor> getPubrelInboundInterceptors() {
+    public  @NotNull List<@NotNull PubrelInboundInterceptor> getPubrelInboundInterceptors() {
         return pubrelInbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull PubrelOutboundInterceptor> getPubrelOutboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull PubrelOutboundInterceptor> getPubrelOutboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(pubrelOutbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull PubrelOutboundInterceptor> getPubrelOutboundInterceptors() {
+    public  @NotNull List<@NotNull PubrelOutboundInterceptor> getPubrelOutboundInterceptors() {
         return pubrelOutbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull PubcompInboundInterceptor> getPubcompInboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull PubcompInboundInterceptor> getPubcompInboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(pubcompInbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull PubcompInboundInterceptor> getPubcompInboundInterceptors() {
+    public  @NotNull List<@NotNull PubcompInboundInterceptor> getPubcompInboundInterceptors() {
         return pubcompInbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull PubcompOutboundInterceptor> getPubcompOutboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull PubcompOutboundInterceptor> getPubcompOutboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(pubcompOutbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull PubcompOutboundInterceptor> getPubcompOutboundInterceptors() {
+    public  @NotNull List<@NotNull PubcompOutboundInterceptor> getPubcompOutboundInterceptors() {
         return pubcompOutbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull SubscribeInboundInterceptor> getSubscribeInboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull SubscribeInboundInterceptor> getSubscribeInboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(subscribeInbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull SubscribeInboundInterceptor> getSubscribeInboundInterceptors() {
+    public  @NotNull List<@NotNull SubscribeInboundInterceptor> getSubscribeInboundInterceptors() {
         return subscribeInbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull SubackOutboundInterceptor> getSubackOutboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull SubackOutboundInterceptor> getSubackOutboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(subackOutbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull SubackOutboundInterceptor> getSubackOutboundInterceptors() {
+    public  @NotNull List<@NotNull SubackOutboundInterceptor> getSubackOutboundInterceptors() {
         return subackOutbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull UnsubscribeInboundInterceptor> getUnsubscribeInboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull UnsubscribeInboundInterceptor> getUnsubscribeInboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(unsubscribeInbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull UnsubscribeInboundInterceptor> getUnsubscribeInboundInterceptors() {
+    public  @NotNull List<@NotNull UnsubscribeInboundInterceptor> getUnsubscribeInboundInterceptors() {
         return unsubscribeInbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull UnsubackOutboundInterceptor> getUnsubackOutboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull UnsubackOutboundInterceptor> getUnsubackOutboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(unsubackOutbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull UnsubackOutboundInterceptor> getUnsubackOutboundInterceptors() {
+    public  @NotNull List<@NotNull UnsubackOutboundInterceptor> getUnsubackOutboundInterceptors() {
         return unsubackOutbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull DisconnectInboundInterceptor> getDisconnectInboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull DisconnectInboundInterceptor> getDisconnectInboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(disconnectInbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull DisconnectInboundInterceptor> getDisconnectInboundInterceptors() {
+    public  @NotNull List<@NotNull DisconnectInboundInterceptor> getDisconnectInboundInterceptors() {
         return disconnectInbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull DisconnectOutboundInterceptor> getDisconnectOutboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull DisconnectOutboundInterceptor> getDisconnectOutboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(disconnectOutbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull DisconnectOutboundInterceptor> getDisconnectOutboundInterceptors() {
+    public  @NotNull List<@NotNull DisconnectOutboundInterceptor> getDisconnectOutboundInterceptors() {
         return disconnectOutbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull PingReqInboundInterceptor> getPingReqInboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull PingReqInboundInterceptor> getPingReqInboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(pingReqInbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull PingReqInboundInterceptor> getPingReqInboundInterceptors() {
+    public  @NotNull List<@NotNull PingReqInboundInterceptor> getPingReqInboundInterceptors() {
         return pingReqInbounds;
     }
 
-    public @Immutable @NotNull List<@NotNull PingRespOutboundInterceptor> getPingRespOutboundInterceptorsOfExtension(
+    public  @NotNull List<@NotNull PingRespOutboundInterceptor> getPingRespOutboundInterceptorsOfExtension(
             final @NotNull ClassLoader extensionClassLoader) {
 
         return filterInterceptorsOfExtension(pingRespOutbounds, extensionClassLoader);
     }
 
-    public @Immutable @NotNull List<@NotNull PingRespOutboundInterceptor> getPingRespOutboundInterceptors() {
+    public  @NotNull List<@NotNull PingRespOutboundInterceptor> getPingRespOutboundInterceptors() {
         return pingRespOutbounds;
     }
 

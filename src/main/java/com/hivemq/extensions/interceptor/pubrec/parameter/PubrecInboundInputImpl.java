@@ -15,8 +15,8 @@
  */
 package com.hivemq.extensions.interceptor.pubrec.parameter;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
 import com.hivemq.extension.sdk.api.interceptor.pubrec.parameter.PubrecInboundInput;
@@ -27,7 +27,7 @@ import com.hivemq.extensions.packets.pubrec.PubrecPacketImpl;
  * @author Yannick Weber
  * @author Silvio Giebl
  */
-@Immutable
+
 public class PubrecInboundInputImpl implements PubrecInboundInput, PluginTaskInput {
 
     private final @NotNull ClientInformation clientInformation;

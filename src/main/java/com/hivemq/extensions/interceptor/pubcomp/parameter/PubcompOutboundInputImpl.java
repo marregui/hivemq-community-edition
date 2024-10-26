@@ -15,8 +15,8 @@
  */
 package com.hivemq.extensions.interceptor.pubcomp.parameter;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
 import com.hivemq.extension.sdk.api.interceptor.pubcomp.parameter.PubcompOutboundInput;
@@ -27,7 +27,7 @@ import com.hivemq.extensions.packets.pubcomp.PubcompPacketImpl;
  * @author Yannick Weber
  * @author Silvio Giebl
  */
-@Immutable
+
 public class PubcompOutboundInputImpl implements PubcompOutboundInput, PluginTaskInput {
 
     private final @NotNull ClientInformation clientInformation;

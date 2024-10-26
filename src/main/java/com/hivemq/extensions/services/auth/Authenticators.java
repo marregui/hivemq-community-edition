@@ -15,8 +15,8 @@
  */
 package com.hivemq.extensions.services.auth;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+
 import com.hivemq.extension.sdk.api.services.auth.provider.AuthenticatorProvider;
 import com.hivemq.extensions.classloader.IsolatedExtensionClassloader;
 
@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * @author Georg Held
  */
-@ThreadSafe
+
 public interface Authenticators {
 
     @NotNull Map<@NotNull String, @NotNull WrappedAuthenticatorProvider> getAuthenticatorProviderMap();

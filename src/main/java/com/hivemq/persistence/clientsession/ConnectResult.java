@@ -15,13 +15,13 @@
  */
 package com.hivemq.persistence.clientsession;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Lukas Brandl
  */
-@Immutable
+
 public class ConnectResult {
 
     @Nullable

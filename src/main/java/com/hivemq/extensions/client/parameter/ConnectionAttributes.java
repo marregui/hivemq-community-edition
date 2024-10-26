@@ -20,9 +20,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.ClientConnectionContext;
 import com.hivemq.configuration.service.InternalConfigurations;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.hivemq.extension.sdk.api.services.exception.LimitExceededException;
 import io.netty.channel.Channel;
 
@@ -36,7 +36,7 @@ import java.util.Optional;
  *
  * @author Silvio Giebl
  */
-@ThreadSafe
+
 public class ConnectionAttributes {
 
     @Nullable

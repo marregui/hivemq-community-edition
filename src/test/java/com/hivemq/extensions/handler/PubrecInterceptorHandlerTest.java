@@ -21,8 +21,8 @@ import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.ClientConnectionContext;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.pubrec.PubrecInboundInterceptor;
 import com.hivemq.extension.sdk.api.interceptor.pubrec.PubrecOutboundInterceptor;
 import com.hivemq.extension.sdk.api.interceptor.pubrec.parameter.PubrecInboundInput;
@@ -479,7 +479,7 @@ public class PubrecInterceptorHandlerTest {
         public void onOutboundPubrec(
                 final @NotNull PubrecOutboundInput pubrecOutboundInput,
                 final @NotNull PubrecOutboundOutput pubrecOutboundOutput) {
-            @Immutable final ModifiablePubrecPacket pubrecPacket = pubrecOutboundOutput.getPubrecPacket();
+             final ModifiablePubrecPacket pubrecPacket = pubrecOutboundOutput.getPubrecPacket();
             pubrecPacket.setReasonString("modified");
         }
     }

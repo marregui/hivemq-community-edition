@@ -19,9 +19,9 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableSet;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.hivemq.mqtt.message.subscribe.Topic;
 import com.hivemq.mqtt.topic.SubscriberWithQoS;
 import com.hivemq.mqtt.topic.SubscriptionFlag;
@@ -43,7 +43,7 @@ import static com.hivemq.configuration.service.InternalConfigurations.SHARED_SUB
 import static com.hivemq.configuration.service.InternalConfigurations.SHARED_SUBSCRIPTION_CACHE_TIME_TO_LIVE_MSEC;
 
 @LazySingleton
-@ThreadSafe
+
 public class SharedSubscriptionService {
 
     private static final String SHARED_SUBSCRIPTION_PREFIX = "$share/";

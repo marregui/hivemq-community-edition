@@ -15,7 +15,7 @@
  */
 package com.hivemq.migration;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Christoph Schäbel

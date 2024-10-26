@@ -21,8 +21,8 @@ import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.ClientConnectionContext;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.puback.PubackInboundInterceptor;
 import com.hivemq.extension.sdk.api.interceptor.puback.PubackOutboundInterceptor;
 import com.hivemq.extension.sdk.api.interceptor.puback.parameter.PubackInboundInput;
@@ -421,7 +421,7 @@ public class PubackInterceptorHandlerTest {
         public void onInboundPuback(
                 final @NotNull PubackInboundInput pubackInboundInput,
                 final @NotNull PubackInboundOutput pubackInboundOutput) {
-            @Immutable final ModifiablePubackPacket pubackPacket = pubackInboundOutput.getPubackPacket();
+             final ModifiablePubackPacket pubackPacket = pubackInboundOutput.getPubackPacket();
             pubackPacket.setReasonString("modified");
         }
     }
@@ -465,7 +465,7 @@ public class PubackInterceptorHandlerTest {
         public void onOutboundPuback(
                 final @NotNull PubackOutboundInput pubackOutboundInput,
                 final @NotNull PubackOutboundOutput pubackOutboundOutput) {
-            @Immutable final ModifiablePubackPacket pubackPacket = pubackOutboundOutput.getPubackPacket();
+             final ModifiablePubackPacket pubackPacket = pubackOutboundOutput.getPubackPacket();
             pubackPacket.setReasonString("modified");
         }
     }

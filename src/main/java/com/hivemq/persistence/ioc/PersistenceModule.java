@@ -24,7 +24,7 @@ import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.configuration.service.PersistenceConfigurationService;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.topic.tree.TopicTreeStartup;
 import com.hivemq.persistence.InMemorySingleWriter;
 import com.hivemq.persistence.PersistenceShutdownHookInstaller;

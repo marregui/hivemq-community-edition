@@ -16,8 +16,8 @@
 package com.hivemq.mqtt.message.subscribe;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.packets.subscribe.SubscribePacketImpl;
 import com.hivemq.mqtt.message.MessageType;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
@@ -30,7 +30,7 @@ import com.hivemq.mqtt.message.mqtt5.MqttMessageWithUserProperties;
  * @author Florian Limpöck
  * @since 1.4
  */
-@Immutable
+
 public class SUBSCRIBE extends MqttMessageWithUserProperties implements Mqtt3SUBSCRIBE, Mqtt5SUBSCRIBE {
 
     private final @NotNull ImmutableList<Topic> topics;

@@ -15,16 +15,16 @@
  */
 package com.hivemq.extensions.iteration;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 
 import java.util.Collection;
 
 /**
  * @author Christoph Schäbel
  */
-@ThreadSafe
+
 public class ResultBuffer<V> {
 
     private ChunkResult<V> currentChunk = null;

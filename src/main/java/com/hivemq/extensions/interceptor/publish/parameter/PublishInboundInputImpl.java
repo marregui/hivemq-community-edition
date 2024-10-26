@@ -15,8 +15,8 @@
  */
 package com.hivemq.extensions.interceptor.publish.parameter;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
 import com.hivemq.extension.sdk.api.interceptor.publish.parameter.PublishInboundInput;
@@ -28,7 +28,7 @@ import com.hivemq.extensions.packets.publish.PublishPacketImpl;
  * @author Silvio Giebl
  * @since 4.0.0
  */
-@Immutable
+
 public class PublishInboundInputImpl implements PublishInboundInput, PluginTaskInput {
 
     private final @NotNull ClientInformation clientInformation;

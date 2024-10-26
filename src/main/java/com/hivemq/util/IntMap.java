@@ -15,7 +15,7 @@
  */
 package com.hivemq.util;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
+
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Arrays;
@@ -283,7 +283,7 @@ public class IntMap implements Iterable<IntMap.IntMapEntry> {
         }
     }
 
-    @Immutable
+
     public static class IntMapEntry {
 
         private final int key;

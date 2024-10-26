@@ -16,8 +16,8 @@
 package com.hivemq.extensions.packets.general;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
+
 import com.hivemq.extension.sdk.api.packets.general.ModifiableUserProperties;
 import com.hivemq.extension.sdk.api.packets.general.UserProperty;
 import com.hivemq.extension.sdk.api.services.exception.DoNotImplementException;
@@ -39,7 +39,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Florian Limpöck
  * @author Silvio Giebl
  */
-@ThreadSafe
+
 public class ModifiableUserPropertiesImpl implements ModifiableUserProperties {
 
     private final @NotNull ReadWriteLock readWriteLock = new ReentrantReadWriteLock();

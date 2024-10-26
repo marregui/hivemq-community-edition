@@ -16,7 +16,7 @@
 package com.hivemq.migration.persistence.payload;
 
 import com.hivemq.configuration.info.SystemInformation;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.migration.Migrations;
 import com.hivemq.migration.TypeMigration;
 import com.hivemq.migration.meta.MetaFileService;

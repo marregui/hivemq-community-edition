@@ -16,7 +16,7 @@
 package com.hivemq.diagnostic.data;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.net.InetAddress;

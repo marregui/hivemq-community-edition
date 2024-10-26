@@ -16,9 +16,9 @@
 package com.hivemq.persistence.local;
 
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.MessageWithID;
 
 import java.util.Set;
@@ -85,7 +85,7 @@ public class IncomingMessageFlowInMemoryLocalPersistence implements IncomingMess
     }
 
 
-    @Immutable
+
     static class MessageFlowKey {
 
         private final String clientId;

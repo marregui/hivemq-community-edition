@@ -15,13 +15,13 @@
  */
 package com.hivemq.persistence.clientsession;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
+
 import com.hivemq.mqtt.message.subscribe.Topic;
 
 /**
  * @author Lukas Brandl
  */
-@Immutable
+
 public class Subscription {
     private final Topic topic;
     private final byte flags;

@@ -1,0 +1,47 @@
+/*
+ * Copyright 2018-present HiveMQ GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.hivemq.extension.sdk.api.packets.general;
+
+/**
+ * The MQTT version of a client.
+ *
+ * @author Christoph Schäbel
+ * @since 4.0.0, CE 2019.1
+ */
+public enum MqttVersion {
+
+    /**
+     * MQTT 3.1 version.
+     *
+     * @since 4.0.0, CE 2019.1
+     */
+    V_3_1,
+
+    /**
+     * MQTT 3.1.1 version.
+     *
+     * @since 4.0.0, CE 2019.1
+     */
+    V_3_1_1,
+
+    /**
+     * MQTT 5 version.
+     *
+     * @since 4.0.0, CE 2019.1
+     */
+    V_5
+}

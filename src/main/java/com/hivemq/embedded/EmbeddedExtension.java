@@ -18,9 +18,9 @@ package com.hivemq.embedded;
 
 import com.hivemq.embedded.internal.EmbeddedExtensionBuilderImpl;
 import com.hivemq.extension.sdk.api.ExtensionMain;
-import com.hivemq.extension.sdk.api.annotations.DoNotImplement;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.parameter.ExtensionStartInput;
 import com.hivemq.extension.sdk.api.parameter.ExtensionStartOutput;
 import com.hivemq.extension.sdk.api.parameter.ExtensionStopInput;
@@ -31,7 +31,7 @@ import com.hivemq.extension.sdk.api.parameter.ExtensionStopOutput;
  * @author Christop Schäbel
  * @since CE 2020.5
  */
-@DoNotImplement
+
 public interface EmbeddedExtension {
 
     /**

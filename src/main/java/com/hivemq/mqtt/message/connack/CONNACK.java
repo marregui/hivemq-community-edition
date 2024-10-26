@@ -15,9 +15,9 @@
  */
 package com.hivemq.mqtt.message.connack;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extensions.packets.connack.ConnackPacketImpl;
 import com.hivemq.mqtt.message.MessageType;
@@ -34,7 +34,7 @@ import com.hivemq.util.Bytes;
  * @author Florian Limpöck
  * @since 4.0.0
  */
-@Immutable
+
 public class CONNACK extends MqttMessageWithReasonCode<Mqtt5ConnAckReasonCode> implements Mqtt3CONNACK, Mqtt5CONNACK {
 
     public static @NotNull CONNACKBuilder builder() {

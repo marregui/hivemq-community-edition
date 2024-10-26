@@ -15,8 +15,8 @@
  */
 package com.hivemq.extensions.interceptor.connect.parameter;
 
-import com.hivemq.extension.sdk.api.annotations.Immutable;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ServerInformation;
@@ -26,7 +26,7 @@ import com.hivemq.extension.sdk.api.interceptor.connect.parameter.ConnectInbound
  * @author Lukas Brandl
  * @author Silvio Giebl
  */
-@Immutable
+
 public class ConnectInboundProviderInputImpl implements ConnectInboundProviderInput {
 
     private final @NotNull ServerInformation serverInformation;

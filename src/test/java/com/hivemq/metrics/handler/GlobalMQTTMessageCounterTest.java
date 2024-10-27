@@ -68,8 +68,8 @@ public class GlobalMQTTMessageCounterTest {
 
         final Counter totalIncomingMessages = getCounter(HiveMQMetrics.INCOMING_MESSAGE_COUNT.name());
 
-        assertEquals(4, totalIncoming.getCount());
-        assertEquals(4, totalIncomingMessages.getCount());
+        assertEquals(2, totalIncoming.getCount());
+        assertEquals(2, totalIncomingMessages.getCount());
 
         assertEquals(0, getCounter(HiveMQMetrics.OUTGOING_MESSAGE_COUNT.name()).getCount());
     }

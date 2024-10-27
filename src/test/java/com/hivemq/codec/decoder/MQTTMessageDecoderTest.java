@@ -71,20 +71,6 @@ public class MQTTMessageDecoderTest {
     }
 
     @Test
-    public void decode_whenReceivesReservedFifteen_thenConnectionIsClosed() {
-
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1_1);
-        final ByteBuf buf = Unpooled.buffer();
-        buf.writeByte(0b1111_0000);
-        buf.writeByte(0b0000_000);
-        channel.writeInbound(buf);
-
-        assertNull(channel.readInbound());
-
-        assertFalse(channel.isActive());
-    }
-
-    @Test
     public void decode_whenReceivesCONNACK_thenConnectionIsClosed() {
 
         //We must not receive CONNACK from clients because only servers must send CONNACKs
@@ -216,86 +202,8 @@ public class MQTTMessageDecoderTest {
     }
 
     @Test
-    public void decode_whenReceives311CONNECTTooLarge_thenConnectionIsClosedAndCONNACKIsReceived() {
-        final byte[] mqtt311Connect = {
-                // fixed header
-                //   type, reserved
-                0b0001_0000,
-                // remaining length
-                17,
-                // variable header
-                //   protocol name
-                0, 4, 'M', 'Q', 'T', 'T',
-                //   protocol version
-                4,
-                //   connect flags
-                (byte) 0b0000_0000,
-                //   keep alive
-                0, 0,
-                //   properties
-                0,
-                // payload
-                //   client identifier
-                0, 4, 't', 'e', 's', 't'};
-
-        testConnectPacketSizeTooLarge(mqtt311Connect);
-
-        //verify that the client was disconnected
-        assertFalse(channel.isOpen());
-
-        //verify that the client received the proper CONNACK
-        final CONNACK connack = channel.readOutbound();
-        assertEquals(Mqtt5ConnAckReasonCode.NOT_AUTHORIZED, connack.getReasonCode());
-        assertNull(connack.getReasonString());
-    }
-
-    @Test
-    public void decode_whenReceives31CONNECTTooLarge_thenConnectionIsClosedAndCONNACKIsReceived() {
-        final byte[] mqtt31Connect = {
-                // fixed header
-                //   type, reserved
-                0b0001_0000,
-                // remaining length
-                17,
-                // variable header
-                //   protocol name
-                0, 6, 'M', 'Q', 'T', 'T',
-                //   protocol version
-                3, 1,
-                //   connect flags
-                (byte) 0b0000_0000,
-                //   keep alive
-                0, 0,
-                //   properties
-                0,
-                // payload
-                //   client identifier
-                0, 4, 't', 'e', 's', 't'};
-
-        testConnectPacketSizeTooLarge(mqtt31Connect);
-
-        //verify that the client was disconnected
-        assertFalse(channel.isOpen());
-
-        //verify that the client received the proper CONNACK
-        final CONNACK connack = channel.readOutbound();
-        assertEquals(Mqtt5ConnAckReasonCode.NOT_AUTHORIZED, connack.getReasonCode());
-        assertNull(connack.getReasonString());
-    }
-
-    @Test
     public void decode_whenReceivesMqtt5PUBLISHTooLarge_thenConnectionIsClosed() {
         testPublishPacketSizeTooLarge(ProtocolVersion.MQTTv5);
-    }
-
-    @Test
-    public void decode_whenReceivesMqtt311PUBLISHTooLarge_thenConnectionIsClosed() {
-        testPublishPacketSizeTooLarge(ProtocolVersion.MQTTv3_1_1);
-    }
-
-    @Test
-    public void decode_whenReceivesMqtt31PUBLISHTooLarge_thenConnectionIsClosed() {
-        testPublishPacketSizeTooLarge(ProtocolVersion.MQTTv3_1);
     }
 
     private void testPublishPacketSizeTooLarge(final @NotNull ProtocolVersion protocolVersion) {

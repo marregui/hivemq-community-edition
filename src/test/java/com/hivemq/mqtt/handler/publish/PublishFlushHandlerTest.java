@@ -82,7 +82,7 @@ public class PublishFlushHandlerTest {
     @Test
     public void whenPublishesAreAdded_thenConsumptionIsTriggered() {
         embeddedChannel.pipeline().addLast(publishFlushHandler);
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.AT_LEAST_ONCE)
                 .withOnwardQos(QoS.AT_LEAST_ONCE)
@@ -103,7 +103,7 @@ public class PublishFlushHandlerTest {
         when(channel.isWritable()).thenReturn(false);
         when(channel.isActive()).thenReturn(true);
         publishFlushHandler.handlerAdded(channelHandlerContext);
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.AT_LEAST_ONCE)
                 .withOnwardQos(QoS.AT_LEAST_ONCE)
@@ -129,7 +129,7 @@ public class PublishFlushHandlerTest {
         InternalConfigurations.COUNT_OF_PUBLISHES_WRITTEN_TO_CHANNEL_TO_TRIGGER_FLUSH.set(1);
         publishFlushHandler = new PublishFlushHandler(metricsHolder);
         publishFlushHandler.handlerAdded(channelHandlerContext);
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.AT_LEAST_ONCE)
                 .withOnwardQos(QoS.AT_LEAST_ONCE)
@@ -148,7 +148,7 @@ public class PublishFlushHandlerTest {
             throws ExecutionException, InterruptedException {
         when(channel.isActive()).thenReturn(false);
         publishFlushHandler.handlerAdded(channelHandlerContext);
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.AT_LEAST_ONCE)
                 .withOnwardQos(QoS.AT_LEAST_ONCE)

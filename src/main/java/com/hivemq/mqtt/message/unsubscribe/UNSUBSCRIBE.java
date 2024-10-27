@@ -34,7 +34,7 @@ import java.util.List;
  * @since 1.4
  */
 
-public class UNSUBSCRIBE extends MqttMessageWithUserProperties implements Mqtt3UNSUBSCRIBE, Mqtt5UNSUBSCRIBE {
+public class UNSUBSCRIBE extends MqttMessageWithUserProperties implements Mqtt5UNSUBSCRIBE {
 
     private final ImmutableList<String> topics;
 

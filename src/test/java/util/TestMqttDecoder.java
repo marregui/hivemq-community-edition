@@ -20,14 +20,6 @@ import com.hivemq.codec.decoder.MQTTMessageDecoder;
 import com.hivemq.codec.decoder.MqttConnectDecoder;
 import com.hivemq.codec.decoder.MqttDecoders;
 import com.hivemq.codec.decoder.MqttPingreqDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3DisconnectDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3PubackDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3PubcompDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3PublishDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3PubrecDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3PubrelDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3SubscribeDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3UnsubscribeDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5AuthDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5DisconnectDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5PubackDecoder;
@@ -80,15 +72,7 @@ public class TestMqttDecoder {
         return new MQTTMessageDecoder(mqttConnectDecoder,
                 mqttConnacker,
                 fullConfigurationService.mqttConfiguration(),
-                new MqttDecoders(new Mqtt3PublishDecoder(hiveMQId, disconnector, fullConfigurationService),
-                        new Mqtt3PubackDecoder(disconnector, fullConfigurationService),
-                        new Mqtt3PubrecDecoder(disconnector, fullConfigurationService),
-                        new Mqtt3PubcompDecoder(disconnector, fullConfigurationService),
-                        new Mqtt3PubrelDecoder(disconnector, fullConfigurationService),
-                        new Mqtt3DisconnectDecoder(disconnector, fullConfigurationService),
-                        new Mqtt3SubscribeDecoder(disconnector, fullConfigurationService),
-                        new Mqtt3UnsubscribeDecoder(disconnector, fullConfigurationService),
-                        new MqttPingreqDecoder(disconnector),
+                new MqttDecoders(new MqttPingreqDecoder(disconnector),
                         new Mqtt5PublishDecoder(disconnector,
                                 hiveMQId,
                                 fullConfigurationService,

@@ -31,7 +31,7 @@ import com.hivemq.mqtt.message.reason.Mqtt5PubRecReasonCode;
  * @since 1.4
  */
 public class PUBREC extends MqttMessageWithUserProperties.MqttMessageWithIdAndReasonCode<Mqtt5PubRecReasonCode>
-        implements Mqtt3PUBREC, Mqtt5PUBREC {
+        implements Mqtt5PUBREC {
 
     //MQTT 3
     public PUBREC(final int packetIdentifier) {

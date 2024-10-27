@@ -36,7 +36,7 @@ import java.util.List;
  */
 
 public class UNSUBACK extends MqttMessageWithUserProperties.MqttMessageWithIdAndReasonCodes<Mqtt5UnsubAckReasonCode>
-        implements Mqtt3UNSUBACK, Mqtt5UNSUBACK {
+        implements Mqtt5UNSUBACK {
 
     //MQTT 3
     public UNSUBACK(final int packetIdentifier, final @NotNull Mqtt5UnsubAckReasonCode... entries) {

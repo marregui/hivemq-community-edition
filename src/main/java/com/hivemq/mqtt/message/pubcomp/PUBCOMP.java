@@ -31,7 +31,7 @@ import com.hivemq.mqtt.message.reason.Mqtt5PubCompReasonCode;
  * @since 1.4
  */
 public class PUBCOMP extends MqttMessageWithUserProperties.MqttMessageWithIdAndReasonCode<Mqtt5PubCompReasonCode>
-        implements Mqtt3PUBCOMP, Mqtt5PUBCOMP {
+        implements Mqtt5PUBCOMP {
 
     //MQTT 3
     public PUBCOMP(final int packetIdentifier) {

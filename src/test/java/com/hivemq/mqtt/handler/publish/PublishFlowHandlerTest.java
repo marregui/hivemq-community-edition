@@ -148,31 +148,11 @@ public class PublishFlowHandlerTest {
     }
 
     @Test
-    public void test_qos_0_messages_not_acknowledged() {
-
-
-        final PUBLISH publish = createPublish(QoS.AT_MOST_ONCE);
-        channel.writeInbound(publish);
-
-        assertEquals(true, channel.outboundMessages().isEmpty());
-    }
-
-    @Test
-    public void test_qos_1_messages_not_acknowledged() {
-
-        final PUBLISH publish = createPublish(QoS.AT_LEAST_ONCE);
-        channel.writeInbound(publish);
-
-        assertEquals(true, channel.outboundMessages().isEmpty());
-    }
-
-
-    @Test
     public void test_qos_1_messages_is_dup_not_forwarded() {
 
         final int messageid = 1;
 
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.AT_LEAST_ONCE)
                 .withOnwardQos(QoS.AT_LEAST_ONCE)
@@ -200,7 +180,7 @@ public class PublishFlowHandlerTest {
 
         final int messageid = 1;
 
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.AT_LEAST_ONCE)
                 .withOnwardQos(QoS.AT_LEAST_ONCE)
@@ -222,7 +202,7 @@ public class PublishFlowHandlerTest {
 
         final int messageid = 1;
 
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.AT_LEAST_ONCE)
                 .withOnwardQos(QoS.AT_LEAST_ONCE)
@@ -240,20 +220,11 @@ public class PublishFlowHandlerTest {
     }
 
     @Test
-    public void test_qos_2_messages_not_acknowledged() {
-
-        final PUBLISH publish = createPublish(QoS.EXACTLY_ONCE);
-        channel.writeInbound(publish);
-
-        assertEquals(true, channel.outboundMessages().isEmpty());
-    }
-
-    @Test
     public void test_qos_2_messages_is_dup_not_forwarded() {
 
         final int messageid = 1;
 
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.EXACTLY_ONCE)
                 .withOnwardQos(QoS.EXACTLY_ONCE)
@@ -281,7 +252,7 @@ public class PublishFlowHandlerTest {
 
         final int messageid = 1;
 
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.EXACTLY_ONCE)
                 .withOnwardQos(QoS.EXACTLY_ONCE)
@@ -306,7 +277,7 @@ public class PublishFlowHandlerTest {
 
         final int messageid = 1;
 
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.EXACTLY_ONCE)
                 .withOnwardQos(QoS.EXACTLY_ONCE)
@@ -418,7 +389,7 @@ public class PublishFlowHandlerTest {
     @Test
     public void test_publish_sending() {
 
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.AT_LEAST_ONCE)
                 .withOnwardQos(QoS.AT_LEAST_ONCE)
@@ -440,7 +411,7 @@ public class PublishFlowHandlerTest {
     @Test
     public void test_publish_sending_qos_0() {
 
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.AT_MOST_ONCE)
                 .withOnwardQos(QoS.AT_MOST_ONCE)
@@ -461,7 +432,7 @@ public class PublishFlowHandlerTest {
     @Test
     public void test_publish_with_future_not_shared_sending() {
 
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withTopic("topic")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")
                 .withHivemqId("hivemqId")
                 .withQoS(QoS.AT_LEAST_ONCE)
                 .withOnwardQos(QoS.AT_LEAST_ONCE)
@@ -754,44 +725,6 @@ public class PublishFlowHandlerTest {
     }
 
     @Test(timeout = 5000)
-    public void test_qos1_return_publish_status_on_puback() throws Exception {
-
-        final PUBLISH publish = createPublish("topic", 1, QoS.AT_LEAST_ONCE);
-        final PUBLISH internalPublish = TestMessageUtil.createMqtt3Publish("hivemqId", publish);
-        final SettableFuture<PublishStatus> future = SettableFuture.create();
-        final PublishWithFuture publishWithFuture = new PublishWithFuture(internalPublish, future, true);
-
-        final ChannelPromise promise1 = channel.newPromise();
-
-        channel.writeAndFlush(publishWithFuture, promise1);
-
-        channel.pipeline().fireChannelRead(new PUBACK(1));
-
-        promise1.await();
-
-        assertEquals(PublishStatus.DELIVERED, future.get());
-    }
-
-    @Test(timeout = 5000)
-    public void test_qos2_return_publish_status_on_pubcomp() throws Exception {
-
-        final PUBLISH publish = createPublish("topic", 1, QoS.EXACTLY_ONCE);
-        final PUBLISH internalPublish = TestMessageUtil.createMqtt3Publish("hivemqId", publish);
-        final SettableFuture<PublishStatus> future = SettableFuture.create();
-        final PublishWithFuture publishWithFuture = new PublishWithFuture(internalPublish, future, true);
-
-        final ChannelPromise promise1 = channel.newPromise();
-
-        channel.writeAndFlush(publishWithFuture, promise1);
-
-        channel.pipeline().fireChannelRead(new PUBCOMP(1));
-
-        promise1.await();
-
-        assertEquals(PublishStatus.DELIVERED, future.get());
-    }
-
-    @Test(timeout = 5000)
     public void test_max_inflight_window() {
 
         ClientConnection.of(channel).setClientReceiveMaximum(50);
@@ -859,7 +792,7 @@ public class PublishFlowHandlerTest {
 
     private PUBLISH createPublish(final String topic, final int messageId, final QoS qoS, final boolean dup) {
 
-        return new PUBLISHFactory.Mqtt3Builder().withHivemqId("hivemqId")
+        return new PUBLISHFactory.Mqtt5Builder().withHivemqId("hivemqId")
                 .withMessageExpiryInterval(PUBLISH.MESSAGE_EXPIRY_INTERVAL_MAX)
                 .withTopic(topic)
                 .withQoS(qoS)
@@ -870,7 +803,4 @@ public class PublishFlowHandlerTest {
                 .build();
     }
 
-    private PUBLISH createPublish(final QoS qoS) {
-        return TestMessageUtil.createMqtt3Publish(qoS);
-    }
 }

@@ -31,7 +31,7 @@ import com.hivemq.mqtt.message.reason.Mqtt5PubAckReasonCode;
  * @since 1.4
  */
 public class PUBACK extends MqttMessageWithUserProperties.MqttMessageWithIdAndReasonCode<Mqtt5PubAckReasonCode>
-        implements Mqtt3PUBACK, Mqtt5PUBACK {
+        implements Mqtt5PUBACK {
 
     //MQTT 3
     public PUBACK(final int packetIdentifier) {

@@ -18,8 +18,6 @@ package com.hivemq.codec.decoder;
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.ClientConnectionContext;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
-import com.hivemq.codec.decoder.mqtt3.Mqtt311ConnectDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt31ConnectDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5ConnectDecoder;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.service.FullConfigurationService;
@@ -43,8 +41,6 @@ public class MqttConnectDecoder {
 
     private final @NotNull MqttConnacker mqttConnacker;
     private final @NotNull Mqtt5ConnectDecoder mqtt5ConnectDecoder;
-    private final @NotNull Mqtt311ConnectDecoder mqtt311ConnectDecoder;
-    private final @NotNull Mqtt31ConnectDecoder mqtt31ConnectDecoder;
 
     @Inject
     public MqttConnectDecoder(
@@ -54,8 +50,6 @@ public class MqttConnectDecoder {
             final @NotNull ClientIds clientIds) {
         this.mqttConnacker = mqttConnacker;
         mqtt5ConnectDecoder = new Mqtt5ConnectDecoder(mqttConnacker, hiveMQId, clientIds, fullConfigurationService);
-        mqtt311ConnectDecoder = new Mqtt311ConnectDecoder(mqttConnacker, clientIds, fullConfigurationService, hiveMQId);
-        mqtt31ConnectDecoder = new Mqtt31ConnectDecoder(mqttConnacker, clientIds, fullConfigurationService, hiveMQId);
     }
 
 
@@ -96,15 +90,10 @@ public class MqttConnectDecoder {
                 final byte versionByte = protocolVersionBuf.readByte();
                 if (versionByte == 5) {
                     protocolVersion = ProtocolVersion.MQTTv5;
-                } else if (versionByte == 4) {
-                    protocolVersion = ProtocolVersion.MQTTv3_1_1;
                 } else {
                     connackInvalidProtocolVersion(clientConnectionContext);
                     return null;
                 }
-                break;
-            case 6:
-                protocolVersion = ProtocolVersion.MQTTv3_1;
                 break;
             default:
                 connackInvalidProtocolVersion(clientConnectionContext);
@@ -128,11 +117,8 @@ public class MqttConnectDecoder {
         }
         if (protocolVersion == ProtocolVersion.MQTTv5) {
             return mqtt5ConnectDecoder.decode(clientConnectionContext, buf, fixedHeader);
-        } else if (protocolVersion == ProtocolVersion.MQTTv3_1_1) {
-            return mqtt311ConnectDecoder.decode(clientConnectionContext, buf, fixedHeader);
-        } else {
-            return mqtt31ConnectDecoder.decode(clientConnectionContext, buf, fixedHeader);
         }
+        return null;
     }
 
     private void connackInvalidProtocolVersion(final @NotNull ClientConnectionContext clientConnectionContext) {

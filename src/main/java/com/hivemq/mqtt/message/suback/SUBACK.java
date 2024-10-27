@@ -35,7 +35,7 @@ import java.util.List;
  * @since 1.4
  */
 
-public class SUBACK extends MqttMessageWithIdAndReasonCodes<Mqtt5SubAckReasonCode> implements Mqtt3SUBACK, Mqtt5SUBACK {
+public class SUBACK extends MqttMessageWithIdAndReasonCodes<Mqtt5SubAckReasonCode> implements Mqtt5SUBACK {
 
     //MQTT 3
     public SUBACK(final int packetIdentifier, final @NotNull Mqtt5SubAckReasonCode... entries) {

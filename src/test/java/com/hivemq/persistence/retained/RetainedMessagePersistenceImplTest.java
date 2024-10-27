@@ -59,7 +59,7 @@ public class RetainedMessagePersistenceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        message = new RetainedMessage(TestMessageUtil.createMqtt3Publish(), 1000);
+        message = new RetainedMessage(TestMessageUtil.createMqtt5Publish(), 1000);
         singleWriterService = TestSingleWriterFactory.defaultSingleWriter();
         retainedMessagePersistence = new RetainedMessagePersistenceImpl(localPersistence,
                 singleWriterService,

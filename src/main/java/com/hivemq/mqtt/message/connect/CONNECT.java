@@ -32,7 +32,7 @@ import java.nio.charset.StandardCharsets;
  * @author Florian Limpöck
  * @author Silvio Giebl
  */
-public class CONNECT extends MqttMessageWithUserProperties implements Mqtt5CONNECT, Mqtt3CONNECT {
+public class CONNECT extends MqttMessageWithUserProperties implements Mqtt5CONNECT {
 
     private final @NotNull ProtocolVersion protocolVersion;
     private final @NotNull String clientIdentifier;
@@ -93,17 +93,14 @@ public class CONNECT extends MqttMessageWithUserProperties implements Mqtt5CONNE
         this.willPublish = willPublish;
     }
 
-    @Override
     public @NotNull ProtocolVersion getProtocolVersion() {
         return protocolVersion;
     }
 
-    @Override
     public @NotNull String getClientIdentifier() {
         return clientIdentifier;
     }
 
-    @Override
     public int getKeepAlive() {
         return keepAlive;
     }
@@ -192,80 +189,6 @@ public class CONNECT extends MqttMessageWithUserProperties implements Mqtt5CONNE
     @Override
     public @NotNull MessageType getType() {
         return MessageType.CONNECT;
-    }
-
-    public static class Mqtt3Builder {
-
-        private @NotNull ProtocolVersion protocolVersion = ProtocolVersion.MQTTv3_1_1;
-        private @Nullable String clientIdentifier;
-        private int keepAlive;
-        private boolean cleanStart;
-        private long sessionExpiryInterval;
-
-        private @Nullable String username;
-        private byte @Nullable [] password;
-
-        private @Nullable MqttWillPublish willPublish;
-
-        public @NotNull CONNECT build() {
-            Preconditions.checkNotNull(clientIdentifier, "client identifier must never be null");
-            return new CONNECT(protocolVersion,
-                    clientIdentifier,
-                    keepAlive,
-                    cleanStart,
-                    sessionExpiryInterval,
-                    DEFAULT_RECEIVE_MAXIMUM,
-                    DEFAULT_TOPIC_ALIAS_MAXIMUM,
-                    DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT,
-                    DEFAULT_RESPONSE_INFORMATION_REQUESTED,
-                    DEFAULT_PROBLEM_INFORMATION_REQUESTED,
-                    username,
-                    password,
-                    null,
-                    null,
-                    willPublish,
-                    Mqtt5UserProperties.NO_USER_PROPERTIES);
-        }
-
-        public @NotNull Mqtt3Builder withProtocolVersion(final @NotNull ProtocolVersion protocolVersion) {
-            this.protocolVersion = protocolVersion;
-            return this;
-        }
-
-        public @NotNull Mqtt3Builder withClientIdentifier(final @NotNull String clientIdentifier) {
-            this.clientIdentifier = clientIdentifier;
-            return this;
-        }
-
-        public @NotNull Mqtt3Builder withKeepAlive(final int keepAlive) {
-            this.keepAlive = keepAlive;
-            return this;
-        }
-
-        public @NotNull Mqtt3Builder withCleanStart(final boolean cleanStart) {
-            this.cleanStart = cleanStart;
-            return this;
-        }
-
-        public @NotNull Mqtt3Builder withSessionExpiryInterval(final long sessionExpiryInterval) {
-            this.sessionExpiryInterval = sessionExpiryInterval;
-            return this;
-        }
-
-        public @NotNull Mqtt3Builder withUsername(final @Nullable String username) {
-            this.username = username;
-            return this;
-        }
-
-        public @NotNull Mqtt3Builder withPassword(final byte @Nullable [] password) {
-            this.password = password;
-            return this;
-        }
-
-        public @NotNull Mqtt3Builder withWillPublish(final @Nullable MqttWillPublish willPublish) {
-            this.willPublish = willPublish;
-            return this;
-        }
     }
 
     public static class Mqtt5Builder {

@@ -43,8 +43,6 @@ public class ReasonStrings {
 
     public static final String CONNACK_NOT_AUTHORIZED_MAX_TOPIC_LENGTH_EXCEEDED =
             "Not authorized to connect. The will topic length exceeded the maximum length configured on the broker.";
-    public static final String CONNACK_PROTOCOL_ERROR_INVALID_USER_PASS_COMB_MQTT3 =
-            "Sent CONNECT with invalid username/password combination.";
     public static final String CONNACK_PROTOCOL_ERROR_NO_AUTH =
             "Sent CONNECT with auth data and no auth method. This is a protocol violation.";
     public static final String CONNACK_PROTOCOL_RECEIVE_MAXIMUM =

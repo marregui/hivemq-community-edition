@@ -16,15 +16,12 @@
 package com.hivemq.codec.decoder;
 
 import com.hivemq.bootstrap.ClientConnectionContext;
-import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;
-import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.connect.CONNECT;
-import com.hivemq.mqtt.message.connect.MqttWillPublish;
 import com.hivemq.mqtt.message.reason.Mqtt5ConnAckReasonCode;
 import com.hivemq.util.Bytes;
 import com.hivemq.util.ClientIds;
@@ -193,79 +190,5 @@ public abstract class AbstractMqttConnectDecoder extends MqttDecoder<CONNECT> {
             disconnectByInvalidHeader(clientConnectionContext);
             return null;
         }
-    }
-
-    /**
-     * Decodes and validates a Mqtt3 LWT (Will)
-     * <p>
-     * Client will be disconnected by:
-     * <p>
-     * - Bad will topic length
-     * <p>
-     * - topic with bad UTF-8 Character
-     * <p>
-     * - topic is empty
-     * <p>
-     * - topic contains null character
-     *
-     * @param clientConnectionContext the connection of the mqtt client
-     * @param buf                     the ByteBuf of the encoded will message
-     * @param willQoS                 the quality of service of the will message
-     * @param isWillRetain            the retain flag of the will message
-     * @param hiveMQId                the HiveMQ identifier
-     * @return a {@link MqttWillPublish} if valid, else {@code null}.
-     */
-    @Nullable
-    protected MqttWillPublish readMqtt3WillPublish(
-            final @NotNull ClientConnectionContext clientConnectionContext,
-            final @NotNull ByteBuf buf,
-            final int willQoS,
-            final boolean isWillRetain,
-            final @NotNull HivemqId hiveMQId) {
-
-        final MqttWillPublish.Mqtt3Builder willBuilder = new MqttWillPublish.Mqtt3Builder();
-        willBuilder.withQos(QoS.valueOf(willQoS));
-        willBuilder.withRetain(isWillRetain);
-
-        final String willTopic;
-        final int utf8StringLengthWill;
-
-        if (buf.readableBytes() < 2 || buf.readableBytes() < (utf8StringLengthWill = buf.readUnsignedShort())) {
-            mqttConnacker.connackError(clientConnectionContext.getChannel(),
-                    "A client (IP: {}) sent a CONNECT with an incorrect will-topic length. Disconnecting client.",
-                    "Incorrect CONNECT will-topic length",
-                    Mqtt5ConnAckReasonCode.MALFORMED_PACKET,
-                    ReasonStrings.CONNACK_MALFORMED_PACKET_INCORRECT_WILL_TOPIC_LENGTH);
-            return null;
-        }
-
-        if (validateUTF8) {
-            willTopic = Strings.getValidatedPrefixedString(buf, utf8StringLengthWill, true);
-            if (willTopic == null) {
-                mqttConnacker.connackError(clientConnectionContext.getChannel(),
-                        "The will-topic of the client (IP: {}) is not well formed. This is not allowed. Disconnecting client.",
-                        "Sent CONNECT with bad UTF-8 character",
-                        Mqtt5ConnAckReasonCode.MALFORMED_PACKET,
-                        ReasonStrings.CONNACK_MALFORMED_PACKET_BAD_UTF8);
-                return null;
-            }
-        } else {
-            willTopic = Strings.getPrefixedString(buf, utf8StringLengthWill);
-        }
-
-        if (isInvalidTopic(clientConnectionContext, willTopic)) {
-            mqttConnacker.connackError(clientConnectionContext.getChannel(),
-                    null,
-                    //already logged
-                    "Sent CONNECT with invalid will-topic",
-                    Mqtt5ConnAckReasonCode.MALFORMED_PACKET,
-                    ReasonStrings.CONNACK_MALFORMED_PACKET_INVALID_WILL_TOPIC);
-            return null;
-        }
-
-        final byte[] prefixedBytes = Bytes.getPrefixedBytes(buf);
-        final byte[] willMessage = prefixedBytes != null ? prefixedBytes : new byte[0];
-
-        return willBuilder.withPayload(willMessage).withTopic(willTopic).withHivemqId(hiveMQId.get()).build();
     }
 }

@@ -36,7 +36,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Florian Limpöck
  * @since 1.4
  */
-public class Topic implements Serializable, Comparable<Topic>, Mqtt3Topic, Mqtt5Topic, Sizable {
+public class Topic implements Serializable, Comparable<Topic>, Mqtt5Topic, Sizable {
 
     /**
      * The default qos to work with.

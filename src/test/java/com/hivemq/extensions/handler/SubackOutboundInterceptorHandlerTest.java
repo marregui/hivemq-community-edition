@@ -135,7 +135,7 @@ public class SubackOutboundInterceptorHandlerTest {
         clientContext.addSubackOutboundInterceptor(interceptor);
 
         ClientConnection.of(channel).setExtensionClientContext(clientContext);
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1);
+            ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
 
         when(hiveMQExtensions.getExtensionForClassloader(any(IsolatedExtensionClassloader.class))).thenReturn(extension);
 
@@ -160,7 +160,7 @@ public class SubackOutboundInterceptorHandlerTest {
         clientContext.addSubackOutboundInterceptor(interceptor);
 
         ClientConnection.of(channel).setExtensionClientContext(clientContext);
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1);
+        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
 
         when(hiveMQExtensions.getExtensionForClassloader(any(IsolatedExtensionClassloader.class))).thenReturn(extension);
 
@@ -186,7 +186,7 @@ public class SubackOutboundInterceptorHandlerTest {
         clientContext.addSubackOutboundInterceptor(interceptor);
 
         ClientConnection.of(channel).setExtensionClientContext(clientContext);
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1);
+        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
 
         when(hiveMQExtensions.getExtensionForClassloader(any(IsolatedExtensionClassloader.class))).thenReturn(extension);
 
@@ -210,7 +210,7 @@ public class SubackOutboundInterceptorHandlerTest {
         clientContext.addSubackOutboundInterceptor(interceptor);
 
         ClientConnection.of(channel).setExtensionClientContext(clientContext);
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1);
+        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
 
         when(hiveMQExtensions.getExtensionForClassloader(any(IsolatedExtensionClassloader.class))).thenReturn(extension);
 

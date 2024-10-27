@@ -17,15 +17,6 @@ package com.hivemq.codec.encoder;
 
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.ClientConnectionContext;
-import com.hivemq.codec.encoder.mqtt3.Mqtt3ConnackEncoder;
-import com.hivemq.codec.encoder.mqtt3.Mqtt3DisconnectEncoder;
-import com.hivemq.codec.encoder.mqtt3.Mqtt3PubackEncoder;
-import com.hivemq.codec.encoder.mqtt3.Mqtt3PubcompEncoder;
-import com.hivemq.codec.encoder.mqtt3.Mqtt3PublishEncoder;
-import com.hivemq.codec.encoder.mqtt3.Mqtt3PubrecEncoder;
-import com.hivemq.codec.encoder.mqtt3.Mqtt3PubrelEncoder;
-import com.hivemq.codec.encoder.mqtt3.Mqtt3SubackEncoder;
-import com.hivemq.codec.encoder.mqtt3.Mqtt3UnsubackEncoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5AuthEncoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5ConnackEncoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5DisconnectEncoder;
@@ -72,7 +63,6 @@ public class EncoderFactory {
     private static final Logger log = LoggerFactory.getLogger(EncoderFactory.class);
 
     private final @NotNull Mqtt5EncoderFactory mqtt5Instance;
-    private final @NotNull Mqtt3EncoderFactory mqtt3Instance;
 
     @Inject
     public EncoderFactory(
@@ -80,7 +70,6 @@ public class EncoderFactory {
             final @NotNull SecurityConfigurationService securityConfigurationService,
             final @NotNull MqttServerDisconnector mqttServerDisconnector) {
         mqtt5Instance = new Mqtt5EncoderFactory(messageDroppedService, securityConfigurationService);
-        mqtt3Instance = new Mqtt3EncoderFactory(mqttServerDisconnector);
     }
 
     /**
@@ -115,9 +104,9 @@ public class EncoderFactory {
 
         if (clientConnectionContext.getProtocolVersion() == ProtocolVersion.MQTTv5) {
             return mqtt5Instance.getEncoder(msg);
-        } else {
-            return mqtt3Instance.getEncoder(msg);
         }
+        throw new IllegalArgumentException("Unsupported protocol version: " +
+                clientConnectionContext.getProtocolVersion());
     }
 
     protected @NotNull ByteBuf allocateBuffer(
@@ -199,61 +188,6 @@ public class EncoderFactory {
                 return mqtt5DisconnectEncoder;
             } else if (msg instanceof AUTH) {
                 return mqtt5AuthEncoder;
-            }
-            return null;
-        }
-    }
-
-    /**
-     * Factory for Mqtt3 encoders.
-     */
-    private static class Mqtt3EncoderFactory {
-
-        private final @NotNull Mqtt3ConnackEncoder connackEncoder;
-        private final @NotNull Mqtt3PubackEncoder pubackEncoder;
-        private final @NotNull Mqtt3PubrecEncoder pubrecEncoder;
-        private final @NotNull Mqtt3PubrelEncoder pubrelEncoder;
-        private final @NotNull Mqtt3PubcompEncoder pubcompEncoder;
-        private final @NotNull Mqtt3SubackEncoder subackEncoder;
-        private final @NotNull Mqtt3UnsubackEncoder unsubackEncoder;
-        private final @NotNull Mqtt3PublishEncoder publishEncoder;
-        private final @NotNull Mqtt3DisconnectEncoder disconnectEncoder;
-        private final @NotNull MqttPingrespEncoder pingrespEncoder;
-
-        Mqtt3EncoderFactory(final @NotNull MqttServerDisconnector mqttServerDisconnector) {
-            connackEncoder = new Mqtt3ConnackEncoder();
-            pubackEncoder = new Mqtt3PubackEncoder();
-            pubrecEncoder = new Mqtt3PubrecEncoder();
-            pubrelEncoder = new Mqtt3PubrelEncoder();
-            pubcompEncoder = new Mqtt3PubcompEncoder();
-            subackEncoder = new Mqtt3SubackEncoder(mqttServerDisconnector);
-            unsubackEncoder = new Mqtt3UnsubackEncoder();
-            publishEncoder = new Mqtt3PublishEncoder();
-            disconnectEncoder = new Mqtt3DisconnectEncoder();
-            pingrespEncoder = new MqttPingrespEncoder();
-        }
-
-        private @Nullable MqttEncoder getEncoder(final @NotNull Message msg) {
-            if (msg instanceof PUBLISH) {
-                return publishEncoder;
-            } else if (msg instanceof PINGRESP) {
-                return pingrespEncoder;
-            } else if (msg instanceof PUBACK) {
-                return pubackEncoder;
-            } else if (msg instanceof PUBREC) {
-                return pubrecEncoder;
-            } else if (msg instanceof PUBREL) {
-                return pubrelEncoder;
-            } else if (msg instanceof PUBCOMP) {
-                return pubcompEncoder;
-            } else if (msg instanceof CONNACK) {
-                return connackEncoder;
-            } else if (msg instanceof SUBACK) {
-                return subackEncoder;
-            } else if (msg instanceof UNSUBACK) {
-                return unsubackEncoder;
-            } else if (msg instanceof DISCONNECT) {
-                return disconnectEncoder;
             }
             return null;
         }

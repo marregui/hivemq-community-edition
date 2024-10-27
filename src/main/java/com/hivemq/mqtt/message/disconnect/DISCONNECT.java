@@ -31,7 +31,7 @@ import com.hivemq.mqtt.message.reason.Mqtt5DisconnectReasonCode;
  */
 
 public class DISCONNECT extends MqttMessageWithUserProperties.MqttMessageWithReasonCode<Mqtt5DisconnectReasonCode>
-        implements Mqtt3DISCONNECT, Mqtt5DISCONNECT {
+        implements Mqtt5DISCONNECT {
 
     public static final long SESSION_EXPIRY_NOT_SET = Long.MAX_VALUE;
 

@@ -41,7 +41,6 @@ import static com.hivemq.mqtt.message.connack.Mqtt5CONNACK.DEFAULT_WILDCARD_SUBS
 public class CONNACKBuilder {
 
     private @Nullable Mqtt5ConnAckReasonCode mqtt5ConnAckReasonCode;
-    private @Nullable Mqtt3ConnAckReturnCode mqtt3ConnAckReturnCode;
     private @Nullable String reasonString;
     private @Nullable Mqtt5UserProperties userProperties;
 
@@ -113,15 +112,6 @@ public class CONNACKBuilder {
                     "A server keep alive must never be larger than 65.535");
         }
 
-        if (mqtt3ConnAckReturnCode != null) {
-            if (mqtt3ConnAckReturnCode != Mqtt3ConnAckReturnCode.ACCEPTED && sessionPresent) {
-
-                throw new IllegalArgumentException("The sessionPresent flag is only allowed for return code " +
-                        Mqtt3ConnAckReturnCode.ACCEPTED);
-            }
-            mqtt5ConnAckReasonCode = Mqtt5ConnAckReasonCode.fromReturnCode(mqtt3ConnAckReturnCode);
-        }
-
         checkNotNull(mqtt5ConnAckReasonCode);
 
         return new CONNACK(mqtt5ConnAckReasonCode,
@@ -152,11 +142,6 @@ public class CONNACKBuilder {
 
     public @NotNull CONNACKBuilder withReasonCode(final @Nullable Mqtt5ConnAckReasonCode mqtt5ConnAckReasonCode) {
         this.mqtt5ConnAckReasonCode = mqtt5ConnAckReasonCode;
-        return self();
-    }
-
-    public @NotNull CONNACKBuilder withMqtt3ReturnCode(final @Nullable Mqtt3ConnAckReturnCode mqtt3ConnAckReturnCode) {
-        this.mqtt3ConnAckReturnCode = mqtt3ConnAckReturnCode;
         return self();
     }
 

@@ -306,35 +306,6 @@ public class IncomingSubscribeServiceTest {
     }
 
     @Test
-    public void test_subscribe_wildcard_disabled_mqtt3_1_1() {
-        when(mqttConfigurationService.wildcardSubscriptionsEnabled()).thenReturn(false);
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1_1);
-        final Topic topic = new Topic("#", QoS.EXACTLY_ONCE);
-
-        final SUBSCRIBE subscribe = new SUBSCRIBE(ImmutableList.copyOf(Lists.newArrayList(topic)), 10);
-
-        incomingSubscribeService.processSubscribe(ctx, subscribe, false);
-
-        assertFalse(channel.isActive());
-
-        verify(clientSessionSubscriptionPersistence, never()).addSubscriptions(any(), any());
-    }
-
-    @Test
-    public void test_subscribe_wildcard_disabled_mqtt3_1() {
-        when(mqttConfigurationService.wildcardSubscriptionsEnabled()).thenReturn(false);
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1);
-        final Topic topic = new Topic("#", QoS.EXACTLY_ONCE);
-
-        final SUBSCRIBE subscribe = new SUBSCRIBE(ImmutableList.copyOf(Lists.newArrayList(topic)), 10);
-
-        incomingSubscribeService.processSubscribe(ctx, subscribe, false);
-
-        assertFalse(channel.isActive());
-        verify(clientSessionSubscriptionPersistence, never()).addSubscriptions(any(), any());
-    }
-
-    @Test
     public void test_shared_subscription_disabled_mqtt5() {
         when(mqttConfigurationService.sharedSubscriptionsEnabled()).thenReturn(false);
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
@@ -348,39 +319,6 @@ public class IncomingSubscribeServiceTest {
 
         verify(clientSessionSubscriptionPersistence, never()).addSubscriptions(any(), any());
     }
-
-    @Test
-    public void test_shared_subscription_disabled_mqtt3_1_1() {
-        when(mqttConfigurationService.sharedSubscriptionsEnabled()).thenReturn(false);
-
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1_1);
-        final Topic topic = new Topic("$share/group1/topic1", QoS.EXACTLY_ONCE);
-
-        final SUBSCRIBE subscribe = new SUBSCRIBE(ImmutableList.copyOf(Lists.newArrayList(topic)), 10);
-
-        incomingSubscribeService.processSubscribe(ctx, subscribe, false);
-
-        assertFalse(channel.isActive());
-
-        verify(clientSessionSubscriptionPersistence, never()).addSubscriptions(any(), any());
-    }
-
-    @Test
-    public void test_shared_subscription_disabled_mqtt3_1() {
-        when(mqttConfigurationService.sharedSubscriptionsEnabled()).thenReturn(false);
-
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1);
-        final Topic topic = new Topic("$share/group1/topic1", QoS.EXACTLY_ONCE);
-
-        final SUBSCRIBE subscribe = new SUBSCRIBE(ImmutableList.copyOf(Lists.newArrayList(topic)), 10);
-
-        incomingSubscribeService.processSubscribe(ctx, subscribe, false);
-
-        assertFalse(channel.isActive());
-
-        verify(clientSessionSubscriptionPersistence, never()).addSubscriptions(any(), any());
-    }
-
 
     @Test
     public void test_subscribe_single_authorized() throws Exception {

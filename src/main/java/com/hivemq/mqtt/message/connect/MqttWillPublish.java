@@ -252,44 +252,6 @@ public class MqttWillPublish implements Sizable {
         return sizeInMemory;
     }
 
-    public static class Mqtt3Builder {
-
-        private String topic;
-        private byte[] payload;
-        private QoS qos;
-        private boolean retain;
-        private String hivemqId;
-
-        public MqttWillPublish build() {
-            return new MqttWillPublish(topic, payload, qos, retain, hivemqId);
-        }
-
-        public Mqtt3Builder withTopic(final String topic) {
-            this.topic = topic;
-            return this;
-        }
-
-        public Mqtt3Builder withPayload(final byte[] payload) {
-            this.payload = payload;
-            return this;
-        }
-
-        public Mqtt3Builder withQos(final QoS qos) {
-            this.qos = qos;
-            return this;
-        }
-
-        public Mqtt3Builder withRetain(final boolean retain) {
-            this.retain = retain;
-            return this;
-        }
-
-        public Mqtt3Builder withHivemqId(final String hivemqId) {
-            this.hivemqId = hivemqId;
-            return this;
-        }
-    }
-
     public static class Mqtt5Builder {
 
         private String hivemqId;

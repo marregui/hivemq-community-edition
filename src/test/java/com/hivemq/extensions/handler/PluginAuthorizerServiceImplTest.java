@@ -190,7 +190,7 @@ public class PluginAuthorizerServiceImplTest {
 
     @Test(timeout = 2000)
     public void test_published_to_invalid_topic() {
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish("#", "1234".getBytes(), QoS.AT_LEAST_ONCE);
+        final PUBLISH publish = TestMessageUtil.createMqtt5Publish("#",  QoS.AT_LEAST_ONCE);
 
         pluginAuthorizerService.authorizePublish(channelHandlerContext, publish);
 
@@ -200,7 +200,7 @@ public class PluginAuthorizerServiceImplTest {
 
     @Test(timeout = 2000)
     public void test_dollar_topic_disconnect() {
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish("$", "payload".getBytes(), QoS.AT_LEAST_ONCE);
+        final PUBLISH publish = TestMessageUtil.createMqtt5Publish("$",  QoS.AT_LEAST_ONCE);
 
         pluginAuthorizerService.authorizePublish(channelHandlerContext, publish);
 
@@ -460,37 +460,6 @@ public class PluginAuthorizerServiceImplTest {
 
         final SUBSCRIBE fullMqtt5Subscribe = TestMessageUtil.createFullMqtt5Subscribe();
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
-
-        pluginAuthorizerService.authorizeSubscriptions(channelHandlerContext, fullMqtt5Subscribe);
-
-        assertTrue(authorizeLatch1.await(10, TimeUnit.SECONDS));
-
-        final ClientAuthorizers extensionClientAuthorizers =
-                ClientConnection.of(channel).getExtensionClientAuthorizers();
-        assertNotNull(extensionClientAuthorizers);
-        assertEquals(1, extensionClientAuthorizers.getSubscriptionAuthorizersMap().size());
-
-        await().pollInterval(Duration.ofMillis(25)).until(() -> {
-            if (channel.isActive()) {
-                channel.runPendingTasks();
-                return false;
-            }
-            return true;
-        });
-    }
-
-    @Test(timeout = 2000)
-    public void test_subscribe_with_3_topics_1_authorizer_disconnect_mqtt3() throws Exception {
-        // three topics
-        final CountDownLatch authorizeLatch1 = new CountDownLatch(3);
-
-        when(authorizers.areAuthorizersAvailable()).thenReturn(true);
-        when(authorizers.getAuthorizerProviderMap()).thenReturn(ImmutableMap.of("extension1",
-                getTestAuthorizerProvider(TestAuthorizerDisconnectProvider.class, authorizeLatch1)));
-
-        final SUBSCRIBE fullMqtt5Subscribe = TestMessageUtil.createFullMqtt5Subscribe();
-
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1_1);
 
         pluginAuthorizerService.authorizeSubscriptions(channelHandlerContext, fullMqtt5Subscribe);
 

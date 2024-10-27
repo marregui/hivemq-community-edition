@@ -65,7 +65,7 @@ public class SubscribeMessageBarrierTest {
     public void test_queue_publishes() {
 
         channel.writeInbound(new SUBSCRIBE(ImmutableList.of(), 1));
-        channel.writeInbound(TestMessageUtil.createMqtt3Publish());
+        channel.writeInbound(TestMessageUtil.createMqtt5Publish());
         channel.writeInbound(new PUBACK(0));
         channel.writeInbound(new DISCONNECT());
 
@@ -76,8 +76,8 @@ public class SubscribeMessageBarrierTest {
     @Test
     public void test_messages_sent_queued_publishes() {
 
-        channel.writeInbound(TestMessageUtil.createMqtt3Publish());
-        channel.writeInbound(TestMessageUtil.createMqtt3Publish());
+        channel.writeInbound(TestMessageUtil.createMqtt5Publish());
+        channel.writeInbound(TestMessageUtil.createMqtt5Publish());
 
         assertEquals(2, subscribeMessageBarrier.getQueue().size());
 
@@ -102,13 +102,13 @@ public class SubscribeMessageBarrierTest {
     @Test
     public void test_messages_sent_publishes_and_subscribe() {
 
-        channel.writeInbound(TestMessageUtil.createMqtt3Publish());
-        channel.writeInbound(TestMessageUtil.createMqtt3Publish());
+        channel.writeInbound(TestMessageUtil.createMqtt5Publish());
+        channel.writeInbound(TestMessageUtil.createMqtt5Publish());
 
         channel.writeInbound(new SUBSCRIBE(ImmutableList.of(), 2));
 
-        channel.writeInbound(TestMessageUtil.createMqtt3Publish());
-        channel.writeInbound(TestMessageUtil.createMqtt3Publish());
+        channel.writeInbound(TestMessageUtil.createMqtt5Publish());
+        channel.writeInbound(TestMessageUtil.createMqtt5Publish());
 
         assertEquals(5, subscribeMessageBarrier.getQueue().size());
 

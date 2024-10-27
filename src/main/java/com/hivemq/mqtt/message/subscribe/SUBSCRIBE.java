@@ -31,7 +31,7 @@ import com.hivemq.mqtt.message.mqtt5.MqttMessageWithUserProperties;
  * @since 1.4
  */
 
-public class SUBSCRIBE extends MqttMessageWithUserProperties implements Mqtt3SUBSCRIBE, Mqtt5SUBSCRIBE {
+public class SUBSCRIBE extends MqttMessageWithUserProperties implements Mqtt5SUBSCRIBE {
 
     private final @NotNull ImmutableList<Topic> topics;
     private final int subscriptionIdentifier;

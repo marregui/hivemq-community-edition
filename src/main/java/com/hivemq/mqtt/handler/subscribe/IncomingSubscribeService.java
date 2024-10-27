@@ -122,6 +122,11 @@ public class IncomingSubscribeService {
         this.mqttServerDisconnector = mqttServerDisconnector;
     }
 
+    @VisibleForTesting
+    static boolean batch(@NotNull final Set<Topic> topics) {
+        return topics.size() >= 2;
+    }
+
     public void processSubscribe(
             final @NotNull ChannelHandlerContext ctx, final @NotNull SUBSCRIBE msg, final boolean authorizersPresent) {
         processSubscribe(ctx,
@@ -303,17 +308,12 @@ public class IncomingSubscribeService {
             }
 
             if (answerCodes[i].getCode() >= 128) { // every code >= 128 is an error code
-                if (mqttVersion == ProtocolVersion.MQTTv3_1) {
-                    handleInsufficientPermissionsV31(ctx, topic);
-                    return;
-                } else {
-                    ignoredTopics.add(topic);
-                    log.trace(
-                            "Ignoring subscription for client [{}] and topic [{}] with qos [{}] because the client is not permitted",
-                            clientId,
-                            topic.getTopic(),
-                            topic.getQoS());
-                }
+                ignoredTopics.add(topic);
+                log.trace(
+                        "Ignoring subscription for client [{}] and topic [{}] with qos [{}] because the client is not permitted",
+                        clientId,
+                        topic.getTopic(),
+                        topic.getQoS());
             }
         }
 
@@ -427,11 +427,6 @@ public class IncomingSubscribeService {
         return cleanedTopics;
     }
 
-    @VisibleForTesting
-    static boolean batch(@NotNull final Set<Topic> topics) {
-        return topics.size() >= 2;
-    }
-
     @NotNull
     private ListenableFuture<ImmutableList<SubscriptionResult>> persistBatchedSubscriptions(
             @NotNull final String clientId,
@@ -465,6 +460,20 @@ public class IncomingSubscribeService {
                 Mqtt5DisconnectReasonCode.NOT_AUTHORIZED,
                 //same as mqtt 5 just for the events
                 null);
+    }
+
+    private void downgradeSharedSubscriptions(@NotNull final SUBSCRIBE subscribe) {
+        for (final Topic topic : subscribe.getTopics()) {
+            final SharedSubscription sharedSubscription =
+                    sharedSubscriptionService.checkForSharedSubscription(topic.getTopic());
+            if (sharedSubscription == null) {
+                continue;
+            }
+            if (topic.getQoS().getQosNumber() > 1) {
+                // QoS 2 is not supported for shared subscriptions
+                topic.setQoS(QoS.AT_LEAST_ONCE);
+            }
+        }
     }
 
     private static class SubscribePersistenceBatchedCallback
@@ -501,33 +510,7 @@ public class IncomingSubscribeService {
 
         @Override
         public void onFailure(@NotNull final Throwable throwable) {
-            if (mqttVersion == ProtocolVersion.MQTTv3_1_1) {
-                Exceptions.rethrowError("Unable to persist subscription to topics " +
-                        msg.getTopics() +
-                        " for client " +
-                        clientId +
-                        ".", throwable);
-                for (int i = 0; i < answerCodes.length; i++) {
-                    answerCodes[i] = UNSPECIFIED_ERROR;
-                }
-                settableFuture.set(null);
-            } else {
-                settableFuture.setException(throwable);
-            }
-        }
-    }
-
-    private void downgradeSharedSubscriptions(@NotNull final SUBSCRIBE subscribe) {
-        for (final Topic topic : subscribe.getTopics()) {
-            final SharedSubscription sharedSubscription =
-                    sharedSubscriptionService.checkForSharedSubscription(topic.getTopic());
-            if (sharedSubscription == null) {
-                continue;
-            }
-            if (topic.getQoS().getQosNumber() > 1) {
-                // QoS 2 is not supported for shared subscriptions
-                topic.setQoS(QoS.AT_LEAST_ONCE);
-            }
+            settableFuture.setException(throwable);
         }
     }
 
@@ -570,17 +553,7 @@ public class IncomingSubscribeService {
 
         @Override
         public void onFailure(@NotNull final Throwable throwable) {
-            if (mqttVersion == ProtocolVersion.MQTTv3_1_1) {
-                Exceptions.rethrowError("Unable to persist subscription to topic " +
-                        topic +
-                        " for client " +
-                        clientId +
-                        ".", throwable);
-                answerCodes[index] = UNSPECIFIED_ERROR;
-                settableFuture.set(null);
-            } else {
-                settableFuture.setException(throwable);
-            }
+            settableFuture.setException(throwable);
         }
     }
 }

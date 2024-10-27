@@ -145,7 +145,7 @@ public class PingInterceptorHandlerTest {
         clientContext.addPingReqInboundInterceptor(interceptor);
 
         ClientConnection.of(channel).setExtensionClientContext(clientContext);
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1);
+        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
         when(hiveMQExtensions.getExtensionForClassloader(any(IsolatedExtensionClassloader.class))).thenReturn(extension);
 
         channel.writeInbound(new PINGREQ());
@@ -170,7 +170,7 @@ public class PingInterceptorHandlerTest {
         clientContext.addPingReqInboundInterceptor(interceptor);
 
         ClientConnection.of(channel).setExtensionClientContext(clientContext);
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1);
+        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
         when(hiveMQExtensions.getExtensionForClassloader(any(IsolatedExtensionClassloader.class))).thenReturn(extension);
 
         channel.writeInbound(new PINGREQ());
@@ -195,7 +195,7 @@ public class PingInterceptorHandlerTest {
         clientContext.addPingRespOutboundInterceptor(interceptor);
 
         ClientConnection.of(channel).setExtensionClientContext(clientContext);
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1);
+        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
         when(hiveMQExtensions.getExtensionForClassloader(any(IsolatedExtensionClassloader.class))).thenReturn(extension);
 
         channel.writeOutbound(new PINGRESP());
@@ -220,7 +220,7 @@ public class PingInterceptorHandlerTest {
         clientContext.addPingRespOutboundInterceptor(interceptor);
 
         ClientConnection.of(channel).setExtensionClientContext(clientContext);
-        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv3_1);
+        ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
         when(hiveMQExtensions.getExtensionForClassloader(any(IsolatedExtensionClassloader.class))).thenReturn(extension);
 
         channel.writeOutbound(new PINGRESP());

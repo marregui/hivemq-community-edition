@@ -300,62 +300,6 @@ public class MqttServerDisconnectorTest {
         assertTrue(authLatch.await(10, TimeUnit.SECONDS));
     }
 
-    @Test
-    public void test_disconnect_channel_with_reason_code_and_reason_string_at_auth_mqtt3_1_1()
-            throws InterruptedException {
-
-        final EmbeddedChannel channel = new EmbeddedChannel();
-        final ClientConnection clientConnection = new DummyClientConnection(channel, null);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1_1);
-        ClientConnection.of(channel).proposeClientState(ClientState.AUTHENTICATED);
-
-        final CountDownLatch eventLatch = new CountDownLatch(1);
-        final CountDownLatch authLatch = new CountDownLatch(1);
-        channel.pipeline().addLast(new TestDisconnectEventHandler(eventLatch, authLatch));
-        assertTrue(channel.isActive());
-
-        mqttServerDisconnector.disconnect(channel,
-                "log",
-                "eventlog",
-                Mqtt5DisconnectReasonCode.MALFORMED_PACKET,
-                "reason",
-                Mqtt5UserProperties.NO_USER_PROPERTIES,
-                true,
-                false);
-
-        assertFalse(channel.isActive());
-        assertTrue(authLatch.await(10, TimeUnit.SECONDS));
-    }
-
-    @Test
-    public void test_disconnect_channel_with_reason_code_and_reason_string_at_auth_mqtt_3_1()
-            throws InterruptedException {
-
-        final EmbeddedChannel channel = new EmbeddedChannel();
-        final ClientConnection clientConnection = new DummyClientConnection(channel, null);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1);
-        ClientConnection.of(channel).proposeClientState(ClientState.AUTHENTICATED);
-
-        final CountDownLatch eventLatch = new CountDownLatch(1);
-        final CountDownLatch authLatch = new CountDownLatch(1);
-        channel.pipeline().addLast(new TestDisconnectEventHandler(eventLatch, authLatch));
-        assertTrue(channel.isActive());
-
-        mqttServerDisconnector.disconnect(channel,
-                "log",
-                "eventlog",
-                Mqtt5DisconnectReasonCode.MALFORMED_PACKET,
-                "reason",
-                Mqtt5UserProperties.NO_USER_PROPERTIES,
-                true,
-                false);
-
-        assertFalse(channel.isActive());
-        assertTrue(authLatch.await(10, TimeUnit.SECONDS));
-    }
-
     @Test(expected = NullPointerException.class)
     public void test_disconnect_channel_with_reason_code_null() throws InterruptedException {
         final EmbeddedChannel channel = new EmbeddedChannel();
@@ -370,23 +314,6 @@ public class MqttServerDisconnectorTest {
                 Mqtt5UserProperties.NO_USER_PROPERTIES,
                 false,
                 false);
-    }
-
-    @Test
-    public void test_disconnect_channel_with_reason_code_null_mqtt_3() throws InterruptedException {
-        final EmbeddedChannel channel = new EmbeddedChannel();
-        final ClientConnection clientConnection = new DummyClientConnection(channel, null);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1);
-        mqttServerDisconnector.disconnect(channel,
-                "log",
-                "eventlog",
-                null,
-                null,
-                Mqtt5UserProperties.NO_USER_PROPERTIES,
-                false,
-                false);
-        assertFalse(channel.isActive());
     }
 
     private static class TestDisconnectEventHandler extends SimpleChannelInboundHandler<CONNECT> {

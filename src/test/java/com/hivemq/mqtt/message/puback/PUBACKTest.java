@@ -33,18 +33,6 @@ import static org.junit.Assert.assertNotSame;
 public class PUBACKTest {
 
     @Test
-    public void test_constructMqtt3() {
-        final PUBACK origin = new PUBACK(1);
-        final PubackPacketImpl packet = new PubackPacketImpl(origin);
-
-        final PUBACK merged = PUBACK.from(packet);
-
-        assertNotNull(merged);
-        assertNotSame(origin, merged);
-        assertPUBACKequals(origin, merged);
-    }
-
-    @Test
     public void test_constructMqtt5() {
         final PUBACK origin = new PUBACK(1,
                 Mqtt5PubAckReasonCode.NOT_AUTHORIZED,

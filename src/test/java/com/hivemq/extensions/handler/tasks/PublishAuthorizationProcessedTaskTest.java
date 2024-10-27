@@ -120,36 +120,6 @@ public class PublishAuthorizationProcessedTaskTest {
     }
 
     @Test
-    public void test_mqtt3_disconnect() {
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1);
-        output.disconnectClient();
-        task.onSuccess(output);
-
-        channel.runPendingTasks();
-
-        verify(mqtt5ServerDisconnector).disconnect(any(),
-                anyString(),
-                anyString(),
-                eq(Mqtt5DisconnectReasonCode.NOT_AUTHORIZED),
-                eq(null));
-    }
-
-    @Test
-    public void test_mqtt3_1_disconnect() {
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1_1);
-        output.disconnectClient();
-        task.onSuccess(output);
-
-        channel.runPendingTasks();
-
-        verify(mqtt5ServerDisconnector).disconnect(any(),
-                anyString(),
-                anyString(),
-                eq(Mqtt5DisconnectReasonCode.NOT_AUTHORIZED),
-                eq(null));
-    }
-
-    @Test
     public void test_mqtt5_fail() {
         final ArgumentCaptor<PublishAuthorizerResult> captor = ArgumentCaptor.forClass(PublishAuthorizerResult.class);
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
@@ -200,46 +170,6 @@ public class PublishAuthorizationProcessedTaskTest {
         final PublishAuthorizerResult result = captor.getValue();
         assertEquals(AckReasonCode.TOPIC_NAME_INVALID, result.getAckReasonCode());
         assertEquals("test-string", result.getReasonString());
-    }
-
-    @Test
-    public void test_mqtt3_fail() {
-
-        final ArgumentCaptor<PublishAuthorizerResult> captor = ArgumentCaptor.forClass(PublishAuthorizerResult.class);
-
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1);
-
-        output.failAuthorization();
-        task.onSuccess(output);
-
-        channel.runPendingTasks();
-
-        verify(incomingPublishService).processPublish(any(), any(), captor.capture());
-
-        final PublishAuthorizerResult result = captor.getValue();
-        assertEquals(AckReasonCode.NOT_AUTHORIZED, result.getAckReasonCode());
-        assertEquals("Not authorized to publish on topic 'topic' with QoS '1' and retain 'false'",
-                result.getReasonString());
-    }
-
-    @Test
-    public void test_mqtt3_1_fail() {
-
-        final ArgumentCaptor<PublishAuthorizerResult> captor = ArgumentCaptor.forClass(PublishAuthorizerResult.class);
-
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1_1);
-
-        output.failAuthorization();
-        task.onSuccess(output);
-
-        channel.runPendingTasks();
-
-        verify(incomingPublishService).processPublish(any(), any(), captor.capture());
-
-        final PublishAuthorizerResult result = captor.getValue();
-        assertEquals(AckReasonCode.NOT_AUTHORIZED, result.getAckReasonCode());
-        assertEquals("Not authorized to publish on topic 'topic' with QoS '1' and retain 'false'",
-                result.getReasonString());
     }
 
     @Test

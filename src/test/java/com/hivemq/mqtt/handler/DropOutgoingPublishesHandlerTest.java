@@ -79,7 +79,7 @@ public class DropOutgoingPublishesHandlerTest {
     @Test
     public void drop_message() throws Exception {
         final SettableFuture<PublishStatus> future = SettableFuture.create();
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withHivemqId("hivemqId")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withHivemqId("hivemqId")
                 .withPayload(new byte[]{0})
                 .withTopic("topic")
                 .withQoS(QoS.AT_MOST_ONCE)
@@ -99,7 +99,7 @@ public class DropOutgoingPublishesHandlerTest {
     @Test
     public void dont_drop_qos_1_message() throws Exception {
         final SettableFuture<PublishStatus> future = SettableFuture.create();
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withHivemqId("hivemqId")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withHivemqId("hivemqId")
                 .withPayload(new byte[]{0})
                 .withTopic("topic")
                 .withQoS(QoS.AT_LEAST_ONCE)
@@ -119,7 +119,7 @@ public class DropOutgoingPublishesHandlerTest {
     public void dont_drop_writable_message() throws Exception {
         when(channel.isWritable()).thenReturn(true);
         final SettableFuture<PublishStatus> future = SettableFuture.create();
-        final PUBLISH publish = new PUBLISHFactory.Mqtt3Builder().withHivemqId("hivemqId")
+        final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withHivemqId("hivemqId")
                 .withPayload(new byte[]{0})
                 .withTopic("topic")
                 .withQoS(QoS.AT_MOST_ONCE)

@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @since 4.0.0
  */
-public class PUBLISH extends MqttMessageWithUserProperties implements Mqtt3PUBLISH, Mqtt5PUBLISH {
+public class PUBLISH extends MqttMessageWithUserProperties implements Mqtt5PUBLISH {
 
     public static final int DEFAULT_NO_TOPIC_ALIAS = -1;
     public static final int NO_PUBLISH_ID_SET = -1;

@@ -17,11 +17,7 @@ package com.hivemq.extensions.packets.general;
 
 import org.junit.Test;
 
-import static com.hivemq.extension.sdk.api.packets.general.MqttVersion.V_3_1;
-import static com.hivemq.extension.sdk.api.packets.general.MqttVersion.V_3_1_1;
 import static com.hivemq.extension.sdk.api.packets.general.MqttVersion.V_5;
-import static com.hivemq.mqtt.message.ProtocolVersion.MQTTv3_1;
-import static com.hivemq.mqtt.message.ProtocolVersion.MQTTv3_1_1;
 import static com.hivemq.mqtt.message.ProtocolVersion.MQTTv5;
 import static org.junit.Assert.assertSame;
 
@@ -34,17 +30,5 @@ public class MqttVersionUtilTest {
     public void test_version_5() {
         assertSame(V_5, MqttVersionUtil.toMqttVersion(MQTTv5));
         assertSame(MQTTv5, MqttVersionUtil.toProtocolVersion(V_5));
-    }
-
-    @Test(timeout = 5000)
-    public void test_version_3_1() {
-        assertSame(V_3_1, MqttVersionUtil.toMqttVersion(MQTTv3_1));
-        assertSame(MQTTv3_1, MqttVersionUtil.toProtocolVersion(V_3_1));
-    }
-
-    @Test(timeout = 5000)
-    public void test_version_3_1_1() {
-        assertSame(V_3_1_1, MqttVersionUtil.toMqttVersion(MQTTv3_1_1));
-        assertSame(MQTTv3_1_1, MqttVersionUtil.toProtocolVersion(V_3_1_1));
     }
 }

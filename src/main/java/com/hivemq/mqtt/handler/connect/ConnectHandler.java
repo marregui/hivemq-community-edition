@@ -50,7 +50,6 @@ import com.hivemq.mqtt.handler.publish.PublishFlowHandler;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import com.hivemq.mqtt.message.connack.CONNACK;
 import com.hivemq.mqtt.message.connack.CONNACKBuilder;
-import com.hivemq.mqtt.message.connack.Mqtt3ConnAckReturnCode;
 import com.hivemq.mqtt.message.connect.CONNECT;
 import com.hivemq.mqtt.message.connect.MqttWillPublish;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
@@ -155,6 +154,21 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
         this.keepAliveDisconnectService = keepAliveDisconnectService;
     }
 
+    private static void cleanChannelAttributesAfterAuth(final @NotNull ClientConnectionContext clientConnectionContext) {
+        final ChannelPipeline pipeline = clientConnectionContext.getChannel().pipeline();
+        if (pipeline.context(AUTH_IN_PROGRESS_MESSAGE_HANDLER) != null) {
+            try {
+                pipeline.remove(AUTH_IN_PROGRESS_MESSAGE_HANDLER);
+            } catch (final NoSuchElementException ignored) {
+            }
+        }
+        clientConnectionContext.setAuthConnect(null);
+    }
+
+    private static double getGracePeriod() {
+        return InternalConfigurations.MQTT_CONNECTION_KEEP_ALIVE_FACTOR;
+    }
+
     @PostConstruct
     public void postConstruct() {
         maxClientIdLength = configurationService.restrictionsConfiguration().maxClientIdLength();
@@ -238,17 +252,6 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
         clientConnectionContext.proposeClientState(ClientState.AUTHENTICATED);
         cleanChannelAttributesAfterAuth(clientConnectionContext);
         connectAuthenticated(ctx, clientConnectionContext, connect, clientSettings);
-    }
-
-    private static void cleanChannelAttributesAfterAuth(final @NotNull ClientConnectionContext clientConnectionContext) {
-        final ChannelPipeline pipeline = clientConnectionContext.getChannel().pipeline();
-        if (pipeline.context(AUTH_IN_PROGRESS_MESSAGE_HANDLER) != null) {
-            try {
-                pipeline.remove(AUTH_IN_PROGRESS_MESSAGE_HANDLER);
-            } catch (final NoSuchElementException ignored) {
-            }
-        }
-        clientConnectionContext.setAuthConnect(null);
     }
 
     private void adjustValuesAccordingToSettings(final @NotNull CONNECT connect) {
@@ -596,12 +599,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
             final CONNACK connack = buildMqtt5Connack(clientConnection, msg, sessionPresent);
             connackSent = mqttConnacker.connackSuccess(ctx, connack, msg);
         } else {
-            clientConnection.setClientSessionExpiryInterval(msg.getSessionExpiryInterval());
-            final CONNACK connack = CONNACK.builder()
-                    .withMqtt3ReturnCode(Mqtt3ConnAckReturnCode.ACCEPTED)
-                    .withSessionPresent(sessionPresent)
-                    .build();
-            connackSent = mqttConnacker.connackSuccess(ctx, connack, msg);
+            throw new RuntimeException("Unsupported protocol version: " + msg.getProtocolVersion());
         }
 
         //send out queued messages (from inflight and client-session queue) for client after connack is sent
@@ -764,10 +762,6 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
                 log.trace("Client {} specified keepAlive of 0. Disabling PING mechanism", msg.getClientIdentifier());
             }
         }
-    }
-
-    private static double getGracePeriod() {
-        return InternalConfigurations.MQTT_CONNECTION_KEEP_ALIVE_FACTOR;
     }
 
     private static final class UpdatePersistenceCallback implements FutureCallback<Void> {

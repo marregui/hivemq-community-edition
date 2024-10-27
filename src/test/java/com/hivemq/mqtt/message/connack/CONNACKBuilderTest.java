@@ -49,7 +49,6 @@ public class CONNACKBuilderTest {
 
         final CONNACK connack = builder.build();
 
-        assertEquals(connack.getReturnCode(), Mqtt3ConnAckReturnCode.ACCEPTED);
         assertNull(connack.getAssignedClientIdentifier());
         assertNull(connack.getAuthData());
         assertNull(connack.getAuthMethod());
@@ -139,7 +138,6 @@ public class CONNACKBuilderTest {
         assertEquals(connack.getUserProperties(), userProperties);
         assertEquals(connack.isWildcardSubscriptionAvailable(), wildcardSubscriptionAvailable);
 
-        assertEquals(connack.getReturnCode(), Mqtt3ConnAckReturnCode.ACCEPTED);
         assertEquals(connack.getType(), MessageType.CONNACK);
         assertEquals(connack.getPacketIdentifier(), 0);
         assertEquals(connack.getReasonCode(), Mqtt5ConnAckReasonCode.SUCCESS);

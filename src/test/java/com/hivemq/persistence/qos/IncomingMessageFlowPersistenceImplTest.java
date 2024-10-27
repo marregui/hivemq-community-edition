@@ -50,9 +50,9 @@ public class IncomingMessageFlowPersistenceImplTest {
 
     @Test
     public void test_delegate_addOrReplace() {
-        final PUBLISH mqtt3Publish = TestMessageUtil.createMqtt3Publish();
-        incomingMessageFlowPersistence.addOrReplace("client", 1, mqtt3Publish);
-        verify(incomingMessageFlowLocalPersistence).addOrReplace("client", 1, mqtt3Publish);
+        final PUBLISH mqtt5Publish = TestMessageUtil.createMqtt5Publish();
+        incomingMessageFlowPersistence.addOrReplace("client", 1, mqtt5Publish);
+        verify(incomingMessageFlowLocalPersistence).addOrReplace("client", 1, mqtt5Publish);
     }
 
     @Test

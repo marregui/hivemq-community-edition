@@ -34,41 +34,22 @@ import com.hivemq.mqtt.message.unsubscribe.UNSUBSCRIBE;
  */
 public class TestEncoderFactory extends EncoderFactory {
 
-    private final @NotNull Mqtt3ConnectEncoder connectEncoder;
-    private final @NotNull Mqtt3SubscribeEncoder subscribeEncoder;
-    private final @NotNull Mqtt3UnsubscribeEncoder unsubscribeEncoder;
     private final @NotNull PingreqEncoder pingreqEncoder;
 
     public TestEncoderFactory(
             final @NotNull MessageDroppedService messageDroppedService,
             final @NotNull SecurityConfigurationService securityConfigurationService,
             final @NotNull MqttServerDisconnector mqttServerDisconnector,
-            final @NotNull Mqtt3ConnectEncoder connectEncoder,
-            final @NotNull Mqtt3SubscribeEncoder subscribeEncoder,
-            final @NotNull Mqtt3UnsubscribeEncoder unsubscribeEncoder,
             final @NotNull PingreqEncoder pingreqEncoder) {
 
         super(messageDroppedService, securityConfigurationService, mqttServerDisconnector);
 
-        this.connectEncoder = connectEncoder;
-        this.subscribeEncoder = subscribeEncoder;
-        this.unsubscribeEncoder = unsubscribeEncoder;
         this.pingreqEncoder = pingreqEncoder;
     }
 
     @Override
     protected @Nullable MqttEncoder getEncoder(
             final @NotNull Message msg, final @NotNull ClientConnectionContext clientConnectionContext) {
-
-        if (msg instanceof CONNECT) {
-            return connectEncoder;
-        }
-        if (msg instanceof SUBSCRIBE) {
-            return subscribeEncoder;
-        }
-        if (msg instanceof UNSUBSCRIBE) {
-            return unsubscribeEncoder;
-        }
         if (msg instanceof PINGREQ) {
             return pingreqEncoder;
         }

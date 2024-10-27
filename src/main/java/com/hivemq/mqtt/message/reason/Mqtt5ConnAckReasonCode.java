@@ -21,7 +21,6 @@ import com.hivemq.extension.sdk.api.packets.connect.ConnackReasonCode;
 import com.hivemq.extension.sdk.api.packets.disconnect.DisconnectReasonCode;
 import com.hivemq.extension.sdk.api.packets.general.DisconnectedReasonCode;
 import com.hivemq.extension.sdk.api.packets.publish.AckReasonCode;
-import com.hivemq.mqtt.message.connack.Mqtt3ConnAckReturnCode;
 
 /**
  * MQTT Reason Codes that can be used in CONNACK packets according to the MQTT 5 specification.
@@ -123,26 +122,6 @@ public enum Mqtt5ConnAckReasonCode implements Mqtt5ReasonCode {
 
     public static @Nullable Mqtt5ConnAckReasonCode from(final @NotNull DisconnectedReasonCode reasonCode) {
         return DISCONNECTED_LOOKUP[reasonCode.ordinal()];
-    }
-
-    @NotNull
-    public static Mqtt5ConnAckReasonCode fromReturnCode(@NotNull final Mqtt3ConnAckReturnCode returnCode) {
-        switch (returnCode) {
-            case ACCEPTED:
-                return Mqtt5ConnAckReasonCode.SUCCESS;
-            case REFUSED_UNACCEPTABLE_PROTOCOL_VERSION:
-                return Mqtt5ConnAckReasonCode.UNSUPPORTED_PROTOCOL_VERSION;
-            case REFUSED_IDENTIFIER_REJECTED:
-                return Mqtt5ConnAckReasonCode.CLIENT_IDENTIFIER_NOT_VALID;
-            case REFUSED_SERVER_UNAVAILABLE:
-                return Mqtt5ConnAckReasonCode.SERVER_UNAVAILABLE;
-            case REFUSED_BAD_USERNAME_OR_PASSWORD:
-                return Mqtt5ConnAckReasonCode.BAD_USER_NAME_OR_PASSWORD;
-            case REFUSED_NOT_AUTHORIZED:
-                return Mqtt5ConnAckReasonCode.NOT_AUTHORIZED;
-            default:
-                throw new IllegalStateException();
-        }
     }
 
     @NotNull

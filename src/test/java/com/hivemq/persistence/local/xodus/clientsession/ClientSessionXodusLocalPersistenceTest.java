@@ -294,7 +294,7 @@ public class ClientSessionXodusLocalPersistenceTest {
 
     @Test
     public void test_get_expired_session_after_clean_up() {
-        final MqttWillPublish mqttWillPublish = new MqttWillPublish.Mqtt3Builder().withTopic("topic")
+        final MqttWillPublish mqttWillPublish = new MqttWillPublish.Mqtt5Builder().withTopic("topic")
                 .withPayload("message".getBytes())
                 .withQos(QoS.AT_LEAST_ONCE)
                 .withRetain(true)
@@ -529,7 +529,7 @@ public class ClientSessionXodusLocalPersistenceTest {
     @Test
     public void test_graceful_handling_if_will_payload_is_missing() {
         final int bucketIndex = BucketUtils.getBucket("clientId", BUCKET_COUNT);
-        final MqttWillPublish willPublish = new MqttWillPublish.Mqtt3Builder().withTopic("abc")
+        final MqttWillPublish willPublish = new MqttWillPublish.Mqtt5Builder().withTopic("abc")
                 .withPayload(new byte[]{})
                 .withQos(QoS.EXACTLY_ONCE)
                 .withHivemqId("hivemqId")

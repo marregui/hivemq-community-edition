@@ -210,19 +210,6 @@ public class IncomingSubscribeHandler {
             final ProtocolVersion version = ClientConnection.of(ctx.channel()).getProtocolVersion();
             final List<Mqtt5SubAckReasonCode> reasonCodesBuilder = new ArrayList<>(size);
 
-            // MQTT 3.1 does not support SUBACK failure codes
-            if (version == ProtocolVersion.MQTTv3_1) {
-                mqttServerDisconnector.disconnect(ctx.channel(),
-                        null,
-                        "Negative SUBSCRIBE acknowledgement for an MQTT 3.1 client is not possible; the client was disconnected instead",
-                        Mqtt5DisconnectReasonCode.UNSPECIFIED_ERROR,
-                        null,
-                        Mqtt5UserProperties.NO_USER_PROPERTIES,
-                        false,
-                        true);
-                return;
-            }
-
             for (int i = 0; i < size; i++) {
                 reasonCodesBuilder.add(Mqtt5SubAckReasonCode.UNSPECIFIED_ERROR);
             }

@@ -27,7 +27,6 @@ import com.hivemq.extensions.events.OnServerDisconnectEvent;
 import com.hivemq.logging.EventLog;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import com.hivemq.mqtt.message.connack.CONNACK;
-import com.hivemq.mqtt.message.connack.Mqtt3ConnAckReturnCode;
 import com.hivemq.mqtt.message.connect.CONNECT;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.reason.Mqtt5ConnAckReasonCode;
@@ -126,17 +125,12 @@ public class MqttConnackerImpl implements MqttConnacker {
         }
 
         fireEvents(clientConnectionContext, oldClientState, reasonCode, reasonString, userProperties, isAuthentication);
-
-        if ((protocolVersion == ProtocolVersion.MQTTv3_1) || (protocolVersion == ProtocolVersion.MQTTv3_1_1)) {
-            connackError3(clientConnectionContext, connackWithReasonCode, reasonCode);
-        } else { // MQTT 5
-            connackError5(clientConnectionContext,
-                    connackWithReasonCode,
-                    connackWithReasonString,
-                    reasonCode,
-                    reasonString,
-                    userProperties);
-        }
+        connackError5(clientConnectionContext,
+                connackWithReasonCode,
+                connackWithReasonString,
+                reasonCode,
+                reasonString,
+                userProperties);
     }
 
     private void logConnack(
@@ -149,24 +143,6 @@ public class MqttConnackerImpl implements MqttConnacker {
 
         if (eventLogMessage != null && !eventLogMessage.isEmpty()) {
             eventLog.clientWasDisconnected(channel, eventLogMessage);
-        }
-    }
-
-    private void connackError3(
-            final @NotNull ClientConnectionContext clientConnectionContext,
-            final boolean withReasonCode,
-            final @Nullable Mqtt5ConnAckReasonCode reasonCode) {
-
-        final Mqtt3ConnAckReturnCode returnCode = transformReasonCode(reasonCode);
-
-        clientConnectionContext.proposeClientState(ClientState.CONNECT_FAILED);
-
-        if (returnCode != null && withReasonCode) {
-            final CONNACK connack = CONNACK.builder().withMqtt3ReturnCode(returnCode).build();
-            clientConnectionContext.getChannel().writeAndFlush(connack).addListener(ChannelFutureListener.CLOSE);
-        } else {
-            //Do not send connack to not let the client know its an mqtt server
-            clientConnectionContext.getChannel().close();
         }
     }
 
@@ -235,24 +211,6 @@ public class MqttConnackerImpl implements MqttConnacker {
                     .fireUserEventTriggered(isAuthentication ?
                             new OnAuthFailedEvent(disconnectedReasonCode, reasonString, userProperties) :
                             new OnServerDisconnectEvent(disconnectedReasonCode, reasonString, userProperties));
-        }
-    }
-
-    private static @Nullable Mqtt3ConnAckReturnCode transformReasonCode(
-            final @Nullable Mqtt5ConnAckReasonCode reasonCode) {
-
-        if (reasonCode == null) {
-            return null;
-        }
-        switch (reasonCode) {
-            case UNSPECIFIED_ERROR:
-            case MALFORMED_PACKET:
-            case PROTOCOL_ERROR:
-            case IMPLEMENTATION_SPECIFIC_ERROR:
-                //no reason code for mqtt 3 available for these cases
-                return null;
-            default:
-                return Mqtt3ConnAckReturnCode.fromReasonCode(reasonCode);
         }
     }
 }

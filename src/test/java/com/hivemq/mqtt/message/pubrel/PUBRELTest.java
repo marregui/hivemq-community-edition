@@ -34,18 +34,6 @@ import static org.junit.Assert.assertNotSame;
 public class PUBRELTest {
 
     @Test
-    public void test_constructMqtt3() {
-        final PUBREL origin = new PUBREL(1);
-        final PubrelPacketImpl packet = new PubrelPacketImpl(origin);
-
-        final PUBREL merged = PUBREL.from(packet);
-
-        assertNotNull(merged);
-        assertNotSame(origin, merged);
-        assertPUBRELequals(origin, merged);
-    }
-
-    @Test
     public void test_constructMqtt5() {
         final PUBREL origin = new PUBREL(1,
                 Mqtt5PubRelReasonCode.PACKET_IDENTIFIER_NOT_FOUND,

@@ -16,14 +16,6 @@
 package com.hivemq.codec.decoder;
 
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3DisconnectDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3PubackDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3PubcompDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3PublishDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3PubrecDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3PubrelDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3SubscribeDecoder;
-import com.hivemq.codec.decoder.mqtt3.Mqtt3UnsubscribeDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5AuthDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5DisconnectDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5PubackDecoder;
@@ -47,19 +39,10 @@ import javax.inject.Inject;
 @LazySingleton
 public class MqttDecoders {
 
-    private final @Nullable MqttDecoder @NotNull [] mqtt3Decoder;
     private final @Nullable MqttDecoder @NotNull [] mqtt5Decoder;
 
     @Inject
     public MqttDecoders(
-            final @NotNull Mqtt3PublishDecoder mqtt3PublishDecoder,
-            final @NotNull Mqtt3PubackDecoder mqtt3PubackDecoder,
-            final @NotNull Mqtt3PubrecDecoder mqtt3PubrecDecoder,
-            final @NotNull Mqtt3PubcompDecoder mqtt3PubcompDecoder,
-            final @NotNull Mqtt3PubrelDecoder mqtt3PubrelDecoder,
-            final @NotNull Mqtt3DisconnectDecoder mqtt3DisconnectDecoder,
-            final @NotNull Mqtt3SubscribeDecoder mqtt3SubscribeDecoder,
-            final @NotNull Mqtt3UnsubscribeDecoder mqtt3UnsubscribeDecoder,
             final @NotNull MqttPingreqDecoder mqttPingreqDecoder,
             final @NotNull Mqtt5PublishDecoder mqtt5PublishDecoder,
             final @NotNull Mqtt5DisconnectDecoder mqtt5DisconnectDecoder,
@@ -71,19 +54,7 @@ public class MqttDecoders {
             final @NotNull Mqtt5AuthDecoder mqtt5AuthDecoder,
             final @NotNull Mqtt5UnsubscribeDecoder mqtt5UnsubscribeDecoder) {
 
-        mqtt3Decoder = new MqttDecoder[16];
         mqtt5Decoder = new MqttDecoder[16];
-
-        mqtt3Decoder[MessageType.PUBLISH.getType()] = mqtt3PublishDecoder;
-        mqtt3Decoder[MessageType.PUBACK.getType()] = mqtt3PubackDecoder;
-        mqtt3Decoder[MessageType.PUBREC.getType()] = mqtt3PubrecDecoder;
-        mqtt3Decoder[MessageType.PUBREL.getType()] = mqtt3PubrelDecoder;
-        mqtt3Decoder[MessageType.PUBCOMP.getType()] = mqtt3PubcompDecoder;
-        mqtt3Decoder[MessageType.SUBSCRIBE.getType()] = mqtt3SubscribeDecoder;
-        mqtt3Decoder[MessageType.UNSUBSCRIBE.getType()] = mqtt3UnsubscribeDecoder;
-        mqtt3Decoder[MessageType.PINGREQ.getType()] = mqttPingreqDecoder;
-        mqtt3Decoder[MessageType.DISCONNECT.getType()] = mqtt3DisconnectDecoder;
-
         mqtt5Decoder[MessageType.PUBLISH.getType()] = mqtt5PublishDecoder;
         mqtt5Decoder[MessageType.PUBACK.getType()] = mqtt5PubackDecoder;
         mqtt5Decoder[MessageType.PUBREC.getType()] = mqtt5PubrecDecoder;
@@ -100,6 +71,6 @@ public class MqttDecoders {
         if (version == ProtocolVersion.MQTTv5) {
             return mqtt5Decoder[type.getType()];
         }
-        return mqtt3Decoder[type.getType()];
+        throw new IllegalArgumentException("Unsupported protocol version: " + version);
     }
 }

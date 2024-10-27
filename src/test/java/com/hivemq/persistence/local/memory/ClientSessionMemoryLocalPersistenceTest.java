@@ -376,7 +376,7 @@ public class ClientSessionMemoryLocalPersistenceTest {
 
     @Test
     public void test_get_expired_session_after_clean_up() {
-        final MqttWillPublish mqttWillPublish = new MqttWillPublish.Mqtt3Builder().withTopic("topic")
+        final MqttWillPublish mqttWillPublish = new MqttWillPublish.Mqtt5Builder().withTopic("topic")
                 .withPayload("message".getBytes())
                 .withQos(QoS.AT_LEAST_ONCE)
                 .withRetain(true)
@@ -742,7 +742,7 @@ public class ClientSessionMemoryLocalPersistenceTest {
     public void cleanUp_usedMemoryReturnsToZero() {
         assertEquals(0L, memoryGauge.getValue().longValue());
 
-        final MqttWillPublish mqttWillPublish = new MqttWillPublish.Mqtt3Builder().withTopic("topic")
+        final MqttWillPublish mqttWillPublish = new MqttWillPublish.Mqtt5Builder().withTopic("topic")
                 .withPayload("message".getBytes())
                 .withQos(QoS.AT_LEAST_ONCE)
                 .withRetain(true)
@@ -772,7 +772,7 @@ public class ClientSessionMemoryLocalPersistenceTest {
     public void removeWithTimestamp_usedMemoryReturnsToZero() {
         assertEquals(0L, memoryGauge.getValue().longValue());
 
-        final MqttWillPublish mqttWillPublish = new MqttWillPublish.Mqtt3Builder().withTopic("topic")
+        final MqttWillPublish mqttWillPublish = new MqttWillPublish.Mqtt5Builder().withTopic("topic")
                 .withPayload("message".getBytes())
                 .withQos(QoS.AT_LEAST_ONCE)
                 .withRetain(true)

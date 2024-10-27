@@ -78,20 +78,6 @@ public class ConnectionInformationImplTest {
     }
 
     @Test
-    public void test_mqtt_v31() {
-        clientConnectionContext.setProtocolVersion(ProtocolVersion.MQTTv3_1);
-        final ConnectionInformationImpl connectionInformation = new ConnectionInformationImpl(clientConnectionContext);
-        assertEquals(MqttVersion.V_3_1, connectionInformation.getMqttVersion());
-    }
-
-    @Test
-    public void test_mqtt_v311() {
-        clientConnectionContext.setProtocolVersion(ProtocolVersion.MQTTv3_1_1);
-        final ConnectionInformationImpl connectionInformation = new ConnectionInformationImpl(clientConnectionContext);
-        assertEquals(MqttVersion.V_3_1_1, connectionInformation.getMqttVersion());
-    }
-
-    @Test
     public void test_mqtt_v5() {
         clientConnectionContext.setProtocolVersion(ProtocolVersion.MQTTv5);
         final ConnectionInformationImpl connectionInformation = new ConnectionInformationImpl(clientConnectionContext);

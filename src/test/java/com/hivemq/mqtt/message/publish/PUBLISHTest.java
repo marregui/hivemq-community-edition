@@ -96,16 +96,7 @@ public class PUBLISHTest {
                 .withUserProperties(Mqtt5UserProperties.of())
                 .build();
 
-        final PUBLISH publishMqtt3 = new PUBLISHFactory.Mqtt3Builder().withQoS(QoS.AT_MOST_ONCE)
-                .withOnwardQos(QoS.AT_MOST_ONCE)
-                .withHivemqId("hivemqId")
-                .withPayload(new byte[0])
-                .withTopic("topic")
-                .build();
-
         assertNotNull(publishMqtt5);
-        assertNotNull(publishMqtt3);
-
     }
 
     @Test
@@ -119,16 +110,7 @@ public class PUBLISHTest {
                 .withUserProperties(Mqtt5UserProperties.of())
                 .build();
 
-        final PUBLISH publishMqtt3 = new PUBLISHFactory.Mqtt3Builder().withQoS(QoS.AT_MOST_ONCE)
-                .withOnwardQos(QoS.AT_MOST_ONCE)
-                .withHivemqId("hivemqId")
-                .withPublishId(1L)
-                .withTopic("topic")
-                .build();
-
         assertNotNull(publishMqtt5);
-        assertNotNull(publishMqtt3);
-
     }
 
     @Test

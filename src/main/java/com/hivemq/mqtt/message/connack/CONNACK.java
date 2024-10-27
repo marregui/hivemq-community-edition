@@ -35,7 +35,7 @@ import com.hivemq.util.Bytes;
  * @since 4.0.0
  */
 
-public class CONNACK extends MqttMessageWithReasonCode<Mqtt5ConnAckReasonCode> implements Mqtt3CONNACK, Mqtt5CONNACK {
+public class CONNACK extends MqttMessageWithReasonCode<Mqtt5ConnAckReasonCode> implements Mqtt5CONNACK {
 
     public static @NotNull CONNACKBuilder builder() {
         return new CONNACKBuilder();
@@ -149,11 +149,6 @@ public class CONNACK extends MqttMessageWithReasonCode<Mqtt5ConnAckReasonCode> i
     @Override
     public int getMaximumPacketSize() {
         return maximumPacketSize;
-    }
-
-    @Override
-    public @NotNull Mqtt3ConnAckReturnCode getReturnCode() {
-        return Mqtt3ConnAckReturnCode.fromReasonCode(getReasonCode());
     }
 
     @Override

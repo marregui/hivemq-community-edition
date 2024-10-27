@@ -250,7 +250,7 @@ public class PublishPollServiceImplTest {
                 anyInt(),
                 anyLong())).thenReturn(Futures.immediateFuture(ImmutableList.of(createPublish(),
                 createPublish(),
-                TestMessageUtil.createMqtt3Publish(QoS.AT_MOST_ONCE))));
+                TestMessageUtil.createMqtt5Publish("group/topic", QoS.AT_MOST_ONCE))));
 
         when(freePacketIdRanges.takeNextId()).thenReturn(2).thenReturn(3);
         when(channel.isActive()).thenReturn(true);
@@ -329,7 +329,7 @@ public class PublishPollServiceImplTest {
         clientConnection.setInFlightMessagesSent(true);
         when(pipeline.get(PublishFlowHandler.class)).thenReturn(pubflishFlowHandler);
 
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish(QoS.AT_LEAST_ONCE);
+        final PUBLISH publish = TestMessageUtil.createMqtt5Publish("group/topic", QoS.AT_LEAST_ONCE);
         when(clientQueuePersistence.readShared(eq("group/topic"),
                 anyInt(),
                 anyLong())).thenReturn(Futures.immediateFuture(ImmutableList.of(publish)));

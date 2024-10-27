@@ -92,41 +92,6 @@ public class InternalPublishServiceImplTest {
     }
 
     @Test(timeout = 20000)
-    public void test_retained_message_remove() throws Exception {
-
-        when(topicTree.findTopicSubscribers(anyString())).thenReturn(new TopicSubscribers(ImmutableSet.of(),
-                ImmutableSet.of()));
-        publishService = new InternalPublishServiceImpl(retainedMessagePersistence, topicTree, publishDistributor);
-
-        final PUBLISH publish =
-                TestMessageUtil.createMqtt3Publish("hivemqId", "subonly", QoS.AT_LEAST_ONCE, new byte[0], true);
-
-        when(retainedMessagePersistence.remove(anyString())).thenReturn(Futures.immediateFuture(null));
-
-        publishService.publish(publish, executorService, "sender").get();
-
-        verify(retainedMessagePersistence).remove("subonly");
-
-    }
-
-    @Test(timeout = 20000)
-    public void test_retained_message_remove_failed() throws Exception {
-
-        when(topicTree.findTopicSubscribers(anyString())).thenReturn(new TopicSubscribers(ImmutableSet.of(),
-                ImmutableSet.of()));
-        publishService = new InternalPublishServiceImpl(retainedMessagePersistence, topicTree, publishDistributor);
-
-        final PUBLISH publish =
-                TestMessageUtil.createMqtt3Publish("hivemqId", "subonly", QoS.AT_LEAST_ONCE, new byte[0], true);
-
-        when(retainedMessagePersistence.remove(anyString())).thenReturn(Futures.immediateFailedFuture(TestException.INSTANCE));
-
-        publishService.publish(publish, executorService, "sender").get();
-
-        verify(retainedMessagePersistence).remove("subonly");
-    }
-
-    @Test(timeout = 20000)
     public void test_no_subs() throws ExecutionException, InterruptedException {
 
         when(topicTree.findTopicSubscribers(anyString())).thenReturn(new TopicSubscribers(ImmutableSet.of(),

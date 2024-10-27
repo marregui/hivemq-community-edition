@@ -138,7 +138,7 @@ public class UnsubscribeInboundInterceptorHandlerTest {
         clientContext.addUnsubscribeInboundInterceptor(interceptor);
 
         ClientConnection.of(channel).setExtensionClientContext(clientContext);
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1);
+        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
         when(extensions.getExtensionForClassloader(ArgumentMatchers.any(IsolatedExtensionClassloader.class))).thenReturn(
                 extension);
@@ -164,7 +164,7 @@ public class UnsubscribeInboundInterceptorHandlerTest {
         clientContext.addUnsubscribeInboundInterceptor(interceptor);
 
         ClientConnection.of(channel).setExtensionClientContext(clientContext);
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1);
+        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
         when(extensions.getExtensionForClassloader(ArgumentMatchers.any(IsolatedExtensionClassloader.class))).thenReturn(
                 extension);

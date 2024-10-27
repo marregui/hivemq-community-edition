@@ -33,18 +33,6 @@ import static org.junit.Assert.assertNotSame;
 public class PUBRECTest {
 
     @Test
-    public void test_constructMqtt3() {
-        final PUBREC origin = new PUBREC(1);
-        final PubrecPacketImpl packet = new PubrecPacketImpl(origin);
-
-        final PUBREC merged = PUBREC.from(packet);
-
-        assertNotNull(merged);
-        assertNotSame(origin, merged);
-        assertPUBRECequals(origin, merged);
-    }
-
-    @Test
     public void test_constructMqtt5() {
         final PUBREC origin = new PUBREC(1,
                 Mqtt5PubRecReasonCode.NOT_AUTHORIZED,

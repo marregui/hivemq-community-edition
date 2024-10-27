@@ -89,7 +89,7 @@ public class UnsubackOutboundInterceptorHandlerTest {
 
         channel = new EmbeddedChannel();
         final ClientConnection clientConnection = new DummyClientConnection(channel, mock(PublishFlushHandler.class));
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1);
+        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
         channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         ClientConnection.of(channel).setClientId("client");
         ClientConnection.of(channel).setRequestResponseInformation(true);

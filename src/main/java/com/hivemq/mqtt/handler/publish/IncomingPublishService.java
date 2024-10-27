@@ -79,7 +79,6 @@ public class IncomingPublishService {
             @Nullable final PublishAuthorizerResult authorizerResult) {
 
         final ClientConnection clientConnection = ClientConnection.of(ctx.channel());
-        final ProtocolVersion protocolVersion = clientConnection.getProtocolVersion();
 
         final int maxQos = mqttConfigurationService.maximumQos().getQosNumber();
         final int qos = publish.getQoS().getQosNumber();
@@ -115,27 +114,6 @@ public class IncomingPublishService {
                     Mqtt5DisconnectReasonCode.TOPIC_NAME_INVALID,
                     ReasonStrings.DISCONNECT_MAXIMUM_TOPIC_LENGTH_EXCEEDED);
             return;
-        }
-
-        if (ProtocolVersion.MQTTv3_1 == protocolVersion || ProtocolVersion.MQTTv3_1_1 == protocolVersion) {
-            final Long maxPublishSize = clientConnection.getMaxPacketSizeSend();
-            if (!isMessageSizeAllowed(maxPublishSize, publish)) {
-                final String clientId = clientConnection.getClientId();
-                final String logMessage = "Client '" +
-                        clientId +
-                        "' (IP: {}) sent a PUBLISH with " +
-                        publish.getPayload().length +
-                        " bytes payload its max allowed size is " +
-                        maxPublishSize +
-                        " bytes. Disconnecting client.";
-                final String reason = "Sent PUBLISH with a payload that is bigger than the allowed message size";
-                mqttServerDisconnector.disconnect(ctx.channel(),
-                        logMessage,
-                        reason,
-                        Mqtt5DisconnectReasonCode.PACKET_TOO_LARGE,
-                        reason);
-                return;
-            }
         }
 
         authorizePublish(ctx, publish, authorizerResult);

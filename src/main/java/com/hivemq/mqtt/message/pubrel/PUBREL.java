@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
  * @since 1.4
  */
 public class PUBREL extends MqttMessageWithUserProperties.MqttMessageWithIdAndReasonCode<Mqtt5PubRelReasonCode>
-        implements Mqtt3PUBREL, Mqtt5PUBREL {
+        implements Mqtt5PUBREL {
 
     private static final int SIZE_NOT_CALCULATED = -1;
 

@@ -130,77 +130,6 @@ public class IncomingPublishServiceTest {
     }
 
     @Test
-    public void test_publish_size_too_big() {
-
-        ClientConnection.of(channel).setMaxPacketSizeSend(5L);
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1);
-
-        final PUBLISH publish =
-                TestMessageUtil.createMqtt3Publish("testtopic", "123456790".getBytes(), QoS.AT_MOST_ONCE);
-
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        verify(mqttServerDisconnector).disconnect(any(),
-                any(),
-                any(),
-                eq(Mqtt5DisconnectReasonCode.PACKET_TOO_LARGE),
-                any());
-    }
-
-    @Test
-    public void test_publish_size_ok() {
-
-        ClientConnection.of(channel).setMaxPacketSizeSend(5L);
-
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish("testtopic", "1234".getBytes(), QoS.AT_MOST_ONCE);
-
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        assertEquals(true, channel.isActive());
-    }
-
-    @Test
-    public void test_publish_valid_qos0_with_ordering() throws InterruptedException {
-
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish("testtopic", "1234".getBytes(), QoS.AT_MOST_ONCE);
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        assertEquals(true, channel.isActive());
-
-        assertEquals(0, channel.outboundMessages().size());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-    }
-
-    @Test
-    public void test_publish_valid_qos0_failed_return_code() throws InterruptedException {
-
-        when(publishService.publish(any(PUBLISH.class),
-                any(ExecutorService.class),
-                anyString())).thenReturn(Futures.immediateFailedFuture(TestException.INSTANCE));
-
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish("testtopic", "1234".getBytes(), QoS.AT_MOST_ONCE);
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        assertEquals(true, channel.isActive());
-
-        assertEquals(0, channel.outboundMessages().size());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-    }
-
-    @Test
-    public void test_publish_valid_qos1() throws InterruptedException {
-
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish("testtopic", "1234".getBytes(), QoS.AT_LEAST_ONCE);
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        assertEquals(true, channel.isActive());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-    }
-
-    @Test
     public void test_publish_mqtt5_valid_qos1_authorized() throws InterruptedException {
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
@@ -379,25 +308,6 @@ public class IncomingPublishServiceTest {
     }
 
     @Test
-    public void test_publish_mqtt3_valid_qos1_authorized() throws InterruptedException {
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1_1);
-
-        final PUBLISH publish = TestMessageUtil.createMqtt5Publish("topic1", QoS.AT_LEAST_ONCE);
-
-        final ModifiableDefaultPermissionsImpl permissions = new ModifiableDefaultPermissionsImpl();
-        permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
-                "#").build());
-
-        ClientConnection.of(channel).setAuthPermissions(permissions);
-
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        assertEquals(true, channel.isActive());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-    }
-
-    @Test
     public void test_publish_mqtt5_valid_qos1_not_authorized() throws InterruptedException {
 
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
@@ -426,54 +336,6 @@ public class IncomingPublishServiceTest {
         assertEquals("Not authorized to publish on topic 'topic1' with QoS '1' and retain 'false'",
                 puback.getReasonString());
 
-    }
-
-    @Test
-    public void test_publish_mqtt3_valid_qos1_not_authorized() {
-
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1_1);
-
-        final PUBLISH publish = TestMessageUtil.createMqtt5Publish("topic1", QoS.AT_LEAST_ONCE);
-
-        final ModifiableDefaultPermissionsImpl permissions = new ModifiableDefaultPermissionsImpl();
-        permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
-                "#").type(TopicPermission.PermissionType.DENY).build());
-
-        ClientConnection.of(channel).setAuthPermissions(permissions);
-
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        verify(mqttServerDisconnector).disconnect(any(),
-                any(),
-                any(),
-                eq(Mqtt5DisconnectReasonCode.NOT_AUTHORIZED),
-                any());
-
-        verify(publishService, never()).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-    }
-
-    @Test
-    public void test_publish_mqtt3_valid_qos2_not_authorized() {
-
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1_1);
-
-        final PUBLISH publish = TestMessageUtil.createMqtt5Publish("topic1", QoS.EXACTLY_ONCE);
-
-        final ModifiableDefaultPermissionsImpl permissions = new ModifiableDefaultPermissionsImpl();
-        permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
-                "#").type(TopicPermission.PermissionType.DENY).build());
-
-        ClientConnection.of(channel).setAuthPermissions(permissions);
-
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        verify(mqttServerDisconnector).disconnect(any(),
-                any(),
-                any(),
-                eq(Mqtt5DisconnectReasonCode.NOT_AUTHORIZED),
-                any());
-
-        verify(publishService, never()).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
     }
 
     @Test
@@ -571,148 +433,6 @@ public class IncomingPublishServiceTest {
     }
 
     @Test
-    public void test_publish_valid_qos1_no_matching_subs() throws InterruptedException {
-
-        when(publishService.publish(any(PUBLISH.class),
-                any(ExecutorService.class),
-                anyString())).thenReturn(Futures.immediateFuture(PublishReturnCode.NO_MATCHING_SUBSCRIBERS));
-
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish("testtopic", "1234".getBytes(), QoS.AT_LEAST_ONCE);
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        assertEquals(true, channel.isActive());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-
-        while (channel.outboundMessages().size() == 0) {
-            channel.runScheduledPendingTasks();
-            channel.runPendingTasks();
-            Thread.sleep(10);
-        }
-
-        final PUBACK puback = channel.readOutbound();
-
-        assertEquals(Mqtt5PubAckReasonCode.NO_MATCHING_SUBSCRIBERS, puback.getReasonCode());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-    }
-
-    @Test
-    public void test_publish_valid_qos1_failed_publish() throws InterruptedException {
-
-        when(publishService.publish(any(PUBLISH.class),
-                any(ExecutorService.class),
-                anyString())).thenReturn(Futures.immediateFailedFuture(TestException.INSTANCE));
-
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish("testtopic", "1234".getBytes(), QoS.AT_LEAST_ONCE);
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        assertEquals(true, channel.isActive());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-
-        while (channel.outboundMessages().size() == 0) {
-            channel.runScheduledPendingTasks();
-            channel.runPendingTasks();
-            Thread.sleep(10);
-        }
-
-        final PUBACK puback = channel.readOutbound();
-
-        assertEquals(Mqtt5PubAckReasonCode.SUCCESS, puback.getReasonCode());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-    }
-
-    @Test
-    public void test_publish_valid_qos2() throws InterruptedException {
-
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish("testtopic", "1234".getBytes(), QoS.EXACTLY_ONCE);
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        assertEquals(true, channel.isActive());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-
-        while (channel.outboundMessages().size() == 0) {
-            channel.runScheduledPendingTasks();
-            channel.runPendingTasks();
-            Thread.sleep(10);
-        }
-
-        assertEquals(1, channel.outboundMessages().size());
-
-        final PUBREC pubrec = channel.readOutbound();
-
-        assertEquals(Mqtt5PubRecReasonCode.SUCCESS, pubrec.getReasonCode());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-    }
-
-    @Test
-    public void test_publish_valid_qos2_no_matching_subs() throws InterruptedException {
-
-        when(publishService.publish(any(PUBLISH.class),
-                any(ExecutorService.class),
-                anyString())).thenReturn(Futures.immediateFuture(PublishReturnCode.NO_MATCHING_SUBSCRIBERS));
-
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish("testtopic", "1234".getBytes(), QoS.EXACTLY_ONCE);
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        assertEquals(true, channel.isActive());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-
-        while (channel.outboundMessages().size() == 0) {
-            channel.runScheduledPendingTasks();
-            channel.runPendingTasks();
-            Thread.sleep(10);
-        }
-
-        final PUBREC pubrec = channel.readOutbound();
-
-        assertEquals(Mqtt5PubRecReasonCode.NO_MATCHING_SUBSCRIBERS, pubrec.getReasonCode());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-    }
-
-    @Test
-    public void test_publish_valid_qos2_failed_publish() throws InterruptedException {
-
-        when(publishService.publish(any(PUBLISH.class),
-                any(ExecutorService.class),
-                anyString())).thenReturn(Futures.immediateFailedFuture(TestException.INSTANCE));
-
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish("testtopic", "1234".getBytes(), QoS.EXACTLY_ONCE);
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        assertEquals(true, channel.isActive());
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-
-        while (channel.outboundMessages().size() == 0) {
-            channel.runScheduledPendingTasks();
-            channel.runPendingTasks();
-            Thread.sleep(10);
-        }
-
-        final PUBREC pubrec = channel.readOutbound();
-
-        assertEquals(Mqtt5PubRecReasonCode.SUCCESS, pubrec.getReasonCode());
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-    }
-
-    @Test
-    public void test_publish_no_callback() {
-
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish("testtopic", "1234".getBytes(), QoS.AT_MOST_ONCE);
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        assertEquals(true, channel.isActive());
-
-        verify(publishService).publish(any(PUBLISH.class), any(ExecutorService.class), anyString());
-    }
-
-    @Test
     public void test_qos_exceeded_disconnect() {
         when(mqttConfigurationService.maximumQos()).thenReturn(QoS.AT_MOST_ONCE);
         setupHandlerAndChannel();
@@ -748,32 +468,11 @@ public class IncomingPublishServiceTest {
     }
 
     @Test
-    public void test_qos_exceeded_mqtt3_disconnect() {
-        when(mqttConfigurationService.maximumQos()).thenReturn(QoS.AT_MOST_ONCE);
-        setupHandlerAndChannel();
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1);
-
-        final PUBLISH publish =
-                TestMessageUtil.createMqtt3Publish("none", "topic", QoS.EXACTLY_ONCE, new byte[0], false);
-
-        incomingPublishService.processPublish(ctx, publish, null);
-
-        verify(mqttServerDisconnector).disconnect(any(),
-                any(),
-                any(),
-                eq(Mqtt5DisconnectReasonCode.QOS_NOT_SUPPORTED),
-                any());
-
-        // Verify PUBLISH not processed
-        verify(publishService, never()).publish(any(), any(), anyString());
-    }
-
-    @Test
     public void test_default_not_authorized() {
 
         ClientConnection.of(channel).setIncomingPublishesDefaultFailedSkipRest(true);
 
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish();
+        final PUBLISH publish = TestMessageUtil.createMqtt5Publish();
         incomingPublishService.processPublish(ctx,
                 publish,
                 new PublishAuthorizerResult(AckReasonCode.SUCCESS, null, true));
@@ -784,23 +483,6 @@ public class IncomingPublishServiceTest {
                 eq(Mqtt5DisconnectReasonCode.NOT_AUTHORIZED),
                 any());
 
-    }
-
-    @Test(timeout = 20000)
-    public void test_topic_length_exceeded_mqtt3() {
-        when(restrictionsConfigurationService.maxTopicLength()).thenReturn(3);
-        clientConnection.setProtocolVersion(ProtocolVersion.MQTTv3_1);
-
-        final PUBLISH publish = TestMessageUtil.createMqtt3Publish();
-        incomingPublishService.processPublish(ctx,
-                publish,
-                new PublishAuthorizerResult(AckReasonCode.SUCCESS, null, true));
-
-        verify(mqttServerDisconnector).disconnect(any(),
-                any(),
-                any(),
-                eq(Mqtt5DisconnectReasonCode.TOPIC_NAME_INVALID),
-                any());
     }
 
     @Test(timeout = 20000)

@@ -272,7 +272,7 @@ public class ClientSessionPersistenceImplTest {
     }
 
     private MqttWillPublish createWillPublish() {
-        return new MqttWillPublish.Mqtt3Builder().withTopic("topic")
+        return new MqttWillPublish.Mqtt5Builder().withTopic("topic")
                 .withPayload("message".getBytes())
                 .withHivemqId("hivemqId")
                 .withRetain(false)

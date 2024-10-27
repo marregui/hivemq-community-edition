@@ -76,15 +76,7 @@ public class ExtensionInformationUtil {
     }
 
     public static @NotNull MqttVersion mqttVersionFromProtocolVersion(final @NotNull ProtocolVersion protocolVersion) {
-        switch (protocolVersion) {
-            case MQTTv3_1:
-                return MqttVersion.V_3_1;
-            case MQTTv3_1_1:
-                return MqttVersion.V_3_1_1;
-            case MQTTv5:
-            default:
-                return MqttVersion.V_5;
-        }
+        return MqttVersion.V_5;
     }
 
     public static @Nullable Listener getListenerFromChannel(final @NotNull Channel channel) {

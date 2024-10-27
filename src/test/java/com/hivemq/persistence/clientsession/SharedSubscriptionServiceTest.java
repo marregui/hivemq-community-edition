@@ -76,12 +76,12 @@ public class SharedSubscriptionServiceTest {
         SharedSubscriptionService.SharedSubscription sharedSubscription;
 
         sharedSubscription =
-                service.checkForSharedSubscription(share + oldDelimiter + group + oldDelimiter + topic + subtopic);
+                SharedSubscriptionService.checkForSharedSubscription(share + oldDelimiter + group + oldDelimiter + topic + subtopic);
         assertNotNull(sharedSubscription);
         assertEquals(group, sharedSubscription.getShareName());
         assertEquals(topic + subtopic, sharedSubscription.getTopicFilter());
 
-        sharedSubscription = service.checkForSharedSubscription(topic + subtopic);
+        sharedSubscription = SharedSubscriptionService.checkForSharedSubscription(topic + subtopic);
         assertNull(sharedSubscription);
     }
 
@@ -171,7 +171,7 @@ public class SharedSubscriptionServiceTest {
 
     @Test
     public void test_remove_prefix() {
-        assertEquals("group/topic", service.removePrefix("$share/group/topic"));
-        assertEquals("topic/a", service.removePrefix("topic/a"));
+        assertEquals("group/topic", SharedSubscriptionService.removePrefix("$share/group/topic"));
+        assertEquals("topic/a", SharedSubscriptionService.removePrefix("topic/a"));
     }
 }

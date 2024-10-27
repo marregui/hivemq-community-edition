@@ -58,8 +58,7 @@ public class HiveMQExtensionXMLReader {
             if (validationError.isPresent()) {
                 if (logging) {
                     log.warn("Could not parse \"{}\" in {} because of {}. Not loading extension.",
-                            HiveMQExtension.HIVEMQ_EXTENSION_XML_FILE,
-                            extensionFolder.toString(),
+                            HiveMQExtension.HIVEMQ_EXTENSION_XML_FILE, extensionFolder,
                             validationError.get().getMessage());
                 }
                 return Optional.empty();
@@ -69,8 +68,7 @@ public class HiveMQExtensionXMLReader {
         } catch (final JAXBException e) {
             if (logging) {
                 log.warn("Could not parse \"{}\" in {}. Not loading extension.",
-                        HiveMQExtension.HIVEMQ_EXTENSION_XML_FILE,
-                        extensionFolder.toString(),
+                        HiveMQExtension.HIVEMQ_EXTENSION_XML_FILE, extensionFolder,
                         e);
             }
             return Optional.empty();

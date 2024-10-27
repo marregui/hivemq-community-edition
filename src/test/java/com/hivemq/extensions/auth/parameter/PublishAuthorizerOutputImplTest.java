@@ -29,6 +29,8 @@ import static com.hivemq.extensions.auth.parameter.PublishAuthorizerOutputImpl.A
 import static com.hivemq.extensions.auth.parameter.PublishAuthorizerOutputImpl.AuthorizationState.SUCCESS;
 import static com.hivemq.extensions.auth.parameter.PublishAuthorizerOutputImpl.AuthorizationState.UNDECIDED;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Christoph Schäbel
@@ -62,14 +64,14 @@ public class PublishAuthorizerOutputImplTest {
     public void test_output_continue() {
         output.nextExtensionOrDefault();
         assertEquals(CONTINUE, output.getAuthorizationState());
-        assertEquals(false, output.isCompleted());
+        assertFalse(output.isCompleted());
     }
 
     @Test
     public void test_output_fail() {
         output.failAuthorization();
         assertEquals(FAIL, output.getAuthorizationState());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test
@@ -77,7 +79,7 @@ public class PublishAuthorizerOutputImplTest {
         output.authorizeSuccessfully();
         output.forceFailedAuthorization();
         assertEquals(FAIL, output.getAuthorizationState());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test
@@ -85,7 +87,7 @@ public class PublishAuthorizerOutputImplTest {
         output.failAuthorization(AckReasonCode.QUOTA_EXCEEDED);
         assertEquals(FAIL, output.getAuthorizationState());
         assertEquals(AckReasonCode.QUOTA_EXCEEDED, output.getAckReasonCode());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test
@@ -94,14 +96,14 @@ public class PublishAuthorizerOutputImplTest {
         assertEquals(FAIL, output.getAuthorizationState());
         assertEquals(AckReasonCode.QUOTA_EXCEEDED, output.getAckReasonCode());
         assertEquals("test-string", output.getReasonString());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test
     public void test_output_disconnect() {
         output.disconnectClient();
         assertEquals(DISCONNECT, output.getAuthorizationState());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test
@@ -109,7 +111,7 @@ public class PublishAuthorizerOutputImplTest {
         output.disconnectClient(DisconnectReasonCode.CONNECTION_RATE_EXCEEDED);
         assertEquals(DISCONNECT, output.getAuthorizationState());
         assertEquals(DisconnectReasonCode.CONNECTION_RATE_EXCEEDED, output.getDisconnectReasonCode());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test
@@ -118,7 +120,7 @@ public class PublishAuthorizerOutputImplTest {
         assertEquals(DISCONNECT, output.getAuthorizationState());
         assertEquals(DisconnectReasonCode.CONNECTION_RATE_EXCEEDED, output.getDisconnectReasonCode());
         assertEquals("test-string", output.getReasonString());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test(expected = UnsupportedOperationException.class)

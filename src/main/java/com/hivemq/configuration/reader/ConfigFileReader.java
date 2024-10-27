@@ -50,7 +50,6 @@ public class ConfigFileReader {
     private final @NotNull MqttConfigurator mqttConfigurator;
     private final @NotNull RestrictionConfigurator restrictionConfigurator;
     private final @NotNull SecurityConfigurator securityConfigurator;
-    private final @NotNull UsageStatisticsConfigurator usageStatisticsConfigurator;
     private final @NotNull PersistenceConfigurator persistenceConfigurator;
 
     public ConfigFileReader(
@@ -58,7 +57,6 @@ public class ConfigFileReader {
             @NotNull final RestrictionConfigurator restrictionConfigurator,
             @NotNull final SecurityConfigurator securityConfigurator,
             @NotNull final EnvVarUtil envVarUtil,
-            @NotNull final UsageStatisticsConfigurator usageStatisticsConfigurator,
             @NotNull final MqttConfigurator mqttConfigurator,
             @NotNull final ListenerConfigurator listenerConfigurator,
             @NotNull final PersistenceConfigurator persistenceConfigurator) {
@@ -69,7 +67,6 @@ public class ConfigFileReader {
         this.mqttConfigurator = mqttConfigurator;
         this.restrictionConfigurator = restrictionConfigurator;
         this.securityConfigurator = securityConfigurator;
-        this.usageStatisticsConfigurator = usageStatisticsConfigurator;
         this.persistenceConfigurator = persistenceConfigurator;
     }
 
@@ -141,7 +138,6 @@ public class ConfigFileReader {
         mqttConfigurator.setMqttConfig(config.getMqttConfig());
         restrictionConfigurator.setRestrictionsConfig(config.getRestrictionsConfig());
         securityConfigurator.setSecurityConfig(config.getSecurityConfig());
-        usageStatisticsConfigurator.setUsageStatisticsConfig(config.getUsageStatisticsConfig());
         persistenceConfigurator.setPersistenceConfig(config.getPersistenceConfig());
     }
 

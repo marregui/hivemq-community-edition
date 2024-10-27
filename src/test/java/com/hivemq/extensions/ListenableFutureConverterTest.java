@@ -166,7 +166,7 @@ public class ListenableFutureConverterTest {
         assertTrue(voidCompletableFuture.isDone());
         assertFalse(voidCompletableFuture.isCompletedExceptionally());
 
-        assertEquals(null, voidCompletableFuture.get());
+        assertNull(voidCompletableFuture.get());
 
     }
 
@@ -187,7 +187,7 @@ public class ListenableFutureConverterTest {
         assertTrue(voidCompletableFuture.isDone());
         assertFalse(voidCompletableFuture.isCompletedExceptionally());
 
-        assertEquals(null, voidCompletableFuture.get());
+        assertNull(voidCompletableFuture.get());
 
     }
 

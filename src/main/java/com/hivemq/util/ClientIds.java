@@ -47,8 +47,7 @@ public class ClientIds {
                 hivemqId +
                 "_" +
                 currentCounter +
-                "_" +
-                hashFunction.hashString(rawID, StandardCharsets.UTF_8).toString();
+                "_" + hashFunction.hashString(rawID, StandardCharsets.UTF_8);
 
     }
 }

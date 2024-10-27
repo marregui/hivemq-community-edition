@@ -26,6 +26,8 @@ import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.DEFAULT_MAXIMUM_PACKE
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.SESSION_EXPIRE_ON_DISCONNECT;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -108,14 +110,14 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
         assertEquals(2684, mqttConfigurationService.maxPacketSize());
         assertEquals(MqttConfigurationService.QueuedMessagesStrategy.DISCARD_OLDEST,
                 mqttConfigurationService.getQueuedMessagesStrategy());
-        assertEquals(false, mqttConfigurationService.retainedMessagesEnabled());
-        assertEquals(false, mqttConfigurationService.wildcardSubscriptionsEnabled());
+        assertFalse(mqttConfigurationService.retainedMessagesEnabled());
+        assertFalse(mqttConfigurationService.wildcardSubscriptionsEnabled());
         assertEquals(QoS.AT_LEAST_ONCE, mqttConfigurationService.maximumQos());
-        assertEquals(true, mqttConfigurationService.topicAliasEnabled());
+        assertTrue(mqttConfigurationService.topicAliasEnabled());
         assertEquals(5, mqttConfigurationService.topicAliasMaxPerClient());
-        assertEquals(true, mqttConfigurationService.subscriptionIdentifierEnabled());
-        assertEquals(false, mqttConfigurationService.sharedSubscriptionsEnabled());
-        assertEquals(false, mqttConfigurationService.keepAliveAllowZero());
+        assertTrue(mqttConfigurationService.subscriptionIdentifierEnabled());
+        assertFalse(mqttConfigurationService.sharedSubscriptionsEnabled());
+        assertFalse(mqttConfigurationService.keepAliveAllowZero());
         assertEquals(65, mqttConfigurationService.keepAliveMax());
 
     }
@@ -135,7 +137,7 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
 
         reader.applyConfig();
 
-        assertEquals(true, mqttConfigurationService.topicAliasEnabled());
+        assertTrue(mqttConfigurationService.topicAliasEnabled());
         assertEquals(1, mqttConfigurationService.topicAliasMaxPerClient());
 
     }
@@ -155,7 +157,7 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
 
         reader.applyConfig();
 
-        assertEquals(true, mqttConfigurationService.topicAliasEnabled());
+        assertTrue(mqttConfigurationService.topicAliasEnabled());
         assertEquals(TOPIC_ALIAS_MAX_PER_CLIENT_MAXIMUM, mqttConfigurationService.topicAliasMaxPerClient());
 
     }

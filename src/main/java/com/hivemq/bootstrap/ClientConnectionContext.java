@@ -64,7 +64,7 @@ public interface ClientConnectionContext {
     AttributeKey<ClientConnectionContext> CHANNEL_ATTRIBUTE_NAME = AttributeKey.valueOf("ClientConnectionContext");
 
     static @NotNull ClientConnectionContext of(final @NotNull Channel channel) {
-        ClientConnectionContext context = channel.attr(CHANNEL_ATTRIBUTE_NAME).get();
+        final ClientConnectionContext context = channel.attr(CHANNEL_ATTRIBUTE_NAME).get();
         if (context != null) {
             return context;
         }

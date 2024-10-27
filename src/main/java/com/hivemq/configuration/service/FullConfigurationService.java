@@ -15,14 +15,11 @@
  */
 package com.hivemq.configuration.service;
 
-import com.hivemq.statistics.UsageStatisticsConfig;
-
 /**
  * @author Christoph Schäbel
  */
 public interface FullConfigurationService extends ConfigurationService {
 
-    UsageStatisticsConfig usageStatisticsConfiguration();
 
     SecurityConfigurationService securityConfiguration();
 

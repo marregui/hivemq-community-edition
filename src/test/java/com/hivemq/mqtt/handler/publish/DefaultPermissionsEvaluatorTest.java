@@ -28,6 +28,8 @@ import org.junit.Test;
 import util.TestConfigurationBootstrap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Christoph Schäbel
@@ -44,7 +46,7 @@ public class DefaultPermissionsEvaluatorTest {
                 .withRetain(true)
                 .build();
 
-        assertEquals(false, DefaultPermissionsEvaluator.checkPublish(null, publish));
+        assertFalse(DefaultPermissionsEvaluator.checkPublish(null, publish));
     }
 
     @Test
@@ -61,7 +63,7 @@ public class DefaultPermissionsEvaluatorTest {
         final ModifiableDefaultPermissionsImpl permissions = new ModifiableDefaultPermissionsImpl();
         permissions.setDefaultBehaviour(DefaultAuthorizationBehaviour.ALLOW);
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertTrue(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
     @Test
@@ -75,7 +77,7 @@ public class DefaultPermissionsEvaluatorTest {
         final ModifiableDefaultPermissionsImpl permissions = new ModifiableDefaultPermissionsImpl();
         permissions.setDefaultBehaviour(DefaultAuthorizationBehaviour.ALLOW);
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkWillPublish(permissions, willPublish));
+        assertTrue(DefaultPermissionsEvaluator.checkWillPublish(permissions, willPublish));
     }
 
     @Test
@@ -92,7 +94,7 @@ public class DefaultPermissionsEvaluatorTest {
         final ModifiableDefaultPermissionsImpl permissions = new ModifiableDefaultPermissionsImpl();
         permissions.setDefaultBehaviour(DefaultAuthorizationBehaviour.DENY);
 
-        assertEquals(false, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertFalse(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
     @Test
@@ -110,7 +112,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "topic/#").build());
 
-        assertEquals(false, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertFalse(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
     @Test
@@ -128,7 +130,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/#").qos(TopicPermission.Qos.ZERO_ONE).build());
 
-        assertEquals(false, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertFalse(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
     @Test
@@ -146,7 +148,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/#").qos(TopicPermission.Qos.ZERO_ONE).build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertTrue(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
     @Test
@@ -164,7 +166,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/#").qos(TopicPermission.Qos.ONE).build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertTrue(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
     @Test
@@ -182,7 +184,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/#").activity(TopicPermission.MqttActivity.SUBSCRIBE).build());
 
-        assertEquals(false, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertFalse(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
     @Test
@@ -200,7 +202,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/#").retain(TopicPermission.Retain.NOT_RETAINED).build());
 
-        assertEquals(false, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertFalse(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
     @Test
@@ -218,7 +220,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/#").retain(TopicPermission.Retain.RETAINED).build());
 
-        assertEquals(false, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertFalse(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
     @Test
@@ -240,7 +242,7 @@ public class DefaultPermissionsEvaluatorTest {
                 .retain(TopicPermission.Retain.RETAINED)
                 .build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertTrue(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
     @Test
@@ -258,7 +260,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "#").build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertTrue(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
     @Test
@@ -276,7 +278,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/+/topic").build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertTrue(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
     @Test
@@ -294,7 +296,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "+/+/topic").build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkPublish(permissions, publish));
+        assertTrue(DefaultPermissionsEvaluator.checkPublish(permissions, publish));
     }
 
 
@@ -302,7 +304,7 @@ public class DefaultPermissionsEvaluatorTest {
     public void test_subscription_null_allow() {
         final Topic topic = new Topic("topic", QoS.EXACTLY_ONCE);
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(null, topic));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(null, topic));
     }
 
     @Test
@@ -313,7 +315,7 @@ public class DefaultPermissionsEvaluatorTest {
         final ModifiableDefaultPermissionsImpl permissions = new ModifiableDefaultPermissionsImpl();
         permissions.setDefaultBehaviour(DefaultAuthorizationBehaviour.ALLOW);
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
     }
 
     @Test
@@ -324,7 +326,7 @@ public class DefaultPermissionsEvaluatorTest {
         final ModifiableDefaultPermissionsImpl permissions = new ModifiableDefaultPermissionsImpl();
         permissions.setDefaultBehaviour(DefaultAuthorizationBehaviour.DENY);
 
-        assertEquals(false, DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
+        assertFalse(DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
     }
 
     @Test
@@ -336,7 +338,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "topic/#").build());
 
-        assertEquals(false, DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
+        assertFalse(DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
     }
 
     @Test
@@ -348,7 +350,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/#").qos(TopicPermission.Qos.ZERO_ONE).build());
 
-        assertEquals(false, DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
+        assertFalse(DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
     }
 
     @Test
@@ -360,7 +362,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/#").qos(TopicPermission.Qos.ZERO_ONE).build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
     }
 
     @Test
@@ -372,7 +374,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/#").qos(TopicPermission.Qos.ONE).build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
     }
 
     @Test
@@ -384,7 +386,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/#").activity(TopicPermission.MqttActivity.PUBLISH).build());
 
-        assertEquals(false, DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
+        assertFalse(DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
     }
 
     @Test
@@ -396,7 +398,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/#").activity(TopicPermission.MqttActivity.SUBSCRIBE).qos(TopicPermission.Qos.ONE_TWO).build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
     }
 
     @Test
@@ -408,7 +410,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "#").build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
     }
 
     @Test
@@ -420,7 +422,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "test/+/topic").build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
     }
 
     @Test
@@ -432,7 +434,7 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "+/+/topic").build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic));
     }
 
     @Test
@@ -445,8 +447,8 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "#").sharedSubscription(TopicPermission.SharedSubscription.NOT_SHARED).build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic1));
-        assertEquals(false, DefaultPermissionsEvaluator.checkSubscription(permissions, topic2));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic1));
+        assertFalse(DefaultPermissionsEvaluator.checkSubscription(permissions, topic2));
     }
 
     @Test
@@ -459,8 +461,8 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "#").sharedSubscription(TopicPermission.SharedSubscription.SHARED).build());
 
-        assertEquals(false, DefaultPermissionsEvaluator.checkSubscription(permissions, topic1));
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic2));
+        assertFalse(DefaultPermissionsEvaluator.checkSubscription(permissions, topic1));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic2));
     }
 
     @Test
@@ -473,8 +475,8 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "#").sharedSubscription(TopicPermission.SharedSubscription.ALL).build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic1));
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic2));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic1));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic2));
     }
 
 
@@ -489,9 +491,9 @@ public class DefaultPermissionsEvaluatorTest {
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "#").sharedSubscription(TopicPermission.SharedSubscription.ALL).sharedGroup("g1").build());
 
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic1));
-        assertEquals(true, DefaultPermissionsEvaluator.checkSubscription(permissions, topic2));
-        assertEquals(false, DefaultPermissionsEvaluator.checkSubscription(permissions, topic3));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic1));
+        assertTrue(DefaultPermissionsEvaluator.checkSubscription(permissions, topic2));
+        assertFalse(DefaultPermissionsEvaluator.checkSubscription(permissions, topic3));
     }
 
 

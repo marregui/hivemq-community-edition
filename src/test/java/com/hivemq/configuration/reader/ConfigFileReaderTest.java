@@ -27,7 +27,6 @@ import com.hivemq.configuration.service.SecurityConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
 import com.hivemq.mqtt.message.QoS;
-import com.hivemq.statistics.UsageStatisticsConfig;
 import com.hivemq.util.EnvVarUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,9 +46,6 @@ public class ConfigFileReaderTest {
 
     @Mock
     private SecurityConfigurationService securityConfigurationService;
-
-    @Mock
-    private UsageStatisticsConfig usageStatisticsConfig;
 
     @Mock
     private EnvVarUtil envVarUtil;
@@ -74,7 +70,6 @@ public class ConfigFileReaderTest {
                 new RestrictionConfigurator(restrictionsConfigurationService),
                 new SecurityConfigurator(securityConfigurationService),
                 envVarUtil,
-                new UsageStatisticsConfigurator(usageStatisticsConfig),
                 new MqttConfigurator(mqttConfigurationService),
                 new ListenerConfigurator(listenerConfigurationService, systemInformation),
                 new PersistenceConfigurator(persistenceConfigurationService));

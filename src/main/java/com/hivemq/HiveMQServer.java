@@ -38,7 +38,6 @@ import com.hivemq.migration.MigrationUnit;
 import com.hivemq.migration.Migrations;
 import com.hivemq.migration.meta.PersistenceType;
 import com.hivemq.persistence.PersistenceStartup;
-import com.hivemq.statistics.UsageStatistics;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -239,9 +238,6 @@ public class HiveMQServer {
         if (shutdownHooks.isShuttingDown()) {
             throw new StartAbortedException("User aborted.");
         }
-
-        final UsageStatistics usageStatistics = injector.getInstance(UsageStatistics.class);
-        usageStatistics.start();
     }
 
     public void start() throws Exception {
@@ -287,7 +283,7 @@ public class HiveMQServer {
         try {
             //ungraceful shutdown does not delete tmp folders, so we clean them up on broker start
             FileUtils.deleteDirectory(new File(tmpFolder));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             //No error because it's not business breaking
             log.warn("The temporary folder could not be deleted ({}).", tmpFolder);
             if (log.isDebugEnabled()) {

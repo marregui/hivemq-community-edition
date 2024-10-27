@@ -55,7 +55,7 @@ public class PublishPayloadRocksDBLocalPersistence extends RocksDBLocalPersisten
     private final long memTableSize;
     private final boolean forceFlush;
 
-    private long @NotNull [] rocksdbToMemTableSize;
+    private final long @NotNull [] rocksdbToMemTableSize;
 
     @Inject
     public PublishPayloadRocksDBLocalPersistence(

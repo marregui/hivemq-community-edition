@@ -265,7 +265,7 @@ public class EventLogTest {
 
         boolean isLogged = false;
         for (final ILoggingEvent event : appender.getCapturedLogs()) {
-            if (event.getFormattedMessage().equals(logMessageBuffer.toString())) {
+            if (event.getFormattedMessage().contentEquals(logMessageBuffer)) {
                 isLogged = true;
             }
         }

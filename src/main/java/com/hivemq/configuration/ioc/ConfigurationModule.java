@@ -24,7 +24,6 @@ import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.statistics.UsageStatisticsConfig;
 
 /**
  * The module for the Configuration Subsystem
@@ -58,8 +57,6 @@ public class ConfigurationModule extends SingletonModule {
         bind(ConfigurationService.class).toInstance(configurationService);
 
         bind(FullConfigurationService.class).toInstance(configurationService);
-
-        bind(UsageStatisticsConfig.class).toInstance(configurationService.usageStatisticsConfiguration());
 
         bind(SecurityConfigurationService.class).toInstance(configurationService.securityConfiguration());
     }

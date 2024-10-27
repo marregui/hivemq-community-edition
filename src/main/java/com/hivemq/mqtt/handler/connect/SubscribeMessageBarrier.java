@@ -46,7 +46,7 @@ public class SubscribeMessageBarrier extends ChannelDuplexHandler {
 
     private final @NotNull Queue<Message> messageQueue = new LinkedList<>();
 
-    public static void addToPipeline(@NotNull ChannelHandlerContext ctx) {
+    public static void addToPipeline(@NotNull final ChannelHandlerContext ctx) {
         if (!ctx.pipeline().names().contains(ChannelHandlerNames.MQTT_SUBSCRIBE_MESSAGE_BARRIER)) {
             final SubscribeMessageBarrier subscribeMessageBarrier = new SubscribeMessageBarrier();
             ctx.pipeline()

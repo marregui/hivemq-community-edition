@@ -155,7 +155,7 @@ public class RetainedMessagePersistenceImpl extends AbstractPersistence implemen
 
     @Override
     public @NotNull ListenableFuture<MultipleChunkResult<Map<String, @NotNull RetainedMessage>>> getAllLocalRetainedMessagesChunk(
-            @NotNull ChunkCursor cursor) {
+            @NotNull final ChunkCursor cursor) {
         return chunker.getAllLocalChunk(cursor,
                 InternalConfigurations.PERSISTENCE_RETAINED_MESSAGES_MAX_CHUNK_MEMORY_BYTES,
                 // Chunker.SingleWriterCall interface

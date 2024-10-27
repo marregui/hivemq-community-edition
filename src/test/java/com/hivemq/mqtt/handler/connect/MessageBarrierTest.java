@@ -28,6 +28,7 @@ import util.DummyHandler;
 
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.MQTT_MESSAGE_BARRIER;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class MessageBarrierTest {
 
@@ -47,6 +48,6 @@ public class MessageBarrierTest {
 
     @Test
     public void test_default() {
-        assertEquals(false, messageBarrier.getConnectReceived());
+        assertFalse(messageBarrier.getConnectReceived());
     }
 }

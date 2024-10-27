@@ -56,7 +56,6 @@ public class StandardPublishCallback implements FutureCallback<PublishStatus> {
                 " on topic " +
                 msg.getTopic() +
                 " to client " +
-                subscriber +
-                "", throwable);
+                subscriber, throwable);
     }
 }

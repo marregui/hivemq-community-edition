@@ -37,8 +37,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
     @Test
     public void test_read_tls_listener() throws Exception {
 
-        final String contents = "" +
-                "<hivemq>" +
+        final String contents = "<hivemq>" +
                 "    <listeners>" +
                 "        <tls-tcp-listener>" +
                 "            <port>8883</port>" +
@@ -84,7 +83,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
         assertEquals(Tls.ClientAuthMode.NONE, tlsTcpListener.getTls().getClientAuthMode());
 
         //Check if the relative path was made absolute
-        assertEquals(true, new File(tlsTcpListener.getTls().getTruststorePath()).isAbsolute());
+        assertTrue(new File(tlsTcpListener.getTls().getTruststorePath()).isAbsolute());
         assertEquals("password-truststore", tlsTcpListener.getTls().getTruststorePassword());
         assertEquals("my-tls-tcp-listener", tlsTcpListener.getName());
 
@@ -94,8 +93,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
     @Test
     public void test_read_tls_listener_without_trust_store() throws Exception {
 
-        final String contents = "" +
-                "<hivemq>" +
+        final String contents = "<hivemq>" +
                 "    <listeners>" +
                 "        <tls-tcp-listener>" +
                 "            <port>8883</port>" +
@@ -138,8 +136,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
     @Test
     public void test_read_multiple_tcp_listeners() throws Exception {
 
-        final String contents = "" +
-                "<hivemq>" +
+        final String contents = "<hivemq>" +
                 "    <listeners>" +
                 "       <tcp-listener>" +
                 "           <port>1883</port>" +
@@ -175,8 +172,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
     @Test
     public void test_read_tcp_listener_white_space_name() throws Exception {
 
-        final String contents = "" +
-                "<hivemq>" +
+        final String contents = "<hivemq>" +
                 "    <listeners>" +
                 "       <tcp-listener>" +
                 "           <port>1883</port>" +
@@ -200,8 +196,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
     @Test
     public void test_read_tcp_listener() throws Exception {
 
-        final String contents = "" +
-                "<hivemq>" +
+        final String contents = "<hivemq>" +
                 "    <listeners>" +
                 "       <tcp-listener>" +
                 "           <port>1883</port>" +
@@ -223,8 +218,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
     @Test
     public void test_read_websocket_listener() throws Exception {
 
-        final String contents = "" +
-                "<hivemq>" +
+        final String contents = "<hivemq>" +
                 "    <listeners>" +
                 "        <websocket-listener>\n" +
                 "            <port>8000</port>\n" +
@@ -247,14 +241,13 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
         assertEquals("0.0.0.0", websocketListener.getBindAddress());
         assertEquals("/mqtt", websocketListener.getPath());
         assertEquals("mqttv3.1", websocketListener.getSubprotocols().get(0));
-        assertEquals(false, websocketListener.getAllowExtensions());
+        assertFalse(websocketListener.getAllowExtensions());
     }
 
     @Test
     public void test_read_tls_websocket_listener() throws Exception {
 
-        final String contents = "" +
-                "<hivemq>" +
+        final String contents = "<hivemq>" +
                 "    <listeners>" +
                 "       <tls-websocket-listener>" +
                 "           <port>8000</port>" +
@@ -290,7 +283,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
         assertEquals("0.0.0.0", websocketListener.getBindAddress());
         assertEquals("/mqtt", websocketListener.getPath());
         assertEquals("mqttv3.1", websocketListener.getSubprotocols().get(0));
-        assertEquals(false, websocketListener.getAllowExtensions());
+        assertFalse(websocketListener.getAllowExtensions());
 
         assertEquals("/path/to/the/key/store.jks", websocketListener.getTls().getKeystorePath());
         assertEquals("password-keystore", websocketListener.getTls().getKeystorePassword());

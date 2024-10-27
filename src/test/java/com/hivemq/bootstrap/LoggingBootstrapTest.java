@@ -74,8 +74,7 @@ public class LoggingBootstrapTest {
     @Test
     public void test_override_standard_logback() throws Exception {
 
-        final String overridenContents = "" +
-                "<configuration>\n" +
+        final String overridenContents = "<configuration>\n" +
                 "\n" +
                 "    <appender name=\"STDOUT\" class=\"ch.qos.logback.core.ConsoleAppender\">\n" +
                 "        <!-- encoders are assigned the type\n" +
@@ -94,7 +93,7 @@ public class LoggingBootstrapTest {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
 
-        assertEquals(false, logger.isTraceEnabled());
+        assertFalse(logger.isTraceEnabled());
 
         try {
 
@@ -104,7 +103,7 @@ public class LoggingBootstrapTest {
 
             LoggingBootstrap.initLogging(configFolder);
 
-            assertEquals(true, logger.isTraceEnabled());
+            assertTrue(logger.isTraceEnabled());
         } finally {
             //Set back to the original level, otherwise we interfere with other tests
             resetLogToOriginal();
@@ -118,7 +117,7 @@ public class LoggingBootstrapTest {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
 
-        assertEquals(false, logger.isTraceEnabled());
+        assertFalse(logger.isTraceEnabled());
 
         try {
             final File configFolder = temporaryFolder.newFolder();
@@ -127,7 +126,7 @@ public class LoggingBootstrapTest {
             //No file was written
             LoggingBootstrap.initLogging(configFolder);
 
-            assertEquals(false, logger.isTraceEnabled());
+            assertFalse(logger.isTraceEnabled());
         } finally {
             //Set back to the original level, otherwise we interfere with other tests
             resetLogToOriginal();
@@ -174,8 +173,7 @@ public class LoggingBootstrapTest {
     @Test
     public void test_log_file_overriden() throws Exception {
 
-        final String overridenContents = "" +
-                "<configuration>\n" +
+        final String overridenContents = "<configuration>\n" +
                 "\n" +
                 "    <appender name=\"APP\" class=\"ch.qos.logback.core.ConsoleAppender\">\n" +
                 "        <!-- encoders are assigned the type\n" +

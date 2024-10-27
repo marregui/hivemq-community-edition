@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -203,15 +204,13 @@ public class Tls {
         if (!privateKeyPassword.equals(tls.privateKeyPassword)) {
             return false;
         }
-        if (truststorePath != null ? !truststorePath.equals(tls.truststorePath) : tls.truststorePath != null) {
+        if (!Objects.equals(truststorePath, tls.truststorePath)) {
             return false;
         }
-        if (truststorePassword != null ?
-                !truststorePassword.equals(tls.truststorePassword) :
-                tls.truststorePassword != null) {
+        if (!Objects.equals(truststorePassword, tls.truststorePassword)) {
             return false;
         }
-        if (truststoreType != null ? !truststoreType.equals(tls.truststoreType) : tls.truststoreType != null) {
+        if (!Objects.equals(truststoreType, tls.truststoreType)) {
             return false;
         }
         if (handshakeTimeout != tls.handshakeTimeout) {
@@ -223,9 +222,7 @@ public class Tls {
         if (!protocols.equals(tls.protocols)) {
             return false;
         }
-        if (preferServerCipherSuites != null ?
-                !preferServerCipherSuites.equals(tls.preferServerCipherSuites) :
-                tls.preferServerCipherSuites != null) {
+        if (!Objects.equals(preferServerCipherSuites, tls.preferServerCipherSuites)) {
             return false;
         }
         return cipherSuites.equals(tls.cipherSuites);

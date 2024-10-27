@@ -179,7 +179,7 @@ public class RetainedMessageTypeMigrationTest {
 
         for (int i = 0; i < 1000; i++) {
             payload.put(i, ("message" + i).getBytes());
-            xodus.put(new RetainedMessage(("message" + i).getBytes(), QoS.AT_LEAST_ONCE, (long) i, i + 1000),
+            xodus.put(new RetainedMessage(("message" + i).getBytes(), QoS.AT_LEAST_ONCE, i, i + 1000),
                     "topic" + i,
                     BucketUtils.getBucket("topic" + i, xodus.getBucketCount()));
         }
@@ -232,7 +232,7 @@ public class RetainedMessageTypeMigrationTest {
 
         for (int i = 0; i < 1000; i++) {
             payload.put(i, ("message" + i).getBytes());
-            rocks.put(new RetainedMessage(("message" + i).getBytes(), QoS.AT_LEAST_ONCE, (long) i, i + 1000),
+            rocks.put(new RetainedMessage(("message" + i).getBytes(), QoS.AT_LEAST_ONCE, i, i + 1000),
                     "topic" + i,
                     BucketUtils.getBucket("topic" + i, rocks.getBucketCount()));
         }
@@ -287,7 +287,7 @@ public class RetainedMessageTypeMigrationTest {
 
         for (int i = 0; i < 10; i++) {
             payload.put(i, ("message" + i).getBytes());
-            xodus.put(new RetainedMessage(("message" + i).getBytes(), QoS.AT_LEAST_ONCE, (long) i, i + 1000),
+            xodus.put(new RetainedMessage(("message" + i).getBytes(), QoS.AT_LEAST_ONCE, i, i + 1000),
                     "topic" + i,
                     BucketUtils.getBucket("topic" + i, xodus.getBucketCount()));
         }

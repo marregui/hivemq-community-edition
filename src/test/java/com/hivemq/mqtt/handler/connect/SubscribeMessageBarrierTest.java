@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.MQTT_SUBSCRIBE_MESSAGE_BARRIER;
 import static com.hivemq.mqtt.message.reason.Mqtt5SubAckReasonCode.fromCode;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class SubscribeMessageBarrierTest {
 
@@ -50,14 +51,14 @@ public class SubscribeMessageBarrierTest {
 
     @Test
     public void test_default() {
-        assertEquals(false, channel.config().isAutoRead());
+        assertFalse(channel.config().isAutoRead());
     }
 
     @Test
     public void test_subscribe_sent() {
 
         channel.writeInbound(new SUBSCRIBE(ImmutableList.of(), 1));
-        assertEquals(false, channel.config().isAutoRead());
+        assertFalse(channel.config().isAutoRead());
         assertEquals(1, subscribeMessageBarrier.getQueue().size());
     }
 
@@ -69,7 +70,7 @@ public class SubscribeMessageBarrierTest {
         channel.writeInbound(new PUBACK(0));
         channel.writeInbound(new DISCONNECT());
 
-        assertEquals(false, channel.config().isAutoRead());
+        assertFalse(channel.config().isAutoRead());
         assertEquals(4, subscribeMessageBarrier.getQueue().size());
     }
 

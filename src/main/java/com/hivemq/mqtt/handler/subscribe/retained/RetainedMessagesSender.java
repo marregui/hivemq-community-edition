@@ -253,7 +253,6 @@ public class RetainedMessagesSender {
                     if (t instanceof CancellationException) {
                         //ignore because task was cancelled because channel became inactive and
                         //response has already been sent by callback from ChannelInactiveHandler
-                        return;
                     }
                 }
             }, MoreExecutors.directExecutor());

@@ -90,7 +90,7 @@ public class ExtensionUtil {
         try (final DirectoryStream<Path> stream = Files.newDirectoryStream(extensionPath)) {
             for (final Path path : stream) {
                 if (ExtensionUtil.isValidExtensionFolder(path, true)) {
-                    log.trace("Found extension folder {}", path.toString());
+                    log.trace("Found extension folder {}", path);
                     builder.add(path);
                 }
             }

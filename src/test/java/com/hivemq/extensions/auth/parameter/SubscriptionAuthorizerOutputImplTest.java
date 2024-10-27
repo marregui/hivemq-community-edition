@@ -29,6 +29,8 @@ import static com.hivemq.extensions.auth.parameter.SubscriptionAuthorizerOutputI
 import static com.hivemq.extensions.auth.parameter.SubscriptionAuthorizerOutputImpl.AuthorizationState.SUCCESS;
 import static com.hivemq.extensions.auth.parameter.SubscriptionAuthorizerOutputImpl.AuthorizationState.UNDECIDED;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Christoph Schäbel
@@ -62,14 +64,14 @@ public class SubscriptionAuthorizerOutputImplTest {
     public void test_output_continue() {
         output.nextExtensionOrDefault();
         assertEquals(CONTINUE, output.getAuthorizationState());
-        assertEquals(false, output.isCompleted());
+        assertFalse(output.isCompleted());
     }
 
     @Test
     public void test_output_fail() {
         output.failAuthorization();
         assertEquals(FAIL, output.getAuthorizationState());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test
@@ -77,7 +79,7 @@ public class SubscriptionAuthorizerOutputImplTest {
         output.authorizeSuccessfully();
         output.forceFailedAuthorization();
         assertEquals(FAIL, output.getAuthorizationState());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test
@@ -85,7 +87,7 @@ public class SubscriptionAuthorizerOutputImplTest {
         output.failAuthorization(SubackReasonCode.QUOTA_EXCEEDED);
         assertEquals(FAIL, output.getAuthorizationState());
         assertEquals(SubackReasonCode.QUOTA_EXCEEDED, output.getSubackReasonCode());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test
@@ -94,14 +96,14 @@ public class SubscriptionAuthorizerOutputImplTest {
         assertEquals(FAIL, output.getAuthorizationState());
         assertEquals(SubackReasonCode.IMPLEMENTATION_SPECIFIC_ERROR, output.getSubackReasonCode());
         assertEquals("test-string", output.getReasonString());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test
     public void test_output_disconnect() {
         output.disconnectClient();
         assertEquals(DISCONNECT, output.getAuthorizationState());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test
@@ -109,7 +111,7 @@ public class SubscriptionAuthorizerOutputImplTest {
         output.disconnectClient(DisconnectReasonCode.CONNECTION_RATE_EXCEEDED);
         assertEquals(DISCONNECT, output.getAuthorizationState());
         assertEquals(DisconnectReasonCode.CONNECTION_RATE_EXCEEDED, output.getDisconnectReasonCode());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test
@@ -118,7 +120,7 @@ public class SubscriptionAuthorizerOutputImplTest {
         assertEquals(DISCONNECT, output.getAuthorizationState());
         assertEquals(DisconnectReasonCode.CONNECTION_RATE_EXCEEDED, output.getDisconnectReasonCode());
         assertEquals("test-string", output.getReasonString());
-        assertEquals(true, output.isCompleted());
+        assertTrue(output.isCompleted());
     }
 
     @Test(expected = UnsupportedOperationException.class)

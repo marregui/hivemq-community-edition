@@ -16,6 +16,7 @@
 package com.hivemq.configuration.service.exception;
 
 
+import java.util.Objects;
 
 /**
  * A concrete validation error
@@ -47,7 +48,7 @@ public class ValidationError {
 
         final ValidationError that = (ValidationError) o;
 
-        return message != null ? message.equals(that.message) : that.message == null;
+        return Objects.equals(message, that.message);
     }
 
     @Override

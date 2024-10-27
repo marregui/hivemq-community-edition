@@ -60,12 +60,12 @@ public class WebSocketInitializerTest {
 
         final List<String> handlerNames = channel.pipeline().names();
 
-        assertEquals(true, handlerNames.contains(HTTP_SERVER_CODEC));
-        assertEquals(true, handlerNames.contains(HTTP_OBJECT_AGGREGATOR));
-        assertEquals(true, handlerNames.contains(WEBSOCKET_SERVER_PROTOCOL_HANDLER));
-        assertEquals(true, handlerNames.contains(WEBSOCKET_BINARY_FRAME_HANDLER));
-        assertEquals(true, handlerNames.contains(WEBSOCKET_TEXT_FRAME_HANDLER));
-        assertEquals(true, handlerNames.contains(MQTT_WEBSOCKET_ENCODER));
+        assertTrue(handlerNames.contains(HTTP_SERVER_CODEC));
+        assertTrue(handlerNames.contains(HTTP_OBJECT_AGGREGATOR));
+        assertTrue(handlerNames.contains(WEBSOCKET_SERVER_PROTOCOL_HANDLER));
+        assertTrue(handlerNames.contains(WEBSOCKET_BINARY_FRAME_HANDLER));
+        assertTrue(handlerNames.contains(WEBSOCKET_TEXT_FRAME_HANDLER));
+        assertTrue(handlerNames.contains(MQTT_WEBSOCKET_ENCODER));
 
     }
 

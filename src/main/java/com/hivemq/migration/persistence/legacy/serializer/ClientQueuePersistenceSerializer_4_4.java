@@ -374,7 +374,7 @@ public class ClientQueuePersistenceSerializer_4_4 {
         builder.withHivemqId(new String(serialized, cursor, hivemqIdLength, UTF_8));
         cursor += hivemqIdLength;
 
-        long payloadId = Bytes.readLong(serialized, cursor);
+        final long payloadId = Bytes.readLong(serialized, cursor);
         cursor += Long.BYTES;
 
         builder.withMessageExpiryInterval(Bytes.readLong(serialized, cursor));

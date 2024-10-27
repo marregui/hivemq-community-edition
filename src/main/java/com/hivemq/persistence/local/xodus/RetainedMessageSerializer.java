@@ -62,7 +62,7 @@ public final class RetainedMessageSerializer {
 
     public static @NotNull String deserializeKey(final byte @NotNull [] serialized) {
         checkNotNull(serialized, "Byte array must not be null");
-        return new String(serialized, 0, serialized.length, UTF_8);
+        return new String(serialized, UTF_8);
     }
 
     public static byte @NotNull [] serializeValue(@NotNull final RetainedMessage retainedMessage) {

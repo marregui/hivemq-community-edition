@@ -86,7 +86,7 @@ public class TopicTreeStartup {
 
                 for (final Topic topic : clientSubscriptions) {
                     final SharedSubscription sharedSubscription =
-                            sharedSubscriptionService.checkForSharedSubscription(topic.getTopic());
+                            SharedSubscriptionService.checkForSharedSubscription(topic.getTopic());
 
                     if (sharedSubscription == null) {
                         final byte flags =

@@ -465,7 +465,7 @@ public class IncomingSubscribeService {
     private void downgradeSharedSubscriptions(@NotNull final SUBSCRIBE subscribe) {
         for (final Topic topic : subscribe.getTopics()) {
             final SharedSubscription sharedSubscription =
-                    sharedSubscriptionService.checkForSharedSubscription(topic.getTopic());
+                    SharedSubscriptionService.checkForSharedSubscription(topic.getTopic());
             if (sharedSubscription == null) {
                 continue;
             }

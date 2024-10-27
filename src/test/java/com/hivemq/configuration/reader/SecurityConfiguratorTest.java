@@ -55,7 +55,7 @@ public class SecurityConfiguratorTest extends AbstractConfigurationTest {
 
     @Test
     public void test_security_defaults() throws Exception {
-        final String contents = "" + "<hivemq>" + "</hivemq>";
+        final String contents = "<hivemq>" + "</hivemq>";
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 

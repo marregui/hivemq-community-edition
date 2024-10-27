@@ -238,7 +238,7 @@ public class SystemInformationImplTest {
         systemInformation = new SystemInformationImpl();
         systemInformation.init();
 
-        assertEquals(true, systemInformation.getExtensionsFolder().exists());
+        assertTrue(systemInformation.getExtensionsFolder().exists());
     }
 
     @Test
@@ -247,7 +247,7 @@ public class SystemInformationImplTest {
         systemInformation = new SystemInformationImpl();
         systemInformation.init();
 
-        assertEquals(true, systemInformation.getDataFolder().exists());
+        assertTrue(systemInformation.getDataFolder().exists());
     }
 
     @Test
@@ -256,7 +256,7 @@ public class SystemInformationImplTest {
         systemInformation = new SystemInformationImpl();
         systemInformation.init();
 
-        assertEquals(true, systemInformation.getLogFolder().exists());
+        assertTrue(systemInformation.getLogFolder().exists());
     }
 
     @Test

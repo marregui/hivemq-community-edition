@@ -27,7 +27,7 @@
     </listeners>
 
     <anonymous-usage-statistics>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
     </anonymous-usage-statistics>
 
 </hivemq>

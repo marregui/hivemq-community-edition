@@ -44,10 +44,10 @@ public class RetainedMessagesGaugeTest {
     @Test
     public void test_getValue() throws Exception {
 
-        when(retainedMessagePersistence.size()).thenReturn(452l);
+        when(retainedMessagePersistence.size()).thenReturn(452L);
 
         final Long value = retainedMessagesGauge.getValue();
 
-        assertEquals(452l, value.longValue());
+        assertEquals(452L, value.longValue());
     }
 }

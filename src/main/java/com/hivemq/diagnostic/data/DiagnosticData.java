@@ -55,39 +55,30 @@ public class DiagnosticData {
 
     public String get() {
 
-        final StringBuilder diagnosticWriter = new StringBuilder();
-        diagnosticWriter.append(BANNER);
-        diagnosticWriter.append("\n");
+        final String diagnosticWriter = BANNER +
+                "\n" +
+                String.format("Generated at %s \n", LocalDateTime.now()) +
+                "Please send this file along with any other files in the 'diagnostic' folder to support@hivemq.com.\n\n" +
+                createHeadline("HiveMQ Information") +
+                hiveMQInformation.getHiveMQInformation() +
+                createHeadline("Java System Properties") +
+                systemPropertyInformation.getSystemPropertyInformation() +
+                createHeadline("System Information") +
+                systemInformation.getSystemInformation() +
+                createHeadline("Network Interfaces") +
+                networkInterfaceInformation.getNetworkInterfaceInformation();
 
-        diagnosticWriter.append(String.format("Generated at %s \n", LocalDateTime.now().toString()));
-        diagnosticWriter.append(
-                "Please send this file along with any other files in the 'diagnostic' folder to support@hivemq.com.\n\n");
-
-        diagnosticWriter.append(createHeadline("HiveMQ Information"));
-
-        diagnosticWriter.append(hiveMQInformation.getHiveMQInformation());
-
-        diagnosticWriter.append(createHeadline("Java System Properties"));
-        diagnosticWriter.append(systemPropertyInformation.getSystemPropertyInformation());
-
-        diagnosticWriter.append(createHeadline("System Information"));
-        diagnosticWriter.append(systemInformation.getSystemInformation());
-
-        diagnosticWriter.append(createHeadline("Network Interfaces"));
-        diagnosticWriter.append(networkInterfaceInformation.getNetworkInterfaceInformation());
-
-        return diagnosticWriter.toString();
+        return diagnosticWriter;
     }
 
     private String createHeadline(final String text) {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("\n");
-        builder.append(SECTION_HEADLINE);
-        builder.append("#");
-        builder.append(StringUtils.center(text, SECTION_HEADLINE.length() - 3));
-        builder.append("#\n");
-        builder.append(SECTION_HEADLINE);
-        builder.append("\n");
-        return builder.toString();
+        final String builder = "\n" +
+                SECTION_HEADLINE +
+                "#" +
+                StringUtils.center(text, SECTION_HEADLINE.length() - 3) +
+                "#\n" +
+                SECTION_HEADLINE +
+                "\n";
+        return builder;
     }
 }

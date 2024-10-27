@@ -24,7 +24,6 @@ import com.hivemq.configuration.reader.MqttConfigurator;
 import com.hivemq.configuration.reader.PersistenceConfigurator;
 import com.hivemq.configuration.reader.RestrictionConfigurator;
 import com.hivemq.configuration.reader.SecurityConfigurator;
-import com.hivemq.configuration.reader.UsageStatisticsConfigurator;
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.configuration.service.impl.ConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.MqttConfigurationServiceImpl;
@@ -33,7 +32,6 @@ import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImp
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.statistics.UsageStatisticsConfigImpl;
 import com.hivemq.util.EnvVarUtil;
 
 /**
@@ -48,7 +46,6 @@ public class ConfigurationBootstrap {
                         new MqttConfigurationServiceImpl(),
                         new RestrictionsConfigurationServiceImpl(),
                         new SecurityConfigurationServiceImpl(),
-                        new UsageStatisticsConfigImpl(),
                         new PersistenceConfigurationServiceImpl());
 
         final ConfigurationFile configurationFile = ConfigurationFileProvider.get(systemInformation);
@@ -57,7 +54,6 @@ public class ConfigurationBootstrap {
                 new RestrictionConfigurator(configurationService.restrictionsConfiguration()),
                 new SecurityConfigurator(configurationService.securityConfiguration()),
                 new EnvVarUtil(),
-                new UsageStatisticsConfigurator(configurationService.usageStatisticsConfiguration()),
                 new MqttConfigurator(configurationService.mqttConfiguration()),
                 new ListenerConfigurator(configurationService.listenerConfiguration(), systemInformation),
                 new PersistenceConfigurator(configurationService.persistenceConfigurationService()));

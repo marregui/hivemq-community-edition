@@ -21,7 +21,6 @@ import com.hivemq.configuration.service.PersistenceConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
-import com.hivemq.statistics.UsageStatisticsConfig;
 
 /**
  * The implementation of the {@link com.hivemq.configuration.service.ConfigurationService}
@@ -35,7 +34,6 @@ public class ConfigurationServiceImpl implements FullConfigurationService {
     private final MqttConfigurationService mqttConfigurationService;
     private final RestrictionsConfigurationService restrictionsConfigurationService;
     private final SecurityConfigurationService securityConfigurationService;
-    private final UsageStatisticsConfig usageStatisticsConfig;
     private final PersistenceConfigurationService persistenceConfigurationService;
 
     public ConfigurationServiceImpl(
@@ -43,13 +41,11 @@ public class ConfigurationServiceImpl implements FullConfigurationService {
             final MqttConfigurationService mqttConfigurationService,
             final RestrictionsConfigurationService restrictionsConfigurationService,
             final SecurityConfigurationService securityConfigurationService,
-            final UsageStatisticsConfig usageStatisticsConfig,
             final PersistenceConfigurationService persistenceConfigurationService) {
         this.listenerConfigurationService = listenerConfigurationService;
         this.mqttConfigurationService = mqttConfigurationService;
         this.restrictionsConfigurationService = restrictionsConfigurationService;
         this.securityConfigurationService = securityConfigurationService;
-        this.usageStatisticsConfig = usageStatisticsConfig;
         this.persistenceConfigurationService = persistenceConfigurationService;
     }
 
@@ -66,11 +62,6 @@ public class ConfigurationServiceImpl implements FullConfigurationService {
     @Override
     public RestrictionsConfigurationService restrictionsConfiguration() {
         return restrictionsConfigurationService;
-    }
-
-    @Override
-    public UsageStatisticsConfig usageStatisticsConfiguration() {
-        return usageStatisticsConfig;
     }
 
     @Override

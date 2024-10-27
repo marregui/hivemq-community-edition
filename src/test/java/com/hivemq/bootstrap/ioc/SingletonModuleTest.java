@@ -83,7 +83,7 @@ public class SingletonModuleTest {
         Guice.createInjector(eagerModule);
 
 
-        assertEquals(true, OnStartup.executed.get());
+        assertTrue(OnStartup.executed.get());
         assertTrue(eagerModule.toString().contains("key=class"));
 
 

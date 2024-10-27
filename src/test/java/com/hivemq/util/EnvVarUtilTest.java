@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -91,7 +92,7 @@ public class EnvVarUtilTest {
 
         final String result = envVarUtil.getValue("TEST_NON_EXISTING_ENVVAR");
 
-        assertEquals(null, result);
+        assertNull(result);
     }
 
     @Test

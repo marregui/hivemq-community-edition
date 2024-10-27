@@ -52,6 +52,7 @@ import util.DummyClientConnection;
 import util.TestMessageUtil;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -194,7 +195,7 @@ public class PublishFlowHandlerTest {
         channel.writeInbound(publish);
         channel.writeInbound(publish);
 
-        assertEquals(true, channel.outboundMessages().isEmpty());
+        assertTrue(channel.outboundMessages().isEmpty());
     }
 
     @Test
@@ -215,7 +216,7 @@ public class PublishFlowHandlerTest {
         channel.writeInbound(publish);
         channel.writeInbound(publish);
 
-        assertEquals(true, channel.outboundMessages().isEmpty());
+        assertTrue(channel.outboundMessages().isEmpty());
         verifyNoMoreInteractions(incomingMessageFlowPersistence);
     }
 
@@ -302,7 +303,7 @@ public class PublishFlowHandlerTest {
         final PUBREL pubrel = new PUBREL(123);
         channel.writeInbound(pubrel);
 
-        assertEquals(false, channel.outboundMessages().isEmpty());
+        assertFalse(channel.outboundMessages().isEmpty());
 
         final PUBCOMP pubComp = channel.readOutbound();
 
@@ -323,7 +324,7 @@ public class PublishFlowHandlerTest {
         final PUBACK puback = new PUBACK(123);
         channel.writeOutbound(puback);
 
-        assertEquals(false, channel.outboundMessages().isEmpty());
+        assertFalse(channel.outboundMessages().isEmpty());
 
         final PUBACK pubackOut = channel.readOutbound();
 
@@ -356,7 +357,7 @@ public class PublishFlowHandlerTest {
         final PUBACK puback = new PUBACK(123);
         channel.writeInbound(puback);
 
-        assertEquals(true, channel.outboundMessages().isEmpty());
+        assertTrue(channel.outboundMessages().isEmpty());
     }
 
     @Test
@@ -367,7 +368,7 @@ public class PublishFlowHandlerTest {
         final PUBREC pubrec = new PUBREC(123);
         channel.writeInbound(pubrec);
 
-        assertEquals(false, channel.outboundMessages().isEmpty());
+        assertFalse(channel.outboundMessages().isEmpty());
 
         final PUBREL pubrel = channel.readOutbound();
 
@@ -383,7 +384,7 @@ public class PublishFlowHandlerTest {
         final PUBCOMP pubcomp = new PUBCOMP(123);
         channel.writeInbound(pubcomp);
 
-        assertEquals(true, channel.outboundMessages().isEmpty());
+        assertTrue(channel.outboundMessages().isEmpty());
     }
 
     @Test
@@ -397,7 +398,7 @@ public class PublishFlowHandlerTest {
                 .build();
         channel.writeOutbound(publish);
 
-        assertEquals(false, channel.outboundMessages().isEmpty());
+        assertFalse(channel.outboundMessages().isEmpty());
 
         final PUBLISH publishOut = channel.readOutbound();
 
@@ -420,7 +421,7 @@ public class PublishFlowHandlerTest {
 
         channel.writeOutbound(publish);
 
-        assertEquals(false, channel.outboundMessages().isEmpty());
+        assertFalse(channel.outboundMessages().isEmpty());
 
         final PUBLISH publishOut = channel.readOutbound();
 
@@ -444,7 +445,7 @@ public class PublishFlowHandlerTest {
 
         channel.writeOutbound(publishWithFuture);
 
-        assertEquals(false, channel.outboundMessages().isEmpty());
+        assertFalse(channel.outboundMessages().isEmpty());
 
         final PUBLISH publishOut = channel.readOutbound();
 
@@ -461,7 +462,7 @@ public class PublishFlowHandlerTest {
                 new PUBREL(1, Mqtt5PubRelReasonCode.SUCCESS, null, Mqtt5UserProperties.NO_USER_PROPERTIES);
         channel.writeOutbound(pubrel);
 
-        assertEquals(false, channel.outboundMessages().isEmpty());
+        assertFalse(channel.outboundMessages().isEmpty());
 
         final PUBREL pubrelOut = channel.readOutbound();
 
@@ -477,7 +478,7 @@ public class PublishFlowHandlerTest {
         final MessageWithID messageWithID = new PUBACK(1);
         channel.writeOutbound(messageWithID);
 
-        assertEquals(false, channel.outboundMessages().isEmpty());
+        assertFalse(channel.outboundMessages().isEmpty());
 
         final MessageWithID messageOut = channel.readOutbound();
 

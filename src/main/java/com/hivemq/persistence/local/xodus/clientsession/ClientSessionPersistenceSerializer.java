@@ -49,7 +49,7 @@ public class ClientSessionPersistenceSerializer {
     }
 
     public String deserializeKey(final byte[] bytes) {
-        return new String(bytes, 0, bytes.length, UTF_8);
+        return new String(bytes, UTF_8);
     }
 
     public byte[] serializeValue(final ClientSession clientSession, final long timestamp) {
@@ -104,7 +104,7 @@ public class ClientSessionPersistenceSerializer {
                     -1);
         }
 
-        int queueLimitLength = clientSession.getQueueLimit() != null ? Long.BYTES : 0;
+        final int queueLimitLength = clientSession.getQueueLimit() != null ? Long.BYTES : 0;
 
 
         final byte[] bytes = new byte[Long.BYTES +        // timestamp

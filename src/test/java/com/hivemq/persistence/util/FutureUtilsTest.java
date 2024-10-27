@@ -24,7 +24,9 @@ import java.util.concurrent.CountDownLatch;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Lukas Brandl
@@ -41,11 +43,11 @@ public class FutureUtilsTest {
 
         builder.add(future1).add(future2);
         final ListenableFuture<Void> resultFuture = FutureUtils.voidFutureFromList(builder.build());
-        assertEquals(false, resultFuture.isDone());
+        assertFalse(resultFuture.isDone());
         future1.set(null);
-        assertEquals(false, resultFuture.isDone());
+        assertFalse(resultFuture.isDone());
         future2.set(null);
-        assertEquals(true, resultFuture.isDone());
+        assertTrue(resultFuture.isDone());
     }
 
     @Test(timeout = 5000)
@@ -86,11 +88,11 @@ public class FutureUtilsTest {
 
         final ListenableFuture<Void> resultFuture = FutureUtils.voidFutureFromList(builder.build());
 
-        assertEquals(false, resultFuture.isDone());
+        assertFalse(resultFuture.isDone());
         future1.set(null);
-        assertEquals(false, resultFuture.isDone());
+        assertFalse(resultFuture.isDone());
         future2.setException(new NullPointerException());
-        assertEquals(true, resultFuture.isDone());
+        assertTrue(resultFuture.isDone());
 
         Exception expected = null;
         try {
@@ -112,11 +114,11 @@ public class FutureUtilsTest {
 
         final ListenableFuture<Void> resultFuture = FutureUtils.voidFutureFromList(builder.build());
 
-        assertEquals(false, resultFuture.isDone());
+        assertFalse(resultFuture.isDone());
         future1.setException(new IllegalAccessException());
-        assertEquals(false, resultFuture.isDone());
+        assertFalse(resultFuture.isDone());
         future2.setException(new NullPointerException());
-        assertEquals(true, resultFuture.isDone());
+        assertTrue(resultFuture.isDone());
 
         Exception expected = null;
         try {

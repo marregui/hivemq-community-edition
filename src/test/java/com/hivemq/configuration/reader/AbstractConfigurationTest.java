@@ -27,8 +27,6 @@ import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImp
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
-import com.hivemq.statistics.UsageStatisticsConfig;
-import com.hivemq.statistics.UsageStatisticsConfigImpl;
 import com.hivemq.util.EnvVarUtil;
 import org.junit.Before;
 import org.junit.Rule;
@@ -55,7 +53,6 @@ public class AbstractConfigurationTest {
     MqttConfigurationService mqttConfigurationService;
     RestrictionsConfigurationService restrictionsConfigurationService;
     SecurityConfigurationService securityConfigurationService;
-    UsageStatisticsConfig usageStatisticsConfig;
     SystemInformation systemInformation;
     PersistenceConfigurationService persistenceConfigurationService;
 
@@ -68,7 +65,6 @@ public class AbstractConfigurationTest {
         securityConfigurationService = new SecurityConfigurationServiceImpl();
         mqttConfigurationService = new MqttConfigurationServiceImpl();
         restrictionsConfigurationService = new RestrictionsConfigurationServiceImpl();
-        usageStatisticsConfig = new UsageStatisticsConfigImpl();
         systemInformation = new SystemInformationImpl(false);
         persistenceConfigurationService = new PersistenceConfigurationServiceImpl();
 
@@ -78,7 +74,6 @@ public class AbstractConfigurationTest {
                 new RestrictionConfigurator(restrictionsConfigurationService),
                 new SecurityConfigurator(securityConfigurationService),
                 envVarUtil,
-                new UsageStatisticsConfigurator(usageStatisticsConfig),
                 new MqttConfigurator(mqttConfigurationService),
                 new ListenerConfigurator(listenerConfigurationService, systemInformation),
                 new PersistenceConfigurator(persistenceConfigurationService));

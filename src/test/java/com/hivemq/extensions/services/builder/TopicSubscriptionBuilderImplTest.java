@@ -68,8 +68,8 @@ public class TopicSubscriptionBuilderImplTest {
 
         assertEquals("topic", topic.getTopicFilter());
         assertEquals(Qos.AT_LEAST_ONCE, topic.getQos());
-        assertEquals(true, topic.getRetainAsPublished());
-        assertEquals(false, topic.getNoLocal());
+        assertTrue(topic.getRetainAsPublished());
+        assertFalse(topic.getNoLocal());
         assertTrue(topic.getSubscriptionIdentifier().isPresent());
         assertEquals(1, topic.getSubscriptionIdentifier().get().intValue());
 
@@ -87,8 +87,8 @@ public class TopicSubscriptionBuilderImplTest {
 
         assertEquals("topic", topic.getTopicFilter());
         assertEquals(Qos.AT_LEAST_ONCE, topic.getQos());
-        assertEquals(true, topic.getRetainAsPublished());
-        assertEquals(false, topic.getNoLocal());
+        assertTrue(topic.getRetainAsPublished());
+        assertFalse(topic.getNoLocal());
         assertTrue(topic.getSubscriptionIdentifier().isPresent());
         assertEquals(1, topic.getSubscriptionIdentifier().get().intValue());
 
@@ -322,8 +322,8 @@ public class TopicSubscriptionBuilderImplTest {
 
         assertEquals("topic", topic.getTopicFilter());
         assertEquals(Qos.AT_MOST_ONCE, topic.getQos());
-        assertEquals(true, topic.getRetainAsPublished());
-        assertEquals(false, topic.getNoLocal());
+        assertTrue(topic.getRetainAsPublished());
+        assertFalse(topic.getNoLocal());
         assertTrue(topic.getSubscriptionIdentifier().isPresent());
         assertEquals(1, topic.getSubscriptionIdentifier().get().intValue());
     }
@@ -335,8 +335,8 @@ public class TopicSubscriptionBuilderImplTest {
 
         assertEquals("topic", topic.getTopicFilter());
         assertEquals(Qos.AT_MOST_ONCE, topic.getQos());
-        assertEquals(false, topic.getRetainAsPublished());
-        assertEquals(false, topic.getNoLocal());
+        assertFalse(topic.getRetainAsPublished());
+        assertFalse(topic.getNoLocal());
         assertFalse(topic.getSubscriptionIdentifier().isPresent());
     }
 }

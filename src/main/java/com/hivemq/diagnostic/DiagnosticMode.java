@@ -115,7 +115,7 @@ public class DiagnosticMode {
         final File metricLog = new File(diagnosticFolder, FILE_NAME_METRIC_LOG);
 
         try {
-            final PrintStream logStream = new PrintStream(metricLog, Charset.defaultCharset().name());
+            final PrintStream logStream = new PrintStream(metricLog, Charset.defaultCharset());
             metricReporter = ConsoleReporter.forRegistry(metricRegistry)
                     .scheduleOn(executor)
                     // Shut this executor down on stop. We can configure this here because we own it.

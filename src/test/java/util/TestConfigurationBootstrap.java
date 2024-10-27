@@ -25,8 +25,6 @@ import com.hivemq.configuration.service.impl.PersistenceConfigurationServiceImpl
 import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
-import com.hivemq.statistics.UsageStatisticsConfig;
-import com.hivemq.statistics.UsageStatisticsConfigImpl;
 
 /**
  * @author Christoph Schäbel
@@ -38,7 +36,6 @@ public class TestConfigurationBootstrap {
     private RestrictionsConfigurationServiceImpl restrictionsConfigurationService;
     private final SecurityConfigurationServiceImpl securityConfigurationService;
     private ConfigurationServiceImpl configurationService;
-    private final UsageStatisticsConfig usageStatisticsConfig;
     private final PersistenceConfigurationService persistenceConfigurationService;
 
     public TestConfigurationBootstrap() {
@@ -46,14 +43,12 @@ public class TestConfigurationBootstrap {
         mqttConfigurationService = new MqttConfigurationServiceImpl();
         restrictionsConfigurationService = new RestrictionsConfigurationServiceImpl();
         securityConfigurationService = new SecurityConfigurationServiceImpl();
-        usageStatisticsConfig = new UsageStatisticsConfigImpl();
         persistenceConfigurationService = new PersistenceConfigurationServiceImpl();
 
         configurationService = new ConfigurationServiceImpl(listenerConfigurationService,
                 mqttConfigurationService,
                 restrictionsConfigurationService,
                 securityConfigurationService,
-                usageStatisticsConfig,
                 persistenceConfigurationService);
     }
 

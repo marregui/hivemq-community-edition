@@ -51,6 +51,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.anyList;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.anyString;
@@ -211,7 +212,7 @@ public class SendRetainedMessagesListenerTest {
         assertEquals("topic", publish.getTopic());
         assertEquals(QoS.EXACTLY_ONCE, publish.getQoS());
         assertArrayEquals("test".getBytes(UTF_8), publish.getPayload());
-        assertEquals(true, publish.isRetain());
+        assertTrue(publish.isRetain());
     }
 
     @Test
@@ -295,7 +296,7 @@ public class SendRetainedMessagesListenerTest {
         assertEquals("topic", publish.getTopic());
         assertEquals(QoS.EXACTLY_ONCE, publish.getQoS());
         assertArrayEquals("test".getBytes(UTF_8), publish.getPayload());
-        assertEquals(true, publish.isRetain());
+        assertTrue(publish.isRetain());
     }
 
     @Test
@@ -329,13 +330,13 @@ public class SendRetainedMessagesListenerTest {
         assertEquals("topic", publish.getTopic());
         assertEquals(QoS.EXACTLY_ONCE, publish.getQoS());
         assertArrayEquals("test".getBytes(UTF_8), publish.getPayload());
-        assertEquals(true, publish.isRetain());
+        assertTrue(publish.isRetain());
 
         final PUBLISH publish2 = (PUBLISH) channel.outboundMessages().poll();
         assertEquals("topic2", publish2.getTopic());
         assertEquals(QoS.AT_MOST_ONCE, publish2.getQoS());
         assertArrayEquals("test".getBytes(UTF_8), publish2.getPayload());
-        assertEquals(true, publish2.isRetain());
+        assertTrue(publish2.isRetain());
     }
 
     @Test
@@ -489,13 +490,13 @@ public class SendRetainedMessagesListenerTest {
         assertEquals("topic", publish.getTopic());
         assertEquals(QoS.AT_LEAST_ONCE, publish.getQoS());
         assertArrayEquals("test".getBytes(UTF_8), publish.getPayload());
-        assertEquals(true, publish.isRetain());
+        assertTrue(publish.isRetain());
 
         final PUBLISH publish2 = captor.getAllValues().get(1).get(0);
         assertEquals("topic2", publish2.getTopic());
         assertEquals(QoS.AT_LEAST_ONCE, publish2.getQoS());
         assertArrayEquals("test".getBytes(UTF_8), publish2.getPayload());
-        assertEquals(true, publish2.isRetain());
+        assertTrue(publish2.isRetain());
     }
 
     private SendRetainedMessagesListener createListener(

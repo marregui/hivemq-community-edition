@@ -39,7 +39,6 @@ import com.hivemq.mqtt.ioc.MQTTServiceModule;
 import com.hivemq.persistence.ioc.PersistenceMigrationModule;
 import com.hivemq.persistence.ioc.PersistenceModule;
 import com.hivemq.security.ioc.SecurityModule;
-import com.hivemq.statistics.UsageStatisticsModule;
 import com.hivemq.throttling.ioc.ThrottlingModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,8 +91,6 @@ public class GuiceBootstrap {
                 new DiagnosticModule(),
                 /* Binds SSL functionality*/
                 new SecurityModule(),
-                /* Bind Statistics specific classes */
-                new UsageStatisticsModule(),
                 /* Binds the Extension System */
                 new ExtensionModule());
 

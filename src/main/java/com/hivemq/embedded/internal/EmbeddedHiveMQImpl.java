@@ -150,7 +150,7 @@ class EmbeddedHiveMQImpl implements EmbeddedHiveMQ {
                     systemInformation.init();
                     configurationService = ConfigurationBootstrap.bootstrapConfig(systemInformation);
 
-                    hiveMQServer = new HiveMQServer(systemInformation, metricRegistry, configurationService, enableLoggingBootstrap, false);
+                    hiveMQServer = new HiveMQServer(systemInformation, metricRegistry, configurationService, enableLoggingBootstrap);
                     hiveMQServer.bootstrap();
                     hiveMQServer.startInstance(embeddedExtension);
 

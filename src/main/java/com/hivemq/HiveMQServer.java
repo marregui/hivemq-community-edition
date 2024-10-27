@@ -34,12 +34,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.lifecycle.LifecycleModule;
 import com.hivemq.metrics.MetricRegistryLogger;
-import com.hivemq.migration.MigrationUnit;
-import com.hivemq.migration.Migrations;
-import com.hivemq.migration.meta.PersistenceType;
 import com.hivemq.persistence.PersistenceStartup;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,8 +45,6 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.hivemq.configuration.service.PersistenceConfigurationService.PersistenceMode;
@@ -64,22 +58,20 @@ public class HiveMQServer {
     private final @NotNull DataLock dataLock;
     private final @NotNull SystemInformation systemInformation;
     private final @NotNull MetricRegistry metricRegistry;
-    private final boolean migrate;
     private final boolean enableLoggingBootstrap;
 
     private @Nullable Injector injector;
     private @Nullable FullConfigurationService configService;
 
     public HiveMQServer() {
-        this(new SystemInformationImpl(true), new MetricRegistry(), null, true, true);
+        this(new SystemInformationImpl(true), new MetricRegistry(), null, true);
     }
 
     public HiveMQServer(
             final @NotNull SystemInformation systemInformation,
             final @Nullable MetricRegistry metricRegistry,
             final @Nullable FullConfigurationService configService,
-            final boolean enableLoggingBootstrap,
-            final boolean migrate) {
+            final boolean enableLoggingBootstrap) {
         hivemqId = new HivemqId();
         lifecycleModule = new LifecycleModule();
         dataLock = new DataLock();
@@ -87,7 +79,6 @@ public class HiveMQServer {
         this.metricRegistry = metricRegistry;
         this.configService = configService;
         this.enableLoggingBootstrap = enableLoggingBootstrap;
-        this.migrate = migrate;
     }
 
     public static void main(final String @NotNull [] args) throws Exception {
@@ -145,11 +136,6 @@ public class HiveMQServer {
         log.trace("Cleaning up temporary folders");
         deleteTmpFolder(systemInformation.getDataFolder());
 
-        //must happen before persistence injector bootstrap as it creates the persistence folder.
-        log.trace("Checking for migrations");
-        final Map<MigrationUnit, PersistenceType> migrations = Migrations.checkForTypeMigration(systemInformation);
-        final Set<MigrationUnit> valueMigrations = Migrations.checkForValueMigration(systemInformation);
-
         log.trace("Initializing persistences");
         final Injector persistenceInjector = GuiceBootstrap.persistenceInjector(systemInformation,
                 metricRegistry,
@@ -161,26 +147,6 @@ public class HiveMQServer {
 
         if (persistenceInjector.getInstance(ShutdownHooks.class).isShuttingDown()) {
             throw new StartAbortedException("User aborted.");
-        }
-
-        if (migrate && configService.persistenceConfigurationService().getMode() != PersistenceMode.IN_MEMORY) {
-
-            if (migrations.size() + valueMigrations.size() > 0) {
-                if (migrations.isEmpty()) {
-                    log.info("Persistence values has been changed, migrating persistent data.");
-                } else {
-                    log.info("Persistence types has been changed, migrating persistent data.");
-                }
-                for (final MigrationUnit migrationUnit : migrations.keySet()) {
-                    log.debug("{} needs to be migrated.", StringUtils.capitalize(migrationUnit.toString()));
-                }
-                for (final MigrationUnit migrationUnit : valueMigrations) {
-                    log.debug("{} needs to be migrated.", StringUtils.capitalize(migrationUnit.toString()));
-                }
-                Migrations.migrate(persistenceInjector, migrations, valueMigrations);
-            }
-
-            Migrations.afterMigration(systemInformation);
         }
 
         if (configService.persistenceConfigurationService().getMode().equals(PersistenceMode.FILE)) {

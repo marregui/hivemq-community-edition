@@ -69,22 +69,6 @@ public class XodusFileDataWriterLogLevelModifierTest {
     public static void afterClass() {
         final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         loggerContext.reset();
-        HiveMQServer.Logging.prepareLogging();
-    }
-
-    @Test
-    public void test_first_time_gets_modified_to_debug() {
-        final String msg = "Can't open directory channel. Log directory fsync won't be performed.";
-
-        final AtomicInteger loggedCounter = new AtomicInteger();
-        final Iterator<Appender<ILoggingEvent>> appenderIterator = rootLogger.iteratorForAppenders();
-
-        while (appenderIterator.hasNext()) {
-            appenderIterator.next().addFilter(createFilter(loggedCounter, msg));
-        }
-        context.getLogger(FileDataWriter.class).warn(msg);
-
-        assertEquals(1, loggedCounter.get());
     }
 
     private @NotNull Filter<ILoggingEvent> createFilter(

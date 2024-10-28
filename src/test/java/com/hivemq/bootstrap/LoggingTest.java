@@ -122,50 +122,12 @@ public class LoggingTest {
         try {
             final File configFolder = temporaryFolder.newFolder();
 
-            HiveMQServer.Logging.prepareLogging();
             //No file was written
             HiveMQServer.Logging.initLogging(configFolder);
 
             assertFalse(logger.isTraceEnabled());
         } finally {
             //Set back to the original level, otherwise we interfere with other tests
-            resetLogToOriginal();
-        }
-    }
-
-    @Test
-    public void test_logger_prepare_holds_back_logger_until_init_logging() throws Exception {
-
-        try {
-
-            final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-
-            final LogbackCapturingAppender testAppender = LogbackCapturingAppender.Factory.weaveInto(logger);
-            HiveMQServer.Logging.prepareLogging();
-
-            logger.info("testlog");
-
-            //The logging statement is cached and is not available yet
-            assertFalse(testAppender.isLogCaptured());
-
-            //This "resets" to the original logger
-            HiveMQServer.Logging.initLogging(temporaryFolder.newFolder());
-
-
-            assertTrue(testAppender.isLogCaptured());
-
-            final ImmutableList<Appender<ILoggingEvent>> appenders =
-                    ImmutableList.copyOf(logger.iteratorForAppenders());
-
-
-            for (final Appender<ILoggingEvent> appender : appenders) {
-                if (appender instanceof ListAppender) {
-                    fail();
-                }
-            }
-
-            LogbackCapturingAppender.Factory.cleanUp();
-        } finally {
             resetLogToOriginal();
         }
     }
@@ -193,7 +155,6 @@ public class LoggingTest {
 
         try {
 
-            HiveMQServer.Logging.prepareLogging();
             final File configFolder = temporaryFolder.newFolder();
 
             Files.write(overridenContents, new File(configFolder, "logback.xml"), StandardCharsets.UTF_8);

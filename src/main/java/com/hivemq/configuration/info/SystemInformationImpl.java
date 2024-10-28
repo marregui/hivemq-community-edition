@@ -22,8 +22,6 @@ import com.hivemq.configuration.SystemProperties;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.util.ManifestUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import oshi.SystemInfo;
 
 import java.io.File;
@@ -31,14 +29,9 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-/**
- * @author Christoph Schäbel
- * @author Silvio Giebl
- */
 public class SystemInformationImpl implements SystemInformation {
 
     public static final String DEVELOPMENT_VERSION = "Development Snapshot";
-    private static final Logger log = LoggerFactory.getLogger(SystemInformationImpl.class);
     private final long runningSince;
     private final int processorCount;
     private final boolean usePathOfRunningJar;
@@ -76,20 +69,13 @@ public class SystemInformationImpl implements SystemInformation {
     }
 
     private int getPhysicalProcessorCount() {
-
         final int runtimeProcessorCount = Runtime.getRuntime().availableProcessors();
         int physicalProcessorCount;
         try {
             physicalProcessorCount = new SystemInfo().getHardware().getProcessor().getPhysicalProcessorCount();
         } catch (final Exception e) {
-            log.warn(
-                    "No able to determine amount of physical cores, using available amount of cores reported by the JVM as fallback");
-            if (log.isTraceEnabled()) {
-                log.trace("Original Exception: ", e);
-            }
             physicalProcessorCount = runtimeProcessorCount;
         }
-
         return Math.min(physicalProcessorCount, runtimeProcessorCount);
     }
 
@@ -116,14 +102,10 @@ public class SystemInformationImpl implements SystemInformation {
     }
 
     private void setHivemqVersion() {
-
         hivemqVersion = ManifestUtils.getValueFromManifest(HiveMQServer.class, "HiveMQ-Version");
-
         if (hivemqVersion == null || hivemqVersion.length() < 1) {
             hivemqVersion = DEVELOPMENT_VERSION;
         }
-
-        log.info("HiveMQ version: {}", hivemqVersion);
     }
 
     public void setHivemqVersion(final String hivemqVersion) {
@@ -196,7 +178,7 @@ public class SystemInformationImpl implements SystemInformation {
         if (createFolderIfNotExists && !folder.exists()) {
             final boolean mkdirsResult = folder.mkdirs();
             if (!mkdirsResult) {
-                log.warn("Not able to create folder {}, HiveMQ will behave unexpectedly!", folder);
+                System.out.printf("Not able to create folder %s, HiveMQ will behave unexpectedly!%n", folder);
             }
         }
 
@@ -227,7 +209,7 @@ public class SystemInformationImpl implements SystemInformation {
 
         if (home != null) {
             homeFolder = findAbsoluteAndRelative(home);
-            log.info("HiveMQ home directory: {}", homeFolder.getAbsolutePath());
+            System.out.printf("HiveMQ home directory: %s%n", homeFolder.getAbsolutePath());
 
             //setting system property to support the deprecated PathUtils in the SPI
             System.setProperty(SystemProperties.HIVEMQ_HOME, homeFolder.getAbsolutePath());
@@ -242,8 +224,8 @@ public class SystemInformationImpl implements SystemInformation {
     private void useTemporaryHomeFolder() {
         final File tempDir = Files.createTempDir();
         tempDir.deleteOnExit();
-        log.warn(
-                "No {} property or {} environment variable was set. Using a temporary directory ({}) HiveMQ will behave unexpectedly!",
+        System.out.printf(
+                "No %s property or %s environment variable was set. Using a temporary directory (%s) HiveMQ will behave unexpectedly!%n",
                 SystemProperties.HIVEMQ_HOME,
                 EnvironmentVariables.HIVEMQ_HOME,
                 tempDir.getAbsolutePath());
@@ -252,7 +234,7 @@ public class SystemInformationImpl implements SystemInformation {
 
     private void usePathOfRunningJarAsHomeFolder() {
         final File pathOfRunningJar = getPathOfRunningJar();
-        log.warn("No {} property or {} environment variable was set. Using {}",
+        System.out.printf("No %s property or %s environment variable was set. Using %s%n",
                 SystemProperties.HIVEMQ_HOME,
                 EnvironmentVariables.HIVEMQ_HOME,
                 pathOfRunningJar.getAbsolutePath());

@@ -69,7 +69,6 @@ public class XodusEnvironmentImplLogLevelModifierTest {
     public static void afterClass() {
         final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         loggerContext.reset();
-        HiveMQServer.Logging.prepareLogging();
     }
 
     @Test

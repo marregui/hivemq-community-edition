@@ -24,8 +24,12 @@ import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.read.ListAppender;
 import ch.qos.logback.core.util.StatusPrinter;
 import com.codahale.metrics.MetricRegistry;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Throwables;
+import com.google.inject.CreationException;
 import com.google.inject.Injector;
-import com.hivemq.bootstrap.HiveMQExceptionHandlerBootstrap;
+import com.google.inject.ProvisionException;
+import com.google.inject.spi.Message;
 import com.hivemq.bootstrap.ioc.GuiceBootstrap;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.ConfigurationBootstrap;
@@ -52,6 +56,7 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -81,16 +86,12 @@ public class HiveMQServer {
         Runtime.getRuntime().addShutdownHook(new Thread(this::stop, "shutdown-thread-" + hivemqId.get()));
 
         // B O O T S T R A P
+        systemInformation.init();
         metricRegistry.addListener(new MetricRegistryLogger());
 
-        Logging.prepareLogging();
-        log.info("Starting HiveMQ Community Edition Server");
-        log.trace("Initializing HiveMQ home directory");
-        systemInformation.init();
-        log.trace("Initializing Logging");
         Logging.initLogging(systemInformation.getConfigFolder());
-        log.trace("Initializing Exception handlers");
-        HiveMQExceptionHandlerBootstrap.addUnrecoverableExceptionHandler();
+        log.info("Starting HiveMQ Community Edition Server");
+        Thread.setDefaultUncaughtExceptionHandler(HiveMQServer::handleUncaughtException);
 
         log.trace("Initializing configuration");
         configService = ConfigurationBootstrap.bootstrapConfig(systemInformation);
@@ -151,7 +152,8 @@ public class HiveMQServer {
         }
         /* It's important that we are modifying the log levels after Guice is initialized,
         otherwise this somehow interferes with Singleton creation */
-        Logging.addLoglevelModifiers();
+        Logging.LOG_LEVEL_MODIFIER_TURBO_FILTER.registerLogLevelModifier(new XodusEnvironmentImplLogLevelModifier());
+        log.trace("Added Xodus log level modifier for EnvironmentImpl.class");
         instance.start();
 
         log.info("Started HiveMQ in {}ms", TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime));
@@ -180,6 +182,9 @@ public class HiveMQServer {
      */
     public static class Logging {
 
+        private static final @NotNull LoggerContext CONTEXT = (LoggerContext) LoggerFactory.getILoggerFactory();
+        private static final @NotNull ch.qos.logback.classic.Logger ROOT_LOGGER =
+                CONTEXT.getLogger(Logger.ROOT_LOGGER_NAME);
         private static final @NotNull ListAppender<ILoggingEvent> LIST_APPENDER = new ListAppender<>();
         private static final @NotNull List<Appender<ILoggingEvent>> DEFAULT_APPENDERS = new LinkedList<>();
         private static final @NotNull LogLevelModifierTurboFilter LOG_LEVEL_MODIFIER_TURBO_FILTER =
@@ -212,10 +217,8 @@ public class HiveMQServer {
                 //noop
             }
         };
-        private static final @NotNull ch.qos.logback.classic.Logger ROOT_LOGGER =
-                (ch.qos.logback.classic.Logger) LoggerFactory.getILoggerFactory().getLogger(Logger.ROOT_LOGGER_NAME);
 
-        public static void prepareLogging() {
+        public static void initLogging(final @NotNull File configFolder) {
             for (final Iterator<Appender<ILoggingEvent>> it = ROOT_LOGGER.iteratorForAppenders(); it.hasNext(); ) {
                 final Appender<ILoggingEvent> appender = it.next();
                 ROOT_LOGGER.detachAppender(appender);
@@ -223,17 +226,13 @@ public class HiveMQServer {
             }
             LIST_APPENDER.start();
             ROOT_LOGGER.addAppender(LIST_APPENDER);
-        }
-
-        public static void initLogging(final @NotNull File configFolder) {
-            final LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-            context.addListener(LOGBACK_CHANGE_LISTENER);
+            CONTEXT.addListener(LOGBACK_CHANGE_LISTENER);
             final boolean overridden = tryToOverrideLogbackXml(configFolder);
             if (!overridden) {
                 for (final Appender<ILoggingEvent> defaultAppender : DEFAULT_APPENDERS) {
                     ROOT_LOGGER.addAppender(defaultAppender);
                 }
-                context.addTurboFilter(LOG_LEVEL_MODIFIER_TURBO_FILTER);
+                CONTEXT.addTurboFilter(LOG_LEVEL_MODIFIER_TURBO_FILTER);
                 logQueuedEntries();
             }
             // redirect JUL to SLF4J
@@ -253,10 +252,10 @@ public class HiveMQServer {
         }
 
         public static void resetLogging() {
-            final LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-            context.getTurboFilterList().remove(LOG_LEVEL_MODIFIER_TURBO_FILTER);
-            context.removeListener(LOGBACK_CHANGE_LISTENER);
+            CONTEXT.getTurboFilterList().remove(LOG_LEVEL_MODIFIER_TURBO_FILTER);
+            CONTEXT.removeListener(LOGBACK_CHANGE_LISTENER);
         }
+
 
         private static void logQueuedEntries() {
             LIST_APPENDER.stop();
@@ -270,12 +269,11 @@ public class HiveMQServer {
         private static boolean tryToOverrideLogbackXml(final @NotNull File configFolder) {
             final File file = new File(configFolder, "logback.xml");
             if (file.canRead()) {
-                final LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
                 try {
-                    context.reset();
+                    CONTEXT.reset();
 
                     final JoranConfigurator configurator = new JoranConfigurator();
-                    configurator.setContext(context);
+                    configurator.setContext(CONTEXT);
                     configurator.doConfigure(file);
                     logQueuedEntries();
                     log.info("Log Configuration was overridden by {}", file.getAbsolutePath());
@@ -283,7 +281,7 @@ public class HiveMQServer {
                 } catch (final Exception ex) {
                     ex.printStackTrace();
                 } finally {
-                    StatusPrinter.printInCaseOfErrorsOrWarnings(context);
+                    StatusPrinter.printInCaseOfErrorsOrWarnings(CONTEXT);
                 }
                 // Print internal status data in case of warnings or errors.
             } else { // we do not override if the custom config file does not exist
@@ -293,10 +291,32 @@ public class HiveMQServer {
             }
             return false;
         }
+    }
 
-        public static void addLoglevelModifiers() {
-            LOG_LEVEL_MODIFIER_TURBO_FILTER.registerLogLevelModifier(new XodusEnvironmentImplLogLevelModifier());
-            log.trace("Added Xodus log level modifier for EnvironmentImpl.class");
+    @VisibleForTesting
+    static void handleUncaughtException(final Thread t, final Throwable e) {
+        exitIfUnrecoverable(e);
+        if (e instanceof CreationException) {
+            exitIfUnrecoverable(e.getCause());
+            exitIfUnrecoverable(((CreationException) e).getErrorMessages());
+        } else if (e instanceof ProvisionException) {
+            exitIfUnrecoverable(e.getCause());
+            exitIfUnrecoverable(((ProvisionException) e).getErrorMessages());
+        }
+        System.err.printf("Problem: %s%n", Throwables.getRootCause(e));
+    }
+
+    private static void exitIfUnrecoverable(final Collection<Message> errorMessages) {
+        for (final Message message : errorMessages) {
+            exitIfUnrecoverable(message.getCause());
+        }
+    }
+
+    private static void exitIfUnrecoverable(final @com.hivemq.extension.sdk.api.annotations.NotNull Throwable t) {
+        if (t instanceof UnrecoverableException) {
+            System.err.println("An unrecoverable Exception occurred. Exiting HiveMQ");
+            t.printStackTrace();
+            System.exit(1);
         }
     }
 }

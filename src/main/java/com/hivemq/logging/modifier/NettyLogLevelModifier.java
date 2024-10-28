@@ -24,6 +24,26 @@ import org.slf4j.Marker;
 
 public class NettyLogLevelModifier implements LogLevelModifier {
 
+    private static void traceAndSortOutUnsupportedOperationException(
+            final @Nullable Marker marker,
+            final @NotNull Logger logger,
+            final @NotNull String format,
+            final @Nullable Object @Nullable [] params,
+            final @Nullable Throwable t) {
+
+        if (t instanceof UnsupportedOperationException) {
+            return;
+        }
+        if (params != null) {
+            for (final Object param : params) {
+                if (param instanceof UnsupportedOperationException) {
+                    return;
+                }
+            }
+        }
+        logger.trace(marker, format, params);
+    }
+
     @Override
     public @NotNull FilterReply decide(
             final @Nullable Marker marker,
@@ -72,25 +92,5 @@ public class NettyLogLevelModifier implements LogLevelModifier {
             }
         }
         return FilterReply.NEUTRAL;
-    }
-
-    private static void traceAndSortOutUnsupportedOperationException(
-            final @Nullable Marker marker,
-            final @NotNull Logger logger,
-            final @NotNull String format,
-            final @Nullable Object @Nullable [] params,
-            final @Nullable Throwable t) {
-
-        if (t instanceof UnsupportedOperationException) {
-            return;
-        }
-        if (params != null) {
-            for (final Object param : params) {
-                if (param instanceof UnsupportedOperationException) {
-                    return;
-                }
-            }
-        }
-        logger.trace(marker, format, params);
     }
 }

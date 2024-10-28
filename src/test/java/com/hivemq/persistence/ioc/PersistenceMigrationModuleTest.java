@@ -25,17 +25,12 @@ import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.service.MqttConfigurationService;
 import com.hivemq.configuration.service.PersistenceConfigurationService;
 import com.hivemq.persistence.PersistenceStartup;
-import com.hivemq.persistence.local.memory.RetainedMessageMemoryLocalPersistence;
-import com.hivemq.persistence.payload.PublishPayloadNoopPersistenceImpl;
-import com.hivemq.persistence.payload.PublishPayloadPersistence;
-import com.hivemq.persistence.retained.RetainedMessageLocalPersistence;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 /**
@@ -75,22 +70,5 @@ public class PersistenceMigrationModuleTest {
         final PersistenceStartup instance2 = injector.getInstance(PersistenceStartup.class);
 
         assertSame(instance1, instance2);
-    }
-
-    @Test
-    public void test_memory_persistence() {
-        when(persistenceConfigurationService.getMode()).thenReturn(PersistenceConfigurationService.PersistenceMode.IN_MEMORY);
-
-        final Injector injector = Guice.createInjector(new PersistenceMigrationModule(new MetricRegistry(),
-                persistenceConfigurationService), new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(SystemInformation.class).toInstance(systemInformation);
-                bindScope(LazySingleton.class, LazySingletonScope.get());
-                bind(MqttConfigurationService.class).toInstance(mqttConfigurationService);
-            }
-        });
-        assertTrue(injector.getInstance(PublishPayloadPersistence.class) instanceof PublishPayloadNoopPersistenceImpl);
-        assertTrue(injector.getInstance(RetainedMessageLocalPersistence.class) instanceof RetainedMessageMemoryLocalPersistence);
     }
 }

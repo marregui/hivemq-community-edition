@@ -192,16 +192,6 @@ public class LocalPersistenceModuleTest {
         InternalConfigurations.RETAINED_MESSAGE_PERSISTENCE_TYPE.set(FILE_NATIVE);
     }
 
-    @Test
-    public void test_memory_persistence() {
-        when(persistenceConfigurationService.getMode()).thenReturn(PersistenceMode.IN_MEMORY);
-
-        final Injector injector =
-                createInjector(new LocalPersistenceModule(persistenceInjector, persistenceConfigurationService));
-
-        assertTrue(injector.getInstance(RetainedMessageLocalPersistence.class) instanceof RetainedMessageMemoryLocalPersistence);
-    }
-
     private Injector createInjector(final LocalPersistenceModule localPersistenceModule) {
         return Guice.createInjector(localPersistenceModule,
                 new LazySingletonModule(),

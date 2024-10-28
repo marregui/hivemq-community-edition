@@ -74,8 +74,4 @@ public interface SystemInformation {
      */
     int getProcessorCount();
 
-    /**
-     * @return is HiveMQ running in embedded mode
-     */
-    boolean isEmbedded();
 }

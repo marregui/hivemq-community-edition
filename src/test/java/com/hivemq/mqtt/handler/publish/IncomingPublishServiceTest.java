@@ -53,7 +53,6 @@ import org.mockito.MockitoAnnotations;
 import util.CheckUserEventTriggeredOnSuper;
 import util.DummyClientConnection;
 import util.TestConfigurationBootstrap;
-import util.TestException;
 import util.TestMessageUtil;
 
 import java.util.concurrent.ExecutorService;

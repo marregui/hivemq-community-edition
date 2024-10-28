@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;
 import com.hivemq.mqtt.message.connect.CONNECT;
 import com.hivemq.mqtt.message.reason.Mqtt5ConnAckReasonCode;
-import com.hivemq.util.Bytes;
 import com.hivemq.util.ClientIds;
 import com.hivemq.util.ReasonStrings;
 import com.hivemq.util.Strings;

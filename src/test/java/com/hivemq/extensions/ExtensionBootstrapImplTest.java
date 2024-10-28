@@ -22,7 +22,6 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.hivemq.common.shutdown.HiveMQShutdownHook;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.info.SystemInformationImpl;
-import com.hivemq.embedded.EmbeddedExtension;
 import com.hivemq.extension.sdk.api.ExtensionMain;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +39,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;
 
@@ -64,7 +62,6 @@ public class ExtensionBootstrapImplTest {
     private final @NotNull HiveMQExtensions hiveMQExtensions = mock(HiveMQExtensions.class);
     private final @NotNull ShutdownHooks shutdownHooks = mock(ShutdownHooks.class);
     private final @NotNull Authenticators authenticators = mock(Authenticators.class);
-    private final @NotNull EmbeddedExtension embeddedExtension = mock(EmbeddedExtension.class);
 
     private @NotNull ExtensionBootstrapImpl pluginBootstrap;
 
@@ -86,44 +83,9 @@ public class ExtensionBootstrapImplTest {
     @Test
     public void test_startPluginSystem_shutdown_hook_registered() {
         when(extensionLoader.loadExtensions(any(Path.class), anyBoolean())).thenReturn(ImmutableList.of());
-        pluginBootstrap.startExtensionSystem(null);
+        pluginBootstrap.startExtensionSystem();
 
         verify(shutdownHooks).add(any(HiveMQShutdownHook.class));
-    }
-
-    @Test
-    public void test_startPluginSystem_with_embeddedExtensions() {
-        when(extensionLoader.loadExtensions(any(Path.class), anyBoolean())).thenReturn(ImmutableList.of());
-        when(extensionLoader.loadEmbeddedExtension(any(EmbeddedExtension.class))).thenReturn(new HiveMQExtensionEvent(
-                HiveMQExtensionEvent.Change.ENABLE,
-                "my-extension",
-                0,
-                new File("/tmp").toPath(),
-                true));
-        pluginBootstrap.startExtensionSystem(embeddedExtension);
-
-        verify(hiveMQExtensions).extensionStart("my-extension");
-        verify(shutdownHooks).add(any(HiveMQShutdownHook.class));
-    }
-
-    @Test
-    public void test_startPluginSystem_mixed() {
-        when(extensionLoader.loadExtensions(any(Path.class),
-                anyBoolean())).thenReturn(ImmutableList.of(new HiveMQExtensionEvent(HiveMQExtensionEvent.Change.ENABLE,
-                "my-extension-1",
-                0,
-                new File("/folder").toPath(),
-                false)));
-        when(extensionLoader.loadEmbeddedExtension(any(EmbeddedExtension.class))).thenReturn(new HiveMQExtensionEvent(
-                HiveMQExtensionEvent.Change.ENABLE,
-                "my-extension-2",
-                0,
-                new File("/tmp").toPath(),
-                true));
-        pluginBootstrap.startExtensionSystem(embeddedExtension);
-
-        verify(hiveMQExtensions).extensionStart("my-extension-1");
-        verify(hiveMQExtensions).extensionStart("my-extension-2");
     }
 
     @Test

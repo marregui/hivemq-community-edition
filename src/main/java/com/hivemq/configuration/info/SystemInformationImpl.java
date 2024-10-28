@@ -37,37 +37,32 @@ import java.util.Objects;
  */
 public class SystemInformationImpl implements SystemInformation {
 
-    private static final Logger log = LoggerFactory.getLogger(SystemInformationImpl.class);
     public static final String DEVELOPMENT_VERSION = "Development Snapshot";
-
+    private static final Logger log = LoggerFactory.getLogger(SystemInformationImpl.class);
+    private final long runningSince;
+    private final int processorCount;
+    private final boolean usePathOfRunningJar;
     private @NotNull File homeFolder;
     private @NotNull File configFolder;
     private @NotNull File logFolder;
     private @NotNull File dataFolder;
     private @NotNull File pluginFolder;
     private @NotNull String hivemqVersion;
-    private final long runningSince;
-    private final boolean embedded;
-    private final int processorCount;
-
-    private final boolean usePathOfRunningJar;
 
     public SystemInformationImpl() {
         this(false);
     }
 
     public SystemInformationImpl(final boolean usePathOfRunningJar) {
-        this(usePathOfRunningJar, false, null, null, null);
+        this(usePathOfRunningJar, null, null, null);
     }
 
     public SystemInformationImpl(
             final boolean usePathOfRunningJar,
-            final boolean embedded,
             final @Nullable File configFolder,
             final @Nullable File dataFolder,
             final @Nullable File pluginFolder) {
         this.usePathOfRunningJar = usePathOfRunningJar;
-        this.embedded = embedded;
         this.configFolder = configFolder;
         this.dataFolder = dataFolder;
         this.pluginFolder = pluginFolder;
@@ -106,7 +101,7 @@ public class SystemInformationImpl implements SystemInformation {
                         "conf",
                         false));
 
-        logFolder = setUpHiveMQFolder(SystemProperties.LOG_FOLDER, EnvironmentVariables.LOG_FOLDER, "log", !embedded);
+        logFolder = setUpHiveMQFolder(SystemProperties.LOG_FOLDER, EnvironmentVariables.LOG_FOLDER, "log", true);
         // Set log folder property for logger-xml-config
         System.setProperty(SystemProperties.LOG_FOLDER, logFolder.getAbsolutePath());
 
@@ -117,7 +112,7 @@ public class SystemInformationImpl implements SystemInformation {
                 () -> setUpHiveMQFolder(SystemProperties.EXTENSIONS_FOLDER,
                         EnvironmentVariables.EXTENSION_FOLDER,
                         "extensions",
-                        !embedded));
+                        true));
     }
 
     private void setHivemqVersion() {
@@ -257,12 +252,10 @@ public class SystemInformationImpl implements SystemInformation {
 
     private void usePathOfRunningJarAsHomeFolder() {
         final File pathOfRunningJar = getPathOfRunningJar();
-        if (!embedded) {
-            log.warn("No {} property or {} environment variable was set. Using {}",
-                    SystemProperties.HIVEMQ_HOME,
-                    EnvironmentVariables.HIVEMQ_HOME,
-                    pathOfRunningJar.getAbsolutePath());
-        }
+        log.warn("No {} property or {} environment variable was set. Using {}",
+                SystemProperties.HIVEMQ_HOME,
+                EnvironmentVariables.HIVEMQ_HOME,
+                pathOfRunningJar.getAbsolutePath());
         homeFolder = pathOfRunningJar;
     }
 
@@ -277,9 +270,5 @@ public class SystemInformationImpl implements SystemInformation {
     @Override
     public int getProcessorCount() {
         return this.processorCount;
-    }
-
-    public boolean isEmbedded() {
-        return embedded;
     }
 }

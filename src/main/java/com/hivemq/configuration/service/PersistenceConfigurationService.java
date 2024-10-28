@@ -27,11 +27,7 @@ public interface PersistenceConfigurationService {
          * All persistent data like queued messages, retained messages subscriptions and so on, will be stored on the
          * file system.
          */
-        FILE,
-        /**
-         * All persistent data like queued messages, retained messages subscriptions and so on, will be stored in RAM.
-         */
-        IN_MEMORY
+        FILE
     }
 
     /**

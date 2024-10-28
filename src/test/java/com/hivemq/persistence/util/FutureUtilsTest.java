@@ -23,7 +23,6 @@ import org.junit.Test;
 import java.util.concurrent.CountDownLatch;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;

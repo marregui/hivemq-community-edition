@@ -23,15 +23,4 @@ import org.jetbrains.annotations.NotNull;
 public enum PersistenceType {
     FILE,
     FILE_NATIVE;
-
-    private static final @NotNull PersistenceType @NotNull [] VALUES = values();
-
-    public static @NotNull PersistenceType forCode(final int code) {
-        try {
-            return VALUES[code];
-        } catch (final ArrayIndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("No persistence type found for code: " + code, e);
-        }
-    }
-
 }

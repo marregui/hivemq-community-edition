@@ -18,7 +18,6 @@ package com.hivemq.extensions.loader;
 
 import com.google.common.collect.ImmutableCollection;
 import com.hivemq.annotations.ReadOnly;
-import com.hivemq.embedded.EmbeddedExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.HiveMQExtension;
@@ -60,6 +59,4 @@ public interface ExtensionLoader {
      * @return An Optional of a loaded extension. Empty if loading fails or extension <id> already known.
      */
     @Nullable HiveMQExtensionEvent processSingleExtensionFolder(final @NotNull Path extensionFolder);
-
-    @Nullable HiveMQExtensionEvent loadEmbeddedExtension(@NotNull EmbeddedExtension extensionMain);
 }

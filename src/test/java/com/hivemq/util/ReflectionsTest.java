@@ -23,7 +23,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.Optional;
 
 import static com.hivemq.util.Reflections.getMethodAnnotationFromInterface;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 

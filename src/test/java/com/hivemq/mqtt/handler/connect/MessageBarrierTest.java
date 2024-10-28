@@ -27,7 +27,6 @@ import util.DummyClientConnection;
 import util.DummyHandler;
 
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.MQTT_MESSAGE_BARRIER;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 public class MessageBarrierTest {

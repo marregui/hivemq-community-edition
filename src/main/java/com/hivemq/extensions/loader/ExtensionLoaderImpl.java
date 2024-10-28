@@ -21,21 +21,17 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.reflect.TypeToken;
-import com.hivemq.HiveMQServer;
 import com.hivemq.annotations.ReadOnly;
-import com.hivemq.embedded.EmbeddedExtension;
 import com.hivemq.extension.sdk.api.ExtensionMain;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.ExtensionUtil;
-import com.hivemq.extensions.HiveMQEmbeddedExtensionImpl;
 import com.hivemq.extensions.HiveMQExtension;
 import com.hivemq.extensions.HiveMQExtensionEntity;
 import com.hivemq.extensions.HiveMQExtensionEvent;
 import com.hivemq.extensions.HiveMQExtensions;
 import com.hivemq.extensions.classloader.IsolatedExtensionClassloader;
 import com.hivemq.extensions.config.HiveMQExtensionXMLReader;
-import com.hivemq.extensions.exception.ExtensionLoadingException;
 import com.hivemq.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -180,49 +176,6 @@ public class ExtensionLoaderImpl implements ExtensionLoader {
                 hiveMQExtension.getStartPriority(),
                 extensionFolder,
                 false);
-    }
-
-    @Override
-    public @Nullable HiveMQExtensionEvent loadEmbeddedExtension(final @NotNull EmbeddedExtension embeddedExtension) {
-        final HiveMQEmbeddedExtensionImpl extension = new HiveMQEmbeddedExtensionImpl(embeddedExtension.getId(),
-                embeddedExtension.getVersion(),
-                embeddedExtension.getName(),
-                embeddedExtension.getAuthor(),
-                embeddedExtension.getPriority(),
-                embeddedExtension.getStartPriority(),
-                embeddedExtension.getExtensionMain(),
-                true);
-
-        final HiveMQExtensionEvent hiveMQExtensionEvent = new HiveMQExtensionEvent(HiveMQExtensionEvent.Change.ENABLE,
-                embeddedExtension.getId(),
-                embeddedExtension.getStartPriority(),
-                extension.getExtensionFolderPath(),
-                true);
-        hiveMQExtensions.addHiveMQExtension(extension);
-
-        final ClassLoader extensionClassloader = extension.getExtensionClassloader();
-        if (extensionClassloader == null) {
-            throw new IllegalStateException("The extensions class loader must not be null at loading stage");
-        }
-
-        // need wrapper to load static context and classes (we cannot close the classloader here,
-        // since the lifecycle of the embedded extension ends outside this method call)
-        //noinspection resource
-        final IsolatedExtensionClassloader isolatedExtensionClassloader =
-                new IsolatedExtensionClassloader(extensionClassloader, HiveMQServer.class.getClassLoader());
-        isolatedExtensionClassloader.loadClassesWithStaticContext();
-
-        try {
-            staticInitializer.initialize(embeddedExtension.getId(), extensionClassloader);
-        } catch (final ExtensionLoadingException e) {
-            log.warn("Embedded extension with id \"{}\" cannot be started, the extension will be disabled. reason: {}",
-                    embeddedExtension.getId(),
-                    e.getMessage());
-            log.debug("Original exception", e);
-            Exceptions.rethrowError(e);
-            return null;
-        }
-        return hiveMQExtensionEvent;
     }
 
     @VisibleForTesting

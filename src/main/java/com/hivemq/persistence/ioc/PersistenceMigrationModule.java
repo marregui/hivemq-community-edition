@@ -30,7 +30,6 @@ import com.hivemq.persistence.PersistenceStartup;
 import com.hivemq.persistence.PersistenceStartupShutdownHookInstaller;
 import com.hivemq.persistence.ioc.annotation.PayloadPersistence;
 import com.hivemq.persistence.ioc.provider.local.PayloadPersistenceScheduledExecutorProvider;
-import com.hivemq.persistence.payload.PublishPayloadNoopPersistenceImpl;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.persistence.payload.PublishPayloadPersistenceImpl;
 
@@ -65,11 +64,7 @@ public class PersistenceMigrationModule extends SingletonModule<Class<Persistenc
             install(new LocalPersistenceMemoryModule(null));
         }
 
-        if (persistenceConfigurationService.getMode() == PersistenceConfigurationService.PersistenceMode.IN_MEMORY) {
-            bind(PublishPayloadPersistence.class).to(PublishPayloadNoopPersistenceImpl.class);
-        } else {
-            bind(PublishPayloadPersistence.class).to(PublishPayloadPersistenceImpl.class);
-        }
+        bind(PublishPayloadPersistence.class).to(PublishPayloadPersistenceImpl.class);
 
         bind(MetricRegistry.class).toInstance(metricRegistry);
         bind(MetricsHolder.class).toProvider(MetricsHolderProvider.class).asEagerSingleton();

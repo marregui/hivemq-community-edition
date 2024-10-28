@@ -150,11 +150,6 @@ public class LocalPersistenceFileUtilTest {
             public int getProcessorCount() {
                 return -1;
             }
-
-            @Override
-            public boolean isEmbedded() {
-                return false;
-            }
         };
     }
 

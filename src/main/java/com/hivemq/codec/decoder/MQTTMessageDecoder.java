@@ -35,10 +35,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.hivemq.mqtt.message.MessageType.CONNECT;
-import static com.hivemq.mqtt.message.MessageType.PUBLISH;
 
 /**
  * @author Dominik Obermaier

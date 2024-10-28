@@ -18,9 +18,7 @@ package com.hivemq;
 import com.hivemq.bootstrap.HiveMQNettyBootstrap;
 import com.hivemq.bootstrap.ListenerStartupInformation;
 import com.hivemq.bootstrap.StartupListenerVerifier;
-import com.hivemq.embedded.EmbeddedExtension;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.services.admin.AdminService;
 import com.hivemq.extensions.ExtensionBootstrap;
 import com.hivemq.extensions.services.admin.AdminServiceImpl;
@@ -54,10 +52,10 @@ public class HiveMQInstance {
         this.adminService = adminService;
     }
 
-    public void start(final @Nullable EmbeddedExtension embeddedExtension) throws Exception {
+    public void start() throws Exception {
 
         payloadPersistence.init();
-        extensionBootstrap.startExtensionSystem(embeddedExtension).get();
+        extensionBootstrap.startExtensionSystem().get();
 
         final List<ListenerStartupInformation> startupInformation = nettyBootstrap.bootstrapServer().get();
         Checkpoints.checkpoint("listener-started");

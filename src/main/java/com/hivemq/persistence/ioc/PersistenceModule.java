@@ -22,11 +22,9 @@ import com.google.inject.Key;
 import com.hivemq.bootstrap.ioc.SingletonModule;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.common.shutdown.ShutdownHooks;
-import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.configuration.service.PersistenceConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.topic.tree.TopicTreeStartup;
-import com.hivemq.persistence.InMemorySingleWriter;
 import com.hivemq.persistence.PersistenceShutdownHookInstaller;
 import com.hivemq.persistence.ScheduledCleanUpService;
 import com.hivemq.persistence.SingleWriterService;
@@ -62,12 +60,7 @@ public class PersistenceModule extends SingletonModule<Class<PersistenceModule>>
 
         install(new LocalPersistenceModule(persistenceInjector, persistenceConfigurationService));
 
-        if ((persistenceConfigurationService.getMode() == PersistenceConfigurationService.PersistenceMode.IN_MEMORY) &&
-                InternalConfigurations.IN_MEMORY_SINGLE_WRITER.get()) {
-            bind(SingleWriterService.class).to(InMemorySingleWriter.class);
-        } else {
-            bind(SingleWriterService.class).to(SingleWriterServiceImpl.class);
-        }
+        bind(SingleWriterService.class).to(SingleWriterServiceImpl.class);
 
         bind(ShutdownHooks.class).toInstance(persistenceInjector.getInstance(ShutdownHooks.class));
 

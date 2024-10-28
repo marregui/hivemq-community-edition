@@ -24,6 +24,7 @@ import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.read.ListAppender;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
+import com.hivemq.HiveMQServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -35,7 +36,6 @@ import util.LogbackCapturingAppender;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -43,7 +43,7 @@ import static org.junit.Assert.fail;
 /**
  * @author Dominik Obermaier
  */
-public class LoggingBootstrapTest {
+public class LoggingTest {
 
 
     @Rule
@@ -101,7 +101,7 @@ public class LoggingBootstrapTest {
 
             Files.write(overridenContents, new File(configFolder, "logback.xml"), StandardCharsets.UTF_8);
 
-            LoggingBootstrap.initLogging(configFolder);
+            HiveMQServer.Logging.initLogging(configFolder);
 
             assertTrue(logger.isTraceEnabled());
         } finally {
@@ -122,9 +122,9 @@ public class LoggingBootstrapTest {
         try {
             final File configFolder = temporaryFolder.newFolder();
 
-            LoggingBootstrap.prepareLogging();
+            HiveMQServer.Logging.prepareLogging();
             //No file was written
-            LoggingBootstrap.initLogging(configFolder);
+            HiveMQServer.Logging.initLogging(configFolder);
 
             assertFalse(logger.isTraceEnabled());
         } finally {
@@ -141,7 +141,7 @@ public class LoggingBootstrapTest {
             final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
             final LogbackCapturingAppender testAppender = LogbackCapturingAppender.Factory.weaveInto(logger);
-            LoggingBootstrap.prepareLogging();
+            HiveMQServer.Logging.prepareLogging();
 
             logger.info("testlog");
 
@@ -149,7 +149,7 @@ public class LoggingBootstrapTest {
             assertFalse(testAppender.isLogCaptured());
 
             //This "resets" to the original logger
-            LoggingBootstrap.initLogging(temporaryFolder.newFolder());
+            HiveMQServer.Logging.initLogging(temporaryFolder.newFolder());
 
 
             assertTrue(testAppender.isLogCaptured());
@@ -193,12 +193,12 @@ public class LoggingBootstrapTest {
 
         try {
 
-            LoggingBootstrap.prepareLogging();
+            HiveMQServer.Logging.prepareLogging();
             final File configFolder = temporaryFolder.newFolder();
 
             Files.write(overridenContents, new File(configFolder, "logback.xml"), StandardCharsets.UTF_8);
 
-            LoggingBootstrap.initLogging(configFolder);
+            HiveMQServer.Logging.initLogging(configFolder);
 
             final ImmutableList<Appender<ILoggingEvent>> appenders =
                     ImmutableList.copyOf(logger.iteratorForAppenders());

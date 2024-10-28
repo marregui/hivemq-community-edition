@@ -28,7 +28,6 @@ import io.netty.channel.embedded.EmbeddedChannel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-import util.DummyClientConnection;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;

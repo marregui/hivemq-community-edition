@@ -18,7 +18,8 @@ package com.hivemq.extensions.services.auth;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.common.annotations.GuardedBy;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.extension.sdk.api.auth.SimpleAuthenticator;
+import com.hivemq.extension.sdk.api.services.auth.provider.AuthenticatorProvider;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.ExtensionPriorityComparator;
 import com.hivemq.extensions.HiveMQExtension;
@@ -39,6 +40,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class AuthenticatorsImpl implements Authenticators {
 
     private static final Logger log = LoggerFactory.getLogger(AuthenticatorsImpl.class);
+    private static final @NotNull SimpleAuthenticator AUTHENTICATOR = (in, out) -> out.authenticateSuccessfully();
+    private static final @NotNull AuthenticatorProvider AUTHENTICATOR_PROVIDER = in -> AUTHENTICATOR;
 
     private final @NotNull ReadWriteLock authenticatorsLock = new ReentrantReadWriteLock();
     @GuardedBy("authenticatorsLock")
@@ -49,11 +52,11 @@ public class AuthenticatorsImpl implements Authenticators {
     public AuthenticatorsImpl(final @NotNull HiveMQExtensions hiveMQExtensions) {
         this.hiveMQExtensions = hiveMQExtensions;
         authenticatorPluginMap = new TreeMap<>(new ExtensionPriorityComparator(hiveMQExtensions));
+        authenticatorPluginMap.put("allow-all-connections", new WrappedAuthenticatorProvider(AUTHENTICATOR_PROVIDER, getClass().getClassLoader()));
     }
 
     @Override
     public @NotNull Map<@NotNull String, @NotNull WrappedAuthenticatorProvider> getAuthenticatorProviderMap() {
-
         final Lock readLock = authenticatorsLock.readLock();
         readLock.lock();
         try {
@@ -65,7 +68,6 @@ public class AuthenticatorsImpl implements Authenticators {
 
     @Override
     public void registerAuthenticatorProvider(final @NotNull WrappedAuthenticatorProvider provider) {
-
         final Lock writeLock = authenticatorsLock.writeLock();
         writeLock.lock();
         try {
@@ -88,14 +90,5 @@ public class AuthenticatorsImpl implements Authenticators {
     @Override
     public void checkAuthenticationSafetyAndLifeness() {
 
-        // Only check for lifeness if safety is given
-        if (InternalConfigurations.AUTH_DENY_UNAUTHENTICATED_CONNECTIONS.get()) {
-            // Check lifeness
-            if (getAuthenticatorProviderMap().isEmpty()) {
-                log.warn("\n###############################################################################" +
-                        "\n# No security extension present, MQTT clients can not connect to this broker. #" +
-                        "\n###############################################################################");
-            }
-        }
     }
 }

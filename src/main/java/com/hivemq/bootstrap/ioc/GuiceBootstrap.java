@@ -43,11 +43,6 @@ import com.hivemq.throttling.ioc.ThrottlingModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Bootstraps Guice. Before the Guice Bootstrap happens, no Dependency Injection is available.
- *
- * @author Dominik Obermaier
- */
 public class GuiceBootstrap {
 
     private static final Logger log = LoggerFactory.getLogger(GuiceBootstrap.class);
@@ -67,7 +62,6 @@ public class GuiceBootstrap {
         }
 
         final ImmutableList.Builder<AbstractModule> modules = ImmutableList.builder();
-
         modules.add(new SystemInformationModule(systemInformation),
                 /* For supporting lazy singletons */
                 new LazySingletonModule(),
@@ -98,11 +92,8 @@ public class GuiceBootstrap {
             return Guice.createInjector(Stage.PRODUCTION, modules.build());
         } catch (final Exception e) {
             log.error("Initializing Guice aborted", e);
-            if (log.isDebugEnabled()) {
-                log.debug("Original Exception: ", e);
-            }
-            return null;
         }
+        return null;
     }
 
     public static @NotNull Injector persistenceInjector(

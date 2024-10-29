@@ -80,83 +80,79 @@ public class HiveMQServer {
         new HiveMQServer().start();
     }
 
+    @VisibleForTesting
+    static void handleUncaughtException(final Thread t, final Throwable e) {
+        exitIfUnrecoverable(e);
+        if (e instanceof CreationException) {
+            exitIfUnrecoverable(e.getCause());
+            exitIfUnrecoverable(((CreationException) e).getErrorMessages());
+        } else if (e instanceof ProvisionException) {
+            exitIfUnrecoverable(e.getCause());
+            exitIfUnrecoverable(((ProvisionException) e).getErrorMessages());
+        }
+        log.error("Problem: %s%n", Throwables.getRootCause(e));
+    }
+
+    private static void exitIfUnrecoverable(final Collection<Message> errorMessages) {
+        for (final Message message : errorMessages) {
+            exitIfUnrecoverable(message.getCause());
+        }
+    }
+
+    private static void exitIfUnrecoverable(final @com.hivemq.extension.sdk.api.annotations.NotNull Throwable t) {
+        if (t instanceof UnrecoverableException) {
+            log.error("An unrecoverable Exception occurred. Exiting HiveMQ: {}", t.getMessage());
+            System.exit(1);
+        }
+    }
+
     public void start() throws Exception {
         final long startTime = System.nanoTime();
 
         Runtime.getRuntime().addShutdownHook(new Thread(this::stop, "shutdown-thread-" + hivemqId.get()));
+        Thread.setDefaultUncaughtExceptionHandler(HiveMQServer::handleUncaughtException);
 
         // B O O T S T R A P
         systemInformation.init();
         metricRegistry.addListener(new MetricRegistryLogger());
-
         Logging.initLogging(systemInformation.getConfigFolder());
         log.info("Starting HiveMQ Community Edition Server");
-        Thread.setDefaultUncaughtExceptionHandler(HiveMQServer::handleUncaughtException);
-
-        log.trace("Initializing configuration");
         configService = ConfigurationBootstrap.bootstrapConfig(systemInformation);
-
-        log.trace("Locking data folder.");
         dataFolderLock.lock(systemInformation.getDataFolder().toPath());
-
-        log.info("This HiveMQ ID is {}", hivemqId.get());
-
-        log.trace("Cleaning up temporary folders");
-        final String tmpFolder = systemInformation.getDataFolder().getPath() + File.separator + "tmp";
+        final File tmp = new File(systemInformation.getDataFolder().getPath() + File.separator + "tmp");
         try {
-            //ungraceful shutdown does not delete tmp folders, so we clean them up on broker start
-            FileUtils.deleteDirectory(new File(tmpFolder));
+            FileUtils.deleteDirectory(tmp);
         } catch (final IOException e) {
-            //No error because it's not business breaking
-            log.warn("The temporary folder could not be deleted ({}).", tmpFolder);
-            if (log.isDebugEnabled()) {
-                log.debug("Original Exception: ", e);
-            }
+            log.warn("The temporary folder could not be deleted ({}).", tmp);
         }
-
-        log.trace("Initializing persistence");
-        final Injector persistenceInjector = GuiceBootstrap.persistenceInjector(systemInformation,
+        final Injector persistence = GuiceBootstrap.persistenceInjector(systemInformation,
                 metricRegistry,
                 hivemqId,
                 configService,
                 lifecycleModule);
-        //blocks until all persistence started
-        persistenceInjector.getInstance(PersistenceStartup.class).finish();
-        if (persistenceInjector.getInstance(ShutdownHooks.class).isShuttingDown()) {
+        persistence.getInstance(PersistenceStartup.class).finish();
+        if (persistence.getInstance(ShutdownHooks.class).isShuttingDown()) {
             throw new StartAbortedException("User aborted.");
         }
-        log.info("Starting with file persistence mode.");
-
-        log.trace("Initializing Guice");
         injector = GuiceBootstrap.bootstrapInjector(systemInformation,
                 metricRegistry,
                 hivemqId,
                 configService,
-                persistenceInjector,
+                persistence,
                 lifecycleModule);
-
-        // S T A R T    I N S T A N C E
         if (injector == null) {
             throw new UnrecoverableException(true);
         }
-        final ShutdownHooks shutdownHooks = injector.getInstance(ShutdownHooks.class);
-        if (shutdownHooks.isShuttingDown()) {
-            throw new StartAbortedException("User aborted.");
-        }
-        final HiveMQInstance instance = injector.getInstance(HiveMQInstance.class);
-        final long start = System.currentTimeMillis();
-        System.gc();
-        log.trace("Finished initial garbage collection after startup in {}ms", System.currentTimeMillis() - start);
-        if (shutdownHooks.isShuttingDown()) {
-            throw new StartAbortedException("User aborted.");
-        }
-        /* It's important that we are modifying the log levels after Guice is initialized,
-        otherwise this somehow interferes with Singleton creation */
-        Logging.LOG_LEVEL_MODIFIER_TURBO_FILTER.registerLogLevelModifier(new XodusEnvironmentImplLogLevelModifier());
-        log.trace("Added Xodus log level modifier for EnvironmentImpl.class");
-        instance.start();
 
-        log.info("Started HiveMQ in {}ms", TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime));
+        // S T A R T    I N S T A N C E
+        final HiveMQInstance instance = injector.getInstance(HiveMQInstance.class);
+        final ShutdownHooks shutdownHooks = injector.getInstance(ShutdownHooks.class);
+        System.gc();
+        Logging.LOG_LEVEL_MODIFIER_TURBO_FILTER.registerLogLevelModifier(new XodusEnvironmentImplLogLevelModifier());
+        instance.start();
+        log.info("Started HiveMQ [{}] in {}ms",
+                hivemqId.get(),
+                TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime));
         if (shutdownHooks.isShuttingDown()) {
             throw new StartAbortedException("User aborted.");
         }
@@ -170,9 +166,12 @@ public class HiveMQServer {
         if (shutdownHooks.isShuttingDown()) {
             return;
         }
-        shutdownHooks.runShutdownHooks();
-        dataFolderLock.unlock();
-        Logging.resetLogging();
+        try {
+            shutdownHooks.runShutdownHooks();
+        } finally {
+            dataFolderLock.unlock();
+            Logging.resetLogging();
+        }
     }
 
     /**
@@ -279,7 +278,7 @@ public class HiveMQServer {
                     log.info("Log Configuration was overridden by {}", file.getAbsolutePath());
                     return true;
                 } catch (final Exception ex) {
-                    ex.printStackTrace();
+                    throw new RuntimeException(ex);
                 } finally {
                     StatusPrinter.printInCaseOfErrorsOrWarnings(CONTEXT);
                 }
@@ -290,33 +289,6 @@ public class HiveMQServer {
                         file.getAbsolutePath());
             }
             return false;
-        }
-    }
-
-    @VisibleForTesting
-    static void handleUncaughtException(final Thread t, final Throwable e) {
-        exitIfUnrecoverable(e);
-        if (e instanceof CreationException) {
-            exitIfUnrecoverable(e.getCause());
-            exitIfUnrecoverable(((CreationException) e).getErrorMessages());
-        } else if (e instanceof ProvisionException) {
-            exitIfUnrecoverable(e.getCause());
-            exitIfUnrecoverable(((ProvisionException) e).getErrorMessages());
-        }
-        System.err.printf("Problem: %s%n", Throwables.getRootCause(e));
-    }
-
-    private static void exitIfUnrecoverable(final Collection<Message> errorMessages) {
-        for (final Message message : errorMessages) {
-            exitIfUnrecoverable(message.getCause());
-        }
-    }
-
-    private static void exitIfUnrecoverable(final @com.hivemq.extension.sdk.api.annotations.NotNull Throwable t) {
-        if (t instanceof UnrecoverableException) {
-            System.err.println("An unrecoverable Exception occurred. Exiting HiveMQ");
-            t.printStackTrace();
-            System.exit(1);
         }
     }
 }

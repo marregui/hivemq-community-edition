@@ -176,10 +176,7 @@ public class SystemInformationImpl implements SystemInformation {
         }
 
         if (createFolderIfNotExists && !folder.exists()) {
-            final boolean mkdirsResult = folder.mkdirs();
-            if (!mkdirsResult) {
-                System.out.printf("Not able to create folder %s, HiveMQ will behave unexpectedly!%n", folder);
-            }
+            folder.mkdirs();
         }
 
         return folder;
@@ -209,7 +206,6 @@ public class SystemInformationImpl implements SystemInformation {
 
         if (home != null) {
             homeFolder = findAbsoluteAndRelative(home);
-            System.out.printf("HiveMQ home directory: %s%n", homeFolder.getAbsolutePath());
 
             //setting system property to support the deprecated PathUtils in the SPI
             System.setProperty(SystemProperties.HIVEMQ_HOME, homeFolder.getAbsolutePath());
@@ -224,21 +220,11 @@ public class SystemInformationImpl implements SystemInformation {
     private void useTemporaryHomeFolder() {
         final File tempDir = Files.createTempDir();
         tempDir.deleteOnExit();
-        System.out.printf(
-                "No %s property or %s environment variable was set. Using a temporary directory (%s) HiveMQ will behave unexpectedly!%n",
-                SystemProperties.HIVEMQ_HOME,
-                EnvironmentVariables.HIVEMQ_HOME,
-                tempDir.getAbsolutePath());
         homeFolder = tempDir;
     }
 
     private void usePathOfRunningJarAsHomeFolder() {
-        final File pathOfRunningJar = getPathOfRunningJar();
-        System.out.printf("No %s property or %s environment variable was set. Using %s%n",
-                SystemProperties.HIVEMQ_HOME,
-                EnvironmentVariables.HIVEMQ_HOME,
-                pathOfRunningJar.getAbsolutePath());
-        homeFolder = pathOfRunningJar;
+        homeFolder = getPathOfRunningJar();
     }
 
     private @NotNull File getPathOfRunningJar() {

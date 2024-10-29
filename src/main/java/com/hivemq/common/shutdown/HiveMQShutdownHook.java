@@ -57,7 +57,6 @@ public interface HiveMQShutdownHook extends Runnable {
         private final int value;
 
         Priority(final int value) {
-
             this.value = value;
         }
 

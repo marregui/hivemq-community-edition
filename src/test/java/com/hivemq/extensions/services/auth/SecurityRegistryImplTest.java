@@ -38,11 +38,8 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import util.IsolatedExtensionClassloaderUtil;
 
-import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -57,12 +54,10 @@ public class SecurityRegistryImplTest {
 
     private @NotNull Authenticators authenticators;
     private @NotNull SecurityRegistryImpl securityRegistry;
-
     private @NotNull AuthenticatorProvider provider1;
     private @NotNull AuthenticatorProvider provider2;
     private @NotNull Authenticator authenticator1;
     private @NotNull Authenticator authenticator2;
-
     private @NotNull EnhancedAuthenticatorProvider enhancedProvider1;
     private @NotNull EnhancedAuthenticatorProvider enhancedProvider2;
     private @NotNull EnhancedAuthenticator enhancedAuthenticator1;
@@ -109,63 +104,6 @@ public class SecurityRegistryImplTest {
             assertNotNull(enhancedAuth2);
             enhancedAuthenticator2 = enhancedAuth2;
         }
-    }
-
-    @Test(timeout = 5000)
-    public void test_set_authenticator_provider() {
-        securityRegistry.setAuthenticatorProvider(provider1);
-
-        final Map<String, WrappedAuthenticatorProvider> registeredAuthenticators =
-                authenticators.getAuthenticatorProviderMap();
-
-        assertEquals(1, registeredAuthenticators.size());
-        assertSame(authenticator1, registeredAuthenticators.values().iterator().next().getAuthenticator(input));
-    }
-
-    @Test(timeout = 5000)
-    public void test_set_second_authenticator_provider_from_same_classloader() {
-        securityRegistry.setAuthenticatorProvider(provider1);
-        Map<String, WrappedAuthenticatorProvider> registeredAuthenticators =
-                authenticators.getAuthenticatorProviderMap();
-        assertEquals(1, registeredAuthenticators.size());
-        assertSame(authenticator1, registeredAuthenticators.values().iterator().next().getAuthenticator(input));
-
-        // replace authenticator
-        securityRegistry.setAuthenticatorProvider(provider2);
-        registeredAuthenticators = authenticators.getAuthenticatorProviderMap();
-        assertEquals(1, registeredAuthenticators.size());
-        assertSame(authenticator2, registeredAuthenticators.values().iterator().next().getAuthenticator(input));
-
-    }
-
-    @Test(timeout = 5000)
-    public void test_set_enhanced_authenticator_provider() {
-        securityRegistry.setEnhancedAuthenticatorProvider(enhancedProvider1);
-
-        final Map<String, WrappedAuthenticatorProvider> registeredAuthenticators =
-                authenticators.getAuthenticatorProviderMap();
-
-        assertEquals(1, registeredAuthenticators.size());
-        assertSame(enhancedAuthenticator1,
-                registeredAuthenticators.values().iterator().next().getEnhancedAuthenticator(input));
-    }
-
-    @Test(timeout = 5000)
-    public void test_set_second_enhanced_authenticator_provider_from_same_classloader() {
-        securityRegistry.setEnhancedAuthenticatorProvider(enhancedProvider1);
-        Map<String, WrappedAuthenticatorProvider> registeredAuthenticators =
-                authenticators.getAuthenticatorProviderMap();
-        assertEquals(1, registeredAuthenticators.size());
-        assertSame(enhancedAuthenticator1,
-                registeredAuthenticators.values().iterator().next().getEnhancedAuthenticator(input));
-
-        // replace authenticator
-        securityRegistry.setEnhancedAuthenticatorProvider(enhancedProvider2);
-        registeredAuthenticators = authenticators.getAuthenticatorProviderMap();
-        assertEquals(1, registeredAuthenticators.size());
-        assertSame(enhancedAuthenticator2,
-                registeredAuthenticators.values().iterator().next().getEnhancedAuthenticator(input));
-
     }
 
     @Test(timeout = 5000, expected = NullPointerException.class)

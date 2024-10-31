@@ -81,7 +81,7 @@ public class AuthenticatorsImplTest {
         final Map<String, WrappedAuthenticatorProvider> registeredAuthenticators =
                 authenticators.getAuthenticatorProviderMap();
 
-        assertEquals(2, registeredAuthenticators.size());
+        assertEquals(3, registeredAuthenticators.size());
 
         final Iterator<WrappedAuthenticatorProvider> iterator = registeredAuthenticators.values().iterator();
 

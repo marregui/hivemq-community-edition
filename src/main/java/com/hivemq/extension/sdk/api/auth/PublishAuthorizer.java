@@ -16,7 +16,7 @@
 
 package com.hivemq.extension.sdk.api.auth;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.parameter.PublishAuthorizerInput;
 import com.hivemq.extension.sdk.api.auth.parameter.PublishAuthorizerOutput;
 

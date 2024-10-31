@@ -18,7 +18,7 @@ package com.hivemq.extension.sdk.api.packets.subscribe;
 
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.ModifiableUserProperties;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
 import com.hivemq.extension.sdk.api.services.subscription.SubscriptionStore;

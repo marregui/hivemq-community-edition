@@ -16,7 +16,7 @@
 
 package com.hivemq.extension.sdk.api.services.exception;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This exception is used to signal that a cluster node has an incompatible HiveMQ version for a specific request.

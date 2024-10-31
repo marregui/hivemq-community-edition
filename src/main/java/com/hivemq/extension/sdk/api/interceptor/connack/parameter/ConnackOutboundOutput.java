@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.interceptor.connack.parameter;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.Async;
 import com.hivemq.extension.sdk.api.async.AsyncOutput;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;

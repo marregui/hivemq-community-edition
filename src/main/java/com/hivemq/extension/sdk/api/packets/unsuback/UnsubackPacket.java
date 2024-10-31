@@ -18,7 +18,7 @@ package com.hivemq.extension.sdk.api.packets.unsuback;
 
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.unsuback.UnsubackOutboundInterceptor;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
 

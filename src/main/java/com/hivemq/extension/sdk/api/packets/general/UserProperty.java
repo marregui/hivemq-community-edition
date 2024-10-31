@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.packets.general;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A representation for a user property.

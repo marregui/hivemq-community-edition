@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.events;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.events.client.ClientLifecycleEventListener;
 import com.hivemq.extension.sdk.api.events.client.ClientLifecycleEventListenerProvider;
 

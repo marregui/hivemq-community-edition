@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.client.parameter;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.MqttVersion;
 
 import java.net.InetAddress;

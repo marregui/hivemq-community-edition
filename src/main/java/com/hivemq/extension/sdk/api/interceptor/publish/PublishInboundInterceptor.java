@@ -16,7 +16,7 @@
 
 package com.hivemq.extension.sdk.api.interceptor.publish;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.Interceptor;
 import com.hivemq.extension.sdk.api.interceptor.publish.parameter.PublishInboundInput;
 import com.hivemq.extension.sdk.api.interceptor.publish.parameter.PublishInboundOutput;

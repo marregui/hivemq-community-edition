@@ -16,7 +16,7 @@
 
 package com.hivemq.extension.sdk.api.interceptor.pubrel;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extension.sdk.api.interceptor.Interceptor;
 import com.hivemq.extension.sdk.api.interceptor.pubrel.parameter.PubrelOutboundInput;

@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.client.parameter;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Holds information about the listener a client uses for a connection to HiveMQ.

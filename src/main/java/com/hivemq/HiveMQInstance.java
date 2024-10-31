@@ -28,10 +28,6 @@ import com.hivemq.util.Checkpoints;
 import javax.inject.Inject;
 import java.util.List;
 
-/**
- * @author Dominik Obermaier
- * @author Florian Limpöck
- */
 public class HiveMQInstance {
 
     private final @NotNull HiveMQNettyBootstrap nettyBootstrap;
@@ -60,7 +56,5 @@ public class HiveMQInstance {
         final List<ListenerStartupInformation> startupInformation = nettyBootstrap.bootstrapServer().get();
         Checkpoints.checkpoint("listener-started");
         new StartupListenerVerifier(startupInformation).verifyAndPrint();
-
-        ((AdminServiceImpl) adminService).hivemqStarted();
     }
 }

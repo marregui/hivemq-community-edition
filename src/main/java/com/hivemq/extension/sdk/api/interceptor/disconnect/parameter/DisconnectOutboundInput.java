@@ -18,7 +18,7 @@ package com.hivemq.extension.sdk.api.interceptor.disconnect.parameter;
 
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.disconnect.DisconnectOutboundInterceptor;
 import com.hivemq.extension.sdk.api.packets.disconnect.DisconnectPacket;
 import com.hivemq.extension.sdk.api.parameter.ClientBasedInput;

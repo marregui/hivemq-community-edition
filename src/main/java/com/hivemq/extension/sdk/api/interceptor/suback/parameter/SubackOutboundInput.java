@@ -18,7 +18,7 @@ package com.hivemq.extension.sdk.api.interceptor.suback.parameter;
 
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.suback.SubackOutboundInterceptor;
 import com.hivemq.extension.sdk.api.packets.suback.SubackPacket;
 import com.hivemq.extension.sdk.api.parameter.ClientBasedInput;

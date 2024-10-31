@@ -18,7 +18,7 @@ package com.hivemq.extension.sdk.api.client.parameter;
 
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.InetAddress;
 import java.nio.ByteBuffer;

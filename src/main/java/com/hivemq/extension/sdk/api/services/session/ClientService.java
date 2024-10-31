@@ -17,8 +17,8 @@
 package com.hivemq.extension.sdk.api.services.session;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.disconnect.DisconnectReasonCode;
 import com.hivemq.extension.sdk.api.services.ManagedExtensionExecutorService;
 import com.hivemq.extension.sdk.api.services.exception.IncompatibleHiveMQVersionException;

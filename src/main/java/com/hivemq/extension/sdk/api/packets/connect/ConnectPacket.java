@@ -18,7 +18,7 @@ package com.hivemq.extension.sdk.api.packets.connect;
 
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.connect.ConnectInboundInterceptor;
 import com.hivemq.extension.sdk.api.packets.general.MqttVersion;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;

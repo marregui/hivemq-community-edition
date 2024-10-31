@@ -23,9 +23,6 @@ import io.netty.util.ReferenceCountUtil;
 
 import java.util.List;
 
-/**
- * @author Lukas Brandl
- */
 public class MQTTWebsocketEncoder extends MessageToMessageEncoder<ByteBuf> {
 
     @Override

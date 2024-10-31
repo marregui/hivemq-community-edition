@@ -21,10 +21,9 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
-import ch.qos.logback.core.read.ListAppender;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
-import com.hivemq.HiveMQServer;
+import com.hivemq.Logging;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -101,7 +100,7 @@ public class LoggingTest {
 
             Files.write(overridenContents, new File(configFolder, "logback.xml"), StandardCharsets.UTF_8);
 
-            HiveMQServer.Logging.initLogging(configFolder);
+            Logging.initLogging(configFolder);
 
             assertTrue(logger.isTraceEnabled());
         } finally {
@@ -123,7 +122,7 @@ public class LoggingTest {
             final File configFolder = temporaryFolder.newFolder();
 
             //No file was written
-            HiveMQServer.Logging.initLogging(configFolder);
+            Logging.initLogging(configFolder);
 
             assertFalse(logger.isTraceEnabled());
         } finally {
@@ -159,7 +158,7 @@ public class LoggingTest {
 
             Files.write(overridenContents, new File(configFolder, "logback.xml"), StandardCharsets.UTF_8);
 
-            HiveMQServer.Logging.initLogging(configFolder);
+            Logging.initLogging(configFolder);
 
             final ImmutableList<Appender<ILoggingEvent>> appenders =
                     ImmutableList.copyOf(logger.iteratorForAppenders());

@@ -16,7 +16,7 @@
 
 package com.hivemq.extension.sdk.api.services.exception;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Unchecked Exception which is thrown when a limit is exceeded by a passed parameter.

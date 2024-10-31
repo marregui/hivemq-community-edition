@@ -12,10 +12,6 @@ import java.nio.channels.FileLock;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-/**
- * Create a lock file in the data folder of HiveMQ and hold the lock until released in order to avoid a second
- * HiveMQ instance starting with the same data folder.
- */
 final class DataFolderLock {
 
     private static final Logger log = LoggerFactory.getLogger(DataFolderLock.class);

@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.auth.parameter;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An instance of this interface is provided by the {@link SimpleAuthOutput} and can be used to configure client

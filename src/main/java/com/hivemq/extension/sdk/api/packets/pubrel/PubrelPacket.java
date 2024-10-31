@@ -18,7 +18,7 @@ package com.hivemq.extension.sdk.api.packets.pubrel;
 
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.pubrel.PubrelInboundInterceptor;
 import com.hivemq.extension.sdk.api.interceptor.pubrel.PubrelOutboundInterceptor;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;

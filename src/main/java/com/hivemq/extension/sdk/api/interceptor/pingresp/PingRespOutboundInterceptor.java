@@ -16,7 +16,7 @@
 
 package com.hivemq.extension.sdk.api.interceptor.pingresp;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.Interceptor;
 import com.hivemq.extension.sdk.api.interceptor.pingresp.parameter.PingRespOutboundInput;
 import com.hivemq.extension.sdk.api.interceptor.pingresp.parameter.PingRespOutboundOutput;

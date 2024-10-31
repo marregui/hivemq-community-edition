@@ -16,8 +16,8 @@
 
 package com.hivemq.extension.sdk.api.services.admin;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ServerInformation;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This service provides general information about the state of this HiveMQ instance.
@@ -33,15 +33,4 @@ public interface AdminService {
      */
     @NotNull ServerInformation getServerInformation();
 
-    /**
-     * @return Information about the current stage of this HiveMQ instance.
-     * @since 4.2.0, CE 2020.1
-     */
-    @NotNull LifecycleStage getCurrentStage();
-
-    /**
-     * @return Information about the license that is used by HiveMQ.
-     * @since 4.2.0, CE 2020.1
-     */
-    @NotNull LicenseInformation getLicenseInformation();
 }

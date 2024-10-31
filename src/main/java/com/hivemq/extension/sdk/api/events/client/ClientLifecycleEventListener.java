@@ -16,7 +16,7 @@
 
 package com.hivemq.extension.sdk.api.events.client;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.events.client.parameters.AuthenticationFailedInput;
 import com.hivemq.extension.sdk.api.events.client.parameters.AuthenticationSuccessfulInput;
 import com.hivemq.extension.sdk.api.events.client.parameters.ClientInitiatedDisconnectInput;

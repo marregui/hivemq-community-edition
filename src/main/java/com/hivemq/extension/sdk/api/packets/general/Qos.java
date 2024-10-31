@@ -16,7 +16,7 @@
 
 package com.hivemq.extension.sdk.api.packets.general;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The quality of service level (QOS) of a PUBLISH or subscription.

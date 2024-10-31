@@ -16,7 +16,7 @@
 
 package com.hivemq.extension.sdk.api.interceptor.connect;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.Interceptor;
 import com.hivemq.extension.sdk.api.interceptor.connect.parameter.ConnectInboundInput;
 import com.hivemq.extension.sdk.api.interceptor.connect.parameter.ConnectInboundOutput;

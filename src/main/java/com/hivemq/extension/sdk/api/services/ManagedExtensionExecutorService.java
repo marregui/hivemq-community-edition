@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.services;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.Callable;

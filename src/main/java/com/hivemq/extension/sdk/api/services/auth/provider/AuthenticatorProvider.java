@@ -16,11 +16,11 @@
 
 package com.hivemq.extension.sdk.api.services.auth.provider;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.Authenticator;
 import com.hivemq.extension.sdk.api.auth.SimpleAuthenticator;
 import com.hivemq.extension.sdk.api.auth.parameter.AuthenticatorProviderInput;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The authenticator provider allows to implement custom logic for the authentication of connecting MQTT clients. For

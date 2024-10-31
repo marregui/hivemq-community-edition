@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.packets.connect;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.publish.PublishPacket;
 import com.hivemq.extension.sdk.api.services.builder.Builders;
 import com.hivemq.extension.sdk.api.services.builder.WillPublishBuilder;

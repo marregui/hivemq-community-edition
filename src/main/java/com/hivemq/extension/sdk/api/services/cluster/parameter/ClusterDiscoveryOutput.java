@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.services.cluster.parameter;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.cluster.ClusterDiscoveryCallback;
 
 import java.util.List;

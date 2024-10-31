@@ -16,8 +16,8 @@
 
 package com.hivemq.extension.sdk.api.packets.connack;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.interceptor.connect.ConnectInboundInterceptor;
 import com.hivemq.extension.sdk.api.packets.connect.ConnackReasonCode;
 import com.hivemq.extension.sdk.api.packets.general.ModifiableUserProperties;

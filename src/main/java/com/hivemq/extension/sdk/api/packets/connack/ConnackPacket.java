@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.packets.connack;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.connect.ConnackReasonCode;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;

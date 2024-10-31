@@ -17,8 +17,8 @@
 package com.hivemq.extension.sdk.api.services;
 
 import com.codahale.metrics.MetricRegistry;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.events.EventRegistry;
 import com.hivemq.extension.sdk.api.events.client.ClientLifecycleEventListenerProvider;
 import com.hivemq.extension.sdk.api.services.admin.AdminService;

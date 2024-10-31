@@ -18,7 +18,7 @@ package com.hivemq.extension.sdk.api.packets.puback;
 
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.puback.PubackInboundInterceptor;
 import com.hivemq.extension.sdk.api.interceptor.puback.PubackOutboundInterceptor;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;

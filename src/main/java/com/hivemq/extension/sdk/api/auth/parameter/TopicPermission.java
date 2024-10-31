@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.auth.parameter;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A topic permission represents an authorization action.

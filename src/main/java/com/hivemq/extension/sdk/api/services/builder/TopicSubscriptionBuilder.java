@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.services.builder;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.subscribe.Subscription;
 import com.hivemq.extension.sdk.api.services.exception.DoNotImplementException;

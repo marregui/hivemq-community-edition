@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.async;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The interface for the async option of the extension system.

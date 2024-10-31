@@ -18,7 +18,7 @@ package com.hivemq.extension.sdk.api.auth.parameter;
 
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.SimpleAuthenticator;
 import com.hivemq.extension.sdk.api.packets.connect.ConnectPacket;
 import com.hivemq.extension.sdk.api.parameter.ClientBasedInput;

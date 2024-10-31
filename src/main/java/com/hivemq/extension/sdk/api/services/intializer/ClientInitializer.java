@@ -16,7 +16,7 @@
 
 package com.hivemq.extension.sdk.api.services.intializer;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.parameter.TopicPermission;
 import com.hivemq.extension.sdk.api.client.ClientContext;
 import com.hivemq.extension.sdk.api.client.parameter.InitializerInput;

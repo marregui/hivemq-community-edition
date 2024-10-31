@@ -17,8 +17,8 @@
 package com.hivemq.extension.sdk.api.services.builder;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.publish.PayloadFormatIndicator;
 import com.hivemq.extension.sdk.api.packets.publish.PublishPacket;

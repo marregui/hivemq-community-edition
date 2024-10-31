@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.services.session;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Information about the session of an MQTT client.

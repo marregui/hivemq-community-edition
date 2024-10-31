@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.parameter;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Output object for the start of an extension.

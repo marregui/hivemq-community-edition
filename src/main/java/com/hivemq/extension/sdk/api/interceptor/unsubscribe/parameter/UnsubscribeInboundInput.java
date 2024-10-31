@@ -18,7 +18,7 @@ package com.hivemq.extension.sdk.api.interceptor.unsubscribe.parameter;
 
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.unsubscribe.UnsubscribeInboundInterceptor;
 import com.hivemq.extension.sdk.api.packets.unsubscribe.UnsubscribePacket;
 import com.hivemq.extension.sdk.api.parameter.ClientBasedInput;

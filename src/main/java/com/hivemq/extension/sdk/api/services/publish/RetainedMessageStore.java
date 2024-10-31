@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.services.publish;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.ManagedExtensionExecutorService;
 import com.hivemq.extension.sdk.api.services.exception.DoNotImplementException;
 import com.hivemq.extension.sdk.api.services.exception.IncompatibleHiveMQVersionException;

@@ -16,7 +16,7 @@
 
 package com.hivemq.extension.sdk.api.packets.subscribe;
 
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The retain handling of a subscription.

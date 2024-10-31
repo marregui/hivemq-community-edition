@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.interceptor.pubrec.parameter;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.Async;
 import com.hivemq.extension.sdk.api.async.SimpleAsyncOutput;
 import com.hivemq.extension.sdk.api.interceptor.pubrec.PubrecInboundInterceptor;

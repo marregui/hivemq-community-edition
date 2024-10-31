@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.services.cluster;
 
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Service for cluster related configuration.

@@ -16,7 +16,6 @@
 package com.hivemq.persistence.local;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.hivemq.annotations.ExecuteInSingleWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.iteration.BucketChunkResult;
@@ -109,7 +108,6 @@ public interface ClientSessionLocalPersistence extends LocalPersistence {
      * @param timestamp     The timestamp of the latest connect/disconnect.
      * @param bucketIndex   The index of the bucket in which the session is stored
      */
-    @ExecuteInSingleWriter
     void put(@NotNull String clientId, @NotNull ClientSession clientSession, long timestamp, int bucketIndex);
 
     /**
@@ -122,7 +120,6 @@ public interface ClientSessionLocalPersistence extends LocalPersistence {
      * @param sessionExpiryInterval The session expiry interval.
      * @return the disconnected {@link ClientSession}.
      */
-    @ExecuteInSingleWriter
     @NotNull ClientSession disconnect(
             @NotNull String clientId, long timestamp, boolean sendWill, int bucketIndex, long sessionExpiryInterval);
 
@@ -140,7 +137,6 @@ public interface ClientSessionLocalPersistence extends LocalPersistence {
      * @param bucketIndex The index of the bucket in which the client sessions are stored.
      * @return A set of strings containing all client identifiers which were cleaned up.
      */
-    @ExecuteInSingleWriter
     @NotNull Set<@NotNull String> cleanUp(int bucketIndex);
 
     /**
@@ -164,7 +160,6 @@ public interface ClientSessionLocalPersistence extends LocalPersistence {
      * @param sessionExpiryInterval session expiry interval for a client in seconds
      * @throws InvalidSessionExpiryIntervalException when interval < 0
      */
-    @ExecuteInSingleWriter
     void setSessionExpiryInterval(@NotNull String clientId, long sessionExpiryInterval, int bucketIndex);
 
     /**
@@ -175,7 +170,6 @@ public interface ClientSessionLocalPersistence extends LocalPersistence {
     /**
      * Remove Will message of a client session.
      */
-    @ExecuteInSingleWriter
     @Nullable PersistenceEntry<@NotNull ClientSession> deleteWill(@NotNull String clientId, int bucketIndex);
 
     /**

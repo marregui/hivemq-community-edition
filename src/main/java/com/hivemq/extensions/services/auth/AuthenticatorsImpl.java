@@ -17,7 +17,6 @@ package com.hivemq.extensions.services.auth;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
-import com.hivemq.common.annotations.GuardedBy;
 import com.hivemq.extension.sdk.api.auth.SimpleAuthenticator;
 import com.hivemq.extension.sdk.api.services.auth.provider.AuthenticatorProvider;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +43,6 @@ public class AuthenticatorsImpl implements Authenticators {
     private static final @NotNull AuthenticatorProvider AUTHENTICATOR_PROVIDER = in -> AUTHENTICATOR;
 
     private final @NotNull ReadWriteLock authenticatorsLock = new ReentrantReadWriteLock();
-    @GuardedBy("authenticatorsLock")
     private final @NotNull TreeMap<String, WrappedAuthenticatorProvider> authenticatorPluginMap;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
 

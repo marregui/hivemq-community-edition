@@ -19,10 +19,6 @@ package com.hivemq.bootstrap.ioc;
 import com.hivemq.mqtt.topic.TokenizedTopicMatcher;
 import com.hivemq.mqtt.topic.TopicMatcher;
 
-/**
- * @author Dominik Obermaier
- * @author Christoph Schäbel
- */
 public class HiveMQMainModule extends SingletonModule {
 
     public HiveMQMainModule() {

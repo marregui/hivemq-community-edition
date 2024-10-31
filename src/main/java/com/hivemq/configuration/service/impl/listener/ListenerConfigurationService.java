@@ -15,7 +15,6 @@
  */
 package com.hivemq.configuration.service.impl.listener;
 
-import com.hivemq.annotations.ReadOnly;
 import com.hivemq.configuration.service.entity.Listener;
 import com.hivemq.configuration.service.entity.TcpListener;
 import com.hivemq.configuration.service.entity.TlsTcpListener;
@@ -50,30 +49,25 @@ public interface ListenerConfigurationService {
     /**
      * @return a unmodifiable list of all active listeners
      */
-    @ReadOnly
     @NotNull List<Listener> getListeners();
 
     /**
      * @return a unmodifiable list of all active TCP listeners
      */
-    @ReadOnly
     @NotNull List<TcpListener> getTcpListeners();
 
     /**
      * @return a unmodifiable list of all active TLS listeners
      */
-    @ReadOnly
     @NotNull List<TlsTcpListener> getTlsTcpListeners();
 
     /**
      * @return a unmodifiable list of all active Websocket listeners
      */
-    @ReadOnly
     @NotNull List<WebsocketListener> getWebsocketListeners();
 
     /**
      * @return a unmodifiable list of all active TLS Websocket listeners
      */
-    @ReadOnly
     @NotNull List<TlsWebsocketListener> getTlsWebsocketListeners();
 }

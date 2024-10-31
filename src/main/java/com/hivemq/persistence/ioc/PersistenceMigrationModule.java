@@ -20,7 +20,6 @@ import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.hivemq.bootstrap.ioc.SingletonModule;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.common.shutdown.ShutdownHooks;
-import com.hivemq.configuration.service.PersistenceConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.metrics.ioc.provider.MetricsHolderProvider;
@@ -35,20 +34,13 @@ import com.hivemq.persistence.payload.PublishPayloadPersistenceImpl;
 
 import javax.inject.Singleton;
 
-/**
- * @author Florian Limpöck
- */
 public class PersistenceMigrationModule extends SingletonModule<Class<PersistenceMigrationModule>> {
 
     private final @NotNull MetricRegistry metricRegistry;
-    private final @NotNull PersistenceConfigurationService persistenceConfigurationService;
 
-    public PersistenceMigrationModule(
-            @NotNull final MetricRegistry metricRegistry,
-            @NotNull final PersistenceConfigurationService persistenceConfigurationService) {
+    public PersistenceMigrationModule(@NotNull final MetricRegistry metricRegistry) {
         super(PersistenceMigrationModule.class);
         this.metricRegistry = metricRegistry;
-        this.persistenceConfigurationService = persistenceConfigurationService;
     }
 
     @Override
@@ -58,11 +50,7 @@ public class PersistenceMigrationModule extends SingletonModule<Class<Persistenc
         bind(PersistenceStartup.class).asEagerSingleton();
         bind(PersistenceStartupShutdownHookInstaller.class).asEagerSingleton();
 
-        if (persistenceConfigurationService.getMode() == PersistenceConfigurationService.PersistenceMode.FILE) {
-            install(new PersistenceMigrationFileModule());
-        } else {
-            install(new LocalPersistenceMemoryModule(null));
-        }
+        install(new PersistenceMigrationFileModule());
 
         bind(PublishPayloadPersistence.class).to(PublishPayloadPersistenceImpl.class);
 
@@ -74,6 +62,5 @@ public class PersistenceMigrationModule extends SingletonModule<Class<Persistenc
                 .in(LazySingleton.class);
 
         bind(MessageDroppedService.class).toProvider(MessageDroppedServiceProvider.class).in(Singleton.class);
-
     }
 }

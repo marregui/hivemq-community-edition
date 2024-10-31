@@ -22,10 +22,6 @@ import io.netty.channel.ChannelFuture;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * @author Dominik Obermaier
- */
-
 public class BindInformation {
 
     private final Listener listener;

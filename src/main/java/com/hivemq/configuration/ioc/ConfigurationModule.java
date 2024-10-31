@@ -25,12 +25,6 @@ import com.hivemq.configuration.service.SecurityConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * The module for the Configuration Subsystem
- *
- * @author Dominik Obermaier
- * @author Christoph Schäbel
- */
 public class ConfigurationModule extends SingletonModule {
 
     private final FullConfigurationService configurationService;
@@ -45,19 +39,12 @@ public class ConfigurationModule extends SingletonModule {
 
     @Override
     protected void configure() {
-
         bind(HivemqId.class).toInstance(hiveMQId);
-
         bind(ListenerConfigurationService.class).toInstance(configurationService.listenerConfiguration());
-
         bind(MqttConfigurationService.class).toInstance(configurationService.mqttConfiguration());
-
         bind(RestrictionsConfigurationService.class).toInstance(configurationService.restrictionsConfiguration());
-
         bind(ConfigurationService.class).toInstance(configurationService);
-
         bind(FullConfigurationService.class).toInstance(configurationService);
-
         bind(SecurityConfigurationService.class).toInstance(configurationService.securityConfiguration());
     }
 }

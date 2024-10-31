@@ -17,7 +17,6 @@ package com.hivemq.mqtt.topic.tree;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.annotations.ReadOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.topic.SubscriberWithQoS;
@@ -144,7 +143,6 @@ class MatchingNodeSubscriptions {
         });
     }
 
-    @ReadOnly
     public int getSubscriberCount() {
         final int nonSharedSubscribersCount = nonSharedSubscribersMap != null ?
                 nonSharedSubscribersMap.size() :
@@ -153,14 +151,12 @@ class MatchingNodeSubscriptions {
         return nonSharedSubscribersCount + sharedSubscribersMap.size();
     }
 
-    @ReadOnly
     public @NotNull Stream<SubscriberWithQoS> getSharedSubscriptionsStream() {
         return sharedSubscribersMap.values()
                 .stream()
                 .flatMap(subscriptionGroup -> subscriptionGroup.getSubscriptionsInfos().stream());
     }
 
-    @ReadOnly
     public @Nullable Stream<SubscriberWithQoS> getNonSharedSubscriptionsStream() {
         if (nonSharedSubscribersMap == null && nonSharedSubscribersArray == null) {
             return null;
@@ -172,7 +168,6 @@ class MatchingNodeSubscriptions {
         }
     }
 
-    @ReadOnly
     private @NotNull Stream<SubscriberWithQoS> getAllSubscriptionsStream() {
         final Stream<SubscriberWithQoS> sharedSubscriptionStream = getSharedSubscriptionsStream();
         final Stream<SubscriberWithQoS> nonSharedSubscriptionStream = getNonSharedSubscriptionsStream();
@@ -183,12 +178,10 @@ class MatchingNodeSubscriptions {
     }
 
     @VisibleForTesting
-    @ReadOnly
     public @NotNull Set<SubscriberWithQoS> getSubscribers() {
         return getAllSubscriptionsStream().collect(Collectors.toSet());
     }
 
-    @ReadOnly
     public boolean isEmpty() {
         return (nonSharedSubscribersMap == null || nonSharedSubscribersMap.isEmpty()) &&
                 (nonSharedSubscribersArray == null || isEmptyArray(nonSharedSubscribersArray)) &&

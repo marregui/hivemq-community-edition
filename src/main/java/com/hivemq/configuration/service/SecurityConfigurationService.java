@@ -15,13 +15,7 @@
  */
 package com.hivemq.configuration.service;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 public interface SecurityConfigurationService {
-
-
     /**
      * Default values
      */

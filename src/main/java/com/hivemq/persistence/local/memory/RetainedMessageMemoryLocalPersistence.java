@@ -19,7 +19,6 @@ import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
-import com.hivemq.annotations.ExecuteInSingleWriter;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -82,7 +81,6 @@ public class RetainedMessageMemoryLocalPersistence implements RetainedMessageLoc
         return sum;
     }
 
-    @ExecuteInSingleWriter
     @Override
     public void clear(final int bucketIndex) {
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
@@ -95,7 +93,6 @@ public class RetainedMessageMemoryLocalPersistence implements RetainedMessageLoc
         bucket.clear();
     }
 
-    @ExecuteInSingleWriter
     @Override
     public void remove(final @NotNull String topic, final int bucketIndex) {
         checkNotNull(topic, "Topic must not be null");
@@ -109,7 +106,6 @@ public class RetainedMessageMemoryLocalPersistence implements RetainedMessageLoc
         }
     }
 
-    @ExecuteInSingleWriter
     @Override
     public @Nullable RetainedMessage get(final @NotNull String topic, final int bucketIndex) {
         checkNotNull(topic, "Topic must not be null");
@@ -123,7 +119,6 @@ public class RetainedMessageMemoryLocalPersistence implements RetainedMessageLoc
         return retainedMessage;
     }
 
-    @ExecuteInSingleWriter
     @Override
     public void put(
             final @NotNull RetainedMessage retainedMessage, final @NotNull String topic, final int bucketIndex) {
@@ -140,7 +135,6 @@ public class RetainedMessageMemoryLocalPersistence implements RetainedMessageLoc
         topicTrees[bucketIndex].add(topic);
     }
 
-    @ExecuteInSingleWriter
     @Override
     public @NotNull Set<String> getAllTopics(final @NotNull String subscription, final int bucketIndex) {
         checkArgument(bucketIndex >= 0 && bucketIndex < bucketCount, "Bucket index out of range");
@@ -149,7 +143,6 @@ public class RetainedMessageMemoryLocalPersistence implements RetainedMessageLoc
         return topicTrees[bucketIndex].get(subscription);
     }
 
-    @ExecuteInSingleWriter
     @Override
     public void cleanUp(final int bucketIndex) {
         checkArgument(bucketIndex >= 0 && bucketIndex < bucketCount, "Bucket index out of range");

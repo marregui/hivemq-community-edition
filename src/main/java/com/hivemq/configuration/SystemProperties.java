@@ -15,20 +15,10 @@
  */
 package com.hivemq.configuration;
 
-/**
- * @author Christoph Schäbel
- */
 public class SystemProperties {
-
     public static final String HIVEMQ_HOME = "hivemq.home";
-
     public static final String LOG_FOLDER = "hivemq.log.folder";
-
     public static final String CONFIG_FOLDER = "hivemq.config.folder";
-
     public static final String DATA_FOLDER = "hivemq.data.folder";
-
     public static final String EXTENSIONS_FOLDER = "hivemq.extensions.folder";
-
-    public static final String DIAGNOSTIC_MODE = "diagnosticMode";
 }

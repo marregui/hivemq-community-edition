@@ -15,7 +15,6 @@
  */
 package com.hivemq.mqtt.handler.disconnect;
 
-import com.hivemq.annotations.ExecuteInEventloop;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
@@ -25,7 +24,6 @@ import io.netty.channel.Channel;
 /**
  * @author Florian Limpöck
  */
-@ExecuteInEventloop
 public interface MqttServerDisconnector {
 
     /**

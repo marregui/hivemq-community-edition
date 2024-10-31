@@ -17,7 +17,6 @@
 package com.hivemq.extensions.loader;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.annotations.ReadOnly;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Singleton;
@@ -58,7 +57,6 @@ public class ClassServiceLoader {
      *                                        loaded
      * @throws java.lang.NullPointerException If <code>null</code> is passed to any parameter
      */
-    @ReadOnly
     public <S> @NotNull Iterable<Class<? extends S>> load(
             final @NotNull Class<S> classToLoad, final @NotNull ClassLoader classLoader)
             throws IOException, ClassNotFoundException {

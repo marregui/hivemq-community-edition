@@ -17,18 +17,13 @@ package util;
 
 import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.configuration.service.PersistenceConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
 import com.hivemq.configuration.service.impl.ConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.MqttConfigurationServiceImpl;
-import com.hivemq.configuration.service.impl.PersistenceConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
 
-/**
- * @author Christoph Schäbel
- */
 public class TestConfigurationBootstrap {
 
     private ListenerConfigurationServiceImpl listenerConfigurationService;
@@ -36,20 +31,17 @@ public class TestConfigurationBootstrap {
     private RestrictionsConfigurationServiceImpl restrictionsConfigurationService;
     private final SecurityConfigurationServiceImpl securityConfigurationService;
     private ConfigurationServiceImpl configurationService;
-    private final PersistenceConfigurationService persistenceConfigurationService;
 
     public TestConfigurationBootstrap() {
         listenerConfigurationService = new ListenerConfigurationServiceImpl();
         mqttConfigurationService = new MqttConfigurationServiceImpl();
         restrictionsConfigurationService = new RestrictionsConfigurationServiceImpl();
         securityConfigurationService = new SecurityConfigurationServiceImpl();
-        persistenceConfigurationService = new PersistenceConfigurationServiceImpl();
 
         configurationService = new ConfigurationServiceImpl(listenerConfigurationService,
                 mqttConfigurationService,
                 restrictionsConfigurationService,
-                securityConfigurationService,
-                persistenceConfigurationService);
+                securityConfigurationService);
     }
 
     public SecurityConfigurationService getSecurityConfigurationService() {
@@ -66,10 +58,6 @@ public class TestConfigurationBootstrap {
 
     public ListenerConfigurationServiceImpl getListenerConfigurationService() {
         return listenerConfigurationService;
-    }
-
-    public void setListenerConfigurationService(final ListenerConfigurationServiceImpl listenerConfigurationService) {
-        this.listenerConfigurationService = listenerConfigurationService;
     }
 
     public MqttConfigurationServiceImpl getMqttConfigurationService() {
@@ -90,9 +78,5 @@ public class TestConfigurationBootstrap {
 
     public void setConfigurationService(final ConfigurationServiceImpl configurationService) {
         this.configurationService = configurationService;
-    }
-
-    public PersistenceConfigurationService getPersistenceConfigurationService() {
-        return persistenceConfigurationService;
     }
 }

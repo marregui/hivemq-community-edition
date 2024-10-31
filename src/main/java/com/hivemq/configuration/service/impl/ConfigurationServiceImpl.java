@@ -17,7 +17,6 @@ package com.hivemq.configuration.service.impl;
 
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.configuration.service.MqttConfigurationService;
-import com.hivemq.configuration.service.PersistenceConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
@@ -34,19 +33,16 @@ public class ConfigurationServiceImpl implements FullConfigurationService {
     private final MqttConfigurationService mqttConfigurationService;
     private final RestrictionsConfigurationService restrictionsConfigurationService;
     private final SecurityConfigurationService securityConfigurationService;
-    private final PersistenceConfigurationService persistenceConfigurationService;
 
     public ConfigurationServiceImpl(
             final ListenerConfigurationService listenerConfigurationService,
             final MqttConfigurationService mqttConfigurationService,
             final RestrictionsConfigurationService restrictionsConfigurationService,
-            final SecurityConfigurationService securityConfigurationService,
-            final PersistenceConfigurationService persistenceConfigurationService) {
+            final SecurityConfigurationService securityConfigurationService) {
         this.listenerConfigurationService = listenerConfigurationService;
         this.mqttConfigurationService = mqttConfigurationService;
         this.restrictionsConfigurationService = restrictionsConfigurationService;
         this.securityConfigurationService = securityConfigurationService;
-        this.persistenceConfigurationService = persistenceConfigurationService;
     }
 
     @Override
@@ -67,10 +63,5 @@ public class ConfigurationServiceImpl implements FullConfigurationService {
     @Override
     public SecurityConfigurationService securityConfiguration() {
         return securityConfigurationService;
-    }
-
-    @Override
-    public PersistenceConfigurationService persistenceConfigurationService() {
-        return persistenceConfigurationService;
     }
 }

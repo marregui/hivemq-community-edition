@@ -29,11 +29,6 @@ import com.hivemq.metrics.ioc.provider.RetainedMessagesGaugeProvider;
 import com.hivemq.metrics.ioc.provider.SessionsGaugeProvider;
 import com.hivemq.metrics.jmx.JmxReporterBootstrap;
 
-/**
- * The guice module which is responsible for all statistics
- *
- * @author Dominik Obermaier
- */
 public class MetricsModule extends SingletonModule<Class<MetricsModule>> {
 
     private final @NotNull MetricRegistry metricRegistry;
@@ -47,7 +42,6 @@ public class MetricsModule extends SingletonModule<Class<MetricsModule>> {
 
     @Override
     protected void configure() {
-
         bind(MetricRegistry.class).toInstance(metricRegistry);
 
         //These providers are needed to force real eager initialization and instant registration of the metrics

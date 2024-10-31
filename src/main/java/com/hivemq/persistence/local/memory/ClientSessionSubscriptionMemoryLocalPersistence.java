@@ -20,7 +20,6 @@ import com.codahale.metrics.MetricRegistry;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import com.hivemq.annotations.ExecuteInSingleWriter;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
@@ -75,14 +74,12 @@ public class ClientSessionSubscriptionMemoryLocalPersistence implements ClientSe
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void addSubscription(
             @NotNull final String client, @NotNull final Topic topic, final long timestamp, final int bucketIndex) {
         addSubscriptions(client, ImmutableSet.of(topic), timestamp, bucketIndex);
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void addSubscriptions(
             @NotNull final String client,
             @NotNull final ImmutableSet<Topic> topics,
@@ -110,7 +107,6 @@ public class ClientSessionSubscriptionMemoryLocalPersistence implements ClientSe
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void remove(
             @NotNull final String client, @NotNull final String topic, final long timestamp, final int bucketIndex) {
         checkNotNull(client, "Clientid must not be null");
@@ -121,7 +117,6 @@ public class ClientSessionSubscriptionMemoryLocalPersistence implements ClientSe
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void removeSubscriptions(
             final @NotNull String client,
             final @NotNull ImmutableSet<String> topics,
@@ -153,7 +148,6 @@ public class ClientSessionSubscriptionMemoryLocalPersistence implements ClientSe
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void removeAll(@NotNull final String client, final long timestamp, final int bucketIndex) {
         checkNotNull(client, "Clientid must not be null");
         checkState(timestamp > 0, "Timestamp must not be 0");

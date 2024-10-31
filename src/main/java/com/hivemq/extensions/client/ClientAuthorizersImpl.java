@@ -16,7 +16,6 @@
 package com.hivemq.extensions.client;
 
 import com.google.common.collect.ImmutableMap;
-import com.hivemq.common.annotations.GuardedBy;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.Authorizer;
 import com.hivemq.extension.sdk.api.auth.PublishAuthorizer;
@@ -40,7 +39,6 @@ public class ClientAuthorizersImpl implements ClientAuthorizers {
 
     private final @NotNull ReadWriteLock authorizerLock;
 
-    @GuardedBy("authorizerLock")
     private final @NotNull Map<String, SubscriptionAuthorizer> subscriptionAuthorizerMap;
     private final @NotNull Map<String, PublishAuthorizer> publishAuthorizerMap;
 

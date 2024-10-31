@@ -25,10 +25,6 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 
 import javax.inject.Singleton;
 
-/**
- * @author Christoph Schäbel
- * @author Dominik Obermaier
- */
 public class NettyModule extends SingletonModule {
 
     public NettyModule() {
@@ -37,14 +33,9 @@ public class NettyModule extends SingletonModule {
 
     @Override
     protected void configure() {
-
         bind(ChannelGroup.class).toInstance(new DefaultChannelGroup(GlobalEventExecutor.INSTANCE));
-
         //bind server event loops
-
         bind(NettyConfiguration.class).toProvider(NettyConfigurationProvider.class).in(Singleton.class);
-
         bind(ChannelInitializerFactory.class).to(ChannelInitializerFactoryImpl.class);
     }
-
 }

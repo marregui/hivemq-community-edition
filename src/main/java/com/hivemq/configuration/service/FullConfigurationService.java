@@ -15,14 +15,8 @@
  */
 package com.hivemq.configuration.service;
 
-/**
- * @author Christoph Schäbel
- */
 public interface FullConfigurationService extends ConfigurationService {
 
 
     SecurityConfigurationService securityConfiguration();
-
-    PersistenceConfigurationService persistenceConfigurationService();
-
 }

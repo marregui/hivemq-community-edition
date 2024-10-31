@@ -26,9 +26,6 @@ import com.hivemq.mqtt.services.PublishDistributorImpl;
 import com.hivemq.mqtt.services.PublishPollService;
 import com.hivemq.mqtt.services.PublishPollServiceImpl;
 
-/**
- * @author Christoph Schäbel
- */
 public class MQTTServiceModule extends SingletonModule {
 
     public MQTTServiceModule() {
@@ -37,12 +34,9 @@ public class MQTTServiceModule extends SingletonModule {
 
     @Override
     protected void configure() {
-
         bind(InternalPublishService.class).to(InternalPublishServiceImpl.class);
         bind(PublishDistributor.class).to(PublishDistributorImpl.class);
-
         bind(TopicAliasLimiter.class).to(TopicAliasLimiterImpl.class);
-
         bind(PublishPollService.class).to(PublishPollServiceImpl.class).in(LazySingleton.class);
     }
 }

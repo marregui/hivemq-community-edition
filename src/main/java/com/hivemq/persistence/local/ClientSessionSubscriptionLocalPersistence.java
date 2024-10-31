@@ -16,8 +16,6 @@
 package com.hivemq.persistence.local;
 
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.annotations.ExecuteInSingleWriter;
-import com.hivemq.annotations.ReadOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.iteration.BucketChunkResult;
@@ -40,7 +38,6 @@ public interface ClientSessionSubscriptionLocalPersistence extends LocalPersiste
      * @param timestamp   The timestamp when the subscription is added.
      * @param bucketIndex The index of the bucket in which the subscription is stored.
      */
-    @ExecuteInSingleWriter
     void addSubscription(@NotNull final String client, @NotNull final Topic topic, long timestamp, int bucketIndex);
 
     /**
@@ -51,7 +48,6 @@ public interface ClientSessionSubscriptionLocalPersistence extends LocalPersiste
      * @param timestamp   The timestamp when the subscriptions are added.
      * @param bucketIndex The index of the bucket in which the subscriptions are stored.
      */
-    @ExecuteInSingleWriter
     void addSubscriptions(
             @NotNull String clientId, @NotNull ImmutableSet<Topic> topics, long timestamp, int bucketIndex);
 
@@ -63,7 +59,6 @@ public interface ClientSessionSubscriptionLocalPersistence extends LocalPersiste
      * @param timestamp   The timestamp when the subscription is removed.
      * @param bucketIndex The index of the bucket in which the subscription is stored.
      */
-    @ExecuteInSingleWriter
     void remove(@NotNull final String client, @NotNull final String topic, long timestamp, int bucketIndex);
 
     /**
@@ -74,7 +69,6 @@ public interface ClientSessionSubscriptionLocalPersistence extends LocalPersiste
      * @param timestamp   The timestamp when the subscriptions are removed.
      * @param bucketIndex The index of the bucket in which the subscriptions are stored.
      */
-    @ExecuteInSingleWriter
     void removeSubscriptions(
             @NotNull String clientId, @NotNull ImmutableSet<String> topics, long timestamp, int bucketIndex);
 
@@ -85,7 +79,6 @@ public interface ClientSessionSubscriptionLocalPersistence extends LocalPersiste
      * @param timestamp   The timestamp when the subscriptions are removed.
      * @param bucketIndex The index of the bucket in which the subscriptions are stored.
      */
-    @ExecuteInSingleWriter
     void removeAll(@NotNull final String client, long timestamp, int bucketIndex);
 
     /**
@@ -93,7 +86,6 @@ public interface ClientSessionSubscriptionLocalPersistence extends LocalPersiste
      *
      * @param bucket The index of the bucket in which the subscriptions are stored.
      */
-    @ExecuteInSingleWriter
     void cleanUp(int bucket);
 
     /**
@@ -102,7 +94,6 @@ public interface ClientSessionSubscriptionLocalPersistence extends LocalPersiste
      * @param client The client identifier of the subscriber.
      * @return A read only set of {@link Topic}s.
      */
-    @ReadOnly
     @NotNull ImmutableSet<Topic> getSubscriptions(@NotNull final String client);
 
     /**

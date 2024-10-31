@@ -24,11 +24,9 @@ import com.google.inject.Stage;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingletonModule;
 import com.hivemq.bootstrap.netty.ioc.NettyModule;
 import com.hivemq.configuration.HivemqId;
-import com.hivemq.configuration.SystemProperties;
 import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.ioc.ConfigurationModule;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.diagnostic.DiagnosticModule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.ioc.ExtensionModule;
@@ -56,10 +54,7 @@ public class GuiceBootstrap {
             final @NotNull Injector persistenceInjector,
             final @NotNull LifecycleModule lifecycleModule) {
 
-        if (!Boolean.parseBoolean(System.getProperty(SystemProperties.DIAGNOSTIC_MODE))) {
-            log.trace("Turning Guice stack traces off");
-            System.setProperty("guice_include_stack_traces", "OFF");
-        }
+        System.setProperty("guice_include_stack_traces", "OFF");
 
         final ImmutableList.Builder<AbstractModule> modules = ImmutableList.builder();
         modules.add(new SystemInformationModule(systemInformation),
@@ -70,19 +65,18 @@ public class GuiceBootstrap {
                 /* Binds the configuration service */
                 new ConfigurationModule(fullConfigurationService, hiveMQId),
                 /* Binds netty specific classes */
-                new NettyModule(), new HiveMQMainModule(),
+                new NettyModule(),
+                new HiveMQMainModule(),
                 /* Binds MQTT handler specific classes */
                 new MQTTHandlerModule(persistenceInjector),
                 /* Binds the persistence */
-                new PersistenceModule(persistenceInjector, fullConfigurationService.persistenceConfigurationService()),
+                new PersistenceModule(persistenceInjector),
                 /* Binds statistics */
                 new MetricsModule(metricRegistry, persistenceInjector),
                 /* Binds throttling specific classes */
                 new ThrottlingModule(),
                 /* Binds Services for publish distribution */
                 new MQTTServiceModule(),
-                /* Binds Diagnostics */
-                new DiagnosticModule(),
                 /* Binds SSL functionality*/
                 new SecurityModule(),
                 /* Binds the Extension System */
@@ -109,7 +103,7 @@ public class GuiceBootstrap {
                 new ConfigurationModule(configService, hiveMQId),
                 new LazySingletonModule(),
                 lifecycleModule,
-                new PersistenceMigrationModule(metricRegistry, configService.persistenceConfigurationService()));
+                new PersistenceMigrationModule(metricRegistry));
 
         return Guice.createInjector(Stage.PRODUCTION, modules.build());
     }

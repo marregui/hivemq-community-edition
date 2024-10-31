@@ -18,7 +18,6 @@ package com.hivemq.persistence.ioc;
 import com.google.inject.Injector;
 import com.hivemq.bootstrap.ioc.SingletonModule;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
-import com.hivemq.configuration.service.PersistenceConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.PersistenceStartup;
 import com.hivemq.persistence.clientqueue.ClientQueuePersistence;
@@ -43,25 +42,17 @@ import javax.inject.Singleton;
 class LocalPersistenceModule extends SingletonModule<Class<LocalPersistenceModule>> {
 
     private final @NotNull Injector persistenceInjector;
-    private final @NotNull PersistenceConfigurationService persistenceConfigurationService;
 
-    public LocalPersistenceModule(
-            @NotNull final Injector persistenceInjector,
-            @NotNull final PersistenceConfigurationService persistenceConfigurationService) {
+    public LocalPersistenceModule(@NotNull final Injector persistenceInjector) {
         super(LocalPersistenceModule.class);
         this.persistenceInjector = persistenceInjector;
-        this.persistenceConfigurationService = persistenceConfigurationService;
     }
 
     @Override
     protected void configure() {
 
-        /* Local */
-        if (persistenceConfigurationService.getMode() == PersistenceConfigurationService.PersistenceMode.FILE) {
-            install(new LocalPersistenceFileModule(persistenceInjector));
-        } else {
-            install(new LocalPersistenceMemoryModule(persistenceInjector));
-        }
+        install(new LocalPersistenceFileModule(persistenceInjector));
+
 
         /* Retained Message */
         bind(RetainedMessagePersistence.class).toProvider(RetainedMessagePersistenceProvider.class)

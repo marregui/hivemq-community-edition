@@ -22,7 +22,6 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.Striped;
-import com.hivemq.common.annotations.GuardedBy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,7 +64,6 @@ public class PluginTaskExecutor {
     private final @NotNull AtomicBoolean running = new AtomicBoolean(true);
 
 
-    @GuardedBy("stripedLock")
     private final @NotNull ConcurrentMap<String, Queue<PluginTaskExecution>> taskQueues = new ConcurrentHashMap<>();
 
     private final @NotNull AtomicLong counterAllQueues;

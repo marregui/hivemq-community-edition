@@ -17,24 +17,11 @@ package com.hivemq.bootstrap.ioc.lazysingleton;
 
 import com.google.inject.Scope;
 
-/**
- * A lazy Singleton Scope for objects which should <b>not</b> be created eagerly on application startup.
- * <p>
- * For true lazy behaviour, make sure to use a {@link javax.inject.Provider} for these lazy singleton
- * objects
- *
- * @author Dominik Obermaier
- */
 public class LazySingletonScope {
 
     /* Singleton, we don't need more instances of it */
     private static final Scope instance = new LazySingletonScopeImpl();
 
-    /**
-     * Returns the LazySingletonScope
-     *
-     * @return the LazySingletonScope
-     */
     public static Scope get() {
         return instance;
     }

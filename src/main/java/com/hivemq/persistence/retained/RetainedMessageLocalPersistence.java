@@ -15,8 +15,6 @@
  */
 package com.hivemq.persistence.retained;
 
-import com.hivemq.annotations.ExecuteInSingleWriter;
-import com.hivemq.annotations.ReadOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.iteration.BucketChunkResult;
@@ -73,7 +71,6 @@ public interface RetainedMessageLocalPersistence extends LocalPersistence {
      * @param bucket       The index of the bucket in which the retained messages are stored.
      * @return a readonly set of topic strings.
      */
-    @ReadOnly
     @NotNull Set<String> getAllTopics(@NotNull String subscription, int bucket);
 
     /**
@@ -97,7 +94,6 @@ public interface RetainedMessageLocalPersistence extends LocalPersistence {
      *         chunks are available
      * @since 4.4.0
      */
-    @ExecuteInSingleWriter
     @NotNull BucketChunkResult<Map<String, @NotNull RetainedMessage>> getAllRetainedMessagesChunk(
             int bucketIndex, @Nullable String lastTopic, int maxMemory);
 

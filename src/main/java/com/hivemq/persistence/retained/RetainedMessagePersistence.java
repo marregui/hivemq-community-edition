@@ -16,7 +16,6 @@
 package com.hivemq.persistence.retained;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.hivemq.annotations.ReadOnly;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.iteration.ChunkCursor;
 import com.hivemq.extensions.iteration.MultipleChunkResult;
@@ -61,9 +60,7 @@ public interface RetainedMessagePersistence {
      * @param topicWithWildcards for the retained messages
      * @return all topics matching the given wildcard topic, that have retained messages
      */
-    @NotNull
-    @ReadOnly
-    ListenableFuture<Set<String>> getWithWildcards(@NotNull String topicWithWildcards);
+    @NotNull ListenableFuture<Set<String>> getWithWildcards(@NotNull String topicWithWildcards);
 
     /**
      * Close the file persistence.

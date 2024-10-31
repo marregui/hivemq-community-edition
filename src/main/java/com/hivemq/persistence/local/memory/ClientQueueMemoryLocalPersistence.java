@@ -21,7 +21,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.annotations.ExecuteInSingleWriter;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.configuration.service.MqttConfigurationService.QueuedMessagesStrategy;
@@ -122,7 +121,6 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void add(
             final @NotNull String queueId,
             final boolean shared,
@@ -141,7 +139,6 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void add(
             final @NotNull String queueId,
             final boolean shared,
@@ -244,7 +241,6 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
     }
 
     @Override
-    @ExecuteInSingleWriter
     public @NotNull ImmutableList<PUBLISH> readNew(
             final @NotNull String queueId,
             final boolean shared,
@@ -353,7 +349,6 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
     }
 
     @Override
-    @ExecuteInSingleWriter
     public @NotNull ImmutableList<MessageWithID> readInflight(
             final @NotNull String queueId,
             final boolean shared,
@@ -397,7 +392,6 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
     }
 
     @Override
-    @ExecuteInSingleWriter
     public @Nullable String replace(
             final @NotNull String queueId, final @NotNull PUBREL pubrel, final int bucketIndex) {
 
@@ -457,13 +451,11 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
     }
 
     @Override
-    @ExecuteInSingleWriter
     public @Nullable String remove(final @NotNull String queueId, final int packetId, final int bucketIndex) {
         return remove(queueId, packetId, null, bucketIndex);
     }
 
     @Override
-    @ExecuteInSingleWriter
     public @Nullable String remove(
             final @NotNull String queueId, final int packetId, final @Nullable String uniqueId, final int bucketIndex) {
 
@@ -501,7 +493,6 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
 
 
     @Override
-    @ExecuteInSingleWriter
     public int size(final @NotNull String queueId, final boolean shared, final int bucketIndex) {
         checkNotNull(queueId, "Queue ID must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX); // QueueSizes are not thread save
@@ -512,7 +503,6 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void clear(final @NotNull String queueId, final boolean shared, final int bucketIndex) {
         checkNotNull(queueId, "Queue ID must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
@@ -536,7 +526,6 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void removeAllQos0Messages(final @NotNull String queueId, final boolean shared, final int bucketIndex) {
         checkNotNull(queueId, "Queue id must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
@@ -557,7 +546,6 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
     }
 
     @Override
-    @ExecuteInSingleWriter
     public @NotNull ImmutableSet<String> cleanUp(final int bucketIndex) {
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
@@ -571,7 +559,6 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void removeShared(
             final @NotNull String sharedSubscription, final @NotNull String uniqueId, final int bucketIndex) {
 
@@ -603,7 +590,6 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void removeInFlightMarker(
             final @NotNull String sharedSubscription, final @NotNull String uniqueId, final int bucketIndex) {
 
@@ -630,7 +616,6 @@ public class ClientQueueMemoryLocalPersistence implements ClientQueueLocalPersis
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void closeDB(final int bucketIndex) {
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
         buckets[bucketIndex].clear();

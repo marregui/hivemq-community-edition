@@ -20,12 +20,6 @@ import io.netty.handler.traffic.GlobalTrafficShapingHandler;
 
 import javax.inject.Singleton;
 
-/**
- * The Guice module for all Throttling bindings
- *
- * @author Florian Limpoeck
- * @author Christoph Schäbel
- */
 public class ThrottlingModule extends SingletonModule {
 
 
@@ -35,7 +29,6 @@ public class ThrottlingModule extends SingletonModule {
 
     @Override
     protected void configure() {
-
         bind(GlobalTrafficShapingHandler.class).toProvider(GlobalTrafficShapingProvider.class).in(Singleton.class);
     }
 }

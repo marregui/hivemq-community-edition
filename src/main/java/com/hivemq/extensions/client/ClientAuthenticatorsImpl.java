@@ -16,7 +16,6 @@
 package com.hivemq.extensions.client;
 
 import com.google.common.collect.ImmutableMap;
-import com.hivemq.common.annotations.GuardedBy;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.EnhancedAuthenticator;
 import com.hivemq.extensions.ExtensionPriorityComparator;
@@ -35,7 +34,6 @@ public class ClientAuthenticatorsImpl implements ClientAuthenticators {
 
     private final @NotNull ReadWriteLock authenticatorLock;
 
-    @GuardedBy("authenticatorLock")
     private final @NotNull Map<String, EnhancedAuthenticator> enhancedAuthenticatorMap;
 
     public ClientAuthenticatorsImpl(final @NotNull ExtensionPriorityComparator extensionPriorityComparator) {

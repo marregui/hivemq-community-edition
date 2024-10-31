@@ -23,7 +23,6 @@ import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingletonScope;
 import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.service.MqttConfigurationService;
-import com.hivemq.configuration.service.PersistenceConfigurationService;
 import com.hivemq.persistence.PersistenceStartup;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +30,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.when;
 
 /**
  * @author Florian Limpöck
@@ -45,26 +43,22 @@ public class PersistenceMigrationModuleTest {
     @Mock
     private MqttConfigurationService mqttConfigurationService;
 
-    @Mock
-    private PersistenceConfigurationService persistenceConfigurationService;
-
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        when(persistenceConfigurationService.getMode()).thenReturn(PersistenceConfigurationService.PersistenceMode.FILE);
     }
 
     @Test
     public void test_startup_singleton() {
-        final Injector injector = Guice.createInjector(new PersistenceMigrationModule(new MetricRegistry(),
-                persistenceConfigurationService), new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(SystemInformation.class).toInstance(systemInformation);
-                bindScope(LazySingleton.class, LazySingletonScope.get());
-                bind(MqttConfigurationService.class).toInstance(mqttConfigurationService);
-            }
-        });
+        final Injector injector =
+                Guice.createInjector(new PersistenceMigrationModule(new MetricRegistry()), new AbstractModule() {
+                    @Override
+                    protected void configure() {
+                        bind(SystemInformation.class).toInstance(systemInformation);
+                        bindScope(LazySingleton.class, LazySingletonScope.get());
+                        bind(MqttConfigurationService.class).toInstance(mqttConfigurationService);
+                    }
+                });
 
         final PersistenceStartup instance1 = injector.getInstance(PersistenceStartup.class);
         final PersistenceStartup instance2 = injector.getInstance(PersistenceStartup.class);

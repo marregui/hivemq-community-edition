@@ -18,11 +18,9 @@ package com.hivemq.configuration.reader;
 import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.info.SystemInformationImpl;
 import com.hivemq.configuration.service.MqttConfigurationService;
-import com.hivemq.configuration.service.PersistenceConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
 import com.hivemq.configuration.service.impl.MqttConfigurationServiceImpl;
-import com.hivemq.configuration.service.impl.PersistenceConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
@@ -54,7 +52,6 @@ public class AbstractConfigurationTest {
     RestrictionsConfigurationService restrictionsConfigurationService;
     SecurityConfigurationService securityConfigurationService;
     SystemInformation systemInformation;
-    PersistenceConfigurationService persistenceConfigurationService;
 
     @Before
     public void setUp() throws Exception {
@@ -66,7 +63,6 @@ public class AbstractConfigurationTest {
         mqttConfigurationService = new MqttConfigurationServiceImpl();
         restrictionsConfigurationService = new RestrictionsConfigurationServiceImpl();
         systemInformation = new SystemInformationImpl(false);
-        persistenceConfigurationService = new PersistenceConfigurationServiceImpl();
 
         when(envVarUtil.replaceEnvironmentVariablePlaceholders(anyString())).thenCallRealMethod();
         final ConfigurationFile configurationFile = new ConfigurationFile(xmlFile);
@@ -75,8 +71,6 @@ public class AbstractConfigurationTest {
                 new SecurityConfigurator(securityConfigurationService),
                 envVarUtil,
                 new MqttConfigurator(mqttConfigurationService),
-                new ListenerConfigurator(listenerConfigurationService, systemInformation),
-                new PersistenceConfigurator(persistenceConfigurationService));
+                new ListenerConfigurator(listenerConfigurationService, systemInformation));
     }
-
 }

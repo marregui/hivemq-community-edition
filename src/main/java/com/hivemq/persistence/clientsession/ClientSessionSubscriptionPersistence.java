@@ -18,7 +18,6 @@ package com.hivemq.persistence.clientsession;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.hivemq.annotations.ReadOnly;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.iteration.ChunkCursor;
 import com.hivemq.extensions.iteration.MultipleChunkResult;
@@ -49,9 +48,7 @@ public interface ClientSessionSubscriptionPersistence {
      * @param client the identifier of the client to get the subscriptions for.
      * @return A set of {@link Topic}s.
      */
-    @NotNull
-    @ReadOnly
-    ImmutableSet<Topic> getSubscriptions(@NotNull String client);
+    @NotNull ImmutableSet<Topic> getSubscriptions(@NotNull String client);
 
     /**
      * Get a chunk of all the subscriptions from this node
@@ -86,9 +83,7 @@ public interface ClientSessionSubscriptionPersistence {
      * @return A future containing an immutable list of {@link SubscriptionResult}s which completes as soon as the
      *         subscriptions are persisted.
      */
-    @NotNull
-    @ReadOnly
-    ListenableFuture<ImmutableList<SubscriptionResult>> addSubscriptions(
+    @NotNull ListenableFuture<ImmutableList<SubscriptionResult>> addSubscriptions(
             @NotNull String clientId, @NotNull ImmutableSet<Topic> topics);
 
     /**
@@ -130,9 +125,7 @@ public interface ClientSessionSubscriptionPersistence {
      * @param client for which to request the shared subscriptions.
      * @return A immutable list of the shared subscription topics
      */
-    @NotNull
-    @ReadOnly
-    ImmutableSet<Topic> getSharedSubscriptions(@NotNull String client);
+    @NotNull ImmutableSet<Topic> getSharedSubscriptions(@NotNull String client);
 
     /**
      * Invalidates Shared subscription caches for a client, and starts polling.

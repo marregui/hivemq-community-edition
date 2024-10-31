@@ -26,10 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Dominik Obermaier
- * @author Lukas brandl
- */
 @XmlRootElement(name = "hivemq")
 @XmlAccessorType(XmlAccessType.NONE)
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
@@ -48,12 +44,6 @@ public class HiveMQConfigEntity {
     @XmlElementRef(required = false)
     private @NotNull SecurityConfigEntity security = new SecurityConfigEntity();
 
-    @XmlElementRef(required = false)
-    private @NotNull UsageStatisticsEntity usageStatistics = new UsageStatisticsEntity();
-
-    @XmlElementRef(required = false)
-    private @NotNull PersistenceEntity persistence = new PersistenceEntity();
-
     public @NotNull List<ListenerEntity> getListenerConfig() {
         return listeners;
     }
@@ -68,13 +58,5 @@ public class HiveMQConfigEntity {
 
     public @NotNull SecurityConfigEntity getSecurityConfig() {
         return security;
-    }
-
-    public @NotNull UsageStatisticsEntity getUsageStatisticsConfig() {
-        return usageStatistics;
-    }
-
-    public @NotNull PersistenceEntity getPersistenceConfig() {
-        return persistence;
     }
 }

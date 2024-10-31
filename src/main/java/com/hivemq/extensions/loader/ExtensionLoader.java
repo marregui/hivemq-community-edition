@@ -17,7 +17,6 @@
 package com.hivemq.extensions.loader;
 
 import com.google.common.collect.ImmutableCollection;
-import com.hivemq.annotations.ReadOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.HiveMQExtension;
@@ -48,7 +47,6 @@ public interface ExtensionLoader {
      * @throws java.lang.IllegalArgumentException If the folder does not exist HiveMQ is not able to read the contents
      *                                            of the folder
      */
-    @ReadOnly
     @NotNull ImmutableCollection<HiveMQExtensionEvent> loadExtensions(
             final @NotNull Path extensionFolder, boolean permissive);
 

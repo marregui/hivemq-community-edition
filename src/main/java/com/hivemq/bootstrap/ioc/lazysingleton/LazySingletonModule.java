@@ -15,14 +15,8 @@
  */
 package com.hivemq.bootstrap.ioc.lazysingleton;
 
-import com.google.inject.Scope;
 import com.hivemq.bootstrap.ioc.SingletonModule;
 
-/**
- * The Guice module for Lazy Singleton Scopes
- *
- * @author Dominik Obermaier
- */
 public class LazySingletonModule extends SingletonModule {
 
     public LazySingletonModule() {
@@ -31,7 +25,6 @@ public class LazySingletonModule extends SingletonModule {
 
     @Override
     protected void configure() {
-        final Scope lazySingletonScope = LazySingletonScope.get();
-        bindScope(LazySingleton.class, lazySingletonScope);
+        bindScope(LazySingleton.class, LazySingletonScope.get());
     }
 }

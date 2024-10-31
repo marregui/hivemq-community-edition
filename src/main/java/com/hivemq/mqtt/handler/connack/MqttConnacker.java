@@ -15,7 +15,6 @@
  */
 package com.hivemq.mqtt.handler.connack;
 
-import com.hivemq.annotations.ExecuteInEventloop;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.connack.CONNACK;
@@ -29,7 +28,6 @@ import io.netty.channel.ChannelHandlerContext;
 /**
  * @author Florian Limpöck
  */
-@ExecuteInEventloop
 public interface MqttConnacker {
 
     /**

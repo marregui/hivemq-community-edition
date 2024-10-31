@@ -31,9 +31,6 @@ import javax.inject.Singleton;
 
 import static com.hivemq.configuration.service.InternalConfigurations.MQTT_EVENT_EXECUTOR_THREAD_COUNT;
 
-/**
- * @author Dominik Obermaier
- */
 public class MQTTHandlerModule extends SingletonModule<Class<MQTTHandlerModule>> {
 
     private final @NotNull Injector persistenceInjector;
@@ -50,11 +47,8 @@ public class MQTTHandlerModule extends SingletonModule<Class<MQTTHandlerModule>>
                 new ThreadFactoryBuilder().setNameFormat("hivemq-event-executor-%d").build());
 
         bind(EventExecutorGroup.class).toInstance(mqttHandlerWorker);
-
         bind(MessageDroppedService.class).toInstance(persistenceInjector.getInstance(MessageDroppedService.class));
-
         bind(MqttServerDisconnector.class).to(MqttServerDisconnectorImpl.class).in(Singleton.class);
         bind(MqttConnacker.class).to(MqttConnackerImpl.class).in(Singleton.class);
-
     }
 }

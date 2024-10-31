@@ -19,7 +19,6 @@ import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.annotations.ExecuteInSingleWriter;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
@@ -172,7 +171,6 @@ public class ClientSessionMemoryLocalPersistence implements ClientSessionLocalPe
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void put(
             final @NotNull String clientId,
             final @NotNull ClientSession newClientSession,
@@ -224,7 +222,6 @@ public class ClientSessionMemoryLocalPersistence implements ClientSessionLocalPe
     }
 
     @Override
-    @ExecuteInSingleWriter
     public @NotNull ClientSession disconnect(
             final @NotNull String clientId,
             final long timestamp,
@@ -301,7 +298,6 @@ public class ClientSessionMemoryLocalPersistence implements ClientSessionLocalPe
     }
 
     @Override
-    @ExecuteInSingleWriter
     public @NotNull Set<String> cleanUp(final int bucketIndex) {
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
@@ -359,7 +355,6 @@ public class ClientSessionMemoryLocalPersistence implements ClientSessionLocalPe
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void setSessionExpiryInterval(
             final @NotNull String clientId, final long sessionExpiryInterval, final int bucketIndex) {
         checkNotNull(clientId, "Client Id must not be null");
@@ -414,7 +409,6 @@ public class ClientSessionMemoryLocalPersistence implements ClientSessionLocalPe
     }
 
     @Override
-    @ExecuteInSingleWriter
     public @Nullable PersistenceEntry<ClientSession> deleteWill(final @NotNull String clientId, final int bucketIndex) {
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
@@ -470,7 +464,6 @@ public class ClientSessionMemoryLocalPersistence implements ClientSessionLocalPe
     }
 
     @Override
-    @ExecuteInSingleWriter
     public void closeDB(final int bucketIndex) {
         getBucket(bucketIndex).clear();
         // Happens for every bucket, but it is faster than calculating all sizes

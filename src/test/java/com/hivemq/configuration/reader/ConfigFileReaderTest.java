@@ -16,12 +16,10 @@
 package com.hivemq.configuration.reader;
 
 import com.hivemq.configuration.entity.MqttConfigEntity;
-import com.hivemq.configuration.entity.PersistenceEntity;
 import com.hivemq.configuration.entity.RestrictionsEntity;
 import com.hivemq.configuration.entity.SecurityConfigEntity;
 import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.service.MqttConfigurationService;
-import com.hivemq.configuration.service.PersistenceConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
@@ -53,9 +51,6 @@ public class ConfigFileReaderTest {
     @Mock
     private SystemInformation systemInformation;
 
-    @Mock
-    private PersistenceConfigurationService persistenceConfigurationService;
-
     private ListenerConfigurationService listenerConfigurationService;
 
     ConfigFileReader reader;
@@ -71,8 +66,7 @@ public class ConfigFileReaderTest {
                 new SecurityConfigurator(securityConfigurationService),
                 envVarUtil,
                 new MqttConfigurator(mqttConfigurationService),
-                new ListenerConfigurator(listenerConfigurationService, systemInformation),
-                new PersistenceConfigurator(persistenceConfigurationService));
+                new ListenerConfigurator(listenerConfigurationService, systemInformation));
     }
 
     @Test
@@ -141,16 +135,5 @@ public class ConfigFileReaderTest {
         verify(securityConfigurationService).setAllowServerAssignedClientId(defaultSecurityValues.getAllowEmptyClientIdEntity()
                 .isEnabled());
 
-    }
-
-    @Test
-    public void verify_persistence_default_values() {
-
-        reader.applyConfig();
-
-        final PersistenceEntity defaultPersistenceValues = new PersistenceEntity();
-
-        verify(persistenceConfigurationService).setMode(PersistenceConfigurationService.PersistenceMode.valueOf(
-                defaultPersistenceValues.getMode().name()));
     }
 }

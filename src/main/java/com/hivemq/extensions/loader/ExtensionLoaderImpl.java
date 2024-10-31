@@ -21,7 +21,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.reflect.TypeToken;
-import com.hivemq.annotations.ReadOnly;
 import com.hivemq.extension.sdk.api.ExtensionMain;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -73,7 +72,6 @@ public class ExtensionLoaderImpl implements ExtensionLoader {
         this.staticInitializer = staticInitializer;
     }
 
-    @ReadOnly
     @Override
     public @NotNull ImmutableSet<HiveMQExtensionEvent> loadExtensions(
             final @NotNull Path extensionFolder, final boolean permissive) {

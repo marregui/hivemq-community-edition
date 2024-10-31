@@ -21,13 +21,11 @@ import com.hivemq.configuration.reader.ConfigFileReader;
 import com.hivemq.configuration.reader.ConfigurationFile;
 import com.hivemq.configuration.reader.ListenerConfigurator;
 import com.hivemq.configuration.reader.MqttConfigurator;
-import com.hivemq.configuration.reader.PersistenceConfigurator;
 import com.hivemq.configuration.reader.RestrictionConfigurator;
 import com.hivemq.configuration.reader.SecurityConfigurator;
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.configuration.service.impl.ConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.MqttConfigurationServiceImpl;
-import com.hivemq.configuration.service.impl.PersistenceConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
@@ -45,8 +43,7 @@ public class ConfigurationBootstrap {
                 new ConfigurationServiceImpl(new ListenerConfigurationServiceImpl(),
                         new MqttConfigurationServiceImpl(),
                         new RestrictionsConfigurationServiceImpl(),
-                        new SecurityConfigurationServiceImpl(),
-                        new PersistenceConfigurationServiceImpl());
+                        new SecurityConfigurationServiceImpl());
 
         final ConfigurationFile configurationFile = ConfigurationFileProvider.get(systemInformation);
 
@@ -55,8 +52,7 @@ public class ConfigurationBootstrap {
                 new SecurityConfigurator(configurationService.securityConfiguration()),
                 new EnvVarUtil(),
                 new MqttConfigurator(configurationService.mqttConfiguration()),
-                new ListenerConfigurator(configurationService.listenerConfiguration(), systemInformation),
-                new PersistenceConfigurator(configurationService.persistenceConfigurationService()));
+                new ListenerConfigurator(configurationService.listenerConfiguration(), systemInformation));
 
         configFileReader.applyConfig();
 

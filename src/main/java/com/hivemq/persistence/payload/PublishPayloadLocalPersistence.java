@@ -17,7 +17,6 @@
 package com.hivemq.persistence.payload;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.annotations.ReadOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,7 +55,6 @@ public interface PublishPayloadLocalPersistence {
     /**
      * @return all payload ids as a readonly list.
      */
-    @ReadOnly
     @NotNull ImmutableList<Long> getAllIds();
 
     /**

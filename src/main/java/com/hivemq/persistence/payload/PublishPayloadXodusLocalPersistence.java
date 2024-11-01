@@ -23,7 +23,6 @@ import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.exceptions.UnrecoverableException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.hivemq.migration.meta.PersistenceType;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.persistence.PersistenceStartup;
 import com.hivemq.persistence.local.xodus.EnvironmentUtil;
@@ -67,7 +66,7 @@ public class PublishPayloadXodusLocalPersistence extends XodusLocalPersistence
                 localPersistenceFileUtil,
                 persistenceStartup,
                 InternalConfigurations.PAYLOAD_PERSISTENCE_BUCKET_COUNT.get(),
-                InternalConfigurations.PAYLOAD_PERSISTENCE_TYPE.get() == PersistenceType.FILE);
+                true);
     }
 
     @Override

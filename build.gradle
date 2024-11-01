@@ -28,7 +28,6 @@ dependencies {
     implementation(libs.bouncycastle.pkix)
 
     // persistence
-    implementation(libs.rocksdb)
     implementation(libs.xodus.openApi)
     implementation(libs.xodus.environment)
 

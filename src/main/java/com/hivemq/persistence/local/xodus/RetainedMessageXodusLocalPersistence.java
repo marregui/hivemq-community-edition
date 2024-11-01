@@ -23,7 +23,6 @@ import com.hivemq.exceptions.UnrecoverableException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.iteration.BucketChunkResult;
-import com.hivemq.migration.meta.PersistenceType;
 import com.hivemq.persistence.PersistenceStartup;
 import com.hivemq.persistence.RetainedMessage;
 import com.hivemq.persistence.local.DeltaCounter;
@@ -84,7 +83,7 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
                 persistenceStartup,
                 InternalConfigurations.PERSISTENCE_BUCKET_COUNT.get(),
                 //check if enabled
-                InternalConfigurations.RETAINED_MESSAGE_PERSISTENCE_TYPE.get().equals(PersistenceType.FILE));
+                true);
 
         this.payloadPersistence = payloadPersistence;
         for (int i = 0; i < bucketCount; i++) {

@@ -15,13 +15,11 @@
  */
 package com.hivemq.configuration.service;
 
-import com.hivemq.migration.meta.PersistenceType;
 import org.rocksdb.CompressionType;
 import org.rocksdb.MutableColumnFamilyOptionsInterface;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.hivemq.configuration.entity.mqtt.MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT;
 
@@ -175,12 +173,6 @@ public class InternalConfigurations {
     public static final AtomicInteger RETAINED_MESSAGE_QUEUE_SIZE = new AtomicInteger(100_000);
 
     /**
-     * The configuration if rocks db is used instead of xodus for retained messages.
-     */
-    public static final AtomicReference<PersistenceType> RETAINED_MESSAGE_PERSISTENCE_TYPE =
-            new AtomicReference<>(PersistenceType.FILE_NATIVE);
-
-    /**
      * The memory that is used for rocksdb memTable as a portion of the RAM for the retained message persistence. (size
      * = RAM/configValue)
      */
@@ -219,12 +211,6 @@ public class InternalConfigurations {
     public static final AtomicInteger PAYLOAD_PERSISTENCE_BUCKET_COUNT = new AtomicInteger(64);
 
     public static final AtomicBoolean PUBLISH_PAYLOAD_FORCE_FLUSH_ENABLED = new AtomicBoolean(true);
-
-    /**
-     * The type of storage underlying the payload persistence (for example, rocks db or xodus).
-     */
-    public static final AtomicReference<PersistenceType> PAYLOAD_PERSISTENCE_TYPE =
-            new AtomicReference<>(PersistenceType.FILE_NATIVE);
 
     /**
      * The memory that is used for rocksdb memTable as a portion of the RAM for the retained message persistence. (size

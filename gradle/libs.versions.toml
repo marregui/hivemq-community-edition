@@ -22,7 +22,6 @@ logback = "1.5.12"
 mockito = "5.11.0"
 netty = "4.1.114.Final"
 oshi = "6.6.5"
-rocksdb = "8.3.3"
 shrinkwrap = "1.2.6"
 slf4j = "2.0.16"
 stefanBirkner-systemRules = "1.19.0"
@@ -63,7 +62,6 @@ netty-common = { module = "io.netty:netty-common", version.ref = "netty" }
 netty-handler = { module = "io.netty:netty-handler", version.ref = "netty" }
 netty-transport = { module = "io.netty:netty-transport", version.ref = "netty" }
 oshi = { module = "com.github.oshi:oshi-core", version.ref = "oshi" }
-rocksdb = { module = "org.rocksdb:rocksdbjni", version.ref = "rocksdb" }
 shrinkwrap-api = { module = "org.jboss.shrinkwrap:shrinkwrap-api", version.ref = "shrinkwrap" }
 shrinkwrap-impl = { module = "org.jboss.shrinkwrap:shrinkwrap-impl-base", version.ref = "shrinkwrap" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }

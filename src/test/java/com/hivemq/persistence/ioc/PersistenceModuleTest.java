@@ -38,10 +38,8 @@ import com.hivemq.persistence.PersistenceShutdownHookInstaller;
 import com.hivemq.persistence.PersistenceStartup;
 import com.hivemq.persistence.SingleWriterServiceImpl;
 import com.hivemq.persistence.clientqueue.ClientQueueXodusLocalPersistence;
-import com.hivemq.persistence.local.xodus.RetainedMessageRocksDBLocalPersistence;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.persistence.payload.PublishPayloadPersistenceImpl;
-import com.hivemq.persistence.payload.PublishPayloadRocksDBLocalPersistence;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -65,12 +63,6 @@ public class PersistenceModuleTest {
 
         when(persistenceInjector.getInstance(PublishPayloadPersistenceImpl.class)).thenReturn(Mockito.mock(
                 PublishPayloadPersistenceImpl.class));
-
-        when(persistenceInjector.getInstance(RetainedMessageRocksDBLocalPersistence.class)).thenReturn(mock(
-                RetainedMessageRocksDBLocalPersistence.class));
-
-        when(persistenceInjector.getInstance(PublishPayloadRocksDBLocalPersistence.class)).thenReturn(mock(
-                PublishPayloadRocksDBLocalPersistence.class));
 
         when(persistenceInjector.getInstance(ClientQueueXodusLocalPersistence.class)).thenReturn(Mockito.mock(
                 ClientQueueXodusLocalPersistence.class));

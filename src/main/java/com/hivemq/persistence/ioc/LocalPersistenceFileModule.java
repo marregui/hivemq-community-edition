@@ -17,10 +17,8 @@ package com.hivemq.persistence.ioc;
 
 import com.google.inject.Injector;
 import com.hivemq.bootstrap.ioc.SingletonModule;
-import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.hivemq.migration.meta.PersistenceType;
 import com.hivemq.persistence.clientqueue.ClientQueueLocalPersistence;
 import com.hivemq.persistence.clientqueue.ClientQueueXodusLocalPersistence;
 import com.hivemq.persistence.ioc.provider.local.ClientSessionLocalProvider;
@@ -36,48 +34,26 @@ import com.hivemq.persistence.retained.RetainedMessageLocalPersistence;
 
 import javax.inject.Singleton;
 
-/**
- * @author Dominik Obermaier
- */
+
 class LocalPersistenceFileModule extends SingletonModule<Class<LocalPersistenceFileModule>> {
 
     private final @NotNull Injector persistenceInjector;
-    private final @NotNull PersistenceType payloadPersistenceType;
-    private final @NotNull PersistenceType retainedPersistenceType;
 
     public LocalPersistenceFileModule(@NotNull final Injector persistenceInjector) {
         super(LocalPersistenceFileModule.class);
         this.persistenceInjector = persistenceInjector;
-        this.payloadPersistenceType = InternalConfigurations.PAYLOAD_PERSISTENCE_TYPE.get();
-        this.retainedPersistenceType = InternalConfigurations.RETAINED_MESSAGE_PERSISTENCE_TYPE.get();
     }
 
     @Override
     protected void configure() {
-
-        /* Local */
-        if (payloadPersistenceType == PersistenceType.FILE) {
-            bindLocalPersistence(PublishPayloadLocalPersistence.class, PublishPayloadXodusLocalPersistence.class, null);
-        }
-        if (retainedPersistenceType == PersistenceType.FILE) {
-            bindLocalPersistence(RetainedMessageLocalPersistence.class,
-                    RetainedMessageXodusLocalPersistence.class,
-                    null);
-        }
-
-        if (payloadPersistenceType == PersistenceType.FILE_NATIVE ||
-                retainedPersistenceType == PersistenceType.FILE_NATIVE) {
-            install(new LocalPersistenceRocksDBModule(persistenceInjector));
-        }
-
+        bindLocalPersistence(PublishPayloadLocalPersistence.class, PublishPayloadXodusLocalPersistence.class, null);
+        bindLocalPersistence(RetainedMessageLocalPersistence.class, RetainedMessageXodusLocalPersistence.class, null);
         bindLocalPersistence(ClientSessionLocalPersistence.class,
                 ClientSessionXodusLocalPersistence.class,
                 ClientSessionLocalProvider.class);
-
         bindLocalPersistence(ClientSessionSubscriptionLocalPersistence.class,
                 ClientSessionSubscriptionXodusLocalPersistence.class,
                 ClientSessionSubscriptionLocalProvider.class);
-
         bindLocalPersistence(ClientQueueLocalPersistence.class, ClientQueueXodusLocalPersistence.class, null);
     }
 

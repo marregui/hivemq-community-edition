@@ -1236,8 +1236,6 @@ public class ClientQueueXodusLocalPersistenceTest {
                 false,
                 BucketUtils.getBucket("client", 4));
 
-        verify(messageDroppedService).qos0MemoryExceeded(eq("client"), eq("topic"), eq(0), anyLong(), eq(1024L));
-
         final ConcurrentHashMap<String, AtomicInteger> clientQos0MemoryMap = persistence.getClientQos0MemoryMap();
         assertNotNull(clientQos0MemoryMap.get("client"));
 

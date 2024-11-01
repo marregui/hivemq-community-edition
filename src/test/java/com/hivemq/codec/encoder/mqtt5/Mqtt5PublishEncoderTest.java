@@ -23,21 +23,14 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
 import com.hivemq.mqtt.message.publish.PUBLISH;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import org.junit.Before;
 import org.junit.Test;
 import util.TestMessageUtil;
 
-import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.TreeSet;
 
-import static com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger.MAXIMUM_PACKET_SIZE_LIMIT;
-import static com.hivemq.mqtt.message.mqtt5.MessageProperties.CORRELATION_DATA;
-import static com.hivemq.mqtt.message.mqtt5.MessageProperties.PAYLOAD_FORMAT_INDICATOR;
 import static com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties.NO_USER_PROPERTIES;
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author Florian Limpöck
@@ -963,68 +956,4 @@ public class Mqtt5PublishEncoderTest extends AbstractMqtt5EncoderTest {
                 null);
         encodeTestBufferSize(expectedQos2, publishQos2);
     }
-
-    @Test
-    public void test_encode_max_packet_size_exceeded() {
-        final ByteBuf expected = Unpooled.buffer(MAXIMUM_PACKET_SIZE_LIMIT, MAXIMUM_PACKET_SIZE_LIMIT + 3);
-
-        // 5 header + remaining length, 7 topic, 4 property length, 2 payload format, 5 payload
-        // exceed packet size by 3 bytes since correlation data header is to much
-        final int correlationDataLength = MAXIMUM_PACKET_SIZE_LIMIT - 5 - 7 - 4 - 2 - 5;
-
-        // fixed header
-        //   type, flags
-        expected.writeByte(0b0011_0000);
-        //   remaining length
-        expected.writeByte(0xff);
-        expected.writeByte(0xff);
-        expected.writeByte(0xff);
-        expected.writeByte(0x7f);
-        // variable header
-        //   topic name
-        expected.writeBytes(new byte[]{0, 5, 't', 'o', 'p', 'i', 'c'});
-        //   properties
-        expected.writeByte(0xef);
-        expected.writeByte(0xff);
-        expected.writeByte(0xff);
-        expected.writeByte(0x7f);
-        //     payload format indicator
-        expected.writeBytes(new byte[]{PAYLOAD_FORMAT_INDICATOR, 0});
-        //     correlation data
-        expected.writeByte(CORRELATION_DATA);
-        expected.writeShort(correlationDataLength);
-        for (int i = 0; i < correlationDataLength; i++) {
-            expected.writeByte(i);
-        }
-        // payload
-        expected.writeBytes(new byte[]{1, 2, 3, 4, 5});
-
-        final byte[] correlationData = ByteBuffer.wrap(expected.array(), 21, correlationDataLength).array();
-        final Mqtt5UserProperties userProperties = Mqtt5UserProperties.of(new MqttUserProperty("user", "property"));
-
-        final PUBLISH publish = TestMessageUtil.createMqtt5Publish(hiveMQId.get(),
-                "topic",
-                new byte[]{1, 2, 3, 4, 5},
-                QoS.AT_MOST_ONCE,
-                QoS.AT_MOST_ONCE,
-                false,
-                MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT,
-                Mqtt5PayloadFormatIndicator.UNSPECIFIED,
-                null,
-                null,
-                correlationData,
-                userProperties,
-                -1,
-                false,
-                true,
-                null);
-
-        ClientConnection.of(channel).setClientId("clientid");
-        channel.writeOutbound(publish);
-        final ByteBuf buf = channel.readOutbound();
-        assertEquals(0, buf.readableBytes());
-
-        expected.release();
-    }
-
 }

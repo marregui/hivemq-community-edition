@@ -21,7 +21,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
@@ -80,7 +80,7 @@ public class DisconnectHandler extends SimpleChannelInboundHandler<DISCONNECT> {
     protected void channelRead0(
             final @NotNull ChannelHandlerContext ctx, final @NotNull DISCONNECT msg) throws Exception {
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
 
         clientConnectionContext.proposeClientState(ClientState.DISCONNECTING);
 
@@ -112,7 +112,7 @@ public class DisconnectHandler extends SimpleChannelInboundHandler<DISCONNECT> {
     @Override
     public void channelInactive(final @NotNull ChannelHandlerContext ctx) throws Exception {
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
 
         // Any disconnect status other than unspecified is already handled.
         // We can be sure that we are logging the initial log and event when we can set this state.
@@ -140,7 +140,7 @@ public class DisconnectHandler extends SimpleChannelInboundHandler<DISCONNECT> {
         super.channelInactive(ctx);
     }
 
-    private void persistDisconnectState(final @NotNull ClientConnectionContext clientConnectionContext) {
+    private void persistDisconnectState(final @NotNull Connection clientConnectionContext) {
 
         final SettableFuture<Void> disconnectFuture = clientConnectionContext.getDisconnectFuture();
 

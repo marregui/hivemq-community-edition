@@ -17,7 +17,7 @@ package com.hivemq.mqtt.handler.publish;
 
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.QoS;
@@ -70,7 +70,7 @@ public class DropOutgoingPublishesHandler {
                         future.set(PublishStatus.CHANNEL_NOT_WRITABLE);
                     }
                     //Drop message
-                    final String clientId = ClientConnectionContext.of(ctx.channel()).getClientId();
+                    final String clientId = Connection.of(ctx.channel()).getClientId();
                     log.trace("Dropped qos 0 message for client {} on topic {} because the channel was not writable",
                             clientId,
                             publish.getTopic());

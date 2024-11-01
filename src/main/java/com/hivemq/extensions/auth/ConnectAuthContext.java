@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.auth;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.handler.PluginAuthenticatorServiceImpl;
 import com.hivemq.mqtt.handler.auth.MqttAuthSender;
@@ -62,7 +62,7 @@ public class ConnectAuthContext extends AuthContext<ConnectAuthOutput> {
     @Override
     void succeedAuthentication(final @NotNull ConnectAuthOutput output) {
         super.succeedAuthentication(output);
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
         clientConnectionContext.setAuthData(output.getAuthenticationData());
         clientConnectionContext.setAuthUserProperties(Mqtt5UserProperties.of(output.getOutboundUserProperties()
                 .asInternalList()));
@@ -86,7 +86,7 @@ public class ConnectAuthContext extends AuthContext<ConnectAuthOutput> {
     @Override
     void undecidedAuthentication(final @NotNull ConnectAuthOutput output) {
         if (initial) {
-            final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+            final Connection clientConnectionContext = Connection.of(ctx.channel());
             connectHandler.connectSuccessfulUndecided(ctx,
                     clientConnectionContext,
                     connect,

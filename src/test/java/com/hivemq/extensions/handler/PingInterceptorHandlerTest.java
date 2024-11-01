@@ -17,7 +17,7 @@
 package com.hivemq.extensions.handler;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.pingreq.PingReqInboundInterceptor;
@@ -88,7 +88,7 @@ public class PingInterceptorHandlerTest {
         executor.postConstruct();
 
         channel = new EmbeddedChannel();
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME)
                 .set(new DummyClientConnection(channel, mock(PublishFlushHandler.class)));
         ClientConnection.of(channel).setClientId("client");
         ClientConnection.of(channel).setRequestResponseInformation(true);

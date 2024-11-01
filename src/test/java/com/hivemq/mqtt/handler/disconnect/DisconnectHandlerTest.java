@@ -19,7 +19,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.configuration.service.entity.TcpListener;
@@ -74,14 +74,14 @@ public class DisconnectHandlerTest {
                 clientSessionPersistence,
                 connectionPersistence);
         channel = new EmbeddedChannel(disconnectHandler);
-        final ClientConnectionContext clientConnectionContext = new UndefinedClientConnection(channel,
+        final Connection clientConnectionContext = new UndefinedClientConnection(channel,
                 null,
                 mock(TcpListener.class));
         clientConnectionContext.setClientId("clientId");
         clientConnectionContext.setProtocolVersion(ProtocolVersion.MQTTv5);
         clientConnectionContext.proposeClientState(ClientState.CONNECTING);
         clientConnectionContext.setClientSessionExpiryInterval(1245L);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
         clientConnection = ClientConnection.from(clientConnectionContext);
 
         when(connectionPersistence.get(anyString())).thenReturn(clientConnection);
@@ -202,7 +202,7 @@ public class DisconnectHandlerTest {
                 null,
                 0);
         clientConnection = new DummyClientConnection(channel, null);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
         channel.writeInbound(disconnect);

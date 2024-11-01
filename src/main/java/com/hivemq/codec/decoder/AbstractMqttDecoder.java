@@ -16,7 +16,7 @@
 package com.hivemq.codec.decoder;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.MqttBinaryData;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
@@ -89,7 +89,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @return the UserProperty-Builder
      */
     protected @Nullable ImmutableList.Builder<MqttUserProperty> readUserProperty(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable ImmutableList.Builder<MqttUserProperty> userPropertiesBuilder,
             final @NotNull MessageType messageType) {
@@ -128,7 +128,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @return the length of the string or -1 for malformed packet
      */
     protected int decodeUTF8StringLength(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final @NotNull String key,
             final @NotNull MessageType messageType) {
@@ -162,7 +162,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      */
     @Nullable
     protected String decodeUTF8Topic(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final @NotNull String key,
             final @NotNull MessageType messageType) {
@@ -195,7 +195,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      */
     @Nullable
     protected String decodeUTF8Topic(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final int utf8StringLength,
             final @NotNull String key,
@@ -220,7 +220,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
     /**
      * Decodes and validates the authentication method.
      *
-     * @param clientConnectionContext the {@link ClientConnectionContext} of the MQTT Client
+     * @param clientConnectionContext the {@link Connection} of the MQTT Client
      * @param buf                     the {@link ByteBuf} to decode
      * @param authenticationMethod    the {@link String} name of the authentication method
      * @param messageType             the {@link MessageType} type of the message
@@ -228,7 +228,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      */
     @Nullable
     protected String decodeAuthenticationMethod(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable String authenticationMethod,
             final @NotNull MessageType messageType) {
@@ -268,7 +268,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @return true if invalid, false if valid
      */
     protected boolean topicInvalid(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull String parameterName,
             final @NotNull String topicName) {
 
@@ -314,7 +314,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @return a byte[] containing decoded correlation data, or {@code null} when failed.
      */
     protected byte @Nullable [] readCorrelationData(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             byte @Nullable [] correlationData,
             final @NotNull MessageType messageType) {
@@ -364,7 +364,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      */
     @Nullable
     protected String readResponseTopic(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable String responseTopic,
             final @NotNull MessageType messageType) {
@@ -414,7 +414,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      */
     @Nullable
     protected String readContentType(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable String contentType,
             final @NotNull MessageType messageType) {
@@ -460,7 +460,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @return a {@link Mqtt5PayloadFormatIndicator}, or {@code null} when failed.
      */
     protected @Nullable Mqtt5PayloadFormatIndicator readPayloadFormatIndicator(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable Mqtt5PayloadFormatIndicator payloadFormatIndicator,
             final @NotNull MessageType messageType) {
@@ -508,7 +508,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @return true if invalid, false if valid
      */
     protected boolean messageExpiryIntervalInvalid(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final long messageExpiryInterval,
             final @NotNull MessageType messageType) {
@@ -545,7 +545,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @return the properties length, or -1 when failed.
      */
     protected int decodePropertiesLengthNoPayload(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final @NotNull MessageType messageType) {
 
@@ -590,7 +590,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @return the session expiry interval, or -1 when decoding failed.
      */
     protected long decodeSessionExpiryInterval(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final long sessionExpiryInterval,
             final long sessionExpiryNotSet,
@@ -625,7 +625,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @return a server reference, or {@code null} when failed.
      */
     protected @Nullable String decodeServerReference(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable String serverReference,
             final @NotNull MessageType messageType) {
@@ -667,7 +667,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @return a reason string, or {@code null} when failed.
      */
     protected @Nullable String decodeReasonString(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable String reasonString,
             final @NotNull MessageType messageType) {
@@ -697,7 +697,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @param messageType             the type of the message
      */
     protected void disconnectByInvalidReasonCode(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull MessageType messageType) {
+            final @NotNull Connection clientConnectionContext, final @NotNull MessageType messageType) {
         disconnector.disconnect(clientConnectionContext.getChannel(),
                 "A client (IP: {}) sent a " + messageType.name() + " with invalid reason code. Disconnecting client.",
                 "Sent a " + messageType.name() + " with invalid reason code",
@@ -713,7 +713,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @param messageType             the type of the message
      */
     protected void disconnectByInvalidAuthMethod(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull MessageType messageType) {
+            final @NotNull Connection clientConnectionContext, final @NotNull MessageType messageType) {
 
         disconnector.disconnect(clientConnectionContext.getChannel(),
                 "A client (IP: {}) sent a " +
@@ -732,7 +732,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @param key                     the name of the property
      */
     protected void disconnectByMoreThanOnce(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull String key,
             final @NotNull MessageType messageType) {
 
@@ -754,7 +754,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @param messageType             the type of the message
      */
     protected void disconnectByRemainingLengthToShort(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull MessageType messageType) {
+            final @NotNull Connection clientConnectionContext, final @NotNull MessageType messageType) {
 
         disconnector.disconnect(clientConnectionContext.getChannel(),
                 "A client (IP: {}) sent a " +
@@ -772,7 +772,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @param messageType             the type of the message
      */
     protected void disconnectByMalformedPropertyLength(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull MessageType messageType) {
+            final @NotNull Connection clientConnectionContext, final @NotNull MessageType messageType) {
 
         disconnector.disconnect(clientConnectionContext.getChannel(),
                 "A client (IP: {}) sent a " +
@@ -791,7 +791,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @param propertyIdentifier      the invalid property identifier as int
      */
     protected void disconnectByInvalidPropertyIdentifier(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final int propertyIdentifier,
             final @NotNull MessageType messageType) {
 
@@ -814,7 +814,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @param messageType             the type of the message
      */
     protected void disconnectByInvalidFixedHeader(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull MessageType messageType) {
+            final @NotNull Connection clientConnectionContext, final @NotNull MessageType messageType) {
 
         disconnector.disconnect(clientConnectionContext.getChannel(),
                 "A client (IP: {}) sent a " +
@@ -828,14 +828,14 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
     /**
      * Closes the connection of a client because of sending a message without identifier
      * <p>
-     * MQTT 3 only. adapted from {@link this#decodePacketIdentifier(ClientConnectionContext, ByteBuf, MessageType)}
+     * MQTT 3 only. adapted from {@link this#decodePacketIdentifier(Connection, ByteBuf, MessageType)}
      * <p>
      *
      * @param clientConnectionContext the connection of the mqtt client
      * @param messageType             the type of the message
      */
     protected void disconnectByNoMessageId(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull MessageType messageType) {
+            final @NotNull Connection clientConnectionContext, final @NotNull MessageType messageType) {
 
         disconnector.disconnect(clientConnectionContext.getChannel(),
                 "A client (IP: {}) sent a " + messageType.name() + " without a message id. Disconnecting client.",
@@ -857,7 +857,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @return the packet identifier
      */
     protected int decodePacketIdentifier(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final @NotNull MessageType messageType) {
 
@@ -879,7 +879,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
      * @param userProperties the properties to validate
      */
     protected boolean invalidUserPropertiesLength(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull MessageType messageType,
             final @NotNull Mqtt5UserProperties userProperties) {
 

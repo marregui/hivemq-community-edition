@@ -15,7 +15,7 @@
  */
 package com.hivemq.codec.decoder;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +59,7 @@ public abstract class AbstractMqttConnectDecoder extends MqttDecoder<CONNECT> {
         allowAssignedClientId = configurationService.securityConfiguration().allowServerAssignedClientId();
     }
 
-    protected void disconnectByInvalidFixedHeader(final @NotNull ClientConnectionContext clientConnectionContext) {
+    protected void disconnectByInvalidFixedHeader(final @NotNull Connection clientConnectionContext) {
         mqttConnacker.connackError(clientConnectionContext.getChannel(),
                 "A client (IP: {}) connected with an invalid fixed header.",
                 "Invalid CONNECT fixed header",
@@ -67,7 +67,7 @@ public abstract class AbstractMqttConnectDecoder extends MqttDecoder<CONNECT> {
                 ReasonStrings.CONNACK_MALFORMED_PACKET_FIXED_HEADER);
     }
 
-    protected void disconnectByInvalidHeader(final @NotNull ClientConnectionContext clientConnectionContext) {
+    protected void disconnectByInvalidHeader(final @NotNull Connection clientConnectionContext) {
         mqttConnacker.connackError(clientConnectionContext.getChannel(),
                 "A client (ID: {},IP: {}) connected with an invalid CONNECT header.",
                 "Invalid CONNECT header",
@@ -97,7 +97,7 @@ public abstract class AbstractMqttConnectDecoder extends MqttDecoder<CONNECT> {
             final boolean isWillFlag,
             final boolean isWillRetain,
             final int willQoS,
-            final @NotNull ClientConnectionContext clientConnectionContext) {
+            final @NotNull Connection clientConnectionContext) {
 
         final boolean valid = (isWillFlag && willQoS < 3) || (!isWillRetain && willQoS == 0);
         if (!valid) {
@@ -120,7 +120,7 @@ public abstract class AbstractMqttConnectDecoder extends MqttDecoder<CONNECT> {
      * @return false if the reserved bit zero is set to 1, else true
      */
     protected boolean validateConnectFlagByte(
-            final byte connectFlagsByte, final @NotNull ClientConnectionContext clientConnectionContext) {
+            final byte connectFlagsByte, final @NotNull Connection clientConnectionContext) {
 
         if (isBitSet(connectFlagsByte, 0)) {
             mqttConnacker.connackError(clientConnectionContext.getChannel(),
@@ -144,7 +144,7 @@ public abstract class AbstractMqttConnectDecoder extends MqttDecoder<CONNECT> {
      */
     protected boolean validateProtocolName(
             final @NotNull ByteBuf variableHeader,
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull String protocolName) {
 
         if (!protocolName.equals(Strings.getPrefixedString(variableHeader))) {
@@ -181,7 +181,7 @@ public abstract class AbstractMqttConnectDecoder extends MqttDecoder<CONNECT> {
      * @return a new ByteBuf of the fixed variable header part or {@code null} in an error case
      */
     protected @Nullable ByteBuf decodeFixedVariableHeaderConnect(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull ByteBuf buf) {
+            final @NotNull Connection clientConnectionContext, final @NotNull ByteBuf buf) {
 
         if (buf.readableBytes() >= VARIABLE_HEADER_LENGTH) {
             return buf.readSlice(VARIABLE_HEADER_LENGTH);

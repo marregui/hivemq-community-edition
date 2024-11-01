@@ -16,7 +16,7 @@
 package com.hivemq.codec.encoder.mqtt5;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.MqttEncoder;
 import com.hivemq.configuration.service.SecurityConfigurationService;
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +66,7 @@ abstract class Mqtt5MessageWithUserPropertiesEncoder<T extends Message> implemen
 
     @Override
     public void encode(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull T msg,
             final @NotNull ByteBuf out) {
 
@@ -117,7 +117,7 @@ abstract class Mqtt5MessageWithUserPropertiesEncoder<T extends Message> implemen
     }
 
     @Override
-    public int bufferSize(final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull T msg) {
+    public int bufferSize(final @NotNull Connection clientConnectionContext, final @NotNull T msg) {
 
         int omittedProperties = 0;
         int propertyLength = calculatePropertyLength(msg);
@@ -163,7 +163,7 @@ abstract class Mqtt5MessageWithUserPropertiesEncoder<T extends Message> implemen
         return encodedLength;
     }
 
-    private static long calculateMaxMessageSize(final @NotNull ClientConnectionContext clientConnectionContext) {
+    private static long calculateMaxMessageSize(final @NotNull Connection clientConnectionContext) {
         Preconditions.checkNotNull(clientConnectionContext, "ClientContext must never be null");
         final Long maxMessageSize = clientConnectionContext.getMaxPacketSizeSend();
         return Objects.requireNonNullElse(maxMessageSize, (long) MAXIMUM_PACKET_SIZE_LIMIT);

@@ -18,7 +18,7 @@ package com.hivemq.extensions.handler;
 
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.service.FullConfigurationService;
@@ -96,7 +96,7 @@ public class ConnectInboundInterceptorHandlerTest {
         executor.postConstruct();
 
         channel = new EmbeddedChannel();
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME)
                 .set(new DummyClientConnection(channel, publishFlushHandler));
         ClientConnection.of(channel).setClientId("client");
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);

@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.handler.publish;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.event.PublishDroppedEvent;
@@ -64,7 +64,7 @@ public class MessageExpiryHandlerTest {
         final MessageExpiryHandler messageExpiryHandler = new MessageExpiryHandler();
         channel = new EmbeddedChannel();
         final ClientConnection clientConnection = new DummyClientConnection(channel, null);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
         ClientConnection.of(channel).setClientId("ClientId");
         channel.pipeline().addLast(messageExpiryHandler);

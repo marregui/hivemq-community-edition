@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.handler.auth;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.handler.PluginAuthenticatorService;
@@ -74,7 +74,7 @@ public class AuthHandler extends SimpleChannelInboundHandler<AUTH> {
     protected void channelRead0(final @NotNull ChannelHandlerContext ctx, final @NotNull AUTH msg) {
 
         final Channel channel = ctx.channel();
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
 
         authSender.logAuth(channel, msg.getReasonCode(), true);
 
@@ -94,7 +94,7 @@ public class AuthHandler extends SimpleChannelInboundHandler<AUTH> {
     private void onReceivedSuccess(
             final @NotNull ChannelHandlerContext ctx,
             final @NotNull AUTH msg,
-            final @NotNull ClientConnectionContext clientConnectionContext) {
+            final @NotNull Connection clientConnectionContext) {
 
         final String reasonString =
                 String.format(ReasonStrings.DISCONNECT_PROTOCOL_ERROR_REASON_CODE, msg.getType().name());
@@ -121,14 +121,14 @@ public class AuthHandler extends SimpleChannelInboundHandler<AUTH> {
     private void onReceivedContinue(
             final @NotNull ChannelHandlerContext ctx,
             final @NotNull AUTH msg,
-            final @NotNull ClientConnectionContext clientConnectionContext) {
+            final @NotNull Connection clientConnectionContext) {
         authService.authenticateAuth(ctx, clientConnectionContext, msg);
     }
 
     private void onReceivedReAuthenticate(
             final @NotNull ChannelHandlerContext ctx,
             final @NotNull AUTH msg,
-            final @NotNull ClientConnectionContext clientConnectionContext) {
+            final @NotNull Connection clientConnectionContext) {
 
         final ClientState clientState = clientConnectionContext.getClientState();
         if (clientState == ClientState.AUTHENTICATING || clientState == ClientState.RE_AUTHENTICATING) {

@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder.mqtt5;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.AbstractMqttDecoder;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
@@ -59,7 +59,7 @@ public class Mqtt5SubscribeDecoder extends AbstractMqttDecoder<SUBSCRIBE> {
 
     @Override
     public @Nullable SUBSCRIBE decode(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final byte header) {
 
@@ -155,7 +155,7 @@ public class Mqtt5SubscribeDecoder extends AbstractMqttDecoder<SUBSCRIBE> {
     }
 
     private @Nullable ImmutableList.Builder<Topic> decodeTopic(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable ImmutableList.Builder<Topic> topicBuilder,
             @NotNull Integer subscriptionIdentifier) {
@@ -221,7 +221,7 @@ public class Mqtt5SubscribeDecoder extends AbstractMqttDecoder<SUBSCRIBE> {
     }
 
     private int readSubscriptionIdentifier(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             int subscriptionIdentifier) {
 
@@ -251,7 +251,7 @@ public class Mqtt5SubscribeDecoder extends AbstractMqttDecoder<SUBSCRIBE> {
     }
 
     private int decodePacketIdentifier(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull ByteBuf buf) {
+            final @NotNull Connection clientConnectionContext, final @NotNull ByteBuf buf) {
         final int packetIdentifier = buf.readUnsignedShort();
         if (packetIdentifier == 0) {
             disconnector.disconnect(clientConnectionContext.getChannel(),
@@ -264,7 +264,7 @@ public class Mqtt5SubscribeDecoder extends AbstractMqttDecoder<SUBSCRIBE> {
     }
 
     private boolean propertiesLengthInvalid(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final int propertyLength) {
 
@@ -279,7 +279,7 @@ public class Mqtt5SubscribeDecoder extends AbstractMqttDecoder<SUBSCRIBE> {
         return false;
     }
 
-    private int decodeQoS(final @NotNull ClientConnectionContext clientConnectionContext, final byte flags) {
+    private int decodeQoS(final @NotNull Connection clientConnectionContext, final byte flags) {
         final int qos = flags & 0b0000_0011;
 
         if (qos == 3) {
@@ -294,7 +294,7 @@ public class Mqtt5SubscribeDecoder extends AbstractMqttDecoder<SUBSCRIBE> {
     }
 
     private Mqtt5RetainHandling decodeRetainHandling(
-            final @NotNull ClientConnectionContext clientConnectionContext, final byte flags) {
+            final @NotNull Connection clientConnectionContext, final byte flags) {
         final int code = (flags & 0b0011_0000) >> 4;
 
         if (code == 3) {

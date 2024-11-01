@@ -16,7 +16,7 @@
 package com.hivemq.extensions.handler.tasks;
 
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extensions.auth.parameter.PublishAuthorizerOutputImpl;
@@ -63,7 +63,7 @@ public class PublishAuthorizerContext extends PluginInOutTaskContext<PublishAuth
 
         if (pluginOutput.getAuthorizationState() == PublishAuthorizerOutputImpl.AuthorizationState.FAIL ||
                 pluginOutput.getAuthorizationState() == PublishAuthorizerOutputImpl.AuthorizationState.DISCONNECT) {
-            ClientConnectionContext.of(ctx.channel()).setIncomingPublishesSkipRest(true);
+            Connection.of(ctx.channel()).setIncomingPublishesSkipRest(true);
         }
 
 

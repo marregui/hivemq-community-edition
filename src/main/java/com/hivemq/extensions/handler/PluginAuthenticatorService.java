@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.handler;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.auth.parameter.ModifiableClientSettingsImpl;
 import com.hivemq.mqtt.message.auth.AUTH;
@@ -39,7 +39,7 @@ public interface PluginAuthenticatorService {
      */
     void authenticateConnect(
             @NotNull ChannelHandlerContext ctx,
-            @NotNull ClientConnectionContext clientConnectionContext,
+            @NotNull Connection clientConnectionContext,
             @NotNull CONNECT connect,
             @NotNull ModifiableClientSettingsImpl clientSettings);
 
@@ -54,6 +54,6 @@ public interface PluginAuthenticatorService {
      */
     void authenticateAuth(
             @NotNull ChannelHandlerContext ctx,
-            @NotNull ClientConnectionContext clientConnectionContext,
+            @NotNull Connection clientConnectionContext,
             @NotNull AUTH auth);
 }

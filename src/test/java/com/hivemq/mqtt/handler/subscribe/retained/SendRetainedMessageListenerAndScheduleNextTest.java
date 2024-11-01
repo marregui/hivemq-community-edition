@@ -17,7 +17,7 @@ package com.hivemq.mqtt.handler.subscribe.retained;
 
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.pool.exception.NoMessageIdAvailableException;
 import com.hivemq.mqtt.message.subscribe.Topic;
@@ -58,7 +58,7 @@ public class SendRetainedMessageListenerAndScheduleNextTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         clientConnection = new DummyClientConnection(channel, null);
-        when(channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)).thenReturn(new TestChannelAttribute<>(
+        when(channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME)).thenReturn(new TestChannelAttribute<>(
                 clientConnection));
         when(channel.eventLoop()).thenReturn(new DefaultEventLoop(Executors.newSingleThreadExecutor()));
     }

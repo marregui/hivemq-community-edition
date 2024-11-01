@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.configuration.service.MqttConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import org.jetbrains.annotations.NotNull;
@@ -117,7 +117,7 @@ public class IncomingSubscribeServiceTest {
 
         channel = new EmbeddedChannel();
         clientConnection = new DummyClientConnection(channel, null);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         ClientConnection.of(channel).setClientId("client");
 
         when(clientSessionSubscriptionPersistence.addSubscription(anyString(),

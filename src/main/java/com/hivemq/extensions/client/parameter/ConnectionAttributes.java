@@ -18,7 +18,7 @@ package com.hivemq.extensions.client.parameter;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,7 +53,7 @@ public class ConnectionAttributes {
     static ConnectionAttributes getInstanceIfPresent(@NotNull final Channel channel) {
         Preconditions.checkNotNull(channel, "Channel for connection attributes must not be null.");
 
-        return ClientConnectionContext.of(channel).getConnectionAttributes();
+        return Connection.of(channel).getConnectionAttributes();
     }
 
     /**
@@ -74,7 +74,7 @@ public class ConnectionAttributes {
 
         final int maxValueSizeBytes = InternalConfigurations.CONNECTION_ATTRIBUTE_STORE_MAX_VALUE_SIZE_BYTES;
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
         return clientConnectionContext.setConnectionAttributesIfAbsent(new ConnectionAttributes(maxValueSizeBytes));
     }
 

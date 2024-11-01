@@ -16,7 +16,7 @@
 package com.hivemq.security.ssl;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.netty.ChannelHandlerNames;
 import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.ssl.SslHandler;
@@ -57,7 +57,7 @@ public class SslParameterHandlerTest {
         MockitoAnnotations.initMocks(this);
 
         channel = new EmbeddedChannel();
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
         channel.pipeline().addLast(new SslParameterHandler());
         channel.pipeline().addLast(ChannelHandlerNames.SSL_HANDLER, sslHandler);
     }

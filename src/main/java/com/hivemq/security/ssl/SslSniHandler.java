@@ -15,7 +15,7 @@
  */
 package com.hivemq.security.ssl;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import io.netty.channel.ChannelHandlerContext;
@@ -53,7 +53,7 @@ public class SslSniHandler extends SniHandler {
             final @NotNull SslContext sslContext) throws Exception {
 
         if (hostname != null) {
-            final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+            final Connection clientConnectionContext = Connection.of(ctx.channel());
             clientConnectionContext.setAuthSniHostname(hostname);
             if (log.isTraceEnabled()) {
                 log.trace("Client with IP '{}' sent SNI hostname '{}'",

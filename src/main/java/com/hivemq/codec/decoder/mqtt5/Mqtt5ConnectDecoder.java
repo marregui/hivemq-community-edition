@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder.mqtt5;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.AbstractMqttConnectDecoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
@@ -93,7 +93,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
 
     @Override
     public @Nullable CONNECT decode(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final byte header) {
 
@@ -133,7 +133,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private @Nullable CONNECT decodeConnect(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final byte connectFlagsByte,
             final @NotNull ByteBuf fixedVariableHeader) {
@@ -212,7 +212,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private @Nullable ImmutableList.Builder<MqttUserProperty> readUserProperty(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             ImmutableList.@Nullable Builder<MqttUserProperty> userPropertiesBuilder) {
 
@@ -234,7 +234,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
 
 
     private boolean decodeAndValidateUsername(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final @NotNull Mqtt5Builder connectBuilder,
             final boolean usernameRequired) {
@@ -257,7 +257,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private boolean decodeAndValidatePassword(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final @NotNull Mqtt5Builder connectBuilder,
             final boolean passwordRequired) {
@@ -279,7 +279,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private boolean readConnectProperties(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final @NotNull Mqtt5Builder connectBuilder) {
 
@@ -433,7 +433,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private int readReceiveMaximum(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             int receiveMaximum) {
 
@@ -458,7 +458,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private long readMaximumPacketSize(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             long maximumPacketSize) {
 
@@ -483,7 +483,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private int readTopicAliasMaximum(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final int topicAliasMaximum) {
 
@@ -499,7 +499,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private @Nullable Boolean readBoolean(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final @Nullable Boolean current,
             final @NotNull String key) {
@@ -528,7 +528,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private @Nullable String readAuthMethod(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable String authMethod) {
 
@@ -549,7 +549,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private byte @Nullable [] readAuthData(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             byte @Nullable [] authData) {
 
@@ -570,7 +570,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private @Nullable MqttWillPublish decodeAndValidateWill(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final int willQos,
             final boolean willRetain) {
@@ -690,7 +690,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private boolean willDelayIntervalInvalid(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final long willDelayInterval) {
 
@@ -706,7 +706,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private boolean readAndValidatePayload(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final @NotNull MqttWillPublish.Mqtt5Builder mqtt5Builder) {
 
@@ -735,7 +735,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
      * @return the length of the string or -1 for malformed packet
      */
     protected int decodeUTF8StringLength(
-            final @NotNull ClientConnectionContext clientConnectionContext, final ByteBuf buf) {
+            final @NotNull Connection clientConnectionContext, final ByteBuf buf) {
 
         final int utf8StringLength;
 
@@ -760,7 +760,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
      * @return the topic as String or {@code null} if failed
      */
     protected @Nullable String decodeUTF8Topic(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull ByteBuf buf) {
+            final @NotNull Connection clientConnectionContext, final @NotNull ByteBuf buf) {
 
         final int utf8StringLength = decodeUTF8StringLength(clientConnectionContext, buf);
         if (utf8StringLength == DISCONNECTED) {
@@ -786,7 +786,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
      * @return the topic as String or {@code null} if failed
      */
     protected @Nullable String decodeUTF8Topic(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final int utf8StringLength) {
 
@@ -803,7 +803,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private boolean readAndValidateTopic(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final @NotNull MqttWillPublish.Mqtt5Builder mqtt5Builder) {
 
@@ -829,7 +829,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private boolean propertiesLengthInvalid(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final int propertyLength) {
 
@@ -855,7 +855,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
      * @param userProperties the properties to validate
      */
     private boolean invalidUserPropertiesLength(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull Mqtt5UserProperties userProperties) {
 
         if (userProperties.encodedLength() > maxUserPropertiesLength) {
@@ -894,7 +894,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
      *         or {@code null} when failed.
      */
     private @Nullable String readResponseTopic(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable String responseTopic) {
 
@@ -938,7 +938,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
      *         or {@code null} when failed.
      */
     private byte @Nullable [] readCorrelationData(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             byte @Nullable [] correlationData) {
 
@@ -979,7 +979,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
      *         or {@code null} when failed.
      */
     private @Nullable String readContentType(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable String contentType) {
 
@@ -1020,7 +1020,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
      *         or {@code null} when failed.
      */
     private @Nullable Mqtt5PayloadFormatIndicator readPayloadFormatIndicator(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable Mqtt5PayloadFormatIndicator payloadFormatIndicator) {
 
@@ -1064,7 +1064,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
      * @return the session expiry interval, or -1 when decoding failed.
      */
     private long decodeSessionExpiryInterval(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final long sessionExpiryInterval) {
 
@@ -1097,7 +1097,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
      * @return true if invalid, false if valid
      */
     private boolean messageExpiryIntervalInvalid(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final long messageExpiryInterval) {
 
@@ -1124,7 +1124,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
      * @return true if invalid, false if valid
      */
     private boolean topicInvalid(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull String topicName,
             final @NotNull String location) {
 
@@ -1151,7 +1151,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private void connackByMoreThanOnce(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull String key) {
+            final @NotNull Connection clientConnectionContext, final @NotNull String key) {
         mqttConnacker.connackError(clientConnectionContext.getChannel(),
                 "A client (IP: {}) sent a CONNECT with '" + key + "' included more than once. This is not allowed.",
                 "Sent a CONNECT with '" + key + "' included more than once",
@@ -1159,7 +1159,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
                 String.format(ReasonStrings.CONNACK_PROTOCOL_MULTIPLE_KEY, key));
     }
 
-    private void connackByRemainingLengthToShort(final @NotNull ClientConnectionContext clientConnectionContext) {
+    private void connackByRemainingLengthToShort(final @NotNull Connection clientConnectionContext) {
         mqttConnacker.connackError(clientConnectionContext.getChannel(),
                 "A client (IP: {}) sent a CONNECT with remaining length too short. This is not allowed.",
                 "Sent a CONNECT with remaining length too short",
@@ -1167,7 +1167,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
                 ReasonStrings.CONNACK_MALFORMED_REMAINING);
     }
 
-    private void connackByMalformedPropertyLength(final @NotNull ClientConnectionContext clientConnectionContext) {
+    private void connackByMalformedPropertyLength(final @NotNull Connection clientConnectionContext) {
         mqttConnacker.connackError(clientConnectionContext.getChannel(),
                 "A client (IP: {}) sent a CONNECT with a malformed properties length. This is not allowed. Disconnecting client.",
                 "Sent a CONNECT with a malformed properties length",
@@ -1176,7 +1176,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
     }
 
     private void connackByInvalidPropertyIdentifier(
-            final @NotNull ClientConnectionContext clientConnectionContext, final int propertyIdentifier) {
+            final @NotNull Connection clientConnectionContext, final int propertyIdentifier) {
         mqttConnacker.connackError(clientConnectionContext.getChannel(),
                 "A client (IP: {}) sent a CONNECT with a invalid property identifier '" +
                         propertyIdentifier +

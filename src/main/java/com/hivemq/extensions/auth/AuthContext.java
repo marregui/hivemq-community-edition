@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.auth;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.executor.task.PluginInOutTaskContext;
 import com.hivemq.mqtt.handler.auth.MqttAuthSender;
@@ -118,7 +118,7 @@ abstract class AuthContext<T extends AuthOutput<?>> extends PluginInOutTaskConte
             });
         } catch (final RejectedExecutionException ex) {
             if (!ctx.executor().isShutdown()) {
-                final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+                final Connection clientConnectionContext = Connection.of(ctx.channel());
                 log.error("Execution of authentication was rejected for client with IP {}.",
                         clientConnectionContext.getChannelIP().orElse("UNKNOWN"),
                         ex);
@@ -137,7 +137,7 @@ abstract class AuthContext<T extends AuthOutput<?>> extends PluginInOutTaskConte
             if (future.isSuccess()) {
                 final ScheduledFuture<?> timeoutFuture =
                         ctx.executor().schedule(this::onTimeout, output.getTimeout(), TimeUnit.SECONDS);
-                ClientConnectionContext.of(ctx.channel()).setAuthFuture(timeoutFuture);
+                Connection.of(ctx.channel()).setAuthFuture(timeoutFuture);
             } else if (future.channel().isActive()) {
                 onSendException(future.cause());
             }
@@ -145,7 +145,7 @@ abstract class AuthContext<T extends AuthOutput<?>> extends PluginInOutTaskConte
     }
 
     void succeedAuthentication(final @NotNull T output) {
-        ClientConnectionContext.of(ctx.channel()).setAuthPermissions(output.getDefaultPermissions());
+        Connection.of(ctx.channel()).setAuthPermissions(output.getDefaultPermissions());
     }
 
     abstract void failAuthentication(@NotNull T output);

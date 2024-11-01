@@ -21,7 +21,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
@@ -154,7 +154,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
         this.keepAliveDisconnectService = keepAliveDisconnectService;
     }
 
-    private static void cleanChannelAttributesAfterAuth(final @NotNull ClientConnectionContext clientConnectionContext) {
+    private static void cleanChannelAttributesAfterAuth(final @NotNull Connection clientConnectionContext) {
         final ChannelPipeline pipeline = clientConnectionContext.getChannel().pipeline();
         if (pipeline.context(AUTH_IN_PROGRESS_MESSAGE_HANDLER) != null) {
             try {
@@ -200,7 +200,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
             return;
         }
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
         clientConnectionContext.setDisconnectFuture(SettableFuture.create());
         clientConnectionContext.setClientReceiveMaximum(connect.getReceiveMaximum());
         //Set max packet size to send to channel
@@ -223,7 +223,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
 
     public void connectSuccessfulUndecided(
             final @NotNull ChannelHandlerContext ctx,
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull CONNECT connect,
             final @Nullable ModifiableClientSettingsImpl clientSettings) {
 
@@ -245,7 +245,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
 
     public void connectSuccessfulAuthenticated(
             final @NotNull ChannelHandlerContext ctx,
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull CONNECT connect,
             final @Nullable ModifiableClientSettingsImpl clientSettings) {
 
@@ -304,7 +304,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
 
     private boolean checkClientId(final @NotNull ChannelHandlerContext ctx, final @NotNull CONNECT msg) {
 
-        final Boolean assigned = ClientConnectionContext.of(ctx.channel()).isClientIdAssigned();
+        final Boolean assigned = Connection.of(ctx.channel()).isClientIdAssigned();
 
         if (assigned != null && assigned) {
             return true;
@@ -378,7 +378,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
 
     private void connectAuthenticated(
             final @NotNull ChannelHandlerContext ctx,
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull CONNECT msg,
             final @Nullable ModifiableClientSettingsImpl clientSettings) {
 
@@ -408,14 +408,14 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
             @NotNull final Channel channel) {
         msg.setReceiveMaximum(clientSettings.getClientReceiveMaximum());
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
         clientConnectionContext.setClientReceiveMaximum(clientSettings.getClientReceiveMaximum());
         clientConnectionContext.setQueueSizeMaximum(clientSettings.getQueueSizeMaximum());
     }
 
     private void continueAfterWillAuthorization(
             final @NotNull ChannelHandlerContext ctx,
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull CONNECT msg) {
 
         clientConnectionContext.getChannel().pipeline().fireUserEventTriggered(new OnAuthSuccessEvent());
@@ -429,7 +429,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
             @NotNull final CONNECT msg,
             @NotNull final PublishAuthorizerResult authorizerResult) {
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
 
         if (authorizerResult.isAuthorizerPresent() && authorizerResult.getAckReasonCode() != null) {
             //decision has been made in PublishAuthorizer
@@ -475,7 +475,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
     private boolean isWillNotAuthorized(@NotNull final ChannelHandlerContext ctx, @NotNull final CONNECT msg) {
         if (msg.getWillPublish() != null) {
             final ModifiableDefaultPermissions permissions =
-                    ClientConnectionContext.of(ctx.channel()).getAuthPermissions();
+                    Connection.of(ctx.channel()).getAuthPermissions();
             if (!DefaultPermissionsEvaluator.checkWillPublish(permissions, msg.getWillPublish())) {
 
                 //will is not authorized, disconnect client

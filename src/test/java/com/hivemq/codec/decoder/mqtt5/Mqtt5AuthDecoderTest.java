@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder.mqtt5;
 
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import com.hivemq.mqtt.message.auth.AUTH;
@@ -45,7 +45,7 @@ public class Mqtt5AuthDecoderTest extends AbstractMqtt5DecoderTest {
     @Before
     public void before() {
 
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
     }
 
@@ -71,7 +71,7 @@ public class Mqtt5AuthDecoderTest extends AbstractMqtt5DecoderTest {
         channel = new EmbeddedChannel(TestMqttDecoder.create());
         clientConnection = new DummyClientConnection(channel, null);
         clientConnection.setProtocolVersion(protocolVersion);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
 
         final byte[] encoded0010 = {
                 // fixed header
@@ -92,7 +92,7 @@ public class Mqtt5AuthDecoderTest extends AbstractMqtt5DecoderTest {
         channel = new EmbeddedChannel(TestMqttDecoder.create());
         clientConnection = new DummyClientConnection(channel, null);
         clientConnection.setProtocolVersion(protocolVersion);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
 
         final byte[] encoded0100 = {
                 // fixed header
@@ -113,7 +113,7 @@ public class Mqtt5AuthDecoderTest extends AbstractMqtt5DecoderTest {
         channel = new EmbeddedChannel(TestMqttDecoder.create());
         clientConnection = new DummyClientConnection(channel, null);
         clientConnection.setProtocolVersion(protocolVersion);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
 
         final byte[] encoded1000 = {
                 // fixed header

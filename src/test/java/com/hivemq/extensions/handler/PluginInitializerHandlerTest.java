@@ -18,7 +18,7 @@ package com.hivemq.extensions.handler;
 
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.info.SystemInformationImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
@@ -116,7 +116,7 @@ public class PluginInitializerHandlerTest {
         clientConnection.setClientId("test_client");
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
 
         when(channelHandlerContext.channel()).thenReturn(channel);
         when(channelHandlerContext.pipeline()).thenReturn(channelPipeline);
@@ -184,7 +184,7 @@ public class PluginInitializerHandlerTest {
         when(initializers.getClientInitializerMap()).thenReturn(createClientInitializerMap());
 
         channelHandlerContext.channel()
-                .attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)
+                .attr(Connection.CHANNEL_ATTRIBUTE_NAME)
                 .get()
                 .setAuthPermissions(new ModifiableDefaultPermissionsImpl());
 

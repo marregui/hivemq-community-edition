@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap.netty.initializer;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
 import com.hivemq.common.shutdown.ShutdownHooks;
@@ -78,7 +78,7 @@ public class AbstractChannelInitializerTest {
 
     @Before
     public void before() {
-        when(socketChannel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)).thenReturn(new TestChannelAttribute<>(
+        when(socketChannel.attr(Connection.CHANNEL_ATTRIBUTE_NAME)).thenReturn(new TestChannelAttribute<>(
                 null));
         when(socketChannel.pipeline()).thenReturn(pipeline);
         when(socketChannel.isActive()).thenReturn(true);
@@ -224,7 +224,7 @@ public class AbstractChannelInitializerTest {
 
         @Override
         protected void initChannel(@NotNull final Channel ch) {
-            ch.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)
+            ch.attr(Connection.CHANNEL_ATTRIBUTE_NAME)
                     .set(new UndefinedClientConnection(ch, null, listener));
             addSpecialHandlers(ch);
         }

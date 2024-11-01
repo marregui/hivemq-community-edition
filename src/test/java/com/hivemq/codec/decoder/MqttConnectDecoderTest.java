@@ -16,7 +16,7 @@
 package com.hivemq.codec.decoder;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.configuration.HivemqId;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;
@@ -53,7 +53,7 @@ public class MqttConnectDecoderTest {
         final HivemqId hiveMQId = new HivemqId();
         channel = new EmbeddedChannel();
         clientConnection = new DummyClientConnection(channel, null);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         decoder = new MqttConnectDecoder(mqttConnacker,
                 new TestConfigurationBootstrap().getFullConfigurationService(),
                 hiveMQId,

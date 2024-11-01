@@ -17,7 +17,7 @@
 package com.hivemq.codec.encoder;
 
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.handler.GlobalMQTTMessageCounter;
 import com.hivemq.mqtt.message.Message;
@@ -43,7 +43,7 @@ public class MQTTMessageEncoder extends MessageToByteEncoder<Message> {
     @Override
     protected void encode(
             final @NotNull ChannelHandlerContext ctx, final @NotNull Message msg, final @NotNull ByteBuf out) {
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
         globalMQTTMessageCounter.countOutbound(msg);
         encoderFactory.encode(clientConnectionContext, msg, out);
         globalMQTTMessageCounter.countOutboundTraffic(out.readableBytes());
@@ -53,7 +53,7 @@ public class MQTTMessageEncoder extends MessageToByteEncoder<Message> {
     protected @NotNull ByteBuf allocateBuffer(
             final @NotNull ChannelHandlerContext ctx, final @NotNull Message msg, final boolean preferDirect) {
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
         return encoderFactory.allocateBuffer(clientConnectionContext, msg, preferDirect);
     }
 }

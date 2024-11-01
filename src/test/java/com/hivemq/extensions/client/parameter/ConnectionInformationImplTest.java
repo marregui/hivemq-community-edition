@@ -17,7 +17,7 @@
 package com.hivemq.extensions.client.parameter;
 
 import com.google.common.collect.Lists;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.configuration.service.entity.TcpListener;
 import com.hivemq.configuration.service.entity.Tls;
@@ -60,7 +60,7 @@ import static org.mockito.Mockito.when;
 public class ConnectionInformationImplTest {
 
     private @NotNull EmbeddedChannel channel;
-    private @NotNull ClientConnectionContext clientConnectionContext;
+    private @NotNull Connection clientConnectionContext;
 
     @Before
     public void setUp() throws Exception {
@@ -68,7 +68,7 @@ public class ConnectionInformationImplTest {
         clientConnectionContext = new UndefinedClientConnection(channel,
                 mock(PublishFlushHandler.class),
                 mock(com.hivemq.configuration.service.entity.Listener.class));
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
     }
 
     @Test(expected = NullPointerException.class)
@@ -116,7 +116,7 @@ public class ConnectionInformationImplTest {
         final TcpListener tcpListener = new TcpListener(1337, "127.0.0.1", "test");
 
         clientConnectionContext = new UndefinedClientConnection(channel, mock(PublishFlushHandler.class), tcpListener);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
         clientConnectionContext.setProtocolVersion(ProtocolVersion.MQTTv5);
 
         final ConnectionInformationImpl connectionInformation = new ConnectionInformationImpl(clientConnectionContext);
@@ -139,7 +139,7 @@ public class ConnectionInformationImplTest {
                 new TlsTcpListener(1337, "127.0.0.1", createDefaultTls().build(), "tls-test");
 
         clientConnectionContext = new UndefinedClientConnection(channel, mock(PublishFlushHandler.class), tcpListener);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
         clientConnectionContext.setProtocolVersion(ProtocolVersion.MQTTv5);
 
         final ConnectionInformationImpl connectionInformation = new ConnectionInformationImpl(clientConnectionContext);
@@ -163,7 +163,7 @@ public class ConnectionInformationImplTest {
 
         clientConnectionContext =
                 new UndefinedClientConnection(channel, mock(PublishFlushHandler.class), websocketListener);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
         clientConnectionContext.setProtocolVersion(ProtocolVersion.MQTTv5);
 
         final ConnectionInformationImpl connectionInformation = new ConnectionInformationImpl(clientConnectionContext);
@@ -189,7 +189,7 @@ public class ConnectionInformationImplTest {
 
         clientConnectionContext =
                 new UndefinedClientConnection(channel, mock(PublishFlushHandler.class), websocketListener);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
         clientConnectionContext.setProtocolVersion(ProtocolVersion.MQTTv5);
 
         final ConnectionInformationImpl connectionInformation = new ConnectionInformationImpl(clientConnectionContext);

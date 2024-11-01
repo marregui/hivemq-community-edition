@@ -18,7 +18,7 @@ package com.hivemq.mqtt.handler.publish;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.handler.IncomingPublishHandler;
@@ -166,7 +166,7 @@ public class PublishFlowHandler extends ChannelDuplexHandler {
 
         orderedTopicService.handleInactive();
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
         final Long sessionExpiryInterval = clientConnectionContext.getClientSessionExpiryInterval();
 
         //remove incoming message flow for not persisted client

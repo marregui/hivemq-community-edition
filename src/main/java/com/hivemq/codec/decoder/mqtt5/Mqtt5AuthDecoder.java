@@ -16,7 +16,7 @@
 package com.hivemq.codec.decoder.mqtt5;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.AbstractMqttDecoder;
 import com.hivemq.codec.encoder.mqtt5.MqttBinaryData;
@@ -74,7 +74,7 @@ public class Mqtt5AuthDecoder extends AbstractMqttDecoder<AUTH> {
 
     @Override
     public @Nullable AUTH decode(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final byte header) {
 
@@ -176,13 +176,13 @@ public class Mqtt5AuthDecoder extends AbstractMqttDecoder<AUTH> {
     /**
      * Read the authentication data.
      *
-     * @param clientConnectionContext the {@link ClientConnectionContext} of the MQTT Client
+     * @param clientConnectionContext the {@link Connection} of the MQTT Client
      * @param buf                     the {@link ByteBuf} to decode
      * @param authenticationData      the {@link byte[]} authentication data
      * @return decoded authentication data as byte array
      */
     private byte @Nullable [] readAuthenticationData(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             byte @Nullable [] authenticationData) {
 

@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder.mqtt5;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.AbstractMqttPublishDecoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
@@ -73,7 +73,7 @@ public class Mqtt5PublishDecoder extends AbstractMqttPublishDecoder<Mqtt5PUBLISH
 
     @Override
     public @Nullable Mqtt5PUBLISH decode(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final byte header) {
 
@@ -135,7 +135,7 @@ public class Mqtt5PublishDecoder extends AbstractMqttPublishDecoder<Mqtt5PUBLISH
     }
 
     private Mqtt5Builder readPublishPropertiesAndPayload(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final @Nullable String topicName) {
 
@@ -282,7 +282,7 @@ public class Mqtt5PublishDecoder extends AbstractMqttPublishDecoder<Mqtt5PUBLISH
     }
 
     private @Nullable Mqtt5Builder readTopicFromAliasMapping(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             @Nullable String topicName,
             final int topicAlias) {
 
@@ -340,7 +340,7 @@ public class Mqtt5PublishDecoder extends AbstractMqttPublishDecoder<Mqtt5PUBLISH
     }
 
     private boolean topicAliasInvalid(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final int topicAlias) {
 
@@ -356,7 +356,7 @@ public class Mqtt5PublishDecoder extends AbstractMqttPublishDecoder<Mqtt5PUBLISH
     }
 
     private boolean propertiesLengthInvalid(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final int propertyLength) {
 

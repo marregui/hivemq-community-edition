@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.handler.connack;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
@@ -111,7 +111,7 @@ public class MqttConnackerImpl implements MqttConnacker {
         Preconditions.checkArgument(reasonCode != Mqtt5ConnAckReasonCode.SUCCESS, "Success is no error");
         ThreadPreConditions.inNettyChildEventloop();
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
 
         final ClientState oldClientState = clientConnectionContext.getClientState();
         clientConnectionContext.proposeClientState(ClientState.DISCONNECTING);
@@ -137,7 +137,7 @@ public class MqttConnackerImpl implements MqttConnacker {
             final @NotNull Channel channel, final @Nullable String logMessage, final @Nullable String eventLogMessage) {
 
         if (log.isDebugEnabled() && logMessage != null && !logMessage.isEmpty()) {
-            final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+            final Connection clientConnectionContext = Connection.of(channel);
             log.debug(logMessage, clientConnectionContext.getChannelIP().orElse("UNKNOWN"));
         }
 
@@ -147,7 +147,7 @@ public class MqttConnackerImpl implements MqttConnacker {
     }
 
     private void connackError5(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final boolean withReasonCode,
             final boolean withReasonString,
             @Nullable Mqtt5ConnAckReasonCode reasonCode,
@@ -195,7 +195,7 @@ public class MqttConnackerImpl implements MqttConnacker {
     }
 
     private void fireEvents(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ClientState oldClientState,
             final @Nullable Mqtt5ConnAckReasonCode reasonCode,
             final @Nullable String reasonString,

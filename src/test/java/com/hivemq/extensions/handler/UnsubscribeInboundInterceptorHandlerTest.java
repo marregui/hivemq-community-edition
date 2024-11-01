@@ -18,7 +18,7 @@ package com.hivemq.extensions.handler;
 
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.service.FullConfigurationService;
 import org.jetbrains.annotations.NotNull;
@@ -90,7 +90,7 @@ public class UnsubscribeInboundInterceptorHandlerTest {
 
         channel = new EmbeddedChannel();
         clientConnection = new DummyClientConnection(channel, mock(PublishFlushHandler.class));
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         ClientConnection.of(channel).setClientId("client");
         ClientConnection.of(channel).setRequestResponseInformation(true);
         ClientConnection.of(channel).setExtensionClientContext(clientContext);

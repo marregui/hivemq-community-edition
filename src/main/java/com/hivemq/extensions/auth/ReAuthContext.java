@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.auth;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.auth.parameter.ModifiableClientSettingsImpl;
@@ -68,7 +68,7 @@ public class ReAuthContext extends AuthContext<ReAuthOutput> {
                 Mqtt5UserProperties.of(output.getOutboundUserProperties().asInternalList()),
                 output.getReasonString());
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
         clientConnectionContext.proposeClientState(ClientState.AUTHENTICATED);
 
         authFuture.addListener((ChannelFutureListener) future -> {
@@ -131,7 +131,7 @@ public class ReAuthContext extends AuthContext<ReAuthOutput> {
     private void applyClientSettings(
             final @NotNull ModifiableClientSettingsImpl clientSettings, final @NotNull Channel channel) {
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
         clientConnectionContext.setClientReceiveMaximum(clientSettings.getClientReceiveMaximum());
         clientConnectionContext.setQueueSizeMaximum(clientSettings.getQueueSizeMaximum());
     }

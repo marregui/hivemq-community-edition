@@ -47,7 +47,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class ClientConnection implements ClientConnectionContext {
+public class ClientConnection implements Connection {
 
     private final @NotNull Channel channel;
     private final @NotNull PublishFlushHandler publishFlushHandler;
@@ -103,15 +103,15 @@ public class ClientConnection implements ClientConnectionContext {
 
     public static @NotNull ClientConnection of(final @NotNull Channel channel) {
 
-        final ClientConnectionContext clientConnectionContext =
-                channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).get();
+        final Connection clientConnectionContext =
+                channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).get();
 
         checkArgument(clientConnectionContext instanceof ClientConnection);
 
         return (ClientConnection) clientConnectionContext;
     }
 
-    public static @NotNull ClientConnection from(final @NotNull ClientConnectionContext clientConnectionContext) {
+    public static @NotNull ClientConnection from(final @NotNull Connection clientConnectionContext) {
         checkArgument(clientConnectionContext instanceof UndefinedClientConnection);
 
         final UndefinedClientConnection context = (UndefinedClientConnection) clientConnectionContext;
@@ -162,8 +162,7 @@ public class ClientConnection implements ClientConnectionContext {
                 context.extensionClientAuthorizers,
                 context.extensionClientInformation,
                 context.extensionConnectionInformation);
-
-        context.getChannel().attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        context.getChannel().attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         return clientConnection;
     }
 
@@ -271,13 +270,6 @@ public class ClientConnection implements ClientConnectionContext {
         if (!this.clientState.disconnected()) {
             this.clientState = clientState;
         }
-    }
-
-    // ONLY VISIBLE FOR TESTING !!!
-    // DO NOT USE IN PROD !!!
-    @VisibleForTesting()
-    public void setClientStateUnsafe(final @NotNull ClientState clientState) {
-        this.clientState = clientState;
     }
 
     @Override

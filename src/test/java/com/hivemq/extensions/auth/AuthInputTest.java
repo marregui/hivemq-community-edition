@@ -16,7 +16,7 @@
 package com.hivemq.extensions.auth;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.extension.sdk.api.packets.auth.AuthPacket;
 import com.hivemq.extension.sdk.api.packets.auth.AuthReasonCode;
 import com.hivemq.mqtt.message.ProtocolVersion;
@@ -56,7 +56,7 @@ public class AuthInputTest {
 
         final EmbeddedChannel channel = new EmbeddedChannel();
         clientConnection = new DummyClientConnection(channel, null);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
         auth = new AUTH(method, authData, reasonCode, userProperties, reasonString);

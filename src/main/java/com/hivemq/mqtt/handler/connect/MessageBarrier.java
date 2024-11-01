@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.handler.connect;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.message.Message;
@@ -112,7 +112,7 @@ public class MessageBarrier extends ChannelDuplexHandler {
 
     private static void suspendRead(final @NotNull Channel channel) {
         if (log.isTraceEnabled()) {
-            final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+            final Connection clientConnectionContext = Connection.of(channel);
             final Optional<String> channelIP = clientConnectionContext.getChannelIP();
 
             log.trace("Suspending read operations for MQTT client with id {} and IP {}",
@@ -124,7 +124,7 @@ public class MessageBarrier extends ChannelDuplexHandler {
 
     private static void resumeRead(final @NotNull Channel channel) {
         if (log.isTraceEnabled()) {
-            final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+            final Connection clientConnectionContext = Connection.of(channel);
             final Optional<String> channelIP = clientConnectionContext.getChannelIP();
 
             log.trace("Restarting read operations for MQTT client with id {} and IP {}",

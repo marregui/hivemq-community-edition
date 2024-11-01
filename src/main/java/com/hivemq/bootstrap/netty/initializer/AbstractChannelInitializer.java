@@ -16,7 +16,7 @@
 package com.hivemq.bootstrap.netty.initializer;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
 import com.hivemq.codec.decoder.MQTTMessageDecoder;
@@ -73,7 +73,7 @@ public abstract class AbstractChannelInitializer extends ChannelInitializer<Chan
         final PublishFlushHandler publishFlushHandler = channelDependencies.createPublishFlushHandler();
         final UndefinedClientConnection clientContext =
                 new UndefinedClientConnection(ch, publishFlushHandler, listener);
-        ch.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientContext);
+        ch.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientContext);
 
         ch.pipeline()
                 .addLast(ALL_CHANNELS_GROUP_HANDLER, new ChannelGroupHandler(channelDependencies.getChannelGroup()));
@@ -139,7 +139,7 @@ public abstract class AbstractChannelInitializer extends ChannelInitializer<Chan
     public void exceptionCaught(final @NotNull ChannelHandlerContext ctx, final @NotNull Throwable cause)
             throws Exception {
         if (cause instanceof SslException) {
-            final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+            final Connection clientConnectionContext = Connection.of(ctx.channel());
             log.error("{}. Disconnecting client {} ",
                     cause.getMessage(),
                     clientConnectionContext.getChannelIP().orElse("UNKNOWN"));

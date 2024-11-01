@@ -16,7 +16,7 @@
 package com.hivemq.codec.encoder;
 
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5AuthEncoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5ConnackEncoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5DisconnectEncoder;
@@ -69,12 +69,12 @@ public class EncoderFactory {
     /**
      * Finds the {@link MqttEncoder} encoder and encodes the {@link Message} message.
      *
-     * @param clientConnectionContext the {@link ClientConnectionContext} of the client
+     * @param clientConnectionContext the {@link Connection} of the client
      * @param msg                     the {@link Message} to encode
      * @param out                     the {@link ByteBuf} into which the encoded message will be written
      */
     public void encode(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull Message msg,
             final @NotNull ByteBuf out) {
 
@@ -90,11 +90,11 @@ public class EncoderFactory {
      * This method finds the Mqtt encoder depending on the message and the protocol version.
      *
      * @param msg                     the {@link Message} is used to identify the encoder
-     * @param clientConnectionContext the {@link ClientConnectionContext} of the mqtt client
+     * @param clientConnectionContext the {@link Connection} of the mqtt client
      * @return {@link MqttEncoder} encoder depends on the message and protocol
      */
     protected @Nullable MqttEncoder getEncoder(
-            final @NotNull Message msg, final @NotNull ClientConnectionContext clientConnectionContext) {
+            final @NotNull Message msg, final @NotNull Connection clientConnectionContext) {
 
         if (clientConnectionContext.getProtocolVersion() == ProtocolVersion.MQTTv5) {
             return mqtt5Instance.getEncoder(msg);
@@ -104,7 +104,7 @@ public class EncoderFactory {
     }
 
     protected @NotNull ByteBuf allocateBuffer(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull Message msg,
             final boolean preferDirect) {
 

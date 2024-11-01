@@ -17,7 +17,7 @@ package com.hivemq.mqtt.callback;
 
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.mqtt.handler.publish.PublishStatus;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.pool.FreePacketIdRanges;
@@ -71,7 +71,7 @@ public class PublishStatusFutureCallbackTest {
         queueId = "queueId";
         publish = TestMessageUtil.createMqtt5Publish();
         channel = new EmbeddedChannel();
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
         client = "client";
 
         when(publishPollService.removeMessageFromSharedQueue(anyString(),

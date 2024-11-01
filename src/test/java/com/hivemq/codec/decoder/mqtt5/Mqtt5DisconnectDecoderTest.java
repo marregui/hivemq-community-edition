@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder.mqtt5;
 
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
 import org.jetbrains.annotations.NotNull;
@@ -159,7 +159,7 @@ public class Mqtt5DisconnectDecoderTest extends AbstractMqtt5DecoderTest {
 
         channel = new EmbeddedChannel(new TestMessageEncoder(messageDroppedService, securityConfigurationService));
         channel.config().setAllocator(new UnpooledByteBufAllocator(false));
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
 
         channel.writeOutbound(disconnect);
@@ -380,7 +380,7 @@ public class Mqtt5DisconnectDecoderTest extends AbstractMqtt5DecoderTest {
         fullConfig.mqttConfiguration().setMaxSessionExpiryInterval(80);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
         //from connect
         ClientConnection.of(channel).setClientSessionExpiryInterval(50L);
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);

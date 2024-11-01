@@ -17,7 +17,7 @@ package com.hivemq.codec.encoder.mqtt5;
 
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.MessageWithID;
 import com.hivemq.mqtt.message.ProtocolVersion;
@@ -49,7 +49,7 @@ public class AbstractMqtt5EncoderTest {
         testMessageEncoder = new TestMessageEncoder();
         channel = new EmbeddedChannel(testMessageEncoder);
         clientConnection = new DummyClientConnection(channel, null);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         channel.config().setAllocator(new UnpooledByteBufAllocator(false));
         ClientConnection.of(channel).setMaxPacketSizeSend((long) MAX_PACKET_SIZE);
         ClientConnection.of(channel).setRequestProblemInformation(true);

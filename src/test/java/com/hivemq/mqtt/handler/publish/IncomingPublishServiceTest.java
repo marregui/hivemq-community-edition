@@ -18,7 +18,7 @@ package com.hivemq.mqtt.handler.publish;
 
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.configuration.entity.mqtt.MqttConfigurationDefaults;
 import com.hivemq.configuration.service.MqttConfigurationService;
@@ -111,7 +111,7 @@ public class IncomingPublishServiceTest {
         final CheckUserEventTriggeredOnSuper triggeredUserEvents = new CheckUserEventTriggeredOnSuper();
 
         channel = new EmbeddedChannel(triggeredUserEvents);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
 
         ClientConnection.of(channel).setClientId("clientid");
         ClientConnection.of(channel).setMaxPacketSizeSend(1000L);

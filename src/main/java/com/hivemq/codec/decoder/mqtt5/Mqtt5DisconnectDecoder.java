@@ -16,7 +16,7 @@
 package com.hivemq.codec.decoder.mqtt5;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.AbstractMqttDecoder;
 import com.hivemq.configuration.service.FullConfigurationService;
@@ -58,7 +58,7 @@ public class Mqtt5DisconnectDecoder extends AbstractMqttDecoder<DISCONNECT> {
 
     @Override
     public @Nullable DISCONNECT decode(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final byte header) {
 

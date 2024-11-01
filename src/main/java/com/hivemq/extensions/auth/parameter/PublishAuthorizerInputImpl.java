@@ -16,7 +16,7 @@
 package com.hivemq.extensions.auth.parameter;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.parameter.PublishAuthorizerInput;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
@@ -61,7 +61,8 @@ public class PublishAuthorizerInputImpl
         Preconditions.checkNotNull(clientId, "clientId must never be null");
 
         final Long timestamp =
-                Objects.requireNonNullElse(ClientConnectionContext.of(channel).getConnectReceivedTimestamp(),
+                Objects.requireNonNullElse(
+                        Connection.of(channel).getConnectReceivedTimestamp(),
                         System.currentTimeMillis());
         this.publishPacket = new WillPublishPacketImpl(publish, timestamp);
         this.clientInformation = ExtensionInformationUtil.getAndSetClientInformation(channel, clientId);

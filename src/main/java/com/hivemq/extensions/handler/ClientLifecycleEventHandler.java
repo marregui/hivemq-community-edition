@@ -17,7 +17,7 @@ package com.hivemq.extensions.handler;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.events.client.ClientLifecycleEventListener;
@@ -155,7 +155,7 @@ public class ClientLifecycleEventHandler extends SimpleChannelInboundHandler<CON
     private void fireOnServerDisconnect(
             final @NotNull ChannelHandlerContext ctx, final @NotNull OnServerDisconnectEvent disconnectEvent) {
 
-        final String clientId = ClientConnectionContext.of(ctx.channel()).getClientId();
+        final String clientId = Connection.of(ctx.channel()).getClientId();
         if (clientId == null) {
             //should never happen
             return;
@@ -194,7 +194,7 @@ public class ClientLifecycleEventHandler extends SimpleChannelInboundHandler<CON
     private void fireOnClientDisconnect(
             final @NotNull ChannelHandlerContext ctx, final @NotNull OnClientDisconnectEvent disconnectEvent) {
 
-        final String clientId = ClientConnectionContext.of(ctx.channel()).getClientId();
+        final String clientId = Connection.of(ctx.channel()).getClientId();
         if (clientId == null) {
             //should never happen
             return;
@@ -235,7 +235,7 @@ public class ClientLifecycleEventHandler extends SimpleChannelInboundHandler<CON
     private void fireOnAuthFailed(
             final @NotNull ChannelHandlerContext ctx, final @NotNull OnAuthFailedEvent authFailedEvent) {
 
-        final String clientId = ClientConnectionContext.of(ctx.channel()).getClientId();
+        final String clientId = Connection.of(ctx.channel()).getClientId();
         if (clientId == null) {
             //should never happen
             return;
@@ -273,7 +273,7 @@ public class ClientLifecycleEventHandler extends SimpleChannelInboundHandler<CON
 
     private void fireOnAuthSuccess(final @NotNull ChannelHandlerContext ctx) {
 
-        final String clientId = ClientConnectionContext.of(ctx.channel()).getClientId();
+        final String clientId = Connection.of(ctx.channel()).getClientId();
         if (clientId == null) {
             //should never happen
             return;
@@ -337,7 +337,7 @@ public class ClientLifecycleEventHandler extends SimpleChannelInboundHandler<CON
 
     @NotNull
     private ClientEventListeners getClientEventListeners(final @NotNull ChannelHandlerContext ctx) {
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
         if (clientConnectionContext.getExtensionClientEventListeners() == null) {
             clientConnectionContext.setExtensionClientEventListeners(new ClientEventListeners(hiveMQExtensions));
         }

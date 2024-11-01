@@ -15,7 +15,7 @@
  */
 package util.encoder;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.EncoderFactory;
 import com.hivemq.codec.encoder.MqttEncoder;
 import com.hivemq.configuration.service.SecurityConfigurationService;
@@ -46,7 +46,7 @@ public class TestEncoderFactory extends EncoderFactory {
 
     @Override
     protected @Nullable MqttEncoder getEncoder(
-            final @NotNull Message msg, final @NotNull ClientConnectionContext clientConnectionContext) {
+            final @NotNull Message msg, final @NotNull Connection clientConnectionContext) {
         if (msg instanceof PINGREQ) {
             return pingreqEncoder;
         }

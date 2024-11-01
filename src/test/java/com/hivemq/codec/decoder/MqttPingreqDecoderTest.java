@@ -16,7 +16,7 @@
 package com.hivemq.codec.decoder;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.PINGREQ;
 import com.hivemq.mqtt.message.ProtocolVersion;
@@ -49,7 +49,7 @@ public class MqttPingreqDecoderTest {
     @Test
     public void test_ping_request_received_mqtt_5() {
 
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
 
         final ByteBuf buf = Unpooled.buffer();
@@ -67,7 +67,7 @@ public class MqttPingreqDecoderTest {
     @Test
     public void test_ping_request_invalid_header_mqtt_5() {
 
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
 
         final ByteBuf buf = Unpooled.buffer();

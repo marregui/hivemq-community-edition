@@ -15,7 +15,7 @@
  */
 package com.hivemq.codec.decoder;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
 import com.hivemq.configuration.service.MqttConfigurationService;
 import org.jetbrains.annotations.NotNull;
@@ -99,7 +99,7 @@ public class MQTTMessageDecoder extends ByteToMessageDecoder {
             return;
         }
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
 
         if (remainingLength == MALFORMED_REMAINING_LENGTH) {
             mqttServerDisconnector.disconnect(clientConnectionContext.getChannel(),
@@ -140,7 +140,7 @@ public class MQTTMessageDecoder extends ByteToMessageDecoder {
 
     private @Nullable Message handleConnect(
             final @NotNull ByteBuf buf,
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final byte fixedHeader,
             final int packetSize,
             final int remainingLength) {
@@ -185,7 +185,7 @@ public class MQTTMessageDecoder extends ByteToMessageDecoder {
 
     private @Nullable Message handleMessage(
             final @NotNull ByteBuf buf,
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final byte fixedHeader,
             final @NotNull MessageType messageType,
             final int packetSize,

@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.handler.tasks;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.auth.Authorizer;
@@ -73,7 +73,7 @@ public class PublishAuthorizerTask implements PluginInOutTask<PublishAuthorizerI
         }
 
         output.authorizerPresent();
-        if (ClientConnectionContext.of(channelHandlerContext.channel()).isIncomingPublishesSkipRest()) {
+        if (Connection.of(channelHandlerContext.channel()).isIncomingPublishesSkipRest()) {
             //client already disconnected by authorizer, no more processing of any messages allowed.
             output.forceFailedAuthorization();
         } else {

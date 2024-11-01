@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.connect;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.logging.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
@@ -41,7 +41,7 @@ public class MessageBarrierTest {
 
         messageBarrier = new MessageBarrier(mqttServerDisconnector);
         channel = new EmbeddedChannel(new DummyHandler());
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
         channel.pipeline().addFirst(MQTT_MESSAGE_BARRIER, messageBarrier);
     }
 

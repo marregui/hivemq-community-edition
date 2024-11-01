@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.handler.disconnect;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
@@ -71,7 +71,7 @@ public class MqttServerDisconnectorImpl implements MqttServerDisconnector {
         Preconditions.checkNotNull(channel, "Channel must never be null");
         ThreadPreConditions.inNettyChildEventloop();
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
         final ClientState oldClientState = clientConnectionContext.getClientState();
         clientConnectionContext.proposeClientState(ClientState.DISCONNECTING);
 
@@ -96,7 +96,7 @@ public class MqttServerDisconnectorImpl implements MqttServerDisconnector {
     }
 
     private void fireEvents(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ClientState oldClientState,
             final @Nullable Mqtt5DisconnectReasonCode reasonCode,
             final @Nullable String reasonString,
@@ -116,7 +116,7 @@ public class MqttServerDisconnectorImpl implements MqttServerDisconnector {
     }
 
     private void log(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @Nullable String logMessage,
             final @Nullable String eventLogMessage) {
 
@@ -130,7 +130,7 @@ public class MqttServerDisconnectorImpl implements MqttServerDisconnector {
     }
 
     private static void closeConnection(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final boolean withReasonCode,
             final boolean withReasonString,
             @Nullable Mqtt5DisconnectReasonCode reasonCode,

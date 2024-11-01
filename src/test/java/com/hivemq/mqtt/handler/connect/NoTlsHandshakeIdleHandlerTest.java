@@ -16,7 +16,7 @@
 
 package com.hivemq.mqtt.handler.connect;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.configuration.service.entity.Listener;
 import com.hivemq.configuration.service.entity.TlsTcpListener;
@@ -65,10 +65,10 @@ public class NoTlsHandshakeIdleHandlerTest {
             }
         };
         channel = new EmbeddedChannel();
-        final ClientConnectionContext clientConnection =
+        final Connection clientConnection =
                 new UndefinedClientConnection(channel, null, connectedListener);
 
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         channel.pipeline().addLast(handler);
         channel.pipeline().addLast(eventAdapter);
     }

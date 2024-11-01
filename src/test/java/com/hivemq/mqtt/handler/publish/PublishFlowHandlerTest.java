@@ -18,7 +18,7 @@ package com.hivemq.mqtt.handler.publish;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.extensions.handler.IncomingPublishHandler;
 import com.hivemq.mqtt.event.PublishDroppedEvent;
@@ -101,7 +101,7 @@ public class PublishFlowHandlerTest {
                 mock(DropOutgoingPublishesHandler.class)));
         final ClientConnection clientConnection = spy(new DummyClientConnection(channel, null));
         when(clientConnection.getFreePacketIdRanges()).thenReturn(freePacketIdRanges);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         ClientConnection.of(channel).setClientId(CLIENT_ID);
     }
 
@@ -760,7 +760,7 @@ public class PublishFlowHandlerTest {
                 mock(DropOutgoingPublishesHandler.class)));
         final ClientConnection clientConnection = spy(new DummyClientConnection(channel, null));
         when(clientConnection.getFreePacketIdRanges()).thenReturn(freePacketIdRanges);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         ClientConnection.of(channel).setClientId(CLIENT_ID);
 
         final PUBLISH publishQoS1 = createPublish("topic", 100, QoS.AT_LEAST_ONCE);

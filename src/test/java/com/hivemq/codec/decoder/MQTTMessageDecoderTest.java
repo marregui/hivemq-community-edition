@@ -16,7 +16,7 @@
 package com.hivemq.codec.decoder;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.configuration.service.FullConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.ProtocolVersion;
@@ -50,7 +50,7 @@ public class MQTTMessageDecoderTest {
         clientConnection = new DummyClientConnection(channel, null);
         //setting version to fake "connected" state
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
     }
 
     /* ***********************
@@ -213,7 +213,7 @@ public class MQTTMessageDecoderTest {
         clientConnection = new DummyClientConnection(channel, null);
         //setting version to fake "connected" state
         clientConnection.setProtocolVersion(protocolVersion);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
 
         final byte[] publish = {
                 // fixed header
@@ -245,7 +245,7 @@ public class MQTTMessageDecoderTest {
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
         clientConnection = new DummyClientConnection(channel, null);
         clientConnection.setProtocolVersion(null);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
 
         final ByteBuf buf = Unpooled.buffer();
         buf.writeBytes(connect);

@@ -16,7 +16,7 @@
 package com.hivemq.security.ssl;
 
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import io.netty.channel.ChannelHandlerAdapter;
@@ -83,7 +83,7 @@ public class SslExceptionHandler extends ChannelHandlerAdapter {
 
             final Throwable rootCause = ExceptionUtils.getRootCause(cause);
 
-            final ClientConnectionContext clientConnection = ClientConnectionContext.of(ctx.channel());
+            final Connection clientConnection = Connection.of(ctx.channel());
             final String clientId = clientConnection.getClientId();
             if (clientId != null) {
                 log.debug("SSL message transmission for client {} failed: {}", clientId, rootCause.getMessage());
@@ -102,7 +102,7 @@ public class SslExceptionHandler extends ChannelHandlerAdapter {
 
             final Throwable rootCause = ExceptionUtils.getRootCause(cause);
 
-            final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+            final Connection clientConnectionContext = Connection.of(ctx.channel());
             final String clientId = clientConnectionContext.getClientId();
             if (clientId != null) {
                 log.debug("SSL Handshake for client {} failed: {}", clientId, rootCause.getMessage());
@@ -119,7 +119,7 @@ public class SslExceptionHandler extends ChannelHandlerAdapter {
 
         if (cause instanceof NotSslRecordException) {
             if (log.isDebugEnabled()) {
-                final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+                final Connection clientConnectionContext = Connection.of(ctx.channel());
                 log.debug("Client {} sent data which is not SSL/TLS to a SSL/TLS listener. Disconnecting client.",
                         clientConnectionContext.getChannelIP().orElse("UNKNOWN"));
                 log.trace("Original Exception:", cause);

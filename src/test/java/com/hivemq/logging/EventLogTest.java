@@ -16,7 +16,7 @@
 package com.hivemq.logging;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.configuration.service.entity.TcpListener;
 import org.jetbrains.annotations.NotNull;
@@ -77,8 +77,8 @@ public class EventLogTest {
         clientConnection.setCleanStart(cleanStart);
         clientConnection.setClientId(clientId);
 
-        final Attribute<ClientConnectionContext> clientConnectionAttribute = mock(Attribute.class);
-        when(channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)).thenReturn(clientConnectionAttribute);
+        final Attribute<Connection> clientConnectionAttribute = mock(Attribute.class);
+        when(channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME)).thenReturn(clientConnectionAttribute);
         when(clientConnectionAttribute.get()).thenReturn(clientConnection);
 
         logMessageBuffer = new StringBuffer();

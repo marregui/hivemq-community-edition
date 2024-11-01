@@ -44,7 +44,7 @@ import java.util.concurrent.ScheduledFuture;
  * The ClientContext contains information about the client that are required to provide them with the functionality of
  * our feature sets.
  * <p>
- * We differentiate between two {@link ClientConnectionContext} implementations to have the most guarantees and
+ * We differentiate between two {@link Connection} implementations to have the most guarantees and
  * immutability of the context information. For example: The client id of a client should not be {@code null} anymore
  * after establishing successfully an MQTT connection.
  * <p>
@@ -57,14 +57,14 @@ import java.util.concurrent.ScheduledFuture;
  * <p>
  * DISCLAIMER: Even when we have this differentiation, we can truly benefit from the guarantees of
  * {@link ClientConnection} when we are using the {@link com.hivemq.persistence.connection.ConnectionPersistence} to
- * obtain it, as we can only then be sure which {@link ClientConnectionContext} implementation we are using.
+ * obtain it, as we can only then be sure which {@link Connection} implementation we are using.
  */
-public interface ClientConnectionContext {
+public interface Connection {
 
-    AttributeKey<ClientConnectionContext> CHANNEL_ATTRIBUTE_NAME = AttributeKey.valueOf("ClientConnectionContext");
+    AttributeKey<Connection> CHANNEL_ATTRIBUTE_NAME = AttributeKey.valueOf("ClientConnectionContext");
 
-    static @NotNull ClientConnectionContext of(final @NotNull Channel channel) {
-        final ClientConnectionContext context = channel.attr(CHANNEL_ATTRIBUTE_NAME).get();
+    static @NotNull Connection of(final @NotNull Channel channel) {
+        final Connection context = channel.attr(CHANNEL_ATTRIBUTE_NAME).get();
         if (context != null) {
             return context;
         }

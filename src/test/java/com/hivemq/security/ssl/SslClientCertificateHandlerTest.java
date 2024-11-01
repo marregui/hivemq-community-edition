@@ -15,7 +15,7 @@
  */
 package com.hivemq.security.ssl;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.bootstrap.netty.ChannelHandlerNames;
 import com.hivemq.configuration.service.entity.Listener;
@@ -81,7 +81,7 @@ public class SslClientCertificateHandlerTest {
         channel = new EmbeddedChannel();
         clientConnection =
                 new UndefinedClientConnection(channel, null, listener);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         channel.pipeline().addLast(new SslClientCertificateHandler(tls, mqttServerDisconnector));
         channel.pipeline().addLast(ChannelHandlerNames.SSL_HANDLER, sslHandler);
     }
@@ -165,7 +165,7 @@ public class SslClientCertificateHandlerTest {
     public void test_class_cast_exception_no_ssl_handler() throws SSLPeerUnverifiedException, InterruptedException {
 
         channel = new EmbeddedChannel();
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         channel.pipeline().addLast(new SslClientCertificateHandler(tls, mqttServerDisconnector));
         channel.pipeline().addLast(ChannelHandlerNames.SSL_HANDLER, new WrongHandler());
 

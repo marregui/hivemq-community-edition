@@ -18,7 +18,7 @@ package com.hivemq.extensions.client.parameter;
 
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.exception.LimitExceededException;
 import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
@@ -54,7 +54,7 @@ public class ConnectionAttributesTest {
         connectionAttributes = new ConnectionAttributes(1000);
         channel = mock(Channel.class);
         clientConnection = new DummyClientConnection(channel, mock(PublishFlushHandler.class));
-        when(channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)).thenReturn(new TestChannelAttribute<>(
+        when(channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME)).thenReturn(new TestChannelAttribute<>(
                 clientConnection));
     }
 
@@ -70,7 +70,7 @@ public class ConnectionAttributesTest {
     @Test
     public void test_getInstanceIfPresent_not_present() {
         clientConnection = new DummyClientConnection(channel, mock(PublishFlushHandler.class));
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
 
         final ConnectionAttributes returnConnectionAttributes = ConnectionAttributes.getInstanceIfPresent(channel);
 
@@ -89,7 +89,7 @@ public class ConnectionAttributesTest {
     @Test
     public void test_getInstance_not_present() {
         clientConnection = new DummyClientConnection(channel, mock(PublishFlushHandler.class));
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
 
         final ConnectionAttributes returnConnectionAttributes = ConnectionAttributes.getInstance(channel);
 

@@ -17,7 +17,7 @@
 package com.hivemq.extensions.handler;
 
 import com.google.common.collect.ImmutableMap;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.service.FullConfigurationService;
 import org.jetbrains.annotations.NotNull;
@@ -99,7 +99,7 @@ public class ConnectInboundInterceptorHandler {
 
     public void handleInboundConnect(final @NotNull ChannelHandlerContext ctx, final @NotNull CONNECT connect) {
         final Channel channel = ctx.channel();
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
         final String clientId = clientConnectionContext.getClientId();
         if (clientId == null) {
             return;
@@ -211,7 +211,7 @@ public class ConnectInboundInterceptorHandler {
                         reasonString);
             } else {
                 final CONNECT connect = CONNECT.from(inputHolder.get().getConnectPacket(), hivemqId.get());
-                final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+                final Connection clientConnectionContext = Connection.of(ctx.channel());
                 clientConnectionContext.setClientId(connect.getClientIdentifier());
                 clientConnectionContext.setExtensionClientInformation(new ClientInformationImpl(connect.getClientIdentifier()));
                 clientConnectionContext.setCleanStart(connect.isCleanStart());

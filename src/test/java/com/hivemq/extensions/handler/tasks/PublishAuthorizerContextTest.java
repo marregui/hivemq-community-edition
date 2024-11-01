@@ -18,7 +18,7 @@ package com.hivemq.extensions.handler.tasks;
 
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
@@ -58,7 +58,7 @@ public class PublishAuthorizerContextTest {
     @Before
     public void before() {
         channel = new EmbeddedChannel();
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME)
                 .set(new DummyClientConnection(channel, mock(PublishFlushHandler.class)));
         when(ctx.channel()).thenReturn(channel);
         final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl(mock(ShutdownHooks.class));

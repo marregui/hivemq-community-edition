@@ -17,7 +17,7 @@
 package com.hivemq.extensions.handler.tasks;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.disconnect.DisconnectReasonCode;
@@ -65,7 +65,7 @@ public class PublishAuthorizationProcessedTaskTest {
 
         channel = new EmbeddedChannel(new DummyHandler());
         clientConnection = new DummyClientConnection(channel, mock(PublishFlushHandler.class));
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         final ChannelHandlerContext ctx = channel.pipeline().context(DummyHandler.class);
         final PUBLISH publish = TestMessageUtil.createMqtt5Publish("topic", QoS.AT_LEAST_ONCE);
         task = new PublishAuthorizationProcessedTask(publish, ctx, mqtt5ServerDisconnector, incomingPublishService);

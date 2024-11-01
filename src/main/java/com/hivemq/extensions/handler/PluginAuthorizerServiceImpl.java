@@ -20,7 +20,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.parameter.AuthorizerProviderInput;
 import com.hivemq.extension.sdk.api.client.parameter.ServerInformation;
@@ -163,7 +163,7 @@ public class PluginAuthorizerServiceImpl implements PluginAuthorizerService {
 
     public void authorizeWillPublish(final @NotNull ChannelHandlerContext ctx, final @NotNull CONNECT connect) {
 
-        final String clientId = ClientConnectionContext.of(ctx.channel()).getClientId();
+        final String clientId = Connection.of(ctx.channel()).getClientId();
         if (clientId == null || !ctx.channel().isActive()) {
             //no more processing needed, client is already disconnected
             return;
@@ -233,7 +233,7 @@ public class PluginAuthorizerServiceImpl implements PluginAuthorizerService {
 
     public void authorizeSubscriptions(final @NotNull ChannelHandlerContext ctx, final @NotNull SUBSCRIBE msg) {
 
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
         final String clientId = clientConnectionContext.getClientId();
         if (clientId == null || !ctx.channel().isActive()) {
             //no more processing needed
@@ -292,7 +292,7 @@ public class PluginAuthorizerServiceImpl implements PluginAuthorizerService {
     }
 
     private @NotNull ClientAuthorizers getClientAuthorizers(final @NotNull ChannelHandlerContext ctx) {
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
         if (clientConnectionContext.getExtensionClientAuthorizers() == null) {
             clientConnectionContext.setExtensionClientAuthorizers(new ClientAuthorizersImpl(extensionPriorityComparator));
         }

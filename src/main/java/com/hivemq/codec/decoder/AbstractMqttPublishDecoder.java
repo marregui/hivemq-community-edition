@@ -16,7 +16,7 @@
 package com.hivemq.codec.decoder;
 
 import com.google.common.base.Utf8;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.configuration.service.FullConfigurationService;
 import org.jetbrains.annotations.NotNull;
@@ -53,7 +53,7 @@ public abstract class AbstractMqttPublishDecoder<T extends Message> extends Abst
      * @param header                  the publish header byte
      * @return the QoS, or -1 if this method disconnected.
      */
-    protected int decodeQoS(final @NotNull ClientConnectionContext clientConnectionContext, final byte header) {
+    protected int decodeQoS(final @NotNull Connection clientConnectionContext, final byte header) {
         final int qos = (header & 0b0000_0110) >> 1;
 
         if (qos == 3) {
@@ -80,7 +80,7 @@ public abstract class AbstractMqttPublishDecoder<T extends Message> extends Abst
      * @return whether the DUP flag is set or {@code null} if this method disconnected.
      */
     protected @Nullable Boolean decodeDup(
-            final @NotNull ClientConnectionContext clientConnectionContext, final byte header, final int qos) {
+            final @NotNull Connection clientConnectionContext, final byte header, final int qos) {
 
         final boolean dup = Bytes.isBitSet(header, 3);
 
@@ -107,7 +107,7 @@ public abstract class AbstractMqttPublishDecoder<T extends Message> extends Abst
      * @return whether the RETAIN flag is set or {@code null} if this method disconnected.
      */
     protected @Nullable Boolean decodeRetain(
-            final @NotNull ClientConnectionContext clientConnectionContext, final byte header) {
+            final @NotNull Connection clientConnectionContext, final byte header) {
         final boolean retained = Bytes.isBitSet(header, 0);
 
         if (retained && !configurationService.mqttConfiguration().retainedMessagesEnabled()) {
@@ -135,7 +135,7 @@ public abstract class AbstractMqttPublishDecoder<T extends Message> extends Abst
      * @return the packet identifier or 0 if this method disconnected.
      */
     protected int decodePacketIdentifier(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull ByteBuf buf) {
+            final @NotNull Connection clientConnectionContext, final @NotNull ByteBuf buf) {
 
         final int packetIdentifier = buf.readUnsignedShort();
         if (packetIdentifier == 0) {
@@ -163,7 +163,7 @@ public abstract class AbstractMqttPublishDecoder<T extends Message> extends Abst
      * @return the payload as a byte[] or {@code null} if this method disconnected.
      */
     protected byte @Nullable [] decodePayload(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final int payloadLength,
             final @Nullable Mqtt5PayloadFormatIndicator payloadFormatIndicator,

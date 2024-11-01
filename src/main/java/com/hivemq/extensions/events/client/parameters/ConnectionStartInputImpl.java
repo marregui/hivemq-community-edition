@@ -17,7 +17,7 @@ package com.hivemq.extensions.events.client.parameters;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
@@ -53,7 +53,8 @@ public class ConnectionStartInputImpl
         this.clientInformation =
                 ExtensionInformationUtil.getAndSetClientInformation(channel, connect.getClientIdentifier());
         this.connectTimestamp =
-                Objects.requireNonNullElse(ClientConnectionContext.of(channel).getConnectReceivedTimestamp(),
+                Objects.requireNonNullElse(
+                        Connection.of(channel).getConnectReceivedTimestamp(),
                         System.currentTimeMillis());
     }
 

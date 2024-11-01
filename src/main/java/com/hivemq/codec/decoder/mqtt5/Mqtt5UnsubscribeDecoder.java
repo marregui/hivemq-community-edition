@@ -16,7 +16,7 @@
 package com.hivemq.codec.decoder.mqtt5;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.AbstractMqttDecoder;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
@@ -53,7 +53,7 @@ public class Mqtt5UnsubscribeDecoder extends AbstractMqttDecoder<UNSUBSCRIBE> {
 
     @Override
     public @Nullable UNSUBSCRIBE decode(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final byte header) {
 
@@ -130,7 +130,7 @@ public class Mqtt5UnsubscribeDecoder extends AbstractMqttDecoder<UNSUBSCRIBE> {
     }
 
     private int decodePacketIdentifier(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull ByteBuf buf) {
+            final @NotNull Connection clientConnectionContext, final @NotNull ByteBuf buf) {
         final int packetIdentifier = buf.readUnsignedShort();
         if (packetIdentifier == 0) {
             disconnector.disconnect(clientConnectionContext.getChannel(),
@@ -144,7 +144,7 @@ public class Mqtt5UnsubscribeDecoder extends AbstractMqttDecoder<UNSUBSCRIBE> {
     }
 
     private boolean propertiesLengthInvalid(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final int propertyLength) {
 
@@ -160,7 +160,7 @@ public class Mqtt5UnsubscribeDecoder extends AbstractMqttDecoder<UNSUBSCRIBE> {
     }
 
     private @Nullable ImmutableList.Builder<String> decodeTopicFilter(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             @Nullable ImmutableList.Builder<String> topicFilterBuilder) {
 

@@ -15,7 +15,7 @@
  */
 package com.hivemq.logging;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.configuration.service.entity.Listener;
 import org.jetbrains.annotations.NotNull;
 import io.netty.channel.Channel;
@@ -34,7 +34,7 @@ public final class LoggingUtils {
      */
     public static @NotNull String appendListenerToMessage(
             final @NotNull Channel channel, final @NotNull String message) {
-        final Listener listener = ClientConnectionContext.of(channel).getConnectedListener();
+        final Listener listener = Connection.of(channel).getConnectedListener();
         final String listenerName = listener.readableName();
         final int listenerPort = listener.getPort();
         return String.format("%s for %s on port: %d", message, listenerName, listenerPort);

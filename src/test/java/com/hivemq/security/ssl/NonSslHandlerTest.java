@@ -15,7 +15,7 @@
  */
 package com.hivemq.security.ssl;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.configuration.service.entity.Listener;
 import com.hivemq.configuration.service.entity.TcpListener;
@@ -657,7 +657,7 @@ public class NonSslHandlerTest {
         MockitoAnnotations.initMocks(this);
         final Listener listener = mock(TcpListener.class);
         channel = new EmbeddedChannel();
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME)
                 .set(new UndefinedClientConnection(channel, null, listener));
         disconnector = new MqttServerDisconnectorImpl(new EventLog());
         channel.pipeline().addLast(new NonSslHandler(disconnector));

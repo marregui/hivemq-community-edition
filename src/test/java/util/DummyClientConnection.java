@@ -22,12 +22,9 @@ import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
 import io.netty.channel.Channel;
 
 public class DummyClientConnection extends ClientConnection {
-
-    public DummyClientConnection(
-            final @NotNull Channel channel, final @NotNull PublishFlushHandler publishFlushHandler) {
-
+    public DummyClientConnection(final @NotNull Channel channel, final @NotNull PublishFlushHandler handler) {
         super(channel,
-                publishFlushHandler,
+                handler,
                 ClientState.CONNECTING,
                 null,
                 null,

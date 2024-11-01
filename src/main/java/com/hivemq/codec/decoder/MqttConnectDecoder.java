@@ -16,7 +16,7 @@
 package com.hivemq.codec.decoder;
 
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5ConnectDecoder;
 import com.hivemq.configuration.HivemqId;
@@ -54,7 +54,7 @@ public class MqttConnectDecoder {
 
 
     public @Nullable ProtocolVersion decodeProtocolVersion(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull ByteBuf buf) {
+            final @NotNull Connection clientConnectionContext, final @NotNull ByteBuf buf) {
         /*
          * It is sufficient to look at the second byte of the variable header (Length LSB) This byte
          * indicates how long the following protocol name is going to be. In case of the
@@ -107,7 +107,7 @@ public class MqttConnectDecoder {
     }
 
     public @Nullable CONNECT decode(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull ByteBuf buf,
             final byte fixedHeader) {
 
@@ -121,7 +121,7 @@ public class MqttConnectDecoder {
         return null;
     }
 
-    private void connackInvalidProtocolVersion(final @NotNull ClientConnectionContext clientConnectionContext) {
+    private void connackInvalidProtocolVersion(final @NotNull Connection clientConnectionContext) {
         mqttConnacker.connackError(clientConnectionContext.getChannel(),
                 "A client (IP: {}) connected with an invalid protocol version.",
                 "Sent CONNECT with an invalid protocol version",

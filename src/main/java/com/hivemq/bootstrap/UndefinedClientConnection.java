@@ -41,7 +41,7 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 
-public class UndefinedClientConnection implements ClientConnectionContext {
+public class UndefinedClientConnection implements Connection {
 
     final @NotNull Channel channel;
     final @NotNull PublishFlushHandler publishFlushHandler;

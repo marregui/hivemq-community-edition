@@ -15,7 +15,7 @@
  */
 package com.hivemq.codec.encoder;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.PINGRESP;
 import io.netty.buffer.ByteBuf;
@@ -28,7 +28,7 @@ public class MqttPingrespEncoder implements MqttEncoder<PINGRESP> {
 
     @Override
     public void encode(
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull PINGRESP msg,
             final @NotNull ByteBuf out) {
 
@@ -37,7 +37,7 @@ public class MqttPingrespEncoder implements MqttEncoder<PINGRESP> {
     }
 
     @Override
-    public int bufferSize(final @NotNull ClientConnectionContext clientConnectionContext, final @NotNull PINGRESP msg) {
+    public int bufferSize(final @NotNull Connection clientConnectionContext, final @NotNull PINGRESP msg) {
         return ENCODED_PINGRESP_SIZE;
     }
 }

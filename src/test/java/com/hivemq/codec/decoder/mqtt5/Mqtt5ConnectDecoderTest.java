@@ -18,7 +18,7 @@ package com.hivemq.codec.decoder.mqtt5;
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Bytes;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
 import com.hivemq.configuration.service.FullConfigurationService;
@@ -1305,7 +1305,7 @@ public class Mqtt5ConnectDecoderTest extends AbstractMqtt5DecoderTest {
         fullConfig.securityConfiguration().setAllowServerAssignedClientId(false);
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
         clientConnection = new DummyClientConnection(channel, null);
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         final byte[] encoded = {
                 // fixed header
                 //   type, reserved
@@ -2017,7 +2017,7 @@ public class Mqtt5ConnectDecoderTest extends AbstractMqtt5DecoderTest {
         fullConfig.mqttConfiguration().setMaxMessageExpiryInterval(100);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         final byte[] encoded = {
                 // fixed header
                 //   type, reserved

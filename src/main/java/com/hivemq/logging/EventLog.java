@@ -15,7 +15,7 @@
  */
 package com.hivemq.logging;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -122,7 +122,7 @@ public class EventLog {
      * @param cleanStart if the connection was started clean
      */
     public void clientConnected(final @NotNull Channel channel, final boolean cleanStart) {
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
         final String clientId = clientConnectionContext.getClientId();
         final String ip = clientConnectionContext.getChannelIP().orElse(null);
         final Long sessionExpiry = clientConnectionContext.getClientSessionExpiryInterval();
@@ -142,7 +142,7 @@ public class EventLog {
      * @param reason                  reason specified by the client for the DISCONNECT.
      */
     public void clientDisconnectedGracefully(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @Nullable String reason) {
+            final @NotNull Connection clientConnectionContext, final @Nullable String reason) {
 
         final String clientId = clientConnectionContext.getClientId();
         final String ip = clientConnectionContext.getChannelIP().orElse(null);
@@ -168,7 +168,7 @@ public class EventLog {
      *
      * @param clientConnectionContext the connection to the client.
      */
-    public void clientDisconnectedUngracefully(final @NotNull ClientConnectionContext clientConnectionContext) {
+    public void clientDisconnectedUngracefully(final @NotNull Connection clientConnectionContext) {
         final String clientId = clientConnectionContext.getClientId();
         final String ip = clientConnectionContext.getChannelIP().orElse(null);
         final Listener listener = clientConnectionContext.getConnectedListener();
@@ -193,7 +193,7 @@ public class EventLog {
      * @param reason  why the connection was closed
      */
     public void clientWasDisconnected(@NotNull final Channel channel, @NotNull final String reason) {
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
         final String clientId = clientConnectionContext.getClientId();
         final String ip = clientConnectionContext.getChannelIP().orElse(null);
         if (log.isTraceEnabled()) {
@@ -213,7 +213,7 @@ public class EventLog {
      */
     public void clientAuthentication(
             @NotNull final Channel channel, @NotNull final Mqtt5AuthReasonCode reasonCode, final boolean received) {
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
         final String clientId = clientConnectionContext.getClientId();
         final String ip = clientConnectionContext.getChannelIP().orElse(null);
         if (received) {

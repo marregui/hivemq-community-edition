@@ -16,7 +16,7 @@
 package com.hivemq.extensions.client.parameter;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.client.parameter.ClientTlsInformation;
@@ -43,7 +43,7 @@ public class ConnectionInformationImpl implements ConnectionInformation {
     private final @Nullable Listener listener;
     private final @Nullable ClientTlsInformation tlsInformation;
 
-    public ConnectionInformationImpl(final @NotNull ClientConnectionContext clientConnectionContext) {
+    public ConnectionInformationImpl(final @NotNull Connection clientConnectionContext) {
         Preconditions.checkNotNull(clientConnectionContext);
 
         final Channel channel = clientConnectionContext.getChannel();

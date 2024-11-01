@@ -15,7 +15,7 @@
  */
 package com.hivemq.codec.decoder;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.Message;
@@ -28,7 +28,7 @@ public abstract class MqttDecoder<T extends Message> {
     private static final Logger log = LoggerFactory.getLogger(MqttDecoder.class);
 
     public abstract @Nullable T decode(
-            @NotNull ClientConnectionContext clientConnectionContext, @NotNull ByteBuf buf, byte header);
+            @NotNull Connection clientConnectionContext, @NotNull ByteBuf buf, byte header);
 
     /**
      * Checks if the last 4 bits are actually zeroed out
@@ -50,7 +50,7 @@ public abstract class MqttDecoder<T extends Message> {
      * @return {@code true} if the topic is valid.
      */
     protected static boolean isInvalidTopic(
-            final @NotNull ClientConnectionContext clientConnectionContext, final @Nullable String topic) {
+            final @NotNull Connection clientConnectionContext, final @Nullable String topic) {
 
         if (topic == null || topic.isEmpty()) {
             if (log.isDebugEnabled()) {

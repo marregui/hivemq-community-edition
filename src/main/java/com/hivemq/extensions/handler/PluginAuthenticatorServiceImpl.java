@@ -18,7 +18,7 @@ package com.hivemq.extensions.handler;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
 import com.hivemq.configuration.service.FullConfigurationService;
@@ -130,7 +130,7 @@ public class PluginAuthenticatorServiceImpl implements PluginAuthenticatorServic
     @Override
     public void authenticateConnect(
             final @NotNull ChannelHandlerContext ctx,
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull CONNECT connect,
             final @NotNull ModifiableClientSettingsImpl clientSettings) {
 
@@ -199,7 +199,7 @@ public class PluginAuthenticatorServiceImpl implements PluginAuthenticatorServic
     @Override
     public void authenticateAuth(
             final @NotNull ChannelHandlerContext ctx,
-            final @NotNull ClientConnectionContext clientConnectionContext,
+            final @NotNull Connection clientConnectionContext,
             final @NotNull AUTH auth) {
 
         final boolean reAuth = clientConnectionContext.getClientState() == ClientState.RE_AUTHENTICATING;
@@ -332,7 +332,7 @@ public class PluginAuthenticatorServiceImpl implements PluginAuthenticatorServic
     }
 
     private static @NotNull ModifiableClientSettingsImpl getSettingsFromChannel(final @NotNull Channel channel) {
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
         final Integer receiveMax = clientConnectionContext.getClientReceiveMaximum();
         Preconditions.checkNotNull(receiveMax, "Receive maximum must not be null here");
         final Long queueSizeMaximum = clientConnectionContext.getQueueSizeMaximum();
@@ -340,7 +340,7 @@ public class PluginAuthenticatorServiceImpl implements PluginAuthenticatorServic
     }
 
     private @NotNull ClientAuthenticators getClientAuthenticators(final @NotNull ChannelHandlerContext ctx) {
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+        final Connection clientConnectionContext = Connection.of(ctx.channel());
         if (clientConnectionContext.getExtensionClientAuthenticators() == null) {
             clientConnectionContext.setExtensionClientAuthenticators(new ClientAuthenticatorsImpl(priorityComparator));
         }

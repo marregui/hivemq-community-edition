@@ -16,7 +16,7 @@
 package com.hivemq.bootstrap.netty;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -64,7 +64,7 @@ public class ExceptionHandlerTest {
 
         when(ctx.pipeline()).thenReturn(pipeline);
         when(channel.pipeline()).thenReturn(pipeline);
-        when(channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)).thenReturn(new TestChannelAttribute<>(
+        when(channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME)).thenReturn(new TestChannelAttribute<>(
                 clientConnection));
         when(clientConnection.getChannelIP()).thenReturn(Optional.of("0.0.0.0"));
         when(ctx.channel()).thenReturn(channel);

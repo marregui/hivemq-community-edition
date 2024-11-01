@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
@@ -150,7 +150,7 @@ public class ConnectHandlerTest {
     private ConnectHandler handler;
     private ModifiableDefaultPermissions defaultPermissions;
     private MqttServerDisconnectorImpl serverDisconnector;
-    private @NotNull ClientConnectionContext clientConnectionContext;
+    private @NotNull Connection clientConnectionContext;
     private ConnectionPersistence connectionPersistence;
 
     @Before
@@ -167,7 +167,7 @@ public class ConnectHandlerTest {
         channel = new EmbeddedChannel(new DummyHandler());
         clientConnectionContext =
                 new UndefinedClientConnection(channel, mock(PublishFlushHandler.class), mock(Listener.class));
-        channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
+        channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
         clientConnectionContext.setQueueSizeMaximum(null);
 
         configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
@@ -617,7 +617,7 @@ public class ConnectHandlerTest {
                 new EmbeddedChannel(testDisconnectHandler, new TestDisconnectEventHandler(disconnectEventLatch));
 
         final ClientConnection oldClientConnection = new DummyClientConnection(oldChannel, null);
-        oldChannel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME).set(oldClientConnection);
+        oldChannel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(oldClientConnection);
         oldClientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
         oldClientConnection.setDisconnectFuture(disconnectFuture);
         oldClientConnection.proposeClientState(ClientState.DISCONNECTING);
@@ -1243,7 +1243,7 @@ public class ConnectHandlerTest {
 
         doAnswer(invocation -> {
             ctx.channel()
-                    .attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)
+                    .attr(Connection.CHANNEL_ATTRIBUTE_NAME)
                     .get()
                     .setAuthPermissions(defaultPermissions);
             handler.connectSuccessfulUndecided(invocation.getArgument(0),

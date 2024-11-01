@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.handler.auth;
 
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.logging.EventLog;
@@ -51,7 +51,8 @@ public class MqttAuthSender {
             final @NotNull Mqtt5UserProperties userProperties,
             final @Nullable String reasonString) {
 
-        final AUTH auth = new AUTH(ClientConnectionContext.of(channel).getAuthMethod(),
+        final AUTH auth = new AUTH(
+                Connection.of(channel).getAuthMethod(),
                 Bytes.fromReadOnlyBuffer(authData),
                 reasonCode,
                 userProperties,

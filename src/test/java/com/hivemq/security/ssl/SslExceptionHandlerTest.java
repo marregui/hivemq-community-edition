@@ -15,7 +15,7 @@
  */
 package com.hivemq.security.ssl;
 
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.configuration.service.entity.Listener;
 import com.hivemq.configuration.service.entity.TcpListener;
@@ -65,10 +65,10 @@ public class SslExceptionHandlerTest {
         when(ctx.channel()).thenReturn(channel);
 
         final Listener listener = mock(TcpListener.class);
-        final ClientConnectionContext clientConnection = new UndefinedClientConnection(channel, null, listener);
+        final Connection clientConnection = new UndefinedClientConnection(channel, null, listener);
         clientConnection.setClientId("client");
 
-        when(channel.attr(ClientConnectionContext.CHANNEL_ATTRIBUTE_NAME)).thenReturn(new TestChannelAttribute<>(
+        when(channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME)).thenReturn(new TestChannelAttribute<>(
                 clientConnection));
         when(channel.isActive()).thenReturn(true);
 

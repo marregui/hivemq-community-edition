@@ -16,7 +16,7 @@
 package com.hivemq.extensions.handler;
 
 import com.google.common.collect.ImmutableMap;
-import com.hivemq.bootstrap.ClientConnectionContext;
+import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.configuration.service.FullConfigurationService;
 import org.jetbrains.annotations.NotNull;
@@ -96,7 +96,7 @@ public class ConnackOutboundInterceptorHandler {
             final @NotNull ChannelPromise promise) {
 
         final Channel channel = ctx.channel();
-        final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(channel);
+        final Connection clientConnectionContext = Connection.of(channel);
         final String clientId = clientConnectionContext.getClientId();
         if (clientId == null) {
             ctx.write(connack, promise);
@@ -198,7 +198,7 @@ public class ConnackOutboundInterceptorHandler {
         @Override
         public void run() {
             if (outputHolder.get().isPrevent()) {
-                final ClientConnectionContext clientConnectionContext = ClientConnectionContext.of(ctx.channel());
+                final Connection clientConnectionContext = Connection.of(ctx.channel());
                 clientConnectionContext.proposeClientState(ClientState.DISCONNECTING);
 
                 eventLog.clientWasDisconnected(ctx.channel(),

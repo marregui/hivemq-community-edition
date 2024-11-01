@@ -17,10 +17,5 @@ package com.hivemq.persistence;
 
 public interface LocalPersistence {
 
-    /**
-     * Close a persistence bucket for a specific index.
-     *
-     * @param bucketIndex the persistence bucket index.
-     */
     void closeDB(int bucketIndex);
 }

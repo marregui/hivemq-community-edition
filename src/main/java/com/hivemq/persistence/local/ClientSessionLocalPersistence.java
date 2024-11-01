@@ -28,10 +28,7 @@ import com.hivemq.persistence.exception.InvalidSessionExpiryIntervalException;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author Dominik Obermaier
- * @author Lukas Brandl
- */
+
 public interface ClientSessionLocalPersistence extends LocalPersistence {
 
     /**

@@ -21,9 +21,6 @@ import com.hivemq.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author Lukas Brandl
- */
 public abstract class AbstractPersistence {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractPersistence.class);
@@ -31,12 +28,11 @@ public abstract class AbstractPersistence {
     @NotNull
     protected ListenableFuture<Void> closeDB(
             final @NotNull LocalPersistence localPersistence, final @NotNull ProducerQueues singleWriter) {
-        return singleWriter.shutdown((bucketIndex) -> {
+        return singleWriter.shutdown(bucketIndex -> {
             try {
                 localPersistence.closeDB(bucketIndex);
             } catch (final Throwable t) {
                 log.warn("Persistence not closed properly: " + t.getMessage());
-                log.debug("Original exception:", t);
                 Exceptions.rethrowError(t);
             }
             return null;

@@ -17,10 +17,7 @@ package com.hivemq.persistence.local.xodus;
 
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.migration.meta.PersistenceType;
 import jetbrains.exodus.env.EnvironmentConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
 
@@ -31,22 +28,11 @@ import static com.hivemq.configuration.service.InternalConfigurations.XODUS_PERS
 import static com.hivemq.configuration.service.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_GC_FILES_INTERVAL;
 import static com.hivemq.configuration.service.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_GC_MIN_AGE;
 import static com.hivemq.configuration.service.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_GC_RUN_PERIOD_MSEC;
-import static com.hivemq.configuration.service.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_GC_TYPE;
 import static com.hivemq.configuration.service.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_JMX;
 import static com.hivemq.configuration.service.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_SYNC_PERIOD_MSEC;
 
-/**
- * @author Florian Limpöck
- */
 @Singleton
 public class EnvironmentUtil {
-
-    public enum GCType {
-        DELETE,
-        RENAME
-    }
-
-    private static final Logger log = LoggerFactory.getLogger(EnvironmentUtil.class);
 
     /**
      * Creates a new Xodus Environment config from a PersistenceConfig
@@ -56,14 +42,10 @@ public class EnvironmentUtil {
      * @throws NullPointerException if one of the parameters is <code>null</code>
      */
     public EnvironmentConfig createEnvironmentConfig(@NotNull final String name) {
-
-        checkNotNull(name, "Name for environment config must not be null");
-
         return createEnvironmentConfig(XODUS_PERSISTENCE_ENVIRONMENT_GC_MIN_AGE,
                 XODUS_PERSISTENCE_ENVIRONMENT_GC_DELETION_DELAY_MSEC,
                 XODUS_PERSISTENCE_ENVIRONMENT_GC_FILES_INTERVAL,
                 XODUS_PERSISTENCE_ENVIRONMENT_GC_RUN_PERIOD_MSEC,
-                XODUS_PERSISTENCE_ENVIRONMENT_GC_TYPE,
                 XODUS_PERSISTENCE_ENVIRONMENT_SYNC_PERIOD_MSEC,
                 XODUS_PERSISTENCE_ENVIRONMENT_DURABLE_WRITES_ENABLED,
                 XODUS_PERSISTENCE_ENVIRONMENT_JMX,
@@ -77,7 +59,6 @@ public class EnvironmentUtil {
      * @param gcDeletionDelay the gc files deletion delay of persistence in ms
      * @param gcFilesInterval the gc files interval of persistence in ms
      * @param gcRunPeriod     the gc run period of persistence in ms
-     * @param gcType          the gc mode of persistence
      * @param syncPeriod      the sync period of persistence in ms
      * @param durableWrites   durable writes for persistence
      * @param jmxEnabled      jmx enabled for persistence
@@ -90,57 +71,21 @@ public class EnvironmentUtil {
             final int gcDeletionDelay,
             final int gcFilesInterval,
             final int gcRunPeriod,
-            @NotNull final GCType gcType,
             final int syncPeriod,
             final boolean durableWrites,
             final boolean jmxEnabled,
             @NotNull final String name) {
-
         checkNotNull(name, "Name for environment config must not be null");
-        checkNotNull(gcType, "Garbage Collection Type for %s must not be null", name);
-
-        final EnvironmentConfig environmentConfig = new EnvironmentConfig();
-
-        environmentConfig.setGcFileMinAge(gcMinAge);
-        log.trace("Setting GC file min age for persistence {} to {}", name, gcMinAge);
-
-        environmentConfig.setGcFilesDeletionDelay(gcDeletionDelay);
-        log.trace("Setting GC files deletion delay for persistence {} to {}ms", name, gcDeletionDelay);
-
-        environmentConfig.setGcFilesInterval(gcFilesInterval);
-        log.trace("Setting GC files interval for persistence {} to {}ms", name, gcFilesInterval);
-
-        environmentConfig.setGcRunPeriod(gcRunPeriod);
-        log.trace("Setting GC run period for persistence {} to {}ms", name, gcRunPeriod);
-
-
-        if (gcType == GCType.RENAME) {
-            environmentConfig.setGcRenameFiles(true);
-        }
-        log.trace("Setting mode for persistence {} to {}", name, gcType.name());
-
-        environmentConfig.setLogSyncPeriod(syncPeriod);
-        log.trace("Setting sync period for persistence {} to {}ms", name, syncPeriod);
-
-        environmentConfig.setLogDurableWrite(durableWrites);
-        log.trace("Setting durable writes for persistence {} to {}", name, durableWrites);
-
-        environmentConfig.setManagementEnabled(jmxEnabled);
-        log.trace("Setting JMX enabled for persistence {} to {}", name, jmxEnabled);
-
-        environmentConfig.setLogCacheUseNio(XODUS_LOG_CACHE_USE_NIO);
-
-        final PersistenceType payloadPersistenceType = InternalConfigurations.PAYLOAD_PERSISTENCE_TYPE.get();
-        final PersistenceType retainedMessagePersistenceType =
-                InternalConfigurations.RETAINED_MESSAGE_PERSISTENCE_TYPE.get();
-        // Use the default cache size if only xodus persistences are used.
-        if (payloadPersistenceType != PersistenceType.FILE && retainedMessagePersistenceType != PersistenceType.FILE) {
-            final int logCacheMemory = InternalConfigurations.XODUS_PERSISTENCE_LOG_MEMORY_HEAP_PERCENTAGE;
-            log.trace("Setting log cache memory percentage for persistence {} to {}", name, logCacheMemory);
-            environmentConfig.setMemoryUsagePercentage(logCacheMemory);
-        }
-
-        return environmentConfig;
+        final EnvironmentConfig env = new EnvironmentConfig();
+        env.setGcFileMinAge(gcMinAge);
+        env.setGcFilesDeletionDelay(gcDeletionDelay);
+        env.setGcFilesInterval(gcFilesInterval);
+        env.setGcRunPeriod(gcRunPeriod);
+        env.setLogSyncPeriod(syncPeriod);
+        env.setLogDurableWrite(durableWrites);
+        env.setManagementEnabled(jmxEnabled);
+        env.setLogCacheUseNio(XODUS_LOG_CACHE_USE_NIO);
+        env.setMemoryUsagePercentage(InternalConfigurations.XODUS_PERSISTENCE_LOG_MEMORY_HEAP_PERCENTAGE);
+        return env;
     }
-
 }

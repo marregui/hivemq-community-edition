@@ -57,15 +57,11 @@ public class LocalTopicTree {
     private static final Logger log = LoggerFactory.getLogger(LocalTopicTree.class);
 
     final CopyOnWriteArrayList<SubscriberWithQoS> rootWildcardSubscribers = new CopyOnWriteArrayList<>();
-
-    private final @NotNull Striped<ReadWriteLock> segmentLocks;
-
     @VisibleForTesting
     final SubscriptionCounters counters;
-
     @VisibleForTesting
     final ConcurrentHashMap<String, TopicTreeNode> segments = new ConcurrentHashMap<>();
-
+    private final @NotNull Striped<ReadWriteLock> segmentLocks;
     private final int mapCreationThreshold;
 
     @Inject
@@ -76,6 +72,311 @@ public class LocalTopicTree {
 
         segmentLocks = Striped.readWriteLock(64);
     }
+
+    /**
+     * Returns a distinct immutable Set of SubscribersWithQoS. The set is guaranteed to only contain one entry per
+     * subscriber string. This entry has the maximum QoS found in the topic tree and the subscription identifiers of all
+     * subscriptions for the client.
+     *
+     * @param subscribers a list of subscribers
+     * @return a immutable Set of distinct Subscribers with the maximum QoS.
+     */
+    private static @NotNull ImmutableSet<SubscriberWithIdentifiers> createDistinctSubscribers(
+            final @NotNull ImmutableList<SubscriberWithQoS> subscribers) {
+
+        final ImmutableSet.Builder<SubscriberWithIdentifiers> newSet = ImmutableSet.builder();
+
+        final ImmutableList<SubscriberWithQoS> subscriberWithQoS =
+                ImmutableList.sortedCopyOf(Comparator.naturalOrder(), subscribers);
+
+        final Iterator<SubscriberWithQoS> iterator = subscriberWithQoS.iterator();
+
+        SubscriberWithIdentifiers last = null;
+
+        // Create a single entry per client id, with the highest QoS an all subscription identifiers
+        while (iterator.hasNext()) {
+            final SubscriberWithQoS current = iterator.next();
+
+            if (last != null) {
+
+                if (!equalSubscription(current, last)) {
+                    newSet.add(last);
+                    last = new SubscriberWithIdentifiers(current);
+                } else {
+                    last.setQos(current.getQos());
+                    if (current.getSubscriptionIdentifier() != null) {
+                        final ImmutableIntArray subscriptionIds = last.getSubscriptionIdentifier();
+                        final Integer subscriptionId = current.getSubscriptionIdentifier();
+                        final ImmutableIntArray mergedSubscriptionIds =
+                                ImmutableIntArray.builder(subscriptionIds.length() + 1)
+                                        .addAll(subscriptionIds)
+                                        .add(subscriptionId)
+                                        .build();
+                        last.setSubscriptionIdentifiers(mergedSubscriptionIds);
+                    }
+                }
+            } else {
+                last = new SubscriberWithIdentifiers(current);
+            }
+
+            if (!iterator.hasNext()) {
+                newSet.add(last);
+            }
+        }
+
+        return newSet.build();
+    }
+
+    private static boolean equalSubscription(
+            final @NotNull SubscriberWithQoS first, final @NotNull SubscriberWithIdentifiers second) {
+
+        return equalSubscription(first, second.getSubscriber(), second.getTopicFilter(), second.getSharedName());
+    }
+
+    private static boolean equalSubscription(
+            final @NotNull SubscriberWithQoS first,
+            final @NotNull String secondClient,
+            final @Nullable String secondTopicFilter,
+            final @Nullable String secondSharedName) {
+
+        if (!first.getSubscriber().equals(secondClient)) {
+            return false;
+        }
+        if (!Objects.equals(first.getTopicFilter(), secondTopicFilter)) {
+            return false;
+        }
+        return Objects.equals(first.getSharedName(), secondSharedName);
+    }
+
+    private static void traverseTree(
+            final @NotNull TopicTreeNode node,
+            final @NotNull SubscriptionsConsumer subscriberAndTopicConsumer,
+            final String[] topicPart,
+            final int depth) {
+
+        if (!topicPart[depth].equals(node.getTopicPart()) && !"+".equals(node.getTopicPart())) {
+            return;
+        }
+
+        subscriberAndTopicConsumer.acceptNonRootState(node.wildcardSubscriptions);
+
+        final boolean end = topicPart.length - 1 == depth;
+        if (end) {
+            subscriberAndTopicConsumer.acceptNonRootState(node.exactSubscriptions);
+        } else {
+            if (getChildrenCount(node) == 0) {
+                return;
+            }
+
+            final int nextDepth = depth + 1;
+
+            //if the node has an index, we can just use the index instead of traversing the whole node set
+            if (node.getChildrenMap() != null) {
+
+                //Get the exact node by the index
+                final TopicTreeNode matchingChildNode = getIndexForChildNode(topicPart[nextDepth], node);
+                if (matchingChildNode != null) {
+                    traverseTree(matchingChildNode, subscriberAndTopicConsumer, topicPart, depth + 1);
+                }
+
+                //We also need to check if there is a wildcard node
+                final TopicTreeNode matchingWildcardNode = getIndexForChildNode("+", node);
+                if (matchingWildcardNode != null) {
+                    traverseTree(matchingWildcardNode, subscriberAndTopicConsumer, topicPart, nextDepth);
+                }
+                //We can return without any further recursion because we found all matching nodes
+                return;
+            }
+
+            //The children are stored as array
+            final TopicTreeNode[] children = node.getChildren();
+            if (children == null) {
+                return;
+            }
+
+            for (final TopicTreeNode childNode : children) {
+                if (childNode != null) {
+                    traverseTree(childNode, subscriberAndTopicConsumer, topicPart, nextDepth);
+                }
+            }
+        }
+    }
+
+    private static @Nullable TopicTreeNode getIndexForChildNode(
+            final @NotNull String key, final @NotNull TopicTreeNode node) {
+
+        final Map<String, TopicTreeNode> childrenMap = node.getChildrenMap();
+        if (childrenMap == null) {
+            return null;
+        }
+        return childrenMap.get(key);
+    }
+
+    private static @Nullable TopicTreeNode getLastNode(final @NotNull TopicTreeNode[] nodes) {
+        //Search for the last node which is not null
+        for (int i = nodes.length - 1; i >= 0; i--) {
+            final TopicTreeNode node = nodes[i];
+
+            if (node != null) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Recursively iterates all children nodes of a given node and does a look-up if one of the children nodes matches
+     * the next topic level. If this is the case, the next node will be added to the given nodes array.
+     * <p>
+     * Please
+     *
+     * @param node       the node to iterate children for
+     * @param topicParts the complete topic array
+     * @param results    the result array
+     * @param depth      the current topic level depth
+     */
+    private static void iterateChildNodesForSubscriberRemoval(
+            final @NotNull TopicTreeNode node,
+            final @NotNull String[] topicParts,
+            final @NotNull TopicTreeNode[] results,
+            final int depth) {
+
+        //Note dobermai: We don't need to check for "+" subscribers explicitly, because unsubscribes are always absolute
+
+        TopicTreeNode foundNode = null;
+
+        if (node.getChildrenMap() != null) {
+            if (topicParts.length > depth + 1) {
+                //We have an index available, so we can use it
+                final TopicTreeNode indexNode = node.getChildrenMap().get(topicParts[depth + 1]);
+                if (indexNode == null) {
+                    //No child topic found, we can abort
+                    return;
+                } else {
+                    foundNode = indexNode;
+                }
+            }
+        } else if (node.getChildren() != null) {
+
+            //No index available, we must iterate all child nodes
+
+            for (int i = 0; i < node.getChildren().length; i++) {
+                final TopicTreeNode child = node.getChildren()[i];
+                if (child != null && depth + 2 <= topicParts.length) {
+
+                    if (child.getTopicPart().equals(topicParts[depth + 1])) {
+                        foundNode = child;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (foundNode != null) {
+            //Child node found, traverse the tree one level deeper
+            results[depth + 1] = foundNode;
+            iterateChildNodesForSubscriberRemoval(foundNode, topicParts, results, depth + 1);
+        }
+    }
+
+    private static void traverseTreeWithFilter(
+            final @NotNull TopicTreeNode node,
+            final @NotNull ImmutableSet.Builder<String> subscribers,
+            final String[] topicPart,
+            final int depth,
+            final @NotNull Predicate<SubscriberWithQoS> itemFilter) {
+
+        if (!topicPart[depth].equals(node.getTopicPart()) && !"+".equals(node.getTopicPart())) {
+            return;
+        }
+
+        node.wildcardSubscriptions.populateWithSubscriberNamesUsingFilter(itemFilter, subscribers);
+
+        final boolean end = topicPart.length - 1 == depth;
+        if (end) {
+            node.exactSubscriptions.populateWithSubscriberNamesUsingFilter(itemFilter, subscribers);
+        } else {
+            if (getChildrenCount(node) == 0) {
+                return;
+            }
+
+            final int nextDepth = depth + 1;
+
+            //if the node has an index, we can just use the index instead of traversing the whole node set
+            if (node.getChildrenMap() != null) {
+
+                //Get the exact node by the index
+                final TopicTreeNode matchingChildNode = getIndexForChildNode(topicPart[nextDepth], node);
+                if (matchingChildNode != null) {
+                    traverseTreeWithFilter(matchingChildNode, subscribers, topicPart, nextDepth, itemFilter);
+                }
+
+                //We also need to check if there is a wildcard node
+                final TopicTreeNode matchingWildcardNode = getIndexForChildNode("+", node);
+                if (matchingWildcardNode != null) {
+                    traverseTreeWithFilter(matchingWildcardNode, subscribers, topicPart, nextDepth, itemFilter);
+                }
+                //We can return without any further recursion because we found all matching nodes
+                return;
+            }
+
+            //The children are stored as array
+            final TopicTreeNode[] children = node.getChildren();
+            if (children == null) {
+                return;
+            }
+
+            for (final TopicTreeNode childNode : children) {
+                if (childNode != null) {
+                    traverseTreeWithFilter(childNode, subscribers, topicPart, nextDepth, itemFilter);
+                }
+            }
+        }
+    }
+
+    private static @NotNull ImmutableSet<String> createDistinctSubscriberIds(
+            final ImmutableSet<SubscriberWithQoS> subscriptionsByFilters) {
+
+        final ImmutableSet.Builder<String> builder =
+                ImmutableSet.builderWithExpectedSize(subscriptionsByFilters.size());
+        for (final SubscriberWithQoS subscription : subscriptionsByFilters) {
+            builder.add(subscription.getSubscriber());
+        }
+        return builder.build();
+    }
+
+    /**
+     * Returns the number of children of a node.
+     *
+     * @param node the node
+     * @return the number of children nodes for the given node
+     */
+    public static int getChildrenCount(final @NotNull TopicTreeNode node) {
+        checkNotNull(node, "Node must not be null");
+
+        //If the node has a children map instead of the array, we don't need to count
+        if (node.childrenMap != null) {
+            return node.childrenMap.size();
+        }
+
+        final TopicTreeNode[] children = node.getChildren();
+
+        if (children == null) {
+            return 0;
+        }
+
+        int count = 0;
+        for (final TopicTreeNode child : children) {
+            if (child != null) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /* ***************************************
+        Subscriber Removal for all nodes
+     ****************************************/
 
     public boolean addTopic(
             final @NotNull String subscriber,
@@ -242,149 +543,6 @@ public class LocalTopicTree {
     }
 
     /**
-     * Returns a distinct immutable Set of SubscribersWithQoS. The set is guaranteed to only contain one entry per
-     * subscriber string. This entry has the maximum QoS found in the topic tree and the subscription identifiers of all
-     * subscriptions for the client.
-     *
-     * @param subscribers a list of subscribers
-     * @return a immutable Set of distinct Subscribers with the maximum QoS.
-     */
-    private static @NotNull ImmutableSet<SubscriberWithIdentifiers> createDistinctSubscribers(
-            final @NotNull ImmutableList<SubscriberWithQoS> subscribers) {
-
-        final ImmutableSet.Builder<SubscriberWithIdentifiers> newSet = ImmutableSet.builder();
-
-        final ImmutableList<SubscriberWithQoS> subscriberWithQoS =
-                ImmutableList.sortedCopyOf(Comparator.naturalOrder(), subscribers);
-
-        final Iterator<SubscriberWithQoS> iterator = subscriberWithQoS.iterator();
-
-        SubscriberWithIdentifiers last = null;
-
-        // Create a single entry per client id, with the highest QoS an all subscription identifiers
-        while (iterator.hasNext()) {
-            final SubscriberWithQoS current = iterator.next();
-
-            if (last != null) {
-
-                if (!equalSubscription(current, last)) {
-                    newSet.add(last);
-                    last = new SubscriberWithIdentifiers(current);
-                } else {
-                    last.setQos(current.getQos());
-                    if (current.getSubscriptionIdentifier() != null) {
-                        final ImmutableIntArray subscriptionIds = last.getSubscriptionIdentifier();
-                        final Integer subscriptionId = current.getSubscriptionIdentifier();
-                        final ImmutableIntArray mergedSubscriptionIds =
-                                ImmutableIntArray.builder(subscriptionIds.length() + 1)
-                                        .addAll(subscriptionIds)
-                                        .add(subscriptionId)
-                                        .build();
-                        last.setSubscriptionIdentifiers(mergedSubscriptionIds);
-                    }
-                }
-            } else {
-                last = new SubscriberWithIdentifiers(current);
-            }
-
-            if (!iterator.hasNext()) {
-                newSet.add(last);
-            }
-        }
-
-        return newSet.build();
-    }
-
-    private static boolean equalSubscription(
-            final @NotNull SubscriberWithQoS first, final @NotNull SubscriberWithIdentifiers second) {
-
-        return equalSubscription(first, second.getSubscriber(), second.getTopicFilter(), second.getSharedName());
-    }
-
-    private static boolean equalSubscription(
-            final @NotNull SubscriberWithQoS first,
-            final @NotNull String secondClient,
-            final @Nullable String secondTopicFilter,
-            final @Nullable String secondSharedName) {
-
-        if (!first.getSubscriber().equals(secondClient)) {
-            return false;
-        }
-        if (!Objects.equals(first.getTopicFilter(), secondTopicFilter)) {
-            return false;
-        }
-        return Objects.equals(first.getSharedName(), secondSharedName);
-    }
-
-    private static void traverseTree(
-            final @NotNull TopicTreeNode node,
-            final @NotNull SubscriptionsConsumer subscriberAndTopicConsumer,
-            final String[] topicPart,
-            final int depth) {
-
-        if (!topicPart[depth].equals(node.getTopicPart()) && !"+".equals(node.getTopicPart())) {
-            return;
-        }
-
-        subscriberAndTopicConsumer.acceptNonRootState(node.wildcardSubscriptions);
-
-        final boolean end = topicPart.length - 1 == depth;
-        if (end) {
-            subscriberAndTopicConsumer.acceptNonRootState(node.exactSubscriptions);
-        } else {
-            if (getChildrenCount(node) == 0) {
-                return;
-            }
-
-            final int nextDepth = depth + 1;
-
-            //if the node has an index, we can just use the index instead of traversing the whole node set
-            if (node.getChildrenMap() != null) {
-
-                //Get the exact node by the index
-                final TopicTreeNode matchingChildNode = getIndexForChildNode(topicPart[nextDepth], node);
-                if (matchingChildNode != null) {
-                    traverseTree(matchingChildNode, subscriberAndTopicConsumer, topicPart, depth + 1);
-                }
-
-                //We also need to check if there is a wildcard node
-                final TopicTreeNode matchingWildcardNode = getIndexForChildNode("+", node);
-                if (matchingWildcardNode != null) {
-                    traverseTree(matchingWildcardNode, subscriberAndTopicConsumer, topicPart, nextDepth);
-                }
-                //We can return without any further recursion because we found all matching nodes
-                return;
-            }
-
-            //The children are stored as array
-            final TopicTreeNode[] children = node.getChildren();
-            if (children == null) {
-                return;
-            }
-
-            for (final TopicTreeNode childNode : children) {
-                if (childNode != null) {
-                    traverseTree(childNode, subscriberAndTopicConsumer, topicPart, nextDepth);
-                }
-            }
-        }
-    }
-
-    private static @Nullable TopicTreeNode getIndexForChildNode(
-            final @NotNull String key, final @NotNull TopicTreeNode node) {
-
-        final Map<String, TopicTreeNode> childrenMap = node.getChildrenMap();
-        if (childrenMap == null) {
-            return null;
-        }
-        return childrenMap.get(key);
-    }
-
-    /* ***************************************
-        Subscriber Removal for all nodes
-     ****************************************/
-
-    /**
      * removes the specified client from the root wildcard subscribers
      *
      * @param subscriber the clientId
@@ -500,73 +658,6 @@ public class LocalTopicTree {
         }
     }
 
-    private static @Nullable TopicTreeNode getLastNode(final @NotNull TopicTreeNode[] nodes) {
-        //Search for the last node which is not null
-        for (int i = nodes.length - 1; i >= 0; i--) {
-            final TopicTreeNode node = nodes[i];
-
-            if (node != null) {
-                return node;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Recursively iterates all children nodes of a given node and does a look-up if one of the children nodes matches
-     * the next topic level. If this is the case, the next node will be added to the given nodes array.
-     * <p>
-     * Please
-     *
-     * @param node       the node to iterate children for
-     * @param topicParts the complete topic array
-     * @param results    the result array
-     * @param depth      the current topic level depth
-     */
-    private static void iterateChildNodesForSubscriberRemoval(
-            final @NotNull TopicTreeNode node,
-            final @NotNull String[] topicParts,
-            final @NotNull TopicTreeNode[] results,
-            final int depth) {
-
-        //Note dobermai: We don't need to check for "+" subscribers explicitly, because unsubscribes are always absolute
-
-        TopicTreeNode foundNode = null;
-
-        if (node.getChildrenMap() != null) {
-            if (topicParts.length > depth + 1) {
-                //We have an index available, so we can use it
-                final TopicTreeNode indexNode = node.getChildrenMap().get(topicParts[depth + 1]);
-                if (indexNode == null) {
-                    //No child topic found, we can abort
-                    return;
-                } else {
-                    foundNode = indexNode;
-                }
-            }
-        } else if (node.getChildren() != null) {
-
-            //No index available, we must iterate all child nodes
-
-            for (int i = 0; i < node.getChildren().length; i++) {
-                final TopicTreeNode child = node.getChildren()[i];
-                if (child != null && depth + 2 <= topicParts.length) {
-
-                    if (child.getTopicPart().equals(topicParts[depth + 1])) {
-                        foundNode = child;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (foundNode != null) {
-            //Child node found, traverse the tree one level deeper
-            results[depth + 1] = foundNode;
-            iterateChildNodesForSubscriberRemoval(foundNode, topicParts, results, depth + 1);
-        }
-    }
-
     public @NotNull ImmutableSet<SubscriberWithQoS> getSharedSubscriber(
             final @NotNull String group, final @NotNull String topicFilter) {
 
@@ -635,72 +726,6 @@ public class LocalTopicTree {
         }
 
         return subscribers.build();
-    }
-
-    private static void traverseTreeWithFilter(
-            final @NotNull TopicTreeNode node,
-            final @NotNull ImmutableSet.Builder<String> subscribers,
-            final String[] topicPart,
-            final int depth,
-            final @NotNull Predicate<SubscriberWithQoS> itemFilter) {
-
-        if (!topicPart[depth].equals(node.getTopicPart()) && !"+".equals(node.getTopicPart())) {
-            return;
-        }
-
-        node.wildcardSubscriptions.populateWithSubscriberNamesUsingFilter(itemFilter, subscribers);
-
-        final boolean end = topicPart.length - 1 == depth;
-        if (end) {
-            node.exactSubscriptions.populateWithSubscriberNamesUsingFilter(itemFilter, subscribers);
-        } else {
-            if (getChildrenCount(node) == 0) {
-                return;
-            }
-
-            final int nextDepth = depth + 1;
-
-            //if the node has an index, we can just use the index instead of traversing the whole node set
-            if (node.getChildrenMap() != null) {
-
-                //Get the exact node by the index
-                final TopicTreeNode matchingChildNode = getIndexForChildNode(topicPart[nextDepth], node);
-                if (matchingChildNode != null) {
-                    traverseTreeWithFilter(matchingChildNode, subscribers, topicPart, nextDepth, itemFilter);
-                }
-
-                //We also need to check if there is a wildcard node
-                final TopicTreeNode matchingWildcardNode = getIndexForChildNode("+", node);
-                if (matchingWildcardNode != null) {
-                    traverseTreeWithFilter(matchingWildcardNode, subscribers, topicPart, nextDepth, itemFilter);
-                }
-                //We can return without any further recursion because we found all matching nodes
-                return;
-            }
-
-            //The children are stored as array
-            final TopicTreeNode[] children = node.getChildren();
-            if (children == null) {
-                return;
-            }
-
-            for (final TopicTreeNode childNode : children) {
-                if (childNode != null) {
-                    traverseTreeWithFilter(childNode, subscribers, topicPart, nextDepth, itemFilter);
-                }
-            }
-        }
-    }
-
-    private static @NotNull ImmutableSet<String> createDistinctSubscriberIds(
-            final ImmutableSet<SubscriberWithQoS> subscriptionsByFilters) {
-
-        final ImmutableSet.Builder<String> builder =
-                ImmutableSet.builderWithExpectedSize(subscriptionsByFilters.size());
-        for (final SubscriberWithQoS subscription : subscriptionsByFilters) {
-            builder.add(subscription.getSubscriber());
-        }
-        return builder.build();
     }
 
     private @NotNull ImmutableSet<SubscriberWithQoS> getSubscriptionsByTopicFilter(
@@ -792,6 +817,10 @@ public class LocalTopicTree {
         }
     }
 
+    /* *************
+        Utilities
+     **************/
+
     public @Nullable SubscriberWithIdentifiers findSubscriber(
             final @NotNull String client, final @NotNull String topic) {
 
@@ -801,39 +830,6 @@ public class LocalTopicTree {
         findSubscribers(topic, false, subscriberConsumer);
 
         return subscriberConsumer.getMatchingSubscriber();
-    }
-
-    /* *************
-        Utilities
-     **************/
-
-    /**
-     * Returns the number of children of a node.
-     *
-     * @param node the node
-     * @return the number of children nodes for the given node
-     */
-    public static int getChildrenCount(final @NotNull TopicTreeNode node) {
-        checkNotNull(node, "Node must not be null");
-
-        //If the node has a children map instead of the array, we don't need to count
-        if (node.childrenMap != null) {
-            return node.childrenMap.size();
-        }
-
-        final TopicTreeNode[] children = node.getChildren();
-
-        if (children == null) {
-            return 0;
-        }
-
-        int count = 0;
-        for (final TopicTreeNode child : children) {
-            if (child != null) {
-                count++;
-            }
-        }
-        return count;
     }
 
     interface SubscriptionsConsumer {
@@ -906,8 +902,8 @@ public class LocalTopicTree {
     private static final class ClientPublishDeliverySubscriptionInfoFinder implements SubscriptionsConsumer {
 
         private final @NotNull String client;
-        private @Nullable SubscriberWithIdentifiers sharedSubscriber;
         private final @NotNull ImmutableList.Builder<SubscriberWithQoS> subscribers = ImmutableList.builder();
+        private @Nullable SubscriberWithIdentifiers sharedSubscriber;
         private boolean nonSharedSubscriberFound;
 
         private ClientPublishDeliverySubscriptionInfoFinder(final @NotNull String client) {
@@ -967,5 +963,4 @@ public class LocalTopicTree {
             }
         }
     }
-
 }

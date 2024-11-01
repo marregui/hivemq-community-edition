@@ -15,9 +15,6 @@
  */
 package com.hivemq.migration.meta;
 
-/**
- * @author Florian Limpöck
- */
 public enum PersistenceType {
     FILE,
     FILE_NATIVE;

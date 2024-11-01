@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.hivemq.configuration.entity.mqtt.MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT;
-import static com.hivemq.persistence.local.xodus.EnvironmentUtil.GCType;
 
 public class InternalConfigurations {
 
@@ -123,11 +122,6 @@ public class InternalConfigurations {
      * The configuration for xodus persistence environment jmx
      */
     public static final boolean XODUS_PERSISTENCE_ENVIRONMENT_JMX = false;
-
-    /**
-     * The configuration for xodus persistence environment garbage collection type
-     */
-    public static final GCType XODUS_PERSISTENCE_ENVIRONMENT_GC_TYPE = GCType.DELETE;
 
     /**
      * The configuration for xodus persistence environment garbage collection deletion delay

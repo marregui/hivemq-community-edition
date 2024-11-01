@@ -12,7 +12,6 @@ equalsVerifier = "3.16.2"
 guava = "33.1.0-jre"
 guice = "5.1.0"
 jackson = "2.17.2"
-jacoco = "0.8.7"
 javassist = "3.30.2-GA"
 javax-annotation-api = "1.3.2"
 jaxb-api = "2.3.3"
@@ -77,15 +76,3 @@ wiremock-jre8-standalone = { module = "com.github.tomakehurst:wiremock-jre8-stan
 xodus-environment = { module = "org.jetbrains.xodus:xodus-environment", version.ref = "xodus" }
 xodus-openApi = { module = "org.jetbrains.xodus:xodus-openAPI", version.ref = "xodus" }
 zeroAllocationHashing = { module = "net.openhft:zero-allocation-hashing", version.ref = "zeroAllocationHashing" }
-
-[plugins]
-defaults = { id = "io.github.sgtsilvio.gradle.defaults", version = "0.2.0" }
-forbiddenApis = { id = "de.thetaphi.forbiddenapis", version = "3.7" }
-githubRelease = { id = "com.github.breadmoirai.github-release", version = "2.4.1" }
-javadocLinks = { id = "io.github.sgtsilvio.gradle.javadoc-links", version = "0.8.0" }
-license = { id = "com.github.hierynomus.license", version = "0.16.1" }
-metadata = { id = "io.github.sgtsilvio.gradle.metadata", version = "0.6.0" }
-nexusPublish = { id = "io.github.gradle-nexus.publish-plugin", version = "1.3.0" }
-oci = { id = "io.github.sgtsilvio.gradle.oci", version = "0.10.0" }
-shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
-versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }

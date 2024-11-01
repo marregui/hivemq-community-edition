@@ -41,7 +41,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 public abstract class RocksDBLocalPersistence implements LocalPersistence, FilePersistence {
 
-    protected final AtomicBoolean stopped = new AtomicBoolean(false);
+    protected final AtomicBoolean stopped;
     protected final @NotNull RocksDB[] buckets;
     private final @NotNull LocalPersistenceFileUtil localPersistenceFileUtil;
     private final @NotNull PersistenceStartup persistenceStartup;
@@ -67,6 +67,23 @@ public abstract class RocksDBLocalPersistence implements LocalPersistence, FileP
         this.blockCacheSizePortion = blockCacheSizePortion;
         this.blockSize = blockSize;
         this.enabled = enabled;
+        this.stopped = new AtomicBoolean();
+    }
+
+    protected static long physicalMemory() {
+        final OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+        if (osBean instanceof com.sun.management.OperatingSystemMXBean) {
+            final com.sun.management.OperatingSystemMXBean bean =
+                    (com.sun.management.OperatingSystemMXBean) osBean;
+            final long physicalMemory = bean.getTotalPhysicalMemorySize();
+            if (physicalMemory > 0) {
+                return physicalMemory;
+            }
+        }
+
+        final long heap = Runtime.getRuntime().maxMemory();
+        final double fallbackEstimation = 1.5;
+        return (long) (heap * fallbackEstimation);
     }
 
     protected abstract @NotNull String getName();
@@ -185,23 +202,6 @@ public abstract class RocksDBLocalPersistence implements LocalPersistence, FileP
         }
 
         init();
-    }
-
-    protected static long physicalMemory() {
-        final OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
-        if (operatingSystemMXBean instanceof com.sun.management.OperatingSystemMXBean) {
-            final com.sun.management.OperatingSystemMXBean sunBeam =
-                    (com.sun.management.OperatingSystemMXBean) operatingSystemMXBean;
-
-            final long physicalMemory = sunBeam.getTotalPhysicalMemorySize();
-            if (physicalMemory > 0) {
-                return physicalMemory;
-            }
-        }
-
-        final long heap = Runtime.getRuntime().maxMemory();
-        final double fallbackEstimation = 1.5;
-        return (long) (heap * fallbackEstimation);
     }
 
     /**

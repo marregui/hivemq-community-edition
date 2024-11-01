@@ -15,8 +15,6 @@
  */
 package com.hivemq.migration.meta;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * @author Florian Limpöck
  */

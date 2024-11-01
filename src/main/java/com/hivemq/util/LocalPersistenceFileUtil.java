@@ -17,51 +17,36 @@ package com.hivemq.util;
 
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.configuration.info.SystemInformation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import java.io.File;
 
-/**
- * A utility for the local file persistences
- *
- * @author Dominik Obermaier
- */
 @LazySingleton
 public class LocalPersistenceFileUtil {
 
-    public static final String PERSISTENCE_SUBFOLDER_NAME = "persistence";
-    private static final Logger log = LoggerFactory.getLogger(LocalPersistenceFileUtil.class);
-
-
-    private final SystemInformation systemInformation;
+    private final @NotNull SystemInformation systemInformation;
 
     @Inject
-    LocalPersistenceFileUtil(final SystemInformation systemInformation) {
+    LocalPersistenceFileUtil(final @NotNull SystemInformation systemInformation) {
         this.systemInformation = systemInformation;
     }
 
-    public synchronized File getLocalPersistenceFolder() {
-        final File dataFolder = systemInformation.getDataFolder();
-
-        final File persistenceFolder = new File(dataFolder, PERSISTENCE_SUBFOLDER_NAME);
-        if (!persistenceFolder.exists()) {
-            log.debug("Folder {} does not exist, trying to create it", persistenceFolder.getAbsolutePath());
-            final boolean createdDirectory = persistenceFolder.mkdirs();
-            if (createdDirectory) {
-                log.debug("Created folder {}", dataFolder.getAbsolutePath());
-            }
-        }
-        return persistenceFolder;
+    public synchronized @NotNull File getLocalPersistenceFolder() {
+        return ensureExists(new File(systemInformation.getDataFolder(), "persistence"),
+                "Could not create persistence folder");
     }
 
-    public synchronized File getVersionedLocalPersistenceFolder(final String persistence, final String version) {
-        final File versionedFolder = new File(getLocalPersistenceFolder(), persistence + File.separator + version);
-        if (!versionedFolder.exists()) {
-            log.debug("Folder {} does not exist, trying to create it", versionedFolder.getAbsolutePath());
-            versionedFolder.mkdirs();
+    public synchronized @NotNull File getVersionedLocalPersistenceFolder(
+            final @NotNull String persistence, final @NotNull String version) {
+        return ensureExists(new File(getLocalPersistenceFolder(), persistence + File.separator + version),
+                "Could not create versioned persistence folder");
+    }
+
+    private synchronized @NotNull File ensureExists(final @NotNull File folder, final @NotNull String errorMsg) {
+        if (!folder.exists() && !folder.mkdirs()) {
+            throw new IllegalStateException(errorMsg + ": " + folder.getAbsolutePath());
         }
-        return versionedFolder;
+        return folder;
     }
 }

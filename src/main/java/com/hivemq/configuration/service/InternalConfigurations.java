@@ -26,26 +26,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.hivemq.configuration.entity.mqtt.MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT;
 import static com.hivemq.persistence.local.xodus.EnvironmentUtil.GCType;
 
-/**
- * @author Christoph Schäbel
- * @author Dominik Obermaier
- * @author Florian Limpöck
- */
 public class InternalConfigurations {
 
     private static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
     private static final int AVAILABLE_PROCESSORS_TIMES_TWO = Runtime.getRuntime().availableProcessors() * 2;
     private static final int AVAILABLE_PROCESSORS_TIMES_FOUR = Runtime.getRuntime().availableProcessors() * 4;
-
-    /* ****************
-     *  Single Writer *
-     *****************/
-
-    /**
-     * Activates special SingleWriter for in-memory persistence. The submitted tasks must not be blocking.
-     */
-    public static final AtomicBoolean IN_MEMORY_SINGLE_WRITER = new AtomicBoolean(true);
-
 
     /* ***************
      *  Persistences *

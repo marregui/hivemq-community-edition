@@ -1,0 +1,76 @@
+plugins {
+    id 'application'
+}
+
+group = "com.hivemq"
+description = "HiveMQ CE is a Java-based open source MQTT broker that fully supports MQTT 5"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // netty
+    implementation(libs.netty.buffer)
+    implementation(libs.netty.codec)
+    implementation(libs.netty.codec.http)
+    implementation(libs.netty.common)
+    implementation(libs.netty.handler)
+    implementation(libs.netty.transport)
+
+    // logging
+    implementation(libs.slf4j.api)
+    implementation(libs.julToSlf4j)
+    implementation(libs.logback.classic)
+
+    // security
+    implementation(libs.bouncycastle.prov)
+    implementation(libs.bouncycastle.pkix)
+
+    // persistence
+    implementation(libs.rocksdb)
+    implementation(libs.xodus.openApi)
+    implementation(libs.xodus.environment)
+
+    // config
+    implementation(libs.jaxb.api)
+    runtimeOnly(libs.jaxb.impl)
+
+    // metrics
+    implementation(libs.dropwizard.metrics)
+    implementation(libs.dropwizard.metrics.jmx)
+    runtimeOnly(libs.dropwizard.metrics.logback)
+    implementation(libs.oshi)
+    implementation(libs.guice)
+    implementation(libs.javax.annotation.api)
+
+    // common
+    implementation(libs.apache.commonsIO)
+    implementation(libs.apache.commonsLang)
+    implementation(libs.guava)
+    implementation(libs.zeroAllocationHashing)
+    implementation(libs.jackson.databind)
+    implementation(libs.jctools)
+
+    /* primitive data structures */
+    implementation(libs.eclipse.collections)
+    implementation(libs.jetbrains.annotations)
+
+    /* ******************** test ******************** */
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito)
+    testImplementation(libs.equalsVerifier)
+    testImplementation(libs.concurrentUnit)
+    testImplementation(libs.shrinkwrap.api)
+    testRuntimeOnly(libs.shrinkwrap.impl)
+    testImplementation(libs.byteBuddy)
+    testImplementation(libs.wiremock.jre8.standalone)
+    testImplementation(libs.javassist)
+    testImplementation(libs.awaitility)
+    testImplementation(libs.jetbrains.annotations)
+    testImplementation(libs.stefanBirkner.systemRules)
+}
+
+wrapper {
+    gradleVersion = '8.10.2'
+}

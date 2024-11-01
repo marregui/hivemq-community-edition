@@ -24,7 +24,7 @@ import com.hivemq.mqtt.handler.publish.PublishStatus;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.message.publish.PUBLISHFactory;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 import com.hivemq.persistence.SingleWriterService;
 import com.hivemq.persistence.clientqueue.ClientQueuePersistence;
 import com.hivemq.persistence.clientsession.ClientSession;
@@ -188,10 +188,10 @@ public class PublishDistributorImplTest {
                 anyBoolean(),
                 anyLong())).thenReturn(Futures.immediateFuture(null));
 
-        final Map<String, SubscriberWithIdentifiers> subscribers = Map.of("client1",
-                new SubscriberWithIdentifiers("client1", 1, (byte) 0, null),
+        final Map<String, SubscriberWithIds> subscribers = Map.of("client1",
+                new SubscriberWithIds("client1", 1, (byte) 0),
                 "client2",
-                new SubscriberWithIdentifiers("client2", 1, (byte) 0, null));
+                new SubscriberWithIds("client2", 1, (byte) 0));
 
         publishDistributor.distributeToNonSharedSubscribers(subscribers,
                 TestMessageUtil.createMqtt5Publish(),

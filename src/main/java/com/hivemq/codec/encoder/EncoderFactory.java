@@ -51,12 +51,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
 
-/**
- * This factory is used to create encoders and encode messages.
- *
- * @author Waldemar Ruck
- * @since 4.0
- */
 @Singleton
 public class EncoderFactory {
 
@@ -151,7 +145,6 @@ public class EncoderFactory {
         Mqtt5EncoderFactory(
                 final @NotNull MessageDroppedService messageDroppedService,
                 final @NotNull SecurityConfigurationService securityConfigurationService) {
-
             mqtt5PublishEncoder = new Mqtt5PublishEncoder(messageDroppedService, securityConfigurationService);
             mqtt5DisconnectEncoder = new Mqtt5DisconnectEncoder(messageDroppedService, securityConfigurationService);
             mqtt5SubackEncoder = new Mqtt5SubackEncoder(messageDroppedService, securityConfigurationService);

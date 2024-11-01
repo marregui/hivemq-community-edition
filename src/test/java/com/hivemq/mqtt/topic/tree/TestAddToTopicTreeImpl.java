@@ -21,7 +21,7 @@ import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 import com.hivemq.mqtt.topic.SubscriberWithQoS;
 import com.hivemq.mqtt.topic.SubscriptionFlag;
 import org.junit.Before;
@@ -388,18 +388,18 @@ public class TestAddToTopicTreeImpl {
         final LocalTopicTree topicTree = new LocalTopicTree(new MetricsHolder(new MetricRegistry()));
         topicTree.addTopic("subscriber1",
                 new Topic("topic1/1", QoS.AT_LEAST_ONCE),
-                SubscriptionFlag.getDefaultFlags(false, false, false),
+                SubscriptionFlag.buildFlag(false, false, false),
                 null);
         topicTree.addTopic("subscriber2",
                 new Topic("topic1/+", QoS.AT_LEAST_ONCE),
-                SubscriptionFlag.getDefaultFlags(false, true, true),
+                SubscriptionFlag.buildFlag(false, true, true),
                 null);
         topicTree.addTopic("subscriber3",
                 new Topic("+/1", QoS.AT_LEAST_ONCE),
-                SubscriptionFlag.getDefaultFlags(false, false, false),
+                SubscriptionFlag.buildFlag(false, false, false),
                 null);
 
-        final ImmutableSet<SubscriberWithIdentifiers> subscribers =
+        final ImmutableSet<SubscriberWithIds> subscribers =
                 topicTree.findTopicSubscribers("topic1/1").getSubscribers();
         assertEquals(3, subscribers.size());
     }

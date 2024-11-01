@@ -21,21 +21,10 @@ import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Arrays;
 import java.util.Iterator;
 
-/**
- * This int to int map designed for minimal memory overhead for instaces with very few entries.
- * Access is to the map is linear at best, therefore this implementation should not be used if cpu time is a concern.
- * This class is not thread save.
- * Each instance of this IntMap must not be accessed by more than one thread at a time.
- *
- * @author Lukas Brandl
- */
 @NotThreadSafe
 public class IntMap implements Iterable<IntMap.IntMapEntry> {
 
-    private int[] backingArray = null;
-
-    public IntMap() {
-    }
+    private int[] backingArray;
 
     /**
      * Fill the array with keys from 0 to initialSize mapped to 0.
@@ -48,6 +37,9 @@ public class IntMap implements Iterable<IntMap.IntMapEntry> {
         for (int i = 0; i < backingArray.length; i += 2) {
             backingArray[i] = i;
         }
+    }
+
+    public IntMap() {
     }
 
     /**

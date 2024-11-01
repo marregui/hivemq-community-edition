@@ -22,18 +22,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-class TopicTreeNode {
+public class TopicTreeNode {
 
     private final @NotNull String topicPart;
-
-    /**
-     * Wildcard and exact subscriptions are stored in separate fields to avoid keeping the distinguishing boolean
-     * in each subscription and iterating the joint structure if the operation is relevant only to one kind of
-     * subscriptions.
-     * <p>
-     * The fields are NOT private to minimize the number of bypass methods.
-     * The class is intended to be used only as a part of {@link LocalTopicTree}.
-     */
     final @NotNull MatchingNodeSubscriptions wildcardSubscriptions;
     final @NotNull MatchingNodeSubscriptions exactSubscriptions;
 

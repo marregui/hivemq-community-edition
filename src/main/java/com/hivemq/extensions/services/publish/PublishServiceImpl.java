@@ -40,7 +40,7 @@ import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.message.publish.PUBLISHFactory;
 import com.hivemq.mqtt.services.InternalPublishService;
 import com.hivemq.mqtt.services.PublishDistributor;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 import com.hivemq.mqtt.topic.tree.LocalTopicTree;
 import com.hivemq.util.Bytes;
 
@@ -125,7 +125,7 @@ public class PublishServiceImpl implements PublishService {
         final PUBLISH internalPublish = publishToPUBLISH((PublishImpl) publish);
 
         final SettableFuture<PublishToClientResult> sendPublishFuture = SettableFuture.create();
-        final SubscriberWithIdentifiers subscriber = topicTree.findSubscriber(clientId, publish.getTopic());
+        final SubscriberWithIds subscriber = topicTree.findSubscriber(clientId, publish.getTopic());
 
         if (subscriber == null) {
             sendPublishFuture.set(PublishToClientResult.NOT_SUBSCRIBED);
@@ -138,7 +138,7 @@ public class PublishServiceImpl implements PublishService {
                 subscriber.getQos(),
                 false,
                 subscriber.isRetainAsPublished(),
-                subscriber.getSubscriptionIdentifier());
+                subscriber.getSubscriptionIds());
         Futures.addCallback(publishSendFuture, new FutureCallback<>() {
             @Override
             public void onSuccess(@Nullable final PublishStatus result) {

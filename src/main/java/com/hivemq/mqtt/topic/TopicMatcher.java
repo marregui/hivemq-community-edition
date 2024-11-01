@@ -19,11 +19,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A topic matcher which is useful if you want to match topics manually if they match to specific wildcard topics
- *
- * @since 1.4
  */
 public interface TopicMatcher {
-
     /**
      * Evaluates if a topic matches a specific topic which also can contain wildcards. All MQTT topic matching rules
      * apply

@@ -17,21 +17,21 @@ package com.hivemq.mqtt.topic.tree;
 
 import com.google.common.collect.ImmutableSet;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 
 public class TopicSubscribers {
 
-    private final @NotNull ImmutableSet<SubscriberWithIdentifiers> subscriber;
+    private final @NotNull ImmutableSet<SubscriberWithIds> subscriber;
     private final @NotNull ImmutableSet<String> sharedSubscriptions;
 
     public TopicSubscribers(
-            final @NotNull ImmutableSet<SubscriberWithIdentifiers> subscriber,
+            final @NotNull ImmutableSet<SubscriberWithIds> subscriber,
             final @NotNull ImmutableSet<String> sharedSubscriptions) {
         this.subscriber = subscriber;
         this.sharedSubscriptions = sharedSubscriptions;
     }
 
-    public @NotNull ImmutableSet<SubscriberWithIdentifiers> getSubscribers() {
+    public @NotNull ImmutableSet<SubscriberWithIds> getSubscribers() {
         return subscriber;
     }
 

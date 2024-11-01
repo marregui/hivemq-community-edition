@@ -15,52 +15,68 @@
  */
 package com.hivemq.mqtt.topic;
 
-
+import com.google.common.primitives.ImmutableIntArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.util.Bytes;
 
 import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * This represents a subscriber (client ID) with a Quality of Service Level
- */
-public class SubscriberWithQoS implements Comparable<SubscriberWithQoS> {
+public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
 
     private final @NotNull String subscriber;
-    private final int qos;
-    private final @Nullable String sharedName;
-    private final @Nullable Integer subscriptionId;
-    private final @Nullable String topicFilter; // only present for shared subscription
     private final byte flags;
+    private final @Nullable String sharedName;
+    private final @Nullable String topicFilter; // only present for shared subscription
+    private int qos;
+    private @NotNull ImmutableIntArray subscriptionIds;
 
-    public SubscriberWithQoS(
-            final @NotNull String subscriber, final int qos, final byte flags, final @Nullable Integer subscriptionId) {
-        this(subscriber, qos, flags, null, subscriptionId, null);
+    public SubscriberWithIds(
+            final @NotNull String subscriber, final int qos, final byte flags) {
+        this(subscriber, qos, flags, null, null, ImmutableIntArray.of());
+
     }
 
-    public SubscriberWithQoS(
+    public SubscriberWithIds(
             final @NotNull String subscriber,
             final int qos,
             final byte flags,
             final @Nullable String sharedName,
-            final @Nullable Integer subscriptionId,
-            final @Nullable String topicFilter) {
+            final @Nullable String topicFilter,
+            final @NotNull ImmutableIntArray subscriptionIds) {
         checkNotNull(subscriber, "Subscriber must not be null");
-        checkArgument((qos <= 2 && qos >= 0), "Quality of Service level must be between 0 and 2");
         this.subscriber = subscriber;
         this.qos = qos;
         this.flags = flags;
         this.sharedName = sharedName;
-        this.subscriptionId = subscriptionId;
         this.topicFilter = topicFilter;
+        this.subscriptionIds = subscriptionIds;
     }
 
-    @NotNull
-    public String getSubscriber() {
+
+    public SubscriberWithIds(final @NotNull SubscriberWithQoS subscriber) {
+        this(subscriber.getSubscriber(),
+                subscriber.getQos(),
+                subscriber.getFlags(),
+                subscriber.getSharedName(),
+                subscriber.getTopicFilter(),
+                subscriber.getSubscriptionId() != null ?
+                        ImmutableIntArray.of(subscriber.getSubscriptionId()) :
+                        ImmutableIntArray.of());
+    }
+
+    @Override
+    public int compareTo(final SubscriberWithIds o) {
+        final int cmp = subscriber.compareTo(o.getSubscriber());
+        if (cmp == 0) {
+            return Integer.compare(qos, o.getQos());
+        }
+        return cmp;
+    }
+
+    public @NotNull String getSubscriber() {
         return subscriber;
     }
 
@@ -68,8 +84,24 @@ public class SubscriberWithQoS implements Comparable<SubscriberWithQoS> {
         return qos;
     }
 
+    public void setQos(final int qos) {
+        this.qos = qos;
+    }
+
     public byte getFlags() {
         return flags;
+    }
+
+    public @Nullable String getSharedName() {
+        return sharedName;
+    }
+
+    public @NotNull ImmutableIntArray getSubscriptionIds() {
+        return subscriptionIds;
+    }
+
+    public void setSubscriptionIds(final @NotNull ImmutableIntArray subscriptionIds) {
+        this.subscriptionIds = subscriptionIds;
     }
 
     public boolean isSharedSubscription() {
@@ -84,18 +116,7 @@ public class SubscriberWithQoS implements Comparable<SubscriberWithQoS> {
         return Bytes.isBitSet(flags, SubscriptionFlag.NO_LOCAL.getOffset());
     }
 
-    @Nullable
-    public String getSharedName() {
-        return sharedName;
-    }
-
-    @Nullable
-    public Integer getSubscriptionId() {
-        return subscriptionId;
-    }
-
-    @Nullable
-    public String getTopicFilter() {
+    public @Nullable String getTopicFilter() {
         return topicFilter;
     }
 
@@ -104,43 +125,20 @@ public class SubscriberWithQoS implements Comparable<SubscriberWithQoS> {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof SubscriberWithQoS)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final SubscriberWithQoS that = (SubscriberWithQoS) o;
+        final SubscriberWithIds that = (SubscriberWithIds) o;
         return qos == that.qos &&
                 flags == that.flags &&
                 Objects.equals(subscriber, that.subscriber) &&
                 Objects.equals(sharedName, that.sharedName) &&
-                Objects.equals(subscriptionId, that.subscriptionId) &&
+                Objects.equals(subscriptionIds, that.subscriptionIds) &&
                 Objects.equals(topicFilter, that.topicFilter);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(subscriber, qos, flags, sharedName, subscriptionId, topicFilter);
-    }
-
-    @Override
-    public int compareTo(@Nullable final SubscriberWithQoS that) {
-        if (that == null) {
-            return -1;
-        }
-        final int cmp = subscriber.compareTo(that.getSubscriber());
-        if (cmp != 0) {
-            return cmp;
-        }
-        final int qosCmp = Integer.compare(qos, that.getQos());
-        if (qosCmp == 0 && subscriptionId != null && that.subscriptionId != null) {
-            return Integer.compare(subscriptionId, that.subscriptionId);
-        }
-        return qosCmp;
-
-    }
-
-    @NotNull
-    @Override
-    public String toString() {
-        return "SubscriberWithQoS{" + "subscriber='" + subscriber + '\'' + ", qos=" + qos + '}';
+        return Objects.hash(subscriber, qos, flags, sharedName, subscriptionIds, topicFilter);
     }
 }

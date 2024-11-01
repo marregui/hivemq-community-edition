@@ -21,11 +21,6 @@ import com.hivemq.persistence.clientsession.SharedSubscriptionService.SharedSubs
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * A Utility class for dealing with topics
- *
- * @author Dominik Obermaier
- */
 public class Topics {
 
     private static final char[] SHARED_SUBSCRIPTION_CHAR_ARRAY = "$share".toCharArray();
@@ -210,7 +205,6 @@ public class Topics {
      * @return the {@link SharedSubscription} for a given topic or <null> if it is none.
      */
     public static SharedSubscription checkForSharedSubscription(@NotNull final String topic) {
-
         final Matcher matcher = SHARED_SUBSCRIPTION_PATTERN.matcher(topic);
         if (matcher.matches()) {
             final String shareGroup;

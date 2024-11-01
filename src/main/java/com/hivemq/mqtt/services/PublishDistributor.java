@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.publish.PublishStatus;
 import com.hivemq.mqtt.message.publish.PUBLISH;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 
 import java.util.Map;
 import java.util.Set;
@@ -40,7 +40,7 @@ public interface PublishDistributor {
      * @param executorService the executor service in which all callbacks are executed
      */
     @NotNull ListenableFuture<Void> distributeToNonSharedSubscribers(
-            @NotNull Map<String, SubscriberWithIdentifiers> subscribers,
+            @NotNull Map<String, SubscriberWithIds> subscribers,
             @NotNull PUBLISH publish,
             @NotNull ExecutorService executorService);
 

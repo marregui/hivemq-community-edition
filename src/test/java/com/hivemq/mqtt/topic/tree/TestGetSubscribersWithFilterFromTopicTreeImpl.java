@@ -22,7 +22,7 @@ import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 import com.hivemq.mqtt.topic.SubscriberWithQoS;
 import com.hivemq.mqtt.topic.SubscriptionFlag;
 import org.junit.Before;
@@ -44,8 +44,8 @@ public class TestGetSubscribersWithFilterFromTopicTreeImpl {
 
     private LocalTopicTree topicTree;
 
-    private static final byte sharedFlag = SubscriptionFlag.getDefaultFlags(true, false, false);
-    private static final byte nonSharedFlag = SubscriptionFlag.getDefaultFlags(false, false, false);
+    private static final byte sharedFlag = SubscriptionFlag.buildFlag(true, false, false);
+    private static final byte nonSharedFlag = SubscriptionFlag.buildFlag(false, false, false);
 
     @Before
     public void setUp() {
@@ -405,10 +405,10 @@ public class TestGetSubscribersWithFilterFromTopicTreeImpl {
                 sharedFlag,
                 "group");
 
-        final SubscriberWithIdentifiers subscribers = topicTree.findSubscriber("client1", "topic/a");
+        final SubscriberWithIds subscribers = topicTree.findSubscriber("client1", "topic/a");
         assertNotNull(subscribers);
-        assertEquals(1, subscribers.getSubscriptionIdentifier().length());
-        assertTrue(subscribers.getSubscriptionIdentifier()
+        assertEquals(1, subscribers.getSubscriptionIds().length());
+        assertTrue(subscribers.getSubscriptionIds()
                 .contains(1));//shared subscription is hidden by the non-shared
     }
 
@@ -423,11 +423,11 @@ public class TestGetSubscribersWithFilterFromTopicTreeImpl {
                 nonSharedFlag,
                 null);
 
-        final SubscriberWithIdentifiers subscribers = topicTree.findSubscriber("client1", "topic/a");
+        final SubscriberWithIds subscribers = topicTree.findSubscriber("client1", "topic/a");
 
-        assertEquals(2, subscribers.getSubscriptionIdentifier().length());
-        assertTrue(subscribers.getSubscriptionIdentifier().contains(1));
-        assertTrue(subscribers.getSubscriptionIdentifier().contains(2));
+        assertEquals(2, subscribers.getSubscriptionIds().length());
+        assertTrue(subscribers.getSubscriptionIds().contains(1));
+        assertTrue(subscribers.getSubscriptionIds().contains(2));
     }
 
     @Test
@@ -442,10 +442,10 @@ public class TestGetSubscribersWithFilterFromTopicTreeImpl {
                 sharedFlag,
                 "group");
 
-        final SubscriberWithIdentifiers subscribers = topicTree.findSubscriber("client1", "topic/a");
+        final SubscriberWithIds subscribers = topicTree.findSubscriber("client1", "topic/a");
 
-        assertEquals(1, subscribers.getSubscriptionIdentifier().length());
-        assertEquals(1, subscribers.getSubscriptionIdentifier().get(0));
+        assertEquals(1, subscribers.getSubscriptionIds().length());
+        assertEquals(1, subscribers.getSubscriptionIds().get(0));
     }
 
 

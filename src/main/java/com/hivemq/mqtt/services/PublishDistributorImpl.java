@@ -28,7 +28,7 @@ import com.hivemq.mqtt.handler.publish.PublishStatus;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.message.publish.PUBLISHFactory;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 import com.hivemq.persistence.SingleWriterService;
 import com.hivemq.persistence.clientqueue.ClientQueuePersistence;
 import com.hivemq.persistence.clientsession.ClientSession;
@@ -68,21 +68,21 @@ public class PublishDistributorImpl implements PublishDistributor {
 
     @Override
     public @NotNull ListenableFuture<Void> distributeToNonSharedSubscribers(
-            final @NotNull Map<String, SubscriberWithIdentifiers> subscribers,
+            final @NotNull Map<String, SubscriberWithIds> subscribers,
             final @NotNull PUBLISH publish,
             final @NotNull ExecutorService executorService) {
 
         final ImmutableList.Builder<ListenableFuture<Void>> publishResultFutureBuilder = ImmutableList.builder();
 
-        for (final Map.Entry<String, SubscriberWithIdentifiers> entry : subscribers.entrySet()) {
-            final SubscriberWithIdentifiers subscriber = entry.getValue();
+        for (final Map.Entry<String, SubscriberWithIds> entry : subscribers.entrySet()) {
+            final SubscriberWithIds subscriber = entry.getValue();
 
             final ListenableFuture<PublishStatus> publishFuture = sendMessageToSubscriber(publish,
                     entry.getKey(),
                     subscriber.getQos(),
                     false,
                     subscriber.isRetainAsPublished(),
-                    subscriber.getSubscriptionIdentifier());
+                    subscriber.getSubscriptionIds());
 
             final SettableFuture<Void> publishFinishedFuture = SettableFuture.create();
             publishResultFutureBuilder.add(publishFinishedFuture);

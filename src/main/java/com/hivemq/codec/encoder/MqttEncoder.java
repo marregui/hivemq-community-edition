@@ -20,12 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.Message;
 import io.netty.buffer.ByteBuf;
 
-/**
- * The Encoder is used to encode mqtt messages.
- *
- * @author Waldemar Ruck
- * @since 4.0
- */
 public interface MqttEncoder<T extends Message> {
 
     /**

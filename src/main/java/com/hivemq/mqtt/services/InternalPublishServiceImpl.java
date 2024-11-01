@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.publish.PublishReturnCode;
 import com.hivemq.mqtt.message.publish.PUBLISH;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 import com.hivemq.mqtt.topic.tree.LocalTopicTree;
 import com.hivemq.mqtt.topic.tree.TopicSubscribers;
 import com.hivemq.persistence.RetainedMessage;
@@ -147,7 +147,7 @@ public class InternalPublishServiceImpl implements InternalPublishService {
             final @Nullable String sender) {
 
         final TopicSubscribers topicSubscribers = topicTree.findTopicSubscribers(publish.getTopic());
-        final ImmutableSet<SubscriberWithIdentifiers> subscribers = topicSubscribers.getSubscribers();
+        final ImmutableSet<SubscriberWithIds> subscribers = topicSubscribers.getSubscribers();
         final ImmutableSet<String> sharedSubscriptions = topicSubscribers.getSharedSubscriptions();
 
         if (subscribers.isEmpty() && sharedSubscriptions.isEmpty()) {
@@ -177,10 +177,10 @@ public class InternalPublishServiceImpl implements InternalPublishService {
             final @NotNull ExecutorService executorService,
             final @Nullable SettableFuture<PublishReturnCode> returnCodeFuture) {
         final Set<String> sharedSubscriptions = topicSubscribers.getSharedSubscriptions();
-        final Map<String, SubscriberWithIdentifiers> notSharedSubscribers =
+        final Map<String, SubscriberWithIds> notSharedSubscribers =
                 new HashMap<>(topicSubscribers.getSubscribers().size());
 
-        for (final SubscriberWithIdentifiers subscriber : topicSubscribers.getSubscribers()) {
+        for (final SubscriberWithIds subscriber : topicSubscribers.getSubscribers()) {
             if (!subscriber.isSharedSubscription()) {
 
                 if (subscriber.isNoLocal() && sender != null && sender.equals(subscriber.getSubscriber())) {

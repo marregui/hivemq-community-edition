@@ -59,6 +59,37 @@ class MatchingNodeSubscriptions {
         sharedSubscribersMap = Map.of();
     }
 
+    private static @NotNull String sharedSubscriptionKey(
+            final @NotNull String sharedName, final @NotNull String topicFilter) {
+
+        return sharedName + "/" + topicFilter;
+    }
+
+    private static boolean isEmptyArray(final @Nullable Object @Nullable [] array) {
+        if (array == null) {
+            return true;
+        }
+        for (final Object object : array) {
+            if (object != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static int countArraySize(final @Nullable Object @Nullable [] array) {
+        if (array == null) {
+            return 0;
+        }
+        int count = 0;
+        for (final Object object : array) {
+            if (object != null) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     /**
      * Attempts to add the subscription information and updates the counters based on how the addition went and
      * what subscription information was stored previously.
@@ -168,6 +199,12 @@ class MatchingNodeSubscriptions {
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////
+    //                                                                   //
+    //                  INTERNAL STRUCTURES MANAGEMENT                   //
+    //                                                                   //
+    ///////////////////////////////////////////////////////////////////////
+
     private @NotNull Stream<SubscriberWithQoS> getAllSubscriptionsStream() {
         final Stream<SubscriberWithQoS> sharedSubscriptionStream = getSharedSubscriptionsStream();
         final Stream<SubscriberWithQoS> nonSharedSubscriptionStream = getNonSharedSubscriptionsStream();
@@ -186,54 +223,6 @@ class MatchingNodeSubscriptions {
         return (nonSharedSubscribersMap == null || nonSharedSubscribersMap.isEmpty()) &&
                 (nonSharedSubscribersArray == null || isEmptyArray(nonSharedSubscribersArray)) &&
                 sharedSubscribersMap.isEmpty();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    //                                                                   //
-    //                  INTERNAL STRUCTURES MANAGEMENT                   //
-    //                                                                   //
-    ///////////////////////////////////////////////////////////////////////
-
-    private static @NotNull String sharedSubscriptionKey(
-            final @NotNull String sharedName, final @NotNull String topicFilter) {
-
-        return sharedName + "/" + topicFilter;
-    }
-
-    /**
-     * Holds information about the subscriptions in a group identified by the shared name and the topic filter.
-     * Used as a means of optimizing storage and retrieval of shared name/topic filter combinations that
-     * have high chance of duplication if there are many shared subscribers in the same group and for the same topic
-     * filter.
-     */
-    private static class SubscriptionGroup {
-
-        private final @NotNull Map<String, SubscriberWithQoS> subscriptions = new HashMap<>();
-
-        @Nullable SubscriberWithQoS put(final @NotNull SubscriberWithQoS subscription) {
-            return subscriptions.put(subscription.getSubscriber(), subscription);
-        }
-
-        @Nullable SubscriberWithQoS remove(final @NotNull String subscriber) {
-            return subscriptions.remove(subscriber);
-        }
-
-        @NotNull Collection<SubscriberWithQoS> getSubscriptionsInfos() {
-            return subscriptions.values();
-        }
-
-        int size() {
-            return subscriptions.size();
-        }
-    }
-
-    private static class SubscriptionInfoPresenceStatus {
-
-        public final boolean subscriptionInfoSame;
-
-        SubscriptionInfoPresenceStatus(final boolean subscriptionInfoSame) {
-            this.subscriptionInfoSame = subscriptionInfoSame;
-        }
     }
 
     private @Nullable SubscriptionInfoPresenceStatus storeSubscriberInStructures(
@@ -308,15 +297,6 @@ class MatchingNodeSubscriptions {
         return null;
     }
 
-    private static class SubscriptionInfoRemovalStatus {
-
-        public final boolean wasSharedSubscription;
-
-        SubscriptionInfoRemovalStatus(final boolean wasSharedSubscription) {
-            this.wasSharedSubscription = wasSharedSubscription;
-        }
-    }
-
     private @Nullable SubscriptionInfoRemovalStatus removeSubscriberFromStructures(
             final @NotNull String subscriber, final @Nullable String sharedName, final @Nullable String topicFilter) {
 
@@ -351,28 +331,48 @@ class MatchingNodeSubscriptions {
         return remove == null ? null : new SubscriptionInfoRemovalStatus(remove.isSharedSubscription());
     }
 
-    private static boolean isEmptyArray(final @Nullable Object @Nullable [] array) {
-        if (array == null) {
-            return true;
+    /**
+     * Holds information about the subscriptions in a group identified by the shared name and the topic filter.
+     * Used as a means of optimizing storage and retrieval of shared name/topic filter combinations that
+     * have high chance of duplication if there are many shared subscribers in the same group and for the same topic
+     * filter.
+     */
+    private static class SubscriptionGroup {
+
+        private final @NotNull Map<String, SubscriberWithQoS> subscriptions = new HashMap<>();
+
+        @Nullable SubscriberWithQoS put(final @NotNull SubscriberWithQoS subscription) {
+            return subscriptions.put(subscription.getSubscriber(), subscription);
         }
-        for (final Object object : array) {
-            if (object != null) {
-                return false;
-            }
+
+        @Nullable SubscriberWithQoS remove(final @NotNull String subscriber) {
+            return subscriptions.remove(subscriber);
         }
-        return true;
+
+        @NotNull Collection<SubscriberWithQoS> getSubscriptionsInfos() {
+            return subscriptions.values();
+        }
+
+        int size() {
+            return subscriptions.size();
+        }
     }
 
-    private static int countArraySize(final @Nullable Object @Nullable [] array) {
-        if (array == null) {
-            return 0;
+    private static class SubscriptionInfoPresenceStatus {
+
+        public final boolean subscriptionInfoSame;
+
+        SubscriptionInfoPresenceStatus(final boolean subscriptionInfoSame) {
+            this.subscriptionInfoSame = subscriptionInfoSame;
         }
-        int count = 0;
-        for (final Object object : array) {
-            if (object != null) {
-                count++;
-            }
+    }
+
+    private static class SubscriptionInfoRemovalStatus {
+
+        public final boolean wasSharedSubscription;
+
+        SubscriptionInfoRemovalStatus(final boolean wasSharedSubscription) {
+            this.wasSharedSubscription = wasSharedSubscription;
         }
-        return count;
     }
 }

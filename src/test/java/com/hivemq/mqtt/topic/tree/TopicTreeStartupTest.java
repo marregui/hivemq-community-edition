@@ -16,16 +16,16 @@
 package com.hivemq.mqtt.topic.tree;
 
 import com.codahale.metrics.MetricRegistry;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import com.google.common.primitives.ImmutableIntArray;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 import com.hivemq.mqtt.topic.SubscriptionFlag;
 import com.hivemq.persistence.clientsession.ClientSession;
 import com.hivemq.persistence.clientsession.ClientSessionPersistence;
@@ -101,30 +101,27 @@ public class TopicTreeStartupTest {
 
         topicTreeStartup.postConstruct();
 
-        final Set<SubscriberWithIdentifiers> subscribersForTopic1 =
-                topicTree.findTopicSubscribers("topic1").getSubscribers();
-        final Set<SubscriberWithIdentifiers> subscribersForTopic2 =
-                topicTree.findTopicSubscribers("topic2").getSubscribers();
-        final Set<SubscriberWithIdentifiers> subscribersForTopic3 =
-                topicTree.findTopicSubscribers("topic3").getSubscribers();
+        final Set<SubscriberWithIds> subscribersForTopic1 = topicTree.findTopicSubscribers("topic1").getSubscribers();
+        final Set<SubscriberWithIds> subscribersForTopic2 = topicTree.findTopicSubscribers("topic2").getSubscribers();
+        final Set<SubscriberWithIds> subscribersForTopic3 = topicTree.findTopicSubscribers("topic3").getSubscribers();
 
         assertThat(subscribersForTopic1,
-                hasItems(new SubscriberWithIdentifiers("client1", 1, (byte) 0, null, ImmutableList.of(), null),
-                        new SubscriberWithIdentifiers("client2", 1, (byte) 0, null, ImmutableList.of(), null)));
+                hasItems(new SubscriberWithIds("client1", 1, (byte) 0, null, null, ImmutableIntArray.of()),
+                        new SubscriberWithIds("client2", 1, (byte) 0, null, null, ImmutableIntArray.of())));
         assertThat(subscribersForTopic2,
-                hasItems(new SubscriberWithIdentifiers("client2",
+                hasItems(new SubscriberWithIds("client2",
                         2,
-                        SubscriptionFlag.getDefaultFlags(false, false, false),
+                        SubscriptionFlag.buildFlag(false, false, false),
                         null,
-                        ImmutableList.of(),
-                        null)));
+                        null,
+                        ImmutableIntArray.of())));
         assertThat(subscribersForTopic3,
-                hasItems(new SubscriberWithIdentifiers("client3",
+                hasItems(new SubscriberWithIds("client3",
                         0,
-                        SubscriptionFlag.getDefaultFlags(false, true, true),
+                        SubscriptionFlag.buildFlag(false, true, true),
                         null,
-                        ImmutableList.of(),
-                        null)));
+                        null,
+                        ImmutableIntArray.of())));
     }
 
     @Test
@@ -140,10 +137,8 @@ public class TopicTreeStartupTest {
         verify(clientSessionSubscriptionPersistence).removeAllLocally("client1");
         verify(clientSessionSubscriptionPersistence).removeAllLocally("client2");
 
-        final Set<SubscriberWithIdentifiers> subscribersForTopic1 =
-                topicTree.findTopicSubscribers("topic1").getSubscribers();
-        final Set<SubscriberWithIdentifiers> subscribersForTopic2 =
-                topicTree.findTopicSubscribers("topic2").getSubscribers();
+        final Set<SubscriberWithIds> subscribersForTopic1 = topicTree.findTopicSubscribers("topic1").getSubscribers();
+        final Set<SubscriberWithIds> subscribersForTopic2 = topicTree.findTopicSubscribers("topic2").getSubscribers();
 
         assertTrue(subscribersForTopic1.isEmpty());
         assertTrue(subscribersForTopic2.isEmpty());

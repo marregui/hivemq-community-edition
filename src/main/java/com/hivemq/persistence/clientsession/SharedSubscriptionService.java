@@ -126,7 +126,7 @@ public class SharedSubscriptionService {
         final SharedSubscription sharedSubscription = checkForSharedSubscription(topic.getTopic());
         if (sharedSubscription == null) {
             return new Subscription(topic,
-                    SubscriptionFlag.getDefaultFlags(false, topic.isRetainAsPublished(), topic.isNoLocal()),
+                    SubscriptionFlag.buildFlag(false, topic.isRetainAsPublished(), topic.isNoLocal()),
                     null);
         } else {
             return new Subscription(new Topic(sharedSubscription.getTopicFilter(),
@@ -135,7 +135,7 @@ public class SharedSubscriptionService {
                     topic.isRetainAsPublished(),
                     topic.getRetainHandling(),
                     topic.getSubscriptionIdentifier()),
-                    SubscriptionFlag.getDefaultFlags(true, topic.isRetainAsPublished(), topic.isNoLocal()),
+                    SubscriptionFlag.buildFlag(true, topic.isRetainAsPublished(), topic.isNoLocal()),
                     sharedSubscription.getShareName());
         }
     }

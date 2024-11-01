@@ -295,7 +295,7 @@ public class PublishPollServiceImpl implements PublishPollService {
                     sharedSubscription,
                     subscriber.getQos(),
                     subscriber.isRetainAsPublished(),
-                    subscriber.getSubscriptionIdentifier(),
+                    subscriber.getSubscriptionId(),
                     clientConnection.getChannel());
         }
     }

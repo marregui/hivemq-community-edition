@@ -24,9 +24,6 @@ import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * @author Florian Limpöck
- */
 @LazySingleton
 public class ClientIds {
 
@@ -40,7 +37,6 @@ public class ClientIds {
     }
 
     public String generateNext() {
-
         final long currentCounter = clientIDCounter.getAndIncrement();
         final String rawID = "hmq_" + hivemqId + "_" + currentCounter + "_" + System.currentTimeMillis();
         return "hmq_" +

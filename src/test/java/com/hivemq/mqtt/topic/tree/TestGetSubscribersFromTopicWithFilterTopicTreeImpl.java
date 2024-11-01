@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 import com.hivemq.mqtt.topic.SubscriberWithQoS;
 import com.hivemq.mqtt.topic.SubscriptionFlag;
 import org.junit.Before;
@@ -47,7 +47,7 @@ public class TestGetSubscribersFromTopicWithFilterTopicTreeImpl {
     @Test
     public void test_empty_topic_tree_get_subscribers() throws Exception {
 
-        final Set<SubscriberWithIdentifiers> any = topicTree.findTopicSubscribers("any").getSubscribers();
+        final Set<SubscriberWithIds> any = topicTree.findTopicSubscribers("any").getSubscribers();
         assertTrue(any.isEmpty());
     }
 
@@ -315,8 +315,8 @@ public class TestGetSubscribersFromTopicWithFilterTopicTreeImpl {
 
     @Test
     public void get_shared_subscriber() {
-        final byte sharedFlag = SubscriptionFlag.getDefaultFlags(true, false, false);
-        final byte notSharedFlag = SubscriptionFlag.getDefaultFlags(false, false, false);
+        final byte sharedFlag = SubscriptionFlag.buildFlag(true, false, false);
+        final byte notSharedFlag = SubscriptionFlag.buildFlag(false, false, false);
 
         topicTree.addTopic("sub1", new Topic("topic", QoS.AT_LEAST_ONCE), sharedFlag, "group");
         topicTree.addTopic("sub2", new Topic("topic", QoS.AT_LEAST_ONCE), notSharedFlag, null);
@@ -335,8 +335,8 @@ public class TestGetSubscribersFromTopicWithFilterTopicTreeImpl {
 
     @Test
     public void get_shared_subscriber_overlapping() {
-        final byte sharedFlag = SubscriptionFlag.getDefaultFlags(true, false, false);
-        final byte notSharedFlag = SubscriptionFlag.getDefaultFlags(false, false, false);
+        final byte sharedFlag = SubscriptionFlag.buildFlag(true, false, false);
+        final byte notSharedFlag = SubscriptionFlag.buildFlag(false, false, false);
 
         topicTree.addTopic("sub1", new Topic("#", QoS.AT_LEAST_ONCE), sharedFlag, "group1");
         topicTree.addTopic("sub2", new Topic("#", QoS.AT_LEAST_ONCE), notSharedFlag, null);
@@ -355,7 +355,7 @@ public class TestGetSubscribersFromTopicWithFilterTopicTreeImpl {
 
     @Test
     public void get_shared_subscriber_with_same_id() {
-        final byte sharedFlag = SubscriptionFlag.getDefaultFlags(true, false, false);
+        final byte sharedFlag = SubscriptionFlag.buildFlag(true, false, false);
 
         topicTree.addTopic("client", new Topic("topic/a", QoS.AT_LEAST_ONCE), sharedFlag, "group");
         topicTree.addTopic("client", new Topic("topic/+", QoS.AT_LEAST_ONCE), sharedFlag, "group");
@@ -367,8 +367,8 @@ public class TestGetSubscribersFromTopicWithFilterTopicTreeImpl {
 
     @Test
     public void get_subscriber() {
-        final byte notSharedFlag = SubscriptionFlag.getDefaultFlags(false, false, false);
-        final byte sharedFlag = SubscriptionFlag.getDefaultFlags(true, false, false);
+        final byte notSharedFlag = SubscriptionFlag.buildFlag(false, false, false);
+        final byte sharedFlag = SubscriptionFlag.buildFlag(true, false, false);
 
         topicTree.addTopic("client1", new Topic("topic/a", QoS.AT_MOST_ONCE), notSharedFlag, null);
         topicTree.addTopic("client2", new Topic("topic/+", QoS.AT_LEAST_ONCE), notSharedFlag, null);

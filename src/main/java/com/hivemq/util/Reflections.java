@@ -42,11 +42,8 @@ public final class Reflections {
     public static <T extends Annotation> Optional<T> getMethodAnnotationFromInterface(
             final @NotNull Method method, final @NotNull Class<? extends T> annotation) {
         final Class<?>[] interfaces = method.getDeclaringClass().getInterfaces();
-
         for (final Class<?> anInterface : interfaces) {
-
             final Method[] interfaceMethods = anInterface.getMethods();
-
             for (final Method interfaceMethod : interfaceMethods) {
                 if (methodSignatureEquals(method, interfaceMethod)) {
 

@@ -125,7 +125,7 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
                 //not a shared subscription
                 subscriberExisted = topicTree.addTopic(client,
                         topic,
-                        SubscriptionFlag.getDefaultFlags(false, topic.isRetainAsPublished(), topic.isNoLocal()),
+                        SubscriptionFlag.buildFlag(false, topic.isRetainAsPublished(), topic.isNoLocal()),
                         null);
                 persistFuture = singleWriter.submit(client, (bucketIndex) -> {
                     localPersistence.addSubscription(client, topic, timestamp, bucketIndex);
@@ -150,11 +150,11 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
 
                 subscriberExisted = topicTree.addTopic(client,
                         sharedTopic,
-                        SubscriptionFlag.getDefaultFlags(true, topic.isRetainAsPublished(), topic.isNoLocal()),
+                        SubscriptionFlag.buildFlag(true, topic.isRetainAsPublished(), topic.isNoLocal()),
                         sharedSubscription.getShareName());
 
                 final Subscription subscription = new Subscription(sharedTopic,
-                        SubscriptionFlag.getDefaultFlags(true, topic.isRetainAsPublished(), topic.isNoLocal()),
+                        SubscriptionFlag.buildFlag(true, topic.isRetainAsPublished(), topic.isNoLocal()),
                         sharedSubscription.getShareName());
 
                 persistFuture = singleWriter.submit(client, (bucketIndex) -> {
@@ -307,7 +307,7 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
             if (sharedSubscription == null) {
                 //not a shared subscription
                 subscriptions.add(new Subscription(topic,
-                        SubscriptionFlag.getDefaultFlags(false, topic.isRetainAsPublished(), topic.isNoLocal()),
+                        SubscriptionFlag.buildFlag(false, topic.isRetainAsPublished(), topic.isNoLocal()),
                         null));
             } else {
                 if (sharedSubscription.getTopicFilter().isEmpty()) {
@@ -327,7 +327,7 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
                         topic.isRetainAsPublished(),
                         topic.getRetainHandling(),
                         topic.getSubscriptionIdentifier()),
-                        SubscriptionFlag.getDefaultFlags(true, topic.isRetainAsPublished(), topic.isNoLocal()),
+                        SubscriptionFlag.buildFlag(true, topic.isRetainAsPublished(), topic.isNoLocal()),
                         sharedSubscription.getShareName());
 
                 sharedSubs.add(sharedSub);

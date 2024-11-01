@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 import com.hivemq.mqtt.topic.SubscriberWithQoS;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -58,7 +58,7 @@ public class LocalTopicTree {
 
     final CopyOnWriteArrayList<SubscriberWithQoS> rootWildcardSubscribers = new CopyOnWriteArrayList<>();
     @VisibleForTesting
-    final SubscriptionCounters counters;
+    final @NotNull SubscriptionCounters counters;
     @VisibleForTesting
     final ConcurrentHashMap<String, TopicTreeNode> segments = new ConcurrentHashMap<>();
     private final @NotNull Striped<ReadWriteLock> segmentLocks;
@@ -81,17 +81,17 @@ public class LocalTopicTree {
      * @param subscribers a list of subscribers
      * @return a immutable Set of distinct Subscribers with the maximum QoS.
      */
-    private static @NotNull ImmutableSet<SubscriberWithIdentifiers> createDistinctSubscribers(
+    private static @NotNull ImmutableSet<SubscriberWithIds> createDistinctSubscribers(
             final @NotNull ImmutableList<SubscriberWithQoS> subscribers) {
 
-        final ImmutableSet.Builder<SubscriberWithIdentifiers> newSet = ImmutableSet.builder();
+        final ImmutableSet.Builder<SubscriberWithIds> newSet = ImmutableSet.builder();
 
         final ImmutableList<SubscriberWithQoS> subscriberWithQoS =
                 ImmutableList.sortedCopyOf(Comparator.naturalOrder(), subscribers);
 
         final Iterator<SubscriberWithQoS> iterator = subscriberWithQoS.iterator();
 
-        SubscriberWithIdentifiers last = null;
+        SubscriberWithIds last = null;
 
         // Create a single entry per client id, with the highest QoS an all subscription identifiers
         while (iterator.hasNext()) {
@@ -101,22 +101,22 @@ public class LocalTopicTree {
 
                 if (!equalSubscription(current, last)) {
                     newSet.add(last);
-                    last = new SubscriberWithIdentifiers(current);
+                    last = new SubscriberWithIds(current);
                 } else {
                     last.setQos(current.getQos());
-                    if (current.getSubscriptionIdentifier() != null) {
-                        final ImmutableIntArray subscriptionIds = last.getSubscriptionIdentifier();
-                        final Integer subscriptionId = current.getSubscriptionIdentifier();
+                    if (current.getSubscriptionId() != null) {
+                        final ImmutableIntArray subscriptionIds = last.getSubscriptionIds();
+                        final Integer subscriptionId = current.getSubscriptionId();
                         final ImmutableIntArray mergedSubscriptionIds =
                                 ImmutableIntArray.builder(subscriptionIds.length() + 1)
                                         .addAll(subscriptionIds)
                                         .add(subscriptionId)
                                         .build();
-                        last.setSubscriptionIdentifiers(mergedSubscriptionIds);
+                        last.setSubscriptionIds(mergedSubscriptionIds);
                     }
                 }
             } else {
-                last = new SubscriberWithIdentifiers(current);
+                last = new SubscriberWithIds(current);
             }
 
             if (!iterator.hasNext()) {
@@ -128,7 +128,7 @@ public class LocalTopicTree {
     }
 
     private static boolean equalSubscription(
-            final @NotNull SubscriberWithQoS first, final @NotNull SubscriberWithIdentifiers second) {
+            final @NotNull SubscriberWithQoS first, final @NotNull SubscriberWithIds second) {
 
         return equalSubscription(first, second.getSubscriber(), second.getTopicFilter(), second.getSharedName());
     }
@@ -212,11 +212,10 @@ public class LocalTopicTree {
         return childrenMap.get(key);
     }
 
-    private static @Nullable TopicTreeNode getLastNode(final @NotNull TopicTreeNode[] nodes) {
+    private static @Nullable TopicTreeNode getLastNode(final @Nullable TopicTreeNode @NotNull[] nodes) {
         //Search for the last node which is not null
         for (int i = nodes.length - 1; i >= 0; i--) {
             final TopicTreeNode node = nodes[i];
-
             if (node != null) {
                 return node;
             }
@@ -237,8 +236,8 @@ public class LocalTopicTree {
      */
     private static void iterateChildNodesForSubscriberRemoval(
             final @NotNull TopicTreeNode node,
-            final @NotNull String[] topicParts,
-            final @NotNull TopicTreeNode[] results,
+            final @NotNull String @NotNull[] topicParts,
+            final @NotNull TopicTreeNode @NotNull[] results,
             final int depth) {
 
         //Note dobermai: We don't need to check for "+" subscribers explicitly, because unsubscribes are always absolute
@@ -447,7 +446,7 @@ public class LocalTopicTree {
     private boolean addNode(
             final @NotNull SubscriberWithQoS subscriber,
             final @NotNull String topicFilter,
-            final @NotNull String[] contents,
+            final @NotNull String @NotNull[] contents,
             final @NotNull TopicTreeNode node,
             final int i) {
 
@@ -487,7 +486,7 @@ public class LocalTopicTree {
 
         findSubscribers(topic, excludeRootLevelWildcard, subscriberConsumer);
 
-        final ImmutableSet<SubscriberWithIdentifiers> distinctSubscribers =
+        final ImmutableSet<SubscriberWithIds> distinctSubscribers =
                 createDistinctSubscribers(subscribers.build());
 
         return new TopicSubscribers(distinctSubscribers, sharedSubscriptions.build());
@@ -821,7 +820,7 @@ public class LocalTopicTree {
         Utilities
      **************/
 
-    public @Nullable SubscriberWithIdentifiers findSubscriber(
+    public @Nullable SubscriberWithIds findSubscriber(
             final @NotNull String client, final @NotNull String topic) {
 
         final ClientPublishDeliverySubscriptionInfoFinder subscriberConsumer =
@@ -903,7 +902,7 @@ public class LocalTopicTree {
 
         private final @NotNull String client;
         private final @NotNull ImmutableList.Builder<SubscriberWithQoS> subscribers = ImmutableList.builder();
-        private @Nullable SubscriberWithIdentifiers sharedSubscriber;
+        private @Nullable SubscriberWithIds sharedSubscriber;
         private boolean nonSharedSubscriberFound;
 
         private ClientPublishDeliverySubscriptionInfoFinder(final @NotNull String client) {
@@ -932,7 +931,7 @@ public class LocalTopicTree {
                     .filter(subscriberWithQoS -> subscriberWithQoS.getSubscriber().equals(client))
                     .forEach(subscriberWithQoS -> {
                         if (sharedSubscriber == null || sharedSubscriber.getQos() < subscriberWithQoS.getQos()) {
-                            sharedSubscriber = new SubscriberWithIdentifiers(subscriberWithQoS);
+                            sharedSubscriber = new SubscriberWithIds(subscriberWithQoS);
                         }
                     });
         }
@@ -946,18 +945,18 @@ public class LocalTopicTree {
                         nonSharedSubscriberFound = true;
                     } else if (!nonSharedSubscriberFound &&
                             (sharedSubscriber == null || sharedSubscriber.getQos() < rootWildcardSubscriber.getQos())) {
-                        sharedSubscriber = new SubscriberWithIdentifiers(rootWildcardSubscriber);
+                        sharedSubscriber = new SubscriberWithIds(rootWildcardSubscriber);
                     }
                 }
             }
         }
 
-        public @Nullable SubscriberWithIdentifiers getMatchingSubscriber() {
+        public @Nullable SubscriberWithIds getMatchingSubscriber() {
             final ImmutableList<SubscriberWithQoS> subscribers = this.subscribers.build();
             if (subscribers.isEmpty()) {
                 return sharedSubscriber;
             } else {
-                final ImmutableSet<SubscriberWithIdentifiers> distinctSubscribers =
+                final ImmutableSet<SubscriberWithIds> distinctSubscribers =
                         createDistinctSubscribers(subscribers);
                 return distinctSubscribers.asList().get(0);
             }

@@ -17,9 +17,6 @@ package com.hivemq.util;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * @author Lukas Brandl
- */
 public class ThreadPreConditions {
 
     public static final String SINGLE_WRITER_THREAD_PREFIX = "single-writer";

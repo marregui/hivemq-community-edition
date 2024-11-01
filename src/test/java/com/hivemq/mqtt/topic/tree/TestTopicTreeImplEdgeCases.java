@@ -16,14 +16,14 @@
 package com.hivemq.mqtt.topic.tree;
 
 import com.codahale.metrics.MetricRegistry;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.UnmodifiableIterator;
+import com.google.common.primitives.ImmutableIntArray;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -91,7 +91,7 @@ public class TestTopicTreeImplEdgeCases {
         topicTree.addTopic("subscriber2", new Topic("a/test", QoS.AT_MOST_ONCE), (byte) 0, null);
         topicTree.addTopic("subscriber3", new Topic("+/test", QoS.AT_MOST_ONCE), (byte) 0, null);
 
-        final Set<SubscriberWithIdentifiers> subscribers = topicTree.findTopicSubscribers("a/test").getSubscribers();
+        final Set<SubscriberWithIds> subscribers = topicTree.findTopicSubscribers("a/test").getSubscribers();
         assertEquals(3, subscribers.size());
     }
 
@@ -102,7 +102,7 @@ public class TestTopicTreeImplEdgeCases {
         topicTree.addTopic("subscriber2", new Topic("a/b/test", QoS.AT_MOST_ONCE), (byte) 0, null);
         topicTree.addTopic("subscriber3", new Topic("a/+/test", QoS.AT_MOST_ONCE), (byte) 0, null);
 
-        final Set<SubscriberWithIdentifiers> subscribers = topicTree.findTopicSubscribers("a/b/test").getSubscribers();
+        final Set<SubscriberWithIds> subscribers = topicTree.findTopicSubscribers("a/b/test").getSubscribers();
         assertEquals(3, subscribers.size());
     }
 
@@ -113,7 +113,7 @@ public class TestTopicTreeImplEdgeCases {
         topicTree.addTopic("subscriber2", new Topic("a/test/b", QoS.AT_MOST_ONCE), (byte) 0, null);
         topicTree.addTopic("subscriber3", new Topic("a/test/+", QoS.AT_MOST_ONCE), (byte) 0, null);
 
-        final Set<SubscriberWithIdentifiers> subscribers = topicTree.findTopicSubscribers("a/test/b").getSubscribers();
+        final Set<SubscriberWithIds> subscribers = topicTree.findTopicSubscribers("a/test/b").getSubscribers();
         assertEquals(3, subscribers.size());
     }
 
@@ -122,20 +122,20 @@ public class TestTopicTreeImplEdgeCases {
 
         topicTree.addTopic("subscriber", new Topic("/", QoS.AT_MOST_ONCE), (byte) 0, null);
 
-        final Set<SubscriberWithIdentifiers> subscribers = topicTree.findTopicSubscribers("/").getSubscribers();
+        final Set<SubscriberWithIds> subscribers = topicTree.findTopicSubscribers("/").getSubscribers();
         assertFalse(subscribers.isEmpty());
         assertThat(subscribers,
-                hasItem(new SubscriberWithIdentifiers("subscriber", 0, (byte) 0, null, ImmutableList.of(), null)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, ImmutableIntArray.of())));
     }
 
     @Test
     public void test_edge_case_slash_topic_wildcard_match() {
         topicTree.addTopic("subscriber", new Topic("+/+", QoS.AT_MOST_ONCE), (byte) 0, null);
-        final Set<SubscriberWithIdentifiers> subscribers2 = topicTree.findTopicSubscribers("/").getSubscribers();
+        final Set<SubscriberWithIds> subscribers2 = topicTree.findTopicSubscribers("/").getSubscribers();
 
         assertFalse(subscribers2.isEmpty());
         assertThat(subscribers2,
-                hasItem(new SubscriberWithIdentifiers("subscriber", 0, (byte) 0, null, ImmutableList.of(), null)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, ImmutableIntArray.of())));
     }
 
     @Test
@@ -143,12 +143,12 @@ public class TestTopicTreeImplEdgeCases {
 
         topicTree.addTopic("subscriber", new Topic("/////", QoS.AT_MOST_ONCE), (byte) 0, null);
 
-        final Set<SubscriberWithIdentifiers> subscribers = topicTree.findTopicSubscribers("/////").getSubscribers();
+        final Set<SubscriberWithIds> subscribers = topicTree.findTopicSubscribers("/////").getSubscribers();
         assertFalse(subscribers.isEmpty());
         assertThat(subscribers,
-                hasItem(new SubscriberWithIdentifiers("subscriber", 0, (byte) 0, null, ImmutableList.of(), null)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, ImmutableIntArray.of())));
 
-        final Set<SubscriberWithIdentifiers> subscribers2 = topicTree.findTopicSubscribers("////").getSubscribers();
+        final Set<SubscriberWithIds> subscribers2 = topicTree.findTopicSubscribers("////").getSubscribers();
         assertTrue(subscribers2.isEmpty());
     }
 
@@ -157,24 +157,24 @@ public class TestTopicTreeImplEdgeCases {
 
         topicTree.addTopic("subscriber", new Topic("+/+/+/+/+/+", QoS.AT_MOST_ONCE), (byte) 0, null);
 
-        final Set<SubscriberWithIdentifiers> subscribers = topicTree.findTopicSubscribers("/////").getSubscribers();
+        final Set<SubscriberWithIds> subscribers = topicTree.findTopicSubscribers("/////").getSubscribers();
         assertFalse(subscribers.isEmpty());
         assertThat(subscribers,
-                hasItem(new SubscriberWithIdentifiers("subscriber", 0, (byte) 0, null, ImmutableList.of(), null)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, ImmutableIntArray.of())));
 
         topicTree.addTopic("subscriber2", new Topic("+/+/+/+/+/", QoS.AT_MOST_ONCE), (byte) 0, null);
 
-        final Set<SubscriberWithIdentifiers> subscribers2 = topicTree.findTopicSubscribers("/////").getSubscribers();
+        final Set<SubscriberWithIds> subscribers2 = topicTree.findTopicSubscribers("/////").getSubscribers();
         assertFalse(subscribers2.isEmpty());
         assertThat(subscribers2,
-                hasItem(new SubscriberWithIdentifiers("subscriber", 0, (byte) 0, null, ImmutableList.of(), null)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, ImmutableIntArray.of())));
 
         topicTree.addTopic("subscriber3", new Topic("/+/+/+/+/", QoS.AT_MOST_ONCE), (byte) 0, null);
 
-        final Set<SubscriberWithIdentifiers> subscribers3 = topicTree.findTopicSubscribers("/////").getSubscribers();
+        final Set<SubscriberWithIds> subscribers3 = topicTree.findTopicSubscribers("/////").getSubscribers();
         assertFalse(subscribers3.isEmpty());
         assertThat(subscribers3,
-                hasItem(new SubscriberWithIdentifiers("subscriber", 0, (byte) 0, null, ImmutableList.of(), null)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, ImmutableIntArray.of())));
 
         assertEquals(3, topicTree.counters.getSubscriptionCounter().getCount());
     }
@@ -185,16 +185,16 @@ public class TestTopicTreeImplEdgeCases {
 
         topicTree.addTopic("subscriber", new Topic("a/+/b", QoS.AT_MOST_ONCE), (byte) 0, null);
 
-        final Set<SubscriberWithIdentifiers> subscribers = topicTree.findTopicSubscribers("a//b").getSubscribers();
+        final Set<SubscriberWithIds> subscribers = topicTree.findTopicSubscribers("a//b").getSubscribers();
         assertFalse(subscribers.isEmpty());
         assertThat(subscribers,
-                hasItem(new SubscriberWithIdentifiers("subscriber", 0, (byte) 0, null, ImmutableList.of(), null)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, ImmutableIntArray.of())));
 
         topicTree.addTopic("subscriber2", new Topic("a/b/+", QoS.AT_MOST_ONCE), (byte) 0, null);
-        final Set<SubscriberWithIdentifiers> subscribers2 = topicTree.findTopicSubscribers("a/b/").getSubscribers();
+        final Set<SubscriberWithIds> subscribers2 = topicTree.findTopicSubscribers("a/b/").getSubscribers();
         assertFalse(subscribers2.isEmpty());
         assertThat(subscribers2,
-                hasItem(new SubscriberWithIdentifiers("subscriber2", 0, (byte) 0, null, ImmutableList.of(), null)));
+                hasItem(new SubscriberWithIds("subscriber2", 0, (byte) 0, null, null, ImmutableIntArray.of())));
     }
 
     @Test
@@ -207,7 +207,7 @@ public class TestTopicTreeImplEdgeCases {
 
         topicTree.addTopic("subscriber", new Topic(topic, QoS.EXACTLY_ONCE), (byte) 0, null);
 
-        final ImmutableSet<SubscriberWithIdentifiers> subscribers =
+        final ImmutableSet<SubscriberWithIds> subscribers =
                 topicTree.findTopicSubscribers(topic).getSubscribers();
 
         assertEquals(0, subscribers.size());
@@ -283,12 +283,12 @@ public class TestTopicTreeImplEdgeCases {
         topicTree.addTopic("client1", new Topic("a/b", QoS.EXACTLY_ONCE), (byte) 0, null);
         topicTree.addTopic("client1", new Topic("a/b", QoS.AT_LEAST_ONCE), (byte) 0, null);
 
-        final ImmutableSet<SubscriberWithIdentifiers> subscribers =
+        final ImmutableSet<SubscriberWithIds> subscribers =
                 topicTree.findTopicSubscribers("a/b").getSubscribers();
         assertEquals(1, subscribers.size());
 
         assertEquals(1, topicTree.counters.getSubscriptionCounter().getCount());
-        final SubscriberWithIdentifiers next = subscribers.iterator().next();
+        final SubscriberWithIds next = subscribers.iterator().next();
 
         assertEquals(1, next.getQos());
     }
@@ -304,16 +304,16 @@ public class TestTopicTreeImplEdgeCases {
 
         topicTree.addTopic("client1", new Topic("a/b", QoS.AT_LEAST_ONCE), (byte) 0, null);
 
-        final ImmutableSet<SubscriberWithIdentifiers> subscribers =
+        final ImmutableSet<SubscriberWithIds> subscribers =
                 topicTree.findTopicSubscribers("a/b").getSubscribers();
         assertEquals(33, subscribers.size());
 
         assertEquals(33, topicTree.counters.getSubscriptionCounter().getCount());
 
-        final UnmodifiableIterator<SubscriberWithIdentifiers> subscribersIterator = subscribers.iterator();
+        final UnmodifiableIterator<SubscriberWithIds> subscribersIterator = subscribers.iterator();
         boolean found = false;
         while (subscribersIterator.hasNext()) {
-            final SubscriberWithIdentifiers next = subscribersIterator.next();
+            final SubscriberWithIds next = subscribersIterator.next();
             if ("client1".equals(next.getSubscriber())) {
                 found = true;
                 assertEquals(1, next.getQos());

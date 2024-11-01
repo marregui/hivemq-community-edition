@@ -22,7 +22,7 @@ import com.hivemq.mqtt.handler.publish.PublishReturnCode;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.services.InternalPublishServiceImpl;
 import com.hivemq.mqtt.services.PublishDistributor;
-import com.hivemq.mqtt.topic.SubscriberWithIdentifiers;
+import com.hivemq.mqtt.topic.SubscriberWithIds;
 import com.hivemq.mqtt.topic.SubscriptionFlag;
 import com.hivemq.mqtt.topic.tree.LocalTopicTree;
 import com.hivemq.mqtt.topic.tree.TopicSubscribers;
@@ -108,9 +108,9 @@ public class InternalPublishServiceImplTest {
     @Test(timeout = 20000)
     public void test_no_local() {
 
-        final byte noLocalFlag = SubscriptionFlag.getDefaultFlags(false, false, true);
-        final SubscriberWithIdentifiers sub1 = new SubscriberWithIdentifiers("sub1", 1, noLocalFlag, null);
-        final SubscriberWithIdentifiers sub2 = new SubscriberWithIdentifiers("sub2", 1, (byte) 0, null);
+        final byte noLocalFlag = SubscriptionFlag.buildFlag(false, false, true);
+        final SubscriberWithIds sub1 = new SubscriberWithIds("sub1", 1, noLocalFlag);
+        final SubscriberWithIds sub2 = new SubscriberWithIds("sub2", 1, (byte) 0);
 
         when(topicTree.findTopicSubscribers("topic")).thenReturn(new TopicSubscribers(ImmutableSet.of(sub1, sub2),
                 ImmutableSet.of()));
@@ -134,8 +134,8 @@ public class InternalPublishServiceImplTest {
     @Test(timeout = 20000)
     public void test_multiple_subs() {
 
-        final SubscriberWithIdentifiers sub1 = new SubscriberWithIdentifiers("sub1", 1, (byte) 0, null);
-        final SubscriberWithIdentifiers sub2 = new SubscriberWithIdentifiers("sub2", 1, (byte) 0, null);
+        final SubscriberWithIds sub1 = new SubscriberWithIds("sub1", 1, (byte) 0);
+        final SubscriberWithIds sub2 = new SubscriberWithIds("sub2", 1, (byte) 0);
 
         when(topicTree.findTopicSubscribers("topic")).thenReturn(new TopicSubscribers(ImmutableSet.of(sub1, sub2),
                 ImmutableSet.of()));
@@ -159,8 +159,8 @@ public class InternalPublishServiceImplTest {
     @Test(timeout = 20000)
     public void test_reset_dup_flag() {
 
-        final SubscriberWithIdentifiers sub1 = new SubscriberWithIdentifiers("sub1", 1, (byte) 0, null);
-        final SubscriberWithIdentifiers sub2 = new SubscriberWithIdentifiers("sub2", 1, (byte) 0, null);
+        final SubscriberWithIds sub1 = new SubscriberWithIds("sub1", 1, (byte) 0);
+        final SubscriberWithIds sub2 = new SubscriberWithIds("sub2", 1, (byte) 0);
 
         when(topicTree.findTopicSubscribers("topic")).thenReturn(new TopicSubscribers(ImmutableSet.of(sub1, sub2),
                 ImmutableSet.of()));
@@ -181,8 +181,8 @@ public class InternalPublishServiceImplTest {
     @Test(timeout = 20000)
     public void test_multiple_subs_failed() throws ExecutionException, InterruptedException {
 
-        final SubscriberWithIdentifiers sub1 = new SubscriberWithIdentifiers("sub1", 1, (byte) 0, null);
-        final SubscriberWithIdentifiers sub2 = new SubscriberWithIdentifiers("sub2", 1, (byte) 0, null);
+        final SubscriberWithIds sub1 = new SubscriberWithIds("sub1", 1, (byte) 0);
+        final SubscriberWithIds sub2 = new SubscriberWithIds("sub2", 1, (byte) 0);
 
         when(topicTree.findTopicSubscribers("topic")).thenReturn(new TopicSubscribers(ImmutableSet.of(sub1, sub2),
                 ImmutableSet.of()));
@@ -247,7 +247,7 @@ public class InternalPublishServiceImplTest {
     @Test(timeout = 20000)
     public void test_mixed_subs() {
 
-        final SubscriberWithIdentifiers sub = new SubscriberWithIdentifiers("sub2", 1, (byte) 0, null);
+        final SubscriberWithIds sub = new SubscriberWithIds("sub2", 1, (byte) 0);
 
         when(topicTree.findTopicSubscribers("topic")).thenReturn(new TopicSubscribers(ImmutableSet.of(sub),
                 ImmutableSet.of("group1/topic")));

@@ -237,7 +237,7 @@ public class PublishPollServiceImplTest {
     @Test
     public void test_poll_shared_publishes() throws NoMessageIdAvailableException {
         final PublishFlowHandler pubflishFlowHandler = mock(PublishFlowHandler.class);
-        final byte flags = SubscriptionFlag.getDefaultFlags(true, false, false);
+        final byte flags = SubscriptionFlag.buildFlag(true, false, false);
         when(sharedSubscriptionService.getSharedSubscriber(anyString())).thenReturn(ImmutableSet.of(new SubscriberWithQoS(
                 "client1",
                 2,
@@ -279,7 +279,7 @@ public class PublishPollServiceImplTest {
 
     @Test
     public void test_poll_shared_publishes_messages_in_flight() throws NoMessageIdAvailableException {
-        final byte flags = SubscriptionFlag.getDefaultFlags(true, false, false);
+        final byte flags = SubscriptionFlag.buildFlag(true, false, false);
         when(sharedSubscriptionService.getSharedSubscriber(anyString())).thenReturn(ImmutableSet.of(new SubscriberWithQoS(
                 "client1",
                 2,
@@ -300,7 +300,7 @@ public class PublishPollServiceImplTest {
     @Test
     public void test_poll_shared_publishes_messages_qos0_in_flight() throws NoMessageIdAvailableException {
         final PublishFlowHandler pubflishFlowHandler = mock(PublishFlowHandler.class);
-        final byte flags = SubscriptionFlag.getDefaultFlags(true, false, false);
+        final byte flags = SubscriptionFlag.buildFlag(true, false, false);
         when(sharedSubscriptionService.getSharedSubscriber(anyString())).thenReturn(ImmutableSet.of(new SubscriberWithQoS(
                 "client1",
                 2,

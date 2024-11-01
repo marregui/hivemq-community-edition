@@ -25,11 +25,6 @@ import javax.inject.Singleton;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Util for handling system environment variables
- *
- * @author Christoph Schäbel
- */
 @Singleton
 public class EnvVarUtil {
 

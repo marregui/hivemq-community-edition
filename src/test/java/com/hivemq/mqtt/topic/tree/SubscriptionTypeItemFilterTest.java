@@ -28,8 +28,8 @@ public class SubscriptionTypeItemFilterTest {
     @Test
     public void test_mode_all() {
 
-        final byte sharedFlag = SubscriptionFlag.getDefaultFlags(true, false, false);
-        final byte individualFlag = SubscriptionFlag.getDefaultFlags(false, false, false);
+        final byte sharedFlag = SubscriptionFlag.buildFlag(true, false, false);
+        final byte individualFlag = SubscriptionFlag.buildFlag(false, false, false);
 
         final SubscriptionTypeItemFilter itemFilter = new SubscriptionTypeItemFilter(SubscriptionType.ALL);
 
@@ -40,8 +40,8 @@ public class SubscriptionTypeItemFilterTest {
     @Test
     public void test_mode_individual() {
 
-        final byte sharedFlag = SubscriptionFlag.getDefaultFlags(true, false, false);
-        final byte individualFlag = SubscriptionFlag.getDefaultFlags(false, false, false);
+        final byte sharedFlag = SubscriptionFlag.buildFlag(true, false, false);
+        final byte individualFlag = SubscriptionFlag.buildFlag(false, false, false);
 
         final SubscriptionTypeItemFilter itemFilter = new SubscriptionTypeItemFilter(SubscriptionType.INDIVIDUAL);
 
@@ -52,8 +52,8 @@ public class SubscriptionTypeItemFilterTest {
     @Test
     public void test_mode_shared() {
 
-        final byte sharedFlag = SubscriptionFlag.getDefaultFlags(true, false, false);
-        final byte individualFlag = SubscriptionFlag.getDefaultFlags(false, false, false);
+        final byte sharedFlag = SubscriptionFlag.buildFlag(true, false, false);
+        final byte individualFlag = SubscriptionFlag.buildFlag(false, false, false);
 
         final SubscriptionTypeItemFilter itemFilter = new SubscriptionTypeItemFilter(SubscriptionType.SHARED);
 

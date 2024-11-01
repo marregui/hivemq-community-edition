@@ -24,9 +24,6 @@ import java.util.Locale;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-/**
- * @author Dominik Obermaier
- */
 public class Strings {
 
     private Strings() {
@@ -53,13 +50,10 @@ public class Strings {
         if (buf.readableBytes() < 2) {
             return null;
         }
-
         final int utf8StringLength = buf.readUnsignedShort();
-
         if (buf.readableBytes() < utf8StringLength) {
             return null;
         }
-
         return getPrefixedString(buf, utf8StringLength);
     }
 
@@ -74,19 +68,14 @@ public class Strings {
     public static String getValidatedPrefixedString(
             @NotNull final ByteBuf buf, final int utf8StringLength, final boolean validateShouldNotCharacters) {
         checkNotNull(buf);
-
         if (buf.readableBytes() < utf8StringLength) {
             return null;
         }
-
         final byte[] bytes = new byte[utf8StringLength];
-
         buf.getBytes(buf.readerIndex(), bytes);
-
         if (Utf8Utils.containsMustNotCharacters(bytes)) {
             return null;
         }
-
         if (validateShouldNotCharacters && Utf8Utils.hasControlOrNonCharacter(bytes)) {
             return null;
         }
@@ -107,7 +96,6 @@ public class Strings {
     public static ByteBuf createPrefixedBytesFromString(final String string, final ByteBuf buffer) {
         checkNotNull(string);
         checkNotNull(buffer);
-
         if (Utf8Utils.stringIsOneByteCharsOnly(string)) {
             // In case ther is no character in the string that is encoded with more than one byte in UTF-8,
             // We can write the string character by character without copying it to a temporary byte array.
@@ -120,8 +108,6 @@ public class Strings {
             buffer.writeShort(bytes.length);
             buffer.writeBytes(bytes);
         }
-
-
         return buffer;
     }
 
@@ -142,7 +128,6 @@ public class Strings {
         final long mbDivisor = kbDivisor * kbDivisor;
         final long gbDivisor = mbDivisor * kbDivisor;
         final long tbDivisor = gbDivisor * kbDivisor;
-
         if (bytes <= kbDivisor) {
             return bytes + " B";
         } else if (bytes <= mbDivisor) {

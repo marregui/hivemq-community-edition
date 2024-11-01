@@ -43,7 +43,7 @@ public class TopicFilter {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (! (o instanceof TopicFilter)) {
             return false;
         }
         final TopicFilter that = (TopicFilter) o;

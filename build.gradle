@@ -46,9 +46,7 @@ dependencies {
     // common
     implementation(libs.apache.commonsIO)
     implementation(libs.apache.commonsLang)
-    implementation(libs.guava)
     implementation(libs.zeroAllocationHashing)
-    implementation(libs.jackson.databind)
     implementation(libs.jctools)
 
     /* primitive data structures */
@@ -62,7 +60,6 @@ dependencies {
     testImplementation(libs.concurrentUnit)
     testImplementation(libs.shrinkwrap.api)
     testRuntimeOnly(libs.shrinkwrap.impl)
-    testImplementation(libs.byteBuddy)
     testImplementation(libs.wiremock.jre8.standalone)
     testImplementation(libs.javassist)
     testImplementation(libs.awaitility)

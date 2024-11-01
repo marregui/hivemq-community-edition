@@ -18,10 +18,6 @@ package com.hivemq.persistence.clientsession;
 
 import com.hivemq.mqtt.message.subscribe.Topic;
 
-/**
- * @author Lukas Brandl
- */
-
 public class Subscription {
     private final Topic topic;
     private final byte flags;

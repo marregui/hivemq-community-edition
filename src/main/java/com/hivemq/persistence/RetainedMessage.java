@@ -24,38 +24,24 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
 import com.hivemq.mqtt.message.publish.PUBLISH;
-import com.hivemq.util.ObjectMemoryEstimation;
+import com.hivemq.util.TypeSize;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-/**
- * @author Dominik Obermaier
- */
 public class RetainedMessage {
 
     private static final int SIZE_NOT_CALCULATED = -1;
-
-    private @Nullable byte[] message;
-
-    private final @NotNull QoS qos;
-
-    private long publishId;
-
     protected final long messageExpiryInterval;
-
+    private final @NotNull QoS qos;
     private final @NotNull Mqtt5UserProperties userProperties;
-
     private final @Nullable String responseTopic;
-
     private final @Nullable String contentType;
-
     private final @Nullable byte[] correlationData;
-
     private final @Nullable Mqtt5PayloadFormatIndicator payloadFormatIndicator;
-
     private final long timestamp;
-
+    private @Nullable byte[] message;
+    private long publishId;
     private int sizeInMemory = SIZE_NOT_CALCULATED;
 
     public RetainedMessage(
@@ -133,24 +119,24 @@ public class RetainedMessage {
         }
         int size = 0;
         // The payload size is not calculated because the payload is removed before the message is stored
-        size += ObjectMemoryEstimation.enumSize(); // QoS
-        size += ObjectMemoryEstimation.longWrapperSize(); // Payload ID
-        size += ObjectMemoryEstimation.longSize(); // expiry interval
+        size += TypeSize.enumSize(); // QoS
+        size += TypeSize.longWrapperSize(); // Payload ID
+        size += TypeSize.longSize(); // expiry interval
 
         size += 24; //User Properties Overhead
         for (final MqttUserProperty userProperty : getUserProperties().asList()) {
             size += 24; //UserProperty Object Overhead
-            size += ObjectMemoryEstimation.stringSize(userProperty.getName());
-            size += ObjectMemoryEstimation.stringSize(userProperty.getValue());
+            size += TypeSize.stringSize(userProperty.getName());
+            size += TypeSize.stringSize(userProperty.getValue());
         }
 
-        size += ObjectMemoryEstimation.stringSize(responseTopic);
-        size += ObjectMemoryEstimation.stringSize(contentType);
-        size += ObjectMemoryEstimation.byteArraySize(correlationData);
+        size += TypeSize.stringSize(responseTopic);
+        size += TypeSize.stringSize(contentType);
+        size += TypeSize.byteArraySize(correlationData);
 
-        size += ObjectMemoryEstimation.enumSize(); // Payload format indicator
-        size += ObjectMemoryEstimation.longSize(); // timestamp
-        size += ObjectMemoryEstimation.intSize(); // size
+        size += TypeSize.enumSize(); // Payload format indicator
+        size += TypeSize.longSize(); // timestamp
+        size += TypeSize.intSize(); // size
 
         sizeInMemory = size;
         return sizeInMemory;
@@ -164,6 +150,10 @@ public class RetainedMessage {
         return message;
     }
 
+    public void setMessage(final @Nullable byte[] message) {
+        this.message = message;
+    }
+
     public @NotNull QoS getQos() {
         return qos;
     }
@@ -174,6 +164,10 @@ public class RetainedMessage {
 
     public long getPublishId() {
         return publishId;
+    }
+
+    public void setPublishId(final long publishId) {
+        this.publishId = publishId;
     }
 
     public @Nullable String getResponseTopic() {
@@ -194,14 +188,6 @@ public class RetainedMessage {
 
     public long getTimestamp() {
         return timestamp;
-    }
-
-    public void setMessage(final @Nullable byte[] message) {
-        this.message = message;
-    }
-
-    public void setPublishId(final long publishId) {
-        this.publishId = publishId;
     }
 
     @Override

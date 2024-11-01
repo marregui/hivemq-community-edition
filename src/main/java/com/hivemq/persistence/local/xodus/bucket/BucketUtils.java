@@ -18,9 +18,6 @@ package com.hivemq.persistence.local.xodus.bucket;
 import org.jetbrains.annotations.NotNull;
 import net.openhft.hashing.LongHashFunction;
 
-/**
- * @author Dominik Obermaier
- */
 public class BucketUtils {
 
     private static final LongHashFunction XX = LongHashFunction.xx();

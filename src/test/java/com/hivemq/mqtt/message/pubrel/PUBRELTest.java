@@ -20,7 +20,7 @@ import com.hivemq.extensions.packets.pubrel.PubrelPacketImpl;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
 import com.hivemq.mqtt.message.reason.Mqtt5PubRelReasonCode;
-import com.hivemq.util.ObjectMemoryEstimation;
+import com.hivemq.util.TypeSize;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -80,10 +80,10 @@ public class PUBRELTest {
                 new MqttUserProperty("user3", "value3"));
 
         final int userPropertiesSize = 3 * (24 + // overhead
-                ObjectMemoryEstimation.stringSize("userx") + ObjectMemoryEstimation.stringSize("valuex"));
+                TypeSize.stringSize("userx") + TypeSize.stringSize("valuex"));
 
         final String reasonString = "reasonString";
-        final int reasonStringSize = ObjectMemoryEstimation.stringSize(reasonString);
+        final int reasonStringSize = TypeSize.stringSize(reasonString);
 
         final PUBREL pubrel1 = new PUBREL(1);
         final PUBREL pubrel2 = new PUBREL(1, 100L, 100L);
@@ -98,11 +98,11 @@ public class PUBRELTest {
                 100L);
 
         final int fixedSize =
-                ObjectMemoryEstimation.objectShellSize() + ObjectMemoryEstimation.intSize() + // sizeInMemory
-                        ObjectMemoryEstimation.intSize() + // packet id
-                        ObjectMemoryEstimation.enumSize() + // reason code
-                        ObjectMemoryEstimation.longWrapperSize() + //publish timestamp
-                        ObjectMemoryEstimation.longWrapperSize() + //expiry interval
+                TypeSize.objectShellSize() + TypeSize.intSize() + // sizeInMemory
+                        TypeSize.intSize() + // packet id
+                        TypeSize.enumSize() + // reason code
+                        TypeSize.longWrapperSize() + //publish timestamp
+                        TypeSize.longWrapperSize() + //expiry interval
                         24; //user props overhead
 
         final int pubrel3Size = fixedSize + reasonStringSize + userPropertiesSize;

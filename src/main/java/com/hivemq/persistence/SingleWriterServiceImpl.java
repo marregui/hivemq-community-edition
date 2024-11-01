@@ -39,9 +39,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static com.hivemq.configuration.service.InternalConfigurations.SINGLE_WRITER_INTERVAL_TO_CHECK_PENDING_TASKS_AND_SCHEDULE_MSEC;
 
-/**
- * @author Lukas Brandl
- */
 @LazySingleton
 public class SingleWriterServiceImpl implements SingleWriterService {
 

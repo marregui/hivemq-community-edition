@@ -25,7 +25,7 @@ import com.hivemq.mqtt.message.mqtt5.MqttMessageWithUserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.message.reason.Mqtt5PubRelReasonCode;
-import com.hivemq.util.ObjectMemoryEstimation;
+import com.hivemq.util.TypeSize;
 
 import java.util.concurrent.TimeUnit;
 
@@ -134,19 +134,19 @@ public class PUBREL extends MqttMessageWithUserProperties.MqttMessageWithIdAndRe
             return sizeInMemory;
         }
         int size = 0;
-        size += ObjectMemoryEstimation.objectShellSize();
-        size += ObjectMemoryEstimation.intSize(); // sizeInMemory
-        size += ObjectMemoryEstimation.intSize(); // packet id
-        size += ObjectMemoryEstimation.enumSize(); // reason code
-        size += ObjectMemoryEstimation.stringSize(getReasonString()); // reason code
-        size += ObjectMemoryEstimation.longWrapperSize(); //publish timestamp
-        size += ObjectMemoryEstimation.longWrapperSize(); //expiry interval
+        size += TypeSize.objectShellSize();
+        size += TypeSize.intSize(); // sizeInMemory
+        size += TypeSize.intSize(); // packet id
+        size += TypeSize.enumSize(); // reason code
+        size += TypeSize.stringSize(getReasonString()); // reason code
+        size += TypeSize.longWrapperSize(); //publish timestamp
+        size += TypeSize.longWrapperSize(); //expiry interval
 
         size += 24; //User Properties Overhead
         for (final MqttUserProperty userProperty : getUserProperties().asList()) {
             size += 24; //UserProperty Object Overhead
-            size += ObjectMemoryEstimation.stringSize(userProperty.getName());
-            size += ObjectMemoryEstimation.stringSize(userProperty.getValue());
+            size += TypeSize.stringSize(userProperty.getName());
+            size += TypeSize.stringSize(userProperty.getValue());
         }
 
         sizeInMemory = size;

@@ -21,7 +21,7 @@ import com.hivemq.extension.sdk.api.packets.subscribe.Subscription;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
 import com.hivemq.persistence.Sizable;
-import com.hivemq.util.ObjectMemoryEstimation;
+import com.hivemq.util.TypeSize;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -197,13 +197,13 @@ public class Topic implements Serializable, Comparable<Topic>, Mqtt5Topic, Sizab
         }
         int size = 0;
 
-        size += ObjectMemoryEstimation.objectShellSize();
-        size += ObjectMemoryEstimation.stringSize(topic);
-        size += ObjectMemoryEstimation.enumSize(); // QoS
-        size += ObjectMemoryEstimation.booleanSize(); // no local
-        size += ObjectMemoryEstimation.booleanSize(); // retain as published
-        size += ObjectMemoryEstimation.enumSize(); // retain handling
-        size += ObjectMemoryEstimation.intWrapperSize(); // sub id
+        size += TypeSize.objectShellSize();
+        size += TypeSize.stringSize(topic);
+        size += TypeSize.enumSize(); // QoS
+        size += TypeSize.booleanSize(); // no local
+        size += TypeSize.booleanSize(); // retain as published
+        size += TypeSize.enumSize(); // retain handling
+        size += TypeSize.intWrapperSize(); // sub id
 
         sizeInMemory = size;
         return sizeInMemory;

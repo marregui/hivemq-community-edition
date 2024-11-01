@@ -19,7 +19,7 @@ import com.hivemq.configuration.entity.mqtt.MqttConfigurationDefaults;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
-import com.hivemq.util.ObjectMemoryEstimation;
+import com.hivemq.util.TypeSize;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
@@ -40,18 +40,18 @@ import static org.junit.Assert.assertTrue;
  */
 public class PUBLISHTest {
 
-    private static final int FIXED_SIZE = ObjectMemoryEstimation.objectShellSize() +  // shell size
-            ObjectMemoryEstimation.intSize() +  // size size
-            ObjectMemoryEstimation.longSize() +  // timestamp
+    private static final int FIXED_SIZE = TypeSize.objectShellSize() +  // shell size
+            TypeSize.intSize() +  // size size
+            TypeSize.longSize() +  // timestamp
             24 + // user props overhead
-            ObjectMemoryEstimation.booleanSize() +  // duplicateDelivery
-            ObjectMemoryEstimation.booleanSize() +  // retain
-            ObjectMemoryEstimation.booleanSize() +  // isNewTopicAlias
-            ObjectMemoryEstimation.longSize() +  // messageExpiryInterval
-            ObjectMemoryEstimation.longSize() +  // publishId
-            ObjectMemoryEstimation.longWrapperSize() + // payloadId
-            ObjectMemoryEstimation.enumSize() +  // QoS
-            ObjectMemoryEstimation.enumSize();   // payloadFormatIndicator
+            TypeSize.booleanSize() +  // duplicateDelivery
+            TypeSize.booleanSize() +  // retain
+            TypeSize.booleanSize() +  // isNewTopicAlias
+            TypeSize.longSize() +  // messageExpiryInterval
+            TypeSize.longSize() +  // publishId
+            TypeSize.longWrapperSize() + // payloadId
+            TypeSize.enumSize() +  // QoS
+            TypeSize.enumSize();   // payloadFormatIndicator
 
     @Test(expected = NullPointerException.class)
     public void test_publish_qos_null() {
@@ -146,7 +146,7 @@ public class PUBLISHTest {
 
         for (final int size : sizeList) {
             //19 + 48 + 54 + 23 + 118 = 262
-            assertEquals(262 + 54 + FIXED_SIZE + ObjectMemoryEstimation.stringSize(publishMqtt5.getUniqueId()), size);
+            assertEquals(262 + 54 + FIXED_SIZE + TypeSize.stringSize(publishMqtt5.getUniqueId()), size);
         }
 
     }
@@ -161,7 +161,7 @@ public class PUBLISHTest {
                 .withTopic("topic") // 10+38 = 48 bytes
                 .build();
 
-        assertEquals(67 + 54 + FIXED_SIZE + ObjectMemoryEstimation.stringSize(publishMqtt5.getUniqueId()),
+        assertEquals(67 + 54 + FIXED_SIZE + TypeSize.stringSize(publishMqtt5.getUniqueId()),
                 publishMqtt5.getEstimatedSizeInMemory());
 
     }
@@ -176,7 +176,7 @@ public class PUBLISHTest {
                 .withTopic("topic") // 10+38 = 48 bytes
                 .build();
 
-        assertEquals(48 + 54 + FIXED_SIZE + ObjectMemoryEstimation.stringSize(publishMqtt5.getUniqueId()),
+        assertEquals(48 + 54 + FIXED_SIZE + TypeSize.stringSize(publishMqtt5.getUniqueId()),
                 publishMqtt5.getEstimatedSizeInMemory());
 
     }
@@ -200,7 +200,7 @@ public class PUBLISHTest {
                 (130_038 * 2) +
                 12_777_790 +
                 FIXED_SIZE +
-                ObjectMemoryEstimation.stringSize(publishMqtt5.getUniqueId()); // 23_523_857 bytes + UniqueID Bytes
+                TypeSize.stringSize(publishMqtt5.getUniqueId()); // 23_523_857 bytes + UniqueID Bytes
         assertEquals(estimatedSize, publishMqtt5.getEstimatedSizeInMemory());
 
     }

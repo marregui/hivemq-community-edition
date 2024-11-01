@@ -24,10 +24,6 @@ import com.hivemq.persistence.LocalPersistence;
 
 import java.util.Map;
 
-/**
- * @author Dominik Obermaier
- * @author Lukas Brandl
- */
 public interface ClientSessionSubscriptionLocalPersistence extends LocalPersistence {
 
     /**

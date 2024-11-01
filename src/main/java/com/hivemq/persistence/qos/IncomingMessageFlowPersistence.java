@@ -19,9 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.MessageWithID;
 
-/**
- * @author Dominik Obermaier
- */
 public interface IncomingMessageFlowPersistence {
 
     /**

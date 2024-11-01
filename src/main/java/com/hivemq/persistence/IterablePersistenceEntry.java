@@ -17,7 +17,7 @@ package com.hivemq.persistence;
 
 
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.util.ObjectMemoryEstimation;
+import com.hivemq.util.TypeSize;
 
 import java.util.Collection;
 
@@ -53,10 +53,10 @@ public class IterablePersistenceEntry<T extends Collection<? extends Sizable>> i
     }
 
     public static int getFixedSize() {
-        int size = ObjectMemoryEstimation.objectShellSize(); // object overhead
-        size += ObjectMemoryEstimation.longSize(); // timestamp
-        size += ObjectMemoryEstimation.intSize(); // sizeInMemory
-        size += ObjectMemoryEstimation.collectionOverhead(); // collection overhead
+        int size = TypeSize.objectShellSize(); // object overhead
+        size += TypeSize.longSize(); // timestamp
+        size += TypeSize.intSize(); // sizeInMemory
+        size += TypeSize.collectionOverhead(); // collection overhead
         return size;
     }
 
@@ -69,7 +69,7 @@ public class IterablePersistenceEntry<T extends Collection<? extends Sizable>> i
 
         int size = getFixedSize();
         for (final Sizable item : object) {
-            size += ObjectMemoryEstimation.objectRefSize();
+            size += TypeSize.objectRefSize();
             size += item.getEstimatedSize();
         }
 

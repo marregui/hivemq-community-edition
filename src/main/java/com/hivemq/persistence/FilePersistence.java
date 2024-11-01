@@ -15,9 +15,6 @@
  */
 package com.hivemq.persistence;
 
-/**
- * @since 4.0.0
- */
 public interface FilePersistence {
 
     /**

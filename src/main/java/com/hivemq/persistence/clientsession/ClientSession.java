@@ -19,7 +19,7 @@ import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.persistence.Sizable;
-import com.hivemq.util.ObjectMemoryEstimation;
+import com.hivemq.util.TypeSize;
 
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.SESSION_EXPIRE_ON_DISCONNECT;
 
@@ -96,17 +96,17 @@ public class ClientSession implements Sizable {
             return inMemorySize;
         }
 
-        int size = ObjectMemoryEstimation.objectShellSize();
-        size += ObjectMemoryEstimation.intSize(); // inMemorySize
-        size += ObjectMemoryEstimation.booleanSize(); // connected
-        size += ObjectMemoryEstimation.longSize(); // sessionExpiryInterval
+        int size = TypeSize.objectShellSize();
+        size += TypeSize.intSize(); // inMemorySize
+        size += TypeSize.booleanSize(); // connected
+        size += TypeSize.longSize(); // sessionExpiryInterval
 
-        size += ObjectMemoryEstimation.objectRefSize(); // reference to will
+        size += TypeSize.objectRefSize(); // reference to will
         if (willPublish != null) {
             size += willPublish.getEstimatedSize();
         }
         if (queueLimit != null) {
-            size += ObjectMemoryEstimation.longSize();
+            size += TypeSize.longSize();
         }
 
         inMemorySize = size;

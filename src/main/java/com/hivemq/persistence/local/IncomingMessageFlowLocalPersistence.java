@@ -18,13 +18,7 @@ package com.hivemq.persistence.local;
 
 import com.hivemq.persistence.qos.IncomingMessageFlowPersistence;
 
-/**
- * @author Dominik Obermaier
- */
 public interface IncomingMessageFlowLocalPersistence extends IncomingMessageFlowPersistence {
 
-    /**
-     * {@inheritDoc}
-     */
     void closeDB();
 }

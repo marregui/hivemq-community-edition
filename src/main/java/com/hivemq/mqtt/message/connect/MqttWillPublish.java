@@ -28,7 +28,7 @@ import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.persistence.Sizable;
 import com.hivemq.util.Bytes;
-import com.hivemq.util.ObjectMemoryEstimation;
+import com.hivemq.util.TypeSize;
 
 /**
  * @author Silvio Giebl
@@ -228,25 +228,25 @@ public class MqttWillPublish implements Sizable {
             return sizeInMemory;
         }
         int size = 0;
-        size += ObjectMemoryEstimation.objectShellSize(); // the will himself
-        size += ObjectMemoryEstimation.intSize(); // sizeInMemory
-        size += ObjectMemoryEstimation.stringSize(topic);
-        size += ObjectMemoryEstimation.byteArraySize(payload);
-        size += ObjectMemoryEstimation.byteArraySize(correlationData);
-        size += ObjectMemoryEstimation.stringSize(responseTopic);
-        size += ObjectMemoryEstimation.stringSize(hivemqId);
-        size += ObjectMemoryEstimation.stringSize(contentType);
+        size += TypeSize.objectShellSize(); // the will himself
+        size += TypeSize.intSize(); // sizeInMemory
+        size += TypeSize.stringSize(topic);
+        size += TypeSize.byteArraySize(payload);
+        size += TypeSize.byteArraySize(correlationData);
+        size += TypeSize.stringSize(responseTopic);
+        size += TypeSize.stringSize(hivemqId);
+        size += TypeSize.stringSize(contentType);
 
         size += 24; //User Properties Overhead
         for (final MqttUserProperty userProperty : getUserProperties().asList()) {
             size += 24; //UserProperty Object Overhead
-            size += ObjectMemoryEstimation.stringSize(userProperty.getName());
-            size += ObjectMemoryEstimation.stringSize(userProperty.getValue());
+            size += TypeSize.stringSize(userProperty.getName());
+            size += TypeSize.stringSize(userProperty.getValue());
         }
-        size += ObjectMemoryEstimation.longSize(); // messageExpiryInterval
-        size += ObjectMemoryEstimation.enumSize(); // QoS
-        size += ObjectMemoryEstimation.enumSize(); // payloadFormatIndicator
-        size += ObjectMemoryEstimation.longSize(); // will delay interval
+        size += TypeSize.longSize(); // messageExpiryInterval
+        size += TypeSize.enumSize(); // QoS
+        size += TypeSize.enumSize(); // payloadFormatIndicator
+        size += TypeSize.longSize(); // will delay interval
 
         sizeInMemory = size;
         return sizeInMemory;

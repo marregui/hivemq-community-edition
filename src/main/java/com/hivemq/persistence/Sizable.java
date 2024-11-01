@@ -16,16 +16,9 @@
 package com.hivemq.persistence;
 
 
-
-/**
- * Allows the estimation of the in memory size of an object.
- *
- * @author Georg Held
- */
 public interface Sizable {
 
     int SIZE_NOT_CALCULATED = -1;
 
-    
     int getEstimatedSize();
 }

@@ -19,9 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.MessageWithID;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 
-/**
- * @author Lukas Brandl
- */
 public class ClientQueueEntry {
 
     @NotNull

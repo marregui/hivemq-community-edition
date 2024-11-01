@@ -28,7 +28,7 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttMessageWithUserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
-import com.hivemq.util.ObjectMemoryEstimation;
+import com.hivemq.util.TypeSize;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -398,34 +398,34 @@ public class PUBLISH extends MqttMessageWithUserProperties implements Mqtt5PUBLI
             return sizeInMemory;
         }
         int size = 0;
-        size += ObjectMemoryEstimation.objectShellSize(); // the publish himself
-        size += ObjectMemoryEstimation.intSize(); // sizeInMemory
-        size += ObjectMemoryEstimation.longSize(); // timestamp
-        size += ObjectMemoryEstimation.stringSize(topic);
-        size += ObjectMemoryEstimation.byteArraySize(payload);
-        size += ObjectMemoryEstimation.byteArraySize(correlationData);
-        size += ObjectMemoryEstimation.stringSize(responseTopic);
-        size += ObjectMemoryEstimation.stringSize(uniqueId);
-        size += ObjectMemoryEstimation.stringSize(hivemqId);
-        size += ObjectMemoryEstimation.stringSize(contentType);
+        size += TypeSize.objectShellSize(); // the publish himself
+        size += TypeSize.intSize(); // sizeInMemory
+        size += TypeSize.longSize(); // timestamp
+        size += TypeSize.stringSize(topic);
+        size += TypeSize.byteArraySize(payload);
+        size += TypeSize.byteArraySize(correlationData);
+        size += TypeSize.stringSize(responseTopic);
+        size += TypeSize.stringSize(uniqueId);
+        size += TypeSize.stringSize(hivemqId);
+        size += TypeSize.stringSize(contentType);
 
         size += 24; //User Properties Overhead
         final ImmutableList<MqttUserProperty> userProperties = getUserProperties().asList();
         for (int i = 0; i < userProperties.size(); i++) {
             final MqttUserProperty userProperty = userProperties.get(i);
             size += 24; //UserProperty Object Overhead
-            size += ObjectMemoryEstimation.stringSize(userProperty.getName());
-            size += ObjectMemoryEstimation.stringSize(userProperty.getValue());
+            size += TypeSize.stringSize(userProperty.getName());
+            size += TypeSize.stringSize(userProperty.getValue());
         }
-        size += ObjectMemoryEstimation.booleanSize(); // duplicateDelivery
-        size += ObjectMemoryEstimation.booleanSize(); // retain
-        size += ObjectMemoryEstimation.booleanSize(); // isNewTopicAlias
-        size += ObjectMemoryEstimation.longSize(); // messageExpiryInterval
-        size += ObjectMemoryEstimation.longSize(); // publishId
-        size += ObjectMemoryEstimation.longWrapperSize(); // payloadId
-        size += ObjectMemoryEstimation.enumSize(); // QoS
-        size += ObjectMemoryEstimation.enumSize(); // payloadFormatIndicator
-        size += ObjectMemoryEstimation.immutableIntArraySize(subscriptionIdentifiers);
+        size += TypeSize.booleanSize(); // duplicateDelivery
+        size += TypeSize.booleanSize(); // retain
+        size += TypeSize.booleanSize(); // isNewTopicAlias
+        size += TypeSize.longSize(); // messageExpiryInterval
+        size += TypeSize.longSize(); // publishId
+        size += TypeSize.longWrapperSize(); // payloadId
+        size += TypeSize.enumSize(); // QoS
+        size += TypeSize.enumSize(); // payloadFormatIndicator
+        size += TypeSize.immutableIntArraySize(subscriptionIdentifiers);
 
         sizeInMemory = size;
         return sizeInMemory;

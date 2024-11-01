@@ -19,9 +19,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
-/**
- * @since 1.4
- */
 public interface Message extends Serializable {
 
     @NotNull MessageType getType();
@@ -61,5 +58,4 @@ public interface Message extends Serializable {
     void setOmittedProperties(final int omittedProperties);
 
     int getOmittedProperties();
-
 }

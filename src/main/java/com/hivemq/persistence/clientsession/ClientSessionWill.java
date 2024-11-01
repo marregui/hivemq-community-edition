@@ -22,7 +22,7 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.connect.MqttWillPublish;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.persistence.Sizable;
-import com.hivemq.util.ObjectMemoryEstimation;
+import com.hivemq.util.TypeSize;
 
 /**
  * @author Lukas Brandl
@@ -115,11 +115,11 @@ public class ClientSessionWill implements Sizable {
             return inMemorySize;
         }
 
-        int size = ObjectMemoryEstimation.objectShellSize(); // will himself
-        size += ObjectMemoryEstimation.intSize(); // inMemorySize
+        int size = TypeSize.objectShellSize(); // will himself
+        size += TypeSize.intSize(); // inMemorySize
 
-        size += ObjectMemoryEstimation.longWrapperSize(); //payload id
-        size += ObjectMemoryEstimation.objectRefSize(); // will publish reference
+        size += TypeSize.longWrapperSize(); //payload id
+        size += TypeSize.objectRefSize(); // will publish reference
         size += mqttWillPublish.getEstimatedSize();
 
         inMemorySize = size;

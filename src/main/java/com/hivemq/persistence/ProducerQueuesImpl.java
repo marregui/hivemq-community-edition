@@ -40,12 +40,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static com.hivemq.persistence.SingleWriterServiceImpl.Task;
 
-/**
- * @author Lukas Brandl
- *         <p>
- *         The ProducerQueuesImpl class is a part of the single writer concept. There is one Instance of this class for
- *         each persistence that utilizes the single writer service.
- */
 @SuppressWarnings("unchecked")
 public class ProducerQueuesImpl implements ProducerQueues {
 

@@ -108,10 +108,8 @@ public class ClientQueuePersistenceSerializer {
     @NotNull ByteIterable serializeKey(final @NotNull Key key) {
         final byte[] clientBytes = key.getQueueId().getBytes(UTF_8);
         final byte[] result = new byte[clientBytes.length + 1];
-
         System.arraycopy(clientBytes, 0, result, 0, clientBytes.length);
         result[clientBytes.length] = (byte) (key.isShared() ? 1 : 0);
-
         return XodusUtils.bytesToByteIterable(result);
     }
 

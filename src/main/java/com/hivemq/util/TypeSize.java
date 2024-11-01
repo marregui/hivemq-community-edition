@@ -18,10 +18,7 @@ package com.hivemq.util;
 import com.google.common.primitives.ImmutableIntArray;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * @author Lukas Brandl
- */
-public class ObjectMemoryEstimation {
+public class TypeSize {
 
     public static final int OBJECT_SHELL_SIZE = 12; //Class Pointer (4), Flags (4), Locks (4)
     public static final int OBJECT_REF_SIZE = 4;

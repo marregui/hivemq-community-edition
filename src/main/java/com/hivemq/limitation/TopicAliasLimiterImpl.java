@@ -21,10 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Singleton;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 @Singleton
 public class TopicAliasLimiterImpl implements TopicAliasLimiter {
 

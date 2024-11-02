@@ -29,12 +29,6 @@ import java.util.concurrent.atomic.LongAdder;
 import static com.hivemq.metrics.HiveMQMetrics.BYTES_READ_TOTAL;
 import static com.hivemq.metrics.HiveMQMetrics.BYTES_WRITE_TOTAL;
 
-/**
- * Gathers statistics about inbound and outbound MQTT messages.
- *
- * @author Dominik Obermaier
- * @author Florian Limpöck
- */
 @Singleton
 public class GlobalMQTTMessageCounter {
 
@@ -48,7 +42,6 @@ public class GlobalMQTTMessageCounter {
         this.metricsHolder = metricsHolder;
         this.bytesReadTotal = new LongAdder();
         this.bytesWrittenTotal = new LongAdder();
-
         metricsHolder.getMetricRegistry().register(BYTES_READ_TOTAL.name(), (Gauge<Long>) bytesReadTotal::longValue);
         metricsHolder.getMetricRegistry()
                 .register(BYTES_WRITE_TOTAL.name(), (Gauge<Long>) bytesWrittenTotal::longValue);
@@ -78,6 +71,4 @@ public class GlobalMQTTMessageCounter {
     public void countOutboundTraffic(final int bytes) {
         bytesWrittenTotal.add(bytes);
     }
-
-
 }

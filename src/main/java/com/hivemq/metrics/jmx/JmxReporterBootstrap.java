@@ -20,6 +20,8 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.jmx.JmxReporter;
 import com.google.common.annotations.VisibleForTesting;
 import com.hivemq.configuration.service.InternalConfigurations;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,21 +31,18 @@ import javax.inject.Singleton;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
-/**
- * @author Lukas Brandl
- */
 @Singleton
 public class JmxReporterBootstrap {
 
     private static final Logger log = LoggerFactory.getLogger(JmxReporterBootstrap.class);
 
-    private final MetricRegistry metricRegistry;
+    private final @NotNull MetricRegistry metricRegistry;
 
     @VisibleForTesting
-    JmxReporter jmxReporter;
+    @Nullable JmxReporter jmxReporter;
 
     @Inject
-    public JmxReporterBootstrap(final MetricRegistry metricRegistry) {
+    public JmxReporterBootstrap(final @NotNull MetricRegistry metricRegistry) {
         this.metricRegistry = metricRegistry;
     }
 
@@ -52,23 +51,13 @@ public class JmxReporterBootstrap {
         if (!InternalConfigurations.JMX_REPORTER_ENABLED.get()) {
             return;
         }
-        /*
-         * The default object name factory in Dropwizard Metrics for JMX reporter was updated and changes the format.
-         * We need to support the old format as our customers are using them for their integrations.
-         * <p>
-         * - Old name format, that we support:  "metrics:name=kafka-extension.total.success.count"
-         * - New name format:                   "metrics:name=kafka-extension.total.success.count,type=counters"
-         * <p>
-         * The behavior was changed in this commit: https://github.com/dropwizard/metrics/pull/1310/files
-         * The code below was copied also from this commit.
-         */
         jmxReporter = JmxReporter.forRegistry(metricRegistry).createsObjectNamesWith((type, domain, name) -> {
             try {
-                ObjectName objectName = new ObjectName(domain, "name", name);
-                if (objectName.isPattern()) {
-                    objectName = new ObjectName(domain, "name", ObjectName.quote(name));
+                ObjectName on = new ObjectName(domain, "name", name);
+                if (on.isPattern()) {
+                    on = new ObjectName(domain, "name", ObjectName.quote(name));
                 }
-                return objectName;
+                return on;
             } catch (final MalformedObjectNameException e) {
                 try {
                     return new ObjectName(domain, "name", ObjectName.quote(name));

@@ -17,20 +17,18 @@ package com.hivemq.metrics.gauges;
 
 import com.codahale.metrics.Gauge;
 import com.hivemq.persistence.retained.RetainedMessagePersistence;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author Christoph Schäbel
- */
 public class RetainedMessagesGauge implements Gauge<Long> {
 
-    private final RetainedMessagePersistence retainedMessagePersistence;
+    private final @NotNull RetainedMessagePersistence retainedMessagePersistence;
 
-    public RetainedMessagesGauge(final RetainedMessagePersistence retainedMessagePersistence) {
+    public RetainedMessagesGauge(final @NotNull RetainedMessagePersistence retainedMessagePersistence) {
         this.retainedMessagePersistence = retainedMessagePersistence;
     }
 
     @Override
-    public Long getValue() {
+    public @NotNull Long getValue() {
         try {
             return retainedMessagePersistence.size();
         } catch (final Exception ignore) {

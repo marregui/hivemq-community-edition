@@ -25,9 +25,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-/**
- * @author Dominik Obermaier
- */
 public class LifecycleHiveMQShutdownHook implements HiveMQShutdownHook {
 
     private static final Logger log = LoggerFactory.getLogger(LifecycleHiveMQShutdownHook.class);

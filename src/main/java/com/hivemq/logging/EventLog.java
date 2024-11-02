@@ -38,13 +38,13 @@ import java.time.format.DateTimeFormatter;
 @LazySingleton
 public class EventLog {
 
-    private static final Logger log = LoggerFactory.getLogger(EventLog.class);
-
     public static final String EVENT_CLIENT_CONNECTED = "event.client-connected";
     public static final String EVENT_CLIENT_DISCONNECTED = "event.client-disconnected";
     public static final String EVENT_MESSAGE_DROPPED = "event.message-dropped";
     public static final String EVENT_CLIENT_SESSION_EXPIRED = "event.client-session-expired";
     public static final String EVENT_AUTHENTICATION = "event.authentication";
+    public static final ZoneId ZONE = ZoneId.of("UTC");
+    private static final Logger log = LoggerFactory.getLogger(EventLog.class);
     /**
      * Events are logged to DEBUG, in case customers are using a custom logback.xml
      */
@@ -54,9 +54,7 @@ public class EventLog {
     private static final Logger logMessageDropped = LoggerFactory.getLogger(EVENT_MESSAGE_DROPPED);
     private static final Logger logClientSessionExpired = LoggerFactory.getLogger(EVENT_CLIENT_SESSION_EXPIRED);
     private static final Logger logAuthentication = LoggerFactory.getLogger(EVENT_AUTHENTICATION);
-
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    public static final ZoneId ZONE = ZoneId.of("UTC");
 
     /**
      * Log that a outgoing publish message was dropped.
@@ -67,10 +65,10 @@ public class EventLog {
      * @param reason   why the message was dropped
      */
     public void messageDropped(
-            @Nullable final String clientId,
-            @Nullable final String topic,
-            @NotNull final int qos,
-            @NotNull final String reason) {
+            final @Nullable String clientId,
+            final @Nullable String topic,
+            final int qos,
+            final @Nullable String reason) {
         logMessageDropped.debug(
                 "Outgoing publish message was dropped. Receiving client: {}, topic: {}, qos: {}, reason: {}.",
                 valueOrUnknown(clientId),
@@ -88,10 +86,7 @@ public class EventLog {
      * @param reason why the message was dropped
      */
     public void sharedSubscriptionMessageDropped(
-            @Nullable final String group,
-            @Nullable final String topic,
-            @NotNull final int qos,
-            @NotNull final String reason) {
+            final @Nullable String group, final @Nullable String topic, final int qos, final @NotNull String reason) {
         logMessageDropped.debug(
                 "Outgoing publish message was dropped. Receiving shared subscription group: {}, topic: {}, qos: {}, reason: {}.",
                 valueOrUnknown(group),
@@ -235,7 +230,7 @@ public class EventLog {
      * @param expiryTimestamp the {@link Long} timestamp of the client-session-expiration
      * @param clientId        of the expired session
      */
-    public void clientSessionExpired(final Long expiryTimestamp, @Nullable final String clientId) {
+    public void clientSessionExpired(final @NotNull Long expiryTimestamp, final @Nullable String clientId) {
 
         final LocalDateTime disconnectedSinceDateTime =
                 LocalDateTime.ofInstant(Instant.ofEpochMilli(expiryTimestamp), ZONE);

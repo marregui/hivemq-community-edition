@@ -17,20 +17,18 @@ package com.hivemq.metrics.gauges;
 
 import com.codahale.metrics.Gauge;
 import com.hivemq.persistence.local.ClientSessionLocalPersistence;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author Christoph Schäbel
- */
 public class SessionsGauge implements Gauge<Integer> {
 
-    private final ClientSessionLocalPersistence clientSessionPersistence;
+    private final @NotNull ClientSessionLocalPersistence clientSessionPersistence;
 
-    public SessionsGauge(final ClientSessionLocalPersistence clientSessionPersistence) {
+    public SessionsGauge(final @NotNull ClientSessionLocalPersistence clientSessionPersistence) {
         this.clientSessionPersistence = clientSessionPersistence;
     }
 
     @Override
-    public Integer getValue() {
+    public @NotNull Integer getValue() {
         return clientSessionPersistence.getSessionsCount();
     }
 

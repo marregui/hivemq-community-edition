@@ -19,23 +19,22 @@ import com.codahale.metrics.MetricRegistry;
 import com.hivemq.metrics.HiveMQMetrics;
 import com.hivemq.metrics.gauges.SessionsGauge;
 import com.hivemq.persistence.local.ClientSessionLocalPersistence;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-/**
- * @author Christoph Schäbel
- */
 @Singleton
 public class SessionsGaugeProvider implements Provider<SessionsGauge> {
 
-    private final MetricRegistry metricRegistry;
-    private final ClientSessionLocalPersistence clientSessionPersistence;
+    private final @NotNull MetricRegistry metricRegistry;
+    private final @NotNull ClientSessionLocalPersistence clientSessionPersistence;
 
     @Inject
     public SessionsGaugeProvider(
-            final MetricRegistry metricRegistry, final ClientSessionLocalPersistence clientSessionPersistence) {
+            final @NotNull MetricRegistry metricRegistry,
+            final @NotNull ClientSessionLocalPersistence clientSessionPersistence) {
         this.metricRegistry = metricRegistry;
         this.clientSessionPersistence = clientSessionPersistence;
     }
@@ -43,11 +42,9 @@ public class SessionsGaugeProvider implements Provider<SessionsGauge> {
 
     @Override
     @Singleton
-    public SessionsGauge get() {
+    public @NotNull SessionsGauge get() {
         final SessionsGauge sessionsGauge = new SessionsGauge(clientSessionPersistence);
-
         metricRegistry.register(HiveMQMetrics.CLIENT_SESSIONS_CURRENT.name(), sessionsGauge);
-
         return sessionsGauge;
     }
 }

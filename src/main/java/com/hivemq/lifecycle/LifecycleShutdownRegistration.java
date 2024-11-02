@@ -16,23 +16,21 @@
 package com.hivemq.lifecycle;
 
 import com.hivemq.common.shutdown.ShutdownHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-/**
- * @author Dominik Obermaier
- */
 @Singleton
 public class LifecycleShutdownRegistration {
 
-    private final ShutdownHooks shutdownHooks;
-    private final LifecycleHiveMQShutdownHook shutdownHook;
+    private final @NotNull ShutdownHooks shutdownHooks;
+    private final @NotNull LifecycleHiveMQShutdownHook shutdownHook;
 
 
     @Inject
-    LifecycleShutdownRegistration(final ShutdownHooks shutdownHooks, final LifecycleHiveMQShutdownHook shutdownHook) {
+    LifecycleShutdownRegistration(final @NotNull ShutdownHooks shutdownHooks, final @NotNull LifecycleHiveMQShutdownHook shutdownHook) {
         this.shutdownHooks = shutdownHooks;
         this.shutdownHook = shutdownHook;
     }

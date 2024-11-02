@@ -17,27 +17,25 @@ package com.hivemq.metrics.ioc.provider;
 
 import com.codahale.metrics.MetricRegistry;
 import com.hivemq.metrics.MetricsHolder;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-/**
- * @author Christoph Schäbel
- */
 @Singleton
 public class MetricsHolderProvider implements Provider<MetricsHolder> {
 
-    private final MetricRegistry metricRegistry;
+    private final @NotNull MetricRegistry metricRegistry;
 
     @Inject
-    public MetricsHolderProvider(final MetricRegistry metricRegistry) {
+    public MetricsHolderProvider(final @NotNull MetricRegistry metricRegistry) {
         this.metricRegistry = metricRegistry;
     }
 
     @Override
     @Singleton
-    public MetricsHolder get() {
+    public @NotNull MetricsHolder get() {
         return new MetricsHolder(metricRegistry);
     }
 

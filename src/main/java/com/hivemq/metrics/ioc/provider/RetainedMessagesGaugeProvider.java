@@ -19,23 +19,21 @@ import com.codahale.metrics.MetricRegistry;
 import com.hivemq.metrics.HiveMQMetrics;
 import com.hivemq.metrics.gauges.RetainedMessagesGauge;
 import com.hivemq.persistence.retained.RetainedMessagePersistence;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-/**
- * @author Christoph Schäbel
- */
 @Singleton
 public class RetainedMessagesGaugeProvider implements Provider<RetainedMessagesGauge> {
 
-    private final RetainedMessagePersistence retainedMessagePersistence;
-    private final MetricRegistry metricRegistry;
+    private final @NotNull RetainedMessagePersistence retainedMessagePersistence;
+    private final @NotNull MetricRegistry metricRegistry;
 
     @Inject
     public RetainedMessagesGaugeProvider(
-            final RetainedMessagePersistence retainedMessagePersistence, final MetricRegistry metricRegistry) {
+            final @NotNull RetainedMessagePersistence retainedMessagePersistence, final @NotNull MetricRegistry metricRegistry) {
         this.retainedMessagePersistence = retainedMessagePersistence;
         this.metricRegistry = metricRegistry;
     }
@@ -43,7 +41,7 @@ public class RetainedMessagesGaugeProvider implements Provider<RetainedMessagesG
 
     @Override
     @Singleton
-    public RetainedMessagesGauge get() {
+    public @NotNull RetainedMessagesGauge get() {
         final RetainedMessagesGauge gauge = new RetainedMessagesGauge(retainedMessagePersistence);
         metricRegistry.register(HiveMQMetrics.RETAINED_MESSAGES_CURRENT.name(), gauge);
         return gauge;

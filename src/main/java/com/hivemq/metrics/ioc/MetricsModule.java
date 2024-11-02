@@ -43,9 +43,6 @@ public class MetricsModule extends SingletonModule<Class<MetricsModule>> {
     @Override
     protected void configure() {
         bind(MetricRegistry.class).toInstance(metricRegistry);
-
-        //These providers are needed to force real eager initialization and instant registration of the metrics
-        //because the metrics need to be available when OnBrokerStart callbacks get called.
         bind(MetricsHolder.class).toInstance(persistenceInjector.getInstance(MetricsHolder.class));
         bind(SessionsGauge.class).toProvider(SessionsGaugeProvider.class).asEagerSingleton();
         bind(OpenConnectionsGauge.class).toProvider(OpenConnectionsGaugeProvider.class).asEagerSingleton();
@@ -53,5 +50,4 @@ public class MetricsModule extends SingletonModule<Class<MetricsModule>> {
         bind(JmxReporterBootstrap.class).asEagerSingleton();
         bind(MetricsShutdownHook.class).asEagerSingleton();
     }
-
 }

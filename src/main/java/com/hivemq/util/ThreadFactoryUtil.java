@@ -25,12 +25,6 @@ import java.util.concurrent.ThreadFactory;
 
 public class ThreadFactoryUtil {
 
-    /**
-     * Creates a {@link ThreadFactory} with given nameFormat and an {@link UncaughtExceptionHandler} to log every
-     * uncaught exception.
-     *
-     * @param nameFormat the format of the name
-     */
     public static @NotNull ThreadFactory create(final @NotNull String nameFormat) {
         return new ThreadFactoryBuilder().setNameFormat(nameFormat)
                 .setUncaughtExceptionHandler(new UncaughtExceptionHandler())
@@ -38,7 +32,6 @@ public class ThreadFactoryUtil {
     }
 
     private static class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
-
         private static final Logger log = LoggerFactory.getLogger(UncaughtExceptionHandler.class);
 
         @Override

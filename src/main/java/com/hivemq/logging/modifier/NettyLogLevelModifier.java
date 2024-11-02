@@ -22,19 +22,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Marker;
 
+
 public class NettyLogLevelModifier implements LogLevelModifier {
 
-    private static void traceAndSortOutUnsupportedOperationException(
+    private static void logUnlessUnsupportedOperationException(
             final @Nullable Marker marker,
             final @NotNull Logger logger,
             final @NotNull String format,
             final @Nullable Object @Nullable [] params,
             final @Nullable Throwable t) {
-
-        if (t instanceof UnsupportedOperationException) {
-            return;
-        }
-        if (params != null) {
+        if (!(t instanceof UnsupportedOperationException) && params != null) {
             for (final Object param : params) {
                 if (param instanceof UnsupportedOperationException) {
                     return;
@@ -52,43 +49,24 @@ public class NettyLogLevelModifier implements LogLevelModifier {
             final @NotNull String format,
             final @Nullable Object @Nullable [] params,
             final @Nullable Throwable t) {
-
-        if (level == Level.DEBUG) {
-            if (logger.getName().startsWith("io.netty")) {
-                if (logger.getName().startsWith("io.netty.handler.traffic.")) {
-                    return FilterReply.DENY;
-                }
-                if (logger.getName().startsWith("io.netty.util.internal.NativeLibraryLoader")) {
-                    if (t instanceof UnsatisfiedLinkError) {
-                        return FilterReply.DENY;
-                    }
-                    if (params == null) {
-                        logger.trace(marker, format, params);
-                        return FilterReply.DENY;
-                    }
-                    for (final Object param : params) {
-                        if (param instanceof UnsatisfiedLinkError) {
-                            return FilterReply.DENY;
-                        }
-                    }
-                    logger.trace(marker, format, params);
-                    return FilterReply.DENY;
-                }
-                traceAndSortOutUnsupportedOperationException(marker, logger, format, params, t);
-                return FilterReply.DENY;
+        if (level == Level.DEBUG || level == Level.TRACE) {
+            final String name = logger.getName();
+            if (!name.startsWith("io.netty")) {
+                return FilterReply.NEUTRAL;
             }
-        } else if (level == Level.TRACE) {
-            if (logger.getName().startsWith("io.netty.channel.nio.NioEventLoop")) {
-                if (t instanceof UnsupportedOperationException) {
+            if (level == Level.DEBUG) {
+                if (name.startsWith("io.netty.handler.traffic.")) {
                     return FilterReply.DENY;
                 }
-                if (params != null) {
-                    for (final Object param : params) {
-                        if (param instanceof UnsupportedOperationException) {
-                            return FilterReply.DENY;
-                        }
-                    }
+                if (name.startsWith("io.netty.util.internal.NativeLibraryLoader")) {
+                    logUnlessUnsupportedOperationException(marker, logger, format, params, t);
+                    return FilterReply.DENY;
                 }
+                logUnlessUnsupportedOperationException(marker, logger, format, params, t);
+                return FilterReply.DENY;
+            } else if (name.startsWith("io.netty.channel.nio.NioEventLoop")) {
+                logUnlessUnsupportedOperationException(marker, logger, format, params, t);
+                return FilterReply.DENY;
             }
         }
         return FilterReply.NEUTRAL;

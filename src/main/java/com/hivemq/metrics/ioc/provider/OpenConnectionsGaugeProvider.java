@@ -19,28 +19,26 @@ import com.codahale.metrics.MetricRegistry;
 import com.hivemq.metrics.HiveMQMetrics;
 import com.hivemq.metrics.gauges.OpenConnectionsGauge;
 import io.netty.channel.group.ChannelGroup;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-/**
- * @author Christoph Schäbel
- */
 @Singleton
 public class OpenConnectionsGaugeProvider implements Provider<OpenConnectionsGauge> {
 
-    private final MetricRegistry metricRegistry;
-    private final ChannelGroup allChannels;
+    private final @NotNull MetricRegistry metricRegistry;
+    private final @NotNull ChannelGroup allChannels;
 
     @Inject
-    public OpenConnectionsGaugeProvider(final MetricRegistry metricRegistry, final ChannelGroup allChannels) {
+    public OpenConnectionsGaugeProvider(final @NotNull MetricRegistry metricRegistry, final @NotNull ChannelGroup allChannels) {
         this.metricRegistry = metricRegistry;
         this.allChannels = allChannels;
     }
 
     @Override
-    public OpenConnectionsGauge get() {
+    public @NotNull OpenConnectionsGauge get() {
         final OpenConnectionsGauge connectionsGauge = new OpenConnectionsGauge(allChannels);
         metricRegistry.register(HiveMQMetrics.CONNECTIONS_OVERALL_CURRENT.name(), connectionsGauge);
         return connectionsGauge;

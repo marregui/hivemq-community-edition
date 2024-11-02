@@ -17,42 +17,36 @@ package com.hivemq.metrics;
 
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Metric;
+import org.jetbrains.annotations.NotNull;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * A convenience class to specify constant names and types of the internal HiveMQ metrics
- *
- * @author Christoph Schäbel
- */
 public class HiveMQMetric<T extends Metric> {
 
-    private final String name;
-    private final Class<? extends Metric> clazz;
+    private final @NotNull String name;
+    private final @NotNull Class<? extends Metric> clazz;
 
 
-    private HiveMQMetric(final String name, final Class<? extends Metric> clazz) {
+    private HiveMQMetric(final @NotNull String name, final @NotNull Class<? extends Metric> clazz) {
         this.name = name;
         this.clazz = clazz;
     }
 
-    public static <T extends Metric> HiveMQMetric<T> valueOf(final String name, final Class<T> metricClass) {
+    public static <T extends Metric> HiveMQMetric<T> valueOf(final @NotNull String name, final @NotNull Class<T> metricClass) {
         checkNotNull(name, "Name cannot be null");
-
         return new HiveMQMetric<>(name, metricClass);
     }
 
-    public static HiveMQMetric<Gauge<Number>> gaugeValue(final String name) {
+    public static @NotNull HiveMQMetric<Gauge<Number>> gaugeValue(final String name) {
         checkNotNull(name, "Name cannot be null");
-
         return new HiveMQMetric<>(name, Gauge.class);
     }
 
-    public String name() {
+    public @NotNull String name() {
         return name;
     }
 
-    public Class<? extends Metric> getClazz() {
+    public @NotNull Class<? extends Metric> getClazz() {
         return clazz;
     }
 }

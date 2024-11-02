@@ -17,20 +17,18 @@ package com.hivemq.metrics.gauges;
 
 import com.codahale.metrics.Gauge;
 import io.netty.channel.group.ChannelGroup;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author Christoph Schäbel
- */
 public class OpenConnectionsGauge implements Gauge<Integer> {
 
-    private final ChannelGroup allChannels;
+    private final @NotNull ChannelGroup allChannels;
 
-    public OpenConnectionsGauge(final ChannelGroup allChannels) {
+    public OpenConnectionsGauge(final @NotNull ChannelGroup allChannels) {
         this.allChannels = allChannels;
     }
 
     @Override
-    public Integer getValue() {
+    public @NotNull Integer getValue() {
         return allChannels.size();
     }
 }

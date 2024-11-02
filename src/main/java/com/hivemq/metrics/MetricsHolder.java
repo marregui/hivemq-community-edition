@@ -33,9 +33,6 @@ import static com.hivemq.metrics.HiveMQMetrics.SUBSCRIPTIONS_CURRENT;
 import static com.hivemq.metrics.HiveMQMetrics.WILL_MESSAGE_COUNT;
 import static com.hivemq.metrics.HiveMQMetrics.WILL_MESSAGE_PUBLISHED_COUNT_TOTAL;
 
-/**
- * @author Christoph Schäbel
- */
 @Singleton
 public class MetricsHolder {
 

@@ -15,29 +15,30 @@
  */
 package com.hivemq.metrics;
 
-import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Metric;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class HiveMQMetric<T extends Metric> {
 
     private final @NotNull String name;
-    private final @NotNull Class<? extends Metric> clazz;
+    private final @NotNull Class<T> clazz;
 
 
-    private HiveMQMetric(final @NotNull String name, final @NotNull Class<? extends Metric> clazz) {
+    private HiveMQMetric(final @NotNull String name, final @NotNull Class<T> clazz) {
         this.name = name;
         this.clazz = clazz;
     }
 
-    public static <T extends Metric> HiveMQMetric<T> valueOf(final @NotNull String name, final @NotNull Class<T> metricClass) {
+    public static <T extends Metric> @NotNull HiveMQMetric<T> valueOf(
+            final @NotNull String name, final @NotNull Class<T> metricClass) {
         checkNotNull(name, "Name cannot be null");
         return new HiveMQMetric<>(name, metricClass);
     }
 
-    public static @NotNull HiveMQMetric<Gauge<Number>> gaugeValue(final String name) {
+    public static @NotNull HiveMQMetric<Gauge> gaugeValue(final @NotNull String name) {
         checkNotNull(name, "Name cannot be null");
         return new HiveMQMetric<>(name, Gauge.class);
     }
@@ -48,5 +49,12 @@ public class HiveMQMetric<T extends Metric> {
 
     public @NotNull Class<? extends Metric> getClazz() {
         return clazz;
+    }
+
+
+    @FunctionalInterface
+    public interface Gauge extends com.codahale.metrics.Gauge<Number> {
+        @Override
+        @Nullable Number getValue();
     }
 }

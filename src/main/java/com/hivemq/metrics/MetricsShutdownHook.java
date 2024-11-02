@@ -24,9 +24,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-/**
- * @author Lukas Brandl
- */
 @Singleton
 public class MetricsShutdownHook implements HiveMQShutdownHook {
 

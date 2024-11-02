@@ -25,20 +25,24 @@ import org.slf4j.Marker;
 
 public class NettyLogLevelModifier implements LogLevelModifier {
 
-    private static void logUnlessUnsupportedOperationException(
+    private static @NotNull FilterReply logUnlessUnsupportedOperationException(
             final @Nullable Marker marker,
             final @NotNull Logger logger,
             final @NotNull String format,
             final @Nullable Object @Nullable [] params,
             final @Nullable Throwable t) {
-        if (!(t instanceof UnsupportedOperationException) && params != null) {
-            for (final Object param : params) {
-                if (param instanceof UnsupportedOperationException) {
-                    return;
+        if (t instanceof UnsupportedOperationException) {
+            return FilterReply.DENY;
+        }
+        if (params != null) {
+            for (final Object p : params) {
+                if (p instanceof UnsupportedOperationException) {
+                    return FilterReply.DENY;
                 }
             }
         }
         logger.trace(marker, format, params);
+        return FilterReply.NEUTRAL;
     }
 
     @Override
@@ -59,14 +63,11 @@ public class NettyLogLevelModifier implements LogLevelModifier {
                     return FilterReply.DENY;
                 }
                 if (name.startsWith("io.netty.util.internal.NativeLibraryLoader")) {
-                    logUnlessUnsupportedOperationException(marker, logger, format, params, t);
-                    return FilterReply.DENY;
+                    return logUnlessUnsupportedOperationException(marker, logger, format, params, t);
                 }
-                logUnlessUnsupportedOperationException(marker, logger, format, params, t);
-                return FilterReply.DENY;
+                return logUnlessUnsupportedOperationException(marker, logger, format, params, t);
             } else if (name.startsWith("io.netty.channel.nio.NioEventLoop")) {
-                logUnlessUnsupportedOperationException(marker, logger, format, params, t);
-                return FilterReply.DENY;
+                return logUnlessUnsupportedOperationException(marker, logger, format, params, t);
             }
         }
         return FilterReply.NEUTRAL;

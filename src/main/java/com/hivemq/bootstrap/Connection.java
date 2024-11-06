@@ -17,6 +17,7 @@ package com.hivemq.bootstrap;
 
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.configuration.service.entity.Listener;
+import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
@@ -32,10 +33,11 @@ import com.hivemq.mqtt.message.connect.CONNECT;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.security.auth.SslClientCertificate;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
 import io.netty.util.AttributeKey;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
@@ -59,11 +61,64 @@ import java.util.concurrent.ScheduledFuture;
  * {@link ClientConnection} when we are using the {@link com.hivemq.persistence.connection.ConnectionPersistence} to
  * obtain it, as we can only then be sure which {@link Connection} implementation we are using.
  */
-public interface Connection {
+public abstract class Connection {
 
-    AttributeKey<Connection> CHANNEL_ATTRIBUTE_NAME = AttributeKey.valueOf("ClientConnectionContext");
+    public static final @NotNull AttributeKey<Connection> CHANNEL_ATTRIBUTE_NAME =
+            AttributeKey.valueOf("ClientConnectionContext");
 
-    static @NotNull Connection of(final @NotNull Channel channel) {
+
+    protected final @NotNull Channel channel;
+    protected final @NotNull PublishFlushHandler publishFlushHandler;
+    protected final @NotNull Listener connectedListener;
+    protected volatile @NotNull ClientState clientState = ClientState.CONNECTING;
+    protected @Nullable ProtocolVersion protocolVersion;
+    protected @Nullable String clientId;
+    protected boolean cleanStart;
+    protected @Nullable ModifiableDefaultPermissions authPermissions;
+    protected @Nullable CONNECT connectMessage;
+    protected @Nullable Integer clientReceiveMaximum;
+    protected @Nullable Integer connectKeepAlive;
+    protected @Nullable Long queueSizeMaximum;
+    protected @Nullable Long clientSessionExpiryInterval;
+    protected @Nullable Long connectReceivedTimestamp;
+    protected @NotNull String @Nullable [] topicAliasMapping;
+    protected boolean clientIdAssigned;
+    protected boolean incomingPublishesSkipRest;
+    protected boolean requestResponseInformation;
+    protected @Nullable Boolean requestProblemInformation;
+    protected @Nullable SettableFuture<Void> disconnectFuture;
+    protected @Nullable ConnectionAttributes connectionAttributes;
+    protected boolean sendWill = true;
+    protected boolean preventLwt;
+    protected @Nullable SslClientCertificate authCertificate;
+    protected @Nullable String authSniHostname;
+    protected @Nullable String authCipherSuite;
+    protected @Nullable String authProtocol;
+    protected @Nullable String authUsername;
+    protected byte @Nullable [] authPassword;
+    protected @Nullable CONNECT authConnect;
+    protected @Nullable String authMethod;
+    protected @Nullable ByteBuffer authData;
+    protected @Nullable Mqtt5UserProperties authUserProperties;
+    protected @Nullable ScheduledFuture<?> authFuture;
+    protected @Nullable Long maxPacketSizeSend;
+    protected @Nullable ClientContextImpl extensionClientContext;
+    protected @Nullable ClientEventListeners extensionClientEventListeners;
+    protected @Nullable ClientAuthenticators extensionClientAuthenticators;
+    protected @Nullable ClientAuthorizers extensionClientAuthorizers;
+    protected @Nullable ClientInformation extensionClientInformation;
+    protected @Nullable ConnectionInformation extensionConnectionInformation;
+
+    protected Connection(
+            final @NotNull Channel channel,
+            final @NotNull PublishFlushHandler publishFlushHandler,
+            final @NotNull Listener connectedListener) {
+        this.channel = channel;
+        this.publishFlushHandler = publishFlushHandler;
+        this.connectedListener = connectedListener;
+    }
+
+    public static @NotNull Connection of(final @NotNull Channel channel) {
         final Connection context = channel.attr(CHANNEL_ATTRIBUTE_NAME).get();
         if (context != null) {
             return context;
@@ -72,151 +127,350 @@ public interface Connection {
         throw new IllegalStateException("Channel has no ClientConnectionContext.");
     }
 
-    @NotNull Channel getChannel();
-
-    @NotNull ChannelHandler getPublishFlushHandler();
-
-    @NotNull ClientState getClientState();
-
-    void proposeClientState(@NotNull ClientState authenticating);
-
-    @Nullable String getClientId();
-
-    void setClientId(@NotNull String clientId);
-
-    @Nullable ProtocolVersion getProtocolVersion();
-
-    void setProtocolVersion(@NotNull ProtocolVersion protocolVersion);
-
-    @Nullable Long getConnectReceivedTimestamp();
-
-    void setConnectReceivedTimestamp(@NotNull Long currentTimeMillis);
-
-    void setCleanStart(boolean cleanStart);
-
-    boolean isClientIdAssigned();
-
-    void setClientIdAssigned(boolean clientIdAssigned);
-
-    void setAuthUsername(@NotNull String username);
-
-    void setAuthPassword(byte @NotNull [] password);
-
-    @Nullable Long getClientSessionExpiryInterval();
-
-    void setClientSessionExpiryInterval(@NotNull Long sessionExpiryInterval);
-
-    void setConnectKeepAlive(@NotNull Integer keepAlive);
-
-    @Nullable Long getMaxPacketSizeSend();
-
-    void setMaxPacketSizeSend(@NotNull Long maximumPacketSize);
-
-    @NotNull Listener getConnectedListener();
-
-    @Nullable Integer getClientReceiveMaximum();
-
-    @Nullable Long getQueueSizeMaximum();
-
-    void setClientReceiveMaximum(@NotNull Integer clientReceiveMaximum);
-
-    void setQueueSizeMaximum(@Nullable Long queueSizeMaximum);
-
-    @Nullable ScheduledFuture<?> getAuthFuture();
-
-    void setAuthFuture(@Nullable ScheduledFuture<?> authFuture);
-
-    void setDisconnectFuture(@NotNull SettableFuture<Void> disconnectFuture);
-
-    boolean isRequestResponseInformation();
-
-    void setRequestResponseInformation(boolean responseInformationRequested);
-
-    @Nullable Boolean getRequestProblemInformation();
-
-    void setRequestProblemInformation(boolean problemInformationRequested);
-
-    void setConnectMessage(@Nullable CONNECT msg);
-
-    @NotNull String @Nullable [] getTopicAliasMapping();
-
-    void setTopicAliasMapping(@NotNull String @NotNull [] strings);
-
-    @Nullable String getAuthMethod();
-
-    void setAuthMethod(@NotNull String authMethod);
-
-    @Nullable Mqtt5UserProperties getAuthUserProperties();
-
-    void setAuthUserProperties(@Nullable Mqtt5UserProperties mqtt5UserProperties);
-
-    @Nullable ByteBuffer getAuthData();
-
-    void setSendWill(boolean sendWill);
-
-    void setPreventLwt(boolean preventLwt);
-
-    @Nullable SettableFuture<Void> getDisconnectFuture();
-
-    @Nullable CONNECT getAuthConnect();
-
-    void setAuthConnect(@Nullable CONNECT connect);
-
-    void setAuthData(@Nullable ByteBuffer authenticationData);
-
-    @Nullable String getAuthCipherSuite();
-
-    void setAuthCipherSuite(@NotNull String cipherSuite);
-
-    @Nullable String getAuthProtocol();
-
-    void setAuthProtocol(@NotNull String protocol);
-
-    @Nullable SslClientCertificate getAuthCertificate();
-
-    void setAuthCertificate(@NotNull SslClientCertificate sslClientCertificate);
-
-    @Nullable String getAuthSniHostname();
-
-    void setAuthSniHostname(@NotNull String hostname);
-
-    @Nullable ClientContextImpl getExtensionClientContext();
-
-    void setExtensionClientContext(@NotNull ClientContextImpl clientContext);
-
-    @Nullable ClientAuthenticators getExtensionClientAuthenticators();
-
-    void setExtensionClientAuthenticators(@NotNull ClientAuthenticators clientAuthenticators);
-
-    @Nullable ModifiableDefaultPermissions getAuthPermissions();
-
-    void setAuthPermissions(@NotNull ModifiableDefaultPermissions defaultPermissions);
-
-    @Nullable ClientInformation getExtensionClientInformation();
-
-    void setExtensionClientInformation(@NotNull ClientInformation clientInformation);
-
-    @Nullable ConnectionInformation getExtensionConnectionInformation();
-
-    void setExtensionConnectionInformation(@NotNull ConnectionInformation connectionInformation);
-
-    @Nullable ClientAuthorizers getExtensionClientAuthorizers();
-
-    void setExtensionClientAuthorizers(@NotNull ClientAuthorizers clientAuthorizers);
-
-    @Nullable ClientEventListeners getExtensionClientEventListeners();
-
-    void setExtensionClientEventListeners(@NotNull ClientEventListeners clientEventListeners);
-
-    boolean isIncomingPublishesSkipRest();
-
-    void setIncomingPublishesSkipRest(boolean incomingPublishesSkipRest);
-
-    @Nullable ConnectionAttributes getConnectionAttributes();
-
-    @NotNull ConnectionAttributes setConnectionAttributesIfAbsent(@NotNull ConnectionAttributes connectionAttributes);
-
-    @NotNull Optional<String> getChannelIP();
-
-    @NotNull Optional<InetAddress> getChannelAddress();
+    public @NotNull Channel getChannel() {
+        return channel;
+    }
+
+    public @NotNull PublishFlushHandler getPublishFlushHandler() {
+        return publishFlushHandler;
+    }
+
+    public @NotNull ClientState getClientState() {
+        return clientState;
+    }
+
+    public void proposeClientState(final @NotNull ClientState clientState) {
+        if (!this.clientState.disconnected()) {
+            this.clientState = clientState;
+        }
+    }
+
+    public @Nullable ProtocolVersion getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    public void setProtocolVersion(final @NotNull ProtocolVersion protocolVersion) {
+        this.protocolVersion = protocolVersion;
+    }
+
+    public @Nullable String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(final @NotNull String clientId) {
+        this.clientId = clientId;
+    }
+
+    public void setCleanStart(final boolean cleanStart) {
+        this.cleanStart = cleanStart;
+    }
+
+    public @Nullable ModifiableDefaultPermissions getAuthPermissions() {
+        return authPermissions;
+    }
+
+    public void setAuthPermissions(final @NotNull ModifiableDefaultPermissions authPermissions) {
+        this.authPermissions = authPermissions;
+    }
+
+    public @NotNull Listener getConnectedListener() {
+        return connectedListener;
+    }
+
+    public @Nullable CONNECT getConnectMessage() {
+        return connectMessage;
+    }
+
+    public void setConnectMessage(final @Nullable CONNECT connectMessage) {
+        this.connectMessage = connectMessage;
+    }
+
+    public @Nullable Integer getClientReceiveMaximum() {
+        return clientReceiveMaximum;
+    }
+
+    public void setClientReceiveMaximum(final @NotNull Integer clientReceiveMaximum) {
+        this.clientReceiveMaximum = clientReceiveMaximum;
+    }
+
+    public @Nullable Integer getConnectKeepAlive() {
+        return connectKeepAlive;
+    }
+
+    public void setConnectKeepAlive(final @NotNull Integer connectKeepAlive) {
+        this.connectKeepAlive = connectKeepAlive;
+    }
+
+    public @Nullable Long getQueueSizeMaximum() {
+        return queueSizeMaximum;
+    }
+
+    public void setQueueSizeMaximum(final @Nullable Long queueSizeMaximum) {
+        this.queueSizeMaximum = queueSizeMaximum;
+    }
+
+    public @Nullable Long getClientSessionExpiryInterval() {
+        return clientSessionExpiryInterval;
+    }
+
+    public void setClientSessionExpiryInterval(final @NotNull Long clientSessionExpiryInterval) {
+        this.clientSessionExpiryInterval = clientSessionExpiryInterval;
+    }
+
+    public @Nullable Long getConnectReceivedTimestamp() {
+        return connectReceivedTimestamp;
+    }
+
+    public void setConnectReceivedTimestamp(final @NotNull Long connectReceivedTimestamp) {
+        this.connectReceivedTimestamp = connectReceivedTimestamp;
+    }
+
+    public @NotNull String @Nullable [] getTopicAliasMapping() {
+        return topicAliasMapping;
+    }
+
+    public void setTopicAliasMapping(final @NotNull String @NotNull [] topicAliasMapping) {
+        this.topicAliasMapping = topicAliasMapping;
+    }
+
+    public boolean isClientIdAssigned() {
+        return clientIdAssigned;
+    }
+
+    public void setClientIdAssigned(final boolean clientIdAssigned) {
+        this.clientIdAssigned = clientIdAssigned;
+    }
+
+    /**
+     * True if this client is not allowed to publish any more messages, if false he is allowed to do so.
+     */
+    public boolean isIncomingPublishesSkipRest() {
+        return incomingPublishesSkipRest;
+    }
+
+    public void setIncomingPublishesSkipRest(final boolean incomingPublishesSkipRest) {
+        this.incomingPublishesSkipRest = incomingPublishesSkipRest;
+    }
+
+    public boolean isRequestResponseInformation() {
+        return requestResponseInformation;
+    }
+
+    public void setRequestResponseInformation(final boolean requestResponseInformation) {
+        this.requestResponseInformation = requestResponseInformation;
+    }
+
+    public @Nullable Boolean getRequestProblemInformation() {
+        return requestProblemInformation;
+    }
+
+    public void setRequestProblemInformation(final boolean requestProblemInformation) {
+        this.requestProblemInformation = requestProblemInformation;
+    }
+
+    /**
+     * This future is added during connection and is set when the client disconnect handling is complete.
+     */
+    public @Nullable SettableFuture<Void> getDisconnectFuture() {
+        return disconnectFuture;
+    }
+
+    public void setDisconnectFuture(final @NotNull SettableFuture<Void> disconnectFuture) {
+        this.disconnectFuture = disconnectFuture;
+    }
+
+    /**
+     * Attribute for storing connection attributes. It is added only when connection attributes are set.
+     */
+    public @Nullable ConnectionAttributes getConnectionAttributes() {
+        return connectionAttributes;
+    }
+
+    public synchronized @NotNull ConnectionAttributes setConnectionAttributesIfAbsent(
+            final @NotNull ConnectionAttributes connectionAttributes) {
+
+        if (this.connectionAttributes == null) {
+            this.connectionAttributes = connectionAttributes;
+        }
+        return this.connectionAttributes;
+    }
+
+    public boolean isSendWill() {
+        return sendWill;
+    }
+
+    public void setSendWill(final boolean sendWill) {
+        this.sendWill = sendWill;
+    }
+
+    public boolean isPreventLwt() {
+        return preventLwt;
+    }
+
+    public void setPreventLwt(final boolean preventLwt) {
+        this.preventLwt = preventLwt;
+    }
+
+    public @Nullable SslClientCertificate getAuthCertificate() {
+        return authCertificate;
+    }
+
+    public void setAuthCertificate(final @NotNull SslClientCertificate authCertificate) {
+        this.authCertificate = authCertificate;
+    }
+
+    public @Nullable String getAuthSniHostname() {
+        return authSniHostname;
+    }
+
+    public void setAuthSniHostname(final @NotNull String authSniHostname) {
+        this.authSniHostname = authSniHostname;
+    }
+
+    public @Nullable String getAuthCipherSuite() {
+        return authCipherSuite;
+    }
+
+    public void setAuthCipherSuite(final @NotNull String authCipherSuite) {
+        this.authCipherSuite = authCipherSuite;
+    }
+
+    public @Nullable String getAuthProtocol() {
+        return authProtocol;
+    }
+
+    public void setAuthProtocol(final @NotNull String authProtocol) {
+        this.authProtocol = authProtocol;
+    }
+
+    public @Nullable String getAuthUsername() {
+        return authUsername;
+    }
+
+    public void setAuthUsername(final @NotNull String authUsername) {
+        this.authUsername = authUsername;
+    }
+
+    public byte @Nullable [] getAuthPassword() {
+        return authPassword;
+    }
+
+    public void setAuthPassword(final byte @Nullable [] authPassword) {
+        this.authPassword = authPassword;
+    }
+
+    public @Nullable CONNECT getAuthConnect() {
+        return authConnect;
+    }
+
+    public void setAuthConnect(final @Nullable CONNECT authConnect) {
+        this.authConnect = authConnect;
+    }
+
+    public @Nullable String getAuthMethod() {
+        return authMethod;
+    }
+
+    public void setAuthMethod(final @NotNull String authMethod) {
+        this.authMethod = authMethod;
+    }
+
+    public @Nullable ByteBuffer getAuthData() {
+        return authData;
+    }
+
+    public void setAuthData(final @Nullable ByteBuffer authData) {
+        this.authData = authData;
+    }
+
+    public @Nullable Mqtt5UserProperties getAuthUserProperties() {
+        return authUserProperties;
+    }
+
+    public void setAuthUserProperties(final @Nullable Mqtt5UserProperties authUserProperties) {
+        this.authUserProperties = authUserProperties;
+    }
+
+    public @Nullable ScheduledFuture<?> getAuthFuture() {
+        return authFuture;
+    }
+
+    public void setAuthFuture(final @Nullable ScheduledFuture<?> authFuture) {
+        this.authFuture = authFuture;
+    }
+
+    public @Nullable Long getMaxPacketSizeSend() {
+        return maxPacketSizeSend;
+    }
+
+    public void setMaxPacketSizeSend(final @NotNull Long maxPacketSizeSend) {
+        this.maxPacketSizeSend = maxPacketSizeSend;
+    }
+
+    public @Nullable ClientContextImpl getExtensionClientContext() {
+        return extensionClientContext;
+    }
+
+    public void setExtensionClientContext(final @NotNull ClientContextImpl extensionClientContext) {
+        this.extensionClientContext = extensionClientContext;
+    }
+
+    public @Nullable ClientEventListeners getExtensionClientEventListeners() {
+        return extensionClientEventListeners;
+    }
+
+    public void setExtensionClientEventListeners(final @NotNull ClientEventListeners extensionClientEventListeners) {
+        this.extensionClientEventListeners = extensionClientEventListeners;
+    }
+
+    public @Nullable ClientAuthenticators getExtensionClientAuthenticators() {
+        return extensionClientAuthenticators;
+    }
+
+    public void setExtensionClientAuthenticators(final @NotNull ClientAuthenticators extensionClientAuthenticators) {
+        this.extensionClientAuthenticators = extensionClientAuthenticators;
+    }
+
+    public @Nullable ClientAuthorizers getExtensionClientAuthorizers() {
+        return extensionClientAuthorizers;
+    }
+
+    public void setExtensionClientAuthorizers(final @NotNull ClientAuthorizers extensionClientAuthorizers) {
+        this.extensionClientAuthorizers = extensionClientAuthorizers;
+    }
+
+    public @Nullable ClientInformation getExtensionClientInformation() {
+        return extensionClientInformation;
+    }
+
+    public void setExtensionClientInformation(final @NotNull ClientInformation extensionClientInformation) {
+        this.extensionClientInformation = extensionClientInformation;
+    }
+
+    public @Nullable ConnectionInformation getExtensionConnectionInformation() {
+        return extensionConnectionInformation;
+    }
+
+    public void setExtensionConnectionInformation(final @NotNull ConnectionInformation extensionConnectionInformation) {
+        this.extensionConnectionInformation = extensionConnectionInformation;
+    }
+
+    public @NotNull Optional<String> getChannelIP() {
+        final Optional<InetAddress> inetAddress = getChannelAddress();
+
+        return inetAddress.map(InetAddress::getHostAddress);
+    }
+
+    public @NotNull Optional<InetAddress> getChannelAddress() {
+        final Optional<SocketAddress> socketAddress = Optional.ofNullable(channel.remoteAddress());
+        if (socketAddress.isPresent()) {
+            final SocketAddress sockAddress = socketAddress.get();
+            //If this is not an InetAddress, we're treating this as if there's no address
+            if (sockAddress instanceof InetSocketAddress) {
+                return Optional.ofNullable(((InetSocketAddress) sockAddress).getAddress());
+            }
+        }
+
+        return Optional.empty();
+    }
 }

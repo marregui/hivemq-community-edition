@@ -29,9 +29,8 @@ import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
 import com.hivemq.mqtt.handler.publish.PublishStatus;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.dropping.MessageDroppedService;
-import com.hivemq.mqtt.message.pool.FreePacketIdRanges;
-import com.hivemq.mqtt.message.pool.exception.MessageIdUnavailableException;
-import com.hivemq.mqtt.message.pool.exception.NoMessageIdAvailableException;
+import com.hivemq.mqtt.message.pool.Ids;
+import com.hivemq.mqtt.message.pool.UnavailableIdException;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.message.publish.PublishWithFuture;
 import com.hivemq.mqtt.message.publish.PubrelWithFuture;
@@ -75,7 +74,7 @@ import static org.mockito.Mockito.when;
 @SuppressWarnings("unchecked")
 public class PublishPollServiceImplTest {
 
-    private @NotNull FreePacketIdRanges freePacketIdRanges;
+    private @NotNull Ids ids;
     private @NotNull ClientQueuePersistence clientQueuePersistence;
     private @NotNull ConnectionPersistence connectionPersistence;
     private @NotNull Channel channel;
@@ -88,7 +87,7 @@ public class PublishPollServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        freePacketIdRanges = mock(FreePacketIdRanges.class);
+        ids = mock(Ids.class);
         clientQueuePersistence = mock(ClientQueuePersistence.class);
         connectionPersistence = mock(ConnectionPersistence.class);
         channel = mock(Channel.class);
@@ -103,7 +102,7 @@ public class PublishPollServiceImplTest {
 
         clientConnection = spy(new DummyClientConnection(channel, publishFlushHandler));
         clientConnection.proposeClientState(ClientState.AUTHENTICATED);
-        when(clientConnection.getFreePacketIdRanges()).thenReturn(freePacketIdRanges);
+        when(clientConnection.getFreePacketIdRanges()).thenReturn(ids);
 
         when(connectionPersistence.get(anyString())).thenReturn(clientConnection);
 
@@ -132,9 +131,9 @@ public class PublishPollServiceImplTest {
     }
 
     @Test
-    public void test_new_messages() throws NoMessageIdAvailableException {
+    public void test_new_messages() throws UnavailableIdException {
 
-        when(freePacketIdRanges.takeNextId()).thenReturn(1);
+        when(ids.lockId()).thenReturn(1);
         when(clientQueuePersistence.readNew(eq("client"),
                 eq(false),
                 any(ImmutableIntArray.class),
@@ -144,19 +143,19 @@ public class PublishPollServiceImplTest {
 
         publishPollService.pollNewMessages("client");
 
-        verify(freePacketIdRanges, times(48)).returnId(anyInt());
+        verify(ids, times(48)).unlockId(anyInt());
         verify(publishFlushHandler, times(1)).sendPublishes(any(List.class));
     }
 
 
     @Test
-    public void test_new_messages_inflight_batch_size() throws NoMessageIdAvailableException {
+    public void test_new_messages_inflight_batch_size() throws UnavailableIdException {
 
         InternalConfigurations.PUBLISH_POLL_BATCH_SIZE = 1;
 
         clientConnection.setClientReceiveMaximum(10);
 
-        when(freePacketIdRanges.takeNextId()).thenReturn(1);
+        when(ids.lockId()).thenReturn(1);
         when(clientQueuePersistence.readNew(eq("client"),
                 eq(false),
                 any(ImmutableIntArray.class),
@@ -168,15 +167,15 @@ public class PublishPollServiceImplTest {
 
         publishPollService.pollNewMessages("client");
 
-        verify(freePacketIdRanges,
-                times(9)).returnId(anyInt()); // 10 messages are polled because the client receive max is 10
+        verify(ids,
+                times(9)).unlockId(anyInt()); // 10 messages are polled because the client receive max is 10
         verify(publishFlushHandler, times(1)).sendPublishes(any(List.class));
     }
 
     @Test
-    public void test_new_messages_channel_inactive() throws NoMessageIdAvailableException {
+    public void test_new_messages_channel_inactive() throws UnavailableIdException {
 
-        when(freePacketIdRanges.takeNextId()).thenReturn(1);
+        when(ids.lockId()).thenReturn(1);
         when(clientQueuePersistence.readNew(eq("client"),
                 eq(false),
                 any(ImmutableIntArray.class),
@@ -190,11 +189,11 @@ public class PublishPollServiceImplTest {
 
         verify(publishFlushHandler, times(1)).sendPublishes(argumentCaptor.capture());
         argumentCaptor.getValue().get(0).getFuture().set(PublishStatus.NOT_CONNECTED);
-        verify(freePacketIdRanges, times(50)).returnId(anyInt()); // The id must be returned
+        verify(ids, times(50)).unlockId(anyInt()); // The id must be returned
     }
 
     @Test
-    public void test_inflight_messages() throws MessageIdUnavailableException {
+    public void test_inflight_messages() throws UnavailableIdException {
         when(clientQueuePersistence.readInflight(eq("client"), anyLong(), anyInt())).thenReturn(Futures.immediateFuture(
                 ImmutableList.of(createPublish(), new PUBREL(2))));
 
@@ -204,13 +203,13 @@ public class PublishPollServiceImplTest {
 
         publishPollService.pollInflightMessages("client", channel);
 
-        verify(freePacketIdRanges, times(2)).takeSpecificId(anyInt());
+        verify(ids, times(2)).lockId(anyInt());
         verify(publishFlushHandler, times(1)).sendPublishes(any(List.class));
         verify(channel).writeAndFlush(any(PubrelWithFuture.class));
     }
 
     @Test
-    public void test_inflight_messages_packet_id_not_available() throws MessageIdUnavailableException {
+    public void test_inflight_messages_packet_id_not_available() throws UnavailableIdException {
         when(clientQueuePersistence.readInflight(eq("client"), anyLong(), anyInt())).thenReturn(Futures.immediateFuture(
                 ImmutableList.of(createPublish())));
 
@@ -219,23 +218,23 @@ public class PublishPollServiceImplTest {
 
         publishPollService.pollInflightMessages("client", channel);
 
-        verify(freePacketIdRanges, times(1)).takeSpecificId(anyInt());
+        verify(ids, times(1)).lockId(anyInt());
         verify(publishFlushHandler, times(1)).sendPublishes(any(List.class));
     }
 
     @Test
-    public void test_inflight_messages_empty() throws MessageIdUnavailableException {
+    public void test_inflight_messages_empty() throws UnavailableIdException {
         clientConnection.setInFlightMessagesSent(true);
 
         when(clientQueuePersistence.readInflight(eq("client"), anyLong(), anyInt())).thenReturn(Futures.immediateFuture(
                 ImmutableList.of()));
         publishPollService.pollInflightMessages("client", channel);
 
-        verify(freePacketIdRanges, never()).takeSpecificId(anyInt());
+        verify(ids, never()).lockId(anyInt());
     }
 
     @Test
-    public void test_poll_shared_publishes() throws NoMessageIdAvailableException {
+    public void test_poll_shared_publishes() throws UnavailableIdException {
         final PublishFlowHandler pubflishFlowHandler = mock(PublishFlowHandler.class);
         final byte flags = SubscriptionFlag.buildFlag(true, false, false);
         when(sharedSubscriptionService.getSharedSubscriber(anyString())).thenReturn(ImmutableSet.of(new SubscriberWithQoS(
@@ -252,7 +251,7 @@ public class PublishPollServiceImplTest {
                 createPublish(),
                 TestMessageUtil.createMqtt5Publish("group/topic", QoS.AT_MOST_ONCE))));
 
-        when(freePacketIdRanges.takeNextId()).thenReturn(2).thenReturn(3);
+        when(ids.lockId()).thenReturn(2).thenReturn(3);
         when(channel.isActive()).thenReturn(true);
         final AtomicInteger inFlightCount = new AtomicInteger(0);
         clientConnection.setInFlightMessageCount(inFlightCount);
@@ -264,7 +263,7 @@ public class PublishPollServiceImplTest {
 
         final ArgumentCaptor<List<PublishWithFuture>> captor = ArgumentCaptor.forClass(List.class);
         verify(publishFlushHandler, times(1)).sendPublishes(captor.capture());
-        verify(freePacketIdRanges, times(2)).takeNextId();
+        verify(ids, times(2)).lockId();
 
         final List<PublishWithFuture> values = captor.getValue();
         assertEquals(2, values.get(0).getPacketIdentifier());
@@ -278,7 +277,7 @@ public class PublishPollServiceImplTest {
     }
 
     @Test
-    public void test_poll_shared_publishes_messages_in_flight() throws NoMessageIdAvailableException {
+    public void test_poll_shared_publishes_messages_in_flight() throws UnavailableIdException {
         final byte flags = SubscriptionFlag.buildFlag(true, false, false);
         when(sharedSubscriptionService.getSharedSubscriber(anyString())).thenReturn(ImmutableSet.of(new SubscriberWithQoS(
                 "client1",
@@ -287,7 +286,7 @@ public class PublishPollServiceImplTest {
                 1)));
         when(connectionPersistence.get("client1")).thenReturn(clientConnection);
 
-        when(freePacketIdRanges.takeNextId()).thenReturn(2).thenReturn(3);
+        when(ids.lockId()).thenReturn(2).thenReturn(3);
         when(channel.isActive()).thenReturn(true);
         clientConnection.setInFlightMessageCount(new AtomicInteger(1));
         clientConnection.setInFlightMessagesSent(true);
@@ -298,7 +297,7 @@ public class PublishPollServiceImplTest {
     }
 
     @Test
-    public void test_poll_shared_publishes_messages_qos0_in_flight() throws NoMessageIdAvailableException {
+    public void test_poll_shared_publishes_messages_qos0_in_flight() throws UnavailableIdException {
         final PublishFlowHandler pubflishFlowHandler = mock(PublishFlowHandler.class);
         final byte flags = SubscriptionFlag.buildFlag(true, false, false);
         when(sharedSubscriptionService.getSharedSubscriber(anyString())).thenReturn(ImmutableSet.of(new SubscriberWithQoS(
@@ -308,7 +307,7 @@ public class PublishPollServiceImplTest {
                 1)));
         when(connectionPersistence.get("client1")).thenReturn(clientConnection);
 
-        when(freePacketIdRanges.takeNextId()).thenReturn(2).thenReturn(3);
+        when(ids.lockId()).thenReturn(2).thenReturn(3);
         when(channel.isActive()).thenReturn(true);
 
         when(pipeline.get(PublishFlowHandler.class)).thenReturn(pubflishFlowHandler);
@@ -321,7 +320,7 @@ public class PublishPollServiceImplTest {
     }
 
     @Test
-    public void test_remove_shared_qos0_downgrade() throws NoMessageIdAvailableException {
+    public void test_remove_shared_qos0_downgrade() throws UnavailableIdException {
         final PublishFlowHandler pubflishFlowHandler = mock(PublishFlowHandler.class);
 
         when(channel.isActive()).thenReturn(true);
@@ -334,7 +333,7 @@ public class PublishPollServiceImplTest {
                 anyInt(),
                 anyLong())).thenReturn(Futures.immediateFuture(ImmutableList.of(publish)));
 
-        when(freePacketIdRanges.takeNextId()).thenReturn(1);
+        when(ids.lockId()).thenReturn(1);
 
         publishPollService.pollSharedPublishesForClient("client", "group/topic", 0, false, null, channel);
 

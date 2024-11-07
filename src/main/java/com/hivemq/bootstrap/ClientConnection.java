@@ -19,7 +19,7 @@ import com.hivemq.configuration.service.entity.Listener;
 import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.hivemq.mqtt.message.pool.FreePacketIdRanges;
+import com.hivemq.mqtt.message.pool.Ids;
 import io.netty.channel.Channel;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -30,7 +30,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ClientConnection extends Connection {
 
-    private final @NotNull FreePacketIdRanges freePacketIdRanges = new FreePacketIdRanges();
+    private final @NotNull Ids ids = new Ids();
     private @Nullable AtomicInteger inFlightMessageCount;
     private boolean noSharedSubscription;
     private boolean incomingPublishesDefaultFailedSkipRest;
@@ -116,8 +116,8 @@ public class ClientConnection extends Connection {
         this.inFlightMessageCount = inFlightMessageCount;
     }
 
-    public @NotNull FreePacketIdRanges getFreePacketIdRanges() {
-        return freePacketIdRanges;
+    public @NotNull Ids getFreePacketIdRanges() {
+        return ids;
     }
 
     /**

@@ -20,7 +20,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.publish.PublishStatus;
-import com.hivemq.mqtt.message.pool.FreePacketIdRanges;
+import com.hivemq.mqtt.message.pool.Ids;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.services.PublishPollService;
 import com.hivemq.persistence.util.FutureUtils;
@@ -38,7 +38,7 @@ public class PublishStatusFutureCallback implements FutureCallback<PublishStatus
     private final boolean sharedSubscription;
     private final @NotNull String queueId;
     private final @NotNull PUBLISH publish;
-    private final @NotNull FreePacketIdRanges messageIDPool;
+    private final @NotNull Ids messageIDPool;
     private final int packetIdentifier;
     private final @NotNull Channel channel;
     private final @NotNull String client;
@@ -48,7 +48,7 @@ public class PublishStatusFutureCallback implements FutureCallback<PublishStatus
             final boolean sharedSubscription,
             final @NotNull String queueId,
             final @NotNull PUBLISH publish,
-            final @NotNull FreePacketIdRanges messageIDPool,
+            final @NotNull Ids messageIDPool,
             final @NotNull Channel channel,
             final @NotNull String client) {
         this.publishPollService = publishPollService;
@@ -100,7 +100,7 @@ public class PublishStatusFutureCallback implements FutureCallback<PublishStatus
             }
         }
         if (packetIdentifier != 0) {
-            messageIDPool.returnId(packetIdentifier);
+            messageIDPool.unlockId(packetIdentifier);
         }
     }
 

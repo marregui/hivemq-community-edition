@@ -19,9 +19,9 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.bootstrap.ClientConnection;
+import com.hivemq.mqtt.message.pool.UnavailableIdException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.hivemq.mqtt.message.pool.exception.NoMessageIdAvailableException;
 import com.hivemq.mqtt.message.subscribe.Topic;
 import com.hivemq.util.Exceptions;
 import io.netty.channel.Channel;
@@ -61,7 +61,7 @@ public class SendRetainedMessageResultListener implements FutureCallback<Void> {
             return;
         }
 
-        if (throwable instanceof NoMessageIdAvailableException) {
+        if (throwable instanceof UnavailableIdException) {
             if (!channel.isActive()) {
                 return;
             }

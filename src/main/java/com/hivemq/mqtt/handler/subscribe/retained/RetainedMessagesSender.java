@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.publish.PublishStatus;
 import com.hivemq.mqtt.handler.publish.PublishWriteFailedListener;
 import com.hivemq.mqtt.message.QoS;
-import com.hivemq.mqtt.message.pool.FreePacketIdRanges;
+import com.hivemq.mqtt.message.pool.Ids;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.message.publish.PUBLISHFactory;
 import com.hivemq.mqtt.message.publish.PublishWithFuture;
@@ -243,8 +243,8 @@ public class RetainedMessagesSender {
                     }
 
                     if (qos0Publish.getPacketIdentifier() != 0) {
-                        final FreePacketIdRanges freePacketIdRanges = ClientConnection.of(channel).getFreePacketIdRanges();
-                        freePacketIdRanges.returnId(qos0Publish.getPacketIdentifier());
+                        final Ids ids = ClientConnection.of(channel).getFreePacketIdRanges();
+                        ids.unlockId(qos0Publish.getPacketIdentifier());
                     }
                 }
 

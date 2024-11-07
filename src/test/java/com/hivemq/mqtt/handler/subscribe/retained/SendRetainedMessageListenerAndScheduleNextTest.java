@@ -19,7 +19,7 @@ import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.mqtt.message.QoS;
-import com.hivemq.mqtt.message.pool.exception.NoMessageIdAvailableException;
+import com.hivemq.mqtt.message.pool.UnavailableIdException;
 import com.hivemq.mqtt.message.subscribe.Topic;
 import io.netty.channel.Channel;
 import io.netty.channel.DefaultEventLoop;
@@ -125,7 +125,7 @@ public class SendRetainedMessageListenerAndScheduleNextTest {
         }
         final SendRetainedMessageListenerAndScheduleNext listener =
                 new SendRetainedMessageListenerAndScheduleNext(topic, topics, channel, retainedMessagesSender, 25);
-        listener.onFailure(new NoMessageIdAvailableException());
+        listener.onFailure(new UnavailableIdException());
 
         verify(retainedMessagesSender, timeout(5000).times(4)).writeRetainedMessages(any(Channel.class),
                 any(Topic[].class));

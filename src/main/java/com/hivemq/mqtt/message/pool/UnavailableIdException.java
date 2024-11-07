@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.mqtt.message.pool.exception;
+package com.hivemq.mqtt.message.pool;
 
-/**
- * This exception indicates that there is no message id available anymore
- *
- * @author Dominik Obermaier
- */
-public class NoMessageIdAvailableException extends Exception {
+public class UnavailableIdException extends Exception {
 
+    public UnavailableIdException() {
+        super();
+    }
+
+    public UnavailableIdException(final int id) {
+        super(String.format("id %d is unavailable", id));
+    }
 }

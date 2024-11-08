@@ -50,7 +50,6 @@ dependencies {
     implementation(libs.jctools)
 
     /* primitive data structures */
-    implementation(libs.eclipse.collections)
     implementation(libs.jetbrains.annotations)
 
     /* ******************** test ******************** */

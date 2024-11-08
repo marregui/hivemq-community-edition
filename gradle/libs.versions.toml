@@ -6,7 +6,6 @@ bouncycastle = "1.78.1"
 byteBuddy = "1.14.19"
 concurrentUnit = "0.4.6"
 dropwizard-metrics = "4.2.28"
-eclipse-collections = "11.1.0"
 equalsVerifier = "3.16.2"
 guava = "33.1.0-jre"
 guice = "5.1.0"
@@ -40,7 +39,6 @@ concurrentUnit = { module = "net.jodah:concurrentunit", version.ref = "concurren
 dropwizard-metrics = { module = "io.dropwizard.metrics:metrics-core", version.ref = "dropwizard-metrics" }
 dropwizard-metrics-jmx = { module = "io.dropwizard.metrics:metrics-jmx", version.ref = "dropwizard-metrics" }
 dropwizard-metrics-logback = { module = "io.dropwizard.metrics:metrics-logback", version.ref = "dropwizard-metrics" }
-eclipse-collections = { module = "org.eclipse.collections:eclipse-collections", version.ref = "eclipse-collections" }
 equalsVerifier = { module = "nl.jqno.equalsverifier:equalsverifier", version.ref = "equalsVerifier" }
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
 guice = { module = "com.google.inject:guice", version.ref = "guice" }

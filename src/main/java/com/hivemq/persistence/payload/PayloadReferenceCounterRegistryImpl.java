@@ -19,8 +19,6 @@ import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
 
 import com.hivemq.persistence.local.xodus.bucket.BucketUtils;
-import org.eclipse.collections.api.tuple.primitive.LongIntPair;
-import org.eclipse.collections.impl.map.mutable.primitive.LongIntHashMap;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -34,25 +32,25 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PayloadReferenceCounterRegistryImpl implements PayloadReferenceCounterRegistry {
 
     private final @NotNull BucketLock bucketLock;
-    private final @NotNull LongIntHashMap @NotNull [] buckets;
+    private final @NotNull LongIntMap @NotNull [] buckets;
 
     PayloadReferenceCounterRegistryImpl(final @NotNull BucketLock bucketLock) {
         this.bucketLock = bucketLock;
-        this.buckets = new LongIntHashMap[bucketLock.getBucketCount()];
+        this.buckets = new LongIntMap[bucketLock.getBucketCount()];
         for (int i = 0; i < buckets.length; i++) {
-            this.buckets[i] = new LongIntHashMap();
+            this.buckets[i] = new LongIntMap();
         }
     }
 
     @Override
     public int get(final long payloadId) {
-        final LongIntHashMap map = buckets[bucketIndexForPayloadId(payloadId)];
+        final LongIntMap map = buckets[bucketIndexForPayloadId(payloadId)];
         return map.getIfAbsent(payloadId, UNKNOWN_PAYLOAD);
     }
 
     @Override
     public int getAndIncrement(final long payloadId) {
-        final LongIntHashMap map = buckets[bucketIndexForPayloadId(payloadId)];
+        final LongIntMap map = buckets[bucketIndexForPayloadId(payloadId)];
         final int previousValue = map.getIfAbsent(payloadId, UNKNOWN_PAYLOAD);
         if (previousValue == UNKNOWN_PAYLOAD) {
             map.put(payloadId, 1);
@@ -65,7 +63,7 @@ public class PayloadReferenceCounterRegistryImpl implements PayloadReferenceCoun
     @Override
     public int decrementAndGet(final long payloadId) {
         final int bucketIndex = bucketIndexForPayloadId(payloadId);
-        final LongIntHashMap map = buckets[bucketIndex];
+        final LongIntMap map = buckets[bucketIndex];
         final int currentValue = map.getIfAbsent(payloadId, UNKNOWN_PAYLOAD);
         if (currentValue == UNKNOWN_PAYLOAD) {
             return UNKNOWN_PAYLOAD;
@@ -80,28 +78,28 @@ public class PayloadReferenceCounterRegistryImpl implements PayloadReferenceCoun
 
     @Override
     public void delete(final long payloadId) {
-        final LongIntHashMap map = buckets[bucketIndexForPayloadId(payloadId)];
+        final LongIntMap map = buckets[bucketIndexForPayloadId(payloadId)];
         if (map == null) {
             return;
         }
         map.remove(payloadId);
     }
 
-    
+
     @Override
     public @NotNull ImmutableMap<Long, Integer> getAll() {
         final ImmutableMap.Builder<Long, Integer> builder = ImmutableMap.builder();
         for (int i = 0; i < buckets.length; i++) {
             bucketLock.accessBucket(i, (bucketIndex) -> {
-                for (final LongIntPair longIntPair : buckets[bucketIndex].keyValuesView()) {
-                    builder.put(longIntPair.getOne(), longIntPair.getTwo());
+                for (final LongIntMap.Entry entry : buckets[bucketIndex]) {
+                    builder.put(entry.getLong(), entry.getInt());
                 }
             });
         }
         return builder.build();
     }
 
-    
+
     @Override
     public int size() {
         final AtomicInteger sum = new AtomicInteger();

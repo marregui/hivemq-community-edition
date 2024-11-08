@@ -39,10 +39,7 @@ import com.hivemq.extensions.services.initializer.InitializersImplTest;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;
 import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
 import com.hivemq.mqtt.message.ProtocolVersion;
-import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.connack.CONNACK;
-import com.hivemq.mqtt.message.connect.CONNECT;
-import com.hivemq.mqtt.message.connect.MqttWillPublish;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.reason.Mqtt5ConnAckReasonCode;
 import com.hivemq.persistence.clientsession.ClientSessionPersistence;
@@ -67,7 +64,6 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -100,7 +96,6 @@ public class PluginInitializerHandlerTest {
             mock(ListenerConfigurationService.class);
     private final @NotNull PublishFlushHandler publishFlushHandler = mock(PublishFlushHandler.class);
 
-    private @NotNull ClientConnection clientConnection;
     private @NotNull PluginTaskExecutor executor;
     private @NotNull EmbeddedChannel channel;
     private @NotNull PluginInitializerHandler pluginInitializerHandler;
@@ -109,13 +104,10 @@ public class PluginInitializerHandlerTest {
     public void setUp() throws Exception {
         executor = new PluginTaskExecutor(new AtomicLong());
         executor.postConstruct();
-
         channel = new EmbeddedChannel();
-        clientConnection = new DummyClientConnection(channel, publishFlushHandler);
-        clientConnection.setConnectMessage(mock(CONNECT.class));
+        final ClientConnection clientConnection = new DummyClientConnection(channel, publishFlushHandler);
         clientConnection.setClientId("test_client");
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
-
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
 
         when(channelHandlerContext.channel()).thenReturn(channel);
@@ -130,9 +122,7 @@ public class PluginInitializerHandlerTest {
         pluginInitializerHandler = new PluginInitializerHandler(initializers,
                 pluginTaskExecutorService,
                 new ServerInformationImpl(new SystemInformationImpl(), listenerConfigurationService),
-                hiveMQExtensions,
-                clientSessionPersistence,
-                mqttConnacker);
+                hiveMQExtensions);
     }
 
     @Test(timeout = 10000)
@@ -163,7 +153,6 @@ public class PluginInitializerHandlerTest {
         verify(channelHandlerContext).writeAndFlush(any(Object.class), eq(channelPromise));
 
         assertFalse(ClientConnection.of(channel).isPreventLwt());
-        assertNull(clientConnection.getConnectMessage());
     }
 
     @Test(timeout = 10000)
@@ -191,9 +180,7 @@ public class PluginInitializerHandlerTest {
         pluginInitializerHandler.write(channelHandlerContext, TestMessageUtil.createFullMqtt5Connack(), channelPromise);
 
         verify(initializers, timeout(5000).times(1)).getClientInitializerMap();
-        verify(channelHandlerContext, timeout(5000)).writeAndFlush(any(Object.class), eq(channelPromise));
         verify(channelPipeline).remove(any(ChannelHandler.class));
-        assertNull(clientConnection.getConnectMessage());
     }
 
     @Test(timeout = 10000)
@@ -210,16 +197,6 @@ public class PluginInitializerHandlerTest {
         when(clientSessionPersistence.deleteWill(anyString())).thenReturn(Futures.immediateFuture(null));
         when(initializers.getClientInitializerMap()).thenReturn(createClientInitializerMap());
 
-        final MqttWillPublish willPublish = new MqttWillPublish.Mqtt5Builder().withTopic("topic")
-                .withQos(QoS.AT_LEAST_ONCE)
-                .withPayload(new byte[]{1, 2, 3})
-                .build();
-
-        final CONNECT connect =
-                new CONNECT.Mqtt5Builder().withClientIdentifier("test-client").withWillPublish(willPublish).build();
-
-        ClientConnection.of(channel).setConnectMessage(connect);
-
         final ModifiableDefaultPermissionsImpl permissions = new ModifiableDefaultPermissionsImpl();
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "topic").type(TopicPermission.PermissionType.DENY).build());
@@ -228,33 +205,13 @@ public class PluginInitializerHandlerTest {
 
         pluginInitializerHandler.write(channelHandlerContext, TestMessageUtil.createFullMqtt5Connack(), channelPromise);
 
-        verify(mqttConnacker, timeout(5000)).connackError(any(Channel.class),
-                anyString(),
-                anyString(),
-                eq(Mqtt5ConnAckReasonCode.NOT_AUTHORIZED),
-                anyString(),
-                eq(Mqtt5UserProperties.NO_USER_PROPERTIES),
-                eq(true));
-
         verify(channelPipeline).remove(any(ChannelHandler.class));
-        assertTrue(ClientConnection.of(channel).isPreventLwt());
-        assertNull(clientConnection.getConnectMessage());
     }
 
     @Test(timeout = 10000)
     public void test_write_will_publish_authorized() throws Exception {
         when(clientSessionPersistence.deleteWill(anyString())).thenReturn(Futures.immediateFuture(null));
         when(initializers.getClientInitializerMap()).thenReturn(createClientInitializerMap());
-
-        final MqttWillPublish willPublish = new MqttWillPublish.Mqtt5Builder().withTopic("topic")
-                .withQos(QoS.AT_LEAST_ONCE)
-                .withPayload(new byte[]{1, 2, 3})
-                .build();
-
-        final CONNECT connect =
-                new CONNECT.Mqtt5Builder().withClientIdentifier("test-client").withWillPublish(willPublish).build();
-
-        ClientConnection.of(channel).setConnectMessage(connect);
 
         final ModifiableDefaultPermissionsImpl permissions = new ModifiableDefaultPermissionsImpl();
         permissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
@@ -267,11 +224,8 @@ public class PluginInitializerHandlerTest {
         // the future must be set, so we need to wait a little
         Thread.sleep(100);
 
-        verify(channelHandlerContext).writeAndFlush(any(Object.class), eq(channelPromise));
-
         verify(channelPipeline).remove(any(ChannelHandler.class));
         assertFalse(ClientConnection.of(channel).isPreventLwt());
-        assertNull(clientConnection.getConnectMessage());
     }
 
     private Map<String, ClientInitializer> createClientInitializerMap() throws Exception {

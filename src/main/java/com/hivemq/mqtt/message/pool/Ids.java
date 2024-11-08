@@ -16,7 +16,6 @@
 
 package com.hivemq.mqtt.message.pool;
 
-import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,12 +30,36 @@ public class Ids {
         root = new Range(MIN, MAX + 1, null);
     }
 
+    private static @Nullable Range unlockId(final @NotNull Range range, final int id) {
+        if (id == range.startInc - 1) { // if the returned element is directly adjacent to the range (from below)
+            range.startInc = id;
+            return null;
+        }
+        if (id < range.endExcl) { // the returned element is within the range, i.e. it has been freed already
+            return null;
+        }
+        final Range next = range.next;
+        if (next == null) {
+            throw new IllegalStateException("id is greater than max");
+        }
+        if (id == range.endExcl) {
+            range.endExcl++;
+            if (range.endExcl == next.startInc) {
+                range.endExcl = next.endExcl;
+                range.next = next.next;
+            }
+            return null;
+        }
+        return next;
+    }
+
     public synchronized int lockId() throws UnavailableIdException {
-        if (root.start == root.end) {
+        if (root.startInc == root.endExcl) {
             throw new UnavailableIdException();
         }
-        final int id = root.start++;
-        if ((root.start == root.end) && (root.next != null)) {
+        final int id = root.startInc;
+        root.startInc++;
+        if ((root.startInc == root.endExcl) && (root.next != null)) {
             final Range ptr = root;
             root = root.next;
             ptr.next = null;
@@ -44,31 +67,32 @@ public class Ids {
         return id;
     }
 
-    public synchronized void lockId(final int id) throws UnavailableIdException {
+    public void lockId(final int id) throws UnavailableIdException {
         if (id < MIN || id > MAX) {
             throw new IllegalArgumentException("id is out of range: " + id);
         }
-
-        Range prev = null;
-        for (Range ptr = root; ptr != null; prev = ptr, ptr = ptr.next) {
-            if (id < ptr.start) {
-                throw new UnavailableIdException(id);
-            }
-            if (id < ptr.end) {
-                final int start = ptr.start;
-                ptr.start = id + 1;
-                if (start != id) {
-                    final Range lo = new Range(start, id, ptr);
-                    if (prev != null) {
-                        prev.next = lo;
-                    } else {
-                        root = lo;
+        synchronized (this) {
+            Range prev = null;
+            for (Range ptr = root; ptr != null; prev = ptr, ptr = ptr.next) {
+                if (id < ptr.startInc) {
+                    throw new UnavailableIdException(id);
+                }
+                if (id < ptr.endExcl) {
+                    final int start = ptr.startInc;
+                    ptr.startInc = id + 1;
+                    if (start != id) {
+                        final Range lo = new Range(start, id, ptr);
+                        if (prev != null) {
+                            prev.next = lo;
+                        } else {
+                            root = lo;
+                        }
                     }
+                    while ((root.startInc == root.endExcl) && (root.next != null)) {
+                        root = root.next;
+                    }
+                    return;
                 }
-                while ((root.start == root.end) && (root.next != null)) {
-                    root = root.next;
-                }
-                return;
             }
         }
         throw new UnavailableIdException(id);
@@ -79,53 +103,32 @@ public class Ids {
             throw new IllegalArgumentException("id is out of range: " + id);
         }
         synchronized (this) {
-            Range current = root;
-            if (id < current.start - 1) { // at least one element is between the returned and the next range
-                root = new Range(id, id + 1, current);
+            Range ptr = root;
+            if (id < ptr.startInc - 1) { // at least one element is between the returned and the next range
+                root = new Range(id, id + 1, ptr);
                 return;
             }
-            Range prev = current;
-            current = unlockId(current, id);
-            while (current != null) {
-                if (id < current.start - 1) {
-                    prev.next = new Range(id, id + 1, current);
+            Range prev = ptr;
+            ptr = unlockId(ptr, id);
+            while (ptr != null) {
+                if (id < ptr.startInc - 1) {
+                    prev.next = new Range(id, id + 1, ptr);
                     return;
                 }
-                prev = current;
-                current = unlockId(current, id);
+                prev = ptr;
+                ptr = unlockId(ptr, id);
             }
         }
-    }
-
-    private static @Nullable Range unlockId(final @NotNull Range range, final int id) {
-        if (id == range.start - 1) { // if the returned element is directly adjacent to the range (from below)
-            range.start = id;
-            return null;
-        }
-        if (id < range.end) { // the returned element is within the range, i.e. it has been freed already
-            return null;
-        }
-        final Range next = range.next;
-        Preconditions.checkState(next != null, "The id is greater than maxId. This must not happen and is a bug.");
-        if (id == range.end) {
-            range.end++;
-            if (range.end == next.start) {
-                range.end = next.end;
-                range.next = next.next;
-            }
-            return null;
-        }
-        return next;
     }
 
     private static class Range {
-        int start;
-        int end;
+        int startInc;
+        int endExcl;
         @Nullable Range next;
 
-        Range(final int start, final int end, final @Nullable Range next) {
-            this.start = start;
-            this.end = end;
+        Range(final int startInc, final int endExcl, final @Nullable Range next) {
+            this.startInc = startInc;
+            this.endExcl = endExcl;
             this.next = next;
         }
     }

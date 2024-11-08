@@ -41,8 +41,8 @@ public class NettyLogLevelModifier implements LogLevelModifier {
                 }
             }
         }
-        logger.trace(marker, format, params);
-        return FilterReply.NEUTRAL;
+        logger.info(marker, format, params);
+        return FilterReply.ACCEPT;
     }
 
     @Override
@@ -53,6 +53,7 @@ public class NettyLogLevelModifier implements LogLevelModifier {
             final @NotNull String format,
             final @Nullable Object @Nullable [] params,
             final @Nullable Throwable t) {
+
         if (level == Level.DEBUG || level == Level.TRACE) {
             final String name = logger.getName();
             if (!name.startsWith("io.netty")) {

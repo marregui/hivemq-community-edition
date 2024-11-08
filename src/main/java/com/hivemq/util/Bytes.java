@@ -21,7 +21,6 @@ import com.google.common.primitives.Longs;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
@@ -29,24 +28,14 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class Bytes {
+public final class Bytes {
 
-    private Bytes() {
-        //This is a utility class, don't instantiate it!
-    }
-
-    /**
-     * Tests for a given Integer if the bit in a specific position is set.
-     */
     public static boolean isBitSet(final byte number, final int bitPosition) {
         checkArgument(bitPosition < 8);
         checkArgument(bitPosition >= 0);
         return (number & (1 << bitPosition)) != 0;
     }
 
-    /**
-     * Sets/Unsets a bit at the specified position
-     */
     public static byte setBit(final byte number, final int bitPosition, final boolean value) {
         checkArgument(bitPosition < 8);
         checkArgument(bitPosition >= 0);
@@ -56,18 +45,12 @@ public class Bytes {
         return unsetBit(number, bitPosition);
     }
 
-    /**
-     * Sets a bit at the specified position
-     */
     public static byte setBit(final byte number, final int bitPosition) {
         checkArgument(bitPosition < 8);
         checkArgument(bitPosition >= 0);
         return (byte) (number | (1 << bitPosition));
     }
 
-    /**
-     * Unsets a bit at the specified position
-     */
     public static byte unsetBit(final byte number, final int bitPosition) {
         checkArgument(bitPosition < 8);
         checkArgument(bitPosition >= 0);
@@ -104,24 +87,6 @@ public class Bytes {
         buf.readBytes(rawBytes);
 
         return rawBytes;
-    }
-
-
-    /**
-     * Prefixes a byte array with the length of the bytes according to the MQTT specification.
-     *
-     * @param bytes the byte array to prefix
-     * @return a {@link io.netty.buffer.ByteBuf} which is prefixed with the length of the given bytes
-     * @throws java.lang.NullPointerException if the passed byte[] is <code>null</code>
-     */
-    public static ByteBuf prefixBytes(final byte[] bytes) {
-        checkNotNull(bytes);
-
-        final ByteBuf buf = Unpooled.buffer();
-        buf.writeShort(bytes.length);
-        buf.writeBytes(bytes);
-
-        return buf;
     }
 
     /**

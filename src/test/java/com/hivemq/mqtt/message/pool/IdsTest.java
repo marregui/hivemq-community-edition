@@ -123,7 +123,7 @@ public class IdsTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testUnlockIdBeyondRange0() throws UnavailableIdException {
+    public void testUnlockIdBeyondRange0() {
         final Ids ids = new Ids();
         ids.unlockId(Ids.MAX + 1);
     }
@@ -135,7 +135,7 @@ public class IdsTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testUnlockIdBeyondRange1() throws UnavailableIdException {
+    public void testUnlockIdBeyondRange1() {
         final Ids ids = new Ids();
         ids.unlockId(Ids.MIN - 1);
     }

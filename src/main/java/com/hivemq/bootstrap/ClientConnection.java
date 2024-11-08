@@ -30,7 +30,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ClientConnection extends Connection {
 
-    private final @NotNull Ids ids = new Ids();
+    private final @NotNull Ids ids;
     private @Nullable AtomicInteger inFlightMessageCount;
     private boolean noSharedSubscription;
     private boolean incomingPublishesDefaultFailedSkipRest;
@@ -43,16 +43,17 @@ public class ClientConnection extends Connection {
             final @NotNull Listener connectedListener) {
         super(channel, publishFlushHandler, connectedListener);
         clientState = ClientState.CONNECTING;
+        ids = new Ids();
     }
 
     private ClientConnection(final @NotNull UndefinedClientConnection context) {
         super(context.channel, context.publishFlushHandler, context.connectedListener);
+        this.ids = new Ids();
         this.clientState = context.clientState;
         this.protocolVersion = context.protocolVersion;
         this.clientId = context.clientId;
         this.cleanStart = context.cleanStart;
         this.authPermissions = context.authPermissions;
-        this.connectMessage = context.connectMessage;
         this.clientReceiveMaximum = context.clientReceiveMaximum;
         this.connectKeepAlive = context.connectKeepAlive;
         this.queueSizeMaximum = context.queueSizeMaximum;

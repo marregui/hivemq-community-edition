@@ -42,30 +42,10 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 
-/**
- * The ClientContext contains information about the client that are required to provide them with the functionality of
- * our feature sets.
- * <p>
- * We differentiate between two {@link Connection} implementations to have the most guarantees and
- * immutability of the context information. For example: The client id of a client should not be {@code null} anymore
- * after establishing successfully an MQTT connection.
- * <p>
- * Initially every client starts early in their connection with {@link UndefinedClientConnection} which has loose
- * guarantees
- * like the client id being nullable as they may have not yet been initialized.
- * <p>
- * At some point during the transition of the client lifecycle between connecting and connected which currently happens
- * in the {@link com.hivemq.mqtt.handler.connect.ConnectHandler} we can change to the {@link ClientConnection}.
- * <p>
- * DISCLAIMER: Even when we have this differentiation, we can truly benefit from the guarantees of
- * {@link ClientConnection} when we are using the {@link com.hivemq.persistence.connection.ConnectionPersistence} to
- * obtain it, as we can only then be sure which {@link Connection} implementation we are using.
- */
 public abstract class Connection {
 
     public static final @NotNull AttributeKey<Connection> CHANNEL_ATTRIBUTE_NAME =
             AttributeKey.valueOf("ClientConnectionContext");
-
 
     protected final @NotNull Channel channel;
     protected final @NotNull PublishFlushHandler publishFlushHandler;
@@ -75,7 +55,6 @@ public abstract class Connection {
     protected @Nullable String clientId;
     protected boolean cleanStart;
     protected @Nullable ModifiableDefaultPermissions authPermissions;
-    protected @Nullable CONNECT connectMessage;
     protected @Nullable Integer clientReceiveMaximum;
     protected @Nullable Integer connectKeepAlive;
     protected @Nullable Long queueSizeMaximum;
@@ -175,14 +154,6 @@ public abstract class Connection {
 
     public @NotNull Listener getConnectedListener() {
         return connectedListener;
-    }
-
-    public @Nullable CONNECT getConnectMessage() {
-        return connectMessage;
-    }
-
-    public void setConnectMessage(final @Nullable CONNECT connectMessage) {
-        this.connectMessage = connectMessage;
     }
 
     public @Nullable Integer getClientReceiveMaximum() {

@@ -15,9 +15,6 @@
  */
 package com.hivemq.extensions.handler;
 
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import org.jetbrains.annotations.NotNull;
@@ -34,14 +31,8 @@ import com.hivemq.extensions.executor.PluginTaskExecutorService;
 import com.hivemq.extensions.executor.task.PluginInOutTask;
 import com.hivemq.extensions.executor.task.PluginInOutTaskContext;
 import com.hivemq.extensions.services.initializer.Initializers;
-import com.hivemq.mqtt.handler.connack.MqttConnacker;
-import com.hivemq.mqtt.handler.publish.DefaultPermissionsEvaluator;
 import com.hivemq.mqtt.message.connack.CONNACK;
-import com.hivemq.mqtt.message.connect.CONNECT;
-import com.hivemq.mqtt.message.connect.MqttWillPublish;
-import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.reason.Mqtt5ConnAckReasonCode;
-import com.hivemq.persistence.clientsession.ClientSessionPersistence;
 import com.hivemq.util.Exceptions;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
@@ -50,8 +41,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.nio.channels.ClosedChannelException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -68,8 +59,6 @@ public class PluginInitializerHandler extends ChannelOutboundHandlerAdapter {
     private final @NotNull PluginTaskExecutorService pluginTaskExecutorService;
     private final @NotNull ServerInformation serverInformation;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
-    private final @NotNull ClientSessionPersistence clientSessionPersistence;
-    private final @NotNull MqttConnacker mqttConnacker;
 
     private @Nullable ClientContextImpl clientContext;
     private @Nullable InitializerInputImpl initializerInput;
@@ -79,16 +68,12 @@ public class PluginInitializerHandler extends ChannelOutboundHandlerAdapter {
             final @NotNull Initializers initializers,
             final @NotNull PluginTaskExecutorService pluginTaskExecutorService,
             final @NotNull ServerInformation serverInformation,
-            final @NotNull HiveMQExtensions hiveMQExtensions,
-            final @NotNull ClientSessionPersistence clientSessionPersistence,
-            final @NotNull MqttConnacker mqttConnacker) {
+            final @NotNull HiveMQExtensions hiveMQExtensions) {
 
         this.initializers = initializers;
         this.pluginTaskExecutorService = pluginTaskExecutorService;
         this.serverInformation = serverInformation;
         this.hiveMQExtensions = hiveMQExtensions;
-        this.clientSessionPersistence = clientSessionPersistence;
-        this.mqttConnacker = mqttConnacker;
     }
 
     @Override
@@ -124,9 +109,6 @@ public class PluginInitializerHandler extends ChannelOutboundHandlerAdapter {
         if (pluginInitializerMap.isEmpty() && msg != null) {
             clientConnection.setPreventLwt(false);
             ctx.writeAndFlush(msg, promise);
-            // Prevent leaking the retained CONNECT message for any existing ClientConnection.
-            // The CONNECT message would otherwise be owned by the plugin initialization below outside this scope.
-            clientConnection.setConnectMessage(null);
             return;
         }
 
@@ -135,7 +117,7 @@ public class PluginInitializerHandler extends ChannelOutboundHandlerAdapter {
             return;
         }
 
-        final String clientId = clientConnection.getClientId();
+        final String clientId = Objects.requireNonNull(clientConnection.getClientId());
 
         if (clientContext == null) {
             final ModifiableDefaultPermissions defaultPermissions = clientConnection.getAuthPermissions();
@@ -170,93 +152,6 @@ public class PluginInitializerHandler extends ChannelOutboundHandlerAdapter {
                     new InitializeTask(initializer, initializerEntry.getKey()));
 
         }
-
-        Futures.addCallback(initializeFuture, new FutureCallback<>() {
-            @Override
-            public void onSuccess(@Nullable final Void result) {
-                authenticateWill(ctx, msg, promise);
-                clientConnection.setConnectMessage(null);
-            }
-
-            @Override
-            public void onFailure(final @NotNull Throwable t) {
-                Exceptions.rethrowError(t);
-                log.error("Calling initializer failed", t);
-                clientConnection.setConnectMessage(null);
-                ctx.writeAndFlush(msg, promise);
-            }
-        }, ctx.executor());
-    }
-
-    private void authenticateWill(
-            final @NotNull ChannelHandlerContext ctx,
-            final @Nullable CONNACK msg,
-            final @NotNull ChannelPromise promise) {
-
-        final ClientConnection clientConnection = ClientConnection.of(ctx.channel());
-
-        final CONNECT connect = clientConnection.getConnectMessage();
-        if (connect == null || connect.getWillPublish() == null) {
-            ctx.writeAndFlush(msg, promise);
-            return;
-        }
-
-        final MqttWillPublish willPublish = connect.getWillPublish();
-        final ModifiableDefaultPermissions permissions = clientConnection.getAuthPermissions();
-        if (DefaultPermissionsEvaluator.checkWillPublish(permissions, willPublish)) {
-            clientConnection.setPreventLwt(false); //clear prevent flag, Will is authorized
-            ctx.writeAndFlush(msg, promise);
-            return;
-        }
-
-        //Will is not authorized
-        clientConnection.setPreventLwt(true);
-        //We have already added the will to the session, so we need to remove it again
-        final ListenableFuture<Void> removeWillFuture =
-                clientSessionPersistence.deleteWill(connect.getClientIdentifier());
-        Futures.addCallback(removeWillFuture, new FutureCallback<>() {
-            @Override
-            public void onSuccess(@Nullable final Void result) {
-                sendConnackWillNotAuthorized();
-            }
-
-            @Override
-            public void onFailure(final @NotNull Throwable t) {
-                sendConnackWillNotAuthorized();
-            }
-
-            private void sendConnackWillNotAuthorized() {
-
-                promise.setFailure(new ClosedChannelException());
-                //will publish is not authorized, disconnect client
-                mqttConnacker.connackError(ctx.channel(),
-                        "A client (IP: {}) sent a CONNECT message with an not authorized Will Publish to topic '" +
-                                willPublish.getTopic() +
-                                "' with QoS '" +
-                                willPublish.getQos().getQosNumber() +
-                                "' and retain '" +
-                                willPublish.isRetain() +
-                                "'.",
-                        "sent a CONNECT message with an not authorized Will Publish to topic '" +
-                                willPublish.getTopic() +
-                                "' with QoS '" +
-                                willPublish.getQos().getQosNumber() +
-                                "' and retain '" +
-                                willPublish.isRetain() +
-                                "'",
-                        Mqtt5ConnAckReasonCode.NOT_AUTHORIZED,
-                        "Will Publish is not authorized to topic '" +
-                                willPublish.getTopic() +
-                                "' with QoS '" +
-                                willPublish.getQos() +
-                                "' and retain '" +
-                                willPublish.isRetain() +
-                                "'",
-                        Mqtt5UserProperties.NO_USER_PROPERTIES,
-                        true);
-            }
-
-        }, ctx.executor());
     }
 
     private static class MultiInitializerTaskContext extends PluginInOutTaskContext<ClientContextPluginImpl> {

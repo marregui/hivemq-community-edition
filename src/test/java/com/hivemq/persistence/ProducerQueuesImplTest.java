@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 public class ProducerQueuesImplTest {
 
     @Mock
-    @NotNull SingleWriterServiceImpl singleWriterServiceImpl;
+    @NotNull SingleWriterService SingleWriterService;
 
     @NotNull ProducerQueuesImpl producerQueues;
 
@@ -43,11 +43,11 @@ public class ProducerQueuesImplTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        when(singleWriterServiceImpl.getPersistenceBucketCount()).thenReturn(64);
-        when(singleWriterServiceImpl.getThreadPoolSize()).thenReturn(4);
-        when(singleWriterServiceImpl.getGlobalTaskCount()).thenReturn(new AtomicLong());
+        when(SingleWriterService.getPersistenceBucketCount()).thenReturn(64);
+        when(SingleWriterService.getThreadPoolSize()).thenReturn(4);
+        when(SingleWriterService.getGlobalTaskCount()).thenReturn(new AtomicLong());
 
-        producerQueues = new ProducerQueuesImpl(singleWriterServiceImpl, 4);
+        producerQueues = new ProducerQueuesImpl(SingleWriterService, 4);
     }
 
     @Test

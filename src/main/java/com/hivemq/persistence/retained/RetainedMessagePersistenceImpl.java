@@ -21,6 +21,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.iteration.ChunkCursor;
 import com.hivemq.extensions.iteration.Chunker;
@@ -28,7 +29,6 @@ import com.hivemq.extensions.iteration.MultipleChunkResult;
 import com.hivemq.persistence.AbstractPersistence;
 import com.hivemq.persistence.ProducerQueues;
 import com.hivemq.persistence.RetainedMessage;
-import com.hivemq.persistence.SingleWriterService;
 import com.hivemq.persistence.util.FutureUtils;
 
 import javax.inject.Inject;

@@ -35,7 +35,6 @@ import com.hivemq.mqtt.message.dropping.MessageDroppedService;
 import com.hivemq.mqtt.topic.TopicMatcher;
 import com.hivemq.persistence.PersistenceStartup;
 import com.hivemq.persistence.SingleWriterService;
-import com.hivemq.persistence.SingleWriterServiceImpl;
 import com.hivemq.persistence.clientqueue.ClientQueueLocalPersistence;
 import com.hivemq.persistence.clientqueue.ClientQueueXodusLocalPersistence;
 import com.hivemq.persistence.ioc.annotation.PayloadPersistence;
@@ -85,7 +84,7 @@ public class LocalPersistenceModuleTest {
     private FullConfigurationService configurationService;
 
     @Mock
-    private SingleWriterServiceImpl singleWriterServiceImpl;
+    private SingleWriterService SingleWriterService;
 
     @Mock
     private EventLog eventLog;
@@ -127,8 +126,7 @@ public class LocalPersistenceModuleTest {
     @Test
     public void test_singletons() throws Exception {
 
-        final Injector injector =
-                createInjector(new LocalPersistenceModule(persistenceInjector));
+        final Injector injector = createInjector(new LocalPersistenceModule(persistenceInjector));
 
         assertSame(injector.getInstance(RetainedMessageLocalPersistence.class),
                 injector.getInstance(RetainedMessageLocalPersistence.class));
@@ -146,8 +144,7 @@ public class LocalPersistenceModuleTest {
 
     @Test
     public void test_xodus_local_persistences() throws Exception {
-        final Injector injector =
-                createInjector(new LocalPersistenceModule(persistenceInjector));
+        final Injector injector = createInjector(new LocalPersistenceModule(persistenceInjector));
 
         assertTrue(injector.getInstance(PublishPayloadLocalPersistence.class) instanceof PublishPayloadXodusLocalPersistence);
         assertTrue(injector.getInstance(RetainedMessageLocalPersistence.class) instanceof RetainedMessageXodusLocalPersistence);
@@ -172,7 +169,7 @@ public class LocalPersistenceModuleTest {
                                 .toInstance(listeningScheduledExecutorService);
                         bind(MetricsHolder.class).toInstance(metricsHolder);
                         bind(MetricRegistry.class).toInstance(new MetricRegistry());
-                        bind(SingleWriterService.class).toInstance(singleWriterServiceImpl);
+                        bind(SingleWriterService.class).toInstance(SingleWriterService);
                         bind(EventLog.class).toInstance(eventLog);
                         bind(MessageDroppedService.class).toInstance(messageDroppedService);
                         bind(RestrictionsConfigurationService.class).toInstance(new RestrictionsConfigurationServiceImpl());

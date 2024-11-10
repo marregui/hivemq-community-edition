@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.hivemq.persistence.SingleWriterServiceImpl.Task;
+import static com.hivemq.persistence.SingleWriterService.Task;
 
 @SuppressWarnings("unchecked")
 public class ProducerQueuesImpl implements ProducerQueues {
@@ -55,7 +55,7 @@ public class ProducerQueuesImpl implements ProducerQueues {
     // Lock.tryLock() seams to park and unpark the thread each time :(
     private final @NotNull ImmutableList<AtomicBoolean> locks;
     private final @NotNull ImmutableList<AtomicLong> queueTaskCounter;
-    private final @NotNull SingleWriterServiceImpl singleWriterServiceImpl;
+    private final @NotNull SingleWriterService SingleWriterService;
 
     private final AtomicBoolean shutdown = new AtomicBoolean(false);
 
@@ -64,10 +64,10 @@ public class ProducerQueuesImpl implements ProducerQueues {
     // Initialized as long max value, to ensure the the grace period condition is not met, when shutdown is true but the start time is net yet set.
 
 
-    public ProducerQueuesImpl(final SingleWriterServiceImpl singleWriterServiceImpl, final int amountOfQueues) {
-        this.singleWriterServiceImpl = singleWriterServiceImpl;
+    public ProducerQueuesImpl(final SingleWriterService SingleWriterService, final int amountOfQueues) {
+        this.SingleWriterService = SingleWriterService;
 
-        final int bucketCount = singleWriterServiceImpl.getPersistenceBucketCount();
+        final int bucketCount = SingleWriterService.getPersistenceBucketCount();
         this.amountOfQueues = amountOfQueues;
         bucketsPerQueue = bucketCount / amountOfQueues;
 
@@ -103,8 +103,8 @@ public class ProducerQueuesImpl implements ProducerQueues {
     public <R> ListenableFuture<R> submit(
             final int bucketIndex,
             @NotNull final Task<R> task,
-            @Nullable final SingleWriterServiceImpl.SuccessCallback<R> successCallback,
-            @Nullable final SingleWriterServiceImpl.FailedCallback failedCallback) {
+            @Nullable final SingleWriterService.SuccessCallback<R> successCallback,
+            @Nullable final SingleWriterService.FailedCallback failedCallback) {
         return submitInternal(bucketIndex, task, successCallback, failedCallback, false);
     }
 
@@ -112,12 +112,12 @@ public class ProducerQueuesImpl implements ProducerQueues {
     public <R> ListenableFuture<R> submitInternal(
             final int bucketIndex,
             @NotNull final Task<R> task,
-            @Nullable final SingleWriterServiceImpl.SuccessCallback<R> successCallback,
-            @Nullable final SingleWriterServiceImpl.FailedCallback failedCallback,
+            @Nullable final SingleWriterService.SuccessCallback<R> successCallback,
+            @Nullable final SingleWriterService.FailedCallback failedCallback,
             final boolean ignoreShutdown) {
         if (!ignoreShutdown &&
                 shutdown.get() &&
-                System.currentTimeMillis() - shutdownStartTime > singleWriterServiceImpl.getShutdownGracePeriod()) {
+                System.currentTimeMillis() - shutdownStartTime > SingleWriterService.getShutdownGracePeriod()) {
             return SettableFuture.create(); // Future will never return since we are shutting down.
         }
         final int queueIndex = bucketIndex / bucketsPerQueue;
@@ -131,9 +131,9 @@ public class ProducerQueuesImpl implements ProducerQueues {
 
         queue.add(new TaskWithFuture<>(resultFuture, task, bucketIndex, successCallback, failedCallback));
         taskCount.incrementAndGet();
-        singleWriterServiceImpl.getGlobalTaskCount().incrementAndGet();
+        SingleWriterService.getGlobalTaskCount().incrementAndGet();
         if (queueTaskCounter.get(queueIndex).getAndIncrement() == 0) {
-            singleWriterServiceImpl.incrementNonemptyQueueCounter();
+            SingleWriterService.incrementNonemptyQueueCounter();
         }
         return resultFuture;
     }
@@ -169,7 +169,7 @@ public class ProducerQueuesImpl implements ProducerQueues {
     private @NotNull <R> List<ListenableFuture<R>> submitToAllBucketsParallel(
             final @NotNull Task<R> task, final boolean ignoreShutdown) {
         final ImmutableList.Builder<ListenableFuture<R>> builder = ImmutableList.builder();
-        final int bucketCount = singleWriterServiceImpl.getPersistenceBucketCount();
+        final int bucketCount = SingleWriterService.getPersistenceBucketCount();
         for (int bucket = 0; bucket < bucketCount; bucket++) {
             //noinspection ConstantConditions (futuer is never null if the callbacks are null)
             builder.add(submitInternal(bucket, task, null, null, ignoreShutdown));
@@ -180,7 +180,7 @@ public class ProducerQueuesImpl implements ProducerQueues {
     public @NotNull <R> List<ListenableFuture<R>> submitToAllBucketsSequential(final @NotNull Task<R> task) {
 
         final ImmutableList.Builder<ListenableFuture<R>> builder = ImmutableList.builder();
-        final int bucketCount = singleWriterServiceImpl.getPersistenceBucketCount();
+        final int bucketCount = SingleWriterService.getPersistenceBucketCount();
 
         ListenableFuture<R> previousFuture = Futures.immediateFuture(null);
         for (int bucket = 0; bucket < bucketCount; bucket++) {
@@ -195,7 +195,7 @@ public class ProducerQueuesImpl implements ProducerQueues {
     }
 
     public int getBucket(@NotNull final String key) {
-        return BucketUtils.getBucket(key, singleWriterServiceImpl.getPersistenceBucketCount());
+        return BucketUtils.getBucket(key, SingleWriterService.getPersistenceBucketCount());
     }
 
     public void execute(final @NotNull SplittableRandom random) {
@@ -208,7 +208,7 @@ public class ProducerQueuesImpl implements ProducerQueues {
             try {
                 final Queue<TaskWithFuture<?>> queue = queues.get(queueIndex);
                 int creditCount = 0;
-                while (creditCount < singleWriterServiceImpl.getCreditsPerExecution()) {
+                while (creditCount < SingleWriterService.getCreditsPerExecution()) {
                     final TaskWithFuture taskWithFuture = queue.poll();
                     if (taskWithFuture == null) {
                         return;
@@ -220,7 +220,7 @@ public class ProducerQueuesImpl implements ProducerQueues {
                             taskWithFuture.getFuture().set(result);
                         } else {
                             if (taskWithFuture.getSuccessCallback() != null) {
-                                singleWriterServiceImpl.getCallbackExecutors()[queueIndex].submit(() -> taskWithFuture.getSuccessCallback()
+                                SingleWriterService.getCallbackExecutors()[queueIndex].submit(() -> taskWithFuture.getSuccessCallback()
                                         .afterTask(result));
                             }
                         }
@@ -229,15 +229,15 @@ public class ProducerQueuesImpl implements ProducerQueues {
                             taskWithFuture.getFuture().setException(e);
                         } else {
                             if (taskWithFuture.getFailedCallback() != null) {
-                                singleWriterServiceImpl.getCallbackExecutors()[queueIndex].submit(() -> taskWithFuture.getFailedCallback()
+                                SingleWriterService.getCallbackExecutors()[queueIndex].submit(() -> taskWithFuture.getFailedCallback()
                                         .afterTask(e));
                             }
                         }
                     }
                     taskCount.decrementAndGet();
-                    singleWriterServiceImpl.getGlobalTaskCount().decrementAndGet();
+                    SingleWriterService.getGlobalTaskCount().decrementAndGet();
                     if (queueTaskCounter.get(queueIndex).decrementAndGet() == 0) {
-                        singleWriterServiceImpl.decrementNonemptyQueueCounter();
+                        SingleWriterService.decrementNonemptyQueueCounter();
                     }
                 }
             } finally {
@@ -273,7 +273,7 @@ public class ProducerQueuesImpl implements ProducerQueues {
                     }
                     return null;
                 },
-                singleWriterServiceImpl.getShutdownGracePeriod() + 50,
+                SingleWriterService.getShutdownGracePeriod() + 50,
                 TimeUnit.MILLISECONDS); // We may have to delay the task for some milliseconds, because a task could just get enqueued.
 
         Futures.addCallback(closeFuture, new FutureCallback<>() {
@@ -301,15 +301,15 @@ public class ProducerQueuesImpl implements ProducerQueues {
         private final @Nullable SettableFuture<T> future;
         private final @NotNull Task task;
         private final int bucketIndex;
-        private final @Nullable SingleWriterServiceImpl.SuccessCallback<T> successCallback;
-        private final @Nullable SingleWriterServiceImpl.FailedCallback failedCallback;
+        private final @Nullable SingleWriterService.SuccessCallback<T> successCallback;
+        private final @Nullable SingleWriterService.FailedCallback failedCallback;
 
         private TaskWithFuture(
                 final @Nullable SettableFuture<T> future,
                 final @NotNull Task task,
                 final int bucketIndex,
-                final @Nullable SingleWriterServiceImpl.SuccessCallback<T> successCallback,
-                final @Nullable SingleWriterServiceImpl.FailedCallback failedCallback) {
+                final @Nullable SingleWriterService.SuccessCallback<T> successCallback,
+                final @Nullable SingleWriterService.FailedCallback failedCallback) {
             this.future = future;
             this.task = task;
             this.bucketIndex = bucketIndex;
@@ -331,11 +331,11 @@ public class ProducerQueuesImpl implements ProducerQueues {
             return bucketIndex;
         }
 
-        @Nullable SingleWriterServiceImpl.SuccessCallback<T> getSuccessCallback() {
+        @Nullable SingleWriterService.SuccessCallback<T> getSuccessCallback() {
             return successCallback;
         }
 
-        @Nullable SingleWriterServiceImpl.FailedCallback getFailedCallback() {
+        @Nullable SingleWriterService.FailedCallback getFailedCallback() {
             return failedCallback;
         }
     }

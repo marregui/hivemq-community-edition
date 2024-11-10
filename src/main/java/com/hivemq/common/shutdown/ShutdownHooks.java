@@ -33,14 +33,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * A implementation for all shutdown hooks.
- * <p>
- * If you add a shutdown hook, the shutdown hook is added to the registry. Please note that the
- * synchronous shutdown hook is <b>not</b> executed by itself when HiveMQ is shutting down.
- *
- * @author Dominik Obermaier
- */
 @Singleton
 public class ShutdownHooks {
 
@@ -52,7 +44,6 @@ public class ShutdownHooks {
     @Inject
     public ShutdownHooks() {
         shuttingDown = new AtomicBoolean(false);
-
         synchronousHooks =
                 MultimapBuilder.SortedSetMultimapBuilder.treeKeys(Ordering.natural().reverse()) //High priorities first
                         .arrayListValues().build();

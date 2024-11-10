@@ -15,24 +15,13 @@
  */
 package util;
 
+import com.hivemq.configuration.info.SystemInformation;
 import org.junit.contrib.java.lang.system.ClearSystemProperties;
 
-import static com.hivemq.configuration.SystemProperties.CONFIG_FOLDER;
-import static com.hivemq.configuration.SystemProperties.DATA_FOLDER;
-import static com.hivemq.configuration.SystemProperties.HIVEMQ_HOME;
-import static com.hivemq.configuration.SystemProperties.LOG_FOLDER;
-
-/**
- * * The {@code ClearHiveMQPropertiesRule} rule clears a set of system
- * properties which are set by HiveMQ when the test starts and restores their original values
- * when the test finishes (whether it passes or fails).
- *
- * @author Christoph Schäbel
- */
 public class ClearHiveMQPropertiesRule extends ClearSystemProperties {
 
     public ClearHiveMQPropertiesRule() {
-        super(HIVEMQ_HOME, LOG_FOLDER, CONFIG_FOLDER, DATA_FOLDER);
+        super(SystemInformation.HIVEMQ_HOME, "hivemq.log.folder", "hivemq.config.folder", "hivemq.data.folder");
     }
 
     public void reset() {

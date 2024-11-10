@@ -27,7 +27,6 @@ import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.ConfigurationBootstrap;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.info.SystemInformation;
-import com.hivemq.configuration.info.SystemInformationImpl;
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.exceptions.StartAbortedException;
 import com.hivemq.exceptions.UnrecoverableException;
@@ -54,7 +53,7 @@ public class HiveMQServer {
     private final @NotNull HivemqId hivemqId = new HivemqId();
     private final @NotNull LifecycleModule lifecycleModule = new LifecycleModule();
     private final @NotNull DataFolderLock dataFolderLock = new DataFolderLock();
-    private final @NotNull SystemInformation systemInformation = new SystemInformationImpl(true);
+    private final @NotNull SystemInformation systemInformation = new SystemInformation();
     private final @NotNull MetricRegistry metricRegistry = new MetricRegistry();
 
     private @Nullable Injector injector;
@@ -97,7 +96,6 @@ public class HiveMQServer {
         Thread.setDefaultUncaughtExceptionHandler(HiveMQServer::handleUncaughtException);
 
         // B O O T S T R A P
-        systemInformation.init();
         metricRegistry.addListener(new MetricRegistryLogger());
         Logging.initLogging(systemInformation.getConfigFolder());
         log.info("Starting HiveMQ Community Edition Server");

@@ -20,7 +20,7 @@ import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.common.shutdown.ShutdownHooks;
-import com.hivemq.configuration.info.SystemInformationImpl;
+import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.parameter.TopicPermission;
@@ -40,10 +40,8 @@ import com.hivemq.mqtt.handler.connack.MqttConnacker;
 import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import com.hivemq.mqtt.message.connack.CONNACK;
-import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.reason.Mqtt5ConnAckReasonCode;
 import com.hivemq.persistence.clientsession.ClientSessionPersistence;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
@@ -121,7 +119,7 @@ public class PluginInitializerHandlerTest {
                 new PluginTaskExecutorServiceImpl(() -> executor, mock(ShutdownHooks.class));
         pluginInitializerHandler = new PluginInitializerHandler(initializers,
                 pluginTaskExecutorService,
-                new ServerInformationImpl(new SystemInformationImpl(), listenerConfigurationService),
+                new ServerInformationImpl(new SystemInformation(), listenerConfigurationService),
                 hiveMQExtensions);
     }
 

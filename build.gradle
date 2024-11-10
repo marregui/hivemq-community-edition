@@ -39,7 +39,6 @@ dependencies {
     implementation(libs.dropwizard.metrics)
     implementation(libs.dropwizard.metrics.jmx)
     runtimeOnly(libs.dropwizard.metrics.logback)
-    implementation(libs.oshi)
     implementation(libs.guice)
     implementation(libs.javax.annotation.api)
 

@@ -16,7 +16,7 @@
 
 package com.hivemq.extensions;
 
-import com.hivemq.configuration.info.SystemInformationImpl;
+import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 import com.hivemq.extension.sdk.api.ExtensionMain;
 import org.jetbrains.annotations.NotNull;
@@ -89,7 +89,7 @@ public class HiveMQExtensionsExtensionTest extends AbstractExtensionTest {
         when(extension1.getExtensionClassloader()).thenReturn(loader1);
         when(extension2.getExtensionClassloader()).thenReturn(loader2);
 
-        hiveMQExtensions = new HiveMQExtensions(new ServerInformationImpl(new SystemInformationImpl(),
+        hiveMQExtensions = new HiveMQExtensions(new ServerInformationImpl(new SystemInformation(),
                 listenerConfigurationService));
         hiveMQExtensions.addHiveMQExtension(extension1);
     }

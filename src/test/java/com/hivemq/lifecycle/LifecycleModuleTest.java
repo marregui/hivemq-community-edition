@@ -23,7 +23,6 @@ import com.google.inject.ProvisionException;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingletonModule;
 import com.hivemq.configuration.info.SystemInformation;
-import com.hivemq.configuration.info.SystemInformationImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,7 +48,7 @@ public class LifecycleModuleTest {
         injector = Guice.createInjector(lifecycleModule, new LazySingletonModule(), new AbstractModule() {
             @Override
             protected void configure() {
-                bind(SystemInformation.class).toInstance(new SystemInformationImpl());
+                bind(SystemInformation.class).toInstance(new SystemInformation());
             }
         });
     }

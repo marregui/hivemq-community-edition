@@ -19,7 +19,6 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
-import com.hivemq.configuration.SystemProperties;
 import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.reader.ConfigurationFile;
 import org.junit.After;
@@ -49,7 +48,7 @@ public class ConfigurationFileProviderTest {
     public TemporaryFolder folder = new TemporaryFolder();
 
     @Rule
-    public final ClearSystemProperties myPropertyIsCleared = new ClearSystemProperties(SystemProperties.HIVEMQ_HOME);
+    public final ClearSystemProperties myPropertyIsCleared = new ClearSystemProperties(SystemInformation.HIVEMQ_HOME);
 
     @Mock
     private Appender mockAppender;

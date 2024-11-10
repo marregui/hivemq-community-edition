@@ -13,65 +13,97 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hivemq.configuration.info;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
-/**
- * Useful information about HiveMQ and the underlying system
- *
- * @author Christoph Schäbel
- * @since 3.0
- */
-public interface SystemInformation {
+public class SystemInformation {
 
-    /**
-     * Sets home folder and HiveMQ version.
-     */
-    void init();
+    public static final @NotNull String HIVEMQ_HOME = "hivemq.home";
+    public static final @NotNull String VERSION = "Origin";
 
-    /**
-     * @return the version string of HiveMQ
-     */
-    @NotNull String getHiveMQVersion();
+    private final @NotNull File home;
+    private final @NotNull File config;
+    private final @NotNull File log;
+    private final @NotNull File data;
+    private final @NotNull File extensions;
 
-    /**
-     * @return the home folder of HiveMQ
-     */
-    @NotNull File getHiveMQHomeFolder();
+    public SystemInformation()  {
+        this.home = resolveHome();
+        this.log = resolveFolder("hivemq.log.folder", "log");
+        this.config = resolveFolder("hivemq.config.folder", "conf");
+        this.data = resolveFolder("hivemq.data.folder", "data");
+        this.extensions = resolveFolder("hivemq.extensions.folder", "extensions");
+        System.setProperty("hivemq.log.folder", log.getAbsolutePath());
+    }
 
-    /**
-     * /**
-     *
-     * @return the config folder of HiveMQ
-     */
-    @NotNull File getConfigFolder();
+    private static @Nullable String resolveProp(final @NotNull String sysProp) {
+        String location = System.getProperty(sysProp);
+        if (location == null) {
+            location = System.getenv().get(sysProp.replaceAll("\\.", "_").toUpperCase());
+        }
+        return location;
+    }
 
-    /**
-     * @return the log folder of HiveMQ
-     */
-    @NotNull File getLogFolder();
+    private static @NotNull File resolveHome() {
+        final File home;
+        final String location = resolveProp(HIVEMQ_HOME);
+        if (location != null) {
+            home = new File(location).getAbsoluteFile();
+        } else {
+            try {
+                home = Files.createTempDirectory("hivemq_home").toFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (home.exists() && home.isDirectory() && home.canRead() && home.canWrite()) {
+            System.setProperty(HIVEMQ_HOME, home.getAbsolutePath());
+            return home;
+        }
+        throw new IllegalStateException("HiveMQ home location is not set");
+    }
 
-    /**
-     * @return the data folder of HiveMQ
-     */
-    @NotNull File getDataFolder();
+    public @NotNull File getHiveMQHomeFolder() {
+        return home;
+    }
 
-    /**
-     * @return the extensions folder of HiveMQ
-     */
-    @NotNull File getExtensionsFolder();
+    public @NotNull File getConfigFolder() {
+        return config;
+    }
 
-    /**
-     * @return the timestamp of HiveMQ start
-     */
-    long getRunningSince();
+    public @NotNull File getLogFolder() {
+        return log;
+    }
 
-    /**
-     * @return the count of CPUs HiveMQ uses
-     */
-    int getProcessorCount();
+    public @NotNull File getDataFolder() {
+        return data;
+    }
 
+    public @NotNull File getExtensionsFolder() {
+        return extensions;
+    }
+
+    private @NotNull File resolveFolder(final @NotNull String sysProp, final @NotNull String defaultName) {
+        final String confName = resolveProp(sysProp);
+        final File folder;
+        if (confName != null) {
+            final File tmp = new File(confName);
+            folder = tmp.isAbsolute() ? tmp : new File(home, confName);
+        } else {
+            folder = new File(home, defaultName);
+        }
+        if (!folder.exists()) {
+            if (!folder.mkdirs()) {
+                throw new IllegalStateException("could not create folder: " + folder.getAbsolutePath());
+            }
+        }
+        return folder;
+    }
 }

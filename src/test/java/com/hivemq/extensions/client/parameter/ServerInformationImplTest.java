@@ -18,7 +18,6 @@ package com.hivemq.extensions.client.parameter;
 
 import com.google.common.collect.ImmutableList;
 import com.hivemq.configuration.info.SystemInformation;
-import com.hivemq.configuration.info.SystemInformationImpl;
 import com.hivemq.configuration.service.entity.TcpListener;
 import com.hivemq.configuration.service.entity.Tls;
 import com.hivemq.configuration.service.entity.TlsTcpListener;
@@ -50,7 +49,7 @@ public class ServerInformationImplTest {
 
     @Before
     public void setUp() throws Exception {
-        systemInformation = new SystemInformationImpl();
+        systemInformation = new SystemInformation();
         serverInformation = new ServerInformationImpl(systemInformation, listenerConfigurationService);
     }
 
@@ -60,7 +59,6 @@ public class ServerInformationImplTest {
         assertEquals(systemInformation.getHiveMQHomeFolder(), serverInformation.getHomeFolder());
         assertEquals(systemInformation.getLogFolder(), serverInformation.getLogFolder());
         assertEquals(systemInformation.getExtensionsFolder(), serverInformation.getExtensionsFolder());
-        assertEquals(systemInformation.getHiveMQVersion(), serverInformation.getVersion());
     }
 
     @Test

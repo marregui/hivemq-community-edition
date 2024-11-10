@@ -21,7 +21,6 @@ import com.google.inject.Injector;
 import com.hivemq.bootstrap.ioc.SystemInformationModule;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingletonModule;
 import com.hivemq.configuration.info.SystemInformation;
-import com.hivemq.configuration.info.SystemInformationImpl;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,9 +33,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Dominik Obermaier
- */
 public class LocalPersistenceFileUtilTest {
 
     @Rule
@@ -53,7 +49,7 @@ public class LocalPersistenceFileUtilTest {
     @Test
     public void test_is_singleton() {
         final Injector injector = Guice.createInjector(new LazySingletonModule(),
-                new SystemInformationModule(new SystemInformationImpl(false)));
+                new SystemInformationModule(new SystemInformation()));
         final LocalPersistenceFileUtil instance = injector.getInstance(LocalPersistenceFileUtil.class);
         final LocalPersistenceFileUtil instance2 = injector.getInstance(LocalPersistenceFileUtil.class);
 
@@ -100,17 +96,6 @@ public class LocalPersistenceFileUtilTest {
     private SystemInformation createInfoForTest(final File dataFolder) {
         return new SystemInformation() {
 
-            @Override
-            public void init() {
-
-            }
-
-            @NotNull
-            @Override
-            public String getHiveMQVersion() {
-                return "0";
-            }
-
             @NotNull
             @Override
             public File getHiveMQHomeFolder() {
@@ -139,16 +124,6 @@ public class LocalPersistenceFileUtilTest {
             @Override
             public File getExtensionsFolder() {
                 return systemFolder;
-            }
-
-            @Override
-            public long getRunningSince() {
-                return 0;
-            }
-
-            @Override
-            public int getProcessorCount() {
-                return -1;
             }
         };
     }

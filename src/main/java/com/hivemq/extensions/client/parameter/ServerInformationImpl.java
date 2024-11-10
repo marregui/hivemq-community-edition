@@ -52,7 +52,7 @@ public class ServerInformationImpl implements ServerInformation {
     @NotNull
     @Override
     public String getVersion() {
-        return systemInformation.getHiveMQVersion();
+        return SystemInformation.VERSION;
     }
 
     @NotNull

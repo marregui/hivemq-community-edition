@@ -24,7 +24,6 @@ import com.google.inject.Key;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingletonScope;
 import com.hivemq.configuration.info.SystemInformation;
-import com.hivemq.configuration.info.SystemInformationImpl;
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.configuration.service.MqttConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
@@ -93,7 +92,7 @@ public class ExtensionModuleTest {
                 final MetricsHolder metricsHolder = mock(MetricsHolder.class);
                 when(metricsHolder.getMetricRegistry()).thenReturn(new MetricRegistry());
                 install(new ExtensionModule());
-                bind(SystemInformation.class).toInstance(new SystemInformationImpl());
+                bind(SystemInformation.class).toInstance(new SystemInformation());
                 bind(ConnectionPersistence.class).toInstance(mock(ConnectionPersistence.class));
                 bind(FullConfigurationService.class).toInstance(new TestConfigurationBootstrap().getFullConfigurationService());
                 bind(MqttConfigurationService.class).toInstance(mock(MqttConfigurationService.class));

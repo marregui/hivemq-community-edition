@@ -16,7 +16,6 @@
 package com.hivemq.configuration.reader;
 
 import com.hivemq.configuration.info.SystemInformation;
-import com.hivemq.configuration.info.SystemInformationImpl;
 import com.hivemq.configuration.service.MqttConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
@@ -62,7 +61,7 @@ public class AbstractConfigurationTest {
         securityConfigurationService = new SecurityConfigurationServiceImpl();
         mqttConfigurationService = new MqttConfigurationServiceImpl();
         restrictionsConfigurationService = new RestrictionsConfigurationServiceImpl();
-        systemInformation = new SystemInformationImpl(false);
+        systemInformation = new SystemInformation();
 
         when(envVarUtil.replaceEnvironmentVariablePlaceholders(anyString())).thenCallRealMethod();
         final ConfigurationFile configurationFile = new ConfigurationFile(xmlFile);

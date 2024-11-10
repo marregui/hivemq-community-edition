@@ -32,9 +32,6 @@ import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServi
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.util.EnvVarUtil;
 
-/**
- * @author Christoph Schäbel
- */
 public class ConfigurationBootstrap {
 
     public static @NotNull FullConfigurationService bootstrapConfig(final @NotNull SystemInformation systemInformation) {

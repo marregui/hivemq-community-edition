@@ -23,7 +23,7 @@ import com.hivemq.bootstrap.ClientState;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
 import com.hivemq.bootstrap.netty.ChannelHandlerNames;
 import com.hivemq.codec.decoder.MQTTMessageDecoder;
-import com.hivemq.configuration.info.SystemInformationImpl;
+import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
@@ -128,7 +128,7 @@ public class PluginAuthenticatorServiceImplTest {
                 asyncer,
                 pluginTaskExecutorService,
                 extensions,
-                new ServerInformationImpl(new SystemInformationImpl(), new ListenerConfigurationServiceImpl()));
+                new ServerInformationImpl(new SystemInformation(), new ListenerConfigurationServiceImpl()));
     }
 
     @After

@@ -25,63 +25,39 @@ import java.util.Queue;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Lukas Brandl
- */
-public class ProducerQueuesImplTest {
+public class ProducerQueuesTest {
 
     @Mock
-    @NotNull SingleWriterService SingleWriterService;
+    @NotNull SingleWriterService writer;
 
-    @NotNull ProducerQueuesImpl producerQueues;
+    @NotNull ProducerQueues producerQueues;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        when(SingleWriterService.getPersistenceBucketCount()).thenReturn(64);
-        when(SingleWriterService.getThreadPoolSize()).thenReturn(4);
-        when(SingleWriterService.getGlobalTaskCount()).thenReturn(new AtomicLong());
+        when(writer.getPersistenceBucketCount()).thenReturn(64);
+        when(writer.getThreadPoolSize()).thenReturn(4);
+        when(writer.getGlobalTaskCount()).thenReturn(new AtomicLong());
 
-        producerQueues = new ProducerQueuesImpl(SingleWriterService, 4);
+        producerQueues = new ProducerQueues(writer, 4);
     }
 
     @Test
     public void submit_task() throws Exception {
         producerQueues.submit("key", bucketIndex -> null);
         final int queueIndex = producerQueues.getBucket("key") / producerQueues.bucketsPerQueue;
-        final Queue<ProducerQueuesImpl.TaskWithFuture<?>> queue = producerQueues.queues.get(queueIndex);
+        final Queue<ProducerQueues.TaskWithFuture<?>> queue = producerQueues.queues[queueIndex];
         assertEquals(1, queue.size());
     }
 
     @Test
     public void submitToAllBucketsParallel_allTasksSubmitted() throws Exception {
         producerQueues.submitToAllBucketsParallel(bucketIndex -> null);
-        assertFalse(producerQueues.queues.isEmpty());
-        for (final Queue<ProducerQueuesImpl.TaskWithFuture<?>> queue : producerQueues.queues) {
+        for (final Queue<ProducerQueues.TaskWithFuture<?>> queue : producerQueues.queues) {
             assertEquals(64 / 4, queue.size());
-        }
-    }
-
-    @Test
-    public void submitToAllBucketsSequential_onlyOneTaskSubmitted() throws Exception {
-        producerQueues.submitToAllBucketsSequential(bucketIndex -> null);
-        assertFalse(producerQueues.queues.isEmpty());
-        boolean found = false;
-        for (final Queue<ProducerQueuesImpl.TaskWithFuture<?>> queue : producerQueues.queues) {
-            if (!found) {
-                if (queue.size() == 1) {
-                    found = true;
-                }
-            } else {
-                if (queue.size() == 1) {
-                    fail();
-                }
-            }
         }
     }
 }

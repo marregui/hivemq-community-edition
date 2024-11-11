@@ -49,7 +49,6 @@ public class PersistenceModule extends SingletonModule<Class<PersistenceModule>>
     @Override
     protected void configure() {
         install(new LocalPersistenceModule(persistenceInjector));
-//        bind(SingleWriterService.class).to(SingleWriterService.class);
         bind(ShutdownHooks.class).toInstance(persistenceInjector.getInstance(ShutdownHooks.class));
         bind(PersistenceShutdownHookInstaller.class).asEagerSingleton();
         bind(ExecutorService.class).annotatedWith(Persistence.class)

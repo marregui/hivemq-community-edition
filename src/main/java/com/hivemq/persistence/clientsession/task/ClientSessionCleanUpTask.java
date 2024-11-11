@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.clientsession.task;
 
-import com.hivemq.persistence.SingleWriterService;
+import com.hivemq.persistence.ProducerQueues;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.persistence.clientsession.ClientSessionPersistence;
@@ -26,7 +26,7 @@ import com.hivemq.util.Checkpoints;
 
 import java.util.Set;
 
-public class ClientSessionCleanUpTask implements SingleWriterService.Task<Void> {
+public class ClientSessionCleanUpTask implements ProducerQueues.Task<Void> {
 
     private final @NotNull ClientSessionLocalPersistence localPersistence;
     private final @NotNull ClientSessionPersistence clientSessionPersistence;

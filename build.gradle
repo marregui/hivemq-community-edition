@@ -45,7 +45,6 @@ dependencies {
     // common
     implementation(libs.apache.commonsIO)
     implementation(libs.apache.commonsLang)
-    implementation(libs.zeroAllocationHashing)
     implementation(libs.jctools)
 
     /* primitive data structures */

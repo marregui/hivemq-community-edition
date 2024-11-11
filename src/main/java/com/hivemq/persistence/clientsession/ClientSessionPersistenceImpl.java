@@ -25,6 +25,7 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.persistence.ProducerQueues;
 import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +37,6 @@ import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.message.connect.MqttWillPublish;
 import com.hivemq.mqtt.message.reason.Mqtt5DisconnectReasonCode;
 import com.hivemq.persistence.AbstractPersistence;
-import com.hivemq.persistence.ProducerQueues;
 import com.hivemq.persistence.clientqueue.ClientQueuePersistence;
 import com.hivemq.persistence.clientsession.task.ClientSessionCleanUpTask;
 import com.hivemq.persistence.connection.ConnectionPersistence;
@@ -122,7 +122,7 @@ public class ClientSessionPersistenceImpl extends AbstractPersistence implements
 
         final long timestamp = System.currentTimeMillis();
         final SettableFuture<Void> resultFuture = SettableFuture.create();
-        singleWriter.submit(client, (SingleWriterService.Task<Void>) (bucketIndex) -> {
+        singleWriter.submit(client, (ProducerQueues.Task<Void>) (bucketIndex) -> {
             final ClientSession disconnectSession =
                     localPersistence.disconnect(client, timestamp, sendWill, bucketIndex, sessionExpiry);
             if (sendWill) {

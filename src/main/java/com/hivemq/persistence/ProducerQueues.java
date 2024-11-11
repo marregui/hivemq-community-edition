@@ -13,35 +13,225 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hivemq.persistence;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningScheduledExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.common.util.concurrent.SettableFuture;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.hivemq.persistence.local.xodus.bucket.BucketUtils;
+import com.hivemq.util.ThreadFactoryUtil;
 
 import java.util.List;
+import java.util.Queue;
+import java.util.SplittableRandom;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
 
-public interface ProducerQueues {
+@SuppressWarnings("unchecked")
+public class ProducerQueues {
 
+    private final int numQueues;
+    final int bucketsPerQueue;
+    final @NotNull Queue<TaskWithFuture<?>>[] queues;
+    private final @NotNull AtomicBoolean[] locks;
+    private final @NotNull AtomicLong[] queueTaskCounter;
+    private final @NotNull SingleWriterService writer;
+    private final @NotNull AtomicLong taskCount = new AtomicLong();
+    private final @NotNull AtomicBoolean shutdown = new AtomicBoolean();
+    private @Nullable ListenableFuture<Void> closeFuture;
+    private long shutdownStartTime = Long.MAX_VALUE;
 
-    <R> @NotNull ListenableFuture<R> submit(
-            @NotNull final String key, @NotNull final SingleWriterService.Task<R> task);
+    public ProducerQueues(final @NotNull SingleWriterService writer, final int numQueues) {
+        this.writer = writer;
+        this.numQueues = numQueues;
+        this.bucketsPerQueue = writer.getPersistenceBucketCount() / numQueues;
+        queues = new Queue[numQueues];
+        locks = new AtomicBoolean[numQueues];
+        queueTaskCounter = new AtomicLong[numQueues];
+        for (int i = 0; i < numQueues; i++) {
+            queues[i] = new ConcurrentLinkedQueue<>();
+            locks[i] = new AtomicBoolean();
+            queueTaskCounter[i] = new AtomicLong();
+        }
+    }
 
-    <R> @NotNull ListenableFuture<R> submit(final int bucketIndex, @NotNull final SingleWriterService.Task<R> task);
+    @NotNull
+    public <R> ListenableFuture<R> submit(@NotNull final String key, @NotNull final Task<R> task) {
+        return submitInternal(getBucket(key), task, false);
+    }
 
+    @NotNull
+    public <R> ListenableFuture<R> submit(final int bucketIndex, @NotNull final Task<R> task) {
+        return submitInternal(bucketIndex, task, false);
+    }
 
-    <R> @Nullable ListenableFuture<R> submit(
-            final int bucketIndex,
-            @NotNull final SingleWriterService.Task<R> task,
-            @Nullable final SingleWriterService.SuccessCallback<R> successCallback,
-            @Nullable final SingleWriterService.FailedCallback failedCallback);
+    private <R> @NotNull ListenableFuture<R> submitInternal(
+            final int bucketIndex, @NotNull final Task<R> task, final boolean ignoreShutdown) {
+        if (!ignoreShutdown && shutdown.get() &&
+                System.currentTimeMillis() - shutdownStartTime > writer.getShutdownGracePeriod()) {
+            return SettableFuture.create(); // Future will never return since we are shutting down.
+        }
+        final int queueIndex = bucketIndex / bucketsPerQueue;
+        final Queue<TaskWithFuture<?>> queue = queues[queueIndex];
+        final SettableFuture<R> resultFuture = SettableFuture.create();
+        queue.add(new TaskWithFuture<>(resultFuture, task, bucketIndex, null, null));
+        taskCount.incrementAndGet();
+        writer.getGlobalTaskCount().incrementAndGet();
+        if (queueTaskCounter[queueIndex].getAndIncrement() == 0) {
+            writer.incrementNonemptyQueueCounter();
+        }
+        return resultFuture;
+    }
 
-    @NotNull <R> List<ListenableFuture<R>> submitToAllBucketsParallel(final @NotNull SingleWriterService.Task<R> task);
+    public @NotNull <R> List<ListenableFuture<R>> submitToAllBucketsParallel(final @NotNull Task<R> task) {
+        return submitToAllBucketsParallel(task, false);
+    }
 
-    @NotNull <R> List<ListenableFuture<R>> submitToAllBucketsSequential(final @NotNull SingleWriterService.Task<R> task);
+    private @NotNull <R> List<ListenableFuture<R>> submitToAllBucketsParallel(
+            final @NotNull Task<R> task, final boolean ignoreShutdown) {
+        final ImmutableList.Builder<ListenableFuture<R>> builder = ImmutableList.builder();
+        final int bucketCount = writer.getPersistenceBucketCount();
+        for (int bucket = 0; bucket < bucketCount; bucket++) {
+            //noinspection ConstantConditions (futuer is never null if the callbacks are null)
+            builder.add(submitInternal(bucket, task, ignoreShutdown));
+        }
+        return builder.build();
+    }
 
-    int getBucket(@NotNull final String key);
+    public int getBucket(@NotNull final String key) {
+        return BucketUtils.getBucket(key, writer.getPersistenceBucketCount());
+    }
 
-    @NotNull ListenableFuture<Void> shutdown(final @Nullable SingleWriterService.Task<Void> finalTask);
+    public void execute(final @NotNull SplittableRandom random) {
+        final int queueIndex = random.nextInt(numQueues);
+        if (queueTaskCounter[queueIndex].get() == 0) {
+            return;
+        }
+        final AtomicBoolean lock = locks[queueIndex];
+        if (!lock.getAndSet(true)) {
+            try {
+                final Queue<TaskWithFuture<?>> queue = queues[queueIndex];
+                int creditCount = 0;
+                while (creditCount < writer.getCreditsPerExecution()) {
+                    final TaskWithFuture taskWithFuture = queue.poll();
+                    if (taskWithFuture == null) {
+                        return;
+                    }
+                    creditCount++;
+                    try {
+                        final Object result = taskWithFuture.task.doTask(taskWithFuture.bucketIndex);
+                        if (taskWithFuture.future != null) {
+                            taskWithFuture.future.set(result);
+                        } else {
+                            if (taskWithFuture.successCallback != null) {
+                                writer.getCallbackExecutors()[queueIndex].submit(() -> taskWithFuture.successCallback.accept(
+                                        result));
+                            }
+                        }
+                    } catch (final Throwable e) {
+                        if (taskWithFuture.future != null) {
+                            taskWithFuture.future.setException(e);
+                        } else {
+                            if (taskWithFuture.failedCallback != null) {
+                                writer.getCallbackExecutors()[queueIndex].submit(() -> taskWithFuture.failedCallback.accept(
+                                        e));
+                            }
+                        }
+                    }
+                    taskCount.decrementAndGet();
+                    writer.getGlobalTaskCount().decrementAndGet();
+                    if (queueTaskCounter[queueIndex].decrementAndGet() == 0) {
+                        writer.decrementNonemptyQueueCounter();
+                    }
+                }
+            } finally {
+                lock.set(false);
+            }
+        }
+    }
 
+    @NotNull
+    public ListenableFuture<Void> shutdown(final @Nullable Task<Void> finalTask) {
+        if (shutdown.getAndSet(true)) {
+            if (closeFuture != null) {
+                return closeFuture;
+            }
+            return Futures.immediateFuture(null);
+        }
+
+        shutdownStartTime = System.currentTimeMillis();
+
+        final ListeningScheduledExecutorService executorService =
+                MoreExecutors.listeningDecorator(Executors.newSingleThreadScheduledExecutor(ThreadFactoryUtil.create("persistence-shutdown-%d")));
+
+        closeFuture = executorService.schedule(
+                () -> {
+                    // Even if no task has to be executed on shutdown, we still have to delay the success of the close future by the shutdown grace period.
+                    if (finalTask != null) {
+                        Futures.allAsList(submitToAllBucketsParallel(finalTask, true)).get();
+                    } else {
+                        Futures.allAsList(submitToAllBucketsParallel((Task<Void>) (bucketIndex) -> null, true)).get();
+                    }
+                    return null;
+                },
+                writer.getShutdownGracePeriod() + 50,
+                TimeUnit.MILLISECONDS); // We may have to delay the task for some milliseconds, because a task could just get enqueued.
+
+        Futures.addCallback(closeFuture, new FutureCallback<>() {
+            @Override
+            public void onSuccess(@Nullable final Void aVoid) {
+                executorService.shutdown();
+            }
+
+            @Override
+            public void onFailure(final @NotNull Throwable throwable) {
+                executorService.shutdown();
+            }
+        }, executorService);
+        return closeFuture;
+    }
+
+    public @NotNull AtomicLong getTaskCount() {
+        return taskCount;
+    }
+
+    @FunctionalInterface
+    public interface Task<R> {
+
+        @NotNull R doTask(int bucketIndex);
+    }
+
+    static class TaskWithFuture<T> {
+
+        private final @Nullable SettableFuture<T> future;
+        private final @NotNull Task task;
+        private final int bucketIndex;
+        private final @Nullable Consumer<T> successCallback;
+        private final @Nullable Consumer<Throwable> failedCallback;
+
+        TaskWithFuture(
+                final @Nullable SettableFuture<T> future,
+                final @NotNull Task task,
+                final int bucketIndex,
+                final @Nullable Consumer<T> successCallback,
+                final @Nullable Consumer<Throwable> failedCallback) {
+            this.future = future;
+            this.task = task;
+            this.bucketIndex = bucketIndex;
+            this.successCallback = successCallback;
+            this.failedCallback = failedCallback;
+        }
+    }
 }

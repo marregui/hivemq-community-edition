@@ -19,7 +19,7 @@ import com.google.common.collect.Sets;
 import com.hivemq.extensions.iteration.Chunker;
 import com.hivemq.persistence.RetainedMessage;
 import com.hivemq.persistence.SingleWriterService;
-import com.hivemq.persistence.local.xodus.bucket.BucketIds;
+import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -115,13 +115,13 @@ public class RetainedMessagePersistenceImplTest {
 
     @Test
     public void test_get_success_null() throws Exception {
-        when(localPersistence.get("topic", BucketIds.getBucket("topic", 64))).thenReturn(null);
+        when(localPersistence.get("topic", Bucket.getBucket("topic", 64))).thenReturn(null);
         assertNull(retainedMessagePersistence.get("topic").get());
     }
 
     @Test
     public void test_get_success_message() throws Exception {
-        when(localPersistence.get("topic", BucketIds.getBucket("topic", 64))).thenReturn(message);
+        when(localPersistence.get("topic", Bucket.getBucket("topic", 64))).thenReturn(message);
         assertEquals(message, retainedMessagePersistence.get("topic").get());
     }
 

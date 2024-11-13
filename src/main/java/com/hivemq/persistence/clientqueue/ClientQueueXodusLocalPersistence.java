@@ -37,7 +37,6 @@ import com.hivemq.persistence.local.xodus.EnvironmentUtil;
 import com.hivemq.persistence.local.xodus.TransactionCommitActions;
 import com.hivemq.persistence.local.xodus.XodusLocalPersistence;
 import com.hivemq.persistence.local.xodus.bucket.Bucket;
-import com.hivemq.persistence.local.xodus.bucket.BucketIds;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.util.LocalPersistenceFileUtil;
 import com.hivemq.util.Strings;
@@ -195,10 +194,10 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
                         if (!key.equals(currentKey)) {
 
                             if (currentKey != null && queueSize != 0) {
-                                queueSizeBuckets.get(BucketIds.getBucket(currentKey.getQueueId(), getBucketCount()))
+                                queueSizeBuckets.get(Bucket.getBucket(currentKey.getQueueId(), getBucketCount()))
                                         .put(currentKey, new AtomicInteger(queueSize));
                                 if (retainedSize != 0) {
-                                    retainedQueueSizeBuckets.get(BucketIds.getBucket(currentKey.getQueueId(),
+                                    retainedQueueSizeBuckets.get(Bucket.getBucket(currentKey.getQueueId(),
                                             getBucketCount())).put(currentKey, new AtomicInteger(retainedSize));
                                 }
                             }
@@ -226,14 +225,14 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
                     //we do not put if we change bucket, therefor we must check after
                     //we must check this, because a bucket may be empty
                     if (currentKey != null) {
-                        if (queueSizeBuckets.get(BucketIds.getBucket(currentKey.getQueueId(), getBucketCount()))
+                        if (queueSizeBuckets.get(Bucket.getBucket(currentKey.getQueueId(), getBucketCount()))
                                 .get(currentKey) == null) {
-                            queueSizeBuckets.get(BucketIds.getBucket(currentKey.getQueueId(), getBucketCount()))
+                            queueSizeBuckets.get(Bucket.getBucket(currentKey.getQueueId(), getBucketCount()))
                                     .put(currentKey, new AtomicInteger(queueSize));
                         }
-                        if (retainedQueueSizeBuckets.get(BucketIds.getBucket(currentKey.getQueueId(),
+                        if (retainedQueueSizeBuckets.get(Bucket.getBucket(currentKey.getQueueId(),
                                 getBucketCount())).get(currentKey) == null) {
-                            retainedQueueSizeBuckets.get(BucketIds.getBucket(currentKey.getQueueId(),
+                            retainedQueueSizeBuckets.get(Bucket.getBucket(currentKey.getQueueId(),
                                     getBucketCount())).put(currentKey, new AtomicInteger(retainedSize));
                         }
                     }

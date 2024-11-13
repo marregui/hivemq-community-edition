@@ -23,9 +23,9 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
+import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.hivemq.persistence.local.xodus.bucket.BucketIds;
 import com.hivemq.util.ThreadFactoryUtil;
 
 import java.util.List;
@@ -110,7 +110,7 @@ public class ProducerQueues {
     }
 
     public int getBucket(@NotNull final String key) {
-        return BucketIds.getBucket(key, writer.getPersistenceBucketCount());
+        return Bucket.getBucket(key, writer.getPersistenceBucketCount());
     }
 
     public void execute(final @NotNull SplittableRandom random) {

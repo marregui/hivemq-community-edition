@@ -38,7 +38,6 @@ import com.hivemq.persistence.local.xodus.EnvironmentUtil;
 import com.hivemq.persistence.local.xodus.TransactionCommitActions;
 import com.hivemq.persistence.local.xodus.XodusLocalPersistence;
 import com.hivemq.persistence.local.xodus.bucket.Bucket;
-import com.hivemq.persistence.local.xodus.bucket.BucketIds;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.util.LocalPersistenceFileUtil;
 import com.hivemq.util.ThreadPreConditions;
@@ -254,7 +253,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
 
     @Override
     public @Nullable Long getTimestamp(final @NotNull String clientId) {
-        return getTimestamp(clientId, BucketIds.getBucket(clientId, bucketCount));
+        return getTimestamp(clientId, Bucket.getBucket(clientId, bucketCount));
     }
 
     @Override

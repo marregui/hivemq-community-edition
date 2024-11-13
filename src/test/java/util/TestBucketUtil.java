@@ -15,7 +15,7 @@
  */
 package util;
 
-import com.hivemq.persistence.local.xodus.bucket.BucketIds;
+import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -29,7 +29,7 @@ public class TestBucketUtil {
     public static String getId(final int desiredBucket, final int bucketSize) {
         checkArgument(0 <= desiredBucket && desiredBucket < bucketSize);
         String id = RandomStringUtils.randomAlphanumeric(15);
-        while (BucketIds.getBucket(id, bucketSize) != desiredBucket) {
+        while (Bucket.getBucket(id, bucketSize) != desiredBucket) {
             id = RandomStringUtils.randomAlphanumeric(15);
         }
         return id;

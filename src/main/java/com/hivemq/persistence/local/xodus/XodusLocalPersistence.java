@@ -21,7 +21,6 @@ import com.hivemq.persistence.FilePersistence;
 import com.hivemq.persistence.LocalPersistence;
 import com.hivemq.persistence.PersistenceStartup;
 import com.hivemq.persistence.local.xodus.bucket.Bucket;
-import com.hivemq.persistence.local.xodus.bucket.BucketIds;
 import com.hivemq.util.LocalPersistenceFileUtil;
 import jetbrains.exodus.ExodusException;
 import jetbrains.exodus.env.Environment;
@@ -216,7 +215,7 @@ public abstract class XodusLocalPersistence implements LocalPersistence, FilePer
     }
 
     public @NotNull Bucket getBucket(final @NotNull String key) {
-        return buckets[BucketIds.getBucket(key, bucketCount)];
+        return buckets[Bucket.getBucket(key, bucketCount)];
     }
 
     protected void checkBucketIndex(final int bucketIndex) {

@@ -24,7 +24,7 @@ public class BucketIdsTest {
     @Test
     public void test_buckets_between_0_and_bucketsize() throws Exception {
         for (long i = -1000000; i < 1000000; i++) {
-            final int bucket = NumericBucketIds.getBucket(i, 10);
+            final int bucket = Bucket.getBucket(i, 10);
             assertTrue(bucket >= -1000000);
             assertTrue(bucket < 1000000);
         }
@@ -32,6 +32,6 @@ public class BucketIdsTest {
 
     @Test
     public void test_integer_min_value() throws Exception {
-        assertTrue(BucketIds.getBucket("DESIGNING WORKHOUSES", 5) >= 0);
+        assertTrue(Bucket.getBucket("DESIGNING WORKHOUSES", 5) >= 0);
     }
 }

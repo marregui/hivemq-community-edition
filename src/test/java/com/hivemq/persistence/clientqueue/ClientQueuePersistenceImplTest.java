@@ -31,7 +31,7 @@ import com.hivemq.persistence.SingleWriterService;
 import com.hivemq.persistence.clientsession.ClientSession;
 import com.hivemq.persistence.connection.ConnectionPersistence;
 import com.hivemq.persistence.local.ClientSessionLocalPersistence;
-import com.hivemq.persistence.local.xodus.bucket.BucketIds;
+import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import io.netty.channel.Channel;
 import io.netty.channel.embedded.EmbeddedChannel;
@@ -242,7 +242,7 @@ public class ClientQueuePersistenceImplTest {
     public void test_clear() throws ExecutionException, InterruptedException {
 
         clientQueuePersistence.clear("client", false).get();
-        verify(localPersistence).clear("client", false, BucketIds.getBucket("client", bucketSize));
+        verify(localPersistence).clear("client", false, Bucket.getBucket("client", bucketSize));
 
     }
 

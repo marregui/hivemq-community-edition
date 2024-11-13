@@ -21,7 +21,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.persistence.local.xodus.bucket.BucketIds;
+import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import com.hivemq.util.ThreadFactoryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,7 +136,7 @@ public class SingleWriterService {
     @NotNull
     public ExecutorService callbackExecutor(@NotNull final String key) {
         final int bucketsPerQueue = persistenceBucketCount / amountOfQueues;
-        final int bucketIndex = BucketIds.getBucket(key, persistenceBucketCount);
+        final int bucketIndex = Bucket.getBucket(key, persistenceBucketCount);
         final int queueIndex = bucketIndex / bucketsPerQueue;
         return callbackExecutors[queueIndex];
     }

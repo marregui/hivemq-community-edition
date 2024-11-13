@@ -28,12 +28,12 @@ import static com.hivemq.persistence.local.xodus.bucket.Bucket.hash;
 import static com.hivemq.persistence.local.xodus.bucket.Bucket.idx;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
-public class BucketIds {
+class BucketIds {
 
     private static final @NotNull Reader READER =
             ByteOrder.nativeOrder() == LITTLE_ENDIAN ? new LittleEndianReader() : new BigEndianReader();
 
-    public static int getBucket(final @NotNull CharSequence id, final int bucketSize) {
+    static int getBucket(final @NotNull CharSequence id, final int bucketSize) {
         final long length = id.length() * 2L;
         long hash;
         long idx = 0L;

@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.payload;
 
-import com.hivemq.persistence.local.xodus.bucket.NumericBucketIds;
+import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.Lock;
@@ -38,7 +38,7 @@ public class BucketLock {
     }
 
     public void accessBucketByPayloadId(final long payloadId, final @NotNull BucketAccessCallback callback) {
-        final int index = NumericBucketIds.getBucket(payloadId, locks.length);
+        final int index = Bucket.getBucket(payloadId, locks.length);
         accessBucket(index, callback);
     }
 

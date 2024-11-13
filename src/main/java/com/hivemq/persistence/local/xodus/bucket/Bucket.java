@@ -34,6 +34,15 @@ public class Bucket {
     static final long HASH3 = -8796714831421723037L;
     static final long HASH4 = 2870177450012600261L;
 
+    private final @NotNull Environment environment;
+    private final @NotNull Store store;
+    private final @NotNull AtomicBoolean closing = new AtomicBoolean();
+
+    public Bucket(@NotNull final Environment environment, @NotNull final Store store) {
+        this.environment = environment;
+        this.store = store;
+    }
+
     static long hash(final long ihash, final long ih0, final long ih1) {
         long hash = ihash;
         long h0 = ih0;
@@ -55,13 +64,12 @@ public class Bucket {
         return (int) (idx >> 1);
     }
 
-    private final @NotNull Environment environment;
-    private final @NotNull Store store;
-    private final @NotNull AtomicBoolean closing = new AtomicBoolean();
+    public static int getBucket(final @NotNull CharSequence id, final int bucketSize) {
+        return BucketIds.getBucket(id, bucketSize);
+    }
 
-    public Bucket(@NotNull final Environment environment, @NotNull final Store store) {
-        this.environment = environment;
-        this.store = store;
+    public static int getBucket(final long id, final int bucketSize) {
+        return NumericBucketIds.getBucket(id, bucketSize);
     }
 
     public boolean close() {

@@ -31,7 +31,7 @@ import com.hivemq.extensions.executor.task.PluginTaskExecution;
 import com.hivemq.extensions.executor.task.PluginTaskExecutor;
 import com.hivemq.extensions.executor.task.PluginTaskInput;
 import com.hivemq.extensions.executor.task.PluginTaskOutput;
-import com.hivemq.persistence.local.xodus.bucket.BucketUtils;
+import com.hivemq.persistence.local.xodus.bucket.BucketIds;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -123,7 +123,7 @@ public class PluginTaskExecutorServiceImpl implements PluginTaskExecutorService 
 
     @NotNull
     private PluginTaskExecutor getPluginTaskExecutor(@NotNull final PluginTaskContext pluginTaskContext) {
-        final int bucket = BucketUtils.getBucket(pluginTaskContext.getIdentifier(), taskExecutorCount);
+        final int bucket = BucketIds.getBucket(pluginTaskContext.getIdentifier(), taskExecutorCount);
         return taskExecutors[bucket];
     }
 

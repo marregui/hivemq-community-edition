@@ -33,7 +33,7 @@ import com.hivemq.persistence.clientsession.ClientSessionWill;
 import com.hivemq.persistence.clientsession.PendingWillMessages;
 import com.hivemq.persistence.exception.InvalidSessionExpiryIntervalException;
 import com.hivemq.persistence.local.xodus.EnvironmentUtil;
-import com.hivemq.persistence.local.xodus.bucket.BucketUtils;
+import com.hivemq.persistence.local.xodus.bucket.BucketIds;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.util.LocalPersistenceFileUtil;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -121,10 +121,10 @@ public class ClientSessionXodusLocalPersistenceTest {
         persistence.put("clientId",
                 new ClientSession(false, SESSION_EXPIRY_MAX),
                 123L,
-                BucketUtils.getBucket("clientId", BUCKET_COUNT));
+                BucketIds.getBucket("clientId", BUCKET_COUNT));
 
         final ClientSession clientSession =
-                persistence.getSession("clientId", BucketUtils.getBucket("clientId", BUCKET_COUNT));
+                persistence.getSession("clientId", BucketIds.getBucket("clientId", BUCKET_COUNT));
         assertNotNull(clientSession);
 
         assertFalse(clientSession.isConnected());
@@ -200,17 +200,17 @@ public class ClientSessionXodusLocalPersistenceTest {
         persistence.put("clientId",
                 new ClientSession(true, SESSION_EXPIRY_MAX),
                 123L,
-                BucketUtils.getBucket("clientId", BUCKET_COUNT));
+                BucketIds.getBucket("clientId", BUCKET_COUNT));
 
         persistence.disconnect("clientId",
                 321L,
                 false,
-                BucketUtils.getBucket("clientId", BUCKET_COUNT),
+                BucketIds.getBucket("clientId", BUCKET_COUNT),
                 SESSION_EXPIRY_MAX);
         persistence.disconnect("clientId2",
                 4321L,
                 false,
-                BucketUtils.getBucket("clientId2", BUCKET_COUNT),
+                BucketIds.getBucket("clientId2", BUCKET_COUNT),
                 SESSION_EXPIRY_MAX);
 
         assertFalse(Objects.requireNonNull(persistence.getSession("clientId")).isConnected());
@@ -226,11 +226,11 @@ public class ClientSessionXodusLocalPersistenceTest {
         persistence.put("clientId",
                 new ClientSession(false, SESSION_EXPIRY_MAX),
                 123L,
-                BucketUtils.getBucket("clientId", BUCKET_COUNT));
-        persistence.removeWithTimestamp("clientId", BucketUtils.getBucket("clientId", BUCKET_COUNT));
+                BucketIds.getBucket("clientId", BUCKET_COUNT));
+        persistence.removeWithTimestamp("clientId", BucketIds.getBucket("clientId", BUCKET_COUNT));
 
         assertEquals(0, persistence.getSessionsCount());
-        assertNull(persistence.getSession("clientId", BucketUtils.getBucket("clientId", BUCKET_COUNT)));
+        assertNull(persistence.getSession("clientId", BucketIds.getBucket("clientId", BUCKET_COUNT)));
     }
 
     @Test
@@ -238,22 +238,22 @@ public class ClientSessionXodusLocalPersistenceTest {
         persistence.put("clientId1",
                 new ClientSession(false, 10),
                 System.currentTimeMillis() - 100000,
-                BucketUtils.getBucket("clientId1", BUCKET_COUNT));
-        final Set<String> expiredSessions = persistence.cleanUp(BucketUtils.getBucket("clientId1", BUCKET_COUNT));
+                BucketIds.getBucket("clientId1", BUCKET_COUNT));
+        final Set<String> expiredSessions = persistence.cleanUp(BucketIds.getBucket("clientId1", BUCKET_COUNT));
         assertTrue(expiredSessions.contains("clientId1"));
 
         persistence.put("clientId2",
                 new ClientSession(false, 100000),
                 System.currentTimeMillis(),
-                BucketUtils.getBucket("clientId2", BUCKET_COUNT));
-        final Set<String> result2 = persistence.cleanUp(BucketUtils.getBucket("clientId2", BUCKET_COUNT));
+                BucketIds.getBucket("clientId2", BUCKET_COUNT));
+        final Set<String> result2 = persistence.cleanUp(BucketIds.getBucket("clientId2", BUCKET_COUNT));
         assertFalse(result2.contains("clientId2"));
 
         persistence.put("clientId3",
                 new ClientSession(true, 10),
                 System.currentTimeMillis() - 100000,
-                BucketUtils.getBucket("clientId3", BUCKET_COUNT));
-        final Set<String> result3 = persistence.cleanUp(BucketUtils.getBucket("clientId3", BUCKET_COUNT));
+                BucketIds.getBucket("clientId3", BUCKET_COUNT));
+        final Set<String> result3 = persistence.cleanUp(BucketIds.getBucket("clientId3", BUCKET_COUNT));
         assertFalse(result3.contains("clientId3"));
 
         verify(eventLog, times(1)).clientSessionExpired(anyLong(), anyString());
@@ -264,18 +264,18 @@ public class ClientSessionXodusLocalPersistenceTest {
         persistence.put("clientId1",
                 new ClientSession(false, 10),
                 System.currentTimeMillis() - 10000,
-                BucketUtils.getBucket("clientId1", BUCKET_COUNT));
+                BucketIds.getBucket("clientId1", BUCKET_COUNT));
 
         ClientSession expiredSession = persistence.getSession("clientId1");
         assertNull(expiredSession);
 
-        final Set<String> result1 = persistence.cleanUp(BucketUtils.getBucket("clientId1", BUCKET_COUNT));
+        final Set<String> result1 = persistence.cleanUp(BucketIds.getBucket("clientId1", BUCKET_COUNT));
         assertTrue(result1.contains("clientId1"));
 
         expiredSession = persistence.getSession("clientId1");
         assertNull(expiredSession);
 
-        final Set<String> result5 = persistence.cleanUp(BucketUtils.getBucket("clientId1", BUCKET_COUNT));
+        final Set<String> result5 = persistence.cleanUp(BucketIds.getBucket("clientId1", BUCKET_COUNT));
         assertTrue(result5.isEmpty());
 
         verify(eventLog, times(1)).clientSessionExpired(anyLong(), anyString());
@@ -286,7 +286,7 @@ public class ClientSessionXodusLocalPersistenceTest {
         persistence.put("clientId1",
                 new ClientSession(false, 10),
                 System.currentTimeMillis() - 10000,
-                BucketUtils.getBucket("clientId1", BUCKET_COUNT));
+                BucketIds.getBucket("clientId1", BUCKET_COUNT));
 
         final ClientSession expiredSession = persistence.getSession("clientId1");
         assertNull(expiredSession);
@@ -306,9 +306,9 @@ public class ClientSessionXodusLocalPersistenceTest {
         persistence.put("clientId1",
                 clientSession,
                 System.currentTimeMillis() - 10000,
-                BucketUtils.getBucket("clientId1", BUCKET_COUNT));
+                BucketIds.getBucket("clientId1", BUCKET_COUNT));
 
-        final Set<String> result1 = persistence.cleanUp(BucketUtils.getBucket("clientId1", BUCKET_COUNT));
+        final Set<String> result1 = persistence.cleanUp(BucketIds.getBucket("clientId1", BUCKET_COUNT));
         assertTrue(result1.contains("clientId1"));
 
         final ClientSession expiredSession = persistence.getSession("clientId1");
@@ -317,16 +317,16 @@ public class ClientSessionXodusLocalPersistenceTest {
 
     @Test
     public void test_get_timestamp() {
-        assertNull(persistence.getTimestamp("clientId", BucketUtils.getBucket("clientId", BUCKET_COUNT)));
+        assertNull(persistence.getTimestamp("clientId", BucketIds.getBucket("clientId", BUCKET_COUNT)));
         final long timestamp = 123L;
         persistence.put("clientId",
                 new ClientSession(false, SESSION_EXPIRY_MAX),
                 timestamp,
-                BucketUtils.getBucket("clientId", BUCKET_COUNT));
+                BucketIds.getBucket("clientId", BUCKET_COUNT));
         assertEquals(
                 timestamp,
                 Objects.requireNonNull(persistence.getTimestamp("clientId",
-                        BucketUtils.getBucket("clientId", BUCKET_COUNT))).longValue());
+                        BucketIds.getBucket("clientId", BUCKET_COUNT))).longValue());
     }
 
     @Test
@@ -335,15 +335,15 @@ public class ClientSessionXodusLocalPersistenceTest {
         persistence.put(clientId,
                 new ClientSession(false, SESSION_EXPIRY_MAX),
                 123L,
-                BucketUtils.getBucket(clientId, BUCKET_COUNT));
+                BucketIds.getBucket(clientId, BUCKET_COUNT));
         final ClientSession clientSession =
-                persistence.getSession(clientId, BucketUtils.getBucket(clientId, BUCKET_COUNT));
+                persistence.getSession(clientId, BucketIds.getBucket(clientId, BUCKET_COUNT));
         assertNotNull(clientSession);
         assertEquals(clientSession.getSessionExpiryIntervalSec(), SESSION_EXPIRY_MAX);
 
-        persistence.setSessionExpiryInterval(clientId, 12345, BucketUtils.getBucket(clientId, BUCKET_COUNT));
+        persistence.setSessionExpiryInterval(clientId, 12345, BucketIds.getBucket(clientId, BUCKET_COUNT));
         final ClientSession updatedClientSession =
-                persistence.getSession(clientId, BucketUtils.getBucket(clientId, BUCKET_COUNT));
+                persistence.getSession(clientId, BucketIds.getBucket(clientId, BUCKET_COUNT));
         assertNotNull(updatedClientSession);
         assertEquals(12345, updatedClientSession.getSessionExpiryIntervalSec());
     }
@@ -351,7 +351,7 @@ public class ClientSessionXodusLocalPersistenceTest {
     @Test(expected = NullPointerException.class)
     public void test_set_ttl_client_null() {
         //noinspection ConstantConditions
-        persistence.setSessionExpiryInterval(null, 12345, BucketUtils.getBucket("clientId", BUCKET_COUNT));
+        persistence.setSessionExpiryInterval(null, 12345, BucketIds.getBucket("clientId", BUCKET_COUNT));
     }
 
     @Test(expected = InvalidSessionExpiryIntervalException.class)
@@ -361,32 +361,32 @@ public class ClientSessionXodusLocalPersistenceTest {
         persistence.put(clientId,
                 new ClientSession(false, SESSION_EXPIRY_MAX),
                 123L,
-                BucketUtils.getBucket(clientId, BUCKET_COUNT));
+                BucketIds.getBucket(clientId, BUCKET_COUNT));
         final ClientSession clientSession =
-                persistence.getSession(clientId, BucketUtils.getBucket(clientId, BUCKET_COUNT));
+                persistence.getSession(clientId, BucketIds.getBucket(clientId, BUCKET_COUNT));
         assertNotNull(clientSession);
         assertEquals(clientSession.getSessionExpiryIntervalSec(), SESSION_EXPIRY_MAX);
 
-        persistence.setSessionExpiryInterval(clientId, -1, BucketUtils.getBucket(clientId, BUCKET_COUNT));
+        persistence.setSessionExpiryInterval(clientId, -1, BucketIds.getBucket(clientId, BUCKET_COUNT));
     }
 
     @Test(expected = InvalidSessionExpiryIntervalException.class)
     public void test_invalid_ttl_and_no_session() {
         final String clientId = "myClient";
-        persistence.setSessionExpiryInterval(clientId, -1, BucketUtils.getBucket(clientId, BUCKET_COUNT));
+        persistence.setSessionExpiryInterval(clientId, -1, BucketIds.getBucket(clientId, BUCKET_COUNT));
     }
 
     @Test(expected = NoSessionException.class)
     public void test_set_ttl_no_session() {
         final String clientId = "myClient";
-        persistence.setSessionExpiryInterval(clientId, 123, BucketUtils.getBucket(clientId, BUCKET_COUNT));
+        persistence.setSessionExpiryInterval(clientId, 123, BucketIds.getBucket(clientId, BUCKET_COUNT));
     }
 
     @Test(expected = NoSessionException.class)
     public void test_set_ttl_no_session_persisted_and_connected() {
         final String clientId = "myClient";
-        persistence.put(clientId, new ClientSession(false, 0), 123L, BucketUtils.getBucket(clientId, BUCKET_COUNT));
-        persistence.setSessionExpiryInterval(clientId, 123, BucketUtils.getBucket(clientId, BUCKET_COUNT));
+        persistence.put(clientId, new ClientSession(false, 0), 123L, BucketIds.getBucket(clientId, BUCKET_COUNT));
+        persistence.setSessionExpiryInterval(clientId, 123, BucketIds.getBucket(clientId, BUCKET_COUNT));
     }
 
     @Test
@@ -528,7 +528,7 @@ public class ClientSessionXodusLocalPersistenceTest {
 
     @Test
     public void test_graceful_handling_if_will_payload_is_missing() {
-        final int bucketIndex = BucketUtils.getBucket("clientId", BUCKET_COUNT);
+        final int bucketIndex = BucketIds.getBucket("clientId", BUCKET_COUNT);
         final MqttWillPublish willPublish = new MqttWillPublish.Mqtt5Builder().withTopic("abc")
                 .withPayload(new byte[]{})
                 .withQos(QoS.EXACTLY_ONCE)

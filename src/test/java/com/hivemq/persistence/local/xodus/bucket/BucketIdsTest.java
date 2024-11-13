@@ -19,28 +19,19 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Dominik Obermaier
- */
-public class BucketUtilsTest {
+public class BucketIdsTest {
 
     @Test
     public void test_buckets_between_0_and_bucketsize() throws Exception {
-        for (int i = 0; i < 10000; i++) {
-            final int bucket = BucketUtils.getBucket("" + i, 3);
-            assertTrue(bucket >= 0);
-            assertTrue(bucket < 3);
-
+        for (long i = -1000000; i < 1000000; i++) {
+            final int bucket = NumericBucketIds.getBucket(i, 10);
+            assertTrue(bucket >= -1000000);
+            assertTrue(bucket < 1000000);
         }
     }
 
     @Test
     public void test_integer_min_value() throws Exception {
-
-        //DESIGNING WORKHOUSES generates Integer.MIN_VALUE :)
-        final int bucket = BucketUtils.getBucket("DESIGNING WORKHOUSES", 5);
-
-        assertTrue(bucket >= 0);
+        assertTrue(BucketIds.getBucket("DESIGNING WORKHOUSES", 5) >= 0);
     }
-
 }

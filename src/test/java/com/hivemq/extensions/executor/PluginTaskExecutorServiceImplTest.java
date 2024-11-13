@@ -33,7 +33,7 @@ import com.hivemq.extensions.executor.task.PluginTaskExecution;
 import com.hivemq.extensions.executor.task.PluginTaskExecutor;
 import com.hivemq.extensions.executor.task.PluginTaskInput;
 import com.hivemq.extensions.executor.task.PluginTaskOutput;
-import com.hivemq.persistence.local.xodus.bucket.BucketUtils;
+import com.hivemq.persistence.local.xodus.bucket.BucketIds;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -133,7 +133,7 @@ public class PluginTaskExecutorServiceImplTest {
     private String getIdForBucket(final int index) {
         for (; ; ) {
             final String s = RandomStringUtils.randomAlphanumeric(10);
-            final int bucket = BucketUtils.getBucket(s, 2);
+            final int bucket = BucketIds.getBucket(s, 2);
             if (bucket == index) {
                 return s;
             }

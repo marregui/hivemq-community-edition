@@ -15,11 +15,12 @@
  */
 package com.hivemq.persistence.payload;
 
+import com.hivemq.persistence.local.xodus.bucket.NumericBucketIds;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.persistence.local.xodus.bucket.BucketUtils;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
 
 public class BucketLock {
 
@@ -37,7 +38,7 @@ public class BucketLock {
     }
 
     public void accessBucketByPayloadId(final long payloadId, final @NotNull BucketAccessCallback callback) {
-        final int index = BucketUtils.getBucket(Long.toString(payloadId), locks.length);
+        final int index = NumericBucketIds.getBucket(payloadId, locks.length);
         accessBucket(index, callback);
     }
 

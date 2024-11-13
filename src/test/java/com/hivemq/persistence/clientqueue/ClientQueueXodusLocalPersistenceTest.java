@@ -27,7 +27,7 @@ import com.hivemq.mqtt.message.publish.PUBLISHFactory;
 import com.hivemq.mqtt.message.pubrel.PUBREL;
 import com.hivemq.persistence.PersistenceStartup;
 import com.hivemq.persistence.local.xodus.EnvironmentUtil;
-import com.hivemq.persistence.local.xodus.bucket.BucketUtils;
+import com.hivemq.persistence.local.xodus.bucket.BucketIds;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.util.LocalPersistenceFileUtil;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -1227,14 +1227,14 @@ public class ClientQueueXodusLocalPersistenceTest {
                 1000,
                 DISCARD,
                 false,
-                BucketUtils.getBucket("client", 4));
+                BucketIds.getBucket("client", 4));
         persistence.add("client",
                 false,
                 createBigPublish(1, QoS.AT_MOST_ONCE, "topic", 1, 500),
                 1000,
                 DISCARD,
                 false,
-                BucketUtils.getBucket("client", 4));
+                BucketIds.getBucket("client", 4));
 
         final ConcurrentHashMap<String, AtomicInteger> clientQos0MemoryMap = persistence.getClientQos0MemoryMap();
         assertNotNull(clientQos0MemoryMap.get("client"));
@@ -1256,14 +1256,14 @@ public class ClientQueueXodusLocalPersistenceTest {
                 1000,
                 DISCARD,
                 false,
-                BucketUtils.getBucket("client", 4));
+                BucketIds.getBucket("client", 4));
         persistence.add("client",
                 false,
                 createPublish(2, QoS.AT_MOST_ONCE, "topic", 2),
                 1000,
                 DISCARD,
                 false,
-                BucketUtils.getBucket("client", 4));
+                BucketIds.getBucket("client", 4));
 
         verify(messageDroppedService).qos0MemoryExceeded(eq("client"), eq("topic"), eq(0), anyLong(), eq(1024L));
 

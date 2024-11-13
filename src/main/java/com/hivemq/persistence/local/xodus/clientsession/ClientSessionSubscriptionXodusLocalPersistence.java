@@ -30,7 +30,7 @@ import com.hivemq.persistence.local.ClientSessionSubscriptionLocalPersistence;
 import com.hivemq.persistence.local.xodus.EnvironmentUtil;
 import com.hivemq.persistence.local.xodus.XodusLocalPersistence;
 import com.hivemq.persistence.local.xodus.bucket.Bucket;
-import com.hivemq.persistence.local.xodus.bucket.BucketUtils;
+import com.hivemq.persistence.local.xodus.bucket.BucketIds;
 import com.hivemq.util.LocalPersistenceFileUtil;
 import jetbrains.exodus.ByteIterable;
 import jetbrains.exodus.ExodusException;
@@ -213,7 +213,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
     public ImmutableSet<Topic> getSubscriptions(@NotNull final String client) {
         checkNotNull(client, "Clientid must not be null");
 
-        final Bucket bucket = buckets[BucketUtils.getBucket(client, bucketCount)];
+        final Bucket bucket = buckets[BucketIds.getBucket(client, bucketCount)];
         return bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
 
             final Map<Topic, Long> results = new HashMap<>();

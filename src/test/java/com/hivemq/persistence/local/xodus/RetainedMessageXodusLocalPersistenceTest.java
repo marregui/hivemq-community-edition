@@ -25,7 +25,7 @@ import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
 import com.hivemq.persistence.PersistenceStartup;
 import com.hivemq.persistence.RetainedMessage;
-import com.hivemq.persistence.local.xodus.bucket.BucketUtils;
+import com.hivemq.persistence.local.xodus.bucket.BucketIds;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.util.LocalPersistenceFileUtil;
 import org.junit.After;
@@ -116,37 +116,37 @@ public class RetainedMessageXodusLocalPersistenceTest {
         persistence.put(new RetainedMessage(new byte[0],
                 QoS.AT_MOST_ONCE,
                 100L,
-                MqttConfigurationDefaults.TTL_DISABLED), "topic/0", BucketUtils.getBucket("topic/0", BUCKETSIZE));
+                MqttConfigurationDefaults.TTL_DISABLED), "topic/0", BucketIds.getBucket("topic/0", BUCKETSIZE));
 
-        assertNull(persistence.get("topic/0", BucketUtils.getBucket("topic/0", BUCKETSIZE)));
+        assertNull(persistence.get("topic/0", BucketIds.getBucket("topic/0", BUCKETSIZE)));
     }
 
     @Test
     public void test_persist_same_topic() {
         persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, MqttConfigurationDefaults.TTL_DISABLED),
                 "topic",
-                BucketUtils.getBucket("topic", BUCKETSIZE));
+                BucketIds.getBucket("topic", BUCKETSIZE));
         persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, MqttConfigurationDefaults.TTL_DISABLED),
                 "topic",
-                BucketUtils.getBucket("topic", BUCKETSIZE));
+                BucketIds.getBucket("topic", BUCKETSIZE));
 
         //existing entry has newer timestamp, so we expect the "old" value
         assertEquals("message0",
-                new String(persistence.get("topic", BucketUtils.getBucket("topic", BUCKETSIZE)).getMessage()));
+                new String(persistence.get("topic", BucketIds.getBucket("topic", BUCKETSIZE)).getMessage()));
 
         persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 3L, MqttConfigurationDefaults.TTL_DISABLED),
                 "topic",
-                BucketUtils.getBucket("topic", BUCKETSIZE));
+                BucketIds.getBucket("topic", BUCKETSIZE));
 
         assertEquals("message3",
-                new String(persistence.get("topic", BucketUtils.getBucket("topic", BUCKETSIZE)).getMessage()));
+                new String(persistence.get("topic", BucketIds.getBucket("topic", BUCKETSIZE)).getMessage()));
 
         persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 4L, MqttConfigurationDefaults.TTL_DISABLED),
                 "topic",
-                BucketUtils.getBucket("topic", BUCKETSIZE));
+                BucketIds.getBucket("topic", BUCKETSIZE));
 
         assertEquals("message4",
-                new String(persistence.get("topic", BucketUtils.getBucket("topic", BUCKETSIZE)).getMessage()));
+                new String(persistence.get("topic", BucketIds.getBucket("topic", BUCKETSIZE)).getMessage()));
     }
 
     @Test
@@ -242,8 +242,8 @@ public class RetainedMessageXodusLocalPersistenceTest {
                 null,
                 System.currentTimeMillis()), "topic2", 0);
 
-        persistence.cleanUp(BucketUtils.getBucket("topic", BUCKETSIZE));
-        persistence.cleanUp(BucketUtils.getBucket("topic2", BUCKETSIZE));
+        persistence.cleanUp(BucketIds.getBucket("topic", BUCKETSIZE));
+        persistence.cleanUp(BucketIds.getBucket("topic2", BUCKETSIZE));
 
         assertNull(persistence.get("topic", 0));
         assertNotNull(persistence.get("topic2", 0));
@@ -263,9 +263,9 @@ public class RetainedMessageXodusLocalPersistenceTest {
                 null,
                 null,
                 null,
-                System.currentTimeMillis() - 2000), "topic", BucketUtils.getBucket("topic", BUCKETSIZE));
+                System.currentTimeMillis() - 2000), "topic", BucketIds.getBucket("topic", BUCKETSIZE));
 
-        final RetainedMessage message = persistence.get("topic", BucketUtils.getBucket("topic", BUCKETSIZE));
+        final RetainedMessage message = persistence.get("topic", BucketIds.getBucket("topic", BUCKETSIZE));
         assertNull(message);
     }
 
@@ -281,9 +281,9 @@ public class RetainedMessageXodusLocalPersistenceTest {
                 "contentType",
                 new byte[]{1, 2, 3},
                 Mqtt5PayloadFormatIndicator.UTF_8,
-                System.currentTimeMillis()), "topic/0", BucketUtils.getBucket("topic", BUCKETSIZE));
+                System.currentTimeMillis()), "topic/0", BucketIds.getBucket("topic", BUCKETSIZE));
 
-        final RetainedMessage retainedMessage = persistence.get("topic/0", BucketUtils.getBucket("topic", BUCKETSIZE));
+        final RetainedMessage retainedMessage = persistence.get("topic/0", BucketIds.getBucket("topic", BUCKETSIZE));
         assertNotNull(retainedMessage);
 
         assertEquals("responseTopic", retainedMessage.getResponseTopic());

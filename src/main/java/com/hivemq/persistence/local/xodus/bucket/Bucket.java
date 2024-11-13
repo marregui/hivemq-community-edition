@@ -25,9 +25,39 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Bucket {
 
+    // https://github.com/Cyan4973/xxHash/blob/dev/doc/xxhash_spec.md
+    // https://betterexplained.com/articles/understanding-big-and-little-endian-byte-order/
+
+    static final long HASH0 = -7046029288634856825L;
+    static final long HASH1 = -4417276706812531889L;
+    static final long HASH2 = 1609587929392839161L;
+    static final long HASH3 = -8796714831421723037L;
+    static final long HASH4 = 2870177450012600261L;
+
+    static long hash(final long ihash, final long ih0, final long ih1) {
+        long hash = ihash;
+        long h0 = ih0;
+        long h1 = ih1;
+        h0 *= HASH1;
+        h0 = (h0 << 31) | (h0 >>> -31);
+        h0 *= HASH0;
+        hash ^= h0;
+        hash = hash * HASH0 + HASH3;
+        h1 *= HASH1;
+        h1 = (h1 << 31) | (h1 >>> -31);
+        h1 *= HASH0;
+        hash ^= h1;
+        hash = hash * HASH0 + HASH3;
+        return hash;
+    }
+
+    static int idx(final long idx) {
+        return (int) (idx >> 1);
+    }
+
     private final @NotNull Environment environment;
     private final @NotNull Store store;
-    private final @NotNull AtomicBoolean closing = new AtomicBoolean(false);
+    private final @NotNull AtomicBoolean closing = new AtomicBoolean();
 
     public Bucket(@NotNull final Environment environment, @NotNull final Store store) {
         this.environment = environment;

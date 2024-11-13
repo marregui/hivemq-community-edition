@@ -18,7 +18,7 @@ package com.hivemq.persistence.payload;
 import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
 
-import com.hivemq.persistence.local.xodus.bucket.BucketUtils;
+import com.hivemq.persistence.local.xodus.bucket.BucketIds;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -110,6 +110,6 @@ public class PayloadReferenceCounterRegistryImpl implements PayloadReferenceCoun
     }
 
     private int bucketIndexForPayloadId(final long payloadId) {
-        return BucketUtils.getBucket(Long.toString(payloadId), buckets.length);
+        return BucketIds.getBucket(Long.toString(payloadId), buckets.length);
     }
 }

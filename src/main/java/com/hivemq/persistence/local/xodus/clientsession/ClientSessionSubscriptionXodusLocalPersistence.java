@@ -117,7 +117,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
             for (int i = 0; i < bucketCount; i++) {
                 final Bucket bucket = buckets[i];
 
-                bucket.getEnvironment().executeInReadonlyTransaction(txn -> {
+                bucket.getEnv().executeInReadonlyTransaction(txn -> {
                     try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                         while (cursor.getNext()) {
                             final long id = serializer.deserializeId(byteIterableToBytes(cursor.getValue()));
@@ -147,7 +147,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
         checkState(timestamp > 0, "Timestamp must not be 0");
 
         final Bucket bucket = buckets[bucketIndex];
-        bucket.getEnvironment().executeInTransaction(txn -> {
+        bucket.getEnv().executeInTransaction(txn -> {
             final ByteIterable key = bytesToByteIterable(serializer.serializeKey(client));
             bucket.getStore()
                     .put(txn,
@@ -167,7 +167,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
         checkState(timestamp > 0, "Timestamp must not be 0");
 
         final Bucket bucket = buckets[bucketIndex];
-        bucket.getEnvironment().executeInTransaction(txn -> {
+        bucket.getEnv().executeInTransaction(txn -> {
             for (final Topic topic : topics) {
                 final long rowId = nextId.getAndIncrement();
                 final ByteIterable key = bytesToByteIterable(serializer.serializeKey(client));
@@ -188,7 +188,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
         checkState(timestamp > 0, "Timestamp must not be 0");
 
         final Bucket bucket = buckets[bucketIndex];
-        bucket.getEnvironment().executeInTransaction(txn -> {
+        bucket.getEnv().executeInTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
 
                 final ByteIterable clientByteIterable = bytesToByteIterable(serializer.serializeKey(client));
@@ -213,7 +213,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
         checkNotNull(client, "Clientid must not be null");
 
         final Bucket bucket = buckets[Bucket.getBucket(client, bucketCount)];
-        return bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
+        return bucket.getEnv().computeInReadonlyTransaction(txn -> {
 
             final Map<Topic, Long> results = new HashMap<>();
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
@@ -250,7 +250,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
         checkState(timestamp > 0, "Timestamp must not be 0");
 
         final Bucket bucket = buckets[bucketIndex];
-        bucket.getEnvironment().executeInTransaction(txn -> {
+        bucket.getEnv().executeInTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                 removeClientFromCursor(client, cursor);
             }
@@ -275,7 +275,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
         final ImmutableMap.Builder<String, ImmutableSet<Topic>> resultBuilder = ImmutableMap.builder();
 
         final Bucket bucket = buckets[bucketIndex];
-        return bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
+        return bucket.getEnv().computeInReadonlyTransaction(txn -> {
 
             String lastKey = null;
 
@@ -362,7 +362,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
 
         final Bucket bucket = buckets[bucketIndex];
 
-        bucket.getEnvironment().executeInTransaction(txn -> {
+        bucket.getEnv().executeInTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                 // Get first entry
                 cursor.getNext();

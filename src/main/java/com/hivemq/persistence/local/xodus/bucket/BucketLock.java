@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.persistence.payload;
+package com.hivemq.persistence.local.xodus.bucket;
 
-import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.Lock;
@@ -38,8 +37,7 @@ public class BucketLock {
     }
 
     public void accessBucketByPayloadId(final long payloadId, final @NotNull BucketAccessCallback callback) {
-        final int index = Bucket.getBucket(payloadId, locks.length);
-        accessBucket(index, callback);
+        accessBucket(Bucket.getBucket(payloadId, locks.length), callback);
     }
 
     public void accessBucket(final int index, final @NotNull BucketAccessCallback callback) {
@@ -53,7 +51,7 @@ public class BucketLock {
     }
 
     @FunctionalInterface
-    interface BucketAccessCallback {
+    public interface BucketAccessCallback {
         void call(int bucketIndex);
     }
 }

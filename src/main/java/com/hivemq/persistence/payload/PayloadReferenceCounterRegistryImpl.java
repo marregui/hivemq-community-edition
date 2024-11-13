@@ -16,6 +16,7 @@
 package com.hivemq.persistence.payload;
 
 import com.google.common.collect.ImmutableMap;
+import com.hivemq.persistence.local.xodus.bucket.BucketLock;
 import org.jetbrains.annotations.NotNull;
 
 import com.hivemq.persistence.local.xodus.bucket.Bucket;

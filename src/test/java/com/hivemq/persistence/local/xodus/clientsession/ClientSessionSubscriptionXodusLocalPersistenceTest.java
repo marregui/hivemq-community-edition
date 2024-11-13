@@ -749,7 +749,7 @@ public class ClientSessionSubscriptionXodusLocalPersistenceTest {
 
     private void countBucketEntries(final AtomicInteger count, final String client) {
         final Bucket bucket = persistence.getBucket(client);
-        bucket.getEnvironment().executeInReadonlyTransaction(txn -> {
+        bucket.getEnv().executeInReadonlyTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                 while (cursor.getNext()) {
                     final String clientId = persistence.serializer.deserializeKey(byteIterableToBytes(cursor.getKey()));

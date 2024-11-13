@@ -134,7 +134,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
         for (int i = 0; i < bucketCount; i++) {
             final Bucket bucket = buckets[i];
             final SessionCounterDelta sessionCounterDelta = new SessionCounterDelta();
-            bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+            bucket.getEnv().executeInExclusiveTransaction(txn -> {
 
                 final Store store = bucket.getStore();
 
@@ -223,7 +223,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
             final boolean checkExpired,
             final boolean includeWill) {
 
-        return bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
+        return bucket.getEnv().computeInReadonlyTransaction(txn -> {
 
             final ByteIterable byteIterable =
                     bucket.getStore().get(txn, bytesToByteIterable(serializer.serializeKey(clientId)));
@@ -259,7 +259,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
     @Override
     public @Nullable Long getTimestamp(final @NotNull String clientId, final int bucketIndex) {
         final Bucket bucket = buckets[bucketIndex];
-        return bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
+        return bucket.getEnv().computeInReadonlyTransaction(txn -> {
 
             final ByteIterable byteIterable =
                     bucket.getStore().get(txn, bytesToByteIterable(serializer.serializeKey(clientId)));
@@ -283,7 +283,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Bucket bucket = buckets[bucketIndex];
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
             final ByteIterable key = bytesToByteIterable(serializer.serializeKey(clientId));
 
             final boolean isPersistent = persistent(newClientSession);
@@ -333,7 +333,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Bucket bucket = buckets[bucketIndex];
-        return bucket.getEnvironment().computeInExclusiveTransaction(txn -> {
+        return bucket.getEnv().computeInExclusiveTransaction(txn -> {
             final ByteIterable key = bytesToByteIterable(serializer.serializeKey(clientId));
             final ByteIterable byteIterable = bucket.getStore().get(txn, key);
 
@@ -377,7 +377,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Bucket bucket = buckets[bucketIndex];
-        return bucket.getEnvironment().computeInExclusiveTransaction(txn -> {
+        return bucket.getEnv().computeInExclusiveTransaction(txn -> {
             final ByteIterable key = bytesToByteIterable(serializer.serializeKey(clientId));
             final ByteIterable byteIterable = bucket.getStore().get(txn, key);
 
@@ -408,7 +408,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
         checkBucketIndex(bucketIndex);
 
         final Bucket bucket = buckets[bucketIndex];
-        return bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
+        return bucket.getEnv().computeInReadonlyTransaction(txn -> {
             final Map<String, ClientSession> resultMap = Maps.newHashMap();
 
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
@@ -467,7 +467,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
     @Override
     public @NotNull Set<String> getAllClients(final int bucketIndex) {
         final Bucket bucket = buckets[bucketIndex];
-        return bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
+        return bucket.getEnv().computeInReadonlyTransaction(txn -> {
             final ImmutableSet.Builder<String> clientSessions = ImmutableSet.builder();
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                 while (cursor.getNext()) {
@@ -482,7 +482,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
     @VisibleForTesting
     void removeWithTimestamp(final @NotNull String client, final int bucketIndex) {
         final Bucket bucket = buckets[bucketIndex];
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
             final ByteIterable value = bucket.getStore().get(txn, bytesToByteIterable(serializer.serializeKey(client)));
             if (value != null) {
                 final ClientSession clientSession = serializer.deserializeValue(byteIterableToBytes(value));
@@ -509,7 +509,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
         }
 
         final Bucket bucket = buckets[bucketIndex];
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
 
             final ByteIterable key = bytesToByteIterable(serializer.serializeKey(clientId));
 
@@ -540,7 +540,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
             return ImmutableSet.of();
         }
         final Bucket bucket = buckets[bucketIndex];
-        return bucket.getEnvironment().computeInExclusiveTransaction(txn -> {
+        return bucket.getEnv().computeInExclusiveTransaction(txn -> {
             final ImmutableSet.Builder<String> expiredSessionsBuilder = ImmutableSet.builder();
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                 final TransactionCommitActions commitActions = TransactionCommitActions.asCommitHookFor(txn);
@@ -578,7 +578,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
 
         final Bucket bucket = buckets[bucketIndex];
 
-        return bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
+        return bucket.getEnv().computeInReadonlyTransaction(txn -> {
 
             final Set<String> collectSet = new HashSet<>();
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
@@ -612,7 +612,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
     public @NotNull Map<String, PendingWillMessages.PendingWill> getPendingWills(final int bucketIndex) {
         final Bucket bucket = buckets[bucketIndex];
 
-        return bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
+        return bucket.getEnv().computeInReadonlyTransaction(txn -> {
             final Map<String, PendingWillMessages.PendingWill> resultMap = new HashMap<>();
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                 while (cursor.getNext()) {

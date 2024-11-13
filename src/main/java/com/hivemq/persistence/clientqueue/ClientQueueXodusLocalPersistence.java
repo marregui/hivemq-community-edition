@@ -182,7 +182,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
 
         for (final Bucket bucket : buckets) {
 
-            bucket.getEnvironment().executeInReadonlyTransaction(txn -> {
+            bucket.getEnv().executeInReadonlyTransaction(txn -> {
                 try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                     Key currentKey = null;
                     int queueSize = 0;
@@ -305,7 +305,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
         final ByteIterable keyBytes = serializer.serializeNewPublishKey(key);
         final ByteIterable valueBytes = serializer.serializePublishWithoutPacketId(publish, retained);
 
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
             txn.setCommitHook(() -> payloadPersistence.add(publish.getPayload(), publish.getPublishId()));
             bucket.getStore().put(txn, keyBytes, valueBytes);
         });
@@ -368,7 +368,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
         final AtomicInteger retainedQueueSize = getOrPutRetainedQueueSize(key, bucketIndex);
         final int qos0Size = qos0Size(key, bucketIndex);
 
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
             final TransactionCommitActions commitActions = TransactionCommitActions.asCommitHookFor(txn);
 
             for (final PUBLISH publish : qos1and2Publishes.build()) {
@@ -516,7 +516,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
      * @return true if a message was discarded, else false
      */
     private boolean discardOldest(final @NotNull Bucket bucket, final @NotNull Key key, final boolean retainedOnly) {
-        return bucket.getEnvironment().computeInExclusiveTransaction(txn -> {
+        return bucket.getEnv().computeInExclusiveTransaction(txn -> {
             final TransactionCommitActions commitActions = TransactionCommitActions.asCommitHookFor(txn);
             return discardOldest(bucket, key, retainedOnly, txn, commitActions);
         });
@@ -633,7 +633,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
         }
 
         final Bucket bucket = buckets[bucketIndex];
-        return bucket.getEnvironment().computeInExclusiveTransaction(txn -> {
+        return bucket.getEnv().computeInExclusiveTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
 
                 final int countLimit = packetIds.length();
@@ -719,7 +719,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
 
         final Bucket bucket = buckets[bucketIndex];
 
-        return bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
+        return bucket.getEnv().computeInReadonlyTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
 
                 final int[] count = {0};
@@ -765,7 +765,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
 
         final Bucket bucket = buckets[bucketIndex];
 
-        return bucket.getEnvironment().computeInExclusiveTransaction(txn -> {
+        return bucket.getEnv().computeInExclusiveTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
 
                 final boolean[] packetIdFound = new boolean[1];
@@ -821,7 +821,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
         final Key key = new Key(client, false);
 
         final Bucket bucket = buckets[bucketIndex];
-        return bucket.getEnvironment().computeInExclusiveTransaction(txn -> {
+        return bucket.getEnv().computeInExclusiveTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
 
                 final String[] result = {null};
@@ -870,7 +870,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
         final Key key = new Key(queueId, shared);
 
         final Bucket bucket = buckets[bucketIndex];
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
 
                 iterateQueue(cursor, key, false, () -> {
@@ -949,7 +949,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
         final Key key = new Key(sharedSubscription, true);
 
         final Bucket bucket = buckets[bucketIndex];
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
 
                 iterateQueue(cursor, key, false, () -> {
@@ -983,7 +983,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
         final Key key = new Key(sharedSubscription, true);
 
         final Bucket bucket = buckets[bucketIndex];
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
 
                 iterateQueue(cursor, key, false, () -> {
@@ -1033,7 +1033,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
 
         final Bucket bucket = buckets[bucketIndex];
 
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
 
                 iterateQueue(cursor, key, false, () -> {
@@ -1160,7 +1160,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
 
         final Bucket bucket = buckets[bucketIndex];
         final ImmutableList.Builder<ClientQueueEntry> messageBuilder =
-                bucket.getEnvironment().computeInExclusiveTransaction(txn -> {
+                bucket.getEnv().computeInExclusiveTransaction(txn -> {
                     try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
 
                         final ImmutableList.Builder<ClientQueueEntry> entries = ImmutableList.builder();

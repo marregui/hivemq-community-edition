@@ -15,6 +15,7 @@
  */
 package com.hivemq.persistence.payload;
 
+import com.hivemq.persistence.local.xodus.bucket.BucketLock;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.util.Exceptions;
 

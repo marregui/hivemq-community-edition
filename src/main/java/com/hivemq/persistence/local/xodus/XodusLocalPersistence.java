@@ -205,9 +205,9 @@ public abstract class XodusLocalPersistence implements LocalPersistence, FilePer
             return;
         }
         if (bucket.close()) {
-            if (bucket.getEnvironment().isOpen()) {
+            if (bucket.getEnv().isOpen()) {
                 new EnvironmentCloser(getName() + "-closer",
-                        bucket.getEnvironment(),
+                        bucket.getEnv(),
                         closeRetries,
                         closeRetryInterval).close();
             }

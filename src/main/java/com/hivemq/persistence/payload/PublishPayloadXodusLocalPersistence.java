@@ -99,7 +99,7 @@ public class PublishPayloadXodusLocalPersistence extends XodusLocalPersistence
         try {
             final AtomicLong maxId = new AtomicLong(0);
             for (final Bucket bucket : buckets) {
-                bucket.getEnvironment().executeInReadonlyTransaction(txn -> {
+                bucket.getEnv().executeInReadonlyTransaction(txn -> {
                     try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                         while (cursor.getNext()) {
                             final KeyPair keypair = deserializeKey(byteIterableToBytes(cursor.getKey()));
@@ -123,7 +123,7 @@ public class PublishPayloadXodusLocalPersistence extends XodusLocalPersistence
     public void put(final long id, final byte @NotNull [] payload) {
 
         final Bucket bucket = getBucket(Long.toString(id));
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
             int chunkIndex = 0;
             // We have to split the payload in chunks with less than 8MB, because Xodus can't handle entries that are bigger than the page size.
             // The chunks are associated with an index.
@@ -149,7 +149,7 @@ public class PublishPayloadXodusLocalPersistence extends XodusLocalPersistence
     public byte @Nullable [] get(final long id) {
 
         final Bucket bucket = getBucket(Long.toString(id));
-        return bucket.getEnvironment().computeInReadonlyTransaction(transaction -> {
+        return bucket.getEnv().computeInReadonlyTransaction(transaction -> {
 
             final Map<Long, byte[]> chunks = new HashMap<>();
 
@@ -197,7 +197,7 @@ public class PublishPayloadXodusLocalPersistence extends XodusLocalPersistence
         final ImmutableList.Builder<Long> payloadIdsBuilder = ImmutableList.builder();
         for (final Bucket bucket : buckets) {
 
-            bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
+            bucket.getEnv().computeInReadonlyTransaction(txn -> {
 
                 try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                     while (cursor.getNext()) {
@@ -218,7 +218,7 @@ public class PublishPayloadXodusLocalPersistence extends XodusLocalPersistence
             return;
         }
         final Bucket bucket = getBucket(Long.toString(id));
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
 
             int chunkIndex = 0;
             boolean deleted;

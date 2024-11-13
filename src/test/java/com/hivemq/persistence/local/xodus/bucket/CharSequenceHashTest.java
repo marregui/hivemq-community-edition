@@ -19,7 +19,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class BucketIdsTest {
+public class CharSequenceHashTest {
 
     @Test
     public void test_buckets_between_0_and_bucketsize() throws Exception {

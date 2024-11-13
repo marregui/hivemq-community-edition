@@ -28,56 +28,53 @@ public class Bucket {
     // https://github.com/Cyan4973/xxHash/blob/dev/doc/xxhash_spec.md
     // https://betterexplained.com/articles/understanding-big-and-little-endian-byte-order/
 
-    static final long HASH0 = -7046029288634856825L;
-    static final long HASH1 = -4417276706812531889L;
-    static final long HASH2 = 1609587929392839161L;
-    static final long HASH3 = -8796714831421723037L;
-    static final long HASH4 = 2870177450012600261L;
+    static final long N0 = -7046029288634856825L;
+    static final long N1 = -4417276706812531889L;
+    static final long N2 = 1609587929392839161L;
+    static final long N3 = -8796714831421723037L;
+    static final long N4 = 2870177450012600261L;
 
-    private final @NotNull Environment environment;
+    private final @NotNull Environment env;
     private final @NotNull Store store;
-    private final @NotNull AtomicBoolean closing = new AtomicBoolean();
+    private final @NotNull AtomicBoolean isClosed;
 
-    public Bucket(@NotNull final Environment environment, @NotNull final Store store) {
-        this.environment = environment;
+    public Bucket(@NotNull final Environment env, @NotNull final Store store) {
+        this.env = env;
         this.store = store;
+        this.isClosed = new AtomicBoolean();
     }
 
     static long hash(final long ihash, final long ih0, final long ih1) {
         long hash = ihash;
         long h0 = ih0;
         long h1 = ih1;
-        h0 *= HASH1;
+        h0 *= N1;
         h0 = (h0 << 31) | (h0 >>> -31);
-        h0 *= HASH0;
+        h0 *= N0;
         hash ^= h0;
-        hash = hash * HASH0 + HASH3;
-        h1 *= HASH1;
+        hash = hash * N0 + N3;
+        h1 *= N1;
         h1 = (h1 << 31) | (h1 >>> -31);
-        h1 *= HASH0;
+        h1 *= N0;
         hash ^= h1;
-        hash = hash * HASH0 + HASH3;
+        hash = hash * N0 + N3;
         return hash;
     }
 
-    static int idx(final long idx) {
-        return (int) (idx >> 1);
-    }
-
     public static int getBucket(final @NotNull CharSequence id, final int bucketSize) {
-        return BucketIds.getBucket(id, bucketSize);
+        return CharSequenceHash.hash(id, bucketSize);
     }
 
     public static int getBucket(final long id, final int bucketSize) {
-        return NumericBucketIds.getBucket(id, bucketSize);
+        return NumericHash.hash(id, bucketSize);
     }
 
     public boolean close() {
-        return closing.compareAndSet(false, true);
+        return isClosed.compareAndSet(false, true);
     }
 
-    public @NotNull Environment getEnvironment() {
-        return environment;
+    public @NotNull Environment getEnv() {
+        return env;
     }
 
     public @NotNull Store getStore() {

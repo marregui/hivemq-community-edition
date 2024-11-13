@@ -19,43 +19,41 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteOrder;
 
-import static com.hivemq.persistence.local.xodus.bucket.Bucket.HASH0;
-import static com.hivemq.persistence.local.xodus.bucket.Bucket.HASH1;
-import static com.hivemq.persistence.local.xodus.bucket.Bucket.HASH2;
-import static com.hivemq.persistence.local.xodus.bucket.Bucket.HASH3;
-import static com.hivemq.persistence.local.xodus.bucket.Bucket.HASH4;
-import static com.hivemq.persistence.local.xodus.bucket.Bucket.hash;
-import static com.hivemq.persistence.local.xodus.bucket.Bucket.idx;
+import static com.hivemq.persistence.local.xodus.bucket.Bucket.N0;
+import static com.hivemq.persistence.local.xodus.bucket.Bucket.N1;
+import static com.hivemq.persistence.local.xodus.bucket.Bucket.N2;
+import static com.hivemq.persistence.local.xodus.bucket.Bucket.N3;
+import static com.hivemq.persistence.local.xodus.bucket.Bucket.N4;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
-class BucketIds {
+class CharSequenceHash {
 
-    private static final @NotNull Reader READER =
+    private static final @NotNull Reader reader =
             ByteOrder.nativeOrder() == LITTLE_ENDIAN ? new LittleEndianReader() : new BigEndianReader();
 
-    static int getBucket(final @NotNull CharSequence id, final int bucketSize) {
+    static int hash(final @NotNull CharSequence id, final int modulo) {
         final long length = id.length() * 2L;
         long hash;
         long idx = 0L;
         long remaining = length;
         if (remaining >= 32L) {
-            @SuppressWarnings("NumericOverflow") long v1 = HASH0 + HASH1;
-            long v2 = HASH1;
+            @SuppressWarnings("NumericOverflow") long v1 = N0 + N1;
+            long v2 = N1;
             long v3 = 0L;
-            long v4 = -HASH0;
+            long v4 = -N0;
             do {
-                v1 += READER.i64(id, idx) * HASH1;
+                v1 += reader.i64(id, idx) * N1;
                 v1 = (v1 << 31) | (v1 >>> -31);
-                v1 *= HASH0;
-                v2 += READER.i64(id, idx + 8) * HASH1;
+                v1 *= N0;
+                v2 += reader.i64(id, idx + 8) * N1;
                 v2 = (v2 << 31) | (v2 >>> -31);
-                v2 *= HASH0;
-                v3 += READER.i64(id, idx + 16) * HASH1;
+                v2 *= N0;
+                v3 += reader.i64(id, idx + 16) * N1;
                 v3 = (v3 << 31) | (v3 >>> -31);
-                v3 *= HASH0;
-                v4 += READER.i64(id, idx + 24) * HASH1;
+                v3 *= N0;
+                v4 += reader.i64(id, idx + 24) * N1;
                 v4 = (v4 << 31) | (v4 >>> -31);
-                v4 *= HASH0;
+                v4 *= N0;
                 idx += 32;
                 remaining -= 32;
             } while (remaining >= 32);
@@ -63,40 +61,40 @@ class BucketIds {
                     ((v2 << 7) | (v2 >>> -7)) +
                     ((v3 << 12) | (v3 >>> -12)) +
                     ((v4 << 18) | (v4 >>> -18));
-            hash = hash(hash, v1, v2);
-            hash = hash(hash, v3, v4);
+            hash = Bucket.hash(hash, v1, v2);
+            hash = Bucket.hash(hash, v3, v4);
         } else {
-            hash = HASH4;
+            hash = N4;
         }
         hash += length;
         while (remaining >= 8) {
-            long k1 = READER.i64(id, idx);
-            k1 *= HASH1;
+            long k1 = reader.i64(id, idx);
+            k1 *= N1;
             k1 = (k1 << 31) | (k1 >>> -31);
-            k1 *= HASH0;
+            k1 *= N0;
             hash ^= k1;
-            hash = ((hash << 27) | (hash >>> -27)) * HASH0 + HASH3;
+            hash = ((hash << 27) | (hash >>> -27)) * N0 + N3;
             idx += 8;
             remaining -= 8;
         }
         if (remaining >= 4) {
-            hash ^= READER.u32(id, idx) * HASH0;
-            hash = ((hash << 23) | (hash >>> -23)) * HASH1 + HASH2;
+            hash ^= reader.u32(id, idx) * N0;
+            hash = ((hash << 23) | (hash >>> -23)) * N1 + N2;
             idx += 4;
             remaining -= 4;
         }
         while (remaining != 0) {
-            hash ^= READER.u8(id, idx) * HASH4;
-            hash = ((hash << 11) | (hash >>> -11)) * HASH0;
+            hash ^= reader.u8(id, idx) * N4;
+            hash = ((hash << 11) | (hash >>> -11)) * N0;
             --remaining;
             ++idx;
         }
         hash ^= hash >>> 33;
-        hash *= HASH1;
+        hash *= N1;
         hash ^= hash >>> 29;
-        hash *= HASH2;
+        hash *= N2;
         hash ^= hash >>> 32;
-        return Math.abs((int) (hash % bucketSize));
+        return Math.abs((int) (hash % modulo));
     }
 
     private static long i64(
@@ -108,7 +106,7 @@ class BucketIds {
             final int ch3Idx,
             final int ch4Idx,
             final int delta) {
-        final int base = idx(idx);
+        final int base = (int) (idx >> 1);
         if (0 == ((int) idx & 1)) {
             return cs.charAt(base + ch0Idx) |
                     ((long) cs.charAt(base + ch1Idx) << 16) |
@@ -130,7 +128,7 @@ class BucketIds {
             final int ch1Idx,
             final int ch2Idx,
             final int delta) {
-        final int base = idx(idx);
+        final int base = (int) (idx >> 1);
         if (0 == ((int) idx & 1)) {
             return cs.charAt(base + ch0Idx) | ((long) cs.charAt(base + ch1Idx) << 16);
         } else {
@@ -141,7 +139,7 @@ class BucketIds {
     }
 
     private static int u8(final @NotNull CharSequence cs, final long idx, final int shift) {
-        return (cs.charAt(idx(idx)) >> shift) & 0xFF;
+        return (cs.charAt((int) (idx >> 1)) >> shift) & 0xFF;
     }
 
     private interface Reader {
@@ -155,17 +153,17 @@ class BucketIds {
     private static class LittleEndianReader implements Reader {
         @Override
         public long i64(final @NotNull CharSequence cs, final long idx) {
-            return BucketIds.i64(cs, idx, 0, 1, 2, 3, 4, 0);
+            return CharSequenceHash.i64(cs, idx, 0, 1, 2, 3, 4, 0);
         }
 
         @Override
         public long u32(final @NotNull CharSequence cs, final long idx) {
-            return BucketIds.u32(cs, idx, 0, 1, 2, 0);
+            return CharSequenceHash.u32(cs, idx, 0, 1, 2, 0);
         }
 
         @Override
         public int u8(final @NotNull CharSequence cs, final long idx) {
-            return BucketIds.u8(cs, idx, ((int) idx & 1) << 3);
+            return CharSequenceHash.u8(cs, idx, ((int) idx & 1) << 3);
         }
 
     }
@@ -173,17 +171,17 @@ class BucketIds {
     private static class BigEndianReader implements Reader {
         @Override
         public long i64(final @NotNull CharSequence cs, final long idx) {
-            return BucketIds.i64(cs, idx, 3, 2, 1, 0, 0, 1);
+            return CharSequenceHash.i64(cs, idx, 3, 2, 1, 0, 0, 1);
         }
 
         @Override
         public long u32(final @NotNull CharSequence cs, final long idx) {
-            return BucketIds.u32(cs, idx, 1, 0, 0, 1);
+            return CharSequenceHash.u32(cs, idx, 1, 0, 0, 1);
         }
 
         @Override
         public int u8(final @NotNull CharSequence cs, final long idx) {
-            return BucketIds.u8(cs, idx, (((int) idx & 1) ^ 1) << 3);
+            return CharSequenceHash.u8(cs, idx, (((int) idx & 1) ^ 1) << 3);
         }
     }
 }

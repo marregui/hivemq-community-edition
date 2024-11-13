@@ -126,7 +126,7 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
                 final Bucket bucket = buckets[i];
                 final PublishTopicTree publishTopicTree = topicTrees.get(i);
 
-                bucket.getEnvironment().executeInReadonlyTransaction(txn -> {
+                bucket.getEnv().executeInReadonlyTransaction(txn -> {
 
                     try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
 
@@ -158,7 +158,7 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
 
         final Bucket bucket = buckets[bucketIndex];
 
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
 
             final DeltaCounter retainMessageDelta = DeltaCounter.finishWith(retainMessageCounter::addAndGet);
             txn.setCommitHook(retainMessageDelta);
@@ -186,7 +186,7 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
 
         final Bucket bucket = buckets[bucketIndex];
 
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
 
             final ByteIterable key = stringToByteIterable(topic);
             final ByteIterable byteIterable = bucket.getStore().get(txn, bytesToByteIterable(serializeKey(topic)));
@@ -213,7 +213,7 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
 
         final Bucket bucket = buckets[bucketIndex];
 
-        return bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
+        return bucket.getEnv().computeInReadonlyTransaction(txn -> {
             final ByteIterable byteIterable = bucket.getStore().get(txn, bytesToByteIterable(serializeKey(topic)));
             if (byteIterable != null) {
 
@@ -245,7 +245,7 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
 
         final Bucket bucket = buckets[bucketIndex];
 
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                 final ByteIterable byteIterable = cursor.getSearchKey(bytesToByteIterable(serializeKey(topic)));
                 if (byteIterable != null) {
@@ -299,7 +299,7 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
         }
 
         final Bucket bucket = buckets[bucketId];
-        bucket.getEnvironment().executeInExclusiveTransaction(txn -> {
+        bucket.getEnv().executeInExclusiveTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                 while (cursor.getNext()) {
                     final RetainedMessage message = deserializeValue(byteIterableToBytes(cursor.getValue()));
@@ -320,7 +320,7 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
         final Bucket bucket = buckets[bucketIndex];
 
-        return bucket.getEnvironment().computeInReadonlyTransaction(txn -> {
+        return bucket.getEnv().computeInReadonlyTransaction(txn -> {
             int usedMemory = 0;
             final ImmutableMap.Builder<String, RetainedMessage> retrievedMessages = ImmutableMap.builder();
             String lastFoundTopic = lastTopic;
@@ -388,7 +388,7 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         for (final Bucket bucket : buckets) {
-            bucket.getEnvironment().executeInReadonlyTransaction(txn -> {
+            bucket.getEnv().executeInReadonlyTransaction(txn -> {
                 try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
                     while (cursor.getNext()) {
                         final RetainedMessage message = deserializeValue(byteIterableToBytes(cursor.getValue()));

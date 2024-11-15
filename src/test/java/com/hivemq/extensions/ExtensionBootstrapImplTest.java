@@ -19,7 +19,6 @@ package com.hivemq.extensions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.extension.sdk.api.ExtensionMain;
@@ -84,7 +83,7 @@ public class ExtensionBootstrapImplTest {
         when(extensionLoader.loadExtensions(any(Path.class), anyBoolean())).thenReturn(ImmutableList.of());
         pluginBootstrap.startExtensionSystem();
 
-        verify(shutdownHooks).add(any(HiveMQShutdownHook.class));
+        verify(shutdownHooks).add(any(ShutdownHooks.Hook.class));
     }
 
     @Test

@@ -41,9 +41,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 
-/**
- * @author Georg Held
- */
+
 @SuppressWarnings("NullabilityAnnotations")
 public class HiveMQExtensionExtensionTest extends AbstractExtensionTest {
 

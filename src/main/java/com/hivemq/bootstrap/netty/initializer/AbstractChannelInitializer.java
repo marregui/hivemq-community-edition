@@ -62,7 +62,7 @@ public abstract class AbstractChannelInitializer extends ChannelInitializer<Chan
     @Override
     protected void initChannel(final @NotNull Channel ch) throws Exception {
         Preconditions.checkNotNull(ch, "Channel must never be null");
-        if (!legacyNettyShutdown && channelDependencies.getShutdownHooks().isShuttingDown()) {
+        if (!legacyNettyShutdown && channelDependencies.getShutdownHooks().hooksHaveRun()) {
             //during shutting down, we dont want new clients to create any pipeline,
             //and we dont want to read from their socket
             ch.config().setAutoRead(false);

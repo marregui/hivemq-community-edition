@@ -29,9 +29,7 @@ import javax.inject.Singleton;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * @author Georg Held
- */
+
 @Singleton
 public class SecurityRegistryImpl implements SecurityRegistry {
 

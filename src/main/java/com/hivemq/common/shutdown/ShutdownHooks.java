@@ -15,98 +15,108 @@
  */
 package com.hivemq.common.shutdown;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
-import com.google.common.collect.Ordering;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.util.ThreadFactoryUtil;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.PriorityQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-@Singleton
 public class ShutdownHooks {
 
-    private static final Logger log = LoggerFactory.getLogger(ShutdownHooks.class);
+    private static final @NotNull Logger log = LoggerFactory.getLogger(ShutdownHooks.class);
+    private static final @NotNull ShutdownHooks INSTANCE = new ShutdownHooks();
 
-    private final @NotNull AtomicBoolean shuttingDown;
-    private final @NotNull Multimap</* Priority */Integer, HiveMQShutdownHook> synchronousHooks;
+    private final @NotNull AtomicBoolean hooksHaveRun = new AtomicBoolean();
+    private final @NotNull PriorityQueue<Hook> hooks =
+            new PriorityQueue<>(Comparator.comparingInt(Hook::priorityValue).reversed());
 
-    @Inject
-    public ShutdownHooks() {
-        shuttingDown = new AtomicBoolean(false);
-        synchronousHooks =
-                MultimapBuilder.SortedSetMultimapBuilder.treeKeys(Ordering.natural().reverse()) //High priorities first
-                        .arrayListValues().build();
+    public static void add(final @NotNull Hook shutdownHook) {
+        INSTANCE.addHook(shutdownHook);
     }
 
-    public boolean isShuttingDown() {
-        return shuttingDown.get();
+    public static void remove(final @NotNull Hook shutdownHook) {
+        INSTANCE.removeHook(shutdownHook);
     }
 
-    /**
-     * Adds a {@link HiveMQShutdownHook} to the shutdown hook registry
-     *
-     * @param hiveMQShutdownHook the {@link HiveMQShutdownHook} to add
-     */
-    public synchronized void add(final @NotNull HiveMQShutdownHook hiveMQShutdownHook) {
-        if (shuttingDown.get()) {
-            return;
+    public static void shutdown() {
+        INSTANCE.runHooks();
+    }
+
+    public boolean hooksHaveRun() {
+        return hooksHaveRun.get();
+    }
+
+    void addHook(final @NotNull ShutdownHooks.Hook shutdownHook) {
+        Objects.requireNonNull(shutdownHook, "shutdownHook must not be null");
+        if (!hooksHaveRun.get()) {
+            log.trace("Adding shutdown hook {} with priority {}", shutdownHook.name(), shutdownHook.priority());
+            synchronized (hooks) {
+                hooks.add(shutdownHook);
+            }
         }
-        checkNotNull(hiveMQShutdownHook, "A shutdown hook must not be null");
-        log.trace("Adding shutdown hook {} with priority {}", hiveMQShutdownHook.name(), hiveMQShutdownHook.priority());
-        synchronousHooks.put(hiveMQShutdownHook.priority().getValue(), hiveMQShutdownHook);
     }
 
-    /**
-     * Removes a {@link HiveMQShutdownHook} from the shutdown hook registry
-     *
-     * @param hiveMQShutdownHook the {@link HiveMQShutdownHook} to add
-     */
-    public synchronized void remove(final @NotNull HiveMQShutdownHook hiveMQShutdownHook) {
-        if (shuttingDown.get()) {
-            return;
+    void removeHook(final @NotNull ShutdownHooks.Hook shutdownHook) {
+        Objects.requireNonNull(shutdownHook, "shutdownHook must not be null");
+        if (!hooksHaveRun.get()) {
+            log.trace("Removing shutdown hook {} with priority {}", shutdownHook.name(), shutdownHook.priority());
+            synchronized (hooks) {
+                hooks.remove(shutdownHook);
+            }
         }
-        checkNotNull(hiveMQShutdownHook, "A shutdown hook must not be null");
-
-        log.trace("Removing shutdown hook {} with priority {}",
-                hiveMQShutdownHook.name(),
-                hiveMQShutdownHook.priority());
-        synchronousHooks.values().remove(hiveMQShutdownHook);
     }
 
-    /**
-     * @return A registry of all Shutdown Hooks.
-     */
-    public @NotNull Multimap<Integer, HiveMQShutdownHook> getShutdownHooks() {
-        return synchronousHooks;
+    @VisibleForTesting
+    public @NotNull PriorityQueue<Hook> getShutdownHooks() {
+        return hooks;
     }
 
-    public void runShutdownHooks() {
-        shuttingDown.set(true);
-        log.info("Shutting down HiveMQ. Please wait, this could take a while...");
-        final ScheduledExecutorService executorService =
-                Executors.newSingleThreadScheduledExecutor(ThreadFactoryUtil.create("shutdown-log-executor"));
-        executorService.scheduleAtFixedRate(() -> log.info(
-                        "Still shutting down HiveMQ. Waiting for remaining tasks to be executed. Do not shutdown HiveMQ."),
-                10,
-                10,
-                TimeUnit.SECONDS);
-        for (final HiveMQShutdownHook runnable : synchronousHooks.values()) {
-            log.trace(MarkerFactory.getMarker("SHUTDOWN_HOOK"), "Running shutdown hook {}", runnable.name());
-            runnable.run();
+    void runHooks() {
+        if (hooksHaveRun.compareAndSet(false, true)) {
+            log.info("Shutting down HiveMQ. Please wait, this could take a while...");
+            for (final Hook runnable : hooks) {
+                log.trace(MarkerFactory.getMarker("SHUTDOWN_HOOK"), "Running shutdown hook {}", runnable.name());
+                runnable.run();
+            }
+            log.info("Shutdown completed.");
         }
-        executorService.shutdown();
+    }
 
-        log.info("Shutdown completed.");
+    public enum Priority {
+        FIRST(Integer.MAX_VALUE),
+        HIGH(100_000),
+        MEDIUM(50_000),
+        LOW(Integer.MIN_VALUE);
+
+        private final int value;
+        private final @NotNull String str;
+
+        Priority(final int value) {
+            this.value = value;
+            this.str = name() + " (" + value + ")";
+        }
+
+        @Override
+        public @NotNull String toString() {
+            return str;
+        }
+    }
+
+    public interface Hook extends Runnable {
+
+        @NotNull String name();
+
+        default @NotNull Priority priority() {
+            return Priority.LOW;
+        }
+
+        default int priorityValue() {
+            return Priority.LOW.value;
+        }
     }
 }

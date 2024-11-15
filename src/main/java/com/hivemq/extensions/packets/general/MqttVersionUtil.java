@@ -19,9 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.MqttVersion;
 import com.hivemq.mqtt.message.ProtocolVersion;
 
-/**
- * @author Georg Held
- */
+
 public class MqttVersionUtil {
     @NotNull
     public static MqttVersion toMqttVersion(@NotNull final ProtocolVersion protocolVersion) {

@@ -16,7 +16,6 @@
 package com.hivemq.extensions.ioc;
 
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.util.ThreadFactoryUtil;
@@ -29,9 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
-/**
- * @author Georg Held
- */
+
 @LazySingleton
 public class ExtensionStartStopExecutorProvider implements Provider<ExecutorService> {
 
@@ -52,7 +49,7 @@ public class ExtensionStartStopExecutorProvider implements Provider<ExecutorServ
         return executorService;
     }
 
-    private static class ExtensionStartStopExecutorShutdownHook implements HiveMQShutdownHook {
+    private static class ExtensionStartStopExecutorShutdownHook implements ShutdownHooks.Hook {
 
         private final @NotNull ExecutorService executorService;
 
@@ -66,8 +63,8 @@ public class ExtensionStartStopExecutorProvider implements Provider<ExecutorServ
         }
 
         @Override
-        public @NotNull Priority priority() {
-            return Priority.DOES_NOT_MATTER;
+        public @NotNull ShutdownHooks.Priority priority() {
+            return ShutdownHooks.Priority.LOW;
         }
 
         @Override

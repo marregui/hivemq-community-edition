@@ -29,9 +29,7 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * @author Georg Held
- */
+
 public class ExtensionUtil {
 
     private static final Logger log = LoggerFactory.getLogger(ExtensionUtil.class);

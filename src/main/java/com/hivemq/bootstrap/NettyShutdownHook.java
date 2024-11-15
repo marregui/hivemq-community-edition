@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap;
 
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
+import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.connection.ConnectionPersistence;
 import io.netty.channel.EventLoopGroup;
@@ -27,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class NettyShutdownHook implements HiveMQShutdownHook {
+public class NettyShutdownHook implements ShutdownHooks.Hook {
 
     private static final Logger log = LoggerFactory.getLogger(NettyShutdownHook.class);
 
@@ -56,8 +56,8 @@ public class NettyShutdownHook implements HiveMQShutdownHook {
     }
 
     @Override
-    public @NotNull Priority priority() {
-        return Priority.MEDIUM;
+    public @NotNull ShutdownHooks.Priority priority() {
+        return ShutdownHooks.Priority.MEDIUM;
     }
 
     @Override

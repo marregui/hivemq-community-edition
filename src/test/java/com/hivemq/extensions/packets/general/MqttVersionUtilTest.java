@@ -21,9 +21,7 @@ import static com.hivemq.extension.sdk.api.packets.general.MqttVersion.V_5;
 import static com.hivemq.mqtt.message.ProtocolVersion.MQTTv5;
 import static org.junit.Assert.assertSame;
 
-/**
- * @author Georg Held
- */
+
 public class MqttVersionUtilTest {
 
     @Test(timeout = 5000)

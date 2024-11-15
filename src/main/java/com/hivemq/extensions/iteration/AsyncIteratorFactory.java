@@ -16,7 +16,6 @@
 package com.hivemq.extensions.iteration;
 
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.util.ThreadFactoryUtil;
@@ -36,15 +35,15 @@ public class AsyncIteratorFactory {
     @Inject
     public AsyncIteratorFactory(final @NotNull ShutdownHooks shutdownHooks) {
         executorService = Executors.newFixedThreadPool(4, ThreadFactoryUtil.create("async-iterator-executor-%d"));
-        shutdownHooks.add(new HiveMQShutdownHook() {
+        shutdownHooks.add(new ShutdownHooks.Hook() {
             @Override
             public @NotNull String name() {
                 return "Async Iterator Executor Shutdown";
             }
 
             @Override
-            public @NotNull Priority priority() {
-                return Priority.MEDIUM;
+            public @NotNull ShutdownHooks.Priority priority() {
+                return ShutdownHooks.Priority.MEDIUM;
             }
 
             @Override

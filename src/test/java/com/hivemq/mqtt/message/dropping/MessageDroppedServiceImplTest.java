@@ -26,9 +26,7 @@ import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-/**
- * @author Georg Held
- */
+
 public class MessageDroppedServiceImplTest {
 
     private final String clientId = "clientId";

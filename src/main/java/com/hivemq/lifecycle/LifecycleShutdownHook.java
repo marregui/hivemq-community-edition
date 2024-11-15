@@ -15,7 +15,7 @@
  */
 package com.hivemq.lifecycle;
 
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
+import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +25,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class LifecycleHiveMQShutdownHook implements HiveMQShutdownHook {
+public class LifecycleShutdownHook implements ShutdownHooks.Hook {
 
-    private static final Logger log = LoggerFactory.getLogger(LifecycleHiveMQShutdownHook.class);
+    private static final Logger log = LoggerFactory.getLogger(LifecycleShutdownHook.class);
 
     private final @NotNull LifecycleRegistry lifecycleRegistry;
 
     @Inject
-    LifecycleHiveMQShutdownHook(final @NotNull LifecycleRegistry lifecycleRegistry) {
+    LifecycleShutdownHook(final @NotNull LifecycleRegistry lifecycleRegistry) {
         this.lifecycleRegistry = lifecycleRegistry;
     }
 
@@ -42,8 +42,8 @@ public class LifecycleHiveMQShutdownHook implements HiveMQShutdownHook {
     }
 
     @Override
-    public @NotNull Priority priority() {
-        return Priority.HIGH;
+    public @NotNull ShutdownHooks.Priority priority() {
+        return ShutdownHooks.Priority.HIGH;
     }
 
     @Override

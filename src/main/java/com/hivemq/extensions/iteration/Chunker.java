@@ -30,9 +30,7 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * @author Georg Held
- */
+
 @Singleton
 public class Chunker {
 

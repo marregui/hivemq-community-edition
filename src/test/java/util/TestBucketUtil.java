@@ -20,9 +20,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-/**
- * @author Georg Held
- */
+
 public class TestBucketUtil {
 
 

@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence;
 
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
+import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ import static com.hivemq.configuration.service.InternalConfigurations.PERSISTENC
 import static com.hivemq.configuration.service.InternalConfigurations.PERSISTENCE_STARTUP_THREAD_POOL_SIZE;
 
 @Singleton
-public class PersistenceStartup implements HiveMQShutdownHook {
+public class PersistenceStartup implements ShutdownHooks.Hook {
 
     private static final Logger log = LoggerFactory.getLogger(PersistenceStartup.class);
 

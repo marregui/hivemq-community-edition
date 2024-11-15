@@ -17,7 +17,6 @@ package com.hivemq.mqtt.handler;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +46,7 @@ public class KeepAliveDisconnectService {
             final @NotNull MqttServerDisconnector mqttServerDisconnector, final @NotNull ShutdownHooks shutdownHooks) {
         this.mqttServerDisconnector = mqttServerDisconnector;
         this.disconnectBatch = InternalConfigurations.DISCONNECT_KEEP_ALIVE_BATCH;
-        shutdownHooks.add(new HiveMQShutdownHook() {
+        shutdownHooks.add(new ShutdownHooks.Hook() {
             @Override
             public @NotNull String name() {
                 return "KeepAliveDisconnectService shutdown";

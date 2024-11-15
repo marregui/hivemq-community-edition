@@ -26,9 +26,7 @@ import com.hivemq.extensions.HiveMQExtension;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * @author Georg Held
- */
+
 public class ExtensionStartStopInputImpl implements ExtensionStartInput, ExtensionStopInput {
 
     private final @NotNull HiveMQExtension extension;

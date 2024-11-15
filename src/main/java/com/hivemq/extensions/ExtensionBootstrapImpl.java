@@ -18,7 +18,6 @@ package com.hivemq.extensions;
 
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.info.SystemInformation;
 import org.jetbrains.annotations.NotNull;
@@ -102,7 +101,7 @@ public class ExtensionBootstrapImpl implements ExtensionBootstrap {
         // not checking for authenticator safety
     }
 
-    private static class ExtensionSystemShutdownHook implements HiveMQShutdownHook {
+    private static class ExtensionSystemShutdownHook implements ShutdownHooks.Hook {
 
         private static final Logger log = LoggerFactory.getLogger(ExtensionSystemShutdownHook.class);
 
@@ -118,8 +117,8 @@ public class ExtensionBootstrapImpl implements ExtensionBootstrap {
         }
 
         @Override
-        public @NotNull Priority priority() {
-            return Priority.VERY_LOW;
+        public @NotNull ShutdownHooks.Priority priority() {
+            return ShutdownHooks.Priority.LOW;
         }
 
         @Override

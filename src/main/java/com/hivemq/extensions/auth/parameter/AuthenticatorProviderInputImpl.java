@@ -21,9 +21,7 @@ import com.hivemq.extension.sdk.api.client.parameter.ServerInformation;
 import com.hivemq.extensions.parameter.ClientBasedInputImpl;
 import io.netty.channel.Channel;
 
-/**
- * @author Georg Held
- */
+
 public class AuthenticatorProviderInputImpl extends ClientBasedInputImpl implements AuthenticatorProviderInput {
 
     private final @NotNull ServerInformation serverInformation;

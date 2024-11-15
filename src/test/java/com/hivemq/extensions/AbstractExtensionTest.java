@@ -28,9 +28,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * @author Georg Held
- */
+
 abstract public class AbstractExtensionTest {
 
     protected @NotNull ExtensionStartOutput getTestExtensionStartOutput() {

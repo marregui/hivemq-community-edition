@@ -20,10 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.Optional;
 
-/**
- * A wrapper class for the configuration file used
- * for initial configuration of HiveMQ on startup
- */
 public class ConfigurationFile {
 
     private final Optional<File> configurationFile;

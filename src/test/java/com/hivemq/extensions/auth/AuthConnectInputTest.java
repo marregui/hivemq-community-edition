@@ -30,9 +30,7 @@ import java.nio.charset.Charset;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * @author Georg Held
- */
+
 @SuppressWarnings("NullabilityAnnotations")
 public class AuthConnectInputTest {
 

@@ -31,9 +31,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Georg Held
- */
+
 public class MQTTHandlerModuleTest {
 
     private Injector injector;

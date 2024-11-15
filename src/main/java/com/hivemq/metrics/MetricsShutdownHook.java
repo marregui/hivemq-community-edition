@@ -15,7 +15,6 @@
  */
 package com.hivemq.metrics;
 
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.jmx.JmxReporterBootstrap;
@@ -25,7 +24,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class MetricsShutdownHook implements HiveMQShutdownHook {
+public class MetricsShutdownHook implements ShutdownHooks.Hook {
 
     private final @NotNull ShutdownHooks shutdownHooks;
     private final @NotNull JmxReporterBootstrap jmxReporterBootstrap;

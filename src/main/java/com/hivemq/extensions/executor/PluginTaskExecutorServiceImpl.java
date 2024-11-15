@@ -15,7 +15,6 @@
  */
 package com.hivemq.extensions.executor;
 
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.executor.task.DefaultPluginTaskInput;
@@ -127,7 +126,7 @@ public class PluginTaskExecutorServiceImpl implements PluginTaskExecutorService 
         return taskExecutors[bucket];
     }
 
-    private static class PluginTaskExecutorServiceShutdownHook implements HiveMQShutdownHook {
+    private static class PluginTaskExecutorServiceShutdownHook implements ShutdownHooks.Hook {
 
         private final @NotNull PluginTaskExecutor[] taskExecutors;
 

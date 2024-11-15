@@ -57,7 +57,7 @@ public class KeepAliveDisconnectServiceTest {
 
     @After
     public void tearDown() {
-        shutdownHooks.runShutdownHooks();
+        shutdownHooks.shutdown();
     }
 
     @Test

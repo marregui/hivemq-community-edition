@@ -17,9 +17,7 @@ package com.hivemq.extensions.executor.task;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * @author Georg Held
- */
+
 public abstract class PluginInTaskContext extends AbstractPluginTaskContext {
 
     protected PluginInTaskContext(final @NotNull String identifier) {

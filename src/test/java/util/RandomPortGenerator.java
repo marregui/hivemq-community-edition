@@ -18,9 +18,7 @@ package util;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-/**
- * @author Georg Held
- */
+
 public class RandomPortGenerator {
 
     public static int get() {

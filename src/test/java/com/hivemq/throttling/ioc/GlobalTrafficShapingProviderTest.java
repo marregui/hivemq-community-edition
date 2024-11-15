@@ -16,7 +16,6 @@
 
 package com.hivemq.throttling.ioc;
 
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.throttling.GlobalTrafficShaperExecutorShutdownHook;
@@ -52,7 +51,7 @@ public class GlobalTrafficShapingProviderTest {
 
     @After
     public void tearDown() throws Exception {
-        for (final HiveMQShutdownHook hook : shutdownHooks.getShutdownHooks().values()) {
+        for (final ShutdownHooks.Hook hook : shutdownHooks.getShutdownHooks()) {
             hook.run();
         }
         closeableMock.close();
@@ -66,8 +65,7 @@ public class GlobalTrafficShapingProviderTest {
 
         globalTrafficShapingProvider.get();
 
-        final Collection<HiveMQShutdownHook> hooks = shutdownHooks.getShutdownHooks()
-                .values()
+        final Collection<ShutdownHooks.Hook> hooks = shutdownHooks.getShutdownHooks()
                 .stream()
                 .filter(x -> x instanceof GlobalTrafficShaperExecutorShutdownHook)
                 .collect(Collectors.toList());

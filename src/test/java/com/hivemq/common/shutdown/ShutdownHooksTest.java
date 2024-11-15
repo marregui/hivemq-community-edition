@@ -18,7 +18,6 @@ package com.hivemq.common.shutdown;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.hivemq.common.shutdown.HiveMQShutdownHook.Priority;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,18 +53,18 @@ public class ShutdownHooksTest {
 
     @Test
     public void hookWhenAddedThenWillRun() {
-        final HiveMQShutdownHook shutdownHook = createShutdownHook("name", Priority.DOES_NOT_MATTER);
+        final ShutdownHooks.Hook shutdownHook = createShutdownHook("name", ShutdownHooks.Priority.LOW);
 
         shutdownHooks.add(shutdownHook);
         assertEquals(1, shutdownHooks.getShutdownHooks().size());
 
-        shutdownHooks.runShutdownHooks();
+        shutdownHooks.shutdown();
         assertEquals(1, executions.size());
     }
 
     @Test
     public void hookWhenRemovedThenWillNotRun() {
-        final HiveMQShutdownHook shutdownHook = createShutdownHook("name", Priority.DOES_NOT_MATTER);
+        final ShutdownHooks.Hook shutdownHook = createShutdownHook("name", ShutdownHooks.Priority.LOW);
 
         shutdownHooks.add(shutdownHook);
         assertEquals(1, shutdownHooks.getShutdownHooks().size());
@@ -77,11 +76,11 @@ public class ShutdownHooksTest {
     @Test
     public void hooksWhenRunThenCanNotBeAdded() {
 
-        assertFalse(shutdownHooks.isShuttingDown());
-        shutdownHooks.runShutdownHooks();
-        assertTrue(shutdownHooks.isShuttingDown());
+        assertFalse(shutdownHooks.hooksHaveRun());
+        shutdownHooks.shutdown();
+        assertTrue(shutdownHooks.hooksHaveRun());
 
-        final HiveMQShutdownHook shutdownHook = createShutdownHook("name", Priority.DOES_NOT_MATTER);
+        final ShutdownHooks.Hook shutdownHook = createShutdownHook("name", ShutdownHooks.Priority.LOW);
 
         shutdownHooks.add(shutdownHook);
         assertEquals(0, shutdownHooks.getShutdownHooks().size());
@@ -90,13 +89,13 @@ public class ShutdownHooksTest {
     @Test
     public void hooksWhenRunThenCanNotBeRemoved() {
 
-        final HiveMQShutdownHook shutdownHook = createShutdownHook("name", Priority.DOES_NOT_MATTER);
+        final ShutdownHooks.Hook shutdownHook = createShutdownHook("name", ShutdownHooks.Priority.LOW);
         shutdownHooks.add(shutdownHook);
         assertEquals(1, shutdownHooks.getShutdownHooks().size());
 
-        assertFalse(shutdownHooks.isShuttingDown());
-        shutdownHooks.runShutdownHooks();
-        assertTrue(shutdownHooks.isShuttingDown());
+        assertFalse(shutdownHooks.hooksHaveRun());
+        shutdownHooks.shutdown();
+        assertTrue(shutdownHooks.hooksHaveRun());
 
         shutdownHooks.remove(shutdownHook);
         assertEquals(1, shutdownHooks.getShutdownHooks().size());
@@ -104,16 +103,16 @@ public class ShutdownHooksTest {
 
     @Test
     public void hooksWhenHaveDifferentPriorityThenSortedByHighest() {
-        final HiveMQShutdownHook shutdownHook = createShutdownHook("hook1", Priority.DOES_NOT_MATTER);
-        final HiveMQShutdownHook shutdownHook2 = createShutdownHook("hook2", Priority.FIRST);
-        final HiveMQShutdownHook shutdownHook3 = createShutdownHook("hook3", Priority.HIGH);
+        final ShutdownHooks.Hook shutdownHook = createShutdownHook("hook1", ShutdownHooks.Priority.LOW);
+        final ShutdownHooks.Hook shutdownHook2 = createShutdownHook("hook2", ShutdownHooks.Priority.FIRST);
+        final ShutdownHooks.Hook shutdownHook3 = createShutdownHook("hook3", ShutdownHooks.Priority.HIGH);
         shutdownHooks.add(shutdownHook);
         shutdownHooks.add(shutdownHook2);
         shutdownHooks.add(shutdownHook3);
 
         assertEquals(3, shutdownHooks.getShutdownHooks().size());
 
-        shutdownHooks.runShutdownHooks();
+        shutdownHooks.shutdown();
 
         assertEquals(3, executions.size());
         assertEquals("hook2", executions.get(0));
@@ -123,10 +122,10 @@ public class ShutdownHooksTest {
 
     @Test
     public void hooksWhenAllSamePriorityThenSortLikeList() {
-        final HiveMQShutdownHook shutdownHook = createShutdownHook("hook1", Priority.DOES_NOT_MATTER);
-        final HiveMQShutdownHook shutdownHook2 = createShutdownHook("hook2", Priority.HIGH);
-        final HiveMQShutdownHook shutdownHook3 = createShutdownHook("hook3", Priority.HIGH);
-        final HiveMQShutdownHook shutdownHook4 = createShutdownHook("hook4", Priority.HIGH);
+        final ShutdownHooks.Hook shutdownHook = createShutdownHook("hook1", ShutdownHooks.Priority.LOW);
+        final ShutdownHooks.Hook shutdownHook2 = createShutdownHook("hook2", ShutdownHooks.Priority.HIGH);
+        final ShutdownHooks.Hook shutdownHook3 = createShutdownHook("hook3", ShutdownHooks.Priority.HIGH);
+        final ShutdownHooks.Hook shutdownHook4 = createShutdownHook("hook4", ShutdownHooks.Priority.HIGH);
         shutdownHooks.add(shutdownHook);
         shutdownHooks.add(shutdownHook2);
         shutdownHooks.add(shutdownHook3);
@@ -134,7 +133,7 @@ public class ShutdownHooksTest {
 
         assertEquals(4, shutdownHooks.getShutdownHooks().size());
 
-        shutdownHooks.runShutdownHooks();
+        shutdownHooks.shutdown();
 
         assertEquals(4, executions.size());
         assertEquals("hook2", executions.get(0));
@@ -153,17 +152,17 @@ public class ShutdownHooksTest {
         shutdownHooks.remove(null);
     }
 
-    private @NotNull HiveMQShutdownHook createShutdownHook(
-            final @NotNull String name, final @NotNull Priority priority) {
+    private @NotNull ShutdownHooks.Hook createShutdownHook(
+            final @NotNull String name, final @NotNull ShutdownHooks.Priority priority) {
 
-        return new HiveMQShutdownHook() {
+        return new ShutdownHooks.Hook() {
             @Override
             public @NotNull String name() {
                 return name;
             }
 
             @Override
-            public @NotNull Priority priority() {
+            public @NotNull ShutdownHooks.Priority priority() {
                 return priority;
             }
 

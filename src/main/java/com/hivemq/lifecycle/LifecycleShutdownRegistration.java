@@ -26,11 +26,11 @@ import javax.inject.Singleton;
 public class LifecycleShutdownRegistration {
 
     private final @NotNull ShutdownHooks shutdownHooks;
-    private final @NotNull LifecycleHiveMQShutdownHook shutdownHook;
+    private final @NotNull LifecycleShutdownHook shutdownHook;
 
 
     @Inject
-    LifecycleShutdownRegistration(final @NotNull ShutdownHooks shutdownHooks, final @NotNull LifecycleHiveMQShutdownHook shutdownHook) {
+    LifecycleShutdownRegistration(final @NotNull ShutdownHooks shutdownHooks, final @NotNull LifecycleShutdownHook shutdownHook) {
         this.shutdownHooks = shutdownHooks;
         this.shutdownHook = shutdownHook;
     }

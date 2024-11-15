@@ -16,7 +16,6 @@
 
 package com.hivemq.extensions.services.executor;
 
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -30,9 +29,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * @since 4.0.0
- */
 public class ManagedPluginExecutorShutdownHookTest {
 
     private final @NotNull GlobalManagedExtensionExecutorService executorService =
@@ -44,7 +40,7 @@ public class ManagedPluginExecutorShutdownHookTest {
                 new ManagedPluginExecutorShutdownHook(executorService, 60);
 
         assertEquals("ManagedExtensionExecutorService shutdown", pluginExecutorShutdownHook.name());
-        assertEquals(HiveMQShutdownHook.Priority.DOES_NOT_MATTER, pluginExecutorShutdownHook.priority());
+        assertEquals(Integer.MIN_VALUE, pluginExecutorShutdownHook.priority());
 
         pluginExecutorShutdownHook.run();
 

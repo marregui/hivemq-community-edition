@@ -22,9 +22,7 @@ import com.hivemq.extensions.HiveMQExtension;
 import java.io.File;
 import java.util.Optional;
 
-/**
- * @author Georg Held
- */
+
 public class ExtensionInformationImpl implements ExtensionInformation {
 
     private final @NotNull HiveMQExtension hiveMQExtension;

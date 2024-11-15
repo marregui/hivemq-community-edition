@@ -24,9 +24,7 @@ import com.hivemq.extensions.services.general.IterationContextImpl;
 import java.util.Collection;
 import java.util.concurrent.Executor;
 
-/**
- * @author Georg Held
- */
+
 public class AllItemsItemCallback<T> implements AsyncIterator.ItemCallback<T> {
 
     private final @NotNull Executor callbackExecutor;

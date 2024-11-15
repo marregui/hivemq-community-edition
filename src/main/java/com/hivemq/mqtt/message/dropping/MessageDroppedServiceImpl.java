@@ -22,9 +22,7 @@ import com.hivemq.metrics.MetricsHolder;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-/**
- * @author Georg Held
- */
+
 public class MessageDroppedServiceImpl implements MessageDroppedService {
 
     private static final NumberFormat FORMAT = NumberFormat.getInstance(Locale.US);

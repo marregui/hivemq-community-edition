@@ -17,8 +17,6 @@ package com.hivemq.extensions.parameter;
 
 import com.hivemq.extension.sdk.api.parameter.ExtensionStopOutput;
 
-/**
- * @author Georg Held
- */
+
 public class ExtensionStopOutputImpl implements ExtensionStopOutput {
 }

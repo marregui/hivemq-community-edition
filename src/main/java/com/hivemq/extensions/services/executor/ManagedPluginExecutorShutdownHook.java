@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.executor;
 
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
+import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  * @author Florian Limpöck
  * @since 4.0.0
  */
-public class ManagedPluginExecutorShutdownHook implements HiveMQShutdownHook {
+public class ManagedPluginExecutorShutdownHook implements ShutdownHooks.Hook {
 
     private static final Logger log = LoggerFactory.getLogger(ManagedPluginExecutorShutdownHook.class);
 
@@ -45,9 +45,9 @@ public class ManagedPluginExecutorShutdownHook implements HiveMQShutdownHook {
     }
 
     @Override
-    public @NotNull Priority priority() {
+    public @NotNull ShutdownHooks.Priority priority() {
         //must be lower than extension shut down hook which is VERY_LOW
-        return Priority.DOES_NOT_MATTER;
+        return ShutdownHooks.Priority.LOW;
     }
 
     @Override

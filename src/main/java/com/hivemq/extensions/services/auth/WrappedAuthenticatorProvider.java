@@ -29,9 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
-/**
- * @author Georg Held
- */
+
 public class WrappedAuthenticatorProvider {
 
     private static final Logger log = LoggerFactory.getLogger(WrappedAuthenticatorProvider.class);

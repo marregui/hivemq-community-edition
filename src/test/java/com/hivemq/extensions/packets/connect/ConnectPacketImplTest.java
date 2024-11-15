@@ -37,9 +37,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Georg Held
- */
+
 public class ConnectPacketImplTest {
 
     private @NotNull ConnectPacketImpl connectPacket;

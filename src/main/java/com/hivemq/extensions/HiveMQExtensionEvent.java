@@ -20,9 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.Objects;
 
-/**
- * @author Georg Held
- */
+
 public class HiveMQExtensionEvent {
     private final Change change;
     private final String extensionId;

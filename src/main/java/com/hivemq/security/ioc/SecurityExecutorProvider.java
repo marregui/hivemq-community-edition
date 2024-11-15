@@ -15,7 +15,6 @@
  */
 package com.hivemq.security.ioc;
 
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
 import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.util.ThreadFactoryUtil;
@@ -26,27 +25,24 @@ import javax.inject.Singleton;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-/**
- * @author Georg Held
- */
 @Singleton
 public class SecurityExecutorProvider implements Provider<ScheduledExecutorService> {
 
     private final @NotNull ScheduledExecutorService sslContextStoreService;
 
     @Inject
-    SecurityExecutorProvider(final @NotNull ShutdownHooks shutdownHooks) {
+    SecurityExecutorProvider() {
         sslContextStoreService =
                 Executors.newScheduledThreadPool(2, ThreadFactoryUtil.create("ssl-context-executor-%d"));
-        shutdownHooks.add(new HiveMQShutdownHook() {
+        ShutdownHooks.add(new ShutdownHooks.Hook() {
             @Override
             public @NotNull String name() {
                 return "Ssl Context Store Executor Shutdown";
             }
 
             @Override
-            public @NotNull Priority priority() {
-                return Priority.MEDIUM;
+            public @NotNull ShutdownHooks.Priority priority() {
+                return ShutdownHooks.Priority.MEDIUM;
             }
 
             @Override

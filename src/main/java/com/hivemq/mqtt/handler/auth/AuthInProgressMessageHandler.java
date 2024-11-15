@@ -30,9 +30,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-/**
- * @author Georg Held
- */
+
 @ChannelHandler.Sharable
 @Singleton
 public class AuthInProgressMessageHandler extends ChannelInboundHandlerAdapter {

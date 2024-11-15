@@ -88,9 +88,7 @@ import javax.inject.Singleton;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * @author Georg Held
- */
+
 public class ExtensionModule extends SingletonModule<Class<ExtensionModule>> {
 
     public ExtensionModule() {

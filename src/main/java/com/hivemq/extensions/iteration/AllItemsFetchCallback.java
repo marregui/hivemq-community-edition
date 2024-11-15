@@ -28,9 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
-/**
- * @author Georg Held
- */
+
 public abstract class AllItemsFetchCallback<R, I> implements FetchCallback<R> {
 
     @Override

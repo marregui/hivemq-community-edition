@@ -16,143 +16,143 @@
 package com.hivemq;
 
 import com.codahale.metrics.MetricRegistry;
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Throwables;
 import com.google.inject.CreationException;
+import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.ProvisionException;
+import com.google.inject.Stage;
 import com.google.inject.spi.Message;
-import com.hivemq.bootstrap.ioc.GuiceBootstrap;
+import com.hivemq.bootstrap.ioc.HiveMQMainModule;
+import com.hivemq.bootstrap.ioc.SystemInformationModule;
+import com.hivemq.bootstrap.ioc.lazysingleton.LazySingletonModule;
+import com.hivemq.bootstrap.netty.ioc.NettyModule;
 import com.hivemq.common.shutdown.ShutdownHooks;
-import com.hivemq.configuration.ConfigurationBootstrap;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.info.SystemInformation;
+import com.hivemq.configuration.ioc.ConfigurationFileProvider;
+import com.hivemq.configuration.ioc.ConfigurationModule;
+import com.hivemq.configuration.reader.ConfigFileReader;
+import com.hivemq.configuration.reader.ListenerConfigurator;
+import com.hivemq.configuration.reader.MqttConfigurator;
+import com.hivemq.configuration.reader.RestrictionConfigurator;
+import com.hivemq.configuration.reader.SecurityConfigurator;
 import com.hivemq.configuration.service.FullConfigurationService;
-import com.hivemq.exceptions.StartAbortedException;
+import com.hivemq.configuration.service.impl.ConfigurationServiceImpl;
+import com.hivemq.configuration.service.impl.MqttConfigurationServiceImpl;
+import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImpl;
+import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
+import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
 import com.hivemq.exceptions.UnrecoverableException;
+import com.hivemq.extensions.ioc.ExtensionModule;
 import com.hivemq.logging.modifier.XodusEnvironmentImplLogLevelModifier;
+import com.hivemq.metrics.ioc.MetricsModule;
+import com.hivemq.mqtt.ioc.MQTTHandlerModule;
+import com.hivemq.mqtt.ioc.MQTTServiceModule;
+import com.hivemq.persistence.ioc.PersistenceMigrationModule;
+import com.hivemq.persistence.ioc.PersistenceModule;
+import com.hivemq.security.ioc.SecurityModule;
+import com.hivemq.throttling.ioc.ThrottlingModule;
+import com.hivemq.util.EnvVarUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.hivemq.lifecycle.LifecycleModule;
 import com.hivemq.metrics.MetricRegistryLogger;
 import com.hivemq.persistence.PersistenceStartup;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 
-public class HiveMQServer {
+public final class HiveMQServer {
 
     private static final Logger log = LoggerFactory.getLogger(HiveMQServer.class);
 
-    private final @NotNull HivemqId hivemqId = new HivemqId();
-    private final @NotNull LifecycleModule lifecycleModule = new LifecycleModule();
-    private final @NotNull DataFolderLock dataFolderLock = new DataFolderLock();
-    private final @NotNull SystemInformation systemInformation = new SystemInformation();
-    private final @NotNull MetricRegistry metricRegistry = new MetricRegistry();
-
-    private @Nullable Injector injector;
-    private @Nullable FullConfigurationService configService;
-
     public static void main(final String @NotNull [] args) throws Exception {
-        new HiveMQServer().start();
-    }
-
-    @VisibleForTesting
-    static void handleUncaughtException(final Thread t, final Throwable e) {
-        exitIfUnrecoverable(e);
-        if (e instanceof CreationException) {
-            exitIfUnrecoverable(e.getCause());
-            exitIfUnrecoverable(((CreationException) e).getErrorMessages());
-        } else if (e instanceof ProvisionException) {
-            exitIfUnrecoverable(e.getCause());
-            exitIfUnrecoverable(((ProvisionException) e).getErrorMessages());
-        }
-        log.error("Problem: %s%n", Throwables.getRootCause(e));
-    }
-
-    private static void exitIfUnrecoverable(final Collection<Message> errorMessages) {
-        for (final Message message : errorMessages) {
-            exitIfUnrecoverable(message.getCause());
-        }
-    }
-
-    private static void exitIfUnrecoverable(final @NotNull Throwable t) {
-        if (t instanceof UnrecoverableException) {
-            log.error("An unrecoverable Exception occurred. Exiting HiveMQ: {}", t.getMessage());
-            System.exit(1);
-        }
-    }
-
-    public void start() throws Exception {
-        final long startTime = System.nanoTime();
-
-        Runtime.getRuntime().addShutdownHook(new Thread(this::stop, "shutdown-thread-" + hivemqId.get()));
-        Thread.setDefaultUncaughtExceptionHandler(HiveMQServer::handleUncaughtException);
-
-        // B O O T S T R A P
-        metricRegistry.addListener(new MetricRegistryLogger());
+        final SystemInformation systemInformation = new SystemInformation();
         Logging.initLogging(systemInformation.getConfigFolder());
-        log.info("Starting HiveMQ Community Edition Server");
-        configService = ConfigurationBootstrap.bootstrapConfig(systemInformation);
-        dataFolderLock.lock(systemInformation.getDataFolder().toPath());
-        final File tmp = new File(systemInformation.getDataFolder().getPath() + File.separator + "tmp");
-        try {
-            FileUtils.deleteDirectory(tmp);
-        } catch (final IOException e) {
-            log.warn("The temporary folder could not be deleted ({}).", tmp);
-        }
-        final Injector persistence = GuiceBootstrap.persistenceInjector(systemInformation,
-                metricRegistry,
-                hivemqId,
-                configService,
-                lifecycleModule);
-        persistence.getInstance(PersistenceStartup.class).finish();
-        if (persistence.getInstance(ShutdownHooks.class).isShuttingDown()) {
-            throw new StartAbortedException("User aborted.");
-        }
-        injector = GuiceBootstrap.bootstrapInjector(systemInformation,
-                metricRegistry,
-                hivemqId,
-                configService,
-                persistence,
-                lifecycleModule);
-        if (injector == null) {
-            throw new UnrecoverableException(true);
-        }
 
-        // S T A R T    I N S T A N C E
+        final HivemqId hivemqId = new HivemqId();
+        final LifecycleModule lifecycleModule = new LifecycleModule();
+        final DataFolderLock dataFolderLock = new DataFolderLock();
+        final MetricRegistry metricRegistry = new MetricRegistry();
+        metricRegistry.addListener(new MetricRegistryLogger());
+
+        final FullConfigurationService config = new ConfigurationServiceImpl(new ListenerConfigurationServiceImpl(),
+                new MqttConfigurationServiceImpl(),
+                new RestrictionsConfigurationServiceImpl(),
+                new SecurityConfigurationServiceImpl());
+        final ConfigFileReader configReader = new ConfigFileReader(ConfigurationFileProvider.get(systemInformation),
+                new RestrictionConfigurator(config.restrictionsConfiguration()),
+                new SecurityConfigurator(config.securityConfiguration()),
+                new EnvVarUtil(),
+                new MqttConfigurator(config.mqttConfiguration()),
+                new ListenerConfigurator(config.listenerConfiguration(), systemInformation));
+        configReader.applyConfig();
+
+        dataFolderLock.lock(systemInformation.getDataFolder().toPath());
+        final Injector persistence = Guice.createInjector(Stage.PRODUCTION,
+                Arrays.asList(new SystemInformationModule(systemInformation),
+                        new ConfigurationModule(config, hivemqId),
+                        new LazySingletonModule(),
+                        lifecycleModule,
+                        new PersistenceMigrationModule(metricRegistry)));
+        persistence.getInstance(PersistenceStartup.class).finish();
+
+        System.setProperty("guice_include_stack_traces", "OFF");
+        final Injector injector = Guice.createInjector(Stage.PRODUCTION,
+                Arrays.asList(new SystemInformationModule(systemInformation),
+                        new LazySingletonModule(),
+                        lifecycleModule,
+                        new ConfigurationModule(config, hivemqId),
+                        new NettyModule(),
+                        new HiveMQMainModule(),
+                        new MQTTHandlerModule(persistence),
+                        new PersistenceModule(persistence),
+                        new MetricsModule(metricRegistry, persistence),
+                        new ThrottlingModule(),
+                        new MQTTServiceModule(),
+                        new SecurityModule(),
+                        new ExtensionModule()));
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                ShutdownHooks.shutdown();
+            } finally {
+                dataFolderLock.unlock();
+                Logging.resetLogging();
+            }
+        }, "shutdown-" + hivemqId.get()));
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            exitIfUnrecoverable(e);
+            final boolean atCreation = e instanceof CreationException;
+            if (atCreation || e instanceof ProvisionException) {
+                exitIfUnrecoverable(e.getCause());
+                for (final Message message : atCreation ?
+                        ((CreationException) e).getErrorMessages() :
+                        ((ProvisionException) e).getErrorMessages()) {
+                    exitIfUnrecoverable(message.getCause());
+                }
+            }
+            log.error("Problem: %s%n", Throwables.getRootCause(e));
+        });
+
+        // start
+        final long startTime = System.nanoTime();
         final HiveMQInstance instance = injector.getInstance(HiveMQInstance.class);
-        final ShutdownHooks shutdownHooks = injector.getInstance(ShutdownHooks.class);
         System.gc();
         Logging.LOG_LEVEL_MODIFIER_TURBO_FILTER.registerLogLevelModifier(new XodusEnvironmentImplLogLevelModifier());
         instance.start();
         log.info("Started HiveMQ [{}] in {}ms",
                 hivemqId.get(),
                 TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime));
-        if (shutdownHooks.isShuttingDown()) {
-            throw new StartAbortedException("User aborted.");
-        }
     }
 
-    public void stop() {
-        if (injector == null) {
-            return;
-        }
-        final ShutdownHooks shutdownHooks = injector.getInstance(ShutdownHooks.class);
-        if (shutdownHooks.isShuttingDown()) {
-            return;
-        }
-        try {
-            shutdownHooks.runShutdownHooks();
-        } finally {
-            dataFolderLock.unlock();
-            Logging.resetLogging();
+    private static void exitIfUnrecoverable(final @NotNull Throwable t) {
+        if (t instanceof UnrecoverableException) {
+            System.err.printf("unrecoverable: %s%n", t.getMessage());
+            System.exit(1);
         }
     }
 }

@@ -22,9 +22,7 @@ import com.hivemq.security.ssl.SslFactory;
 
 import java.util.concurrent.ScheduledExecutorService;
 
-/**
- * @author Georg Held
- */
+
 public class SecurityModule extends SingletonModule<Class<SecurityModule>> {
 
     public SecurityModule() {

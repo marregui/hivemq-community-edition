@@ -31,9 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
-/**
- * @author Georg Held
- */
+
 @Singleton
 public class HiveMQExtensionXMLReader {
 

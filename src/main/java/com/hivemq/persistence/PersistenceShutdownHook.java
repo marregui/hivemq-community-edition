@@ -20,7 +20,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.google.inject.Inject;
-import com.hivemq.common.shutdown.HiveMQShutdownHook;
+import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.clientqueue.ClientQueuePersistence;
 import com.hivemq.persistence.clientsession.ClientSessionPersistence;
@@ -42,7 +42,7 @@ import static com.hivemq.configuration.service.InternalConfigurations.PERSISTENC
 /**
  * @author Lukas Brandl
  */
-public class PersistenceShutdownHook implements HiveMQShutdownHook {
+public class PersistenceShutdownHook implements ShutdownHooks.Hook {
 
     private static final Logger log = LoggerFactory.getLogger(PersistenceShutdownHook.class);
 

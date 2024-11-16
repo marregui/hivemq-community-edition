@@ -27,9 +27,7 @@ import io.netty.channel.Channel;
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.SSL_CLIENT_CERTIFICATE_HANDLER;
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.SSL_PARAMETER_HANDLER;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class TlsWebsocketChannelInitializer extends AbstractTlsChannelInitializer {
 
     @NotNull

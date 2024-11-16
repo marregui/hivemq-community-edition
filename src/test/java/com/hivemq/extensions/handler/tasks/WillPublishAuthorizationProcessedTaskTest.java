@@ -16,7 +16,6 @@
 
 package com.hivemq.extensions.handler.tasks;
 
-import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.disconnect.DisconnectReasonCode;
 import com.hivemq.extension.sdk.api.packets.publish.AckReasonCode;
@@ -54,7 +53,7 @@ public class WillPublishAuthorizationProcessedTaskTest {
         final CONNECT connect = TestMessageUtil.createMqtt5ConnectWithWill();
         task = new WillPublishAuthorizationProcessedTask(connect, ctx);
 
-        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl(mock(ShutdownHooks.class));
+        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         output = new PublishAuthorizerOutputImpl(asyncer);
     }
 

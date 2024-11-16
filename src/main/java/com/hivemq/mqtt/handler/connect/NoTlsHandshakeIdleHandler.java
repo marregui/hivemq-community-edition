@@ -25,9 +25,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 
 import static com.hivemq.logging.LoggingUtils.appendListenerToMessage;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class NoTlsHandshakeIdleHandler extends ChannelInboundHandlerAdapter {
 
     private final @NotNull MqttServerDisconnector mqttServerDisconnector;

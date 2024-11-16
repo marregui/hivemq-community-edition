@@ -16,6 +16,7 @@
 
 package com.hivemq.extensions.services.executor;
 
+import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -40,7 +41,7 @@ public class ManagedPluginExecutorShutdownHookTest {
                 new ManagedPluginExecutorShutdownHook(executorService, 60);
 
         assertEquals("ManagedExtensionExecutorService shutdown", pluginExecutorShutdownHook.name());
-        assertEquals(Integer.MIN_VALUE, pluginExecutorShutdownHook.priority());
+        assertEquals(ShutdownHooks.Priority.LOW, pluginExecutorShutdownHook.priority());
 
         pluginExecutorShutdownHook.run();
 

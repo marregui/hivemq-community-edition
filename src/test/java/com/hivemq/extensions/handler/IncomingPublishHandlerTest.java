@@ -117,7 +117,7 @@ public class IncomingPublishHandlerTest {
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         ClientConnection.of(channel).setClientId("test_client");
 
-        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl(Mockito.mock(ShutdownHooks.class));
+        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
 
         final MessageDroppedService messageDroppedService = new TestDropService(dropLatch);
 
@@ -128,7 +128,7 @@ public class IncomingPublishHandlerTest {
         final PluginAuthorizerService pluginAuthorizerService = new TestAuthService(messageAtomicReference);
 
         final PluginTaskExecutorService pluginTaskExecutorService =
-                new PluginTaskExecutorServiceImpl(() -> executor, mock(ShutdownHooks.class));
+                new PluginTaskExecutorServiceImpl(() -> executor);
         final IncomingPublishHandler incomingPublishHandler = new IncomingPublishHandler(pluginTaskExecutorService,
                 asyncer,
                 hiveMQExtensions,

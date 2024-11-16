@@ -28,9 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
-/**
- * @author Christoph Schäbel
- */
+
 @LazySingleton
 public class PersistenceScheduledExecutorProvider implements Provider<ListeningScheduledExecutorService> {
 

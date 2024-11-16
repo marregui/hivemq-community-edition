@@ -30,9 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class AllTopicsProcessedTask implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(AllTopicsProcessedTask.class);

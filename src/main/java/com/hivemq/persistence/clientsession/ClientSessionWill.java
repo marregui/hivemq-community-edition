@@ -24,9 +24,7 @@ import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.persistence.Sizable;
 import com.hivemq.util.TypeSize;
 
-/**
- * @author Lukas Brandl
- */
+
 public class ClientSessionWill implements Sizable {
 
     private final @NotNull MqttWillPublish mqttWillPublish;

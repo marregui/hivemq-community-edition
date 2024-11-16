@@ -41,9 +41,7 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Lukas Brandl
- */
+
 public class SendRetainedMessageListenerAndScheduleNextTest {
 
     @Mock

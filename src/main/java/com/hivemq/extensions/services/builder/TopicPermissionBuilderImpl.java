@@ -33,9 +33,7 @@ import com.hivemq.util.Topics;
 
 import static com.hivemq.extension.sdk.api.auth.parameter.TopicPermission.SharedSubscription;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
 
     private @Nullable String topicFilter = null;

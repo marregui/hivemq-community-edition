@@ -18,9 +18,7 @@ package com.hivemq.persistence.clientsession;
 
 import org.jetbrains.annotations.Nullable;
 
-/**
- * @author Lukas Brandl
- */
+
 
 public class ConnectResult {
 

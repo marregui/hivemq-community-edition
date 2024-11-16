@@ -72,7 +72,7 @@ public class ManagedExecutorServicePerExtensionTest {
 
         when(hiveMQExtensions.getExtensionForClassloader(classLoader)).thenReturn(extension);
 
-        globalManagedPluginExecutorService = new GlobalManagedExtensionExecutorService(shutdownHooks);
+        globalManagedPluginExecutorService = new GlobalManagedExtensionExecutorService();
         globalManagedPluginExecutorService.postConstruct();
 
         managedExecutorServicePerExtension = new ManagedExecutorServicePerExtension(globalManagedPluginExecutorService,

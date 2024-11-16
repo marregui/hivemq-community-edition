@@ -19,9 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.disconnect.DisconnectReasonCode;
 import com.hivemq.extension.sdk.api.packets.publish.AckReasonCode;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class PublishAuthorizerResult {
 
     private final @Nullable DisconnectReasonCode disconnectReasonCode;

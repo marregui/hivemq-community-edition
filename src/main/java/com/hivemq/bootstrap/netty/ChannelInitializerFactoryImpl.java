@@ -35,9 +35,7 @@ import javax.inject.Provider;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class ChannelInitializerFactoryImpl implements ChannelInitializerFactory {
 
     @NotNull

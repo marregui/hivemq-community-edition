@@ -97,7 +97,7 @@ public class ClientLifecycleEventHandlerTest {
         when(channelHandlerContext.executor()).thenReturn(ImmediateEventExecutor.INSTANCE);
 
         final PluginTaskExecutorService pluginTaskExecutorService =
-                new PluginTaskExecutorServiceImpl(() -> executor, mock(ShutdownHooks.class));
+                new PluginTaskExecutorServiceImpl(() -> executor);
         clientLifecycleEventHandler =
                 new ClientLifecycleEventHandler(lifecycleEventListeners, pluginTaskExecutorService, hiveMQExtensions);
     }

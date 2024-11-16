@@ -49,9 +49,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Lukas Brandl
- */
+
 @SuppressWarnings({"unchecked", "NullabilityAnnotations"})
 public class ScheduledCleanUpServiceTest {
 

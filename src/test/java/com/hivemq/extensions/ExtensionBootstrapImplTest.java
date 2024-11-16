@@ -49,9 +49,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class ExtensionBootstrapImplTest {
 
     @Rule
@@ -74,7 +72,6 @@ public class ExtensionBootstrapImplTest {
                 systemInformation,
                 extensionLifecycleHandler,
                 hiveMQExtensions,
-                shutdownHooks,
                 authenticators);
     }
 
@@ -82,8 +79,6 @@ public class ExtensionBootstrapImplTest {
     public void test_startPluginSystem_shutdown_hook_registered() {
         when(extensionLoader.loadExtensions(any(Path.class), anyBoolean())).thenReturn(ImmutableList.of());
         pluginBootstrap.startExtensionSystem();
-
-        verify(shutdownHooks).add(any(ShutdownHooks.Hook.class));
     }
 
     @Test

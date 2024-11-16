@@ -27,9 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
-/**
- * @author Christoph Schäbel
- */
+
 public interface PublishDistributor {
 
     /**

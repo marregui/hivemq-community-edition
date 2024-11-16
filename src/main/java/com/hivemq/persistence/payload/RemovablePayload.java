@@ -19,9 +19,7 @@ package com.hivemq.persistence.payload;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * @author Lukas Brandl
- */
+
 
 public class RemovablePayload {
 

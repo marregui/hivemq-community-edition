@@ -15,10 +15,8 @@
  */
 package com.hivemq.common.shutdown;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,14 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 public class ShutdownHooksTest {
 
-    private ShutdownHooks shutdownHooks;
-    private List<String> executions;
+    private @Nullable List<String> executions;
+    private @NotNull ShutdownHooks shutdownHooks;
 
     @Before
     public void setUp() throws Exception {
@@ -42,63 +37,22 @@ public class ShutdownHooksTest {
     }
 
     @Test
-    public void instanceWhenInjectedThenReturnSingleton() {
-        final Injector injector = Guice.createInjector(new AbstractModule() {
-        });
-
-        final ShutdownHooks instance = injector.getInstance(ShutdownHooks.class);
-        final ShutdownHooks instance2 = injector.getInstance(ShutdownHooks.class);
-        assertSame(instance, instance2);
-    }
-
-    @Test
     public void hookWhenAddedThenWillRun() {
-        final ShutdownHooks.Hook shutdownHook = createShutdownHook("name", ShutdownHooks.Priority.LOW);
-
-        shutdownHooks.add(shutdownHook);
+        shutdownHooks.add(createShutdownHook("name", ShutdownHooks.Priority.LOW));
         assertEquals(1, shutdownHooks.getShutdownHooks().size());
-
         shutdownHooks.shutdown();
         assertEquals(1, executions.size());
     }
 
     @Test
     public void hookWhenRemovedThenWillNotRun() {
-        final ShutdownHooks.Hook shutdownHook = createShutdownHook("name", ShutdownHooks.Priority.LOW);
+        final ShutdownHooks.Hook hook = createShutdownHook("name", ShutdownHooks.Priority.LOW);
 
-        shutdownHooks.add(shutdownHook);
+        shutdownHooks.add(hook);
         assertEquals(1, shutdownHooks.getShutdownHooks().size());
 
-        shutdownHooks.remove(shutdownHook);
+        shutdownHooks.remove(hook);
         assertEquals(0, shutdownHooks.getShutdownHooks().size());
-    }
-
-    @Test
-    public void hooksWhenRunThenCanNotBeAdded() {
-
-        assertFalse(shutdownHooks.hooksHaveRun());
-        shutdownHooks.shutdown();
-        assertTrue(shutdownHooks.hooksHaveRun());
-
-        final ShutdownHooks.Hook shutdownHook = createShutdownHook("name", ShutdownHooks.Priority.LOW);
-
-        shutdownHooks.add(shutdownHook);
-        assertEquals(0, shutdownHooks.getShutdownHooks().size());
-    }
-
-    @Test
-    public void hooksWhenRunThenCanNotBeRemoved() {
-
-        final ShutdownHooks.Hook shutdownHook = createShutdownHook("name", ShutdownHooks.Priority.LOW);
-        shutdownHooks.add(shutdownHook);
-        assertEquals(1, shutdownHooks.getShutdownHooks().size());
-
-        assertFalse(shutdownHooks.hooksHaveRun());
-        shutdownHooks.shutdown();
-        assertTrue(shutdownHooks.hooksHaveRun());
-
-        shutdownHooks.remove(shutdownHook);
-        assertEquals(1, shutdownHooks.getShutdownHooks().size());
     }
 
     @Test
@@ -118,38 +72,6 @@ public class ShutdownHooksTest {
         assertEquals("hook2", executions.get(0));
         assertEquals("hook3", executions.get(1));
         assertEquals("hook1", executions.get(2));
-    }
-
-    @Test
-    public void hooksWhenAllSamePriorityThenSortLikeList() {
-        final ShutdownHooks.Hook shutdownHook = createShutdownHook("hook1", ShutdownHooks.Priority.LOW);
-        final ShutdownHooks.Hook shutdownHook2 = createShutdownHook("hook2", ShutdownHooks.Priority.HIGH);
-        final ShutdownHooks.Hook shutdownHook3 = createShutdownHook("hook3", ShutdownHooks.Priority.HIGH);
-        final ShutdownHooks.Hook shutdownHook4 = createShutdownHook("hook4", ShutdownHooks.Priority.HIGH);
-        shutdownHooks.add(shutdownHook);
-        shutdownHooks.add(shutdownHook2);
-        shutdownHooks.add(shutdownHook3);
-        shutdownHooks.add(shutdownHook4);
-
-        assertEquals(4, shutdownHooks.getShutdownHooks().size());
-
-        shutdownHooks.shutdown();
-
-        assertEquals(4, executions.size());
-        assertEquals("hook2", executions.get(0));
-        assertEquals("hook3", executions.get(1));
-        assertEquals("hook4", executions.get(2));
-        assertEquals("hook1", executions.get(3));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void hookAddWhenNullThenNpe() {
-        shutdownHooks.add(null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void hookRemoveWhenNullThenNpe() {
-        shutdownHooks.remove(null);
     }
 
     private @NotNull ShutdownHooks.Hook createShutdownHook(

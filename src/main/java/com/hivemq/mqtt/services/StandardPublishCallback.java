@@ -23,9 +23,7 @@ import com.hivemq.mqtt.handler.publish.PublishStatus;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.util.Exceptions;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class StandardPublishCallback implements FutureCallback<PublishStatus> {
 
     private final @NotNull String subscriber;

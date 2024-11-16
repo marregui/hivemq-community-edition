@@ -40,7 +40,6 @@ import static org.mockito.Mockito.when;
 
 public class KeepAliveDisconnectServiceTest {
 
-    private final @NotNull ShutdownHooks shutdownHooks = new ShutdownHooks();
     private final @NotNull ArgumentCaptor<Channel> channelArgumentCaptor = ArgumentCaptor.forClass(Channel.class);
 
     private final @NotNull MqttServerDisconnector mqttServerDisconnector = mock(MqttServerDisconnector.class);
@@ -50,14 +49,14 @@ public class KeepAliveDisconnectServiceTest {
 
     @Before
     public void setUp() {
-        keepAliveDisconnectService = new KeepAliveDisconnectService(mqttServerDisconnector, shutdownHooks);
+        keepAliveDisconnectService = new KeepAliveDisconnectService(mqttServerDisconnector);
         doAnswer(invocation -> null).when(mqttServerDisconnector)
                 .disconnect(channelArgumentCaptor.capture(), any(), any(), any(), any());
     }
 
     @After
     public void tearDown() {
-        shutdownHooks.shutdown();
+        ShutdownHooks.INSTANCE.shutdown();
     }
 
     @Test

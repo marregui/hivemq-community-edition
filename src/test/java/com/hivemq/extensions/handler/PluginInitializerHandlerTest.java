@@ -116,7 +116,7 @@ public class PluginInitializerHandlerTest {
         when(extension.getExtensionClassloader()).thenReturn(classloader);
 
         final PluginTaskExecutorService pluginTaskExecutorService =
-                new PluginTaskExecutorServiceImpl(() -> executor, mock(ShutdownHooks.class));
+                new PluginTaskExecutorServiceImpl(() -> executor);
         pluginInitializerHandler = new PluginInitializerHandler(initializers,
                 pluginTaskExecutorService,
                 new ServerInformationImpl(new SystemInformation(), listenerConfigurationService),

@@ -38,7 +38,7 @@ public class GlobalManagedExtensionExecutorServiceTest {
         InternalConfigurations.MANAGED_EXTENSION_THREAD_POOL_KEEP_ALIVE_SEC.set(60);
         InternalConfigurations.MANAGED_EXTENSION_THREAD_POOL_THREADS_COUNT.set(4);
 
-        managedPluginExecutorService = new GlobalManagedExtensionExecutorService(shutdownHooks);
+        managedPluginExecutorService = new GlobalManagedExtensionExecutorService();
     }
 
     @Test

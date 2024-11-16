@@ -23,9 +23,7 @@ import com.hivemq.extensions.executor.task.PluginInOutTaskContext;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class SubscriptionAuthorizerContext extends PluginInOutTaskContext<SubscriptionAuthorizerOutputImpl> {
 
     private final @NotNull SubscriptionAuthorizerOutputImpl output;

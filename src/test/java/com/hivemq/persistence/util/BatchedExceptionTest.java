@@ -21,9 +21,7 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * @author Lukas Brandl
- */
+
 public class BatchedExceptionTest {
 
     @Test

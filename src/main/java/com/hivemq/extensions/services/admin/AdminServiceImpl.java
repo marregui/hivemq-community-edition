@@ -22,9 +22,7 @@ import com.hivemq.extension.sdk.api.services.admin.AdminService;
 
 import javax.inject.Inject;
 
-/**
- * @author Lukas Brandl
- */
+
 @LazySingleton
 public class AdminServiceImpl implements AdminService {
 

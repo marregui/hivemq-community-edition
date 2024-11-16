@@ -18,9 +18,7 @@ package com.hivemq.extensions.services.subscription;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.subscription.SubscriberWithFilterResult;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class SubscriberWithFilterResultImpl implements SubscriberWithFilterResult {
 
     @NotNull

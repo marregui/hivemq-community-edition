@@ -31,9 +31,7 @@ import io.netty.channel.Channel;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-/**
- * @author Lukas Brandl
- */
+
 public class SubscriptionAuthorizerInputImpl
         implements SubscriptionAuthorizerInput, PluginTaskInput, Supplier<SubscriptionAuthorizerInputImpl> {
 

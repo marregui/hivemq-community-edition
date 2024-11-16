@@ -19,9 +19,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.persistence.SingleWriterService;
 
-/**
- * @author Lukas Brandl
- */
+
 public class TestSingleWriterFactory {
 
     public static SingleWriterService defaultSingleWriter() {

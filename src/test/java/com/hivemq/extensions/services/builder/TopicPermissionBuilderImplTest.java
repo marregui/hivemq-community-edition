@@ -23,9 +23,7 @@ import util.TestConfigurationBootstrap;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class TopicPermissionBuilderImplTest {
 
     private TopicPermissionBuilderImpl topicPermissionBuilder;

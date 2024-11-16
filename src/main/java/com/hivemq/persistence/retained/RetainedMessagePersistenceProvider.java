@@ -20,9 +20,7 @@ import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-/**
- * @author Christoph Schäbel
- */
+
 @LazySingleton
 public class RetainedMessagePersistenceProvider implements Provider<RetainedMessagePersistence> {
 

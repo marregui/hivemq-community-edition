@@ -27,9 +27,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.verify;
 
-/**
- * @author Lukas Brandl
- */
+
 public class ClientSessionCleanUpTaskTest {
 
     @Mock

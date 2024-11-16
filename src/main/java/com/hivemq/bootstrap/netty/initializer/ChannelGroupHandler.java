@@ -20,9 +20,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.group.ChannelGroup;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class ChannelGroupHandler extends ChannelInboundHandlerAdapter {
 
     private final @NotNull ChannelGroup channelGroup;

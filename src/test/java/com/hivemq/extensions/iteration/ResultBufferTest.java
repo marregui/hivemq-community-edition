@@ -25,9 +25,7 @@ import java.util.Queue;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * @author Christoph Schäbel
- */
+
 @SuppressWarnings("NullabilityAnnotations")
 public class ResultBufferTest {
 

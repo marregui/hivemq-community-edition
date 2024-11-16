@@ -69,13 +69,37 @@ public final class HiveMQServer {
 
     private static final Logger log = LoggerFactory.getLogger(HiveMQServer.class);
 
+    static {
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            exitIfUnrecoverable(e);
+            final boolean atCreation = e instanceof CreationException;
+            if (atCreation || e instanceof ProvisionException) {
+                exitIfUnrecoverable(e.getCause());
+                for (final Message message : atCreation ?
+                        ((CreationException) e).getErrorMessages() :
+                        ((ProvisionException) e).getErrorMessages()) {
+                    exitIfUnrecoverable(message.getCause());
+                }
+            }
+            log.error("Problem: %s%n", Throwables.getRootCause(e));
+        });
+        System.setProperty("guice_include_stack_traces", "OFF");
+    }
+
+    private static void exitIfUnrecoverable(final @NotNull Throwable t) {
+        if (t instanceof UnrecoverableException) {
+            System.err.printf("unrecoverable: %s%n", t.getMessage());
+            System.exit(1);
+        }
+    }
+
     public static void main(final String @NotNull [] args) throws Exception {
         final SystemInformation systemInformation = new SystemInformation();
         Logging.initLogging(systemInformation.getConfigFolder());
 
         final HivemqId hivemqId = new HivemqId();
         final LifecycleModule lifecycleModule = new LifecycleModule();
-        final DataFolderLock dataFolderLock = new DataFolderLock();
+        final DataFolderLock dataLock = new DataFolderLock();
         final MetricRegistry metricRegistry = new MetricRegistry();
         metricRegistry.addListener(new MetricRegistryLogger());
 
@@ -91,7 +115,16 @@ public final class HiveMQServer {
                 new ListenerConfigurator(config.listenerConfiguration(), systemInformation));
         configReader.applyConfig();
 
-        dataFolderLock.lock(systemInformation.getDataFolder().toPath());
+        dataLock.lock(systemInformation.getDataFolder().toPath());
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                ShutdownHooks.INSTANCE.shutdown();
+            } finally {
+                dataLock.unlock();
+                Logging.resetLogging();
+            }
+        }, "shutdown-" + hivemqId.get()));
+
         final Injector persistence = Guice.createInjector(Stage.PRODUCTION,
                 Arrays.asList(new SystemInformationModule(systemInformation),
                         new ConfigurationModule(config, hivemqId),
@@ -99,8 +132,6 @@ public final class HiveMQServer {
                         lifecycleModule,
                         new PersistenceMigrationModule(metricRegistry)));
         persistence.getInstance(PersistenceStartup.class).finish();
-
-        System.setProperty("guice_include_stack_traces", "OFF");
         final Injector injector = Guice.createInjector(Stage.PRODUCTION,
                 Arrays.asList(new SystemInformationModule(systemInformation),
                         new LazySingletonModule(),
@@ -116,28 +147,6 @@ public final class HiveMQServer {
                         new SecurityModule(),
                         new ExtensionModule()));
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                ShutdownHooks.shutdown();
-            } finally {
-                dataFolderLock.unlock();
-                Logging.resetLogging();
-            }
-        }, "shutdown-" + hivemqId.get()));
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            exitIfUnrecoverable(e);
-            final boolean atCreation = e instanceof CreationException;
-            if (atCreation || e instanceof ProvisionException) {
-                exitIfUnrecoverable(e.getCause());
-                for (final Message message : atCreation ?
-                        ((CreationException) e).getErrorMessages() :
-                        ((ProvisionException) e).getErrorMessages()) {
-                    exitIfUnrecoverable(message.getCause());
-                }
-            }
-            log.error("Problem: %s%n", Throwables.getRootCause(e));
-        });
-
         // start
         final long startTime = System.nanoTime();
         final HiveMQInstance instance = injector.getInstance(HiveMQInstance.class);
@@ -147,12 +156,5 @@ public final class HiveMQServer {
         log.info("Started HiveMQ [{}] in {}ms",
                 hivemqId.get(),
                 TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime));
-    }
-
-    private static void exitIfUnrecoverable(final @NotNull Throwable t) {
-        if (t instanceof UnrecoverableException) {
-            System.err.printf("unrecoverable: %s%n", t.getMessage());
-            System.exit(1);
-        }
     }
 }

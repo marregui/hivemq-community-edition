@@ -58,9 +58,7 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Lukas Brandl
- */
+
 public class PublishServiceImplTest {
 
     @Mock
@@ -89,7 +87,7 @@ public class PublishServiceImplTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         when(rateLimitService.rateLimitExceeded()).thenReturn(false);
-        managedPluginExecutorService = new GlobalManagedExtensionExecutorService(shutdownHooks);
+        managedPluginExecutorService = new GlobalManagedExtensionExecutorService();
         managedPluginExecutorService.postConstruct();
         publishService = new PublishServiceImpl(rateLimitService,
                 managedPluginExecutorService,

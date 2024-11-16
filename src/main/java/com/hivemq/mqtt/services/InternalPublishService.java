@@ -23,9 +23,7 @@ import com.hivemq.mqtt.message.publish.PUBLISH;
 
 import java.util.concurrent.ExecutorService;
 
-/**
- * @author Christoph Schäbel
- */
+
 public interface InternalPublishService {
 
     /**

@@ -20,12 +20,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ScheduledExecutorService;
 
-/**
- * This Shutdown Hook is responsible for shutting down the backing executor
- * for the Global Traffic Shaper.
- *
- * @author Florian Limpoeck
- */
 public class GlobalTrafficShaperExecutorShutdownHook implements ShutdownHooks.Hook {
 
     private final @NotNull ScheduledExecutorService executor;

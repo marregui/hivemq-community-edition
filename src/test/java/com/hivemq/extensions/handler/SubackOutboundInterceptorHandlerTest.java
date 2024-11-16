@@ -100,9 +100,9 @@ public class SubackOutboundInterceptorHandlerTest {
 
         final FullConfigurationService configurationService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
-        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl(Mockito.mock(ShutdownHooks.class));
+        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         final PluginTaskExecutorService pluginTaskExecutorService =
-                new PluginTaskExecutorServiceImpl(() -> executor, mock(ShutdownHooks.class));
+                new PluginTaskExecutorServiceImpl(() -> executor);
 
         final SubackOutboundInterceptorHandler handler = new SubackOutboundInterceptorHandler(configurationService,
                 asyncer,

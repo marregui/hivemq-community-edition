@@ -20,9 +20,7 @@ import com.hivemq.configuration.service.entity.TlsTcpListener;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.security.ssl.SslFactory;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class TlsTcpChannelInitializer extends AbstractTlsChannelInitializer {
 
 

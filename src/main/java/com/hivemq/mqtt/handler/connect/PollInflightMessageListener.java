@@ -20,9 +20,7 @@ import com.hivemq.mqtt.services.PublishPollService;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 
-/**
- * @author Lukas Brandl
- */
+
 public class PollInflightMessageListener implements ChannelFutureListener {
 
     @NotNull

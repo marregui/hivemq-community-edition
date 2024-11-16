@@ -18,9 +18,7 @@ package com.hivemq.bootstrap.ioc;
 import com.google.inject.AbstractModule;
 import com.hivemq.configuration.info.SystemInformation;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class SystemInformationModule extends AbstractModule {
 
     private final SystemInformation systemInformation;

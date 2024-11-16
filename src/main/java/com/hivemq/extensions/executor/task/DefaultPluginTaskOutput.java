@@ -20,9 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class DefaultPluginTaskOutput implements PluginTaskOutput {
 
     private static final DefaultPluginTaskOutput INSTANCE = new DefaultPluginTaskOutput();

@@ -522,7 +522,7 @@ public class ClientServiceImplTest {
     @NotNull
     private GlobalManagedExtensionExecutorService getManagedExtensionExecutorService() {
         final GlobalManagedExtensionExecutorService globalManagedPluginExecutorService =
-                new GlobalManagedExtensionExecutorService(mock(ShutdownHooks.class));
+                new GlobalManagedExtensionExecutorService();
         globalManagedPluginExecutorService.postConstruct();
         return globalManagedPluginExecutorService;
     }

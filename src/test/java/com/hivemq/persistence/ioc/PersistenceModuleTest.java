@@ -68,8 +68,6 @@ public class PersistenceModuleTest {
                 ClientQueueXodusLocalPersistence.class));
 
         when(persistenceInjector.getInstance(PersistenceStartup.class)).thenReturn(Mockito.mock(PersistenceStartup.class));
-
-        when(persistenceInjector.getInstance(ShutdownHooks.class)).thenReturn(Mockito.mock(ShutdownHooks.class));
     }
 
     @Test

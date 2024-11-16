@@ -20,9 +20,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * @author Lukas Brandl
- */
+
 public class PropertiesSerializationUtilTest {
 
     @Test

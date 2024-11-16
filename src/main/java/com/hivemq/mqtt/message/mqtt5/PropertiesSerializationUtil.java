@@ -21,9 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.local.xodus.XodusUtils;
 import com.hivemq.util.Bytes;
 
-/**
- * @author Lukas Brandl
- */
+
 public class PropertiesSerializationUtil {
 
     public static int encodedSize(final Mqtt5UserProperties properties) {

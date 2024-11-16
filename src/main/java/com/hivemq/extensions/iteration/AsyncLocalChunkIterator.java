@@ -29,9 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class AsyncLocalChunkIterator<V> implements AsyncIterator<V> {
 
     private final @NotNull FetchCallback<V> fetchCallback;

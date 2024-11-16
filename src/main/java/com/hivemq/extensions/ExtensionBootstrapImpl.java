@@ -32,9 +32,7 @@ import javax.inject.Singleton;
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * @author Christoph Schäbel
- */
+
 @Singleton
 public class ExtensionBootstrapImpl implements ExtensionBootstrap {
 
@@ -44,7 +42,6 @@ public class ExtensionBootstrapImpl implements ExtensionBootstrap {
     private final @NotNull SystemInformation systemInformation;
     private final @NotNull ExtensionLifecycleHandler lifecycleHandler;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
-    private final @NotNull ShutdownHooks shutdownHooks;
     private final @NotNull Authenticators authenticators;
 
     @Inject
@@ -53,13 +50,11 @@ public class ExtensionBootstrapImpl implements ExtensionBootstrap {
             final @NotNull SystemInformation systemInformation,
             final @NotNull ExtensionLifecycleHandler lifecycleHandler,
             final @NotNull HiveMQExtensions hiveMQExtensions,
-            final @NotNull ShutdownHooks shutdownHooks,
             final @NotNull Authenticators authenticators) {
         this.extensionLoader = extensionLoader;
         this.systemInformation = systemInformation;
         this.lifecycleHandler = lifecycleHandler;
         this.hiveMQExtensions = hiveMQExtensions;
-        this.shutdownHooks = shutdownHooks;
         this.authenticators = authenticators;
     }
 
@@ -68,7 +63,7 @@ public class ExtensionBootstrapImpl implements ExtensionBootstrap {
     public CompletableFuture<Void> startExtensionSystem() {
         log.info("Starting HiveMQ extension system.");
 
-        shutdownHooks.add(new ExtensionSystemShutdownHook(this));
+        ShutdownHooks.INSTANCE.add(new ExtensionSystemShutdownHook(this));
         final Path extensionFolder = systemInformation.getExtensionsFolder().toPath();
 
         // load already installed extensions

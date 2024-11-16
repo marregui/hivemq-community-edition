@@ -98,9 +98,9 @@ public class PubcompInterceptorHandlerTest {
 
         final FullConfigurationService configurationService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
-        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl(mock(ShutdownHooks.class));
+        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         final PluginTaskExecutorService pluginTaskExecutorService =
-                new PluginTaskExecutorServiceImpl(() -> executor, mock(ShutdownHooks.class));
+                new PluginTaskExecutorServiceImpl(() -> executor);
 
         handler = new PubcompInterceptorHandler(configurationService,
                 asyncer,

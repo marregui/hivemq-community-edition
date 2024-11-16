@@ -29,9 +29,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class ModifiableDefaultPermissionsImpl implements ModifiableDefaultPermissions {
 
     private @NotNull ImmutableList<TopicPermission> topicPermissions = ImmutableList.of();

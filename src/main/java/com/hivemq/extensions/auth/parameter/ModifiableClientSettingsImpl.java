@@ -21,9 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.auth.parameter.ModifiableClientSettings;
 import com.hivemq.extension.sdk.api.auth.parameter.OverloadProtectionThrottlingLevel;
 
-/**
- * @author Lukas Brandl
- */
+
 public class ModifiableClientSettingsImpl implements ModifiableClientSettings {
 
     private int receiveMaximum;

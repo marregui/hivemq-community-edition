@@ -26,7 +26,6 @@ import com.hivemq.extensions.executor.task.PluginTaskOutput;
 import com.hivemq.util.ThreadFactoryUtil;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.Duration;
 import java.util.concurrent.ScheduledExecutorService;
@@ -34,28 +33,18 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author Christoph Schäbel
- */
 @Singleton
 public class PluginOutputAsyncerImpl implements PluginOutPutAsyncer {
 
     @NotNull
     private final ScheduledExecutorService scheduledExecutor;
 
-    @NotNull
-    private final ShutdownHooks shutdownHooks;
-
     @PostConstruct
     public void postConstruct() {
-
-        shutdownHooks.add(new PluginOutputAsyncerShutdownHook(scheduledExecutor));
+        ShutdownHooks.INSTANCE.add(new PluginOutputAsyncerShutdownHook(scheduledExecutor));
     }
 
-    @Inject
-    public PluginOutputAsyncerImpl(@NotNull final ShutdownHooks shutdownHooks) {
-        this.shutdownHooks = shutdownHooks;
-
+    public PluginOutputAsyncerImpl() {
         final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         //enable removing canceled tasks from the executor queue
         executor.setRemoveOnCancelPolicy(true);
@@ -100,6 +89,11 @@ public class PluginOutputAsyncerImpl implements PluginOutPutAsyncer {
         @Override
         public void run() {
             scheduledExecutor.shutdown();
+        }
+
+        @Override
+        public @NotNull ShutdownHooks.Priority priority() {
+            return ShutdownHooks.Priority.LOW;
         }
     }
 }

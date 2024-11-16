@@ -49,9 +49,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-/**
- * @author Christoph Schäbel
- */
+
 @SuppressWarnings("NullabilityAnnotations")
 public class PluginTaskExecutorServiceImplTest {
 
@@ -73,8 +71,7 @@ public class PluginTaskExecutorServiceImplTest {
         InternalConfigurations.EXTENSION_TASK_QUEUE_EXECUTOR_THREADS_COUNT.set(2);
 
         executorService =
-                new PluginTaskExecutorServiceImpl(new ExecutorProvider(Lists.newArrayList(executor1, executor2)),
-                        mock(ShutdownHooks.class));
+                new PluginTaskExecutorServiceImpl(new ExecutorProvider(Lists.newArrayList(executor1, executor2)));
     }
 
     @Test

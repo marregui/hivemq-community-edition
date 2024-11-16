@@ -45,9 +45,7 @@ import com.hivemq.util.ClientIds;
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.SESSION_EXPIRY_MAX;
 import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_MAX;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class TestMqttDecoder {
 
     public static MQTTMessageDecoder create() {

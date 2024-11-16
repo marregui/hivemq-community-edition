@@ -37,9 +37,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Christoph Schäbel
- */
+
 @SuppressWarnings("NullabilityAnnotations")
 public class SubscriptionAuthorizerInputImplTest {
 

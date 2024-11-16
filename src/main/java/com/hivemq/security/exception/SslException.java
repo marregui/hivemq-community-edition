@@ -16,9 +16,7 @@
 package com.hivemq.security.exception;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class SslException extends RuntimeException {
 
     public SslException(final @NotNull String message) {

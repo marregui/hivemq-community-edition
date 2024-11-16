@@ -18,9 +18,7 @@ package com.hivemq.extensions.iteration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class BucketChunkResult<V> {
 
 

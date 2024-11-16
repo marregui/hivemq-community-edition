@@ -27,9 +27,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author Lukas Brandl
- */
+
 public class PublishTopicTree {
 
     private final Node root = new Node();

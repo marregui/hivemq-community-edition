@@ -18,9 +18,7 @@ package com.hivemq.mqtt.event;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 
-/**
- * @author Lukas Brandl
- */
+
 public class PublishDroppedEvent {
 
     @NotNull

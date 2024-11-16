@@ -20,9 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.publish.PublishStatus;
 import com.hivemq.mqtt.message.pubrel.PUBREL;
 
-/**
- * @author Lukas Brandl
- */
+
 public class PubrelWithFuture extends PUBREL {
 
     @NotNull

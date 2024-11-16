@@ -22,10 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 public class ManagedPluginExecutorShutdownHook implements ShutdownHooks.Hook {
 
     private static final Logger log = LoggerFactory.getLogger(ManagedPluginExecutorShutdownHook.class);

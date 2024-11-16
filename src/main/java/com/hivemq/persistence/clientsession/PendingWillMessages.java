@@ -44,9 +44,7 @@ import java.util.concurrent.TimeUnit;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.hivemq.configuration.service.InternalConfigurations.WILL_DELAY_CHECK_INTERVAL_SEC;
 
-/**
- * @author Lukas Brandl
- */
+
 @Singleton
 public class PendingWillMessages {
 

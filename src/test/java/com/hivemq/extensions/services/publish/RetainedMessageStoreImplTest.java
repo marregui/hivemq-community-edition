@@ -77,7 +77,7 @@ public class RetainedMessageStoreImplTest {
     @Before
     public void setUp() throws Exception {
         closeableMock = MockitoAnnotations.openMocks(this);
-        managedPluginExecutorService = new GlobalManagedExtensionExecutorService(Mockito.mock(ShutdownHooks.class));
+        managedPluginExecutorService = new GlobalManagedExtensionExecutorService();
         managedPluginExecutorService.postConstruct();
         retainedMessageStore = new RetainedMessageStoreImpl(retainedMessagePersistence,
                 managedPluginExecutorService,

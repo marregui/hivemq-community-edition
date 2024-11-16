@@ -31,9 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class SubscriptionAuthorizerTask
         implements PluginInOutTask<SubscriptionAuthorizerInputImpl, SubscriptionAuthorizerOutputImpl> {
 

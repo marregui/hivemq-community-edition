@@ -27,9 +27,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-/**
- * @author Christoph Schäbel
- */
+
 @Singleton
 @ChannelHandler.Sharable
 public class PingRequestHandler extends SimpleChannelInboundHandler<PINGREQ> {

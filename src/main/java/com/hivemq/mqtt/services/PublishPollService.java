@@ -20,9 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import io.netty.channel.Channel;
 
-/**
- * @author Lukas Brandl
- */
+
 public interface PublishPollService {
 
     /**

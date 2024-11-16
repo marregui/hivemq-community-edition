@@ -17,9 +17,7 @@ package com.hivemq.mqtt.handler.publish;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * @author Christoph Schäbel
- */
+
 public enum PublishStatus {
 
     /**

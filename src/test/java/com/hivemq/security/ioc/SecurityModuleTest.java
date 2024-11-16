@@ -21,7 +21,6 @@ import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingletonScope;
-import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.security.ssl.SslFactory;
 import io.netty.util.concurrent.EventExecutorGroup;
 import org.junit.Test;
@@ -29,10 +28,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 
-/**
- * @author Florian Limpöck
- * @since 4.1.0
- */
 public class SecurityModuleTest {
 
     @Test
@@ -42,7 +37,6 @@ public class SecurityModuleTest {
             @Override
             protected void configure() {
                 bind(EventExecutorGroup.class).toInstance(mock(EventExecutorGroup.class));
-                bind(ShutdownHooks.class).toInstance(mock(ShutdownHooks.class));
                 bindScope(LazySingleton.class, LazySingletonScope.get());
             }
         });

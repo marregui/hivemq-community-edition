@@ -56,7 +56,6 @@ public class HiveMQNettyBootstrap {
 
     private static final Logger log = LoggerFactory.getLogger(HiveMQNettyBootstrap.class);
 
-    private final @NotNull ShutdownHooks shutdownHooks;
     private final @NotNull ListenerConfigurationService listenerConfigurationService;
     private final @NotNull ChannelInitializerFactory channelInitializerFactory;
     private final @NotNull ConnectionPersistence connectionPersistence;
@@ -67,13 +66,11 @@ public class HiveMQNettyBootstrap {
 
     @Inject
     HiveMQNettyBootstrap(
-            final @NotNull ShutdownHooks shutdownHooks,
             final @NotNull ListenerConfigurationService listenerConfigurationService,
             final @NotNull ChannelInitializerFactory channelInitializerFactory,
             final @NotNull ConnectionPersistence connectionPersistence,
             final @NotNull NettyConfiguration nettyConfiguration) {
 
-        this.shutdownHooks = shutdownHooks;
         this.listenerConfigurationService = listenerConfigurationService;
         this.channelInitializerFactory = channelInitializerFactory;
         this.connectionPersistence = connectionPersistence;
@@ -85,7 +82,7 @@ public class HiveMQNettyBootstrap {
         //Adding shutdown hook for graceful shutdown
         final int shutdownTimeout = InternalConfigurations.EVENT_LOOP_GROUP_SHUTDOWN_TIMEOUT_SEC;
         final int channelsShutdownTimeout = InternalConfigurations.CONNECTION_PERSISTENCE_SHUTDOWN_TIMEOUT_SEC;
-        shutdownHooks.add(new NettyShutdownHook(nettyConfiguration.getChildEventLoopGroup(),
+        ShutdownHooks.INSTANCE.add(new NettyShutdownHook(nettyConfiguration.getChildEventLoopGroup(),
                 nettyConfiguration.getParentEventLoopGroup(),
                 shutdownTimeout,
                 channelsShutdownTimeout,

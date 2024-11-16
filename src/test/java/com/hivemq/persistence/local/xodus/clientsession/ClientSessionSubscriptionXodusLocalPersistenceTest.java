@@ -59,9 +59,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class ClientSessionSubscriptionXodusLocalPersistenceTest {
 
     private AutoCloseable closeableMock;

@@ -21,8 +21,6 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.hivemq.bootstrap.ioc.SingletonModule;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
-import com.hivemq.common.shutdown.ShutdownHooks;
-import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.topic.tree.TopicTreeStartup;
 import com.hivemq.persistence.PersistenceShutdownHookInstaller;
@@ -49,7 +47,6 @@ public class PersistenceModule extends SingletonModule<Class<PersistenceModule>>
     @Override
     protected void configure() {
         install(new LocalPersistenceModule(persistenceInjector));
-        bind(ShutdownHooks.class).toInstance(persistenceInjector.getInstance(ShutdownHooks.class));
         bind(PersistenceShutdownHookInstaller.class).asEagerSingleton();
         bind(ExecutorService.class).annotatedWith(Persistence.class)
                 .toProvider(PersistenceExecutorProvider.class)
@@ -71,7 +68,7 @@ public class PersistenceModule extends SingletonModule<Class<PersistenceModule>>
         requestStaticInjection(FutureUtils.class);
     }
 
-    private <T> void bindIfAbsent(final Class type, final Class provider, final Class annotation) {
+    private void bindIfAbsent(final Class type, final Class provider, final Class annotation) {
         final Object instance = persistenceInjector.getInstance(Key.get(type, annotation));
         if (instance != null) {
             bind(type).annotatedWith(annotation).toInstance(instance);

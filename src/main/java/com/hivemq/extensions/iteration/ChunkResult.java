@@ -20,9 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class ChunkResult<V> {
 
     private final @NotNull Collection<V> results;

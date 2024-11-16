@@ -22,30 +22,24 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 
-/**
- * @author Lukas Brandl
- */
+
 @Singleton
 public class PersistenceShutdownHookInstaller {
 
-    private final @NotNull ShutdownHooks shutdownHooks;
     private final @NotNull PersistenceShutdownHook persistenceShutdownHook;
     private final @NotNull PersistenceStartup persistenceStartup;
 
     @Inject
     public PersistenceShutdownHookInstaller(
-            final @NotNull ShutdownHooks shutdownHooks,
             final @NotNull PersistenceShutdownHook persistenceShutdownHook,
             final @NotNull PersistenceStartup persistenceStartup) {
-        this.shutdownHooks = shutdownHooks;
         this.persistenceShutdownHook = persistenceShutdownHook;
         this.persistenceStartup = persistenceStartup;
     }
 
     @PostConstruct
     public void postConstruct() {
-        shutdownHooks.remove(persistenceStartup);
-        shutdownHooks.add(persistenceShutdownHook);
+        ShutdownHooks.INSTANCE.remove(persistenceStartup);
+        ShutdownHooks.INSTANCE.add(persistenceShutdownHook);
     }
-
 }

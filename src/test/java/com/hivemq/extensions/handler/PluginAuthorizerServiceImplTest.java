@@ -126,12 +126,12 @@ public class PluginAuthorizerServiceImplTest {
         when(hiveMQExtensions.getExtension("extension1")).thenReturn(extension1);
         when(hiveMQExtensions.getExtension("extension2")).thenReturn(extension2);
 
-        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl(mock(ShutdownHooks.class));
+        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
 
         final MqttServerDisconnector mqttServerDisconnector = new MqttServerDisconnectorImpl(eventLog);
 
         final PluginTaskExecutorService pluginTaskExecutorService =
-                new PluginTaskExecutorServiceImpl(() -> executor, mock(ShutdownHooks.class));
+                new PluginTaskExecutorServiceImpl(() -> executor);
         pluginAuthorizerService = new PluginAuthorizerServiceImpl(authorizers,
                 asyncer,
                 pluginTaskExecutorService,

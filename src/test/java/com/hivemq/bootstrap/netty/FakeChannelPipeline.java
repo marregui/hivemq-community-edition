@@ -30,9 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class FakeChannelPipeline implements ChannelPipeline {
 
     private final List<String> names = Lists.newArrayList();

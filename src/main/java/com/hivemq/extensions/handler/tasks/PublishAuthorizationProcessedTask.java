@@ -27,9 +27,7 @@ import com.hivemq.mqtt.message.reason.Mqtt5DisconnectReasonCode;
 import com.hivemq.util.Exceptions;
 import io.netty.channel.ChannelHandlerContext;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class PublishAuthorizationProcessedTask implements FutureCallback<PublishAuthorizerOutputImpl> {
 
     private final @NotNull PUBLISH publish;

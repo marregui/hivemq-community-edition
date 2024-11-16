@@ -49,9 +49,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Lukas Brandl
- */
+
 public class PublishDistributorImplTest {
 
     private AutoCloseable closeableMock;

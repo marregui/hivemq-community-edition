@@ -29,9 +29,7 @@ import java.util.Set;
 
 import static com.hivemq.persistence.clientsession.ClientSessionPersistenceImpl.DisconnectSource;
 
-/**
- * @author Lukas Brandl
- */
+
 public interface ClientSessionPersistence {
 
     boolean isExistent(@NotNull String client);

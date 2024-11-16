@@ -18,9 +18,7 @@ package util;
 import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
 
-/**
- * @author Christoph Schäbel
- */
+
 @SuppressWarnings("deprecation")
 public class TestChannelAttribute<T> implements Attribute<T> {
 

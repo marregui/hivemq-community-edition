@@ -20,22 +20,18 @@ import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.util.ThreadFactoryUtil;
 
-import javax.inject.Inject;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * @author Christoph Schäbel
- */
+
 @LazySingleton
 public class AsyncIteratorFactory {
 
     private final @NotNull ExecutorService executorService;
 
-    @Inject
-    public AsyncIteratorFactory(final @NotNull ShutdownHooks shutdownHooks) {
+    public AsyncIteratorFactory() {
         executorService = Executors.newFixedThreadPool(4, ThreadFactoryUtil.create("async-iterator-executor-%d"));
-        shutdownHooks.add(new ShutdownHooks.Hook() {
+        ShutdownHooks.INSTANCE.add(new ShutdownHooks.Hook() {
             @Override
             public @NotNull String name() {
                 return "Async Iterator Executor Shutdown";

@@ -21,9 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-/**
- * @author Christoph Schäbel
- */
+
 
 public class ResultBuffer<V> {
 

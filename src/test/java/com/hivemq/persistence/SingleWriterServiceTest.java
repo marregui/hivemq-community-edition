@@ -34,9 +34,7 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Lukas Brandl
- */
+
 public class SingleWriterServiceTest {
 
     SingleWriterService SingleWriterService;

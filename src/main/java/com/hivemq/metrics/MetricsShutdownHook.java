@@ -26,19 +26,16 @@ import javax.inject.Singleton;
 @Singleton
 public class MetricsShutdownHook implements ShutdownHooks.Hook {
 
-    private final @NotNull ShutdownHooks shutdownHooks;
     private final @NotNull JmxReporterBootstrap jmxReporterBootstrap;
 
     @Inject
-    public MetricsShutdownHook(
-            final @NotNull ShutdownHooks shutdownHooks, final @NotNull JmxReporterBootstrap jmxReporterBootstrap) {
-        this.shutdownHooks = shutdownHooks;
+    public MetricsShutdownHook(final @NotNull JmxReporterBootstrap jmxReporterBootstrap) {
         this.jmxReporterBootstrap = jmxReporterBootstrap;
     }
 
     @PostConstruct
     public void postConstruct() {
-        shutdownHooks.add(this);
+        ShutdownHooks.INSTANCE.add(this);
     }
 
     @Override
@@ -49,5 +46,10 @@ public class MetricsShutdownHook implements ShutdownHooks.Hook {
     @Override
     public @NotNull String name() {
         return "Metrics Shutdown";
+    }
+
+    @Override
+    public @NotNull ShutdownHooks.Priority priority() {
+        return ShutdownHooks.Priority.LOW;
     }
 }

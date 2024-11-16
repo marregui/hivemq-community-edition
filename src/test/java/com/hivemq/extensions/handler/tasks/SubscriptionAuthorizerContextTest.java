@@ -46,7 +46,7 @@ public class SubscriptionAuthorizerContextTest {
 
     @Before
     public void before() {
-        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl(mock(ShutdownHooks.class));
+        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         resultFuture = SettableFuture.create();
         output = new SubscriptionAuthorizerOutputImpl(asyncer);
         context = new SubscriptionAuthorizerContext("clientId", output, resultFuture, 1);

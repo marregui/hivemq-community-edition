@@ -178,8 +178,7 @@ public class ChannelDependenciesTest {
                 () -> messageExpiryHandler,
                 mqttServerDisconnector,
                 interceptorHandler,
-                globalMQTTMessageCounter,
-                shutdownHooks);
+                globalMQTTMessageCounter);
     }
 
     @Test

@@ -94,9 +94,9 @@ public class PingInterceptorHandlerTest {
         ClientConnection.of(channel).setRequestResponseInformation(true);
         when(extension.getId()).thenReturn("plugin");
 
-        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl(Mockito.mock(ShutdownHooks.class));
+        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         final PluginTaskExecutorService pluginTaskExecutorService =
-                new PluginTaskExecutorServiceImpl(() -> executor, mock(ShutdownHooks.class));
+                new PluginTaskExecutorServiceImpl(() -> executor);
 
         final PingInterceptorHandler handler =
                 new PingInterceptorHandler(pluginTaskExecutorService, asyncer, hiveMQExtensions);

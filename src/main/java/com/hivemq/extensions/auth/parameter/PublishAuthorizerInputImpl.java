@@ -33,9 +33,7 @@ import io.netty.channel.Channel;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class PublishAuthorizerInputImpl
         implements PublishAuthorizerInput, PluginTaskInput, Supplier<PublishAuthorizerInputImpl> {
 

@@ -108,7 +108,7 @@ public class IncomingSubscribeHandlerTest {
         executor = new PluginTaskExecutor(new AtomicLong());
         executor.postConstruct();
 
-        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl(Mockito.mock(ShutdownHooks.class));
+        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
 
         final FullConfigurationService configurationService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
@@ -119,7 +119,7 @@ public class IncomingSubscribeHandlerTest {
         final MqttServerDisconnector mqttServerDisconnector = new MqttServerDisconnectorImpl(eventLog);
 
         final PluginTaskExecutorService pluginTaskExecutorService =
-                new PluginTaskExecutorServiceImpl(() -> executor, mock(ShutdownHooks.class));
+                new PluginTaskExecutorServiceImpl(() -> executor);
         final IncomingSubscribeHandler incomingSubscribeHandler =
                 new IncomingSubscribeHandler(pluginTaskExecutorService,
                         asyncer,

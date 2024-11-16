@@ -33,9 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class PublishAuthorizerTask implements PluginInOutTask<PublishAuthorizerInputImpl, PublishAuthorizerOutputImpl> {
 
     private static final Logger log = LoggerFactory.getLogger(PublishAuthorizerTask.class);

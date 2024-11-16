@@ -22,9 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class ChunkCursor {
 
 

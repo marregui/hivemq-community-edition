@@ -29,9 +29,7 @@ import java.util.List;
 import static com.hivemq.logging.LoggingUtils.appendListenerToMessage;
 
 
-/**
- * @author Christoph Schäbel
- */
+
 public class NonSslHandler extends ByteToMessageDecoder {
 
     private final @NotNull MqttServerDisconnector mqttServerDisconnector;

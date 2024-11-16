@@ -35,9 +35,7 @@ import java.security.cert.Certificate;
 
 import static com.hivemq.logging.LoggingUtils.appendListenerToMessage;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class SslClientCertificateHandler extends ChannelInboundHandlerAdapter {
 
     private static final @NotNull Logger log = LoggerFactory.getLogger(SslClientCertificateHandler.class);

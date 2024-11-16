@@ -19,9 +19,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * @author Christoph Schäbel
- */
+
 public interface FetchCallback<V> {
 
     @NotNull ListenableFuture<ChunkResult<V>> fetchNextResults(@Nullable final ChunkCursor cursor);

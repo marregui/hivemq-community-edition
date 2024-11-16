@@ -19,9 +19,7 @@ package com.hivemq.extensions.auth.parameter;
 import org.jetbrains.annotations.NotNull;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- * @author Christoph Schäbel
- */
+
 
 public class TopicPermissionImpl implements InternalTopicPermission {
 

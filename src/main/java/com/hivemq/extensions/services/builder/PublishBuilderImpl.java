@@ -44,9 +44,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET;
 
-/**
- * @author Lukas Brandl
- */
+
 public class PublishBuilderImpl implements PublishBuilder {
 
     @NotNull

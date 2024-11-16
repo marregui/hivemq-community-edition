@@ -24,9 +24,7 @@ import com.hivemq.extensions.executor.PluginOutPutAsyncer;
 
 import java.time.Duration;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class AbstractAsyncOutput<T> extends AbstractSimpleAsyncOutput<T> implements AsyncOutput<T> {
 
     protected @NotNull TimeoutFallback timeoutFallback = TimeoutFallback.FAILURE;

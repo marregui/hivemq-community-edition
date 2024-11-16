@@ -34,7 +34,7 @@ public class SecurityExecutorProvider implements Provider<ScheduledExecutorServi
     SecurityExecutorProvider() {
         sslContextStoreService =
                 Executors.newScheduledThreadPool(2, ThreadFactoryUtil.create("ssl-context-executor-%d"));
-        ShutdownHooks.add(new ShutdownHooks.Hook() {
+        ShutdownHooks.INSTANCE.add(new ShutdownHooks.Hook() {
             @Override
             public @NotNull String name() {
                 return "Ssl Context Store Executor Shutdown";

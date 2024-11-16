@@ -32,26 +32,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
-/**
- * A provider which creates the Global Traffic Shaper for HiveMQ.
- *
- * @author Florian Limpoeck
- * @author Dominik Obermaier
- */
 @Singleton
 public class GlobalTrafficShapingProvider implements Provider<GlobalTrafficShapingHandler> {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalTrafficShapingProvider.class);
 
-    private final @NotNull ShutdownHooks registry;
     private final @NotNull RestrictionsConfigurationService restrictionsConfigurationService;
 
     @Inject
     GlobalTrafficShapingProvider(
-            final @NotNull ShutdownHooks registry,
             final @NotNull RestrictionsConfigurationService restrictionsConfigurationService) {
 
-        this.registry = registry;
         this.restrictionsConfigurationService = restrictionsConfigurationService;
     }
 
@@ -64,7 +55,7 @@ public class GlobalTrafficShapingProvider implements Provider<GlobalTrafficShapi
 
         final GlobalTrafficShaperExecutorShutdownHook shutdownHook =
                 new GlobalTrafficShaperExecutorShutdownHook(scheduledExecutorService);
-        registry.add(shutdownHook);
+        ShutdownHooks.INSTANCE.add(shutdownHook);
 
         final long incomingLimit = restrictionsConfigurationService.incomingLimit();
         log.debug("Throttling incoming traffic to {} B/s", incomingLimit);

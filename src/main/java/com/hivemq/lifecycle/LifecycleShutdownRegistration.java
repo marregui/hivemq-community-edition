@@ -25,19 +25,17 @@ import javax.inject.Singleton;
 @Singleton
 public class LifecycleShutdownRegistration {
 
-    private final @NotNull ShutdownHooks shutdownHooks;
     private final @NotNull LifecycleShutdownHook shutdownHook;
 
 
     @Inject
-    LifecycleShutdownRegistration(final @NotNull ShutdownHooks shutdownHooks, final @NotNull LifecycleShutdownHook shutdownHook) {
-        this.shutdownHooks = shutdownHooks;
+    LifecycleShutdownRegistration(final @NotNull LifecycleShutdownHook shutdownHook) {
         this.shutdownHook = shutdownHook;
     }
 
     @PostConstruct
     public void postConstruct() {
-        shutdownHooks.add(shutdownHook);
+        ShutdownHooks.INSTANCE.add(shutdownHook);
     }
 
 }

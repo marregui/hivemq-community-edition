@@ -40,9 +40,7 @@ import static com.hivemq.bootstrap.netty.ChannelHandlerNames.SSL_EXCEPTION_HANDL
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.SSL_HANDLER;
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.SSL_PARAMETER_HANDLER;
 
-/**
- * @author Christoph Schäbel
- */
+
 public abstract class AbstractTlsChannelInitializer extends AbstractChannelInitializer {
 
     private final @NotNull TlsListener tlsListener;

@@ -43,10 +43,10 @@ public class KeepAliveDisconnectService {
 
     @Inject
     public KeepAliveDisconnectService(
-            final @NotNull MqttServerDisconnector mqttServerDisconnector, final @NotNull ShutdownHooks shutdownHooks) {
+            final @NotNull MqttServerDisconnector mqttServerDisconnector) {
         this.mqttServerDisconnector = mqttServerDisconnector;
         this.disconnectBatch = InternalConfigurations.DISCONNECT_KEEP_ALIVE_BATCH;
-        shutdownHooks.add(new ShutdownHooks.Hook() {
+        ShutdownHooks.INSTANCE.add(new ShutdownHooks.Hook() {
             @Override
             public @NotNull String name() {
                 return "KeepAliveDisconnectService shutdown";
@@ -55,6 +55,11 @@ public class KeepAliveDisconnectService {
             @Override
             public void run() {
                 scheduledExecutorService.shutdown();
+            }
+
+            @Override
+            public @NotNull ShutdownHooks.Priority priority() {
+                return ShutdownHooks.Priority.LOW;
             }
         });
     }

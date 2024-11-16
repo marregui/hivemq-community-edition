@@ -22,37 +22,17 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ShutdownHooks {
 
+    public static final @NotNull ShutdownHooks INSTANCE = new ShutdownHooks();
     private static final @NotNull Logger log = LoggerFactory.getLogger(ShutdownHooks.class);
-    private static final @NotNull ShutdownHooks INSTANCE = new ShutdownHooks();
-
     private final @NotNull AtomicBoolean hooksHaveRun = new AtomicBoolean();
-    private final @NotNull PriorityQueue<Hook> hooks =
-            new PriorityQueue<>(Comparator.comparingInt(Hook::priorityValue).reversed());
+    private final @NotNull PriorityQueue<Hook> hooks = new PriorityQueue<>(Comparator.comparing(Hook::priority));
 
-    public static void add(final @NotNull Hook shutdownHook) {
-        INSTANCE.addHook(shutdownHook);
-    }
-
-    public static void remove(final @NotNull Hook shutdownHook) {
-        INSTANCE.removeHook(shutdownHook);
-    }
-
-    public static void shutdown() {
-        INSTANCE.runHooks();
-    }
-
-    public boolean hooksHaveRun() {
-        return hooksHaveRun.get();
-    }
-
-    void addHook(final @NotNull ShutdownHooks.Hook shutdownHook) {
-        Objects.requireNonNull(shutdownHook, "shutdownHook must not be null");
+    public void add(final @NotNull Hook shutdownHook) {
         if (!hooksHaveRun.get()) {
             log.trace("Adding shutdown hook {} with priority {}", shutdownHook.name(), shutdownHook.priority());
             synchronized (hooks) {
@@ -61,8 +41,7 @@ public class ShutdownHooks {
         }
     }
 
-    void removeHook(final @NotNull ShutdownHooks.Hook shutdownHook) {
-        Objects.requireNonNull(shutdownHook, "shutdownHook must not be null");
+    public void remove(final @NotNull Hook shutdownHook) {
         if (!hooksHaveRun.get()) {
             log.trace("Removing shutdown hook {} with priority {}", shutdownHook.name(), shutdownHook.priority());
             synchronized (hooks) {
@@ -71,34 +50,51 @@ public class ShutdownHooks {
         }
     }
 
-    @VisibleForTesting
-    public @NotNull PriorityQueue<Hook> getShutdownHooks() {
-        return hooks;
+    public boolean hooksHaveRun() {
+        return hooksHaveRun.get();
     }
 
-    void runHooks() {
+    @VisibleForTesting
+    public @NotNull PriorityQueue<Hook> getShutdownHooks() {
+        synchronized (hooks) {
+            return hooks;
+        }
+    }
+
+    public void clear() {
+        synchronized (hooks) {
+            hooks.clear();
+        }
+    }
+
+    public void shutdown() {
         if (hooksHaveRun.compareAndSet(false, true)) {
             log.info("Shutting down HiveMQ. Please wait, this could take a while...");
-            for (final Hook runnable : hooks) {
-                log.trace(MarkerFactory.getMarker("SHUTDOWN_HOOK"), "Running shutdown hook {}", runnable.name());
-                runnable.run();
-            }
+            do {
+                final Hook hook = hooks.poll();
+                if (hook != null) {
+                    log.trace(MarkerFactory.getMarker("SHUTDOWN_HOOK"), "Running shutdown hook {}", hook.name());
+                    try {
+                        hook.run();
+                    } catch (final Throwable t) {
+                        log.error("Shutdown hook {} failed: {}", hook.name(), t.getMessage());
+                    }
+                }
+            } while (!hooks.isEmpty());
             log.info("Shutdown completed.");
         }
     }
 
     public enum Priority {
-        FIRST(Integer.MAX_VALUE),
-        HIGH(100_000),
-        MEDIUM(50_000),
-        LOW(Integer.MIN_VALUE);
+        FIRST,
+        HIGH,
+        MEDIUM,
+        LOW;
 
-        private final int value;
         private final @NotNull String str;
 
-        Priority(final int value) {
-            this.value = value;
-            this.str = name() + " (" + value + ")";
+        Priority() {
+            this.str = name() + " (" + ordinal() + ")";
         }
 
         @Override
@@ -107,16 +103,16 @@ public class ShutdownHooks {
         }
     }
 
-    public interface Hook extends Runnable {
+
+    public interface Hook extends Runnable, Comparable<Hook> {
 
         @NotNull String name();
 
-        default @NotNull Priority priority() {
-            return Priority.LOW;
-        }
+        @NotNull Priority priority();
 
-        default int priorityValue() {
-            return Priority.LOW.value;
+        @Override
+        default int compareTo(final @NotNull Hook that) {
+            return priority().compareTo(that.priority());
         }
     }
 }

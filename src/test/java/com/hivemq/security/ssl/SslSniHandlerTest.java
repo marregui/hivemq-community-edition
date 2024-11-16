@@ -28,9 +28,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class SslSniHandlerTest {
 
     @Test

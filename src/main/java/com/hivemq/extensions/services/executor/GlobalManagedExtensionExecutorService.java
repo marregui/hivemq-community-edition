@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.List;
@@ -50,15 +49,8 @@ public class GlobalManagedExtensionExecutorService implements ScheduledExecutorS
 
     private static final Logger log = LoggerFactory.getLogger(GlobalManagedExtensionExecutorService.class);
 
-    private final @NotNull ShutdownHooks shutdownHooks;
-
     private @Nullable ScheduledExecutorService scheduledExecutorService;
     private @Nullable ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
-
-    @Inject
-    public GlobalManagedExtensionExecutorService(final @NotNull ShutdownHooks shutdownHooks) {
-        this.shutdownHooks = shutdownHooks;
-    }
 
     @PostConstruct
     public void postConstruct() {
@@ -79,7 +71,7 @@ public class GlobalManagedExtensionExecutorService implements ScheduledExecutorS
         //for instrumentation (metrics)
         scheduledExecutorService = scheduledThreadPoolExecutor;
 
-        shutdownHooks.add(new ManagedPluginExecutorShutdownHook(this,
+        ShutdownHooks.INSTANCE.add(new ManagedPluginExecutorShutdownHook(this,
                 MANAGED_EXTENSION_EXECUTOR_SHUTDOWN_TIMEOUT_SEC.get()));
     }
 

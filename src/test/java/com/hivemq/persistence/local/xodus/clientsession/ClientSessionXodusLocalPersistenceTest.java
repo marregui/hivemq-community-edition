@@ -67,9 +67,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Christoph Schäbel
- */
+
 @SuppressWarnings("NullabilityAnnotations")
 public class ClientSessionXodusLocalPersistenceTest {
 

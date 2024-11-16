@@ -22,7 +22,6 @@ import com.hivemq.util.ThreadFactoryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,18 +33,12 @@ public class ExtensionStartStopExecutorProvider implements Provider<ExecutorServ
 
     private static final @NotNull Logger log = LoggerFactory.getLogger(ExtensionStartStopExecutorProvider.class);
 
-    private final @NotNull ShutdownHooks shutdownHooks;
-
-    @Inject
-    public ExtensionStartStopExecutorProvider(final @NotNull ShutdownHooks shutdownHooks) {
-        this.shutdownHooks = shutdownHooks;
-    }
 
     @Override
     public ExecutorService get() {
         final ThreadFactory threadFactory = ThreadFactoryUtil.create("extension-start-stop-executor");
         final ExecutorService executorService = Executors.newSingleThreadExecutor(threadFactory);
-        shutdownHooks.add(new ExtensionStartStopExecutorShutdownHook(executorService));
+        ShutdownHooks.INSTANCE.add(new ExtensionStartStopExecutorShutdownHook(executorService));
         return executorService;
     }
 

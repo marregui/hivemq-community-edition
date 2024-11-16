@@ -28,9 +28,7 @@ import com.hivemq.extensions.executor.task.PluginTaskOutput;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
-/**
- * @author Lukas Brandl
- */
+
 public class SubscriptionAuthorizerOutputImpl extends AbstractAsyncOutput<SubscriptionAuthorizerOutput>
         implements SubscriptionAuthorizerOutput, PluginTaskOutput, Supplier<SubscriptionAuthorizerOutputImpl> {
 

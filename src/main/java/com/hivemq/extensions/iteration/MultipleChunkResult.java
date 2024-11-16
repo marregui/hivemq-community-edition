@@ -19,9 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class MultipleChunkResult<V> {
 
     private final @NotNull Map<Integer, BucketChunkResult<V>> values;

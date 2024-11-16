@@ -17,9 +17,7 @@ package com.hivemq.extensions.executor.task;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class DefaultPluginTaskInput implements PluginTaskInput {
 
     private static final DefaultPluginTaskInput INSTANCE = new DefaultPluginTaskInput();

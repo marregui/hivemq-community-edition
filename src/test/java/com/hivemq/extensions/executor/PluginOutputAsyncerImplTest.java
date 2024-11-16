@@ -37,24 +37,19 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-/**
- * @author Christoph Schäbel
- */
+
 @SuppressWarnings("NullabilityAnnotations")
 public class PluginOutputAsyncerImplTest {
 
 
     private PluginOutPutAsyncer asyncer;
 
-    @Mock
-    private ShutdownHooks shutdownHooks;
-
 
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
 
-        asyncer = new PluginOutputAsyncerImpl(shutdownHooks);
+        asyncer = new PluginOutputAsyncerImpl();
     }
 
     @Test

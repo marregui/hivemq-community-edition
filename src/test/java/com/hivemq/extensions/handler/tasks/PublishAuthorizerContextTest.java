@@ -61,7 +61,7 @@ public class PublishAuthorizerContextTest {
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME)
                 .set(new DummyClientConnection(channel, mock(PublishFlushHandler.class)));
         when(ctx.channel()).thenReturn(channel);
-        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl(mock(ShutdownHooks.class));
+        final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         resultFuture = SettableFuture.create();
         output = new PublishAuthorizerOutputImpl(asyncer);
         context = new PublishAuthorizerContext("clientId", output, resultFuture, 1, ctx);

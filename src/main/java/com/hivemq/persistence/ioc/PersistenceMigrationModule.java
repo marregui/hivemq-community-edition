@@ -19,7 +19,6 @@ import com.codahale.metrics.MetricRegistry;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.hivemq.bootstrap.ioc.SingletonModule;
 import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
-import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.metrics.ioc.provider.MetricsHolderProvider;
@@ -45,8 +44,6 @@ public class PersistenceMigrationModule extends SingletonModule<Class<Persistenc
 
     @Override
     protected void configure() {
-
-        bind(ShutdownHooks.class).asEagerSingleton();
         bind(PersistenceStartup.class).asEagerSingleton();
         bind(PersistenceStartupShutdownHookInstaller.class).asEagerSingleton();
 

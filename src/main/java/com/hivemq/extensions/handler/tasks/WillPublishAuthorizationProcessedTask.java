@@ -26,9 +26,7 @@ import com.hivemq.mqtt.message.connect.CONNECT;
 import com.hivemq.util.Exceptions;
 import io.netty.channel.ChannelHandlerContext;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class WillPublishAuthorizationProcessedTask implements FutureCallback<PublishAuthorizerOutputImpl> {
 
     private final @NotNull CONNECT connect;

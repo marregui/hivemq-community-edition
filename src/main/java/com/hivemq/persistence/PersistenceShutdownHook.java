@@ -39,9 +39,7 @@ import java.util.concurrent.TimeoutException;
 
 import static com.hivemq.configuration.service.InternalConfigurations.PERSISTENCE_SHUTDOWN_TIMEOUT_SEC;
 
-/**
- * @author Lukas Brandl
- */
+
 public class PersistenceShutdownHook implements ShutdownHooks.Hook {
 
     private static final Logger log = LoggerFactory.getLogger(PersistenceShutdownHook.class);
@@ -127,5 +125,10 @@ public class PersistenceShutdownHook implements ShutdownHooks.Hook {
 
         persistenceScheduledExecutorService.shutdownNow();
         persistenceExecutorService.shutdown();
+    }
+
+    @Override
+    public @NotNull ShutdownHooks.Priority priority() {
+        return ShutdownHooks.Priority.LOW;
     }
 }

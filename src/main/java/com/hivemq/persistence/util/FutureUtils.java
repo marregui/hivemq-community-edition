@@ -30,9 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-/**
- * @author Lukas Brandl
- */
+
 public class FutureUtils {
 
     private static final Logger log = LoggerFactory.getLogger(FutureUtils.class);

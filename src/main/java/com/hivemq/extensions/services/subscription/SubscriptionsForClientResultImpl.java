@@ -21,9 +21,7 @@ import com.hivemq.extension.sdk.api.services.subscription.TopicSubscription;
 
 import java.util.Set;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class SubscriptionsForClientResultImpl implements SubscriptionsForClientResult {
 
     private final @NotNull String clientId;

@@ -22,9 +22,7 @@ import com.hivemq.extension.sdk.api.async.Async;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class AsyncOutputImpl<T extends PluginTaskOutput> implements Async<T> {
 
     @NotNull

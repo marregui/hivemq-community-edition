@@ -40,9 +40,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Lukas Brandl
- */
+
 public class PublishPayloadXodusLocalPersistenceTest {
 
     @Rule

@@ -26,9 +26,7 @@ import javax.inject.Provider;
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.NON_SSL_HANDLER;
 
 
-/**
- * @author Christoph Schäbel
- */
+
 public class TcpChannelInitializer extends AbstractChannelInitializer {
 
     @NotNull

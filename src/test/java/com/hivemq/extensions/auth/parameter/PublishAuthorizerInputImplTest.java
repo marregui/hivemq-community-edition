@@ -29,9 +29,7 @@ import util.TestMessageUtil;
 
 import static org.junit.Assert.assertNotNull;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class PublishAuthorizerInputImplTest {
 
     private Channel channel;

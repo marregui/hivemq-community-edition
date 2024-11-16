@@ -32,9 +32,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class SslClientCertificateImpl implements SslClientCertificate {
 
     private final Certificate[] certificates;

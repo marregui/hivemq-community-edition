@@ -20,6 +20,7 @@ import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
 import com.hivemq.codec.decoder.MQTTMessageDecoder;
+import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.entity.Listener;
@@ -62,7 +63,7 @@ public abstract class AbstractChannelInitializer extends ChannelInitializer<Chan
     @Override
     protected void initChannel(final @NotNull Channel ch) throws Exception {
         Preconditions.checkNotNull(ch, "Channel must never be null");
-        if (!legacyNettyShutdown && channelDependencies.getShutdownHooks().hooksHaveRun()) {
+        if (!legacyNettyShutdown && ShutdownHooks.INSTANCE.hooksHaveRun()) {
             //during shutting down, we dont want new clients to create any pipeline,
             //and we dont want to read from their socket
             ch.config().setAutoRead(false);

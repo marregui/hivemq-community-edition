@@ -25,9 +25,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class PublishAuthorizerContext extends PluginInOutTaskContext<PublishAuthorizerOutputImpl> {
 
     private final @NotNull PublishAuthorizerOutputImpl output;

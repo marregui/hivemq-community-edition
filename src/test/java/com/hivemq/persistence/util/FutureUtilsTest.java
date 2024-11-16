@@ -27,9 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Lukas Brandl
- */
+
 public class FutureUtilsTest {
 
     @Test

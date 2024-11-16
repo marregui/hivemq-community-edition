@@ -87,7 +87,6 @@ public class AbstractChannelInitializerTest {
                 1000L));
 
         when(channelDependencies.getConfigurationService()).thenReturn(configurationService);
-        when(channelDependencies.getShutdownHooks()).thenReturn(mock(ShutdownHooks.class));
         when(configurationService.mqttConfiguration()).thenReturn(mqttConfigurationService);
 
         when(channelDependencies.getRestrictionsConfigurationService()).thenReturn(restrictionsConfigurationService);

@@ -17,9 +17,7 @@ package com.hivemq.configuration.service.entity;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * @author Christoph Schäbel
- */
+
 public interface TlsListener extends Listener {
 
     /**

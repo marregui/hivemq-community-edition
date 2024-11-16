@@ -30,9 +30,7 @@ import util.TestConfigurationBootstrap;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class DefaultPermissionsEvaluatorTest {
 
     @Test

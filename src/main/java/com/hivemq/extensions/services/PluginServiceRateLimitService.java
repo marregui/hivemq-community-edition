@@ -23,9 +23,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static com.hivemq.configuration.service.InternalConfigurations.EXTENSION_SERVICE_CALL_RATE_LIMIT_PER_SEC;
 
-/**
- * @author Lukas Brandl
- */
+
 @LazySingleton
 public class PluginServiceRateLimitService {
 

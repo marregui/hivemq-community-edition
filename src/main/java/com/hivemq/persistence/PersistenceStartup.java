@@ -104,4 +104,9 @@ public class PersistenceStartup implements ShutdownHooks.Hook {
             log.error("Closing file persistence failed", e);
         }
     }
+
+    @Override
+    public @NotNull ShutdownHooks.Priority priority() {
+        return ShutdownHooks.Priority.LOW;
+    }
 }

@@ -25,9 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-/**
- * @author Lukas Brandl
- */
+
 public class ThreadPreConditionsTest {
 
     @After

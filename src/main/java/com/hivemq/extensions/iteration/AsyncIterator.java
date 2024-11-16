@@ -21,9 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * @author Christoph Schäbel
- */
+
 public interface AsyncIterator<V> {
 
     /**

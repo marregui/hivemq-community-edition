@@ -17,9 +17,7 @@ package com.hivemq.configuration.entity;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-/**
- * @author Lukas Brandl
- */
+
 public class StringTrimAdapter extends XmlAdapter<String, String> {
 
     @Override

@@ -18,9 +18,7 @@ package com.hivemq.extensions.services.subscription;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.subscription.SubscriberForTopicResult;
 
-/**
- * @author Christoph Schäbel
- */
+
 public class SubscriberForTopicResultImpl implements SubscriberForTopicResult {
 
     @NotNull

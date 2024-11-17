@@ -15,11 +15,6 @@
  */
 package com.hivemq;
 
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
-import com.google.inject.ProvisionException;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.InjectionListener;
@@ -29,7 +24,6 @@ import com.hivemq.bootstrap.SingletonModule;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.util.ThreadFactoryUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,10 +36,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
 
@@ -53,7 +48,6 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
 
     private final @NotNull Map<String, InvokeStatus> invokeStatus;
     private final @NotNull List<Invocable> invocable;
-    private @Nullable ListeningExecutorService executor;
 
     public LifecycleModule() {
         super(LifecycleModule.class);
@@ -71,10 +65,8 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         if (type.isAnnotationPresent(javax.inject.Singleton.class) ||
                 type.isAnnotationPresent(com.google.inject.Singleton.class) ||
                 type.isAnnotationPresent(LazySingleton.class)) {
-            addSingletonClass(type);
+            invokeStatus.putIfAbsent(type.getCanonicalName(), new InvokeStatus());
         }
-
-        // post constructs
         for (final Method m : type.getDeclaredMethods()) {
             if (m.isAnnotationPresent(PostConstruct.class)) {
                 if (m.getParameterTypes().length != 0 ||
@@ -83,47 +75,65 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
                     throw new RuntimeException();
                 }
                 if (canInvokePostConstruct(type)) {
-                    final Method postConstruct = m;
-                    encounter.register((InjectionListener<I>) listener -> {
-                        try {
-                            postConstruct.setAccessible(true);
-                            postConstruct.invoke(listener);
-                        } catch (final IllegalAccessException | InvocationTargetException e) {
-                            if (e.getCause() instanceof UnrecoverableException) {
-                                log.error("An unrecoverable Exception occurred. Exiting HiveMQ", e);
-                                System.exit(1);
-                            }
-                            throw new RuntimeException(e);
-                        }
-                    });
+                    encounter.register(postConstructInvocation(m));
                 }
                 break;
             }
         }
-
-        // pre destroys
         for (final Method m : type.getDeclaredMethods()) {
             if (m.isAnnotationPresent(PreDestroy.class)) {
                 if (m.getParameterTypes().length != 0) {
                     throw new RuntimeException();
                 }
                 if (canInvokePreDestroy(type)) {
-                    final Method preDestroy = m;
-                    encounter.register((InjectionListener<I>) target -> invocable.add(new Invocable(preDestroy,
-                            target)));
+                    encounter.register(preDestroyInvocation(m));
                 }
                 break;
             }
         }
     }
 
+    private <I> @NotNull InjectionListener<I> postConstructInvocation(final @NotNull Method method) {
+        return target -> {
+            try {
+                method.setAccessible(true);
+                method.invoke(target);
+            } catch (final IllegalAccessException | InvocationTargetException e) {
+                if (e.getCause() instanceof UnrecoverableException) {
+                    log.error("An unrecoverable Exception occurred. Exiting HiveMQ", e);
+                    System.exit(1);
+                }
+                throw new RuntimeException(e);
+            }
+        };
+    }
+
+    private <I> @NotNull InjectionListener<I> preDestroyInvocation(final @NotNull Method method) {
+        return target -> invocable.add(new Invocable(method, target));
+    }
+
     @Override
     protected void configure() {
-        bind(LifecycleShutdownRegistration.class).asEagerSingleton();
         bindListener(Matchers.any(), new TypeListener() {
             @Override
             public <I> void hear(final @NotNull TypeLiteral<I> type, final @NotNull TypeEncounter<I> encounter) {
                 invoke(encounter, type.getRawType());
+            }
+        });
+        ShutdownHooks.INSTANCE.add(new ShutdownHooks.Hook() {
+            @Override
+            public @NotNull String name() {
+                return "Lifecycle Shutdown";
+            }
+
+            @Override
+            public @NotNull ShutdownHooks.Priority priority() {
+                return ShutdownHooks.Priority.HIGH;
+            }
+
+            @Override
+            public void run() {
+                LifecycleModule.this.executePreDestroys();
             }
         });
     }
@@ -148,36 +158,19 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         return !was;
     }
 
-    public void shutdown() {
-        if (executor != null) {
-            executor.shutdown();
-        }
-    }
-
-    void addSingletonClass(final @NotNull Class<?> clazz) {
-        invokeStatus.putIfAbsent(clazz.getCanonicalName(), new InvokeStatus());
-    }
-
-    void addPreDestroyMethod(final @NotNull Method preDestroy, final @NotNull Object listener) {
-        this.invocable.add(new Invocable(Objects.requireNonNull(preDestroy), Objects.requireNonNull(listener)));
-    }
-
-    public @NotNull ListenableFuture<?> executePreDestroy() {
+    public void executePreDestroys() {
         final ExecutorService executor = Executors.newFixedThreadPool(3, ThreadFactoryUtil.create("PreDestroy-%d"));
-        this.executor = MoreExecutors.listeningDecorator(executor);
-        final List<ListenableFuture<?>> futures = new ArrayList<>(invocable.size());
-        for (final Invocable preDestroyInvokable : invocable) {
-            futures.add(this.executor.submit(() -> {
-                try {
-                    preDestroyInvokable.method.invoke(preDestroyInvokable.target);
-                } catch (final IllegalAccessException | InvocationTargetException e) {
-                    log.error("Could not execute preDestroy method for class {}",
-                            preDestroyInvokable.target.getClass(),
-                            e);
-                }
-            }));
+        final List<Future<?>> futures = new ArrayList<>(invocable.size());
+        for (final Invocable preDestroy : invocable) {
+            futures.add(executor.submit(preDestroy::invoke));
         }
-        return Futures.allAsList(futures);
+        executor.shutdown();
+        try {
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (final InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("Exceptions in lifecycle shutdown", e);
+        }
     }
 
     private static final class InvokeStatus {
@@ -189,9 +182,17 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         private final @NotNull Method method;
         private final @NotNull Object target;
 
-        public Invocable(final @NotNull Method method, final @NotNull Object target) {
+        Invocable(final @NotNull Method method, final @NotNull Object target) {
             this.method = method;
             this.target = target;
+        }
+
+        void invoke() {
+            try {
+                method.invoke(target);
+            } catch (final IllegalAccessException | InvocationTargetException e) {
+                log.error("Could not execute preDestroy method for class {}", target.getClass(), e);
+            }
         }
     }
 }

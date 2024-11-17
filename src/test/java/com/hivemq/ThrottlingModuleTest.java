@@ -24,19 +24,21 @@ import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;
 import io.netty.handler.traffic.GlobalTrafficShapingHandler;
+import org.jetbrains.annotations.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 
 public class ThrottlingModuleTest {
 
-    private AutoCloseable closeableMock;
+    private @Nullable AutoCloseable closeableMock;
 
-    private Injector injector;
+    private @Nullable Injector injector;
 
     @Before
     public void setUp() throws Exception {
@@ -55,16 +57,16 @@ public class ThrottlingModuleTest {
 
     @After
     public void tearDown() throws Exception {
-        closeableMock.close();
+        if (closeableMock != null) {
+            closeableMock.close();
+        }
     }
 
     @Test
-    public void test_traffic_shaping_handler_is_singleton() throws Exception {
-
+    public void test_traffic_shaping_handler_is_singleton() {
+        assertNotNull(injector);
         final GlobalTrafficShapingHandler instance = injector.getInstance(GlobalTrafficShapingHandler.class);
         final GlobalTrafficShapingHandler instance2 = injector.getInstance(GlobalTrafficShapingHandler.class);
-
         assertSame(instance, instance2);
     }
-
 }

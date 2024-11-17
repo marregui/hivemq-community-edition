@@ -17,6 +17,7 @@ package com.hivemq;
 
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Singleton;
 import java.util.concurrent.atomic.AtomicLong;
@@ -24,17 +25,13 @@ import java.util.concurrent.atomic.AtomicLong;
 @Singleton
 public class TopicAliasLimiter {
 
-    private final @NotNull AtomicLong memoryUsage;
-    private final @NotNull AtomicLong topicAliasesTotal;
+    private final @NotNull AtomicLong memoryUsage = new AtomicLong();
+    private final @NotNull AtomicLong topicAliasesTotal = new AtomicLong();
+    private final int memorySoftLimit = InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_SOFT_LIMIT_BYTES.get();
+    private final int memoryHardLimit = InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.get();
 
-    private final int memorySoftLimit;
-    private final int memoryHardLimit;
-
-    public TopicAliasLimiter() {
-        this.memoryUsage = new AtomicLong(0);
-        this.topicAliasesTotal = new AtomicLong(0);
-        this.memorySoftLimit = InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_SOFT_LIMIT_BYTES.get();
-        this.memoryHardLimit = InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.get();
+    private static int getEstimatedSize(final @NotNull String topic) {
+        return 38 + 2 * topic.length();
     }
 
     public boolean aliasesAvailable() {
@@ -42,42 +39,30 @@ public class TopicAliasLimiter {
     }
 
     public boolean limitExceeded() {
-        return this.memoryUsage.get() > memoryHardLimit;
+        return memoryUsage.get() > memoryHardLimit;
     }
 
     public void initUsage(final int size) {
-        //4 bytes per topic as index
-        this.memoryUsage.addAndGet(size * 4L);
+        memoryUsage.addAndGet(4L * size); //4 bytes per topic as index
     }
 
     public void addUsage(@NotNull final String topic) {
-        this.memoryUsage.addAndGet(getEstimatedSize(topic));
-        this.topicAliasesTotal.incrementAndGet();
+        memoryUsage.addAndGet(getEstimatedSize(topic));
+        topicAliasesTotal.incrementAndGet();
     }
 
-    public void removeUsage(final String... topics) {
-        for (final String topic : topics) {
+    public void removeUsage(final @NotNull String @Nullable ... topics) {
+        for (int i = 0; i < topics.length; i++) {
+            final String topic = topics[i];
             if (topic != null) {
-                this.memoryUsage.addAndGet(-1 * getEstimatedSize(topic));
-                this.topicAliasesTotal.decrementAndGet();
+                memoryUsage.addAndGet(-1 * getEstimatedSize(topic));
+                topicAliasesTotal.decrementAndGet();
             }
         }
     }
 
-    public void finishUsage(@NotNull final String... topics) {
-        //4 bytes per topic as index
-        this.memoryUsage.addAndGet(topics.length * -4L);
-        this.removeUsage(topics);
-    }
-
-    /**
-     * 38 = estimated String overhead
-     * 2  = per character of a topic
-     *
-     * @param topic to estimate size
-     * @return the size in memory of a topic
-     */
-    private int getEstimatedSize(final @NotNull String topic) {
-        return 38 + (topic.length() * 2);
+    public void finishUsage(final @NotNull String @Nullable ... topics) {
+        memoryUsage.addAndGet(-4L * topics.length); //4 bytes per topic as index
+        removeUsage(topics);
     }
 }

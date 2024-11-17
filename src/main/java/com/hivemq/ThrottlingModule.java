@@ -16,12 +16,23 @@
 package com.hivemq;
 
 import com.hivemq.bootstrap.SingletonModule;
+import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.configuration.service.RestrictionsConfigurationService;
+import com.hivemq.util.ThreadFactoryUtil;
 import io.netty.handler.traffic.GlobalTrafficShapingHandler;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
-public class ThrottlingModule extends SingletonModule {
+public class ThrottlingModule extends SingletonModule<Class<ThrottlingModule>> {
 
+    private static final long outLimit = InternalConfigurations.OUTGOING_BANDWIDTH_THROTTLING_DEFAULT_BYTES_PER_SEC;
 
     public ThrottlingModule() {
         super(ThrottlingModule.class);
@@ -30,5 +41,43 @@ public class ThrottlingModule extends SingletonModule {
     @Override
     protected void configure() {
         bind(GlobalTrafficShapingHandler.class).toProvider(GlobalTrafficShapingProvider.class).in(Singleton.class);
+    }
+
+
+    private static class GlobalTrafficShapingProvider implements Provider<GlobalTrafficShapingHandler> {
+        private static final Logger log = LoggerFactory.getLogger(GlobalTrafficShapingProvider.class);
+
+        private final long inLimit;
+
+        @Inject
+        GlobalTrafficShapingProvider(final @NotNull RestrictionsConfigurationService config) {
+            inLimit = config.incomingLimit();
+            log.debug("Throttling incoming traffic to {} B/s", inLimit);
+            log.debug("Throttling outgoing traffic to {} B/s", outLimit);
+        }
+
+        @Override
+        public @NotNull GlobalTrafficShapingHandler get() {
+            final ScheduledExecutorService executor =
+                    Executors.newSingleThreadScheduledExecutor(ThreadFactoryUtil.create(
+                            "global-traffic-shaper-executor-%d"));
+            ShutdownHooks.INSTANCE.add(new ShutdownHooks.Hook() {
+                @Override
+                public @NotNull String name() {
+                    return "Global Traffic Shaper Executor Shutdown Hook";
+                }
+
+                @Override
+                public @NotNull ShutdownHooks.Priority priority() {
+                    return ShutdownHooks.Priority.HIGH;
+                }
+
+                @Override
+                public void run() {
+                    executor.shutdownNow();
+                }
+            });
+            return new GlobalTrafficShapingHandler(executor, outLimit, inLimit, 1000L);
+        }
     }
 }

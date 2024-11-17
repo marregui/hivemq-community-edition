@@ -24,7 +24,7 @@ final class DataFolderLock {
             channel = FileChannel.open(lockFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
         } catch (final Throwable e) {
             log.error("Could not open data lock file.", e);
-            throw new StartAbortedException(
+            throw new RuntimeException(
                     "An error occurred while opening the persistence. Is another HiveMQ instance running?");
         }
         try {
@@ -32,7 +32,7 @@ final class DataFolderLock {
         } catch (final Throwable ignored) {
         }
         if (fileLock == null) {
-            throw new StartAbortedException(
+            throw new RuntimeException(
                     "An error occurred while opening the persistence. Is another HiveMQ instance running?");
         }
     }

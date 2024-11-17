@@ -73,9 +73,7 @@ public class Mqtt5PublishDecoder extends AbstractMqttPublishDecoder<Mqtt5PUBLISH
 
     @Override
     public @Nullable Mqtt5PUBLISH decode(
-            final @NotNull Connection clientConnectionContext,
-            final @NotNull ByteBuf buf,
-            final byte header) {
+            final @NotNull Connection clientConnectionContext, final @NotNull ByteBuf buf, final byte header) {
 
         final int qos = decodeQoS(clientConnectionContext, header);
         if (qos == DISCONNECTED) {
@@ -282,9 +280,7 @@ public class Mqtt5PublishDecoder extends AbstractMqttPublishDecoder<Mqtt5PUBLISH
     }
 
     private @Nullable Mqtt5Builder readTopicFromAliasMapping(
-            final @NotNull Connection clientConnectionContext,
-            @Nullable String topicName,
-            final int topicAlias) {
+            final @NotNull Connection clientConnectionContext, @Nullable String topicName, final int topicAlias) {
 
         boolean isNewTopicAlias = false;
         if (topicAlias != DEFAULT_NO_TOPIC_ALIAS) {
@@ -340,9 +336,7 @@ public class Mqtt5PublishDecoder extends AbstractMqttPublishDecoder<Mqtt5PUBLISH
     }
 
     private boolean topicAliasInvalid(
-            final @NotNull Connection clientConnectionContext,
-            final @NotNull ByteBuf buf,
-            final int topicAlias) {
+            final @NotNull Connection clientConnectionContext, final @NotNull ByteBuf buf, final int topicAlias) {
 
         if (topicAlias != DEFAULT_NO_TOPIC_ALIAS) {
             disconnectByMoreThanOnce(clientConnectionContext, "topic alias", MessageType.PUBLISH);
@@ -356,9 +350,7 @@ public class Mqtt5PublishDecoder extends AbstractMqttPublishDecoder<Mqtt5PUBLISH
     }
 
     private boolean propertiesLengthInvalid(
-            final @NotNull Connection clientConnectionContext,
-            final @NotNull ByteBuf buf,
-            final int propertyLength) {
+            final @NotNull Connection clientConnectionContext, final @NotNull ByteBuf buf, final int propertyLength) {
 
         if (propertyLength < 0) {
             disconnectByMalformedPropertyLength(clientConnectionContext, MessageType.PUBLISH);

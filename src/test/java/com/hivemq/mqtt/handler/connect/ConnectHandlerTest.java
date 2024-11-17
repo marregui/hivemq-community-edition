@@ -46,7 +46,7 @@ import com.hivemq.extensions.handler.tasks.PublishAuthorizerResult;
 import com.hivemq.extensions.packets.general.ModifiableDefaultPermissionsImpl;
 import com.hivemq.extensions.services.auth.Authorizers;
 import com.hivemq.extensions.services.builder.TopicPermissionBuilderImpl;
-import com.hivemq.TopicAliasLimiterImpl;
+import com.hivemq.TopicAliasLimiter;
 import com.hivemq.logging.EventLog;
 import com.hivemq.mqtt.handler.KeepAliveDisconnectHandler;
 import com.hivemq.mqtt.handler.KeepAliveDisconnectService;
@@ -1216,7 +1216,7 @@ public class ConnectHandlerTest {
                 publishFlowHandlerProvider,
                 flowControlHandlerProvider,
                 mqttConnacker,
-                new TopicAliasLimiterImpl(),
+                new TopicAliasLimiter(),
                 mock(PublishPollService.class),
                 mock(SharedSubscriptionService.class),
                 internalAuthServiceImpl,

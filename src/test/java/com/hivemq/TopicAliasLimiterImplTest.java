@@ -40,7 +40,7 @@ public class TopicAliasLimiterImplTest {
         InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_SOFT_LIMIT_BYTES.set(50);
         InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(200);
 
-        topicAliasLimiter = new TopicAliasLimiterImpl();
+        topicAliasLimiter = new TopicAliasLimiter();
     }
 
     @Test

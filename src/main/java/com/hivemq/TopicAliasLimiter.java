@@ -15,46 +15,69 @@
  */
 package com.hivemq;
 
+import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 
-public interface TopicAliasLimiter {
+import javax.inject.Singleton;
+import java.util.concurrent.atomic.AtomicLong;
+
+@Singleton
+public class TopicAliasLimiter {
+
+    private final @NotNull AtomicLong memoryUsage;
+    private final @NotNull AtomicLong topicAliasesTotal;
+
+    private final int memorySoftLimit;
+    private final int memoryHardLimit;
+
+    public TopicAliasLimiter() {
+        this.memoryUsage = new AtomicLong(0);
+        this.topicAliasesTotal = new AtomicLong(0);
+        this.memorySoftLimit = InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_SOFT_LIMIT_BYTES.get();
+        this.memoryHardLimit = InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.get();
+    }
+
+    public boolean aliasesAvailable() {
+        return memoryUsage.get() < memorySoftLimit;
+    }
+
+    public boolean limitExceeded() {
+        return this.memoryUsage.get() > memoryHardLimit;
+    }
+
+    public void initUsage(final int size) {
+        //4 bytes per topic as index
+        this.memoryUsage.addAndGet(size * 4L);
+    }
+
+    public void addUsage(@NotNull final String topic) {
+        this.memoryUsage.addAndGet(getEstimatedSize(topic));
+        this.topicAliasesTotal.incrementAndGet();
+    }
+
+    public void removeUsage(final String... topics) {
+        for (final String topic : topics) {
+            if (topic != null) {
+                this.memoryUsage.addAndGet(-1 * getEstimatedSize(topic));
+                this.topicAliasesTotal.decrementAndGet();
+            }
+        }
+    }
+
+    public void finishUsage(@NotNull final String... topics) {
+        //4 bytes per topic as index
+        this.memoryUsage.addAndGet(topics.length * -4L);
+        this.removeUsage(topics);
+    }
 
     /**
-     * @return true if more memory soft limit for topic aliases not reached, else false
-     */
-    boolean aliasesAvailable();
-
-    /**
-     * @return true if more memory hard limit for topic aliases reached, else false
-     */
-    boolean limitExceeded();
-
-    /**
-     * Use this method to initialize topic alias usage for a channel, with topic alias maximum
+     * 38 = estimated String overhead
+     * 2  = per character of a topic
      *
-     * @param topicAliasMaximum the topic alias maximum per client, sent in the connack
+     * @param topic to estimate size
+     * @return the size in memory of a topic
      */
-    void initUsage(final int topicAliasMaximum);
-
-    /**
-     * Use this method to add topic alias memory usage
-     *
-     * @param topic the topic to add memory usage for
-     */
-    void addUsage(@NotNull final String topic);
-
-    /**
-     * Use this method to remove topic alias memory usage
-     *
-     * @param topics the topics to remove memory usage for
-     */
-    void removeUsage(final String... topics);
-
-    /**
-     * Use this method to remove topic alias memory usage and the reserved memory for a channel
-     *
-     * @param topics the topics to remove memory usage for
-     */
-    void finishUsage(@NotNull final String... topics);
-
+    private int getEstimatedSize(final @NotNull String topic) {
+        return 38 + (topic.length() * 2);
+    }
 }

@@ -474,8 +474,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
 
     private boolean isWillNotAuthorized(@NotNull final ChannelHandlerContext ctx, @NotNull final CONNECT msg) {
         if (msg.getWillPublish() != null) {
-            final ModifiableDefaultPermissions permissions =
-                    Connection.of(ctx.channel()).getAuthPermissions();
+            final ModifiableDefaultPermissions permissions = Connection.of(ctx.channel()).getAuthPermissions();
             if (!DefaultPermissionsEvaluator.checkWillPublish(permissions, msg.getWillPublish())) {
 
                 //will is not authorized, disconnect client

@@ -32,7 +32,7 @@ import com.hivemq.codec.decoder.mqtt5.Mqtt5UnsubscribeDecoder;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.service.FullConfigurationService;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.TopicAliasLimiterImpl;
+import com.hivemq.TopicAliasLimiter;
 import com.hivemq.logging.EventLog;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.metrics.handler.GlobalMQTTMessageCounter;
@@ -74,7 +74,7 @@ public class TestMqttDecoder {
                         new Mqtt5PublishDecoder(disconnector,
                                 hiveMQId,
                                 fullConfigurationService,
-                                new TopicAliasLimiterImpl()),
+                                new TopicAliasLimiter()),
                         new Mqtt5DisconnectDecoder(disconnector, fullConfigurationService),
                         new Mqtt5SubscribeDecoder(disconnector, fullConfigurationService),
                         new Mqtt5PubackDecoder(disconnector, fullConfigurationService),

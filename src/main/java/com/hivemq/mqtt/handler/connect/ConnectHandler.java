@@ -39,7 +39,7 @@ import com.hivemq.extensions.handler.PluginAuthorizerServiceImpl.AuthorizeWillRe
 import com.hivemq.extensions.handler.tasks.PublishAuthorizerResult;
 import com.hivemq.extensions.packets.general.ModifiableDefaultPermissionsImpl;
 import com.hivemq.extensions.services.auth.Authorizers;
-import com.hivemq.limitation.TopicAliasLimiter;
+import com.hivemq.TopicAliasLimiter;
 import com.hivemq.mqtt.handler.KeepAliveDisconnectHandler;
 import com.hivemq.mqtt.handler.KeepAliveDisconnectService;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;

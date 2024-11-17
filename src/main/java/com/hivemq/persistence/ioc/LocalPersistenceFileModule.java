@@ -16,7 +16,7 @@
 package com.hivemq.persistence.ioc;
 
 import com.google.inject.Injector;
-import com.hivemq.bootstrap.ioc.SingletonModule;
+import com.hivemq.bootstrap.SingletonModule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.persistence.clientqueue.ClientQueueLocalPersistence;

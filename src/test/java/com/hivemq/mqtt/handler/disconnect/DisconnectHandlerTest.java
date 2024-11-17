@@ -24,7 +24,7 @@ import com.hivemq.bootstrap.ClientState;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.configuration.service.entity.TcpListener;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.limitation.TopicAliasLimiter;
+import com.hivemq.TopicAliasLimiter;
 import com.hivemq.logging.EventLog;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.ProtocolVersion;

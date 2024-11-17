@@ -18,7 +18,7 @@ package com.hivemq.codec.decoder.mqtt5;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.AbstractMqttConnectDecoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.MqttBinaryData;

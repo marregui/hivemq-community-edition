@@ -15,7 +15,7 @@
  */
 package com.hivemq.codec.decoder;
 
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5AuthDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5DisconnectDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5PubackDecoder;

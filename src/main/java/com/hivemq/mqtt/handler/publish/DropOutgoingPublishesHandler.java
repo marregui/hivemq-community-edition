@@ -18,7 +18,7 @@ package com.hivemq.mqtt.handler.publish;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.dropping.MessageDroppedService;

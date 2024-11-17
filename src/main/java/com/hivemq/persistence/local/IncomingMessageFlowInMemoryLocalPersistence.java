@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.local;
 
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

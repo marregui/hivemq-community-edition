@@ -20,7 +20,6 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.disconnect.DisconnectReasonCode;
 import com.hivemq.extension.sdk.api.services.exception.RateLimitExceededException;

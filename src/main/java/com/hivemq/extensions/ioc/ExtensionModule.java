@@ -15,8 +15,8 @@
  */
 package com.hivemq.extensions.ioc;
 
-import com.hivemq.bootstrap.ioc.SingletonModule;
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.SingletonModule;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.extension.sdk.api.client.parameter.ServerInformation;
 import com.hivemq.extension.sdk.api.events.EventRegistry;
 import com.hivemq.extension.sdk.api.services.admin.AdminService;

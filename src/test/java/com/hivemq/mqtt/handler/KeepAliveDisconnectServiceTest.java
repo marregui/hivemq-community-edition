@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler;
 
-import com.hivemq.common.shutdown.ShutdownHooks;
+import com.hivemq.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import io.netty.channel.Channel;

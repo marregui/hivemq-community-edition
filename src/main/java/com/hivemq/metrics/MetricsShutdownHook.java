@@ -15,7 +15,7 @@
  */
 package com.hivemq.metrics;
 
-import com.hivemq.common.shutdown.ShutdownHooks;
+import com.hivemq.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.jmx.JmxReporterBootstrap;
 

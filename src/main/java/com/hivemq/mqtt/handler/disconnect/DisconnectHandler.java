@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.events.OnClientDisconnectEvent;
 import com.hivemq.extensions.packets.general.UserPropertiesImpl;
-import com.hivemq.limitation.TopicAliasLimiter;
+import com.hivemq.TopicAliasLimiter;
 import com.hivemq.logging.EventLog;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.disconnect.DISCONNECT;

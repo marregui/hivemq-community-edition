@@ -15,6 +15,7 @@
  */
 package com.hivemq.common.shutdown;
 
+import com.hivemq.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Before;

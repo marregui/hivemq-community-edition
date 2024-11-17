@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.qos;
 
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.MessageWithID;
 import com.hivemq.persistence.local.IncomingMessageFlowLocalPersistence;

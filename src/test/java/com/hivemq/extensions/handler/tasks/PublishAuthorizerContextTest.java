@@ -19,7 +19,6 @@ package com.hivemq.extensions.handler.tasks;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extension.sdk.api.packets.publish.AckReasonCode;

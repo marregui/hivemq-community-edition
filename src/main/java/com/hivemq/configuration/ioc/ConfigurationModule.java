@@ -15,7 +15,7 @@
  */
 package com.hivemq.configuration.ioc;
 
-import com.hivemq.bootstrap.ioc.SingletonModule;
+import com.hivemq.bootstrap.SingletonModule;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.FullConfigurationService;

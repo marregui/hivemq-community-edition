@@ -17,7 +17,7 @@ package com.hivemq.metrics.ioc;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Injector;
-import com.hivemq.bootstrap.ioc.SingletonModule;
+import com.hivemq.bootstrap.SingletonModule;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.metrics.MetricsShutdownHook;

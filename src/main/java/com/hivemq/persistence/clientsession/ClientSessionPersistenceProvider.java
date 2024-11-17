@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.clientsession;
 
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

@@ -18,7 +18,7 @@ package com.hivemq.bootstrap.netty;
 import com.hivemq.codec.decoder.MqttConnectDecoder;
 import com.hivemq.codec.decoder.MqttDecoders;
 import com.hivemq.codec.encoder.EncoderFactory;
-import com.hivemq.common.shutdown.ShutdownHooks;
+import com.hivemq.ShutdownHooks;
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import org.jetbrains.annotations.NotNull;

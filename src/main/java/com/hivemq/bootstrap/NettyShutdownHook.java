@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap;
 
-import com.hivemq.common.shutdown.ShutdownHooks;
+import com.hivemq.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.connection.ConnectionPersistence;
 import io.netty.channel.EventLoopGroup;

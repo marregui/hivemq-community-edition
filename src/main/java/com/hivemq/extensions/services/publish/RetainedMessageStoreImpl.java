@@ -18,7 +18,7 @@ package com.hivemq.extensions.services.publish;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.exception.DoNotImplementException;
 import com.hivemq.extension.sdk.api.services.general.IterationCallback;

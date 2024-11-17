@@ -16,7 +16,7 @@
 package com.hivemq.persistence.payload;
 
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

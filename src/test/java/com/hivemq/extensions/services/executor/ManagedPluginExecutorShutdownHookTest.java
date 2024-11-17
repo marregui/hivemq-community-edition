@@ -16,7 +16,7 @@
 
 package com.hivemq.extensions.services.executor;
 
-import com.hivemq.common.shutdown.ShutdownHooks;
+import com.hivemq.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 

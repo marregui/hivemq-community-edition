@@ -19,7 +19,6 @@ package com.hivemq.extensions.handler;
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.common.shutdown.ShutdownHooks;
 import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 import org.jetbrains.annotations.NotNull;

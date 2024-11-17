@@ -19,7 +19,6 @@ package com.hivemq.extensions.handler;
 import com.google.common.collect.Maps;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.events.client.ClientLifecycleEventListener;

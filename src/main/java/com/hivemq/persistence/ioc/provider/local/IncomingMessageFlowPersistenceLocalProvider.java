@@ -16,7 +16,7 @@
 package com.hivemq.persistence.ioc.provider.local;
 
 
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.persistence.local.IncomingMessageFlowInMemoryLocalPersistence;
 import com.hivemq.persistence.local.IncomingMessageFlowLocalPersistence;
 import org.slf4j.Logger;

@@ -20,7 +20,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.google.inject.Inject;
-import com.hivemq.common.shutdown.ShutdownHooks;
+import com.hivemq.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.clientqueue.ClientQueuePersistence;
 import com.hivemq.persistence.clientsession.ClientSessionPersistence;

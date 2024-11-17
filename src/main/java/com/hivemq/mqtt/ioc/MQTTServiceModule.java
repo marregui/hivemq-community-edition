@@ -15,10 +15,10 @@
  */
 package com.hivemq.mqtt.ioc;
 
-import com.hivemq.bootstrap.ioc.SingletonModule;
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
-import com.hivemq.limitation.TopicAliasLimiter;
-import com.hivemq.limitation.TopicAliasLimiterImpl;
+import com.hivemq.bootstrap.SingletonModule;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.hivemq.TopicAliasLimiter;
+import com.hivemq.TopicAliasLimiterImpl;
 import com.hivemq.mqtt.services.InternalPublishService;
 import com.hivemq.mqtt.services.InternalPublishServiceImpl;
 import com.hivemq.mqtt.services.PublishDistributor;

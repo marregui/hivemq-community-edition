@@ -17,7 +17,7 @@ package com.hivemq.mqtt.handler;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.hivemq.common.shutdown.ShutdownHooks;
+import com.hivemq.ShutdownHooks;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;

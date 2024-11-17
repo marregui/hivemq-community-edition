@@ -16,7 +16,7 @@
 package com.hivemq.logging;
 
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.reason.Mqtt5AuthReasonCode;
@@ -31,10 +31,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-/**
- * The EventLog class is used to log certain events that could be important for customers to separate files.
- * In a future state of the implementation it may also be used to display those events in the web-interface.
- */
 @LazySingleton
 public class EventLog {
 
@@ -48,7 +44,6 @@ public class EventLog {
     /**
      * Events are logged to DEBUG, in case customers are using a custom logback.xml
      */
-
     private static final Logger logClientConnected = LoggerFactory.getLogger(EVENT_CLIENT_CONNECTED);
     private static final Logger logClientDisconnected = LoggerFactory.getLogger(EVENT_CLIENT_DISCONNECTED);
     private static final Logger logMessageDropped = LoggerFactory.getLogger(EVENT_MESSAGE_DROPPED);

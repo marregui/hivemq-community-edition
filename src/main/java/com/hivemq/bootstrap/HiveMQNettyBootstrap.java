@@ -22,7 +22,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.netty.ChannelInitializerFactory;
 import com.hivemq.bootstrap.netty.NettyConfiguration;
-import com.hivemq.common.shutdown.ShutdownHooks;
+import com.hivemq.ShutdownHooks;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.configuration.service.entity.ClientWriteBufferProperties;
 import com.hivemq.configuration.service.entity.Listener;

@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.cluster;
 
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.cluster.ClusterDiscoveryCallback;
 import com.hivemq.extension.sdk.api.services.cluster.ClusterService;

@@ -17,7 +17,7 @@ package com.hivemq.util;
 
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.configuration.HivemqId;
 
 import javax.inject.Inject;

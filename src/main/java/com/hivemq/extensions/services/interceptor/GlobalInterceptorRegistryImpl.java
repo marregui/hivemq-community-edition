@@ -16,7 +16,7 @@
 package com.hivemq.extensions.services.interceptor;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.connack.ConnackOutboundInterceptorProvider;
 import com.hivemq.extension.sdk.api.interceptor.connect.ConnectInboundInterceptorProvider;

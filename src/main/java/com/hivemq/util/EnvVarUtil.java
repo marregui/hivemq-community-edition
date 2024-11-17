@@ -15,7 +15,7 @@
  */
 package com.hivemq.util;
 
-import com.hivemq.exceptions.UnrecoverableException;
+import com.hivemq.UnrecoverableException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

@@ -16,7 +16,7 @@
 
 package com.hivemq.extensions.services.initializer;
 
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
 
 import com.hivemq.extension.sdk.api.services.intializer.ClientInitializer;

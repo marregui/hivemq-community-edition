@@ -15,7 +15,7 @@
  */
 package com.hivemq.util;
 
-import com.hivemq.exceptions.UnrecoverableException;
+import com.hivemq.UnrecoverableException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

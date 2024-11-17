@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.ioc;
 
-import com.hivemq.bootstrap.ioc.SingletonModule;
+import com.hivemq.bootstrap.SingletonModule;
 import com.hivemq.persistence.clientqueue.ClientQueueLocalPersistence;
 import com.hivemq.persistence.clientqueue.ClientQueueXodusLocalPersistence;
 import com.hivemq.persistence.ioc.provider.local.ClientSessionLocalProvider;

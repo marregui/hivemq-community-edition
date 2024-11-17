@@ -16,7 +16,6 @@
 package com.hivemq.extensions.executor;
 
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.async.Async;
@@ -24,7 +23,6 @@ import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extensions.executor.task.PluginTaskOutput;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.Duration;

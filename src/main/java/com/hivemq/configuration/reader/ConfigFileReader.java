@@ -21,7 +21,7 @@ import com.hivemq.configuration.entity.listener.TCPListenerEntity;
 import com.hivemq.configuration.entity.listener.TlsTCPListenerEntity;
 import com.hivemq.configuration.entity.listener.TlsWebsocketListenerEntity;
 import com.hivemq.configuration.entity.listener.WebsocketListenerEntity;
-import com.hivemq.exceptions.UnrecoverableException;
+import com.hivemq.UnrecoverableException;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.util.EnvVarUtil;
 import org.slf4j.Logger;

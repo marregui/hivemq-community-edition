@@ -15,8 +15,8 @@
  */
 package com.hivemq.security.ioc;
 
-import com.hivemq.bootstrap.ioc.SingletonModule;
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.SingletonModule;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.security.ssl.SslContextStore;
 import com.hivemq.security.ssl.SslFactory;
 

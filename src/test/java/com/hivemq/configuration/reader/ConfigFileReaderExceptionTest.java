@@ -16,7 +16,7 @@
 package com.hivemq.configuration.reader;
 
 import com.google.common.io.Files;
-import com.hivemq.exceptions.UnrecoverableException;
+import com.hivemq.UnrecoverableException;
 import org.junit.Test;
 
 import java.io.IOException;

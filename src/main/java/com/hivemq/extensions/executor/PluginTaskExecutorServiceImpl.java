@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.executor;
 
-import com.hivemq.common.shutdown.ShutdownHooks;
+import com.hivemq.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.executor.task.DefaultPluginTaskInput;
 import com.hivemq.extensions.executor.task.DefaultPluginTaskOutput;

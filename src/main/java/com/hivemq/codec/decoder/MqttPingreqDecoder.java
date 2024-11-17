@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder;
 
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;

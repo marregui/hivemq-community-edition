@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services;
 
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.extension.sdk.api.services.exception.RateLimitExceededException;
 
 import java.util.concurrent.atomic.AtomicInteger;

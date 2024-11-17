@@ -1,6 +1,5 @@
 package com.hivemq;
 
-import com.hivemq.exceptions.StartAbortedException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

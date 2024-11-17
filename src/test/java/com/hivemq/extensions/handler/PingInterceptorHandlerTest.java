@@ -18,7 +18,6 @@ package com.hivemq.extensions.handler;
 
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.common.shutdown.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.pingreq.PingReqInboundInterceptor;
 import com.hivemq.extension.sdk.api.interceptor.pingreq.parameter.PingReqInboundInput;
@@ -50,7 +49,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.mockito.Mockito;
 import util.DummyClientConnection;
 import util.IsolatedExtensionClassloaderUtil;
 

@@ -16,7 +16,7 @@
 package com.hivemq.bootstrap;
 
 import com.hivemq.configuration.service.entity.TcpListener;
-import com.hivemq.exceptions.UnrecoverableException;
+import com.hivemq.UnrecoverableException;
 import org.junit.Test;
 
 import java.util.ArrayList;

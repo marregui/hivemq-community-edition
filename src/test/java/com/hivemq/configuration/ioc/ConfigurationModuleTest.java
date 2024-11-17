@@ -18,7 +18,7 @@ package com.hivemq.configuration.ioc;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.hivemq.bootstrap.ioc.SystemInformationModule;
+import com.hivemq.bootstrap.SystemInformationModule;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.service.ConfigurationService;

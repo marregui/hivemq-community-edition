@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder;
 
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5ConnectDecoder;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.service.FullConfigurationService;

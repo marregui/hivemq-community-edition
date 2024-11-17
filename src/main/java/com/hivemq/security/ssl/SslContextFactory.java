@@ -16,7 +16,7 @@
 
 package com.hivemq.security.ssl;
 
-import com.hivemq.bootstrap.ioc.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.configuration.service.entity.Tls;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.security.exception.SslException;

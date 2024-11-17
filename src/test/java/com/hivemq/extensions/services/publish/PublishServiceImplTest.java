@@ -17,7 +17,7 @@ package com.hivemq.extensions.services.publish;
 
 import com.google.common.primitives.ImmutableIntArray;
 import com.google.common.util.concurrent.Futures;
-import com.hivemq.common.shutdown.ShutdownHooks;
+import com.hivemq.ShutdownHooks;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.extension.sdk.api.packets.general.Qos;

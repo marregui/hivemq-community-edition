@@ -98,8 +98,8 @@ public final class HiveMQServer {
     }
 
     public static void main(final String @NotNull [] args) throws Exception {
-        final SystemInformation systemInformation = new SystemInformation();
-        Logging.initLogging(systemInformation.getConfigFolder());
+        final SystemInformation sysInfo = new SystemInformation();
+        Logging.initLogging(sysInfo.getConfigFolder());
 
         final HivemqId hivemqId = new HivemqId();
         final LifecycleModule lifecycleModule = new LifecycleModule();
@@ -111,15 +111,15 @@ public final class HiveMQServer {
                 new MqttConfigurationServiceImpl(),
                 new RestrictionsConfigurationServiceImpl(),
                 new SecurityConfigurationServiceImpl());
-        final ConfigFileReader configReader = new ConfigFileReader(ConfigurationFileProvider.get(systemInformation),
+        final ConfigFileReader configReader = new ConfigFileReader(ConfigurationFileProvider.get(sysInfo),
                 new RestrictionConfigurator(config.restrictionsConfiguration()),
                 new SecurityConfigurator(config.securityConfiguration()),
                 new EnvVarUtil(),
                 new MqttConfigurator(config.mqttConfiguration()),
-                new ListenerConfigurator(config.listenerConfiguration(), systemInformation));
+                new ListenerConfigurator(config.listenerConfiguration(), sysInfo));
         configReader.applyConfig();
 
-        dataLock.lock(systemInformation.getDataFolder().toPath());
+        dataLock.lock(sysInfo.getDataFolder().toPath());
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 ShutdownHooks.INSTANCE.shutdown();
@@ -130,14 +130,14 @@ public final class HiveMQServer {
         }, "shutdown-" + hivemqId.get()));
 
         final Injector persistence = Guice.createInjector(Stage.PRODUCTION,
-                Arrays.asList(new SystemInformationModule(systemInformation),
+                Arrays.asList(new SystemInformationModule(sysInfo),
                         new ConfigurationModule(config, hivemqId),
                         new LazySingletonModule(),
                         lifecycleModule,
                         new PersistenceMigrationModule(metricRegistry)));
         persistence.getInstance(PersistenceStartup.class).finish();
         final Injector injector = Guice.createInjector(Stage.PRODUCTION,
-                Arrays.asList(new SystemInformationModule(systemInformation),
+                Arrays.asList(new SystemInformationModule(sysInfo),
                         new LazySingletonModule(),
                         lifecycleModule,
                         new ConfigurationModule(config, hivemqId),
@@ -153,22 +153,21 @@ public final class HiveMQServer {
 
         // start
         final long startTime = System.nanoTime();
-        final HiveMQInstance instance = injector.getInstance(HiveMQInstance.class);
+        final Instance instance = injector.getInstance(Instance.class);
         System.gc();
-        Logging.LOG_LEVEL_MODIFIER_TURBO_FILTER.registerLogLevelModifier(new XodusEnvironmentImplLogLevelModifier());
         instance.start();
         log.info("Started HiveMQ [{}] in {}ms",
                 hivemqId.get(),
                 TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime));
     }
 
-    private static class HiveMQInstance {
+    private static class Instance {
         private final @NotNull HiveMQNettyBootstrap nettyBootstrap;
         private final @NotNull PublishPayloadPersistence payloadPersistence;
         private final @NotNull ExtensionBootstrap extensionBootstrap;
 
         @Inject
-        HiveMQInstance(
+        Instance(
                 final @NotNull HiveMQNettyBootstrap nettyBootstrap,
                 final @NotNull PublishPayloadPersistence payloadPersistence,
                 final @NotNull ExtensionBootstrap extensionBootstrap) {

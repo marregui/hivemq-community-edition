@@ -24,6 +24,9 @@ import com.google.inject.ProvisionException;
 import com.google.inject.Stage;
 import com.google.inject.spi.Message;
 import com.hivemq.bootstrap.HiveMQMainModule;
+import com.hivemq.bootstrap.HiveMQNettyBootstrap;
+import com.hivemq.bootstrap.ListenerStartupInformation;
+import com.hivemq.bootstrap.StartupListenerVerifier;
 import com.hivemq.bootstrap.SystemInformationModule;
 import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
 import com.hivemq.bootstrap.netty.NettyModule;
@@ -42,6 +45,7 @@ import com.hivemq.configuration.service.impl.MqttConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
+import com.hivemq.extensions.ExtensionBootstrap;
 import com.hivemq.extensions.ioc.ExtensionModule;
 import com.hivemq.logging.modifier.XodusEnvironmentImplLogLevelModifier;
 import com.hivemq.metrics.ioc.MetricsModule;
@@ -49,7 +53,9 @@ import com.hivemq.mqtt.ioc.MQTTHandlerModule;
 import com.hivemq.mqtt.ioc.MQTTServiceModule;
 import com.hivemq.persistence.ioc.PersistenceMigrationModule;
 import com.hivemq.persistence.ioc.PersistenceModule;
+import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.security.ioc.SecurityModule;
+import com.hivemq.util.Checkpoints;
 import com.hivemq.util.EnvVarUtil;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.MetricRegistryLogger;
@@ -57,7 +63,9 @@ import com.hivemq.persistence.PersistenceStartup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -152,5 +160,29 @@ public final class HiveMQServer {
         log.info("Started HiveMQ [{}] in {}ms",
                 hivemqId.get(),
                 TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime));
+    }
+
+    private static class HiveMQInstance {
+        private final @NotNull HiveMQNettyBootstrap nettyBootstrap;
+        private final @NotNull PublishPayloadPersistence payloadPersistence;
+        private final @NotNull ExtensionBootstrap extensionBootstrap;
+
+        @Inject
+        HiveMQInstance(
+                final @NotNull HiveMQNettyBootstrap nettyBootstrap,
+                final @NotNull PublishPayloadPersistence payloadPersistence,
+                final @NotNull ExtensionBootstrap extensionBootstrap) {
+            this.nettyBootstrap = nettyBootstrap;
+            this.payloadPersistence = payloadPersistence;
+            this.extensionBootstrap = extensionBootstrap;
+        }
+
+        public void start() throws Exception {
+            payloadPersistence.init();
+            extensionBootstrap.startExtensionSystem().get();
+            final List<ListenerStartupInformation> startupInformation = nettyBootstrap.bootstrapServer().get();
+            Checkpoints.checkpoint("listener-started");
+            new StartupListenerVerifier(startupInformation).verifyAndPrint();
+        }
     }
 }

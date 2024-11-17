@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class LifecycleModuleTest {
@@ -186,9 +185,7 @@ public class LifecycleModuleTest {
     public void test_predestroy() throws Exception {
         final WithPreDestroy instance = injector.getInstance(WithPreDestroy.class);
         assertEquals(1, instance.getLatch().getCount());
-
-        final LifecycleModule.Registry registry = injector.getInstance(LifecycleModule.Registry.class);
-        registry.executePreDestroy().get(1, TimeUnit.SECONDS);
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
 
         assertEquals(0, instance.getLatch().getCount());
     }
@@ -198,18 +195,12 @@ public class LifecycleModuleTest {
 
         final WithPreDestroy instance = injector.getInstance(WithPreDestroy.class);
 
-        final LifecycleModule.Registry registry = injector.getInstance(LifecycleModule.Registry.class);
-        registry.executePreDestroy().get(1, TimeUnit.SECONDS);
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
 
         assertEquals(0, instance.getLatch().getCount());
-
         createInjector();
-
         final WithPreDestroy instance2 = injector.getInstance(WithPreDestroy.class);
-
-        final LifecycleModule.Registry registry2 = injector.getInstance(LifecycleModule.Registry.class);
-        registry2.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(0, instance2.getLatch().getCount());
     }
 
@@ -217,18 +208,12 @@ public class LifecycleModuleTest {
     public void preDestroy_whenJavaxSingletonClass_thenOnce() throws Exception {
 
         final JavaxSingletonWithPreDestroy instance = injector.getInstance(JavaxSingletonWithPreDestroy.class);
-
-        final LifecycleModule.Registry registry = injector.getInstance(LifecycleModule.Registry.class);
-        registry.executePreDestroy().get(1, TimeUnit.SECONDS);
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
 
         assertEquals(0, instance.getLatch().getCount());
-
         createInjector();
-
         final JavaxSingletonWithPreDestroy instance2 = injector.getInstance(JavaxSingletonWithPreDestroy.class);
-
-        final LifecycleModule.Registry registry2 = injector.getInstance(LifecycleModule.Registry.class);
-        registry2.executePreDestroy().get(1, TimeUnit.SECONDS);
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
 
         assertEquals(1, instance2.getLatch().getCount());
     }
@@ -237,19 +222,11 @@ public class LifecycleModuleTest {
     public void preDestroy_whenGoogleSingletonClass_thenOnce() throws Exception {
 
         final GoogleSingletonWithPreDestroy instance = injector.getInstance(GoogleSingletonWithPreDestroy.class);
-
-        final LifecycleModule.Registry registry = injector.getInstance(LifecycleModule.Registry.class);
-        registry.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(0, instance.getLatch().getCount());
-
         createInjector();
-
         final GoogleSingletonWithPreDestroy instance2 = injector.getInstance(GoogleSingletonWithPreDestroy.class);
-
-        final LifecycleModule.Registry registry2 = injector.getInstance(LifecycleModule.Registry.class);
-        registry2.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(1, instance2.getLatch().getCount());
     }
 
@@ -257,19 +234,11 @@ public class LifecycleModuleTest {
     public void preDestroy_whenLazySingletonClass_thenOnce() throws Exception {
 
         final LazySingletonWithPreDestroy instance = injector.getInstance(LazySingletonWithPreDestroy.class);
-
-        final LifecycleModule.Registry registry = injector.getInstance(LifecycleModule.Registry.class);
-        registry.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(0, instance.getLatch().getCount());
-
         createInjector();
-
         final LazySingletonWithPreDestroy instance2 = injector.getInstance(LazySingletonWithPreDestroy.class);
-
-        final LifecycleModule.Registry registry2 = injector.getInstance(LifecycleModule.Registry.class);
-        registry2.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(1, instance2.getLatch().getCount());
     }
 
@@ -279,10 +248,7 @@ public class LifecycleModuleTest {
         final WithPreDestroy instance2 = injector.getInstance(WithPreDestroy.class);
         assertEquals(1, instance.getLatch().getCount());
         assertEquals(1, instance2.getLatch().getCount());
-
-        final LifecycleModule.Registry registry = injector.getInstance(LifecycleModule.Registry.class);
-        registry.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(0, instance.getLatch().getCount());
         assertEquals(0, instance2.getLatch().getCount());
     }
@@ -302,10 +268,7 @@ public class LifecycleModuleTest {
         final WithPreDestroyAndPostConstruct instance = injector.getInstance(WithPreDestroyAndPostConstruct.class);
         assertEquals(1, instance.getPreDestroyLatch().getCount());
         assertEquals(0, instance.getPostConstructLatch().getCount());
-
-        final LifecycleModule.Registry registry = injector.getInstance(LifecycleModule.Registry.class);
-        registry.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(0, instance.getPreDestroyLatch().getCount());
     }
 
@@ -318,21 +281,13 @@ public class LifecycleModuleTest {
         final WithPreDestroyAndPostConstruct instance = injector.getInstance(WithPreDestroyAndPostConstruct.class);
         assertEquals(1, instance.getPreDestroyLatch().getCount());
         assertEquals(0, instance.getPostConstructLatch().getCount());
-
-        final LifecycleModule.Registry registry = injector.getInstance(LifecycleModule.Registry.class);
-        registry.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(0, instance.getPreDestroyLatch().getCount());
-
         createInjector();
-
         final WithPreDestroyAndPostConstruct instance2 = injector.getInstance(WithPreDestroyAndPostConstruct.class);
         assertEquals(1, instance2.getPreDestroyLatch().getCount());
         assertEquals(0, instance2.getPostConstructLatch().getCount());
-
-        final LifecycleModule.Registry registry2 = injector.getInstance(LifecycleModule.Registry.class);
-        registry2.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(0, instance2.getPreDestroyLatch().getCount());
     }
 
@@ -342,21 +297,14 @@ public class LifecycleModuleTest {
                 injector.getInstance(JavaxSingletonWithPreDestroyAndPostConstruct.class);
         assertEquals(1, instance.getPreDestroyLatch().getCount());
         assertEquals(0, instance.getPostConstructLatch().getCount());
-
-        final LifecycleModule.Registry registry = injector.getInstance(LifecycleModule.Registry.class);
-        registry.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(0, instance.getPreDestroyLatch().getCount());
-
         createInjector();
 
         final JavaxSingletonWithPreDestroyAndPostConstruct instance2 =
                 injector.getInstance(JavaxSingletonWithPreDestroyAndPostConstruct.class);
         assertEquals(1, instance2.getPostConstructLatch().getCount());
-
-        final LifecycleModule.Registry registry2 = injector.getInstance(LifecycleModule.Registry.class);
-        registry2.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(1, instance2.getPreDestroyLatch().getCount());
     }
 
@@ -366,21 +314,13 @@ public class LifecycleModuleTest {
                 injector.getInstance(GoogleSingletonWithPreDestroyAndPostConstruct.class);
         assertEquals(1, instance.getPreDestroyLatch().getCount());
         assertEquals(0, instance.getPostConstructLatch().getCount());
-
-        final LifecycleModule.Registry registry = injector.getInstance(LifecycleModule.Registry.class);
-        registry.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(0, instance.getPreDestroyLatch().getCount());
-
         createInjector();
-
         final GoogleSingletonWithPreDestroyAndPostConstruct instance2 =
                 injector.getInstance(GoogleSingletonWithPreDestroyAndPostConstruct.class);
         assertEquals(1, instance2.getPostConstructLatch().getCount());
-
-        final LifecycleModule.Registry registry2 = injector.getInstance(LifecycleModule.Registry.class);
-        registry2.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(1, instance2.getPreDestroyLatch().getCount());
     }
 
@@ -390,21 +330,13 @@ public class LifecycleModuleTest {
                 injector.getInstance(LazySingletonWithPreDestroyAndPostConstruct.class);
         assertEquals(1, instance.getPreDestroyLatch().getCount());
         assertEquals(0, instance.getPostConstructLatch().getCount());
-
-        final LifecycleModule.Registry registry = injector.getInstance(LifecycleModule.Registry.class);
-        registry.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(0, instance.getPreDestroyLatch().getCount());
-
         createInjector();
-
         final LazySingletonWithPreDestroyAndPostConstruct instance2 =
                 injector.getInstance(LazySingletonWithPreDestroyAndPostConstruct.class);
         assertEquals(1, instance2.getPostConstructLatch().getCount());
-
-        final LifecycleModule.Registry registry2 = injector.getInstance(LifecycleModule.Registry.class);
-        registry2.executePreDestroy().get(1, TimeUnit.SECONDS);
-
+        lifecycleModule.executePreDestroy().get(1, TimeUnit.SECONDS);
         assertEquals(1, instance2.getPreDestroyLatch().getCount());
     }
 
@@ -414,7 +346,6 @@ public class LifecycleModuleTest {
 
     @Test
     public void preDestroyIsExecutedWhenAdded() throws Exception {
-        final LifecycleModule.Registry registry = new LifecycleModule.Registry();
 
         final CountDownLatch latch = new CountDownLatch(1);
         class PredestroyClass {
@@ -424,51 +355,48 @@ public class LifecycleModuleTest {
             }
         }
 
-        registry.addPreDestroyMethod(PredestroyClass.class.getMethod("preDestroy"), new PredestroyClass());
-        registry.executePreDestroy();
+        lifecycleModule.addPreDestroyMethod(PredestroyClass.class.getMethod("preDestroy"), new PredestroyClass());
+        lifecycleModule.executePreDestroy();
 
         assertTrue(latch.await(1, TimeUnit.SECONDS));
     }
 
     @Test
     public void lifecycleMethodsWhenNotSingletonClassThenCanBeCalledMultipleTimes() {
-        final LifecycleModule.Registry lifecycleRegistry = new LifecycleModule.Registry();
         final Class<Object> objectClass = Object.class;
-        assertTrue(lifecycleRegistry.canInvokePostConstruct(objectClass));
-        assertTrue(lifecycleRegistry.canInvokePostConstruct(objectClass));
-        assertTrue(lifecycleRegistry.canInvokePreDestroy(objectClass));
-        assertTrue(lifecycleRegistry.canInvokePreDestroy(objectClass));
+        assertTrue(lifecycleModule.canInvokePostConstruct(objectClass));
+        assertTrue(lifecycleModule.canInvokePostConstruct(objectClass));
+        assertTrue(lifecycleModule.canInvokePreDestroy(objectClass));
+        assertTrue(lifecycleModule.canInvokePreDestroy(objectClass));
     }
 
     @Test
     public void lifecycleMethodsWhenSingletonClassThenCanOnlyBeCalledOnce() {
-        final LifecycleModule.Registry lifecycleRegistry = new LifecycleModule.Registry();
 
         final Class<Object> objectClass = Object.class;
-        lifecycleRegistry.addSingletonClass(objectClass);
+        lifecycleModule.addSingletonClass(objectClass);
 
-        assertTrue(lifecycleRegistry.canInvokePostConstruct(objectClass));
-        assertFalse(lifecycleRegistry.canInvokePostConstruct(objectClass));
-        assertTrue(lifecycleRegistry.canInvokePreDestroy(objectClass));
-        assertFalse(lifecycleRegistry.canInvokePreDestroy(objectClass));
+        assertTrue(lifecycleModule.canInvokePostConstruct(objectClass));
+        assertFalse(lifecycleModule.canInvokePostConstruct(objectClass));
+        assertTrue(lifecycleModule.canInvokePreDestroy(objectClass));
+        assertFalse(lifecycleModule.canInvokePreDestroy(objectClass));
     }
 
     @Test
     public void lifecycleMethodsWhenSingletonClassAddedAgainThenCanStillBeCalledOnce() {
-        final LifecycleModule.Registry lifecycleRegistry = new LifecycleModule.Registry();
 
         final Class<Object> objectClass = Object.class;
-        lifecycleRegistry.addSingletonClass(objectClass);
+        lifecycleModule.addSingletonClass(objectClass);
 
-        assertTrue(lifecycleRegistry.canInvokePostConstruct(objectClass));
-        assertFalse(lifecycleRegistry.canInvokePostConstruct(objectClass));
-        assertTrue(lifecycleRegistry.canInvokePreDestroy(objectClass));
-        assertFalse(lifecycleRegistry.canInvokePreDestroy(objectClass));
+        assertTrue(lifecycleModule.canInvokePostConstruct(objectClass));
+        assertFalse(lifecycleModule.canInvokePostConstruct(objectClass));
+        assertTrue(lifecycleModule.canInvokePreDestroy(objectClass));
+        assertFalse(lifecycleModule.canInvokePreDestroy(objectClass));
 
-        lifecycleRegistry.addSingletonClass(objectClass);
+        lifecycleModule.addSingletonClass(objectClass);
 
-        assertFalse(lifecycleRegistry.canInvokePostConstruct(objectClass));
-        assertFalse(lifecycleRegistry.canInvokePreDestroy(objectClass));
+        assertFalse(lifecycleModule.canInvokePostConstruct(objectClass));
+        assertFalse(lifecycleModule.canInvokePreDestroy(objectClass));
     }
 
     static class WithPostConstruct {

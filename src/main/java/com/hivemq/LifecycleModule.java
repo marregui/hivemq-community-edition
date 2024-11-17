@@ -51,54 +51,54 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
 
     private static final Logger log = LoggerFactory.getLogger(LifecycleModule.class);
 
-    private final @NotNull LifecycleModule.Registry registry;
+    private final @NotNull Map<String, InvokeStatus> invokeStatus;
+    private final @NotNull List<Invocable> preDestroy;
+    private @Nullable ListeningExecutorService executor;
 
     public LifecycleModule() {
         super(LifecycleModule.class);
-        registry = new Registry();
+        invokeStatus = new ConcurrentHashMap<>();
+        preDestroy = Collections.synchronizedList(new ArrayList<>());
     }
 
-    private static <I> void hear(
-            final @NotNull LifecycleModule.Registry registry,
-            final @NotNull TypeEncounter<I> encounter,
-            final @NotNull Class<? super I> rawType) {
-
+    private <I> void invoke(
+            final @NotNull TypeEncounter<I> encounter, final @NotNull Class<? super I> type) {
         // recur up to Object.class
-        if (rawType.getSuperclass() != null) {
-            hear(registry, encounter, rawType.getSuperclass());
+        if (type.getSuperclass() != null) {
+            invoke(encounter, type.getSuperclass());
         }
 
-        if (rawType.isAnnotationPresent(javax.inject.Singleton.class) ||
-                rawType.isAnnotationPresent(com.google.inject.Singleton.class) ||
-                rawType.isAnnotationPresent(LazySingleton.class)) {
-            registry.addSingletonClass(rawType);
+        if (type.isAnnotationPresent(javax.inject.Singleton.class) ||
+                type.isAnnotationPresent(com.google.inject.Singleton.class) ||
+                type.isAnnotationPresent(LazySingleton.class)) {
+            addSingletonClass(type);
         }
 
         // post constructs
-        Method pc = null;
-        for (final Method method : rawType.getDeclaredMethods()) {
-            if (method.isAnnotationPresent(PostConstruct.class)) {
-                if (method.getParameterTypes().length != 0) {
+        Method method = null;
+        for (final Method m : type.getDeclaredMethods()) {
+            if (m.isAnnotationPresent(PostConstruct.class)) {
+                if (m.getParameterTypes().length != 0) {
                     throw new ProvisionException("@PostConstruct must not have parameters");
                 }
-                if (method.getExceptionTypes().length > 0) {
+                if (m.getExceptionTypes().length > 0) {
                     throw new ProvisionException("@PostConstruct must not throw checked exceptions");
                 }
-                if (Modifier.isStatic(method.getModifiers())) {
+                if (Modifier.isStatic(m.getModifiers())) {
                     throw new ProvisionException("@PostConstruct must not be static");
                 }
-                if (pc != null) {
-                    throw new ProvisionException("More than one @PostConstruct for class " + rawType);
+                if (method != null) {
+                    throw new ProvisionException("More than one @PostConstruct for class " + type);
                 }
-                pc = method;
+                method = m;
             }
         }
-        if (pc != null && registry.canInvokePostConstruct(rawType)) {
-            final Method finalPc = pc;
+        if (method != null && canInvokePostConstruct(type)) {
+            final Method postConstruct = method;
             encounter.register((InjectionListener<I>) listener -> {
                 try {
-                    finalPc.setAccessible(true);
-                    finalPc.invoke(listener);
+                    postConstruct.setAccessible(true);
+                    postConstruct.invoke(listener);
                 } catch (final IllegalAccessException | InvocationTargetException e) {
                     if (e.getCause() instanceof UnrecoverableException) {
                         log.error("An unrecoverable Exception occurred. Exiting HiveMQ", e);
@@ -110,115 +110,99 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         }
 
         // pre destroys
-        pc = null;
-        for (final Method method : rawType.getDeclaredMethods()) {
-            if (method.isAnnotationPresent(PreDestroy.class)) {
-                if (method.getParameterTypes().length != 0) {
+        method = null;
+        for (final Method m : type.getDeclaredMethods()) {
+            if (m.isAnnotationPresent(PreDestroy.class)) {
+                if (m.getParameterTypes().length != 0) {
                     throw new ProvisionException("@PreDestroy must not have parameters");
                 }
-                if (pc != null) {
-                    throw new ProvisionException("More than one @PreDestroy for class " + rawType);
+                if (method != null) {
+                    throw new ProvisionException("More than one @PreDestroy for class " + type);
                 }
-                pc = method;
+                method = m;
             }
         }
-        if (pc != null && registry.canInvokePreDestroy(rawType)) {
-            final Method finalPc = pc;
-            encounter.register((InjectionListener<I>) listener -> registry.addPreDestroyMethod(finalPc, listener));
+        if (method != null && canInvokePreDestroy(type)) {
+            final Method preDestroy = method;
+            encounter.register((InjectionListener<I>) listener -> addPreDestroyMethod(preDestroy, listener));
         }
-    }
-
-    public @NotNull ListenableFuture<?> executePreDestroy() {
-        return registry.executePreDestroy();
     }
 
     @Override
     protected void configure() {
-        bind(Registry.class).toInstance(registry);
         bind(LifecycleShutdownRegistration.class).asEagerSingleton();
         bindListener(Matchers.any(), new TypeListener() {
             @Override
             public <I> void hear(final @NotNull TypeLiteral<I> type, final @NotNull TypeEncounter<I> encounter) {
-                LifecycleModule.hear(registry, encounter, type.getRawType());
+                invoke(encounter, type.getRawType());
             }
         });
     }
 
-    public static class Registry {
-        private final @NotNull Map<String, Invoke> invokedStatus;
-        private final @NotNull List<Invocable> preDestroy;
-        private @Nullable ListeningExecutorService executor;
-
-        Registry() {
-            invokedStatus = new ConcurrentHashMap<>();
-            preDestroy = Collections.synchronizedList(new ArrayList<>());
+    <T> boolean canInvokePostConstruct(final @NotNull Class<T> clazz) {
+        final InvokeStatus invoke = invokeStatus.get(clazz.getCanonicalName());
+        if (invoke == null) {
+            return true;
         }
+        final boolean was = invoke.postConstructCalled;
+        invoke.postConstructCalled = true;
+        return !was;
+    }
 
-        public void shutdown() {
-            if (executor != null) {
-                executor.shutdown();
-            }
+    <T> boolean canInvokePreDestroy(final @NotNull Class<T> clazz) {
+        final InvokeStatus invoke = invokeStatus.get(clazz.getCanonicalName());
+        if (invoke == null) {
+            return true;
         }
+        final boolean was = invoke.preDestroyCalled;
+        invoke.preDestroyCalled = true;
+        return !was;
+    }
 
-        void addSingletonClass(final @NotNull Class<?> clazz) {
-            invokedStatus.putIfAbsent(clazz.getCanonicalName(), new Invoke());
+    public void shutdown() {
+        if (executor != null) {
+            executor.shutdown();
         }
+    }
 
-        void addPreDestroyMethod(final @NotNull Method method, final @NotNull Object target) {
-            preDestroy.add(new Invocable(Objects.requireNonNull(method), Objects.requireNonNull(target)));
+    void addSingletonClass(final @NotNull Class<?> clazz) {
+        invokeStatus.putIfAbsent(clazz.getCanonicalName(), new InvokeStatus());
+    }
+
+    void addPreDestroyMethod(final @NotNull Method method, final @NotNull Object target) {
+        preDestroy.add(new Invocable(Objects.requireNonNull(method), Objects.requireNonNull(target)));
+    }
+
+    public @NotNull ListenableFuture<?> executePreDestroy() {
+        final ExecutorService executor = Executors.newFixedThreadPool(3, ThreadFactoryUtil.create("PreDestroy-%d"));
+        this.executor = MoreExecutors.listeningDecorator(executor);
+        final List<ListenableFuture<?>> futures = new ArrayList<>(preDestroy.size());
+        for (final Invocable preDestroyInvokable : preDestroy) {
+            futures.add(this.executor.submit(() -> {
+                try {
+                    preDestroyInvokable.method.invoke(preDestroyInvokable.target);
+                } catch (final IllegalAccessException | InvocationTargetException e) {
+                    log.error("Could not execute preDestroy method for class {}",
+                            preDestroyInvokable.target.getClass(),
+                            e);
+                }
+            }));
         }
+        return Futures.allAsList(futures);
+    }
 
-        <T> boolean canInvokePostConstruct(final @NotNull Class<T> clazz) {
-            final Invoke invoke = invokedStatus.get(clazz.getCanonicalName());
-            if (invoke == null) {
-                return true;
-            }
-            final boolean was = invoke.construct;
-            invoke.construct = true;
-            return !was;
-        }
+    private static final class InvokeStatus {
+        private boolean postConstructCalled;
+        private boolean preDestroyCalled;
+    }
 
-        <T> boolean canInvokePreDestroy(final @NotNull Class<T> clazz) {
-            final Invoke invoke = invokedStatus.get(clazz.getCanonicalName());
-            if (invoke == null) {
-                return true;
-            }
-            final boolean was = invoke.destroy;
-            invoke.destroy = true;
-            return !was;
-        }
+    private static final class Invocable {
+        private final @NotNull Method method;
+        private final @NotNull Object target;
 
-        public @NotNull ListenableFuture<?> executePreDestroy() {
-            final ExecutorService executor = Executors.newFixedThreadPool(3, ThreadFactoryUtil.create("PreDestroy-%d"));
-            this.executor = MoreExecutors.listeningDecorator(executor);
-            final List<ListenableFuture<?>> futures = new ArrayList<>(preDestroy.size());
-            for (final Invocable preDestroyInvokable : preDestroy) {
-                futures.add(this.executor.submit(() -> {
-                    try {
-                        preDestroyInvokable.method.invoke(preDestroyInvokable.target);
-                    } catch (final IllegalAccessException | InvocationTargetException e) {
-                        log.error("Could not execute preDestroy method for class {}",
-                                preDestroyInvokable.target.getClass(),
-                                e);
-                    }
-                }));
-            }
-            return Futures.allAsList(futures);
-        }
-
-        private static final class Invoke {
-            private boolean construct;
-            private boolean destroy;
-        }
-
-        private static final class Invocable {
-            private final @NotNull Method method;
-            private final @NotNull Object target;
-
-            public Invocable(final @NotNull Method method, final @NotNull Object target) {
-                this.method = method;
-                this.target = target;
-            }
+        public Invocable(final @NotNull Method method, final @NotNull Object target) {
+            this.method = method;
+            this.target = target;
         }
     }
 }

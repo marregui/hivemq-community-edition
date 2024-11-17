@@ -28,11 +28,11 @@ public class LifecycleShutdownHook implements ShutdownHooks.Hook {
 
     private static final Logger log = LoggerFactory.getLogger(LifecycleShutdownHook.class);
 
-    private final @NotNull LifecycleModule.Registry lifecycleRegistry;
+    private final @NotNull LifecycleModule lifecycle;
 
     @Inject
-    LifecycleShutdownHook(final @NotNull LifecycleModule.Registry lifecycleRegistry) {
-        this.lifecycleRegistry = lifecycleRegistry;
+    LifecycleShutdownHook(final @NotNull LifecycleModule lifecycle) {
+        this.lifecycle = lifecycle;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class LifecycleShutdownHook implements ShutdownHooks.Hook {
     @Override
     public void run() {
         try {
-            lifecycleRegistry.executePreDestroy().get(5, TimeUnit.SECONDS);
+            lifecycle.executePreDestroy().get(5, TimeUnit.SECONDS);
         } catch (final InterruptedException | ExecutionException | TimeoutException e) {
             log.error("Exceptions in lifecycle shutdown", e);
         }

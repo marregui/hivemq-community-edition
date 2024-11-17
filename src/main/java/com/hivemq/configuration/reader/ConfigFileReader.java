@@ -114,10 +114,8 @@ public class ConfigFileReader {
 
             } catch (final Exception e) {
                 if (e.getCause() instanceof UnrecoverableException) {
-                    if (((UnrecoverableException) e.getCause()).isShowException()) {
-                        log.error("An unrecoverable Exception occurred. Exiting HiveMQ", e);
-                        log.debug("Original error message:", e);
-                    }
+                    log.error("An unrecoverable Exception occurred. Exiting HiveMQ", e);
+                    log.debug("Original error message:", e);
                     System.exit(1);
                 }
                 log.error("Could not read the configuration file {}. Using default config",

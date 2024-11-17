@@ -133,7 +133,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
         } catch (final ExodusException e) {
             log.error("An error occurred while preparing the Client Session Subscription persistence.");
             log.debug("Original Exception:", e);
-            throw new UnrecoverableException(false);
+            throw new UnrecoverableException();
         }
 
     }

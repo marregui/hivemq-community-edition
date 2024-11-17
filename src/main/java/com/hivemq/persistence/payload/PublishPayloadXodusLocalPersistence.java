@@ -115,7 +115,7 @@ public class PublishPayloadXodusLocalPersistence extends XodusLocalPersistence
         } catch (final ExodusException e) {
             log.error("An error occurred while preparing the Publish Payload persistence.");
             log.debug("Original Exception:", e);
-            throw new UnrecoverableException(false);
+            throw new UnrecoverableException();
         }
     }
 

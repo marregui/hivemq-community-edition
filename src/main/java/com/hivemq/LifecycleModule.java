@@ -24,7 +24,6 @@ import com.google.inject.spi.TypeListener;
 import com.hivemq.bootstrap.SingletonModule;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,112 +33,96 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-/**
- * The Guice module which allows to use lifecycle annotations.
- * Lifecycle annotations which are supported at the moment are
- * <br>
- * * {@link javax.annotation.PostConstruct}
- * * {@link javax.annotation.PreDestroy}
- */
 public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
 
     private static final Logger log = LoggerFactory.getLogger(LifecycleModule.class);
 
-    private final @NotNull LifecycleRegistry lifecycleRegistry;
+    private final @NotNull LifecycleRegistry registry;
 
     public LifecycleModule() {
         super(LifecycleModule.class);
-        lifecycleRegistry = new LifecycleRegistry();
+        registry = new LifecycleRegistry();
     }
 
-    private static <I> boolean isSingleton(final @NotNull Class<? super I> rawType) {
-        return rawType.isAnnotationPresent(javax.inject.Singleton.class) ||
+    private static <I> void hear(
+            final @NotNull LifecycleRegistry registry,
+            final @NotNull TypeEncounter<I> encounter,
+            final @NotNull Class<? super I> rawType) {
+
+        // recur up to Object.class
+        if (rawType.getSuperclass() != null) {
+            hear(registry, encounter, rawType.getSuperclass());
+        }
+
+        if (rawType.isAnnotationPresent(javax.inject.Singleton.class) ||
                 rawType.isAnnotationPresent(com.google.inject.Singleton.class) ||
-                rawType.isAnnotationPresent(LazySingleton.class);
-    }
+                rawType.isAnnotationPresent(LazySingleton.class)) {
+            registry.addSingletonClass(rawType);
+        }
 
-    private static <I> @Nullable Method findPostConstruct(final @NotNull Class<? super I> rawType) {
+        // post constructs
         Method pc = null;
         for (final Method method : rawType.getDeclaredMethods()) {
             if (method.isAnnotationPresent(PostConstruct.class)) {
                 if (method.getParameterTypes().length != 0) {
-                    throw new ProvisionException("A method annotated with @PostConstruct must not have any parameters");
+                    throw new ProvisionException("@PostConstruct must not have parameters");
                 }
                 if (method.getExceptionTypes().length > 0) {
-                    throw new ProvisionException(
-                            "A method annotated with @PostConstruct must not throw any checked exceptions");
+                    throw new ProvisionException("@PostConstruct must not throw checked exceptions");
                 }
                 if (Modifier.isStatic(method.getModifiers())) {
-                    throw new ProvisionException("A method annotated with @PostConstruct must not be static");
+                    throw new ProvisionException("@PostConstruct must not be static");
                 }
                 if (pc != null) {
-                    throw new ProvisionException("More than one @PostConstruct method found for class " + rawType);
+                    throw new ProvisionException("More than one @PostConstruct for class " + rawType);
                 }
                 pc = method;
             }
         }
-        return pc;
-    }
+        if (pc != null && registry.canInvokePostConstruct(rawType)) {
+            final Method finalPc = pc;
+            encounter.register((InjectionListener<I>) listener -> {
+                try {
+                    finalPc.setAccessible(true);
+                    finalPc.invoke(listener);
+                } catch (final IllegalAccessException | InvocationTargetException e) {
+                    if (e.getCause() instanceof UnrecoverableException) {
+                        log.error("An unrecoverable Exception occurred. Exiting HiveMQ", e);
+                        System.exit(1);
+                    }
+                    throw new ProvisionException("An error occurred while calling @PostConstruct", e);
+                }
+            });
+        }
 
-    private static <I> @Nullable Method findPreDestroy(final @NotNull Class<? super I> rawType) {
-        Method pd = null;
+        // pre destroys
+        pc = null;
         for (final Method method : rawType.getDeclaredMethods()) {
             if (method.isAnnotationPresent(PreDestroy.class)) {
                 if (method.getParameterTypes().length != 0) {
-                    throw new ProvisionException("A method annotated with @PreDestroy must not have any parameters");
+                    throw new ProvisionException("@PreDestroy must not have parameters");
                 }
-                if (pd != null) {
-                    throw new ProvisionException("More than one @PreDestroy method found for class " + rawType);
+                if (pc != null) {
+                    throw new ProvisionException("More than one @PreDestroy for class " + rawType);
                 }
-                pd = method;
+                pc = method;
             }
         }
-        return pd;
+        if (pc != null && registry.canInvokePreDestroy(rawType)) {
+            final Method finalPc = pc;
+            encounter.register((InjectionListener<I>) listener -> registry.addPreDestroyMethod(finalPc, listener));
+        }
     }
 
     @Override
     protected void configure() {
-        bind(LifecycleRegistry.class).toInstance(lifecycleRegistry);
+        bind(LifecycleRegistry.class).toInstance(registry);
         bind(LifecycleShutdownRegistration.class).asEagerSingleton();
         bindListener(Matchers.any(), new TypeListener() {
             @Override
             public <I> void hear(final @NotNull TypeLiteral<I> type, final @NotNull TypeEncounter<I> encounter) {
-                executePostConstruct(encounter, type.getRawType());
+                LifecycleModule.hear(registry, encounter, type.getRawType());
             }
         });
-    }
-
-    private <I> void executePostConstruct(
-            final @NotNull TypeEncounter<I> encounter, final @NotNull Class<? super I> rawType) {
-        //We're going recursive up to every superclass until we hit Object.class
-        if (rawType.getSuperclass() != null) {
-            executePostConstruct(encounter, rawType.getSuperclass());
-        }
-        if (isSingleton(rawType)) {
-            lifecycleRegistry.addSingletonClass(rawType);
-        }
-        final Method pc = findPostConstruct(rawType);
-        if (pc != null) {
-            if (lifecycleRegistry.canInvokePostConstruct(rawType)) {
-                encounter.register((InjectionListener<I>) listener -> {
-                    try {
-                        pc.setAccessible(true);
-                        pc.invoke(listener);
-                    } catch (final IllegalAccessException | InvocationTargetException e) {
-                        if (e.getCause() instanceof UnrecoverableException) {
-                            if (((UnrecoverableException) e.getCause()).isShowException()) {
-                                log.error("An unrecoverable Exception occurred. Exiting HiveMQ", e);
-                            }
-                            System.exit(1);
-                        }
-                        throw new ProvisionException("An error occurred while calling @PostConstruct", e);
-                    }
-                });
-            }
-        }
-        final Method pd = findPreDestroy(rawType);
-        if (pd != null && lifecycleRegistry.canInvokePreDestroy(rawType)) {
-            encounter.register((InjectionListener<I>) listener -> lifecycleRegistry.addPreDestroyMethod(pd, listener));
-        }
     }
 }

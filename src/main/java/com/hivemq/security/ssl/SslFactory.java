@@ -127,7 +127,7 @@ public class SslFactory {
         } catch (final Exception e) {
             log.error("Not able to create SSL server context. Reason: {}", e.getMessage());
             log.debug("Original exception", e);
-            throw new UnrecoverableException(false);
+            throw new UnrecoverableException();
         }
     }
 }

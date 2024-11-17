@@ -52,7 +52,7 @@ public class StartupListenerVerifier {
         if (startupInformation.isEmpty()) {
             log.error(
                     "No listener was configured. In order to operate properly, HiveMQ needs at least one listener. Shutting down HiveMQ");
-            throw new UnrecoverableException(false);
+            throw new UnrecoverableException();
         }
 
         int successfullyStarted = 0;
@@ -70,7 +70,7 @@ public class StartupListenerVerifier {
 
         if (successfullyStarted < 1) {
             log.error("Could not bind any listener. Stopping HiveMQ.");
-            throw new UnrecoverableException(false);
+            throw new UnrecoverableException();
         }
     }
 

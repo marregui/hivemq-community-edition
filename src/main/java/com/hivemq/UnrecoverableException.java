@@ -17,17 +17,7 @@ package com.hivemq;
 
 public class UnrecoverableException extends RuntimeException {
 
-    private final boolean showException;
-
     public UnrecoverableException() {
-        this(true);
-    }
-
-    public UnrecoverableException(final boolean showException) {
-        this.showException = showException;
-    }
-
-    public boolean isShowException() {
-        return showException;
+        // no-op
     }
 }

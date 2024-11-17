@@ -32,74 +32,70 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 @Singleton
 public class LifecycleRegistry {
 
-    private static final Logger log = LoggerFactory.getLogger(LifecycleRegistry.class);
+    private static final @NotNull Logger log = LoggerFactory.getLogger(LifecycleRegistry.class);
 
-    private final @NotNull Map<String, Invoke> singletonInvokedStatus;
-    private final @NotNull List<PreDestroyInvokable> preDestroy;
-
-    private @Nullable ListeningExecutorService listeningExecutor;
+    private final @NotNull Map<String, Invoke> invokedStatus;
+    private final @NotNull List<Invocable> preDestroy;
+    private @Nullable ListeningExecutorService executor;
 
     LifecycleRegistry() {
-        singletonInvokedStatus = new ConcurrentHashMap<>();
+        invokedStatus = new ConcurrentHashMap<>();
         preDestroy = Collections.synchronizedList(new ArrayList<>());
     }
 
     public void shutdown() {
-        if (listeningExecutor != null) {
-            listeningExecutor.shutdown();
+        if (executor != null) {
+            executor.shutdown();
         }
     }
 
-    public void addSingletonClass(final @NotNull Class<?> clazz) {
-        singletonInvokedStatus.putIfAbsent(clazz.getCanonicalName(), new Invoke());
+    void addSingletonClass(final @NotNull Class<?> clazz) {
+        invokedStatus.putIfAbsent(clazz.getCanonicalName(), new Invoke());
     }
 
-    public void addPreDestroyMethod(final @NotNull Method method, final @NotNull Object target) {
-        checkNotNull(method);
-        checkNotNull(target);
-        preDestroy.add(new PreDestroyInvokable(method, target));
+    void addPreDestroyMethod(final @NotNull Method method, final @NotNull Object target) {
+        preDestroy.add(new Invocable(Objects.requireNonNull(method), Objects.requireNonNull(target)));
     }
 
-    public <T> boolean canInvokePostConstruct(final @NotNull Class<T> clazz) {
-        final Invoke invoke = singletonInvokedStatus.get(clazz.getCanonicalName());
+    <T> boolean canInvokePostConstruct(final @NotNull Class<T> clazz) {
+        final Invoke invoke = invokedStatus.get(clazz.getCanonicalName());
         if (invoke == null) {
             return true;
         }
-        final boolean was = invoke.isPostConstructed();
-        invoke.enablePostConstruct();
+        final boolean was = invoke.construct;
+        invoke.construct = true;
         return !was;
     }
 
-    public <T> boolean canInvokePreDestroy(final @NotNull Class<T> clazz) {
-        final Invoke invoke = singletonInvokedStatus.get(clazz.getCanonicalName());
+    <T> boolean canInvokePreDestroy(final @NotNull Class<T> clazz) {
+        final Invoke invoke = invokedStatus.get(clazz.getCanonicalName());
         if (invoke == null) {
             return true;
         }
-        final boolean was = invoke.isPreDestroyed();
-        invoke.enablePreDestroy();
+        final boolean was = invoke.destroy;
+        invoke.destroy = true;
         return !was;
     }
 
     public @NotNull ListenableFuture<?> executePreDestroy() {
         final ExecutorService executor = Executors.newFixedThreadPool(3, ThreadFactoryUtil.create("PreDestroy-%d"));
-        listeningExecutor = MoreExecutors.listeningDecorator(executor);
+        this.executor = MoreExecutors.listeningDecorator(executor);
         final List<ListenableFuture<?>> futures = new ArrayList<>(preDestroy.size());
-        for (final PreDestroyInvokable preDestroyInvokable : preDestroy) {
-            futures.add(listeningExecutor.submit(() -> {
+        for (final Invocable preDestroyInvokable : preDestroy) {
+            futures.add(this.executor.submit(() -> {
                 try {
-                    preDestroyInvokable.getMethod().invoke(preDestroyInvokable.getTarget());
+                    preDestroyInvokable.method.invoke(preDestroyInvokable.target);
                 } catch (final IllegalAccessException | InvocationTargetException e) {
                     log.error("Could not execute preDestroy method for class {}",
-                            preDestroyInvokable.getTarget().getClass(),
+                            preDestroyInvokable.target.getClass(),
                             e);
                 }
             }));
@@ -108,41 +104,17 @@ public class LifecycleRegistry {
     }
 
     private static final class Invoke {
-        private boolean postConstruct;
-        private boolean preDestroy;
-
-        public boolean isPostConstructed() {
-            return postConstruct;
-        }
-
-        public void enablePostConstruct() {
-            postConstruct = true;
-        }
-
-        public boolean isPreDestroyed() {
-            return preDestroy;
-        }
-
-        public void enablePreDestroy() {
-            preDestroy = true;
-        }
+        private boolean construct;
+        private boolean destroy;
     }
 
-    private static final class PreDestroyInvokable {
+    private static final class Invocable {
         private final @NotNull Method method;
         private final @NotNull Object target;
 
-        public PreDestroyInvokable(final @NotNull Method method, final @NotNull Object target) {
+        public Invocable(final @NotNull Method method, final @NotNull Object target) {
             this.method = method;
             this.target = target;
-        }
-
-        public @NotNull Method getMethod() {
-            return method;
-        }
-
-        public @NotNull Object getTarget() {
-            return target;
         }
     }
 }

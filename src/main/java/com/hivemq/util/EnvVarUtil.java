@@ -77,7 +77,7 @@ public class EnvVarUtil {
 
             if (replacement == null) {
                 log.error("Environment Variable {} for HiveMQ config.xml is not set.", varName);
-                throw new UnrecoverableException(false);
+                throw new UnrecoverableException();
             }
 
             //sets replacement for this match

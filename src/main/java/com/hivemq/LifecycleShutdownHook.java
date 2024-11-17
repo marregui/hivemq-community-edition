@@ -28,10 +28,10 @@ public class LifecycleShutdownHook implements ShutdownHooks.Hook {
 
     private static final Logger log = LoggerFactory.getLogger(LifecycleShutdownHook.class);
 
-    private final @NotNull LifecycleRegistry lifecycleRegistry;
+    private final @NotNull LifecycleModule.Registry lifecycleRegistry;
 
     @Inject
-    LifecycleShutdownHook(final @NotNull LifecycleRegistry lifecycleRegistry) {
+    LifecycleShutdownHook(final @NotNull LifecycleModule.Registry lifecycleRegistry) {
         this.lifecycleRegistry = lifecycleRegistry;
     }
 

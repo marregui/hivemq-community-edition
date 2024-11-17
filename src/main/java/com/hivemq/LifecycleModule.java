@@ -15,6 +15,10 @@
  */
 package com.hivemq;
 
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.inject.ProvisionException;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
@@ -23,7 +27,9 @@ import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import com.hivemq.bootstrap.SingletonModule;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.hivemq.util.ThreadFactoryUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,20 +38,28 @@ import javax.annotation.PreDestroy;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
 
     private static final Logger log = LoggerFactory.getLogger(LifecycleModule.class);
 
-    private final @NotNull LifecycleRegistry registry;
+    private final @NotNull LifecycleModule.Registry registry;
 
     public LifecycleModule() {
         super(LifecycleModule.class);
-        registry = new LifecycleRegistry();
+        registry = new Registry();
     }
 
     private static <I> void hear(
-            final @NotNull LifecycleRegistry registry,
+            final @NotNull LifecycleModule.Registry registry,
             final @NotNull TypeEncounter<I> encounter,
             final @NotNull Class<? super I> rawType) {
 
@@ -114,9 +128,13 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         }
     }
 
+    public @NotNull ListenableFuture<?> executePreDestroy() {
+        return registry.executePreDestroy();
+    }
+
     @Override
     protected void configure() {
-        bind(LifecycleRegistry.class).toInstance(registry);
+        bind(Registry.class).toInstance(registry);
         bind(LifecycleShutdownRegistration.class).asEagerSingleton();
         bindListener(Matchers.any(), new TypeListener() {
             @Override
@@ -124,5 +142,83 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
                 LifecycleModule.hear(registry, encounter, type.getRawType());
             }
         });
+    }
+
+    public static class Registry {
+        private final @NotNull Map<String, Invoke> invokedStatus;
+        private final @NotNull List<Invocable> preDestroy;
+        private @Nullable ListeningExecutorService executor;
+
+        Registry() {
+            invokedStatus = new ConcurrentHashMap<>();
+            preDestroy = Collections.synchronizedList(new ArrayList<>());
+        }
+
+        public void shutdown() {
+            if (executor != null) {
+                executor.shutdown();
+            }
+        }
+
+        void addSingletonClass(final @NotNull Class<?> clazz) {
+            invokedStatus.putIfAbsent(clazz.getCanonicalName(), new Invoke());
+        }
+
+        void addPreDestroyMethod(final @NotNull Method method, final @NotNull Object target) {
+            preDestroy.add(new Invocable(Objects.requireNonNull(method), Objects.requireNonNull(target)));
+        }
+
+        <T> boolean canInvokePostConstruct(final @NotNull Class<T> clazz) {
+            final Invoke invoke = invokedStatus.get(clazz.getCanonicalName());
+            if (invoke == null) {
+                return true;
+            }
+            final boolean was = invoke.construct;
+            invoke.construct = true;
+            return !was;
+        }
+
+        <T> boolean canInvokePreDestroy(final @NotNull Class<T> clazz) {
+            final Invoke invoke = invokedStatus.get(clazz.getCanonicalName());
+            if (invoke == null) {
+                return true;
+            }
+            final boolean was = invoke.destroy;
+            invoke.destroy = true;
+            return !was;
+        }
+
+        public @NotNull ListenableFuture<?> executePreDestroy() {
+            final ExecutorService executor = Executors.newFixedThreadPool(3, ThreadFactoryUtil.create("PreDestroy-%d"));
+            this.executor = MoreExecutors.listeningDecorator(executor);
+            final List<ListenableFuture<?>> futures = new ArrayList<>(preDestroy.size());
+            for (final Invocable preDestroyInvokable : preDestroy) {
+                futures.add(this.executor.submit(() -> {
+                    try {
+                        preDestroyInvokable.method.invoke(preDestroyInvokable.target);
+                    } catch (final IllegalAccessException | InvocationTargetException e) {
+                        log.error("Could not execute preDestroy method for class {}",
+                                preDestroyInvokable.target.getClass(),
+                                e);
+                    }
+                }));
+            }
+            return Futures.allAsList(futures);
+        }
+
+        private static final class Invoke {
+            private boolean construct;
+            private boolean destroy;
+        }
+
+        private static final class Invocable {
+            private final @NotNull Method method;
+            private final @NotNull Object target;
+
+            public Invocable(final @NotNull Method method, final @NotNull Object target) {
+                this.method = method;
+                this.target = target;
+            }
+        }
     }
 }

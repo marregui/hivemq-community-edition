@@ -102,7 +102,13 @@ public final class HiveMQServer {
         Logging.initLogging(sysInfo.getConfigFolder());
 
         final HivemqId hivemqId = new HivemqId();
+
+
+
         final LifecycleModule lifecycleModule = new LifecycleModule();
+
+
+
         final DataFolderLock dataLock = new DataFolderLock();
         final MetricRegistry metricRegistry = new MetricRegistry();
         metricRegistry.addListener(new MetricRegistryLogger());

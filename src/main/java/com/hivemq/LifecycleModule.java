@@ -36,7 +36,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -46,7 +48,7 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
 
     private static final Logger log = LoggerFactory.getLogger(LifecycleModule.class);
 
-    private final @NotNull Map<String, InvokeStatus> invokeStatus;
+    private final @NotNull Map<Class<?>, InvokeStatus> invokeStatus;
     private final @NotNull List<Invocable> invocable;
 
     public LifecycleModule() {
@@ -65,7 +67,7 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         if (type.isAnnotationPresent(javax.inject.Singleton.class) ||
                 type.isAnnotationPresent(com.google.inject.Singleton.class) ||
                 type.isAnnotationPresent(LazySingleton.class)) {
-            invokeStatus.putIfAbsent(type.getCanonicalName(), new InvokeStatus());
+            invokeStatus.putIfAbsent(type, new InvokeStatus());
         }
         for (final Method m : type.getDeclaredMethods()) {
             if (m.isAnnotationPresent(PostConstruct.class)) {
@@ -133,13 +135,32 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
 
             @Override
             public void run() {
-                LifecycleModule.this.executePreDestroys();
+                final ExecutorService executor =
+                        Executors.newFixedThreadPool(3, ThreadFactoryUtil.create("PreDestroy-%d"));
+                try {
+                    for (final Future<Void> future : executor.invokeAll(invocable)) {
+                        future.get();
+                    }
+                } catch (final InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    log.error("Exceptions in lifecycle shutdown", e);
+                } catch (ExecutionException e) {
+                    log.error("Exceptions in lifecycle shutdown", e);
+                } finally {
+                    executor.shutdownNow();
+                    try {
+                        executor.awaitTermination(100, TimeUnit.MILLISECONDS);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        log.error("Exceptions in lifecycle shutdown", e);
+                    }
+                }
             }
         });
     }
 
     <T> boolean canInvokePostConstruct(final @NotNull Class<T> clazz) {
-        final InvokeStatus invoke = invokeStatus.get(clazz.getCanonicalName());
+        final InvokeStatus invoke = invokeStatus.get(clazz);
         if (invoke == null) {
             return true;
         }
@@ -149,7 +170,7 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
     }
 
     <T> boolean canInvokePreDestroy(final @NotNull Class<T> clazz) {
-        final InvokeStatus invoke = invokeStatus.get(clazz.getCanonicalName());
+        final InvokeStatus invoke = invokeStatus.get(clazz);
         if (invoke == null) {
             return true;
         }
@@ -158,27 +179,12 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         return !was;
     }
 
-    public void executePreDestroys() {
-        final ExecutorService executor = Executors.newFixedThreadPool(3, ThreadFactoryUtil.create("PreDestroy-%d"));
-        final List<Future<?>> futures = new ArrayList<>(invocable.size());
-        for (final Invocable preDestroy : invocable) {
-            futures.add(executor.submit(preDestroy::invoke));
-        }
-        executor.shutdown();
-        try {
-            executor.awaitTermination(5, TimeUnit.SECONDS);
-        } catch (final InterruptedException e) {
-            Thread.currentThread().interrupt();
-            log.error("Exceptions in lifecycle shutdown", e);
-        }
-    }
-
     private static final class InvokeStatus {
         private boolean postConstructCalled;
         private boolean preDestroyCalled;
     }
 
-    private static final class Invocable {
+    private static final class Invocable implements Callable<Void> {
         private final @NotNull Method method;
         private final @NotNull Object target;
 
@@ -187,12 +193,14 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
             this.target = target;
         }
 
-        void invoke() {
+        @Override
+        public Void call() {
             try {
                 method.invoke(target);
             } catch (final IllegalAccessException | InvocationTargetException e) {
                 log.error("Could not execute preDestroy method for class {}", target.getClass(), e);
             }
+            return null;
         }
     }
 }

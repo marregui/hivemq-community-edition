@@ -52,13 +52,13 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
     private static final Logger log = LoggerFactory.getLogger(LifecycleModule.class);
 
     private final @NotNull Map<String, InvokeStatus> invokeStatus;
-    private final @NotNull List<Invocable> preDestroy;
+    private final @NotNull List<Invocable> invocable;
     private @Nullable ListeningExecutorService executor;
 
     public LifecycleModule() {
         super(LifecycleModule.class);
         invokeStatus = new ConcurrentHashMap<>();
-        preDestroy = Collections.synchronizedList(new ArrayList<>());
+        invocable = Collections.synchronizedList(new ArrayList<>());
     }
 
     private <I> void invoke(
@@ -75,56 +75,45 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         }
 
         // post constructs
-        Method method = null;
         for (final Method m : type.getDeclaredMethods()) {
             if (m.isAnnotationPresent(PostConstruct.class)) {
-                if (m.getParameterTypes().length != 0) {
-                    throw new ProvisionException("@PostConstruct must not have parameters");
+                if (m.getParameterTypes().length != 0 ||
+                        m.getExceptionTypes().length > 0 ||
+                        Modifier.isStatic(m.getModifiers())) {
+                    throw new RuntimeException();
                 }
-                if (m.getExceptionTypes().length > 0) {
-                    throw new ProvisionException("@PostConstruct must not throw checked exceptions");
+                if (canInvokePostConstruct(type)) {
+                    final Method postConstruct = m;
+                    encounter.register((InjectionListener<I>) listener -> {
+                        try {
+                            postConstruct.setAccessible(true);
+                            postConstruct.invoke(listener);
+                        } catch (final IllegalAccessException | InvocationTargetException e) {
+                            if (e.getCause() instanceof UnrecoverableException) {
+                                log.error("An unrecoverable Exception occurred. Exiting HiveMQ", e);
+                                System.exit(1);
+                            }
+                            throw new RuntimeException(e);
+                        }
+                    });
                 }
-                if (Modifier.isStatic(m.getModifiers())) {
-                    throw new ProvisionException("@PostConstruct must not be static");
-                }
-                if (method != null) {
-                    throw new ProvisionException("More than one @PostConstruct for class " + type);
-                }
-                method = m;
+                break;
             }
-        }
-        if (method != null && canInvokePostConstruct(type)) {
-            final Method postConstruct = method;
-            encounter.register((InjectionListener<I>) listener -> {
-                try {
-                    postConstruct.setAccessible(true);
-                    postConstruct.invoke(listener);
-                } catch (final IllegalAccessException | InvocationTargetException e) {
-                    if (e.getCause() instanceof UnrecoverableException) {
-                        log.error("An unrecoverable Exception occurred. Exiting HiveMQ", e);
-                        System.exit(1);
-                    }
-                    throw new ProvisionException("An error occurred while calling @PostConstruct", e);
-                }
-            });
         }
 
         // pre destroys
-        method = null;
         for (final Method m : type.getDeclaredMethods()) {
             if (m.isAnnotationPresent(PreDestroy.class)) {
                 if (m.getParameterTypes().length != 0) {
-                    throw new ProvisionException("@PreDestroy must not have parameters");
+                    throw new RuntimeException();
                 }
-                if (method != null) {
-                    throw new ProvisionException("More than one @PreDestroy for class " + type);
+                if (canInvokePreDestroy(type)) {
+                    final Method preDestroy = m;
+                    encounter.register((InjectionListener<I>) target -> invocable.add(new Invocable(preDestroy,
+                            target)));
                 }
-                method = m;
+                break;
             }
-        }
-        if (method != null && canInvokePreDestroy(type)) {
-            final Method preDestroy = method;
-            encounter.register((InjectionListener<I>) listener -> addPreDestroyMethod(preDestroy, listener));
         }
     }
 
@@ -169,15 +158,15 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         invokeStatus.putIfAbsent(clazz.getCanonicalName(), new InvokeStatus());
     }
 
-    void addPreDestroyMethod(final @NotNull Method method, final @NotNull Object target) {
-        preDestroy.add(new Invocable(Objects.requireNonNull(method), Objects.requireNonNull(target)));
+    void addPreDestroyMethod(final @NotNull Method preDestroy, final @NotNull Object listener) {
+        this.invocable.add(new Invocable(Objects.requireNonNull(preDestroy), Objects.requireNonNull(listener)));
     }
 
     public @NotNull ListenableFuture<?> executePreDestroy() {
         final ExecutorService executor = Executors.newFixedThreadPool(3, ThreadFactoryUtil.create("PreDestroy-%d"));
         this.executor = MoreExecutors.listeningDecorator(executor);
-        final List<ListenableFuture<?>> futures = new ArrayList<>(preDestroy.size());
-        for (final Invocable preDestroyInvokable : preDestroy) {
+        final List<ListenableFuture<?>> futures = new ArrayList<>(invocable.size());
+        for (final Invocable preDestroyInvokable : invocable) {
             futures.add(this.executor.submit(() -> {
                 try {
                     preDestroyInvokable.method.invoke(preDestroyInvokable.target);

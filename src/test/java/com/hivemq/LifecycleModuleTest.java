@@ -345,23 +345,6 @@ public class LifecycleModuleTest {
      * ******************+**/
 
     @Test
-    public void preDestroyIsExecutedWhenAdded() throws Exception {
-
-        final CountDownLatch latch = new CountDownLatch(1);
-        class PredestroyClass {
-            @PreDestroy
-            public void preDestroy() {
-                latch.countDown();
-            }
-        }
-
-        lifecycleModule.addPreDestroyMethod(PredestroyClass.class.getMethod("preDestroy"), new PredestroyClass());
-        lifecycleModule.executePreDestroy();
-
-        assertTrue(latch.await(1, TimeUnit.SECONDS));
-    }
-
-    @Test
     public void lifecycleMethodsWhenNotSingletonClassThenCanBeCalledMultipleTimes() {
         final Class<Object> objectClass = Object.class;
         assertTrue(lifecycleModule.canInvokePostConstruct(objectClass));

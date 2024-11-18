@@ -25,16 +25,20 @@ import com.hivemq.configuration.service.SecurityConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 import org.jetbrains.annotations.NotNull;
 
-public class ConfigurationModule extends SingletonModule {
+public class ConfigurationModule extends SingletonModule<Class<ConfigurationModule>> {
 
-    private final FullConfigurationService configurationService;
-    private final HivemqId hiveMQId;
+    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull HivemqId hiveMQId;
 
     public ConfigurationModule(
-            final @NotNull FullConfigurationService configurationService, final @NotNull HivemqId hiveMQId) {
+            final @NotNull FullConfigurationService configurationService) {
         super(ConfigurationModule.class);
         this.configurationService = configurationService;
-        this.hiveMQId = hiveMQId;
+        this.hiveMQId = new HivemqId();
+    }
+
+    public @NotNull String getHiveMQId() {
+        return hiveMQId.get();
     }
 
     @Override

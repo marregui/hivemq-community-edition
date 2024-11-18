@@ -17,7 +17,7 @@ package com.hivemq.bootstrap.lazysingleton;
 
 import com.hivemq.bootstrap.SingletonModule;
 
-public class LazySingletonModule extends SingletonModule {
+public class LazySingletonModule extends SingletonModule<Class<LazySingletonModule>> {
 
     public LazySingletonModule() {
         super(LazySingletonModule.class);

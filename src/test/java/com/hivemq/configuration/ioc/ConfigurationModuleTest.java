@@ -52,7 +52,7 @@ public class ConfigurationModuleTest {
         final FullConfigurationService fullConfigurationService =
                 testConfigurationBootstrap.getFullConfigurationService();
 
-        injector = Guice.createInjector(new ConfigurationModule(fullConfigurationService, new HivemqId()),
+        injector = Guice.createInjector(new ConfigurationModule(fullConfigurationService),
                 new AbstractModule() {
                     @Override
                     protected void configure() {

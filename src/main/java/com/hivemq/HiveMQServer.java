@@ -28,7 +28,6 @@ import com.hivemq.bootstrap.HiveMQNettyBootstrap;
 import com.hivemq.bootstrap.ListenerStartupInformation;
 import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
 import com.hivemq.bootstrap.netty.NettyModule;
-import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.ioc.ConfigurationFileProvider;
 import com.hivemq.configuration.ioc.ConfigurationModule;
@@ -97,24 +96,22 @@ public final class HiveMQServer {
 
     public static void main(final String @NotNull [] args) throws Exception {
         Logging.initLogging(SystemInformation.INSTANCE.getConfigFolder());
-        final HivemqId hivemqId = new HivemqId();
-        final LifecycleModule lifecycle = new LifecycleModule();
-        final DataFolderLock dataLock = new DataFolderLock();
-        final MetricRegistry metricRegistry = new MetricRegistry();
-        metricRegistry.addListener(new MetricRegistryLogger());
 
         final FullConfigurationService config = new ConfigurationServiceImpl(new ListenerConfigurationServiceImpl(),
                 new MqttConfigurationServiceImpl(),
                 new RestrictionsConfigurationServiceImpl(),
                 new SecurityConfigurationServiceImpl());
-        final ConfigFileReader configReader = new ConfigFileReader(ConfigurationFileProvider.get(SystemInformation.INSTANCE),
-                new RestrictionConfigurator(config.restrictionsConfiguration()),
-                new SecurityConfigurator(config.securityConfiguration()),
-                new EnvVarUtil(),
-                new MqttConfigurator(config.mqttConfiguration()),
-                new ListenerConfigurator(config.listenerConfiguration()));
+        final ConfigFileReader configReader =
+                new ConfigFileReader(ConfigurationFileProvider.get(SystemInformation.INSTANCE),
+                        new RestrictionConfigurator(config.restrictionsConfiguration()),
+                        new SecurityConfigurator(config.securityConfiguration()),
+                        new EnvVarUtil(),
+                        new MqttConfigurator(config.mqttConfiguration()),
+                        new ListenerConfigurator(config.listenerConfiguration()));
         configReader.applyConfig();
+        final ConfigurationModule configuration = new ConfigurationModule(config);
 
+        final DataFolderLock dataLock = new DataFolderLock();
         dataLock.lock(SystemInformation.INSTANCE.getDataFolder().toPath());
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
@@ -123,19 +120,19 @@ public final class HiveMQServer {
                 dataLock.unlock();
                 Logging.resetLogging();
             }
-        }, "shutdown-" + hivemqId.get()));
+        }, "shutdown-" + configuration.getHiveMQId()));
 
+        final MetricRegistry metricRegistry = new MetricRegistry();
+        metricRegistry.addListener(new MetricRegistryLogger());
+        final LifecycleModule lifecycle = new LifecycleModule();
+        final LazySingletonModule singletons = new LazySingletonModule();
         final Injector persistence = Guice.createInjector(Stage.PRODUCTION,
-                Arrays.asList(lifecycle,
-                        new ConfigurationModule(config, hivemqId),
-                        new LazySingletonModule(),
-                        new PersistenceMigrationModule(metricRegistry)));
+                Arrays.asList(lifecycle, singletons, configuration, new PersistenceMigrationModule(metricRegistry)));
         persistence.getInstance(PersistenceStartup.class).finish();
-
         final Injector injector = Guice.createInjector(Stage.PRODUCTION,
                 Arrays.asList(lifecycle,
-                        new LazySingletonModule(),
-                        new ConfigurationModule(config, hivemqId),
+                        singletons,
+                        configuration,
                         new NettyModule(),
                         new HiveMQMainModule(),
                         new MQTTHandlerModule(persistence),
@@ -180,7 +177,7 @@ public final class HiveMQServer {
         }
         System.gc();
         log.info("Started HiveMQ [{}] in {}ms",
-                hivemqId.get(),
+                configuration.getHiveMQId(),
                 TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime));
     }
 }

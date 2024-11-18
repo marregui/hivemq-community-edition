@@ -99,13 +99,8 @@ public final class HiveMQServer {
     public static void main(final String @NotNull [] args) throws Exception {
         final SystemInformation sysInfo = new SystemInformation();
         Logging.initLogging(sysInfo.getConfigFolder());
-
         final HivemqId hivemqId = new HivemqId();
-
-
         final LifecycleModule lifecycleModule = new LifecycleModule();
-
-
         final DataFolderLock dataLock = new DataFolderLock();
         final MetricRegistry metricRegistry = new MetricRegistry();
         metricRegistry.addListener(new MetricRegistryLogger());
@@ -139,6 +134,7 @@ public final class HiveMQServer {
                         lifecycleModule,
                         new PersistenceMigrationModule(metricRegistry)));
         persistence.getInstance(PersistenceStartup.class).finish();
+
         final Injector injector = Guice.createInjector(Stage.PRODUCTION,
                 Arrays.asList(new SystemInformationModule(sysInfo),
                         new LazySingletonModule(),

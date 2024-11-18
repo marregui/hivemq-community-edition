@@ -46,18 +46,13 @@ public class PersistenceMigrationModule extends SingletonModule<Class<Persistenc
     protected void configure() {
         bind(PersistenceStartup.class).asEagerSingleton();
         bind(PersistenceStartupShutdownHookInstaller.class).asEagerSingleton();
-
         install(new PersistenceMigrationFileModule());
-
         bind(PublishPayloadPersistence.class).to(PublishPayloadPersistenceImpl.class);
-
         bind(MetricRegistry.class).toInstance(metricRegistry);
         bind(MetricsHolder.class).toProvider(MetricsHolderProvider.class).asEagerSingleton();
-
         bind(ListeningScheduledExecutorService.class).annotatedWith(PayloadPersistence.class)
                 .toProvider(PayloadPersistenceScheduledExecutorProvider.class)
                 .in(LazySingleton.class);
-
         bind(MessageDroppedService.class).toProvider(MessageDroppedServiceProvider.class).in(Singleton.class);
     }
 }

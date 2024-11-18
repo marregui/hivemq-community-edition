@@ -16,27 +16,34 @@
 
 package com.hivemq.util;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadFactoryUtil {
 
+    private static final @NotNull ConcurrentHashMap<String, AtomicInteger> IDS = new ConcurrentHashMap<>();
+
     public static @NotNull ThreadFactory create(final @NotNull String nameFormat) {
-        return new ThreadFactoryBuilder().setNameFormat(nameFormat)
-                .setUncaughtExceptionHandler(new UncaughtExceptionHandler())
-                .build();
-    }
-
-    private static class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
-        private static final Logger log = LoggerFactory.getLogger(UncaughtExceptionHandler.class);
-
-        @Override
-        public void uncaughtException(final @NotNull Thread thread, final @NotNull Throwable throwable) {
-            log.error("Uncaught exception in thread '{}'.", thread.getName(), throwable);
-        }
+        return r -> {
+            final String threadName;
+            final int wild = nameFormat.indexOf("%d");
+            if (wild != -1) {
+                final String name = nameFormat.substring(0, wild);
+                threadName = name + IDS.computeIfAbsent(name, k -> new AtomicInteger()).incrementAndGet();
+            } else {
+                threadName = nameFormat;
+            }
+            final Thread thr = new Thread(r);
+            thr.setName(threadName);
+            thr.setDaemon(false);
+            thr.setUncaughtExceptionHandler((thread, throwable) -> {
+                System.err.printf("[%s] Uncaught exception: %s%n.", thread.getName(), throwable.getMessage());
+                throwable.printStackTrace(System.err);
+            });
+            return thr;
+        };
     }
 }

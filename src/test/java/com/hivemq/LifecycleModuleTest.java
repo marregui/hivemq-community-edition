@@ -177,15 +177,6 @@ public class LifecycleModuleTest {
      * @PreDestroy tests *
      * ******************+**/
 
-    @Test
-    public void lifecycleMethodsWhenNotSingletonClassThenCanBeCalledMultipleTimes() {
-        final Class<Object> objectClass = Object.class;
-        assertTrue(lifecycleModule.canInvokePostConstruct(objectClass));
-        assertTrue(lifecycleModule.canInvokePostConstruct(objectClass));
-        assertTrue(lifecycleModule.canInvokePreDestroy(objectClass));
-        assertTrue(lifecycleModule.canInvokePreDestroy(objectClass));
-    }
-
     static class WithPostConstruct {
 
         private final CountDownLatch latch = new CountDownLatch(1);

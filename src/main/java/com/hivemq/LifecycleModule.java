@@ -42,7 +42,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
 
@@ -57,45 +56,7 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         invocable = Collections.synchronizedList(new ArrayList<>());
     }
 
-    private <I> void invoke(
-            final @NotNull TypeEncounter<I> encounter, final @NotNull Class<? super I> type) {
-        // recur up to Object.class
-        if (type.getSuperclass() != null) {
-            invoke(encounter, type.getSuperclass());
-        }
-
-        if (type.isAnnotationPresent(javax.inject.Singleton.class) ||
-                type.isAnnotationPresent(com.google.inject.Singleton.class) ||
-                type.isAnnotationPresent(LazySingleton.class)) {
-            invokeStatus.putIfAbsent(type, new InvokeStatus());
-        }
-        for (final Method m : type.getDeclaredMethods()) {
-            if (m.isAnnotationPresent(PostConstruct.class)) {
-                if (m.getParameterTypes().length != 0 ||
-                        m.getExceptionTypes().length > 0 ||
-                        Modifier.isStatic(m.getModifiers())) {
-                    throw new RuntimeException();
-                }
-                if (canInvokePostConstruct(type)) {
-                    encounter.register(postConstructInvocation(m));
-                }
-                break;
-            }
-        }
-        for (final Method m : type.getDeclaredMethods()) {
-            if (m.isAnnotationPresent(PreDestroy.class)) {
-                if (m.getParameterTypes().length != 0) {
-                    throw new RuntimeException();
-                }
-                if (canInvokePreDestroy(type)) {
-                    encounter.register(preDestroyInvocation(m));
-                }
-                break;
-            }
-        }
-    }
-
-    private <I> @NotNull InjectionListener<I> postConstructInvocation(final @NotNull Method method) {
+    private static <I> @NotNull InjectionListener<I> postConstructInvocation(final @NotNull Method method) {
         return target -> {
             try {
                 method.setAccessible(true);
@@ -110,8 +71,53 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         };
     }
 
-    private <I> @NotNull InjectionListener<I> preDestroyInvocation(final @NotNull Method method) {
+    private static <I> @NotNull InjectionListener<I> preDestroyInvocation(
+            final @NotNull List<Invocable> invocable, final @NotNull Method method) {
         return target -> invocable.add(new Invocable(method, target));
+    }
+
+    private <I> void invoke(
+            final @NotNull TypeEncounter<I> encounter, final @NotNull Class<? super I> type) {
+        if (type.getSuperclass() != null) {
+            invoke(encounter, type.getSuperclass());
+        }
+        if (type.isAnnotationPresent(javax.inject.Singleton.class) ||
+                type.isAnnotationPresent(com.google.inject.Singleton.class) ||
+                type.isAnnotationPresent(LazySingleton.class)) {
+            invokeStatus.putIfAbsent(type, new InvokeStatus());
+        }
+        for (final Method m : type.getDeclaredMethods()) {
+            if (m.isAnnotationPresent(PostConstruct.class)) {
+                if (m.getParameterTypes().length != 0 ||
+                        m.getExceptionTypes().length > 0 ||
+                        Modifier.isStatic(m.getModifiers())) {
+                    throw new RuntimeException();
+                }
+                final InvokeStatus invoke = invokeStatus.get(type);
+                if (invoke == null) {
+                    encounter.register(postConstructInvocation(m));
+                } else if (!invoke.postConstructCalled) {
+                    invoke.postConstructCalled = true;
+                    encounter.register(postConstructInvocation(m));
+                }
+                break;
+            }
+        }
+        for (final Method m : type.getDeclaredMethods()) {
+            if (m.isAnnotationPresent(PreDestroy.class)) {
+                if (m.getParameterTypes().length != 0) {
+                    throw new RuntimeException();
+                }
+                final InvokeStatus invoke = invokeStatus.get(type);
+                if (invoke == null) {
+                    encounter.register(preDestroyInvocation(invocable, m));
+                } else if (!invoke.preDestroyCalled) {
+                    invoke.preDestroyCalled = true;
+                    encounter.register(preDestroyInvocation(invocable, m));
+                }
+                break;
+            }
+        }
     }
 
     @Override
@@ -144,39 +150,12 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
                 } catch (final InterruptedException e) {
                     Thread.currentThread().interrupt();
                     log.error("Exceptions in lifecycle shutdown", e);
-                } catch (ExecutionException e) {
+                } catch (final ExecutionException e) {
                     log.error("Exceptions in lifecycle shutdown", e);
-                } finally {
-                    executor.shutdownNow();
-                    try {
-                        executor.awaitTermination(100, TimeUnit.MILLISECONDS);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        log.error("Exceptions in lifecycle shutdown", e);
-                    }
                 }
+                executor.shutdownNow();
             }
         });
-    }
-
-    <T> boolean canInvokePostConstruct(final @NotNull Class<T> clazz) {
-        final InvokeStatus invoke = invokeStatus.get(clazz);
-        if (invoke == null) {
-            return true;
-        }
-        final boolean was = invoke.postConstructCalled;
-        invoke.postConstructCalled = true;
-        return !was;
-    }
-
-    <T> boolean canInvokePreDestroy(final @NotNull Class<T> clazz) {
-        final InvokeStatus invoke = invokeStatus.get(clazz);
-        if (invoke == null) {
-            return true;
-        }
-        final boolean was = invoke.preDestroyCalled;
-        invoke.preDestroyCalled = true;
-        return !was;
     }
 
     private static final class InvokeStatus {

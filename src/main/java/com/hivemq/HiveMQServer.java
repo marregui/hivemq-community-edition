@@ -26,7 +26,6 @@ import com.google.inject.spi.Message;
 import com.hivemq.bootstrap.HiveMQMainModule;
 import com.hivemq.bootstrap.HiveMQNettyBootstrap;
 import com.hivemq.bootstrap.ListenerStartupInformation;
-import com.hivemq.bootstrap.StartupListenerVerifier;
 import com.hivemq.bootstrap.SystemInformationModule;
 import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
 import com.hivemq.bootstrap.netty.NettyModule;
@@ -40,6 +39,7 @@ import com.hivemq.configuration.reader.MqttConfigurator;
 import com.hivemq.configuration.reader.RestrictionConfigurator;
 import com.hivemq.configuration.reader.SecurityConfigurator;
 import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.entity.Listener;
 import com.hivemq.configuration.service.impl.ConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.MqttConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImpl;
@@ -47,7 +47,6 @@ import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
 import com.hivemq.extensions.ExtensionBootstrap;
 import com.hivemq.extensions.ioc.ExtensionModule;
-import com.hivemq.logging.modifier.XodusEnvironmentImplLogLevelModifier;
 import com.hivemq.metrics.ioc.MetricsModule;
 import com.hivemq.mqtt.ioc.MQTTHandlerModule;
 import com.hivemq.mqtt.ioc.MQTTServiceModule;
@@ -63,9 +62,9 @@ import com.hivemq.persistence.PersistenceStartup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
@@ -104,9 +103,7 @@ public final class HiveMQServer {
         final HivemqId hivemqId = new HivemqId();
 
 
-
         final LifecycleModule lifecycleModule = new LifecycleModule();
-
 
 
         final DataFolderLock dataLock = new DataFolderLock();
@@ -159,35 +156,39 @@ public final class HiveMQServer {
 
         // start
         final long startTime = System.nanoTime();
-        final Instance instance = injector.getInstance(Instance.class);
+        injector.getInstance(PublishPayloadPersistence.class).init();
+        injector.getInstance(ExtensionBootstrap.class).startExtensionSystem().get();
+        final List<ListenerStartupInformation> startupInformation =
+                Objects.requireNonNull(injector.getInstance(HiveMQNettyBootstrap.class).bootstrapServer().get());
+        Checkpoints.checkpoint("listener-started");
+        if (startupInformation.isEmpty()) {
+            log.error("No listener was configured");
+            throw new UnrecoverableException();
+        }
+        int success = 0;
+        for (final ListenerStartupInformation info : startupInformation) {
+            if (info.isSuccessful()) {
+                final Listener listener = info.getListener();
+                log.info("Started {} on address {} and on port {}.",
+                        listener.readableName(),
+                        listener.getBindAddress(),
+                        listener.getPort());
+                success++;
+            } else {
+                final Listener listener = info.getListener();
+                log.error("Could not start {} on port {} and address {}. Is it already in use?",
+                        listener.readableName(),
+                        listener.getPort(),
+                        listener.getBindAddress());
+            }
+        }
+        if (success < 1) {
+            log.error("Could not bind any listener. Stopping HiveMQ.");
+            throw new UnrecoverableException();
+        }
         System.gc();
-        instance.start();
         log.info("Started HiveMQ [{}] in {}ms",
                 hivemqId.get(),
                 TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime));
-    }
-
-    private static class Instance {
-        private final @NotNull HiveMQNettyBootstrap nettyBootstrap;
-        private final @NotNull PublishPayloadPersistence payloadPersistence;
-        private final @NotNull ExtensionBootstrap extensionBootstrap;
-
-        @Inject
-        Instance(
-                final @NotNull HiveMQNettyBootstrap nettyBootstrap,
-                final @NotNull PublishPayloadPersistence payloadPersistence,
-                final @NotNull ExtensionBootstrap extensionBootstrap) {
-            this.nettyBootstrap = nettyBootstrap;
-            this.payloadPersistence = payloadPersistence;
-            this.extensionBootstrap = extensionBootstrap;
-        }
-
-        public void start() throws Exception {
-            payloadPersistence.init();
-            extensionBootstrap.startExtensionSystem().get();
-            final List<ListenerStartupInformation> startupInformation = nettyBootstrap.bootstrapServer().get();
-            Checkpoints.checkpoint("listener-started");
-            new StartupListenerVerifier(startupInformation).verifyAndPrint();
-        }
     }
 }

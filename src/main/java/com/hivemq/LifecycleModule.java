@@ -48,12 +48,12 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
     private static final Logger log = LoggerFactory.getLogger(LifecycleModule.class);
 
     private final @NotNull Map<Class<?>, InvokeStatus> invokeStatus;
-    private final @NotNull List<Invocable> invocable;
+    private final @NotNull List<PreDestroyCallable> preDestroys;
 
     public LifecycleModule() {
         super(LifecycleModule.class);
         invokeStatus = new ConcurrentHashMap<>();
-        invocable = Collections.synchronizedList(new ArrayList<>());
+        preDestroys = Collections.synchronizedList(new ArrayList<>());
     }
 
     private static <I> @NotNull InjectionListener<I> postConstructInvocation(final @NotNull Method method) {
@@ -72,8 +72,8 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
     }
 
     private static <I> @NotNull InjectionListener<I> preDestroyInvocation(
-            final @NotNull List<Invocable> invocable, final @NotNull Method method) {
-        return target -> invocable.add(new Invocable(method, target));
+            final @NotNull List<PreDestroyCallable> invocable, final @NotNull Method method) {
+        return target -> invocable.add(new PreDestroyCallable(method, target));
     }
 
     private <I> void invoke(
@@ -110,10 +110,10 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
                 }
                 final InvokeStatus invoke = invokeStatus.get(type);
                 if (invoke == null) {
-                    encounter.register(preDestroyInvocation(invocable, m));
+                    encounter.register(preDestroyInvocation(preDestroys, m));
                 } else if (!invoke.preDestroyCalled) {
                     invoke.preDestroyCalled = true;
-                    encounter.register(preDestroyInvocation(invocable, m));
+                    encounter.register(preDestroyInvocation(preDestroys, m));
                 }
                 break;
             }
@@ -144,7 +144,7 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
                 final ExecutorService executor =
                         Executors.newFixedThreadPool(3, ThreadFactoryUtil.create("PreDestroy-%d"));
                 try {
-                    for (final Future<Void> future : executor.invokeAll(invocable)) {
+                    for (final Future<Void> future : executor.invokeAll(preDestroys)) {
                         future.get();
                     }
                 } catch (final InterruptedException e) {
@@ -163,11 +163,11 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         private boolean preDestroyCalled;
     }
 
-    private static final class Invocable implements Callable<Void> {
+    private static final class PreDestroyCallable implements Callable<Void> {
         private final @NotNull Method method;
         private final @NotNull Object target;
 
-        Invocable(final @NotNull Method method, final @NotNull Object target) {
+        PreDestroyCallable(final @NotNull Method method, final @NotNull Object target) {
             this.method = method;
             this.target = target;
         }

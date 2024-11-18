@@ -25,6 +25,8 @@ import java.nio.file.Files;
 
 public class SystemInformation {
 
+    public static final @NotNull SystemInformation INSTANCE = new SystemInformation();
+
     public static final @NotNull String HIVEMQ_HOME = "hivemq.home";
     public static final @NotNull String VERSION = "Origin";
 

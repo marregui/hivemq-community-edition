@@ -64,12 +64,9 @@ public class ExtensionBootstrapImplTest {
 
     @Before
     public void before() {
-        final SystemInformation systemInformation = new SystemInformation();
-
         final ExtensionLifecycleHandler extensionLifecycleHandler =
                 new ExtensionLifecycleHandlerImpl(hiveMQExtensions, MoreExecutors.newDirectExecutorService());
         pluginBootstrap = new ExtensionBootstrapImpl(extensionLoader,
-                systemInformation,
                 extensionLifecycleHandler,
                 hiveMQExtensions,
                 authenticators);

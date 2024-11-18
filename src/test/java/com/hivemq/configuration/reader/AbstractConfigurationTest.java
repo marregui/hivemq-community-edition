@@ -15,7 +15,6 @@
  */
 package com.hivemq.configuration.reader;
 
-import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.service.MqttConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
@@ -50,7 +49,6 @@ public class AbstractConfigurationTest {
     MqttConfigurationService mqttConfigurationService;
     RestrictionsConfigurationService restrictionsConfigurationService;
     SecurityConfigurationService securityConfigurationService;
-    SystemInformation systemInformation;
 
     @Before
     public void setUp() throws Exception {
@@ -61,7 +59,6 @@ public class AbstractConfigurationTest {
         securityConfigurationService = new SecurityConfigurationServiceImpl();
         mqttConfigurationService = new MqttConfigurationServiceImpl();
         restrictionsConfigurationService = new RestrictionsConfigurationServiceImpl();
-        systemInformation = new SystemInformation();
 
         when(envVarUtil.replaceEnvironmentVariablePlaceholders(anyString())).thenCallRealMethod();
         final ConfigurationFile configurationFile = new ConfigurationFile(xmlFile);
@@ -70,6 +67,6 @@ public class AbstractConfigurationTest {
                 new SecurityConfigurator(securityConfigurationService),
                 envVarUtil,
                 new MqttConfigurator(mqttConfigurationService),
-                new ListenerConfigurator(listenerConfigurationService, systemInformation));
+                new ListenerConfigurator(listenerConfigurationService));
     }
 }

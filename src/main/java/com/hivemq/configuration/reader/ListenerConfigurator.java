@@ -49,15 +49,12 @@ public class ListenerConfigurator {
     private static final String JKS = "JKS";
 
     private final @NotNull ListenerConfigurationService listenerConfigurationService;
-    private final @NotNull SystemInformation systemInformation;
 
     private final @NotNull List<String> chosenNames;
 
     public ListenerConfigurator(
-            final @NotNull ListenerConfigurationService listenerConfigurationService,
-            final @NotNull SystemInformation systemInformation) {
+            final @NotNull ListenerConfigurationService listenerConfigurationService) {
         this.listenerConfigurationService = listenerConfigurationService;
-        this.systemInformation = systemInformation;
         this.chosenNames = new ArrayList<>();
     }
 
@@ -202,7 +199,7 @@ public class ListenerConfigurator {
             if (file.isAbsolute()) {
                 return file.getAbsolutePath();
             } else {
-                return new File(systemInformation.getHiveMQHomeFolder(), path).getAbsolutePath();
+                return new File(SystemInformation.INSTANCE.getHiveMQHomeFolder(), path).getAbsolutePath();
             }
         }
     }
@@ -220,5 +217,4 @@ public class ListenerConfigurator {
                 return Tls.ClientAuthMode.NONE;
         }
     }
-
 }

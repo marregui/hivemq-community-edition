@@ -118,7 +118,7 @@ public class PluginInitializerHandlerTest {
                 new PluginTaskExecutorServiceImpl(() -> executor);
         pluginInitializerHandler = new PluginInitializerHandler(initializers,
                 pluginTaskExecutorService,
-                new ServerInformationImpl(new SystemInformation(), listenerConfigurationService),
+                new ServerInformationImpl(listenerConfigurationService),
                 hiveMQExtensions);
     }
 

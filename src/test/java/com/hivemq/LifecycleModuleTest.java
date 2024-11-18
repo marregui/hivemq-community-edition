@@ -45,12 +45,7 @@ public class LifecycleModuleTest {
     }
 
     private void createInjector() {
-        injector = Guice.createInjector(lifecycleModule, new LazySingletonModule(), new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(SystemInformation.class).toInstance(new SystemInformation());
-            }
-        });
+        injector = Guice.createInjector(lifecycleModule, new LazySingletonModule());
     }
 
     /* **********************

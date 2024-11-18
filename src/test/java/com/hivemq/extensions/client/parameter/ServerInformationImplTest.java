@@ -36,29 +36,24 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * @since 4.0.0
- */
 public class ServerInformationImplTest {
 
     private final @NotNull ListenerConfigurationService listenerConfigurationService =
             mock(ListenerConfigurationService.class);
 
     private @NotNull ServerInformation serverInformation;
-    private @NotNull SystemInformation systemInformation;
 
     @Before
     public void setUp() throws Exception {
-        systemInformation = new SystemInformation();
-        serverInformation = new ServerInformationImpl(systemInformation, listenerConfigurationService);
+        serverInformation = new ServerInformationImpl(listenerConfigurationService);
     }
 
     @Test
     public void test_server_and_system_information_equal() {
-        assertEquals(systemInformation.getDataFolder(), serverInformation.getDataFolder());
-        assertEquals(systemInformation.getHiveMQHomeFolder(), serverInformation.getHomeFolder());
-        assertEquals(systemInformation.getLogFolder(), serverInformation.getLogFolder());
-        assertEquals(systemInformation.getExtensionsFolder(), serverInformation.getExtensionsFolder());
+        assertEquals(SystemInformation.INSTANCE.getDataFolder(), serverInformation.getDataFolder());
+        assertEquals(SystemInformation.INSTANCE.getHiveMQHomeFolder(), serverInformation.getHomeFolder());
+        assertEquals(SystemInformation.INSTANCE.getLogFolder(), serverInformation.getLogFolder());
+        assertEquals(SystemInformation.INSTANCE.getExtensionsFolder(), serverInformation.getExtensionsFolder());
     }
 
     @Test

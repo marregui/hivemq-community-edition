@@ -39,7 +39,6 @@ public class ExtensionBootstrapImpl implements ExtensionBootstrap {
     private static final Logger log = LoggerFactory.getLogger(ExtensionBootstrapImpl.class);
 
     private final @NotNull ExtensionLoader extensionLoader;
-    private final @NotNull SystemInformation systemInformation;
     private final @NotNull ExtensionLifecycleHandler lifecycleHandler;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull Authenticators authenticators;
@@ -47,12 +46,10 @@ public class ExtensionBootstrapImpl implements ExtensionBootstrap {
     @Inject
     public ExtensionBootstrapImpl(
             final @NotNull ExtensionLoader extensionLoader,
-            final @NotNull SystemInformation systemInformation,
             final @NotNull ExtensionLifecycleHandler lifecycleHandler,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull Authenticators authenticators) {
         this.extensionLoader = extensionLoader;
-        this.systemInformation = systemInformation;
         this.lifecycleHandler = lifecycleHandler;
         this.hiveMQExtensions = hiveMQExtensions;
         this.authenticators = authenticators;
@@ -64,7 +61,7 @@ public class ExtensionBootstrapImpl implements ExtensionBootstrap {
         log.info("Starting HiveMQ extension system.");
 
         ShutdownHooks.INSTANCE.add(new ExtensionSystemShutdownHook(this));
-        final Path extensionFolder = systemInformation.getExtensionsFolder().toPath();
+        final Path extensionFolder = SystemInformation.INSTANCE.getExtensionsFolder().toPath();
 
         // load already installed extensions
         final ImmutableCollection<HiveMQExtensionEvent> hiveMQExtensionEvents =

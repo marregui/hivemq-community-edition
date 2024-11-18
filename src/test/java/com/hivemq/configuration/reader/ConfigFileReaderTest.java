@@ -66,7 +66,7 @@ public class ConfigFileReaderTest {
                 new SecurityConfigurator(securityConfigurationService),
                 envVarUtil,
                 new MqttConfigurator(mqttConfigurationService),
-                new ListenerConfigurator(listenerConfigurationService, systemInformation));
+                new ListenerConfigurator(listenerConfigurationService));
     }
 
     @Test

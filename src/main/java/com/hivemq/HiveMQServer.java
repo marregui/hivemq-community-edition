@@ -26,7 +26,6 @@ import com.google.inject.spi.Message;
 import com.hivemq.bootstrap.HiveMQMainModule;
 import com.hivemq.bootstrap.HiveMQNettyBootstrap;
 import com.hivemq.bootstrap.ListenerStartupInformation;
-import com.hivemq.bootstrap.SystemInformationModule;
 import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
 import com.hivemq.bootstrap.netty.NettyModule;
 import com.hivemq.configuration.HivemqId;
@@ -97,10 +96,9 @@ public final class HiveMQServer {
     }
 
     public static void main(final String @NotNull [] args) throws Exception {
-        final SystemInformation sysInfo = new SystemInformation();
-        Logging.initLogging(sysInfo.getConfigFolder());
+        Logging.initLogging(SystemInformation.INSTANCE.getConfigFolder());
         final HivemqId hivemqId = new HivemqId();
-        final LifecycleModule lifecycleModule = new LifecycleModule();
+        final LifecycleModule lifecycle = new LifecycleModule();
         final DataFolderLock dataLock = new DataFolderLock();
         final MetricRegistry metricRegistry = new MetricRegistry();
         metricRegistry.addListener(new MetricRegistryLogger());
@@ -109,15 +107,15 @@ public final class HiveMQServer {
                 new MqttConfigurationServiceImpl(),
                 new RestrictionsConfigurationServiceImpl(),
                 new SecurityConfigurationServiceImpl());
-        final ConfigFileReader configReader = new ConfigFileReader(ConfigurationFileProvider.get(sysInfo),
+        final ConfigFileReader configReader = new ConfigFileReader(ConfigurationFileProvider.get(SystemInformation.INSTANCE),
                 new RestrictionConfigurator(config.restrictionsConfiguration()),
                 new SecurityConfigurator(config.securityConfiguration()),
                 new EnvVarUtil(),
                 new MqttConfigurator(config.mqttConfiguration()),
-                new ListenerConfigurator(config.listenerConfiguration(), sysInfo));
+                new ListenerConfigurator(config.listenerConfiguration()));
         configReader.applyConfig();
 
-        dataLock.lock(sysInfo.getDataFolder().toPath());
+        dataLock.lock(SystemInformation.INSTANCE.getDataFolder().toPath());
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 ShutdownHooks.INSTANCE.shutdown();
@@ -128,17 +126,15 @@ public final class HiveMQServer {
         }, "shutdown-" + hivemqId.get()));
 
         final Injector persistence = Guice.createInjector(Stage.PRODUCTION,
-                Arrays.asList(new SystemInformationModule(sysInfo),
+                Arrays.asList(lifecycle,
                         new ConfigurationModule(config, hivemqId),
                         new LazySingletonModule(),
-                        lifecycleModule,
                         new PersistenceMigrationModule(metricRegistry)));
         persistence.getInstance(PersistenceStartup.class).finish();
 
         final Injector injector = Guice.createInjector(Stage.PRODUCTION,
-                Arrays.asList(new SystemInformationModule(sysInfo),
+                Arrays.asList(lifecycle,
                         new LazySingletonModule(),
-                        lifecycleModule,
                         new ConfigurationModule(config, hivemqId),
                         new NettyModule(),
                         new HiveMQMainModule(),

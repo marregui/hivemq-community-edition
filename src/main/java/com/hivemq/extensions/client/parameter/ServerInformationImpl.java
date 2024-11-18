@@ -28,24 +28,15 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 @LazySingleton
 public class ServerInformationImpl implements ServerInformation {
-
-    @NotNull
-    private final SystemInformation systemInformation;
 
     @NotNull
     private final ListenerConfigurationService listenerConfigurationService;
 
     @Inject
     public ServerInformationImpl(
-            @NotNull final SystemInformation systemInformation,
             @NotNull final ListenerConfigurationService listenerConfigurationService) {
-        this.systemInformation = systemInformation;
         this.listenerConfigurationService = listenerConfigurationService;
     }
 
@@ -58,25 +49,25 @@ public class ServerInformationImpl implements ServerInformation {
     @NotNull
     @Override
     public File getHomeFolder() {
-        return systemInformation.getHiveMQHomeFolder();
+        return SystemInformation.INSTANCE.getHiveMQHomeFolder();
     }
 
     @NotNull
     @Override
     public File getDataFolder() {
-        return systemInformation.getDataFolder();
+        return SystemInformation.INSTANCE.getDataFolder();
     }
 
     @NotNull
     @Override
     public File getLogFolder() {
-        return systemInformation.getLogFolder();
+        return SystemInformation.INSTANCE.getLogFolder();
     }
 
     @NotNull
     @Override
     public File getExtensionsFolder() {
-        return systemInformation.getExtensionsFolder();
+        return SystemInformation.INSTANCE.getExtensionsFolder();
     }
 
     @NotNull

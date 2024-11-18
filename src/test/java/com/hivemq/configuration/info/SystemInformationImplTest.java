@@ -36,7 +36,6 @@ public class SystemInformationImplTest {
     @Rule
     public ClearHiveMQPropertiesRule clearHiveMQPropertiesRule = new ClearHiveMQPropertiesRule();
 
-    private SystemInformation systemInformation;
 
     private String tempFolderPath;
 
@@ -63,14 +62,12 @@ public class SystemInformationImplTest {
 
     @Test
     public void test_getHiveMQHomeFolder() throws Exception {
-        systemInformation = new SystemInformation();
-        assertEquals(tempFolderPath, systemInformation.getHiveMQHomeFolder().getAbsolutePath());
+        assertEquals(tempFolderPath, SystemInformation.INSTANCE.getHiveMQHomeFolder().getAbsolutePath());
     }
 
     @Test
-    public void test_getHiveMQHomeFolder_from_system_information_with_path() throws Exception {
-        systemInformation = new SystemInformation();
-        assertEquals(tempFolderPath, systemInformation.getHiveMQHomeFolder().getAbsolutePath());
+    public void test_getHiveMQHomeFolder_from_system_information_with_path() {
+        assertEquals(tempFolderPath, SystemInformation.INSTANCE.getHiveMQHomeFolder().getAbsolutePath());
     }
 
     @Test
@@ -78,95 +75,85 @@ public class SystemInformationImplTest {
         final File testfolder = tempFolder.newFolder("home");
         System.getProperties().remove(SystemInformation.HIVEMQ_HOME);
         setEnvironmentVariable("HIVEMQ_HOME", testfolder.getAbsolutePath());
-        systemInformation = new SystemInformation();
         removeEnvironmentVariable("HIVEMQ_HOME");
-        assertEquals(testfolder.getAbsolutePath(), systemInformation.getHiveMQHomeFolder().getAbsolutePath());
+        assertEquals(testfolder.getAbsolutePath(), SystemInformation.INSTANCE.getHiveMQHomeFolder().getAbsolutePath());
     }
 
     @Test
-    public void test_getConfigFolder_default() throws Exception {
-        systemInformation = new SystemInformation();
-        assertEquals(tempFolderPath + File.separator + "conf", systemInformation.getConfigFolder().getAbsolutePath());
+    public void test_getConfigFolder_default() {
+        assertEquals(tempFolderPath + File.separator + "conf",
+                SystemInformation.INSTANCE.getConfigFolder().getAbsolutePath());
     }
 
     @Test
     public void test_getConfigFolder_property() throws Exception {
         final File testfolder = tempFolder.newFolder("testconfig");
         System.setProperty("hivemq.config.folder", testfolder.getAbsolutePath());
-        systemInformation = new SystemInformation();
-        assertEquals(testfolder.getAbsolutePath(), systemInformation.getConfigFolder().getAbsolutePath());
+        assertEquals(testfolder.getAbsolutePath(), SystemInformation.INSTANCE.getConfigFolder().getAbsolutePath());
     }
 
     @Test
     public void test_getConfigFolder_environmentVariable() throws Exception {
         final File testfolder = tempFolder.newFolder("testconfig");
         setEnvironmentVariable("HIVEMQ_CONFIG_FOLDER", testfolder.getAbsolutePath());
-        systemInformation = new SystemInformation();
         removeEnvironmentVariable("HIVEMQ_CONFIG_FOLDER");
-        assertEquals(testfolder.getAbsolutePath(), systemInformation.getConfigFolder().getAbsolutePath());
+        assertEquals(testfolder.getAbsolutePath(), SystemInformation.INSTANCE.getConfigFolder().getAbsolutePath());
     }
 
     @Test
-    public void test_getLogFolder_default() throws Exception {
-        systemInformation = new SystemInformation();
-        assertEquals(tempFolderPath + File.separator + "log", systemInformation.getLogFolder().getAbsolutePath());
+    public void test_getLogFolder_default() {
+        assertEquals(tempFolderPath + File.separator + "log",
+                SystemInformation.INSTANCE.getLogFolder().getAbsolutePath());
     }
 
     @Test
     public void test_getLogFolder_property() throws Exception {
         final File testfolder = tempFolder.newFolder("testlogs");
         System.setProperty("hivemq.log.folder", testfolder.getAbsolutePath());
-        systemInformation = new SystemInformation();
-        assertEquals(testfolder.getAbsolutePath(), systemInformation.getLogFolder().getAbsolutePath());
+        assertEquals(testfolder.getAbsolutePath(), SystemInformation.INSTANCE.getLogFolder().getAbsolutePath());
     }
 
     @Test
     public void test_getLogFolder_environmentVariable() throws Exception {
         final File testfolder = tempFolder.newFolder("testlogs");
         setEnvironmentVariable("HIVEMQ_LOG_FOLDER", testfolder.getAbsolutePath());
-        systemInformation = new SystemInformation();
         removeEnvironmentVariable("HIVEMQ_LOG_FOLDER");
-        assertEquals(testfolder.getAbsolutePath(), systemInformation.getLogFolder().getAbsolutePath());
+        assertEquals(testfolder.getAbsolutePath(), SystemInformation.INSTANCE.getLogFolder().getAbsolutePath());
     }
 
     @Test
-    public void test_getDataFolder_default() throws Exception {
-        systemInformation = new SystemInformation();
-        assertEquals(tempFolderPath + File.separator + "data", systemInformation.getDataFolder().getAbsolutePath());
+    public void test_getDataFolder_default() {
+        assertEquals(tempFolderPath + File.separator + "data",
+                SystemInformation.INSTANCE.getDataFolder().getAbsolutePath());
     }
 
     @Test
     public void test_getDataFolder_property() throws Exception {
         final File testfolder = tempFolder.newFolder("testdatas");
         System.setProperty("hivemq.data.folder", testfolder.getAbsolutePath());
-        systemInformation = new SystemInformation();
-        assertEquals(testfolder.getAbsolutePath(), systemInformation.getDataFolder().getAbsolutePath());
+        assertEquals(testfolder.getAbsolutePath(), SystemInformation.INSTANCE.getDataFolder().getAbsolutePath());
     }
 
     @Test
     public void test_getDataFolder_environmentVariable() throws Exception {
         final File testfolder = tempFolder.newFolder("testdatas");
         setEnvironmentVariable("HIVEMQ_DATA_FOLDER", testfolder.getAbsolutePath());
-        systemInformation = new SystemInformation();
         removeEnvironmentVariable("HIVEMQ_DATA_FOLDER");
-        assertEquals(testfolder.getAbsolutePath(), systemInformation.getDataFolder().getAbsolutePath());
+        assertEquals(testfolder.getAbsolutePath(), SystemInformation.INSTANCE.getDataFolder().getAbsolutePath());
     }
 
     @Test
-    public void test_create_plugin_folder_if_not_exists() throws Exception {
-        systemInformation = new SystemInformation();
-        assertTrue(systemInformation.getExtensionsFolder().exists());
+    public void test_create_plugin_folder_if_not_exists() {
+        assertTrue(SystemInformation.INSTANCE.getExtensionsFolder().exists());
     }
 
     @Test
-    public void test_create_data_folder_if_not_exists() throws Exception {
-        systemInformation = new SystemInformation();
-        assertTrue(systemInformation.getDataFolder().exists());
+    public void test_create_data_folder_if_not_exists() {
+        assertTrue(SystemInformation.INSTANCE.getDataFolder().exists());
     }
 
     @Test
-    public void test_create_log_folder_if_not_exists() throws Exception {
-        systemInformation = new SystemInformation();
-        assertTrue(systemInformation.getLogFolder().exists());
+    public void test_create_log_folder_if_not_exists() {
+        assertTrue(SystemInformation.INSTANCE.getLogFolder().exists());
     }
 }

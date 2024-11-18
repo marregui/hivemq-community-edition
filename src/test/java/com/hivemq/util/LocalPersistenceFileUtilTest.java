@@ -18,7 +18,6 @@ package com.hivemq.util;
 import com.google.common.io.Files;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.hivemq.bootstrap.SystemInformationModule;
 import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
 import com.hivemq.configuration.info.SystemInformation;
 import org.jetbrains.annotations.NotNull;
@@ -48,8 +47,7 @@ public class LocalPersistenceFileUtilTest {
 
     @Test
     public void test_is_singleton() {
-        final Injector injector = Guice.createInjector(new LazySingletonModule(),
-                new SystemInformationModule(new SystemInformation()));
+        final Injector injector = Guice.createInjector(new LazySingletonModule());
         final LocalPersistenceFileUtil instance = injector.getInstance(LocalPersistenceFileUtil.class);
         final LocalPersistenceFileUtil instance2 = injector.getInstance(LocalPersistenceFileUtil.class);
 

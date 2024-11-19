@@ -19,16 +19,23 @@ import com.codahale.metrics.MetricRegistry;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.Stage;
 import com.hivemq.bootstrap.SingletonModule;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
 import com.hivemq.bootstrap.netty.ChannelInitializerFactory;
 import com.hivemq.bootstrap.netty.ChannelInitializerFactoryImpl;
 import com.hivemq.bootstrap.netty.NettyConfiguration;
 import com.hivemq.bootstrap.netty.NettyConfigurationProvider;
+import com.hivemq.configuration.ioc.ConfigurationModule;
+import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
+import com.hivemq.extensions.ioc.ExtensionModule;
+import com.hivemq.metrics.MetricRegistryLogger;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.metrics.MetricsShutdownHook;
 import com.hivemq.metrics.gauges.OpenConnectionsGauge;
@@ -53,8 +60,10 @@ import com.hivemq.mqtt.topic.TokenizedTopicMatcher;
 import com.hivemq.mqtt.topic.TopicMatcher;
 import com.hivemq.mqtt.topic.tree.TopicTreeStartup;
 import com.hivemq.persistence.PersistenceShutdownHookInstaller;
+import com.hivemq.persistence.PersistenceStartup;
 import com.hivemq.persistence.ScheduledCleanUpService;
 import com.hivemq.persistence.ioc.LocalPersistenceModule;
+import com.hivemq.persistence.ioc.PersistenceMigrationModule;
 import com.hivemq.persistence.ioc.annotation.PayloadPersistence;
 import com.hivemq.persistence.ioc.annotation.Persistence;
 import com.hivemq.persistence.ioc.provider.local.PayloadPersistenceScheduledExecutorProvider;
@@ -79,6 +88,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -87,13 +97,37 @@ import static com.hivemq.configuration.service.InternalConfigurations.MQTT_EVENT
 
 public class UberModule extends SingletonModule<Class<UberModule>> {
 
-    private final @NotNull Injector persistenceInjector;
+    private final @NotNull Injector persistence;
     private final @NotNull MetricRegistry metricRegistry;
+    private final @NotNull LifecycleModule lifecycle = new LifecycleModule();
+    private final @NotNull LazySingletonModule singletons = new LazySingletonModule();
+    private final @NotNull ConfigurationModule configuration;
 
-    public UberModule(final @NotNull Injector persistenceInjector, final @NotNull MetricRegistry metricRegistry) {
+    public UberModule(final @NotNull FullConfigurationService config) throws InterruptedException {
         super(UberModule.class);
-        this.persistenceInjector = persistenceInjector;
-        this.metricRegistry = metricRegistry;
+        configuration = new ConfigurationModule(config);
+        metricRegistry = new MetricRegistry();
+        metricRegistry.addListener(new MetricRegistryLogger());
+        persistence = Guice.createInjector(Stage.PRODUCTION,
+                Arrays.asList(lifecycle, singletons, configuration, new PersistenceMigrationModule(metricRegistry)));
+        persistence.getInstance(PersistenceStartup.class).finish();
+    }
+
+    public @NotNull Injector getPersistence() {
+        return persistence;
+    }
+
+    public @NotNull MetricRegistry getMetricRegistry() {
+        return metricRegistry;
+    }
+
+    public @NotNull String getHiveMQId() {
+        return configuration.getHiveMQId();
+    }
+
+    public @NotNull Injector init() {
+        return Guice.createInjector(Stage.PRODUCTION,
+                Arrays.asList(lifecycle, singletons, configuration, this, new ExtensionModule()));
     }
 
     @Override
@@ -111,7 +145,7 @@ public class UberModule extends SingletonModule<Class<UberModule>> {
                 MQTT_EVENT_EXECUTOR_THREAD_COUNT.get(),
                 new ThreadFactoryBuilder().setNameFormat("hivemq-event-executor-%d").build());
         bind(EventExecutorGroup.class).toInstance(mqttHandlerWorker);
-        bind(MessageDroppedService.class).toInstance(persistenceInjector.getInstance(MessageDroppedService.class));
+        bind(MessageDroppedService.class).toInstance(persistence.getInstance(MessageDroppedService.class));
         bind(MqttServerDisconnector.class).to(MqttServerDisconnectorImpl.class).in(Singleton.class);
         bind(MqttConnacker.class).to(MqttConnackerImpl.class).in(Singleton.class);
 
@@ -132,7 +166,7 @@ public class UberModule extends SingletonModule<Class<UberModule>> {
                 .in(LazySingleton.class);
 
         // persistence
-        install(new LocalPersistenceModule(persistenceInjector));
+        install(new LocalPersistenceModule(persistence));
         bind(PersistenceShutdownHookInstaller.class).asEagerSingleton();
         bind(ExecutorService.class).annotatedWith(Persistence.class)
                 .toProvider(PersistenceExecutorProvider.class)
@@ -155,7 +189,7 @@ public class UberModule extends SingletonModule<Class<UberModule>> {
 
         // metrics
         bind(MetricRegistry.class).toInstance(metricRegistry);
-        bind(MetricsHolder.class).toInstance(persistenceInjector.getInstance(MetricsHolder.class));
+        bind(MetricsHolder.class).toInstance(persistence.getInstance(MetricsHolder.class));
         bind(SessionsGauge.class).toProvider(SessionsGaugeProvider.class).asEagerSingleton();
         bind(OpenConnectionsGauge.class).toProvider(OpenConnectionsGaugeProvider.class).asEagerSingleton();
         bind(RetainedMessagesGauge.class).toProvider(RetainedMessagesGaugeProvider.class).asEagerSingleton();
@@ -163,8 +197,8 @@ public class UberModule extends SingletonModule<Class<UberModule>> {
         bind(MetricsShutdownHook.class).asEagerSingleton();
     }
 
-    private void bindIfAbsent(final Class type, final Class provider, final Class annotation) {
-        final Object instance = persistenceInjector.getInstance(Key.get(type, annotation));
+    private void bindIfAbsent(final @NotNull Class type, final @NotNull Class provider, final @NotNull Class annotation) {
+        final Object instance = persistence.getInstance(Key.get(type, annotation));
         if (instance != null) {
             bind(type).annotatedWith(annotation).toInstance(instance);
         } else {

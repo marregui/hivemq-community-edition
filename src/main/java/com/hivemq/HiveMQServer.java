@@ -15,20 +15,15 @@
  */
 package com.hivemq;
 
-import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Throwables;
 import com.google.inject.CreationException;
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.ProvisionException;
-import com.google.inject.Stage;
 import com.google.inject.spi.Message;
 import com.hivemq.bootstrap.HiveMQNettyBootstrap;
 import com.hivemq.bootstrap.ListenerStartupInformation;
-import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
 import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.ioc.ConfigurationFileProvider;
-import com.hivemq.configuration.ioc.ConfigurationModule;
 import com.hivemq.configuration.reader.ConfigFileReader;
 import com.hivemq.configuration.reader.ListenerConfigurator;
 import com.hivemq.configuration.reader.MqttConfigurator;
@@ -42,18 +37,13 @@ import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImp
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
 import com.hivemq.extensions.ExtensionBootstrap;
-import com.hivemq.extensions.ioc.ExtensionModule;
-import com.hivemq.persistence.ioc.PersistenceMigrationModule;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.util.Checkpoints;
 import com.hivemq.util.EnvVarUtil;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.metrics.MetricRegistryLogger;
-import com.hivemq.persistence.PersistenceStartup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -102,7 +92,8 @@ public final class HiveMQServer {
                         new MqttConfigurator(config.mqttConfiguration()),
                         new ListenerConfigurator(config.listenerConfiguration()));
         configReader.applyConfig();
-        final ConfigurationModule configuration = new ConfigurationModule(config);
+
+        final UberModule uberModule = new UberModule(config);
 
         final DataFolderLock dataLock = new DataFolderLock();
         dataLock.lock(SystemInformation.INSTANCE.getDataFolder().toPath());
@@ -113,27 +104,10 @@ public final class HiveMQServer {
                 dataLock.unlock();
                 Logging.resetLogging();
             }
-        }, "shutdown-" + configuration.getHiveMQId()));
-
-        final MetricRegistry metricRegistry = new MetricRegistry();
-        metricRegistry.addListener(new MetricRegistryLogger());
-        final LifecycleModule lifecycle = new LifecycleModule();
-        final LazySingletonModule singletons = new LazySingletonModule();
-
-
-        final Injector persistence = Guice.createInjector(Stage.PRODUCTION,
-                Arrays.asList(lifecycle, singletons, configuration, new PersistenceMigrationModule(metricRegistry)));
-        persistence.getInstance(PersistenceStartup.class).finish();
-
-
-        final Injector injector = Guice.createInjector(Stage.PRODUCTION,
-                Arrays.asList(lifecycle,
-                        singletons,
-                        configuration,
-                        new UberModule(persistence, metricRegistry),
-                        new ExtensionModule()));
+        }, "shutdown-" + uberModule.getHiveMQId()));
 
         // start
+        final Injector injector = uberModule.init();
         final long startTime = System.nanoTime();
         injector.getInstance(PublishPayloadPersistence.class).init();
         injector.getInstance(ExtensionBootstrap.class).startExtensionSystem().get();
@@ -167,7 +141,7 @@ public final class HiveMQServer {
         }
         System.gc();
         log.info("Started HiveMQ [{}] in {}ms",
-                configuration.getHiveMQId(),
+                uberModule.getHiveMQId(),
                 TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime));
     }
 }

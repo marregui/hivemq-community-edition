@@ -15,7 +15,6 @@
  */
 package com.hivemq.extensions.auth.parameter;
 
-import com.google.common.base.Preconditions;
 import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.parameter.PublishAuthorizerInput;

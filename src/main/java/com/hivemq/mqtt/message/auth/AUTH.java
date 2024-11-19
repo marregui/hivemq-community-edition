@@ -15,7 +15,6 @@
  */
 package com.hivemq.mqtt.message.auth;
 
-import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.MessageType;

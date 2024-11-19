@@ -15,7 +15,6 @@
  */
 package com.hivemq.security.ssl;
 
-import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.security.auth.SslClientCertificate;

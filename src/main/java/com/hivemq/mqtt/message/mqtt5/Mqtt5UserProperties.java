@@ -15,7 +15,6 @@
  */
 package com.hivemq.mqtt.message.mqtt5;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 import org.jetbrains.annotations.NotNull;

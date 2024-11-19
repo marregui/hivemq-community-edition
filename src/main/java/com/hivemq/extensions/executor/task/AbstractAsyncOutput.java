@@ -15,7 +15,6 @@
  */
 package com.hivemq.extensions.executor.task;
 
-import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.Async;
 import com.hivemq.extension.sdk.api.async.AsyncOutput;

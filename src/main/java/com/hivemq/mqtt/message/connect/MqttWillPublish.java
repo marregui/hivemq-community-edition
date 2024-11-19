@@ -15,7 +15,6 @@
  */
 package com.hivemq.mqtt.message.connect;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import org.jetbrains.annotations.NotNull;

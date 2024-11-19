@@ -15,7 +15,6 @@
  */
 package com.hivemq.extensions.client.parameter;
 
-import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.client.parameter.ClientTlsInformation;

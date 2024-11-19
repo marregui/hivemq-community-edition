@@ -15,7 +15,6 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.google.common.base.Preconditions;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.codec.decoder.MQTTMessageDecoder;

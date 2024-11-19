@@ -15,7 +15,6 @@
  */
 package com.hivemq.extensions;
 
-import com.google.common.base.Preconditions;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.config.entity.TcpListener;
 import com.hivemq.config.entity.TlsTcpListener;

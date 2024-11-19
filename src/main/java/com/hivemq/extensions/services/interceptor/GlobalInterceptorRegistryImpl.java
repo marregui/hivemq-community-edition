@@ -15,7 +15,6 @@
  */
 package com.hivemq.extensions.services.interceptor;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.connack.ConnackOutboundInterceptorProvider;

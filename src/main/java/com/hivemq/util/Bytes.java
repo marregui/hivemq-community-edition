@@ -15,7 +15,6 @@
  */
 package com.hivemq.util;
 
-import com.google.common.base.Preconditions;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import org.jetbrains.annotations.NotNull;

@@ -15,7 +15,6 @@
  */
 package com.hivemq.codec.decoder.mqtt5;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.Connection;
 import com.google.inject.Singleton;

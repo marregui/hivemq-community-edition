@@ -15,7 +15,6 @@
  */
 package com.hivemq.mqtt.message.publish;
 
-import com.google.common.base.Preconditions;
 import com.google.common.primitives.ImmutableIntArray;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import org.jetbrains.annotations.NotNull;

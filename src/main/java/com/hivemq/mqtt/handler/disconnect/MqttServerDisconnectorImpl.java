@@ -15,7 +15,6 @@
  */
 package com.hivemq.mqtt.handler.disconnect;
 
-import com.google.common.base.Preconditions;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.config.InternalConfig;

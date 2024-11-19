@@ -16,7 +16,6 @@
 package com.hivemq.extensions.handler;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;

@@ -15,7 +15,6 @@
  */
 package com.hivemq.codec.encoder.mqtt5;
 
-import com.google.common.base.Preconditions;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.MqttEncoder;
 import com.hivemq.config.SecurityConfigService;

@@ -15,7 +15,6 @@
  */
 package com.hivemq.extensions.services.publish;
 
-import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Singleton;

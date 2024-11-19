@@ -15,7 +15,6 @@
  */
 package com.hivemq.extensions.events.client.parameters;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
 import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;

@@ -27,9 +27,7 @@ import com.hivemq.mqtt.message.reason.Mqtt5ConnAckReasonCode;
 import com.hivemq.util.ReasonStrings;
 import io.netty.channel.ChannelHandlerContext;
 
-/**
- * @author Silvio Giebl
- */
+
 public class ConnectAuthContext extends AuthContext<ConnectAuthOutput> {
 
     private final @NotNull ConnectHandler connectHandler;

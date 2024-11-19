@@ -46,7 +46,7 @@ public class ModifiableOutboundPublishImplTest {
 
     @Before
     public void setUp() throws Exception {
-        configService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new ConfigService();
     }
 
     @Test

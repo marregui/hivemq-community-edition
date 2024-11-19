@@ -81,7 +81,7 @@ public class PublishOutboundInterceptorHandlerTest {
         ClientConnection.of(channel).setClientId("test_client");
 
         final ConfigService configService =
-                new TestConfigurationBootstrap().getFullConfigurationService();
+                new ConfigService();
         handler = new PublishOutboundInterceptorHandler(asyncer, configService,
                 pluginTaskExecutorService,
                 hiveMQExtensions,

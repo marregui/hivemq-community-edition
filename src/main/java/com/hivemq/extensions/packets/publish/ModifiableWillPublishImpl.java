@@ -26,11 +26,6 @@ import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-/**
- * @author Lukas Brandl
- * @author Silvio Giebl
- */
-
 public class ModifiableWillPublishImpl extends ModifiablePublishPacketImpl implements ModifiableWillPublish {
 
     private long willDelay;

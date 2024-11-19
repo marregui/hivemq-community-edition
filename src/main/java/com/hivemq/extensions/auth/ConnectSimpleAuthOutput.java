@@ -27,9 +27,7 @@ import com.hivemq.extension.sdk.api.packets.general.ModifiableUserProperties;
 
 import java.time.Duration;
 
-/**
- * @author Silvio Giebl
- */
+
 class ConnectSimpleAuthOutput implements SimpleAuthOutput {
 
     private final @NotNull ConnectAuthOutput delegate;

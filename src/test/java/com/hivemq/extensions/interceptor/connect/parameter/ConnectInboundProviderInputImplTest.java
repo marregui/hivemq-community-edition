@@ -23,9 +23,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 
-/**
- * @author Silvio Giebl
- */
+
 public class ConnectInboundProviderInputImplTest {
 
     @Test

@@ -169,7 +169,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     public void test_decode_topic_alias_exceeds_limit() throws JAXBException, IOException {
 
 
-        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new ConfigService();
         InternalConfig.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(47);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
@@ -199,7 +199,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     public void test_decode_topic_alias_override() throws JAXBException, IOException {
 
 
-        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new ConfigService();
         InternalConfig.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(100);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
@@ -368,7 +368,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void test_decode_retain_not_supported() throws JAXBException, IOException {
 
-        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new ConfigService();
         fullConfig.mqttConfiguration().setRetainedMessagesEnabled(false);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
@@ -430,7 +430,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void test_decode_messageExpiryInterval_higher_than_config() throws JAXBException, IOException {
 
-        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new ConfigService();
         fullConfig.mqttConfiguration().setMaxMessageExpiryInterval(100);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
@@ -595,7 +595,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     public void test_decode_PayloadUtf8NotWellFormed_returnsNull() throws JAXBException, IOException {
 
         final ConfigService fullConfigService =
-                new TestConfigurationBootstrap().getFullConfigurationService();
+                new ConfigService();
         fullConfigService.securityConfiguration().setPayloadFormatValidation(true);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfigService));

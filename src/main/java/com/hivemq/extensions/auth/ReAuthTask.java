@@ -22,9 +22,7 @@ import com.hivemq.extension.sdk.api.packets.auth.AuthReasonCode;
 import com.hivemq.extensions.client.ClientAuthenticators;
 import com.hivemq.extensions.services.auth.WrappedAuthenticatorProvider;
 
-/**
- * @author Silvio Giebl
- */
+
 public class ReAuthTask extends AbstractEnhancedAuthTask<AuthInput, ReAuthOutput> {
 
     public ReAuthTask(

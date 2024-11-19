@@ -82,7 +82,7 @@ public class PublishServiceImplTest {
 
     private final HivemqId hiveMQId = new HivemqId();
     private final ConfigService fullConfigService =
-            new TestConfigurationBootstrap().getFullConfigurationService();
+            new ConfigService();
     private PublishServiceImpl publishService;
 
     public PublishServiceImplTest() throws JAXBException, IOException {

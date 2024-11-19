@@ -109,7 +109,7 @@ public class IncomingSubscribeHandlerTest {
         final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
 
         final ConfigService configService =
-                new TestConfigurationBootstrap().getFullConfigurationService();
+                new ConfigService();
 
         messageAtomicReference = new AtomicReference<>();
         final PluginAuthorizerService pluginAuthorizerService = new TestAuthService(messageAtomicReference);

@@ -31,7 +31,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-import util.TestConfigurationBootstrap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -48,7 +47,7 @@ public class TopicSubscriptionBuilderImplTest {
     public void setUp() throws Exception {
 
         MockitoAnnotations.initMocks(this);
-        fullConfigService = new TestConfigurationBootstrap().getFullConfigurationService();
+        fullConfigService = new ConfigService();
         topicSubscriptionBuilder = new TopicSubscriptionBuilderImpl(fullConfigService);
 
     }

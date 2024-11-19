@@ -35,17 +35,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Lukas Brandl
- * @author Silvio Giebl
- */
 public class ModifiableWillPublishImplTest {
 
     private @NotNull ConfigService configService;
 
     @Before
     public void setUp() throws Exception {
-        configService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new ConfigService();
     }
 
     @Test

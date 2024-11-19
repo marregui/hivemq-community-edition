@@ -15,9 +15,7 @@
  */
 package com.hivemq.codec.encoder.mqtt5;
 
-/**
- * @author Silvio Giebl
- */
+
 public final class UnsignedDataTypes {
 
     public static final int UNSIGNED_SHORT_MAX_VALUE = 0xFFFF;

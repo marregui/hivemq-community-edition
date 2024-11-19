@@ -41,7 +41,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
 
     @Before
     public void setUp() throws Exception {
-        configService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new ConfigService();
     }
 
     @Test

@@ -82,7 +82,7 @@ public class ExtensionModuleTest {
 
     @Before
     public void setUp() throws Exception {
-        final ConfigService config = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService config = new ConfigService();
         injector = Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {

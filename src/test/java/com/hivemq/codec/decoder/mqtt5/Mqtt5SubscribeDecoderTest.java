@@ -911,7 +911,7 @@ public class Mqtt5SubscribeDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void test_decode_failed_subscription_identifier_disabled() throws JAXBException, IOException {
 
-        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new ConfigService();
         fullConfig.mqttConfiguration().setSubscriptionIdentifierEnabled(false);
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
         final byte[] encoded = {

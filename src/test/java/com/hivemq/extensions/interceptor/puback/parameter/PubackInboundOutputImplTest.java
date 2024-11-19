@@ -24,9 +24,7 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Silvio Giebl
- */
+
 public class PubackInboundOutputImplTest {
 
     @Test

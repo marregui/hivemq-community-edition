@@ -42,7 +42,7 @@ public class ModifiableSubscribePacketImplTest {
 
     @Before
     public void setUp() throws Exception {
-        configService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new ConfigService();
 
         final SubscribePacketImpl packet = new SubscribePacketImpl(ImmutableList.of(new SubscriptionImpl("topic",
                 Qos.AT_LEAST_ONCE,

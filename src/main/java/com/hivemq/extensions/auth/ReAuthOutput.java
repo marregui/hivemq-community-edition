@@ -31,9 +31,7 @@ import com.hivemq.util.ReasonStrings;
 import java.time.Duration;
 import java.util.Objects;
 
-/**
- * @author Silvio Giebl
- */
+
 public class ReAuthOutput extends AuthOutput<EnhancedAuthOutput> implements EnhancedAuthOutput {
 
     private @NotNull Mqtt5DisconnectReasonCode reasonCode = Mqtt5DisconnectReasonCode.NOT_AUTHORIZED;

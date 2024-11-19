@@ -21,9 +21,7 @@ import com.hivemq.extension.sdk.api.auth.parameter.AuthenticatorProviderInput;
 import com.hivemq.extensions.client.ClientAuthenticators;
 import com.hivemq.extensions.services.auth.WrappedAuthenticatorProvider;
 
-/**
- * @author Silvio Giebl
- */
+
 public class ConnectAuthConnectTask extends AbstractEnhancedAuthTask<AuthConnectInput, ConnectAuthOutput> {
 
     public ConnectAuthConnectTask(

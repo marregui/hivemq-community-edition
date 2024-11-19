@@ -33,12 +33,12 @@ public class AbstractConfigurationTest {
     MqttConfigService mqttConfigService;
     RestrictionsConfigService restrictionsConfigService;
     SecurityConfigService securityConfigService;
+    ConfigService configService;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         listenerConfigService = new ListenerConfigService();
-
         xmlFile = temporaryFolder.newFile();
         securityConfigService = new SecurityConfigService();
         mqttConfigService = new MqttConfigService();

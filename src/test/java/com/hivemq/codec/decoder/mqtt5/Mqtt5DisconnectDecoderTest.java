@@ -379,7 +379,7 @@ public class Mqtt5DisconnectDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void decode_disconnect_with_session_expiry_to_large() throws JAXBException, IOException {
 
-        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new ConfigService();
         fullConfig.mqttConfiguration().setMaxSessionExpiryInterval(80);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));

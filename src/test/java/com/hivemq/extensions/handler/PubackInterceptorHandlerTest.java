@@ -97,7 +97,7 @@ public class PubackInterceptorHandlerTest {
         when(extension.getId()).thenReturn("extension");
 
         final ConfigService configService =
-                new TestConfigurationBootstrap().getFullConfigurationService();
+                new ConfigService();
         final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         final PluginTaskExecutorService pluginTaskExecutorService =
                 new PluginTaskExecutorServiceImpl(() -> executor);

@@ -42,6 +42,9 @@ import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
 import com.hivemq.util.ClientIds;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.SESSION_EXPIRY_MAX;
 import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_MAX;
 
@@ -49,7 +52,14 @@ import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_MA
 public class TestMqttDecoder {
 
     public static MQTTMessageDecoder create()  {
-        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig;
+        try {
+            fullConfig = new ConfigService();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
         fullConfig.securityConfiguration().setValidateUTF8(true);
         fullConfig.mqttConfiguration().setMaxSessionExpiryInterval(SESSION_EXPIRY_MAX);
         fullConfig.mqttConfiguration().setMaxMessageExpiryInterval(MESSAGE_EXPIRY_INTERVAL_MAX);

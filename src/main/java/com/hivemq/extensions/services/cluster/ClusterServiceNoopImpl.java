@@ -20,9 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.cluster.ClusterDiscoveryCallback;
 import com.hivemq.extension.sdk.api.services.cluster.ClusterService;
 
-/**
- * @author Silvio Giebl
- */
+
 @Singleton
 public class ClusterServiceNoopImpl implements ClusterService {
 

@@ -120,7 +120,7 @@ public class IncomingPublishHandlerTest {
         final MessageDroppedService messageDroppedService = new TestDropService(dropLatch);
 
         final ConfigService configService =
-                new TestConfigurationBootstrap().getFullConfigurationService();
+                new ConfigService();
 
         messageAtomicReference = new AtomicReference<>();
         final PluginAuthorizerService pluginAuthorizerService = new TestAuthService(messageAtomicReference);

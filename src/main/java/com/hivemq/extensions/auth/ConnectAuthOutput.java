@@ -36,14 +36,11 @@ import java.util.Objects;
 import static com.google.common.base.Preconditions.checkArgument;
 
 
-/**
- * @author Silvio Giebl
- */
 public class ConnectAuthOutput extends AuthOutput<EnhancedAuthOutput> implements EnhancedAuthOutput {
 
+    private final boolean supportsEnhancedAuth;
     private @NotNull Mqtt5ConnAckReasonCode reasonCode = Mqtt5ConnAckReasonCode.NOT_AUTHORIZED;
     private @NotNull Mqtt5ConnAckReasonCode timeoutReasonCode = Mqtt5ConnAckReasonCode.NOT_AUTHORIZED;
-    private final boolean supportsEnhancedAuth;
 
     public ConnectAuthOutput(
             final @NotNull PluginOutPutAsyncer asyncer,
@@ -62,6 +59,25 @@ public class ConnectAuthOutput extends AuthOutput<EnhancedAuthOutput> implements
         super(prevOutput);
         supportsEnhancedAuth = prevOutput.supportsEnhancedAuth;
         setDefaultReasonStrings();
+    }
+
+    private static @NotNull Mqtt5ConnAckReasonCode checkReasonCode(final @NotNull ConnackReasonCode reasonCode) {
+        Objects.requireNonNull(reasonCode, "CONNACK reason code must never be null");
+        checkArgument(reasonCode != ConnackReasonCode.SUCCESS,
+                "CONNACK reason code must not be SUCCESS for failed authentication");
+        return Mqtt5ConnAckReasonCode.from(reasonCode);
+    }
+
+    private static @NotNull Mqtt5ConnAckReasonCode checkReasonCode(
+            final @NotNull DisconnectedReasonCode disconnectedReasonCode) {
+
+        Objects.requireNonNull(disconnectedReasonCode, "Disconnected reason code must never be null");
+        final Mqtt5ConnAckReasonCode connackReasonCode = Mqtt5ConnAckReasonCode.from(disconnectedReasonCode);
+        Preconditions.checkArgument(connackReasonCode != null,
+                "The disconnected reason code " +
+                        disconnectedReasonCode.name() +
+                        " is not a CONNACK reason code and therefore must not be used during connect authentication.");
+        return connackReasonCode;
     }
 
     private void setDefaultReasonStrings() {
@@ -115,7 +131,8 @@ public class ConnectAuthOutput extends AuthOutput<EnhancedAuthOutput> implements
 
     @Override
     public void failAuthentication(
-            final @NotNull DisconnectedReasonCode reasonCode, final @Nullable String reasonString) {
+            final @NotNull DisconnectedReasonCode reasonCode,
+            final @Nullable String reasonString) {
 
         final Mqtt5ConnAckReasonCode connAckReasonCode = checkReasonCode(reasonCode);
         failAuthentication(reasonString);
@@ -192,24 +209,5 @@ public class ConnectAuthOutput extends AuthOutput<EnhancedAuthOutput> implements
 
     @NotNull Mqtt5ConnAckReasonCode getReasonCode() {
         return reasonCode;
-    }
-
-    private static @NotNull Mqtt5ConnAckReasonCode checkReasonCode(final @NotNull ConnackReasonCode reasonCode) {
-        Objects.requireNonNull(reasonCode, "CONNACK reason code must never be null");
-        checkArgument(reasonCode != ConnackReasonCode.SUCCESS,
-                "CONNACK reason code must not be SUCCESS for failed authentication");
-        return Mqtt5ConnAckReasonCode.from(reasonCode);
-    }
-
-    private static @NotNull Mqtt5ConnAckReasonCode checkReasonCode(
-            final @NotNull DisconnectedReasonCode disconnectedReasonCode) {
-
-        Objects.requireNonNull(disconnectedReasonCode, "Disconnected reason code must never be null");
-        final Mqtt5ConnAckReasonCode connackReasonCode = Mqtt5ConnAckReasonCode.from(disconnectedReasonCode);
-        Preconditions.checkArgument(connackReasonCode != null,
-                "The disconnected reason code " +
-                        disconnectedReasonCode.name() +
-                        " is not a CONNACK reason code and therefore must not be used during connect authentication.");
-        return connackReasonCode;
     }
 }

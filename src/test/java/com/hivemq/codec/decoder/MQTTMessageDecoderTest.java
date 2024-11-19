@@ -212,7 +212,7 @@ public class MQTTMessageDecoderTest {
 
     private void testPublishPacketSizeTooLarge(final @NotNull ProtocolVersion protocolVersion)
             throws JAXBException, IOException {
-        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new ConfigService();
         fullConfig.mqttConfiguration().setMaxPacketSize(10);
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
         clientConnection = new DummyClientConnection(channel, null);
@@ -245,7 +245,7 @@ public class MQTTMessageDecoderTest {
     }
 
     private void testConnectPacketSizeTooLarge(final byte[] connect) throws JAXBException, IOException {
-        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new ConfigService();
         fullConfig.mqttConfiguration().setMaxPacketSize(10);
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
         clientConnection = new DummyClientConnection(channel, null);

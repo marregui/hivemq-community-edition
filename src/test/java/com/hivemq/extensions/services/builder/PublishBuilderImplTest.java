@@ -44,7 +44,7 @@ public class PublishBuilderImplTest {
 
     @Before
     public void before() throws JAXBException, IOException {
-        configService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new ConfigService();
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -32,9 +32,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
-/**
- * @author Silvio Giebl
- */
+
 public class ReAuthContext extends AuthContext<ReAuthOutput> {
 
     private final @NotNull MqttServerDisconnector disconnector;

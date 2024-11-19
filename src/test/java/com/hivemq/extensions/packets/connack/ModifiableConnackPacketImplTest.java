@@ -44,7 +44,7 @@ public class ModifiableConnackPacketImplTest {
 
     @Before
     public void setUp() throws JAXBException, IOException {
-        configService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new ConfigService();
     }
 
     @Test

@@ -100,7 +100,7 @@ public class PubrelInterceptorHandlerTest {
         when(extension.getId()).thenReturn("plugin");
 
         final ConfigService configService =
-                new TestConfigurationBootstrap().getFullConfigurationService();
+                new ConfigService();
         final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         final PluginTaskExecutorService pluginTaskExecutorService =
                 new PluginTaskExecutorServiceImpl(() -> executor);

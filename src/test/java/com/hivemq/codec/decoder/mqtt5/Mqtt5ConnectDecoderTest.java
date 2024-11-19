@@ -1303,7 +1303,7 @@ public class Mqtt5ConnectDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void decode_with_client_id_assigned_not_allowed() throws JAXBException, IOException {
 
-        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new ConfigService();
         fullConfig.securityConfiguration().setAllowServerAssignedClientId(false);
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
         clientConnection = new DummyClientConnection(channel, null);
@@ -2016,7 +2016,7 @@ public class Mqtt5ConnectDecoderTest extends AbstractMqtt5DecoderTest {
     public void decode_property_message_expiry_interval_larger_than_config_max_value()
             throws JAXBException, IOException {
 
-        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new ConfigService();
         fullConfig.mqttConfiguration().setMaxMessageExpiryInterval(100);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));

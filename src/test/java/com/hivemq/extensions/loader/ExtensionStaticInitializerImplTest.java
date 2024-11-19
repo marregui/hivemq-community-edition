@@ -117,7 +117,7 @@ public class ExtensionStaticInitializerImplTest {
     @Before
     public void before() throws JAXBException, IOException {
         final ConfigService fullConfigService =
-                new TestConfigurationBootstrap().getFullConfigurationService();
+                new ConfigService();
         metricRegistry = new MetricRegistry();
         initializerRegistry = new InitializerRegistryImpl(new InitializersImpl(hiveMQExtensions));
         retainedPublishBuilder = new RetainedPublishBuilderImpl(fullConfigService);

@@ -101,6 +101,8 @@ import util.TestConfigurationBootstrap;
 import util.TestMqttDecoder;
 
 import javax.inject.Provider;
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -170,7 +172,7 @@ public class ConnectHandlerTest {
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
         clientConnectionContext.setQueueSizeMaximum(null);
 
-        configService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new ConfigService();
         InternalConfig.AUTH_DENY_UNAUTHENTICATED_CONNECTIONS.set(false);
         mqttConnacker = new MqttConnackerImpl(eventLog);
         serverDisconnector = new MqttServerDisconnectorImpl(eventLog);
@@ -873,7 +875,7 @@ public class ConnectHandlerTest {
     }
 
     @Test(timeout = 5000)
-    public void test_will_authorization_success() {
+    public void test_will_authorization_success() throws JAXBException, IOException {
         createHandler();
 
         when(clientSessionPersistence.clientConnected(anyString(),
@@ -890,7 +892,7 @@ public class ConnectHandlerTest {
         final CONNECT connect =
                 new CONNECT.Mqtt5Builder().withClientIdentifier("client").withWillPublish(willPublish).build();
 
-        defaultPermissions.add(new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
+        defaultPermissions.add(new TopicPermissionBuilderImpl(new ConfigService()).topicFilter(
                 "topic").type(TopicPermission.PermissionType.ALLOW).build());
 
         channel.writeInbound(connect);

@@ -57,7 +57,7 @@ public class RetainedPublishBuilderImplTest {
 
     @Before
     public void setUp() throws Exception {
-        configService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new ConfigService();
         retainedPublishBuilder = new RetainedPublishBuilderImpl(configService);
     }
 

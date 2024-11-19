@@ -20,9 +20,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
-/**
- * @author Silvio Giebl
- */
+
 public class AuthPacketImplTest {
 
     @Test

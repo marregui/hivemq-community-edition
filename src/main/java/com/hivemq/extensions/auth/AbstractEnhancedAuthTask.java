@@ -23,9 +23,7 @@ import com.hivemq.extensions.client.ClientAuthenticators;
 import com.hivemq.extensions.executor.task.PluginTaskInput;
 import com.hivemq.extensions.services.auth.WrappedAuthenticatorProvider;
 
-/**
- * @author Silvio Giebl
- */
+
 abstract class AbstractEnhancedAuthTask<I extends PluginTaskInput, O extends AuthOutput<?>>
         extends AbstractAuthTask<I, O> {
 

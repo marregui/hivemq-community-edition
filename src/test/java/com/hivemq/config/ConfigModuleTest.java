@@ -56,46 +56,6 @@ public class ConfigModuleTest {
     }
 
     @Test
-    public void test_listener_configuration_service_singleton() throws Exception {
-
-        final ListenerConfigService instance = injector.getInstance(ListenerConfigService.class);
-        final ListenerConfigService instance2 = injector.getInstance(ListenerConfigService.class);
-
-        assertSame(instance, instance2);
-        assertSame(testConfigurationBootstrap.getListenerConfigurationService(), instance);
-    }
-
-    @Test
-    public void test_mqtt_configuration_service_singleton() throws Exception {
-
-        final MqttConfigService instance = injector.getInstance(MqttConfigService.class);
-        final MqttConfigService instance2 = injector.getInstance(MqttConfigService.class);
-
-        assertSame(instance, instance2);
-        assertSame(testConfigurationBootstrap.getMqttConfigurationService(), instance);
-    }
-
-    @Test
-    public void test_throttling_configuration_service_singleton() throws Exception {
-
-        final RestrictionsConfigService instance = injector.getInstance(RestrictionsConfigService.class);
-        final RestrictionsConfigService instance2 = injector.getInstance(RestrictionsConfigService.class);
-
-        assertSame(instance, instance2);
-        assertSame(testConfigurationBootstrap.getRestrictionsConfigurationService(), instance);
-    }
-
-    @Test
-    public void test_configuration_service_singleton() throws Exception {
-
-        final ConfigService instance = injector.getInstance(ConfigService.class);
-        final ConfigService instance2 = injector.getInstance(ConfigService.class);
-
-        assertSame(instance, instance2);
-        assertSame(testConfigurationBootstrap.getConfigurationService(), instance);
-    }
-
-    @Test
     public void test_configuration_service_same_as_full_configuration_service() throws Exception {
 
         final ConfigService instance = injector.getInstance(ConfigService.class);

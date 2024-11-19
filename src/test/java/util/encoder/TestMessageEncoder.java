@@ -18,7 +18,7 @@ package util.encoder;
 import com.codahale.metrics.MetricRegistry;
 import com.hivemq.codec.encoder.MQTTMessageEncoder;
 import com.hivemq.config.SecurityConfigurationService;
-import com.hivemq.config.SecurityConfigurationServiceImpl;
+import com.hivemq.config.SecurityConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.logging.EventLog;
 import com.hivemq.metrics.MetricsHolder;
@@ -39,7 +39,7 @@ public class TestMessageEncoder extends MQTTMessageEncoder {
     private final @NotNull SecurityConfigurationService securityConfigurationService;
 
     public TestMessageEncoder() {
-        this(mock(MessageDroppedService.class), new SecurityConfigurationServiceImpl());
+        this(mock(MessageDroppedService.class), new SecurityConfigurationService());
     }
 
     public TestMessageEncoder(

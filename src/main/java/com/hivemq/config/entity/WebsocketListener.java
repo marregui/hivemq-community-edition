@@ -25,18 +25,7 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * A listener which allows to listen to MQTT traffic over websockets.
- * <p>
- * Use the builder if you want to create a new websocket listener.
- *
- * @author Dominik Obermaier
- * @author Christoph Schaebel
- * @since 3.0
- */
-
 public class WebsocketListener implements Listener {
-
     private int port;
     private final @NotNull String bindAddress;
     private final @NotNull String path;
@@ -84,30 +73,18 @@ public class WebsocketListener implements Listener {
         return name;
     }
 
-    /**
-     * @return the path of the websocket
-     */
     public @NotNull String getPath() {
         return path;
     }
 
-    /**
-     * @return if websocket extensions are allowed or not
-     */
     public boolean getAllowExtensions() {
         return allowExtensions;
     }
 
-    /**
-     * @return a list of all supported subprotocols
-     */
     public @NotNull List<String> getSubprotocols() {
         return subprotocols;
     }
 
-    /**
-     * A builder which allows to conveniently build a listener object with a fluent API
-     */
     public static class Builder {
 
         protected @NotNull String path;
@@ -135,83 +112,40 @@ public class WebsocketListener implements Listener {
             return this;
         }
 
-        /**
-         * Sets the port of the websocket listener
-         *
-         * @param port the port
-         * @return the Builder
-         */
         public @NotNull Builder port(final int port) {
             this.port = port;
             return this;
         }
 
-        /**
-         * Sets the bind address of the websocket listener
-         *
-         * @param bindAddress the bind address
-         * @return the Builder
-         */
         public @NotNull Builder bindAddress(final @NotNull String bindAddress) {
             checkNotNull(bindAddress);
             this.bindAddress = bindAddress;
             return this;
         }
 
-        /**
-         * Sets the websocket path of the websocket listener
-         *
-         * @param path the path
-         * @return the Builder
-         */
         public @NotNull Builder path(final @NotNull String path) {
             checkNotNull(path);
             this.path = path;
             return this;
         }
 
-        /**
-         * Sets the name of the websocket listener
-         *
-         * @param name the name
-         * @return the Builder
-         */
         public @NotNull Builder name(final @NotNull String name) {
             checkNotNull(name);
             this.name = name;
             return this;
         }
 
-        /**
-         * Sets if websocket extensions should be allowed or not
-         *
-         * @param allowExtensions if websocket extensions should be allowed or not
-         * @return the Builder
-         */
         public @NotNull Builder allowExtensions(final boolean allowExtensions) {
             this.allowExtensions = allowExtensions;
             return this;
         }
 
-        /**
-         * Sets a list of subprotocols the websocket listener should support.
-         * <p>
-         * Typically you should use 'mqtt' and/or 'mqttv3.1
-         *
-         * @param subprotocols a list of websocket subprotocols
-         * @return the Builder
-         */
         public @NotNull Builder subprotocols(final @NotNull List<String> subprotocols) {
             checkNotNull(subprotocols);
             this.subprotocols = ImmutableList.copyOf(subprotocols);
             return this;
         }
 
-        /**
-         * Creates the Websocket Listener
-         *
-         * @return the Websocket Listener
-         */
         public @NotNull WebsocketListener build() throws IllegalStateException {
             if (port == null) {
                 throw new IllegalStateException("The port for a Websocket listener was not set.");

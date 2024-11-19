@@ -22,10 +22,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import static com.hivemq.mqtt.message.connack.Mqtt5CONNACK.DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 @XmlRootElement(name = "packets")
 @XmlAccessorType(XmlAccessType.NONE)
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})

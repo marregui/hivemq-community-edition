@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.message.publish;
 
-import com.hivemq.config.entity.MqttConfigurationDefaults;
+import com.hivemq.config.ConfigService;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
@@ -226,7 +226,7 @@ public class PUBLISHTest {
         assertFalse(publish2.isExpired());
 
         final PUBLISH publish3 = createPublishWithTimestampAndExpiry(System.currentTimeMillis() - 100000000,
-                MqttConfigurationDefaults.TTL_DISABLED);
+                ConfigService.TTL_DISABLED);
         assertFalse(publish3.isExpired());
     }
 

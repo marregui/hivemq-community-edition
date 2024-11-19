@@ -19,7 +19,7 @@ package com.hivemq.extensions.handler;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.puback.PubackInboundInterceptor;
@@ -96,13 +96,14 @@ public class PubackInterceptorHandlerTest {
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
         when(extension.getId()).thenReturn("extension");
 
-        final ConfigurationService configurationService =
+        final ConfigService configService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
         final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         final PluginTaskExecutorService pluginTaskExecutorService =
                 new PluginTaskExecutorServiceImpl(() -> executor);
 
-        handler = new PubackInterceptorHandler(configurationService,
+        handler = new PubackInterceptorHandler(
+                configService,
                 asyncer,
                 hiveMQExtensions,
                 pluginTaskExecutorService);

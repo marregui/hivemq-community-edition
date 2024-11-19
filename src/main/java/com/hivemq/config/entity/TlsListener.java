@@ -20,8 +20,5 @@ import org.jetbrains.annotations.NotNull;
 
 public interface TlsListener extends Listener {
 
-    /**
-     * @return the TLS configuration
-     */
     @NotNull Tls getTls();
 }

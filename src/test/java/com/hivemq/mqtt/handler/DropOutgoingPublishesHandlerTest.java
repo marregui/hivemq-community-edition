@@ -19,7 +19,7 @@ import com.codahale.metrics.Counter;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.mqtt.handler.publish.DropOutgoingPublishesHandler;
 import com.hivemq.mqtt.handler.publish.PublishStatus;
 import com.hivemq.mqtt.message.QoS;
@@ -72,7 +72,7 @@ public class DropOutgoingPublishesHandlerTest {
         clientConnection.setClientId("clientId");
         when(channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME)).thenReturn(new TestChannelAttribute<>(
                 clientConnection));
-        InternalConfigurations.NOT_WRITABLE_QUEUE_SIZE.set(0);
+        InternalConfig.NOT_WRITABLE_QUEUE_SIZE.set(0);
         handler = new DropOutgoingPublishesHandler(messageDroppedService);
     }
 

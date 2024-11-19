@@ -19,7 +19,7 @@ package com.hivemq.extensions.handler;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.suback.SubackOutboundInterceptor;
 import com.hivemq.extension.sdk.api.interceptor.suback.parameter.SubackOutboundInput;
@@ -98,13 +98,14 @@ public class SubackOutboundInterceptorHandlerTest {
         ClientConnection.of(channel).setExtensionClientContext(clientContext);
         when(extension.getId()).thenReturn("extension");
 
-        final ConfigurationService configurationService =
+        final ConfigService configService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
         final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         final PluginTaskExecutorService pluginTaskExecutorService =
                 new PluginTaskExecutorServiceImpl(() -> executor);
 
-        final SubackOutboundInterceptorHandler handler = new SubackOutboundInterceptorHandler(configurationService,
+        final SubackOutboundInterceptorHandler handler = new SubackOutboundInterceptorHandler(
+                configService,
                 asyncer,
                 hiveMQExtensions,
                 pluginTaskExecutorService);

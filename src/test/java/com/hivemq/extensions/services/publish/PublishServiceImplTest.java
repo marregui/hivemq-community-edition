@@ -19,7 +19,7 @@ import com.google.common.primitives.ImmutableIntArray;
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.ShutdownHooks;
 import com.hivemq.config.HivemqId;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
 import com.hivemq.extension.sdk.api.packets.publish.PayloadFormatIndicator;
@@ -81,7 +81,7 @@ public class PublishServiceImplTest {
     private GlobalManagedExtensionExecutorService managedPluginExecutorService;
 
     private final HivemqId hiveMQId = new HivemqId();
-    private final ConfigurationService fullConfigurationService =
+    private final ConfigService fullConfigService =
             new TestConfigurationBootstrap().getFullConfigurationService();
     private PublishServiceImpl publishService;
 
@@ -114,7 +114,7 @@ public class PublishServiceImplTest {
     @Test(expected = RateLimitExceededException.class)
     public void test_publish_rate_limit_exceeded() throws Throwable {
         when(rateLimitService.rateLimitExceeded()).thenReturn(true);
-        final Publish publish = new PublishBuilderImpl(fullConfigurationService).topic("topic")
+        final Publish publish = new PublishBuilderImpl(fullConfigService).topic("topic")
                 .payload(ByteBuffer.wrap("message".getBytes()))
                 .build();
         try {
@@ -136,7 +136,7 @@ public class PublishServiceImplTest {
     @Test(expected = RateLimitExceededException.class)
     public void test_publish_to_client_rate_limit_exceeded() throws Throwable {
         when(rateLimitService.rateLimitExceeded()).thenReturn(true);
-        final Publish publish = new PublishBuilderImpl(fullConfigurationService).topic("topic")
+        final Publish publish = new PublishBuilderImpl(fullConfigService).topic("topic")
                 .payload(ByteBuffer.wrap("message".getBytes()))
                 .build();
         try {
@@ -148,7 +148,7 @@ public class PublishServiceImplTest {
 
     @Test(timeout = 10000)
     public void test_publish() throws Throwable {
-        final Publish publish = new PublishBuilderImpl(fullConfigurationService).topic("topic")
+        final Publish publish = new PublishBuilderImpl(fullConfigService).topic("topic")
                 .payload(ByteBuffer.wrap("message".getBytes()))
                 .build();
         when(internalPublishService.publish(any(PUBLISH.class), any(ExecutorService.class), isNull())).thenReturn(
@@ -161,7 +161,7 @@ public class PublishServiceImplTest {
     @Test(timeout = 10000)
     public void test_publish_to_client() throws Exception {
         final byte subscriptionFlags = SubscriptionFlag.buildFlag(false, false, false);
-        final Publish publish = new PublishBuilderImpl(fullConfigurationService).topic("topic")
+        final Publish publish = new PublishBuilderImpl(fullConfigService).topic("topic")
                 .payload(ByteBuffer.wrap("message".getBytes()))
                 .build();
         when(topicTree.findSubscriber("client", "topic")).thenReturn(new SubscriberWithIds("client",
@@ -180,7 +180,7 @@ public class PublishServiceImplTest {
 
     @Test(timeout = 10000)
     public void test_publish_to_client_not_subscribed() throws Exception {
-        final Publish publish = new PublishBuilderImpl(fullConfigurationService).topic("topic")
+        final Publish publish = new PublishBuilderImpl(fullConfigService).topic("topic")
                 .payload(ByteBuffer.wrap("message".getBytes()))
                 .build();
         when(topicTree.findSubscriber("client", "topic")).thenReturn(null);

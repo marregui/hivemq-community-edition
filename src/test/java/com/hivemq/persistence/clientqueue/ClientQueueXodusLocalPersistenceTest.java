@@ -18,7 +18,7 @@ package com.hivemq.persistence.clientqueue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.mqtt.message.MessageWithID;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.dropping.MessageDroppedService;
@@ -84,15 +84,15 @@ public class ClientQueueXodusLocalPersistenceTest {
         // Return a non-null payload to ensure a PUBLISH isn't dropped during its lookup due to a missing payload.
         when(payloadPersistence.get(anyLong())).thenReturn(new byte[0]);
 
-        InternalConfigurations.PERSISTENCE_BUCKET_COUNT.set(bucketCount);
-        InternalConfigurations.PERSISTENCE_CLOSE_RETRIES.set(3);
-        InternalConfigurations.PERSISTENCE_CLOSE_RETRY_INTERVAL_MSEC.set(5);
+        InternalConfig.PERSISTENCE_BUCKET_COUNT.set(bucketCount);
+        InternalConfig.PERSISTENCE_CLOSE_RETRIES.set(3);
+        InternalConfig.PERSISTENCE_CLOSE_RETRY_INTERVAL_MSEC.set(5);
         when(localPersistenceFileUtil.getVersionedLocalPersistenceFolder(anyString(), anyString())).thenReturn(
                 temporaryFolder.newFolder());
 
-        InternalConfigurations.QOS_0_MEMORY_HARD_LIMIT_DIVISOR.set(10000);
-        InternalConfigurations.QOS_0_MEMORY_LIMIT_PER_CLIENT_BYTES.set(1024);
-        InternalConfigurations.RETAINED_MESSAGE_QUEUE_SIZE.set(5);
+        InternalConfig.QOS_0_MEMORY_HARD_LIMIT_DIVISOR.set(10000);
+        InternalConfig.QOS_0_MEMORY_LIMIT_PER_CLIENT_BYTES.set(1024);
+        InternalConfig.RETAINED_MESSAGE_QUEUE_SIZE.set(5);
 
         persistenceStartup = new PersistenceStartup();
 
@@ -1277,7 +1277,7 @@ public class ClientQueueXodusLocalPersistenceTest {
     @Test
     public void test_read_byte_limit_respected_qos0() {
 
-        InternalConfigurations.QOS_0_MEMORY_LIMIT_PER_CLIENT_BYTES.set(1024 * 100);
+        InternalConfig.QOS_0_MEMORY_LIMIT_PER_CLIENT_BYTES.set(1024 * 100);
 
         persistence.stop();
         persistence = new ClientQueueXodusLocalPersistence(payloadPersistence,
@@ -1314,7 +1314,7 @@ public class ClientQueueXodusLocalPersistenceTest {
     @Test
     public void test_read_byte_limit_respected_qos1() {
 
-        InternalConfigurations.QOS_0_MEMORY_LIMIT_PER_CLIENT_BYTES.set(1024 * 100);
+        InternalConfig.QOS_0_MEMORY_LIMIT_PER_CLIENT_BYTES.set(1024 * 100);
 
         persistence.stop();
         persistence = new ClientQueueXodusLocalPersistence(payloadPersistence,
@@ -1361,7 +1361,7 @@ public class ClientQueueXodusLocalPersistenceTest {
     @Test
     public void test_read_byte_limit_respected_qos0_and_qos1() {
 
-        InternalConfigurations.QOS_0_MEMORY_LIMIT_PER_CLIENT_BYTES.set(1024 * 100);
+        InternalConfig.QOS_0_MEMORY_LIMIT_PER_CLIENT_BYTES.set(1024 * 100);
 
         persistence.stop();
         persistence = new ClientQueueXodusLocalPersistence(payloadPersistence,

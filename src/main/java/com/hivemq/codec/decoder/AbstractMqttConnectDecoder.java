@@ -16,8 +16,8 @@
 package com.hivemq.codec.decoder;
 
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.ConfigurationService;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.ConfigService;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;
@@ -49,14 +49,14 @@ public abstract class AbstractMqttConnectDecoder extends MqttDecoder<CONNECT> {
 
     protected AbstractMqttConnectDecoder(
             final @NotNull MqttConnacker mqttConnacker,
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final @NotNull ClientIds clientIds) {
         this.mqttConnacker = mqttConnacker;
         this.clientIds = clientIds;
-        validateUTF8 = configurationService.securityConfiguration().validateUTF8();
-        maxUserPropertiesLength = InternalConfigurations.USER_PROPERTIES_MAX_SIZE_BYTES;
-        maxSessionExpiryInterval = configurationService.mqttConfiguration().maxSessionExpiryInterval();
-        allowAssignedClientId = configurationService.securityConfiguration().allowServerAssignedClientId();
+        validateUTF8 = configService.securityConfiguration().validateUTF8();
+        maxUserPropertiesLength = InternalConfig.USER_PROPERTIES_MAX_SIZE_BYTES;
+        maxSessionExpiryInterval = configService.mqttConfiguration().maxSessionExpiryInterval();
+        allowAssignedClientId = configService.securityConfiguration().allowServerAssignedClientId();
     }
 
     protected void disconnectByInvalidFixedHeader(final @NotNull Connection clientConnectionContext) {

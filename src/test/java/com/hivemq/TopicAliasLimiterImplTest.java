@@ -16,7 +16,7 @@
 package com.hivemq;
 
 
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,8 +37,8 @@ public class TopicAliasLimiterImplTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_SOFT_LIMIT_BYTES.set(50);
-        InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(200);
+        InternalConfig.TOPIC_ALIAS_GLOBAL_MEMORY_SOFT_LIMIT_BYTES.set(50);
+        InternalConfig.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(200);
 
         topicAliasLimiter = new TopicAliasLimiter();
     }

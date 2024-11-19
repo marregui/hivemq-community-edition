@@ -17,28 +17,195 @@ package com.hivemq.config;
 
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.QoS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- * A Configuration service which allows to get information about the current MQTT configuration
- * and allows to change the global MQTT configuration of HiveMQ at runtime.
- *
- * @author Dominik Obermaier
- * @author Florian Limpöck
- * @since 3.0
- */
-public interface MqttConfigurationService {
+import javax.inject.Singleton;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
-    enum QueuedMessagesStrategy {
-        /**
-         * This strategy discards the oldest element in the queue if
-         * the queue is full.
-         */
-        DISCARD_OLDEST(0),
-        /**
-         * This strategy discards the current element to queue in case
-         * the queue is full.
-         */
-        DISCARD(1);
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.hivemq.config.ConfigService.KEEP_ALIVE_ALLOW_UNLIMITED_DEFAULT;
+import static com.hivemq.config.ConfigService.KEEP_ALIVE_MAX_DEFAULT;
+import static com.hivemq.config.ConfigService.MAXIMUM_QOS_DEFAULT;
+import static com.hivemq.config.ConfigService.MAX_EXPIRY_INTERVAL_DEFAULT;
+import static com.hivemq.config.ConfigService.MAX_QUEUED_MESSAGES_DEFAULT;
+import static com.hivemq.config.ConfigService.QUEUED_MESSAGES_STRATEGY_DEFAULT;
+import static com.hivemq.config.ConfigService.RETAINED_MESSAGES_ENABLED_DEFAULT;
+import static com.hivemq.config.ConfigService.SERVER_RECEIVE_MAXIMUM_DEFAULT;
+import static com.hivemq.config.ConfigService.SHARED_SUBSCRIPTIONS_ENABLED_DEFAULT;
+import static com.hivemq.config.ConfigService.SUBSCRIPTION_IDENTIFIER_ENABLED_DEFAULT;
+import static com.hivemq.config.ConfigService.TOPIC_ALIAS_ENABLED_DEFAULT;
+import static com.hivemq.config.ConfigService.TOPIC_ALIAS_MAX_PER_CLIENT_DEFAULT;
+import static com.hivemq.config.ConfigService.WILDCARD_SUBSCRIPTIONS_ENABLED_DEFAULT;
+import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT;
+import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.SESSION_EXPIRY_MAX;
+
+@Singleton
+public class MqttConfigurationService {
+
+    private static final Logger log = LoggerFactory.getLogger(MqttConfigurationService.class);
+    private final AtomicLong maxClientSessionExpiryInterval = new AtomicLong(SESSION_EXPIRY_MAX);
+    private final AtomicLong maxMessageExpiryInterval = new AtomicLong(MAX_EXPIRY_INTERVAL_DEFAULT);
+    private final AtomicInteger serverReceiveMaximum = new AtomicInteger(SERVER_RECEIVE_MAXIMUM_DEFAULT);
+    private final AtomicInteger maxPacketSize = new AtomicInteger(DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT);
+    private final AtomicLong maxQueuedMessages = new AtomicLong(MAX_QUEUED_MESSAGES_DEFAULT);
+    private final AtomicReference<QueuedMessagesStrategy> queuedMessagesStrategy =
+            new AtomicReference<>(QUEUED_MESSAGES_STRATEGY_DEFAULT);
+    private final AtomicBoolean retainedMessagesEnabled = new AtomicBoolean(RETAINED_MESSAGES_ENABLED_DEFAULT);
+    private final AtomicBoolean wildcardSubscriptionsEnabled =
+            new AtomicBoolean(WILDCARD_SUBSCRIPTIONS_ENABLED_DEFAULT);
+    private final AtomicBoolean topicAliasEnabled = new AtomicBoolean(TOPIC_ALIAS_ENABLED_DEFAULT);
+    private final AtomicInteger topicAliasMaxPerClient = new AtomicInteger(TOPIC_ALIAS_MAX_PER_CLIENT_DEFAULT);
+    private final AtomicBoolean subscriptionIdentifierEnabled =
+            new AtomicBoolean(SUBSCRIPTION_IDENTIFIER_ENABLED_DEFAULT);
+    private final AtomicBoolean sharedSubscriptionsEnabled = new AtomicBoolean(SHARED_SUBSCRIPTIONS_ENABLED_DEFAULT);
+    private final AtomicBoolean keepAliveAllowZero = new AtomicBoolean(KEEP_ALIVE_ALLOW_UNLIMITED_DEFAULT);
+    private final AtomicInteger keepAliveMax = new AtomicInteger(KEEP_ALIVE_MAX_DEFAULT);
+    private final AtomicReference<QoS> maximumQos = new AtomicReference<>(MAXIMUM_QOS_DEFAULT);
+
+    public long maxQueuedMessages() {
+        return maxQueuedMessages.get();
+    }
+
+    public long maxSessionExpiryInterval() {
+        return maxClientSessionExpiryInterval.get();
+    }
+
+    public long maxMessageExpiryInterval() {
+        return maxMessageExpiryInterval.get();
+    }
+
+    public int serverReceiveMaximum() {
+        return serverReceiveMaximum.get();
+    }
+
+    public int maxPacketSize() {
+        return maxPacketSize.get();
+    }
+
+    public @NotNull QueuedMessagesStrategy getQueuedMessagesStrategy() {
+        return queuedMessagesStrategy.get();
+    }
+
+    public void setQueuedMessagesStrategy(@NotNull final QueuedMessagesStrategy strategy) {
+        checkNotNull(strategy, "Queued Messages strategy must not be null");
+        log.debug("Setting queued messages strategy for each client to {}", strategy.name());
+        queuedMessagesStrategy.set(strategy);
+    }
+
+    public boolean retainedMessagesEnabled() {
+        return retainedMessagesEnabled.get();
+    }
+
+    public boolean wildcardSubscriptionsEnabled() {
+        return wildcardSubscriptionsEnabled.get();
+    }
+
+    public @NotNull QoS maximumQos() {
+        return maximumQos.get();
+    }
+
+    public boolean topicAliasEnabled() {
+        return topicAliasEnabled.get();
+    }
+
+    public int topicAliasMaxPerClient() {
+        return topicAliasMaxPerClient.get();
+    }
+
+    public boolean subscriptionIdentifierEnabled() {
+        return subscriptionIdentifierEnabled.get();
+    }
+
+    public boolean sharedSubscriptionsEnabled() {
+        return sharedSubscriptionsEnabled.get();
+    }
+
+    public boolean keepAliveAllowZero() {
+        return keepAliveAllowZero.get();
+    }
+
+    public int keepAliveMax() {
+        return keepAliveMax.get();
+    }
+
+    public void setMaxPacketSize(final int maxPacketSize) {
+        log.debug("Setting the maximum packet size for mqtt messages {} bytes", maxPacketSize);
+        this.maxPacketSize.set(maxPacketSize);
+    }
+
+    public void setMaxQueuedMessages(final long maxQueuedMessages) {
+        log.debug("Setting the number of max queued messages  per client to {} entries", maxQueuedMessages);
+        this.maxQueuedMessages.set(maxQueuedMessages);
+    }
+
+    public void setMaxSessionExpiryInterval(final long maxClientSessionExpiryInterval) {
+        log.debug("Setting the expiry interval for client sessions to {} seconds", maxClientSessionExpiryInterval);
+        this.maxClientSessionExpiryInterval.set(maxClientSessionExpiryInterval);
+    }
+
+    public void setMaxMessageExpiryInterval(final long messageExpiryInterval) {
+        log.debug("Setting the expiry interval for publish messages to {} seconds", messageExpiryInterval);
+        this.maxMessageExpiryInterval.set(messageExpiryInterval);
+    }
+
+    public void setRetainedMessagesEnabled(final boolean enabled) {
+        log.debug("Setting retained messages enabled to {}", enabled);
+        this.retainedMessagesEnabled.set(enabled);
+    }
+
+    public void setWildcardSubscriptionsEnabled(final boolean enabled) {
+        log.debug("Setting wildcard subscriptions enabled to {}", enabled);
+        this.wildcardSubscriptionsEnabled.set(enabled);
+    }
+
+    public void setMaximumQos(@NotNull final QoS maximumQos) {
+        checkNotNull(maximumQos, "Maximum QoS may never be null");
+        log.debug("Setting maximum qos to {} ", maximumQos);
+        this.maximumQos.set(maximumQos);
+    }
+
+    public void setTopicAliasEnabled(final boolean enabled) {
+        log.debug("Setting topic alias enabled to {}", enabled);
+        this.topicAliasEnabled.set(enabled);
+    }
+
+    public void setTopicAliasMaxPerClient(final int maxPerClient) {
+        log.debug("Setting topic alias maximum per client to {}", maxPerClient);
+        this.topicAliasMaxPerClient.set(maxPerClient);
+    }
+
+    public void setSubscriptionIdentifierEnabled(final boolean enabled) {
+        log.debug("Setting subscription identifier enabled to {}", enabled);
+        this.subscriptionIdentifierEnabled.set(enabled);
+    }
+
+    public void setSharedSubscriptionsEnabled(final boolean enabled) {
+        log.debug("Setting shared subscriptions enabled to {}", enabled);
+        this.sharedSubscriptionsEnabled.set(enabled);
+    }
+
+    public void setKeepAliveAllowZero(final boolean allowZero) {
+        log.debug("Setting keep alive allow zero to {}", allowZero);
+        this.keepAliveAllowZero.set(allowZero);
+    }
+
+    public void setKeepAliveMax(final int keepAliveMax) {
+        log.debug("Setting keep alive maximum to {} seconds", keepAliveMax);
+        this.keepAliveMax.set(keepAliveMax);
+    }
+
+    public void setServerReceiveMaximum(final int serverReceiveMaximum) {
+        log.debug("Setting the server receive maximum to {}", serverReceiveMaximum);
+        this.serverReceiveMaximum.set(serverReceiveMaximum);
+    }
+
+    public enum QueuedMessagesStrategy {
+        DISCARD_OLDEST(0), // discards the oldest element in the queue if the queue is full
+        DISCARD(1); // discards the current element to queue in case the queue is full.
 
         private static final @NotNull QueuedMessagesStrategy @NotNull [] VALUES = values();
 
@@ -60,110 +227,4 @@ public interface MqttConfigurationService {
             return index;
         }
     }
-
-    /**
-     * @return the global maximum offline queued messages per client
-     */
-    long maxQueuedMessages();
-
-    /**
-     * @return the maximum client session expiry interval. The session expiry interval applies to offline clients.
-     */
-    long maxSessionExpiryInterval();
-
-    /**
-     * @return the maximum publish message expire interval.
-     */
-    long maxMessageExpiryInterval();
-
-    /**
-     * @return the maximum amount of concurrent QoS > 0 publishes the server allows before disconnecting the client.
-     */
-    int serverReceiveMaximum();
-
-    /**
-     * @return the maximum allowed MQTT packet size in bytes
-     */
-    int maxPacketSize();
-
-    /**
-     * @return the strategy to discard queued messages, when queue full. Default DISCARD
-     */
-    QueuedMessagesStrategy getQueuedMessagesStrategy();
-
-    /**
-     * @return true if retained messages are enabled, else false. Default true
-     */
-    boolean retainedMessagesEnabled();
-
-    /**
-     * @return true if wildcard subscriptions are enabled, else false. Default true
-     */
-    boolean wildcardSubscriptionsEnabled();
-
-    /**
-     * @return the maximum qos the server allows. Default 2 (Exactly Once)
-     */
-    QoS maximumQos();
-
-    /**
-     * @return true if topic alias is enabled, else false. Default false
-     */
-    boolean topicAliasEnabled();
-
-    /**
-     * @return the maximum amount of topic aliases a client may have. Default 10
-     */
-    int topicAliasMaxPerClient();
-
-    /**
-     * @return true if subscription identifiers are enabled, else false. Default false
-     */
-    boolean subscriptionIdentifierEnabled();
-
-    /**
-     * @return true if shared subscriptions are enabled, else false. Default true
-     */
-    boolean sharedSubscriptionsEnabled();
-
-    /**
-     * @return true if zero keep alive is allowed (no keep alive), else false. Default true
-     */
-    boolean keepAliveAllowZero();
-
-    /**
-     * @return the maximum keep alive a client may have. Default 65535
-     */
-    int keepAliveMax();
-
-
-    void setQueuedMessagesStrategy(@NotNull QueuedMessagesStrategy strategy);
-
-    void setMaxPacketSize(int maxPacketSize);
-
-    void setServerReceiveMaximum(final int serverReceiveMaximum);
-
-    void setMaxQueuedMessages(long maxQueuedMessages);
-
-    void setMaxSessionExpiryInterval(final long maxClientSessionExpiryInterval);
-
-    void setMaxMessageExpiryInterval(final long maxMessageExpiryInterval);
-
-    void setRetainedMessagesEnabled(final boolean enabled);
-
-    void setWildcardSubscriptionsEnabled(final boolean enabled);
-
-    void setMaximumQos(final QoS maximumQos);
-
-    void setTopicAliasEnabled(final boolean enabled);
-
-    void setTopicAliasMaxPerClient(final int maxPerClient);
-
-    void setSubscriptionIdentifierEnabled(final boolean enabled);
-
-    void setSharedSubscriptionsEnabled(final boolean enabled);
-
-    void setKeepAliveAllowZero(final boolean allowZero);
-
-    void setKeepAliveMax(final int keepAliveMax);
 }

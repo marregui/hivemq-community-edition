@@ -16,7 +16,7 @@
 package util;
 
 import com.google.common.util.concurrent.MoreExecutors;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.persistence.SingleWriterService;
 
 
@@ -24,11 +24,11 @@ public class TestSingleWriterFactory {
 
     public static SingleWriterService defaultSingleWriter() {
 
-        InternalConfigurations.PERSISTENCE_BUCKET_COUNT.set(64);
-        InternalConfigurations.SINGLE_WRITER_THREAD_POOL_SIZE.set(1);
-        InternalConfigurations.SINGLE_WRITER_CREDITS_PER_EXECUTION.set(100);
-        InternalConfigurations.PERSISTENCE_SHUTDOWN_GRACE_PERIOD_MSEC.set(1000);
-        InternalConfigurations.SINGLE_WRITER_INTERVAL_TO_CHECK_PENDING_TASKS_AND_SCHEDULE_MSEC.set(100);
+        InternalConfig.PERSISTENCE_BUCKET_COUNT.set(64);
+        InternalConfig.SINGLE_WRITER_THREAD_POOL_SIZE.set(1);
+        InternalConfig.SINGLE_WRITER_CREDITS_PER_EXECUTION.set(100);
+        InternalConfig.PERSISTENCE_SHUTDOWN_GRACE_PERIOD_MSEC.set(1000);
+        InternalConfig.SINGLE_WRITER_INTERVAL_TO_CHECK_PENDING_TASKS_AND_SCHEDULE_MSEC.set(100);
 
         final SingleWriterService SingleWriterService = new SingleWriterService();
         for (int i = 0; i < SingleWriterService.callbackExecutors.length; i++) {

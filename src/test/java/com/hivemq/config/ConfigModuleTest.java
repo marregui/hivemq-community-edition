@@ -28,7 +28,7 @@ import util.TestConfigurationBootstrap;
 import static org.junit.Assert.assertSame;
 
 @SuppressWarnings("deprecation")
-public class ConfigurationModuleTest {
+public class ConfigModuleTest {
 
     @Mock
     SharedSubscriptionService sharedSubscriptionService;
@@ -43,10 +43,10 @@ public class ConfigurationModuleTest {
         MockitoAnnotations.initMocks(this);
 
         testConfigurationBootstrap = new TestConfigurationBootstrap();
-        final ConfigurationService fullConfigurationService =
+        final ConfigService fullConfigService =
                 testConfigurationBootstrap.getFullConfigurationService();
 
-        injector = Guice.createInjector(new ConfigurationModule(fullConfigurationService),
+        injector = Guice.createInjector(new ConfigModule(fullConfigService),
                 new AbstractModule() {
                     @Override
                     protected void configure() {
@@ -88,8 +88,8 @@ public class ConfigurationModuleTest {
     @Test
     public void test_configuration_service_singleton() throws Exception {
 
-        final ConfigurationService instance = injector.getInstance(ConfigurationService.class);
-        final ConfigurationService instance2 = injector.getInstance(ConfigurationService.class);
+        final ConfigService instance = injector.getInstance(ConfigService.class);
+        final ConfigService instance2 = injector.getInstance(ConfigService.class);
 
         assertSame(instance, instance2);
         assertSame(testConfigurationBootstrap.getConfigurationService(), instance);
@@ -98,8 +98,8 @@ public class ConfigurationModuleTest {
     @Test
     public void test_configuration_service_same_as_full_configuration_service() throws Exception {
 
-        final ConfigurationService instance = injector.getInstance(ConfigurationService.class);
-        final ConfigurationService instance2 = injector.getInstance(ConfigurationService.class);
+        final ConfigService instance = injector.getInstance(ConfigService.class);
+        final ConfigService instance2 = injector.getInstance(ConfigService.class);
 
         assertSame(instance, instance2);
         assertSame(testConfigurationBootstrap.getFullConfigurationService(), instance);
@@ -108,12 +108,14 @@ public class ConfigurationModuleTest {
     @Test
     public void test_configuration_service_bindings_same_as_direct_binding() throws Exception {
 
-        final ConfigurationService configurationService = injector.getInstance(ConfigurationService.class);
+        final ConfigService configService = injector.getInstance(ConfigService.class);
 
-        assertSame(configurationService.listenerConfiguration(),
+        assertSame(
+                configService.listenerConfiguration(),
                 injector.getInstance(ListenerConfigurationService.class));
-        assertSame(configurationService.mqttConfiguration(), injector.getInstance(MqttConfigurationService.class));
-        assertSame(configurationService.restrictionsConfiguration(),
+        assertSame(configService.mqttConfiguration(), injector.getInstance(MqttConfigurationService.class));
+        assertSame(
+                configService.restrictionsConfiguration(),
                 injector.getInstance(RestrictionsConfigurationService.class));
     }
 }

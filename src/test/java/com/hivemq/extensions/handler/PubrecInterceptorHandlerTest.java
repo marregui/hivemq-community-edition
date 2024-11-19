@@ -19,7 +19,7 @@ package com.hivemq.extensions.handler;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.pubrec.PubrecInboundInterceptor;
@@ -96,13 +96,14 @@ public class PubrecInterceptorHandlerTest {
         ClientConnection.of(channel).setExtensionClientContext(clientContext);
         when(extension.getId()).thenReturn("plugin");
 
-        final ConfigurationService configurationService =
+        final ConfigService configService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
         final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         final PluginTaskExecutorService pluginTaskExecutorService =
                 new PluginTaskExecutorServiceImpl(() -> executor);
 
-        handler = new PubrecInterceptorHandler(configurationService,
+        handler = new PubrecInterceptorHandler(
+                configService,
                 asyncer,
                 hiveMQExtensions,
                 pluginTaskExecutorService);

@@ -15,20 +15,10 @@
  */
 package com.hivemq.config.entity;
 
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-/**
- * A listener which allows to listen to MQTT traffic via TCP
- *
- * @author Dominik Obermaier
- * @author Christoph Schaebel
- * @author Georg Held
- * @since 3.0
- */
+import java.util.Objects;
 
 public class TcpListener implements Listener {
 
@@ -37,29 +27,14 @@ public class TcpListener implements Listener {
     private final @NotNull String name;
     private final @NotNull String bindAddress;
 
-    /**
-     * Creates a new TCP listener which listens to a specific port and bind address
-     *
-     * @param port        the port
-     * @param bindAddress the bind address
-     */
     @Deprecated
-    public TcpListener(final int port, @NotNull final String bindAddress) {
+    public TcpListener(final int port, final @NotNull String bindAddress) {
         this(port, bindAddress, "tcp-listener-" + port);
     }
 
-    /**
-     * Creates a new TCP listener which listens to a specific port and bind address
-     *
-     * @param port        the port
-     * @param bindAddress the bind address
-     * @param name        the name of the listener
-     */
     public TcpListener(final int port, final @NotNull String bindAddress, final @NotNull String name) {
-
-        checkNotNull(bindAddress, "bindAddress must not be null");
-        checkNotNull(name, "name must not be null");
-
+        Objects.requireNonNull(bindAddress, "bindAddress must not be null");
+        Objects.requireNonNull(name, "name must not be null");
         this.port = port;
         this.bindAddress = bindAddress;
         this.name = name;
@@ -91,7 +66,6 @@ public class TcpListener implements Listener {
     }
 
     public static class Builder {
-
         private @Nullable String name;
         private @Nullable Integer port;
         private @Nullable String bindAddress;
@@ -109,13 +83,13 @@ public class TcpListener implements Listener {
         }
 
         public @NotNull Builder bindAddress(final @NotNull String bindAddress) {
-            checkNotNull(bindAddress);
+            Objects.requireNonNull(bindAddress);
             this.bindAddress = bindAddress;
             return this;
         }
 
         public @NotNull Builder name(final @NotNull String name) {
-            checkNotNull(name);
+            Objects.requireNonNull(name);
             this.name = name;
             return this;
         }

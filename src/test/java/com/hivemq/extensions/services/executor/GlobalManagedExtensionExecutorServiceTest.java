@@ -16,7 +16,7 @@
 package com.hivemq.extensions.services.executor;
 
 import com.hivemq.ShutdownHooks;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,8 +35,8 @@ public class GlobalManagedExtensionExecutorServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        InternalConfigurations.MANAGED_EXTENSION_THREAD_POOL_KEEP_ALIVE_SEC.set(60);
-        InternalConfigurations.MANAGED_EXTENSION_THREAD_POOL_THREADS_COUNT.set(4);
+        InternalConfig.MANAGED_EXTENSION_THREAD_POOL_KEEP_ALIVE_SEC.set(60);
+        InternalConfig.MANAGED_EXTENSION_THREAD_POOL_THREADS_COUNT.set(4);
 
         managedPluginExecutorService = new GlobalManagedExtensionExecutorService();
     }

@@ -22,7 +22,7 @@ import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.publish.PublishFlowHandler;
@@ -112,8 +112,8 @@ public class PublishPollServiceImplTest {
 
         when(channel.writeAndFlush(any())).thenReturn(mock(ChannelFuture.class));
 
-        InternalConfigurations.PUBLISH_POLL_BATCH_SIZE = 50;
-        InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 50;
+        InternalConfig.PUBLISH_POLL_BATCH_SIZE = 50;
+        InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 50;
 
         singleWriterService = TestSingleWriterFactory.defaultSingleWriter();
 
@@ -151,7 +151,7 @@ public class PublishPollServiceImplTest {
     @Test
     public void test_new_messages_inflight_batch_size() throws UnavailableIdException {
 
-        InternalConfigurations.PUBLISH_POLL_BATCH_SIZE = 1;
+        InternalConfig.PUBLISH_POLL_BATCH_SIZE = 1;
 
         clientConnection.setClientReceiveMaximum(10);
 

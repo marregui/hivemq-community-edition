@@ -22,10 +22,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.SESSION_EXPIRY_MAX;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 @XmlRootElement(name = "session-expiry")
 @XmlAccessorType(XmlAccessType.NONE)
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})

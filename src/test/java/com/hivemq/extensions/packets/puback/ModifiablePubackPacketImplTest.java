@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.puback;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.publish.AckReasonCode;
 import com.hivemq.extensions.packets.general.UserPropertiesImpl;
@@ -39,11 +39,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiablePubackPacketImplTest {
 
-    private @NotNull ConfigurationService configurationService;
+    private @NotNull ConfigService configService;
 
     @Before
     public void setUp() throws JAXBException, IOException {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ModifiablePubackPacketImplTest {
         final PubackPacketImpl packet =
                 new PubackPacketImpl(1, AckReasonCode.SUCCESS, null, UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -66,7 +66,7 @@ public class ModifiablePubackPacketImplTest {
         final PubackPacketImpl packet =
                 new PubackPacketImpl(1, AckReasonCode.SUCCESS, "reason", UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -81,7 +81,7 @@ public class ModifiablePubackPacketImplTest {
         final PubackPacketImpl packet =
                 new PubackPacketImpl(1, AckReasonCode.SUCCESS, "same", UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -96,7 +96,7 @@ public class ModifiablePubackPacketImplTest {
         final PubackPacketImpl packet =
                 new PubackPacketImpl(1, AckReasonCode.SUCCESS, null, UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -111,7 +111,7 @@ public class ModifiablePubackPacketImplTest {
         final PubackPacketImpl packet =
                 new PubackPacketImpl(1, AckReasonCode.SUCCESS, null, UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
 
         modifiablePacket.setReasonCode(null);
     }
@@ -121,7 +121,7 @@ public class ModifiablePubackPacketImplTest {
         final PubackPacketImpl packet =
                 new PubackPacketImpl(1, AckReasonCode.SUCCESS, null, UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -138,7 +138,7 @@ public class ModifiablePubackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -155,7 +155,7 @@ public class ModifiablePubackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -170,7 +170,7 @@ public class ModifiablePubackPacketImplTest {
         final PubackPacketImpl packet =
                 new PubackPacketImpl(1, AckReasonCode.SUCCESS, null, UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -184,7 +184,7 @@ public class ModifiablePubackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
 
         modifiablePacket.setReasonCode(AckReasonCode.SUCCESS);
     }
@@ -194,7 +194,7 @@ public class ModifiablePubackPacketImplTest {
         final PubackPacketImpl packet =
                 new PubackPacketImpl(1, AckReasonCode.SUCCESS, null, UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
 
         final PubackPacketImpl copy = modifiablePacket.copy();
 
@@ -206,7 +206,7 @@ public class ModifiablePubackPacketImplTest {
         final PubackPacketImpl packet =
                 new PubackPacketImpl(1, AckReasonCode.SUCCESS, null, UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
 
         modifiablePacket.setReasonString("reason");
         modifiablePacket.getUserProperties().addUserProperty("testName", "testValue");

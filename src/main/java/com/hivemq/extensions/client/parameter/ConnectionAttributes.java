@@ -19,7 +19,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,7 +72,7 @@ public class ConnectionAttributes {
             return connectionAttributes;
         }
 
-        final int maxValueSizeBytes = InternalConfigurations.CONNECTION_ATTRIBUTE_STORE_MAX_VALUE_SIZE_BYTES;
+        final int maxValueSizeBytes = InternalConfig.CONNECTION_ATTRIBUTE_STORE_MAX_VALUE_SIZE_BYTES;
 
         final Connection clientConnectionContext = Connection.of(channel);
         return clientConnectionContext.setConnectionAttributesIfAbsent(new ConnectionAttributes(maxValueSizeBytes));

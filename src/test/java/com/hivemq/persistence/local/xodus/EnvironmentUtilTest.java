@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.local.xodus;
 
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import jetbrains.exodus.env.EnvironmentConfig;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +54,7 @@ public class EnvironmentUtilTest {
         assertEquals(1000, envConfig.getLogSyncPeriod());
         assertFalse(envConfig.getLogDurableWrite());
         assertEquals(25, envConfig.getMemoryUsagePercentage());
-        assertEquals(InternalConfigurations.XODUS_LOG_CACHE_USE_NIO, envConfig.getLogCacheUseNio());
+        assertEquals(InternalConfig.XODUS_LOG_CACHE_USE_NIO, envConfig.getLogCacheUseNio());
     }
 
 }

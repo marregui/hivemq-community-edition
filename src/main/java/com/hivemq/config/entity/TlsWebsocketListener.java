@@ -25,16 +25,6 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * A listener which allows to listen to MQTT traffic over secure websockets with TLS.
- * <p>
- * Use the builder if you want to create a new TLS websocket listener.
- *
- * @author Dominik Obermaier
- * @author Christoph Schaebel
- * @since 3.0
- */
-
 public class TlsWebsocketListener extends WebsocketListener implements TlsListener {
 
     private final @NotNull Tls tls;
@@ -60,14 +50,9 @@ public class TlsWebsocketListener extends WebsocketListener implements TlsListen
         return "Websocket Listener with TLS";
     }
 
-    /**
-     * A builder which allows to conveniently build a listener object with a fluent API
-     */
     public static class Builder {
-
         protected @NotNull String path;
         protected @NotNull List<String> subprotocols;
-
         protected @Nullable String name;
         protected @Nullable Integer port;
         protected @Nullable String bindAddress;
@@ -93,95 +78,46 @@ public class TlsWebsocketListener extends WebsocketListener implements TlsListen
             return this;
         }
 
-        /**
-         * Sets the TLS configuration of the TLS Websocket listener
-         *
-         * @param tls the TLS configuration
-         * @return the Builder
-         */
         public @NotNull Builder tls(final @NotNull Tls tls) {
             checkNotNull(tls);
             this.tls = tls;
             return this;
         }
 
-        /**
-         * Sets the port of the TLS websocket listener
-         *
-         * @param port the port
-         * @return the Builder
-         */
         public @NotNull Builder port(final int port) {
             this.port = port;
             return this;
         }
 
-        /**
-         * Sets the bind address of the TLS websocket listener
-         *
-         * @param bindAddress the bind address
-         * @return the Builder
-         */
         public @NotNull Builder bindAddress(final @NotNull String bindAddress) {
             checkNotNull(bindAddress);
             this.bindAddress = bindAddress;
             return this;
         }
 
-        /**
-         * Sets the websocket path of the TLS websocket listener
-         *
-         * @param path the path
-         * @return the Builder
-         */
         public @NotNull Builder path(final @NotNull String path) {
             checkNotNull(path);
             this.path = path;
             return this;
         }
 
-        /**
-         * Sets the name of the websocket listener
-         *
-         * @param name the name
-         * @return the Builder
-         */
         public @NotNull Builder name(final @NotNull String name) {
             checkNotNull(name);
             this.name = name;
             return this;
         }
 
-        /**
-         * Sets if websocket extensions should be allowed or not
-         *
-         * @param allowExtensions if websocket extensions should be allowed or not
-         * @return the Builder
-         */
         public @NotNull Builder allowExtensions(final boolean allowExtensions) {
             this.allowExtensions = allowExtensions;
             return this;
         }
 
-        /**
-         * Sets a list of subprotocols the websocket listener should support.
-         * <p>
-         * Typically you should use 'mqtt' and/or 'mqttv3.1
-         *
-         * @param subprotocols a list of websocket subprotocols
-         * @return the Builder
-         */
         public @NotNull Builder subprotocols(final @NotNull List<String> subprotocols) {
             checkNotNull(subprotocols);
             this.subprotocols = ImmutableList.copyOf(subprotocols);
             return this;
         }
 
-        /**
-         * Creates the TLS Websocket Listener
-         *
-         * @return the TLS Websocket Listener
-         */
         public @NotNull TlsWebsocketListener build() {
             if (port == null) {
                 throw new IllegalStateException("The port for a TLS Websocket listener was not set.");

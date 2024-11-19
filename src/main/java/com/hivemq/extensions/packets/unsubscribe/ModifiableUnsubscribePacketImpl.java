@@ -17,7 +17,7 @@ package com.hivemq.extensions.packets.unsubscribe;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.unsubscribe.ModifiableUnsubscribePacket;
 import com.hivemq.extensions.packets.general.ModifiableUserPropertiesImpl;
@@ -35,18 +35,18 @@ public class ModifiableUnsubscribePacketImpl implements ModifiableUnsubscribePac
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
     private final int packetIdentifier;
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private boolean modified = false;
 
     public ModifiableUnsubscribePacketImpl(
-            final @NotNull UnsubscribePacketImpl packet, final @NotNull ConfigurationService configurationService) {
+            final @NotNull UnsubscribePacketImpl packet, final @NotNull ConfigService configService) {
 
         topicFilters = packet.topicFilters;
         userProperties = new ModifiableUserPropertiesImpl(packet.userProperties.asInternalList(),
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
         packetIdentifier = packet.packetIdentifier;
 
-        this.configurationService = configurationService;
+        this.configService = configService;
     }
 
     @Override
@@ -89,6 +89,6 @@ public class ModifiableUnsubscribePacketImpl implements ModifiableUnsubscribePac
     }
 
     public @NotNull ModifiableUnsubscribePacketImpl update(final @NotNull UnsubscribePacketImpl packet) {
-        return new ModifiableUnsubscribePacketImpl(packet, configurationService);
+        return new ModifiableUnsubscribePacketImpl(packet, configService);
     }
 }

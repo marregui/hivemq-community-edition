@@ -24,7 +24,7 @@ import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.MqttBinaryData;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
 import com.hivemq.config.HivemqId;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;
@@ -86,8 +86,8 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
             final @NotNull MqttConnacker mqttConnacker,
             final @NotNull HivemqId hiveMQId,
             final @NotNull ClientIds clientIds,
-            final @NotNull ConfigurationService configurationService) {
-        super(mqttConnacker, configurationService, clientIds);
+            final @NotNull ConfigService configService) {
+        super(mqttConnacker, configService, clientIds);
         this.hiveMQId = hiveMQId;
     }
 

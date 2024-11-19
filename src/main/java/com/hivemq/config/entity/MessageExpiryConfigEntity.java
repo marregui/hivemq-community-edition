@@ -20,12 +20,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import static com.hivemq.config.entity.MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT;
+import static com.hivemq.config.ConfigService.MAX_EXPIRY_INTERVAL_DEFAULT;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 @XmlRootElement(name = "message-expiry")
 @XmlAccessorType(XmlAccessType.NONE)
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})

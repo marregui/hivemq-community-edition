@@ -18,7 +18,7 @@ package com.hivemq.persistence.local.xodus.clientsession;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.UnmodifiableIterator;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.iteration.BucketChunkResult;
 import com.hivemq.mqtt.message.QoS;
@@ -80,9 +80,9 @@ public class ClientSessionSubscriptionXodusLocalPersistenceTest {
     public void before() throws Exception {
         closeableMock = MockitoAnnotations.openMocks(this);
 
-        InternalConfigurations.PERSISTENCE_CLOSE_RETRIES.set(3);
-        InternalConfigurations.PERSISTENCE_CLOSE_RETRY_INTERVAL_MSEC.set(5);
-        InternalConfigurations.PERSISTENCE_BUCKET_COUNT.set(bucketCount);
+        InternalConfig.PERSISTENCE_CLOSE_RETRIES.set(3);
+        InternalConfig.PERSISTENCE_CLOSE_RETRY_INTERVAL_MSEC.set(5);
+        InternalConfig.PERSISTENCE_BUCKET_COUNT.set(bucketCount);
         when(localPersistenceFileUtil.getVersionedLocalPersistenceFolder(anyString(), anyString())).thenReturn(
                 temporaryFolder.newFolder());
 

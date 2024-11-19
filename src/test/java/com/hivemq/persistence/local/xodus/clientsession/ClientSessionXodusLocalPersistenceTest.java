@@ -17,7 +17,7 @@ package com.hivemq.persistence.local.xodus.clientsession;
 
 import com.codahale.metrics.Counter;
 import com.google.common.collect.Lists;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.iteration.BucketChunkResult;
 import com.hivemq.logging.EventLog;
@@ -88,9 +88,9 @@ public class ClientSessionXodusLocalPersistenceTest {
 
         final LocalPersistenceFileUtil localPersistenceFileUtil = mock(LocalPersistenceFileUtil.class);
 
-        InternalConfigurations.PERSISTENCE_CLOSE_RETRIES.set(3);
-        InternalConfigurations.PERSISTENCE_CLOSE_RETRY_INTERVAL_MSEC.set(5);
-        InternalConfigurations.PERSISTENCE_BUCKET_COUNT.set(BUCKET_COUNT);
+        InternalConfig.PERSISTENCE_CLOSE_RETRIES.set(3);
+        InternalConfig.PERSISTENCE_CLOSE_RETRY_INTERVAL_MSEC.set(5);
+        InternalConfig.PERSISTENCE_BUCKET_COUNT.set(BUCKET_COUNT);
         when(localPersistenceFileUtil.getVersionedLocalPersistenceFolder(anyString(), anyString())).thenReturn(
                 temporaryFolder.newFolder());
 

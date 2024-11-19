@@ -16,7 +16,7 @@
 
 package com.hivemq.persistence.payload;
 
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.persistence.PersistenceStartup;
@@ -53,9 +53,9 @@ public class PublishPayloadXodusLocalPersistenceTest {
     @Before
     public void before() throws Exception {
         localPersistenceFileUtil = mock(LocalPersistenceFileUtil.class);
-        InternalConfigurations.PERSISTENCE_CLOSE_RETRIES.set(3);
-        InternalConfigurations.PERSISTENCE_CLOSE_RETRY_INTERVAL_MSEC.set(5);
-        InternalConfigurations.PAYLOAD_PERSISTENCE_BUCKET_COUNT.set(8);
+        InternalConfig.PERSISTENCE_CLOSE_RETRIES.set(3);
+        InternalConfig.PERSISTENCE_CLOSE_RETRY_INTERVAL_MSEC.set(5);
+        InternalConfig.PAYLOAD_PERSISTENCE_BUCKET_COUNT.set(8);
         when(localPersistenceFileUtil.getVersionedLocalPersistenceFolder(anyString(), anyString())).thenReturn(
                 temporaryFolder.newFolder());
 

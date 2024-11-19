@@ -16,7 +16,7 @@
 package com.hivemq.extensions.handler;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
@@ -66,7 +66,7 @@ public class IncomingSubscribeHandler {
     private final @NotNull PluginOutPutAsyncer asyncer;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull PluginAuthorizerService authorizerService;
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final @NotNull MqttServerDisconnector mqttServerDisconnector;
 
     @Inject
@@ -75,14 +75,14 @@ public class IncomingSubscribeHandler {
             final @NotNull PluginOutPutAsyncer asyncer,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull PluginAuthorizerService authorizerService,
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final @NotNull MqttServerDisconnector mqttServerDisconnector) {
 
         this.executorService = executorService;
         this.asyncer = asyncer;
         this.hiveMQExtensions = hiveMQExtensions;
         this.authorizerService = authorizerService;
-        this.configurationService = configurationService;
+        this.configService = configService;
         this.mqttServerDisconnector = mqttServerDisconnector;
     }
 
@@ -120,7 +120,7 @@ public class IncomingSubscribeHandler {
         final ExtensionParameterHolder<SubscribeInboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiableSubscribePacketImpl modifiablePacket =
-                new ModifiableSubscribePacketImpl(packet, configurationService);
+                new ModifiableSubscribePacketImpl(packet, configService);
         final SubscribeInboundOutputImpl output = new SubscribeInboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<SubscribeInboundOutputImpl> outputHolder =
                 new ExtensionParameterHolder<>(output);

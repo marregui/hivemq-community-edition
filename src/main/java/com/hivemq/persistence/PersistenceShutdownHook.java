@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import static com.hivemq.config.InternalConfigurations.PERSISTENCE_SHUTDOWN_TIMEOUT_SEC;
+import static com.hivemq.config.InternalConfig.PERSISTENCE_SHUTDOWN_TIMEOUT_SEC;
 
 
 public class PersistenceShutdownHook implements ShutdownHooks.Hook {

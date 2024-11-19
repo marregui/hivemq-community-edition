@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.publish;
 
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.event.PublishDroppedEvent;
 import com.hivemq.mqtt.event.PubrelDroppedEvent;
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
 
-import static com.hivemq.config.entity.MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT;
+import static com.hivemq.config.ConfigService.MAX_EXPIRY_INTERVAL_DEFAULT;
 
 /**
  * @author Florian Limpöck
@@ -52,7 +52,7 @@ public class MessageExpiryHandler extends ChannelOutboundHandlerAdapter {
         if (msg instanceof PUBLISH) {
             final PUBLISH publish = (PUBLISH) msg;
             checkAndSetPublishExpiry(publish);
-            final boolean expireInflight = InternalConfigurations.EXPIRE_INFLIGHT_MESSAGES_ENABLED;
+            final boolean expireInflight = InternalConfig.EXPIRE_INFLIGHT_MESSAGES_ENABLED;
             final boolean isInflight = (publish.getQoS() == QoS.EXACTLY_ONCE) && publish.isDuplicateDelivery();
             final boolean drop = (publish.getMessageExpiryInterval() == 0) && (!isInflight || expireInflight);
             if (drop) {
@@ -62,7 +62,7 @@ public class MessageExpiryHandler extends ChannelOutboundHandlerAdapter {
         } else if (msg instanceof PUBREL) {
             final PUBREL pubrel = (PUBREL) msg;
             checkAndSetPubrelExpiry(pubrel);
-            final boolean expireInflight = InternalConfigurations.EXPIRE_INFLIGHT_PUBRELS_ENABLED;
+            final boolean expireInflight = InternalConfig.EXPIRE_INFLIGHT_PUBRELS_ENABLED;
             final boolean drop = (pubrel.getMessageExpiryInterval() != null) &&
                     (pubrel.getMessageExpiryInterval() == 0) &&
                     expireInflight;

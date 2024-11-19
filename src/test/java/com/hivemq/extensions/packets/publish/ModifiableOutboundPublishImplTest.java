@@ -18,7 +18,7 @@ package com.hivemq.extensions.packets.publish;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.publish.PayloadFormatIndicator;
@@ -42,11 +42,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiableOutboundPublishImplTest {
 
-    private @NotNull ConfigurationService configurationService;
+    private @NotNull ConfigService configService;
 
     @Before
     public void setUp() throws Exception {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 
     @Test
@@ -67,7 +67,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -95,7 +95,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -123,7 +123,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         modifiablePacket.setTopic(null);
     }
@@ -146,7 +146,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         modifiablePacket.setTopic("");
     }
@@ -169,9 +169,9 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
-        configurationService.restrictionsConfiguration().setMaxTopicLength(10);
+        configService.restrictionsConfiguration().setMaxTopicLength(10);
         modifiablePacket.setTopic("topic123456");
     }
 
@@ -193,7 +193,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         modifiablePacket.setTopic("topic" + '\u0000');
     }
@@ -216,7 +216,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         modifiablePacket.setTopic("topic" + '\u0001');
     }
@@ -239,11 +239,11 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
-        configurationService.securityConfiguration().setValidateUTF8(false);
+        configService.securityConfiguration().setValidateUTF8(false);
         modifiablePacket.setTopic("topic" + '\u0001');
 
         assertTrue(modifiablePacket.isModified());
@@ -268,7 +268,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -296,7 +296,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -324,7 +324,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         modifiablePacket.setPayload(null);
     }
@@ -347,7 +347,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -375,7 +375,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -403,7 +403,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -431,7 +431,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -459,9 +459,9 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
-        configurationService.mqttConfiguration().setMaxMessageExpiryInterval(240L);
+        configService.mqttConfiguration().setMaxMessageExpiryInterval(240L);
         modifiablePacket.setMessageExpiryInterval(241);
     }
 
@@ -483,7 +483,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -511,7 +511,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -539,7 +539,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -567,7 +567,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -595,7 +595,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -623,7 +623,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -651,7 +651,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         modifiablePacket.setContentType("contentType" + '\u0000');
     }
@@ -674,7 +674,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         modifiablePacket.setContentType("contentType" + '\u0001');
     }
@@ -697,11 +697,11 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
-        configurationService.securityConfiguration().setValidateUTF8(false);
+        configService.securityConfiguration().setValidateUTF8(false);
         modifiablePacket.setContentType("contentType" + '\u0001');
 
         assertTrue(modifiablePacket.isModified());
@@ -726,7 +726,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -755,7 +755,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -783,7 +783,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -811,7 +811,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         modifiablePacket.setResponseTopic("responseTopic" + '\u0000');
     }
@@ -834,7 +834,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         modifiablePacket.setResponseTopic("responseTopic" + '\u0001');
     }
@@ -857,11 +857,11 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
-        configurationService.securityConfiguration().setValidateUTF8(false);
+        configService.securityConfiguration().setValidateUTF8(false);
         modifiablePacket.setResponseTopic("responseTopic" + '\u0001');
 
         assertTrue(modifiablePacket.isModified());
@@ -886,7 +886,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -914,7 +914,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -942,7 +942,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -970,7 +970,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -998,7 +998,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -1026,7 +1026,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         modifiablePacket.setSubscriptionIdentifiers(null);
     }
@@ -1049,7 +1049,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         modifiablePacket.setSubscriptionIdentifiers(Arrays.asList(1, null));
     }
@@ -1072,7 +1072,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -1100,7 +1100,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         final PublishPacketImpl copy = modifiablePacket.copy();
 
@@ -1125,7 +1125,7 @@ public class ModifiableOutboundPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 12345L);
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
 
         modifiablePacket.setTopic("modifiedTopic");
         modifiablePacket.setPayload(ByteBuffer.wrap("modifiedPayload".getBytes()));

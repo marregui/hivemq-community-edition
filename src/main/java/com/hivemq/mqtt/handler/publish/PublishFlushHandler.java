@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.handler.publish;
 
 import com.codahale.metrics.Counter;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.metrics.MetricsHolder;
@@ -41,7 +41,7 @@ public class PublishFlushHandler extends ChannelInboundHandlerAdapter implements
 
     public PublishFlushHandler(final @NotNull MetricsHolder metricsHolder) {
         channelNotWritable = metricsHolder.getChannelNotWritableCounter();
-        maxWritesBeforeFlush = InternalConfigurations.COUNT_OF_PUBLISHES_WRITTEN_TO_CHANNEL_TO_TRIGGER_FLUSH.get();
+        maxWritesBeforeFlush = InternalConfig.COUNT_OF_PUBLISHES_WRITTEN_TO_CHANNEL_TO_TRIGGER_FLUSH.get();
     }
 
     @Override

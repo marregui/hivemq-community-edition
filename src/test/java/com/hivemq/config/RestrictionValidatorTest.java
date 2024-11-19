@@ -29,7 +29,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("UnstableApiUsage")
-public class RestrictionConfiguratorTest extends AbstractConfigurationTest {
+public class RestrictionValidatorTest extends AbstractConfigurationTest {
 
     @Test
     public void test_restrictions_xml() throws Exception {

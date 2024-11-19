@@ -17,7 +17,7 @@ package com.hivemq.extensions.executor;
 
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
@@ -67,7 +67,7 @@ public class PluginTaskExecutorServiceImplTest {
     public void before() {
         MockitoAnnotations.initMocks(this);
 
-        InternalConfigurations.EXTENSION_TASK_QUEUE_EXECUTOR_THREADS_COUNT.set(2);
+        InternalConfig.EXTENSION_TASK_QUEUE_EXECUTOR_THREADS_COUNT.set(2);
 
         executorService =
                 new PluginTaskExecutorServiceImpl(new ExecutorProvider(Lists.newArrayList(executor1, executor2)));

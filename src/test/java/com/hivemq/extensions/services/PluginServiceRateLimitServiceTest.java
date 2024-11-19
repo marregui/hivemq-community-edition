@@ -16,7 +16,7 @@
 package com.hivemq.extensions.services;
 
 
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
@@ -42,7 +42,7 @@ public class PluginServiceRateLimitServiceTest {
 
     @Test
     public void test_limit() {
-        InternalConfigurations.EXTENSION_SERVICE_CALL_RATE_LIMIT_PER_SEC.set(10);
+        InternalConfig.EXTENSION_SERVICE_CALL_RATE_LIMIT_PER_SEC.set(10);
 
         pluginServiceRateLimitService = new PluginServiceRateLimitService();
 
@@ -59,7 +59,7 @@ public class PluginServiceRateLimitServiceTest {
 
     @Test
     public void test_limit_not_exceeded() {
-        InternalConfigurations.EXTENSION_SERVICE_CALL_RATE_LIMIT_PER_SEC.set(2);
+        InternalConfig.EXTENSION_SERVICE_CALL_RATE_LIMIT_PER_SEC.set(2);
 
         pluginServiceRateLimitService = new PluginServiceRateLimitService();
 

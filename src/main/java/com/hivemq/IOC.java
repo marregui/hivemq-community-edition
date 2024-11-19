@@ -31,9 +31,9 @@ import com.hivemq.bootstrap.netty.ChannelInitializerFactoryImpl;
 import com.hivemq.bootstrap.netty.NettyConfiguration;
 import com.hivemq.bootstrap.netty.NettyConfigurationProvider;
 import com.hivemq.config.SystemInformation;
-import com.hivemq.config.ConfigurationModule;
-import com.hivemq.config.ConfigurationService;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.ConfigModule;
+import com.hivemq.config.ConfigService;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.config.RestrictionsConfigurationService;
 import com.hivemq.extensions.ioc.ExtensionModule;
 import com.hivemq.metrics.MetricRegistryLogger;
@@ -95,19 +95,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import static com.hivemq.config.InternalConfigurations.MQTT_EVENT_EXECUTOR_THREAD_COUNT;
+import static com.hivemq.config.InternalConfig.MQTT_EVENT_EXECUTOR_THREAD_COUNT;
 
 public class IOC extends SingletonModule<Class<IOC>> {
 
     private final @NotNull MetricRegistry metricRegistry;
     private final @NotNull LifecycleModule lifecycle = new LifecycleModule();
     private final @NotNull LazySingletonModule singletons = new LazySingletonModule();
-    private final @NotNull ConfigurationModule configuration;
+    private final @NotNull ConfigModule configuration;
     private @Nullable Injector injector;
 
-    public IOC(final @NotNull ConfigurationService config) throws InterruptedException {
+    public IOC(final @NotNull ConfigService config) throws InterruptedException {
         super(IOC.class);
-        configuration = new ConfigurationModule(config);
+        configuration = new ConfigModule(config);
         metricRegistry = new MetricRegistry();
         metricRegistry.addListener(new MetricRegistryLogger());
         // lock data folder
@@ -219,7 +219,7 @@ public class IOC extends SingletonModule<Class<IOC>> {
 
     private static class GlobalTrafficShapingProvider implements Provider<GlobalTrafficShapingHandler> {
         private static final Logger log = LoggerFactory.getLogger(GlobalTrafficShapingProvider.class);
-        private static final long outLimit = InternalConfigurations.OUTGOING_BANDWIDTH_THROTTLING_DEFAULT_BYTES_PER_SEC;
+        private static final long outLimit = InternalConfig.OUTGOING_BANDWIDTH_THROTTLING_DEFAULT_BYTES_PER_SEC;
 
 
         private final long inLimit;

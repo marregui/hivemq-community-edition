@@ -15,26 +15,10 @@
  */
 package com.hivemq.config.entity;
 
-
-
-/**
- * Allows the customization of write buffer behaviour.
- *
- * @since 3.3
- */
-
 public class ClientWriteBufferProperties {
-
     private final int highThresholdBytes;
     private final int lowThresholdBytes;
 
-    /**
-     * @param highThresholdBytes If the write buffer for a client reaches a size in bytes that is greater than
-     *                           {@code highThreshold} no more data will be written to the write buffer.
-     * @param lowThresholdBytes  If the write buffer for a client exceeded the highThreshold in the past, writing to the
-     *                           buffer will be resumed once the fill state of the buffer drops below the
-     *                           {@code lowThreshold}.
-     */
     public ClientWriteBufferProperties(final int highThresholdBytes, final int lowThresholdBytes) {
         this.highThresholdBytes = highThresholdBytes;
         this.lowThresholdBytes = lowThresholdBytes;

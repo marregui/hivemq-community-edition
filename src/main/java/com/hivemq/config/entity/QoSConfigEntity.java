@@ -20,12 +20,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import static com.hivemq.config.entity.MqttConfigurationDefaults.MAXIMUM_QOS_DEFAULT;
+import static com.hivemq.config.ConfigService.MAXIMUM_QOS_DEFAULT;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 @XmlRootElement(name = "quality-of-service")
 @XmlAccessorType(XmlAccessType.NONE)
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})

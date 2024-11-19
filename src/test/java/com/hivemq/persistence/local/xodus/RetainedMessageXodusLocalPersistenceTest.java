@@ -16,8 +16,8 @@
 package com.hivemq.persistence.local.xodus;
 
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
-import com.hivemq.config.entity.MqttConfigurationDefaults;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.ConfigService;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.iteration.BucketChunkResult;
 import com.hivemq.mqtt.message.QoS;
@@ -75,9 +75,9 @@ public class RetainedMessageXodusLocalPersistenceTest {
     public void setUp() throws Exception {
         closeableMock = MockitoAnnotations.openMocks(this);
 
-        InternalConfigurations.PERSISTENCE_CLOSE_RETRIES.set(3);
-        InternalConfigurations.PERSISTENCE_CLOSE_RETRY_INTERVAL_MSEC.set(5);
-        InternalConfigurations.PERSISTENCE_BUCKET_COUNT.set(BUCKETSIZE);
+        InternalConfig.PERSISTENCE_CLOSE_RETRIES.set(3);
+        InternalConfig.PERSISTENCE_CLOSE_RETRY_INTERVAL_MSEC.set(5);
+        InternalConfig.PERSISTENCE_BUCKET_COUNT.set(BUCKETSIZE);
         when(localPersistenceFileUtil.getVersionedLocalPersistenceFolder(anyString(), anyString())).thenReturn(
                 temporaryFolder.newFolder());
 
@@ -114,17 +114,17 @@ public class RetainedMessageXodusLocalPersistenceTest {
         persistence.put(new RetainedMessage(new byte[0],
                 QoS.AT_MOST_ONCE,
                 100L,
-                MqttConfigurationDefaults.TTL_DISABLED), "topic/0", Bucket.getBucket("topic/0", BUCKETSIZE));
+                ConfigService.TTL_DISABLED), "topic/0", Bucket.getBucket("topic/0", BUCKETSIZE));
 
         assertNull(persistence.get("topic/0", Bucket.getBucket("topic/0", BUCKETSIZE)));
     }
 
     @Test
     public void test_persist_same_topic() {
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, ConfigService.TTL_DISABLED),
                 "topic",
                 Bucket.getBucket("topic", BUCKETSIZE));
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, ConfigService.TTL_DISABLED),
                 "topic",
                 Bucket.getBucket("topic", BUCKETSIZE));
 
@@ -132,14 +132,14 @@ public class RetainedMessageXodusLocalPersistenceTest {
         assertEquals("message0",
                 new String(persistence.get("topic", Bucket.getBucket("topic", BUCKETSIZE)).getMessage()));
 
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 3L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 3L, ConfigService.TTL_DISABLED),
                 "topic",
                 Bucket.getBucket("topic", BUCKETSIZE));
 
         assertEquals("message3",
                 new String(persistence.get("topic", Bucket.getBucket("topic", BUCKETSIZE)).getMessage()));
 
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 4L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 4L, ConfigService.TTL_DISABLED),
                 "topic",
                 Bucket.getBucket("topic", BUCKETSIZE));
 
@@ -150,16 +150,16 @@ public class RetainedMessageXodusLocalPersistenceTest {
     @Test
     public void test_getAllTopics() {
 
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, ConfigService.TTL_DISABLED),
                 "topic/0",
                 0);
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_LEAST_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_LEAST_ONCE, 1L, ConfigService.TTL_DISABLED),
                 "topic/1",
                 0);
-        persistence.put(new RetainedMessage(new byte[0], QoS.EXACTLY_ONCE, 2L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.EXACTLY_ONCE, 2L, ConfigService.TTL_DISABLED),
                 "topic/2",
                 0);
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 3L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 3L, ConfigService.TTL_DISABLED),
                 "topic",
                 0);
 
@@ -174,10 +174,10 @@ public class RetainedMessageXodusLocalPersistenceTest {
 
     @Test
     public void decrement_payload_reference_count_remove() {
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, ConfigService.TTL_DISABLED),
                 "topic/0",
                 0);
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 1L, ConfigService.TTL_DISABLED),
                 "topic/1",
                 0);
 
@@ -193,17 +193,17 @@ public class RetainedMessageXodusLocalPersistenceTest {
 
     @Test
     public void decrement_payload_reference_count_put() {
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, ConfigService.TTL_DISABLED),
                 "topic/0",
                 0);
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 1L, ConfigService.TTL_DISABLED),
                 "topic/1",
                 0);
 
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 0L, ConfigService.TTL_DISABLED),
                 "topic/0",
                 0);
-        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED),
+        persistence.put(new RetainedMessage(new byte[0], QoS.AT_MOST_ONCE, 1L, ConfigService.TTL_DISABLED),
                 "topic/1",
                 0);
 
@@ -273,7 +273,7 @@ public class RetainedMessageXodusLocalPersistenceTest {
         persistence.put(new RetainedMessage(new byte[0],
                 QoS.AT_MOST_ONCE,
                 0L,
-                MqttConfigurationDefaults.TTL_DISABLED,
+                ConfigService.TTL_DISABLED,
                 Mqtt5UserProperties.of(MqttUserProperty.of("name", "value")),
                 "responseTopic",
                 "contentType",
@@ -302,7 +302,7 @@ public class RetainedMessageXodusLocalPersistenceTest {
             persistence.put(new RetainedMessage(new byte[0],
                     QoS.AT_LEAST_ONCE,
                     (long) i + 1,
-                    MqttConfigurationDefaults.TTL_DISABLED), "topic" + i, 0);
+                    ConfigService.TTL_DISABLED), "topic" + i, 0);
         }
 
         assertEquals(BUCKETSIZE, persistence.size());

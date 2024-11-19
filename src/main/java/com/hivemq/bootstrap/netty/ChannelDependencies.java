@@ -19,7 +19,7 @@ import com.hivemq.codec.decoder.MqttConnectDecoder;
 import com.hivemq.codec.decoder.MqttDecoders;
 import com.hivemq.codec.encoder.EncoderFactory;
 import com.hivemq.codec.encoder.MQTTMessageEncoder;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.RestrictionsConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.handler.ClientLifecycleEventHandler;
@@ -59,7 +59,7 @@ public class ChannelDependencies {
     private final @NotNull Provider<SubscribeHandler> subscribeHandlerProvider;
     private final @NotNull UnsubscribeHandler unsubscribeHandler;
     private final @NotNull ChannelGroup channelGroup;
-    private final @NotNull ConfigurationService fullConfigurationService;
+    private final @NotNull ConfigService fullConfigService;
     private final @NotNull GlobalTrafficShapingHandler globalTrafficShapingHandler;
     private final @NotNull MetricsHolder metricsHolder;
     private final @NotNull ExceptionHandler exceptionHandler;
@@ -92,7 +92,7 @@ public class ChannelDependencies {
             final @NotNull Provider<SubscribeHandler> subscribeHandlerProvider,
             final @NotNull UnsubscribeHandler unsubscribeHandler,
             final @NotNull ChannelGroup channelGroup,
-            final @NotNull ConfigurationService fullConfigurationService,
+            final @NotNull ConfigService fullConfigService,
             final @NotNull GlobalTrafficShapingHandler globalTrafficShapingHandler,
             final @NotNull MetricsHolder metricsHolder,
             final @NotNull ExceptionHandler exceptionHandler,
@@ -122,7 +122,7 @@ public class ChannelDependencies {
         this.subscribeHandlerProvider = subscribeHandlerProvider;
         this.unsubscribeHandler = unsubscribeHandler;
         this.channelGroup = channelGroup;
-        this.fullConfigurationService = fullConfigurationService;
+        this.fullConfigService = fullConfigService;
         this.globalTrafficShapingHandler = globalTrafficShapingHandler;
         this.metricsHolder = metricsHolder;
         this.exceptionHandler = exceptionHandler;
@@ -182,8 +182,8 @@ public class ChannelDependencies {
     }
 
     @NotNull
-    public ConfigurationService getConfigurationService() {
-        return fullConfigurationService;
+    public ConfigService getConfigurationService() {
+        return fullConfigService;
     }
 
     @NotNull

@@ -18,7 +18,7 @@ package com.hivemq.extensions.handler;
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
@@ -63,7 +63,7 @@ public class ConnackOutboundInterceptorHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ConnackOutboundInterceptorHandler.class);
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final @NotNull PluginOutPutAsyncer asyncer;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull PluginTaskExecutorService executorService;
@@ -73,7 +73,7 @@ public class ConnackOutboundInterceptorHandler {
 
     @Inject
     public ConnackOutboundInterceptorHandler(
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final @NotNull PluginOutPutAsyncer asyncer,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull PluginTaskExecutorService executorService,
@@ -81,7 +81,7 @@ public class ConnackOutboundInterceptorHandler {
             final @NotNull ServerInformation serverInformation,
             final @NotNull EventLog eventLog) {
 
-        this.configurationService = configurationService;
+        this.configService = configService;
         this.asyncer = asyncer;
         this.hiveMQExtensions = hiveMQExtensions;
         this.executorService = executorService;
@@ -122,7 +122,7 @@ public class ConnackOutboundInterceptorHandler {
         final ExtensionParameterHolder<ConnackOutboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, requestResponseInformation);
+                new ModifiableConnackPacketImpl(packet, configService, requestResponseInformation);
         final ConnackOutboundOutputImpl output = new ConnackOutboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<ConnackOutboundOutputImpl> outputHolder = new ExtensionParameterHolder<>(output);
 

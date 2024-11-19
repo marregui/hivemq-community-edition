@@ -13,42 +13,63 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hivemq.config;
 
-public interface SecurityConfigurationService {
-    /**
-     * Default values
-     */
-    boolean ALLOW_SERVER_ASSIGNED_CLIENT_ID_DEFAULT = true;
-    boolean VALIDATE_UTF_8_DEFAULT = true;
-    boolean PAYLOAD_FORMAT_VALIDATION_DEFAULT = false;
-    boolean ALLOW_REQUEST_PROBLEM_INFORMATION_DEFAULT = true;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    /**
-     * @return true if server may assign a client id when clients connect with zero length client id else false.
-     */
-    boolean allowServerAssignedClientId();
+import java.util.concurrent.atomic.AtomicBoolean;
 
-    /**
-     * @return true if topic and client id should be validated to be UTF-8 well formed else false.
-     */
-    boolean validateUTF8();
+public class SecurityConfigurationService {
 
-    /**
-     * @return true if any payload should be validated by payload format indicator else false.
-     */
-    boolean payloadFormatValidation();
+    public static final boolean ALLOW_SERVER_ASSIGNED_CLIENT_ID_DEFAULT = true;
+    public static final boolean VALIDATE_UTF_8_DEFAULT = true;
+    public static final boolean PAYLOAD_FORMAT_VALIDATION_DEFAULT = false;
+    public static final boolean ALLOW_REQUEST_PROBLEM_INFORMATION_DEFAULT = true;
 
-    /**
-     * @return true if the request problem information should be allowed else false.
-     */
-    boolean allowRequestProblemInformation();
+    private static final Logger log = LoggerFactory.getLogger(SecurityConfigurationService.class);
 
-    void setValidateUTF8(final boolean validateUTF8);
+    private final AtomicBoolean allowServerAssignedClientId =
+            new AtomicBoolean(ALLOW_SERVER_ASSIGNED_CLIENT_ID_DEFAULT);
+    private final AtomicBoolean validateUTF8 = new AtomicBoolean(VALIDATE_UTF_8_DEFAULT);
+    private final AtomicBoolean payloadFormatValidation = new AtomicBoolean(PAYLOAD_FORMAT_VALIDATION_DEFAULT);
+    private final AtomicBoolean allowRequestProblemInformation =
+            new AtomicBoolean(ALLOW_REQUEST_PROBLEM_INFORMATION_DEFAULT);
 
-    void setPayloadFormatValidation(final boolean payloadFormatValidation);
+    public boolean allowServerAssignedClientId() {
+        return allowServerAssignedClientId.get();
+    }
 
-    void setAllowServerAssignedClientId(final boolean allowServerAssignedClientId);
+    public boolean validateUTF8() {
+        return validateUTF8.get();
+    }
 
-    void setAllowRequestProblemInformation(final boolean allowRequestProblemInformation);
+    public boolean payloadFormatValidation() {
+        return payloadFormatValidation.get();
+    }
+
+    public boolean allowRequestProblemInformation() {
+        return allowRequestProblemInformation.get();
+    }
+
+    public void setValidateUTF8(final boolean validateUTF8) {
+        log.debug("Setting validate UTF-8 to {}", validateUTF8);
+        this.validateUTF8.set(validateUTF8);
+    }
+
+    public void setPayloadFormatValidation(final boolean payloadFormatValidation) {
+        log.debug("Setting payload format validation to {}", payloadFormatValidation);
+        this.payloadFormatValidation.set(payloadFormatValidation);
+    }
+
+    public void setAllowServerAssignedClientId(final boolean allowServerAssignedClientId) {
+        log.debug("Setting allow server assigned client identifier to {}", allowServerAssignedClientId);
+        this.allowServerAssignedClientId.set(allowServerAssignedClientId);
+    }
+
+    public void setAllowRequestProblemInformation(final boolean allowRequestProblemInformation) {
+        log.debug("Setting allow-problem-information to {}", allowRequestProblemInformation);
+        this.allowRequestProblemInformation.set(allowRequestProblemInformation);
+    }
 }

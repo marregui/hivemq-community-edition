@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.AbstractMqttDecoder;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -46,8 +46,8 @@ public class Mqtt5PubrecDecoder extends AbstractMqttDecoder<PUBREC> {
     @Inject
     public Mqtt5PubrecDecoder(
             final @NotNull MqttServerDisconnector disconnector,
-            final @NotNull ConfigurationService configurationService) {
-        super(disconnector, configurationService);
+            final @NotNull ConfigService configService) {
+        super(disconnector, configService);
     }
 
     @Override

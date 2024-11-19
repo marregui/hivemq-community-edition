@@ -42,7 +42,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
-import static com.hivemq.config.InternalConfigurations.ACKNOWLEDGE_INCOMING_PUBLISH_AFTER_PERSISTING_ENABLED;
+import static com.hivemq.config.InternalConfig.ACKNOWLEDGE_INCOMING_PUBLISH_AFTER_PERSISTING_ENABLED;
 
 /**
  * @author Christoph Schäbel

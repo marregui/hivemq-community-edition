@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.persistence.local.xodus.bucket.BucketLock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +54,7 @@ public class PublishPayloadPersistenceImpl implements PublishPayloadPersistence 
         this.localPersistence = localPersistence;
         this.scheduledExecutorService = scheduledExecutorService;
 
-        final int bucketCount = InternalConfigurations.PAYLOAD_PERSISTENCE_BUCKET_COUNT.get();
+        final int bucketCount = InternalConfig.PAYLOAD_PERSISTENCE_BUCKET_COUNT.get();
         bucketLock = new BucketLock(bucketCount);
         payloadReferenceCounterRegistry = new PayloadReferenceCounterRegistryImpl(bucketLock);
 
@@ -67,8 +67,8 @@ public class PublishPayloadPersistenceImpl implements PublishPayloadPersistence 
     // The payload persistence has to be initialized after the other persistence bootstraps are finished.
     @Override
     public void init() {
-        final int cleanupThreadCount = InternalConfigurations.PAYLOAD_PERSISTENCE_CLEANUP_THREADS.get();
-        final long removeSchedule = InternalConfigurations.PAYLOAD_PERSISTENCE_CLEANUP_SCHEDULE_MSEC.get();
+        final int cleanupThreadCount = InternalConfig.PAYLOAD_PERSISTENCE_CLEANUP_THREADS.get();
+        final long removeSchedule = InternalConfig.PAYLOAD_PERSISTENCE_CLEANUP_SCHEDULE_MSEC.get();
 
         final RemovablePayloads[][] bucketResponsibilities =
                 partitionBucketResponsibilities(removablePayloads, cleanupThreadCount);
@@ -111,7 +111,7 @@ public class PublishPayloadPersistenceImpl implements PublishPayloadPersistence 
         bucketLock.accessBucketByPayloadId(id, (bucketIndex) -> {
             final int result = payloadReferenceCounterRegistry.decrementAndGet(id);
             if (result == UNKNOWN_PAYLOAD || result == REF_COUNT_ALREADY_ZERO) {
-                if (InternalConfigurations.LOG_REFERENCE_COUNTING_STACKTRACE_AS_WARNING) {
+                if (InternalConfig.LOG_REFERENCE_COUNTING_STACKTRACE_AS_WARNING) {
                     if (log.isWarnEnabled()) {
                         log.warn("Tried to decrement a payload reference counter ({}) that was already zero.",
                                 id,

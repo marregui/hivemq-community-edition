@@ -17,7 +17,7 @@ package com.hivemq.extensions.packets.suback;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.suback.ModifiableSubackPacket;
@@ -41,19 +41,19 @@ public class ModifiableSubackPacketImpl implements ModifiableSubackPacket {
     private final int packetIdentifier;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private boolean modified = false;
 
     public ModifiableSubackPacketImpl(
-            final @NotNull SubackPacketImpl packet, final @NotNull ConfigurationService configurationService) {
+            final @NotNull SubackPacketImpl packet, final @NotNull ConfigService configService) {
 
         reasonCodes = packet.reasonCodes;
         reasonString = packet.reasonString;
         packetIdentifier = packet.packetIdentifier;
         userProperties = new ModifiableUserPropertiesImpl(packet.userProperties.asInternalList(),
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
 
-        this.configurationService = configurationService;
+        this.configService = configService;
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ModifiableSubackPacketImpl implements ModifiableSubackPacket {
 
     @Override
     public void setReasonString(final @Nullable String reasonString) {
-        PluginBuilderUtil.checkReasonString(reasonString, configurationService.securityConfiguration().validateUTF8());
+        PluginBuilderUtil.checkReasonString(reasonString, configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.reasonString, reasonString)) {
             return;
         }
@@ -116,6 +116,6 @@ public class ModifiableSubackPacketImpl implements ModifiableSubackPacket {
     }
 
     public @NotNull ModifiableSubackPacketImpl update(final @NotNull SubackPacketImpl packet) {
-        return new ModifiableSubackPacketImpl(packet, configurationService);
+        return new ModifiableSubackPacketImpl(packet, configService);
     }
 }

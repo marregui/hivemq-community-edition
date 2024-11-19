@@ -17,7 +17,7 @@
 package com.hivemq.extensions.handler;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
@@ -61,7 +61,7 @@ public class PublishOutboundInterceptorHandler {
     private static final Logger log = LoggerFactory.getLogger(PublishOutboundInterceptorHandler.class);
 
     private final @NotNull PluginOutPutAsyncer asyncer;
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final @NotNull PluginTaskExecutorService pluginTaskExecutorService;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull MessageDroppedService messageDroppedService;
@@ -69,13 +69,13 @@ public class PublishOutboundInterceptorHandler {
     @Inject
     public PublishOutboundInterceptorHandler(
             final @NotNull PluginOutPutAsyncer asyncer,
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final @NotNull PluginTaskExecutorService pluginTaskExecutorService,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull MessageDroppedService messageDroppedService) {
 
         this.asyncer = asyncer;
-        this.configurationService = configurationService;
+        this.configService = configService;
         this.pluginTaskExecutorService = pluginTaskExecutorService;
         this.hiveMQExtensions = hiveMQExtensions;
         this.messageDroppedService = messageDroppedService;
@@ -112,7 +112,7 @@ public class PublishOutboundInterceptorHandler {
         final ExtensionParameterHolder<PublishOutboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configurationService);
+                new ModifiableOutboundPublishImpl(packet, configService);
         final PublishOutboundOutputImpl output = new PublishOutboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<PublishOutboundOutputImpl> outputHolder = new ExtensionParameterHolder<>(output);
 

@@ -21,37 +21,15 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * A listener which allows to listen to MQTT traffic via TLS
- *
- * @author Dominik Obermaier
- * @author Christoph Schaebel
- * @since 3.0
- */
-
 public class TlsTcpListener extends TcpListener implements TlsListener {
 
     private final @NotNull Tls tls;
 
-    /**
-     * Creates a new TLS Listener which listens to a specific port and bind address
-     *
-     * @param port        the port
-     * @param bindAddress the bind address
-     * @param tls         the TLS configuration
-     */
     @Deprecated
     public TlsTcpListener(final int port, final @NotNull String bindAddress, final @NotNull Tls tls) {
         this(port, bindAddress, tls, "tls-tcp-listener-" + port);
     }
 
-    /**
-     * Creates a new TLS Listener which listens to a specific port and bind address.
-     *
-     * @param port        the port
-     * @param bindAddress the bind address
-     * @param tls         the TLS configuration
-     */
     public TlsTcpListener(
             final int port, final @NotNull String bindAddress, final @NotNull Tls tls, final @NotNull String name) {
         super(port, bindAddress, name);

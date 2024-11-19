@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.builder;
 
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.subscribe.RetainHandling;
@@ -40,7 +40,7 @@ import static org.junit.Assert.assertTrue;
 @SuppressWarnings("NullabilityAnnotations")
 public class TopicSubscriptionBuilderImplTest {
 
-    private ConfigurationService fullConfigurationService;
+    private ConfigService fullConfigService;
 
     private TopicSubscriptionBuilder topicSubscriptionBuilder;
 
@@ -48,8 +48,8 @@ public class TopicSubscriptionBuilderImplTest {
     public void setUp() throws Exception {
 
         MockitoAnnotations.initMocks(this);
-        fullConfigurationService = new TestConfigurationBootstrap().getFullConfigurationService();
-        topicSubscriptionBuilder = new TopicSubscriptionBuilderImpl(fullConfigurationService);
+        fullConfigService = new TestConfigurationBootstrap().getFullConfigurationService();
+        topicSubscriptionBuilder = new TopicSubscriptionBuilderImpl(fullConfigService);
 
     }
 
@@ -108,7 +108,7 @@ public class TopicSubscriptionBuilderImplTest {
     @Test(expected = IllegalArgumentException.class)
     public void test_with_sub_id_not_allowed() {
 
-        fullConfigurationService.mqttConfiguration().setSubscriptionIdentifierEnabled(false);
+        fullConfigService.mqttConfiguration().setSubscriptionIdentifierEnabled(false);
 
         topicSubscriptionBuilder.topicFilter("topic")
                 .qos(Qos.AT_LEAST_ONCE)
@@ -143,7 +143,7 @@ public class TopicSubscriptionBuilderImplTest {
     @Test(expected = IllegalArgumentException.class)
     public void test_with_topic_contains_forbidden_wildcard_hashtag() {
 
-        fullConfigurationService.mqttConfiguration().setWildcardSubscriptionsEnabled(false);
+        fullConfigService.mqttConfiguration().setWildcardSubscriptionsEnabled(false);
 
         topicSubscriptionBuilder.topicFilter("#")
                 .qos(Qos.AT_LEAST_ONCE)
@@ -180,7 +180,7 @@ public class TopicSubscriptionBuilderImplTest {
     @Test(expected = IllegalArgumentException.class)
     public void test_with_topic_contains_forbidden_wildcard_plus() {
 
-        fullConfigurationService.mqttConfiguration().setWildcardSubscriptionsEnabled(false);
+        fullConfigService.mqttConfiguration().setWildcardSubscriptionsEnabled(false);
 
         topicSubscriptionBuilder.topicFilter("topic/a/+/asd")
                 .qos(Qos.AT_LEAST_ONCE)
@@ -193,7 +193,7 @@ public class TopicSubscriptionBuilderImplTest {
     @Test(expected = IllegalArgumentException.class)
     public void test_with_topic_contains_forbidden_shared_sub() {
 
-        fullConfigurationService.mqttConfiguration().setSharedSubscriptionsEnabled(false);
+        fullConfigService.mqttConfiguration().setSharedSubscriptionsEnabled(false);
 
         topicSubscriptionBuilder.topicFilter("$share/group/topic")
                 .qos(Qos.AT_LEAST_ONCE)

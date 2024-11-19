@@ -31,7 +31,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 import static util.TlsTestUtil.createDefaultTLS;
 
-public class ListenerConfigurationServiceImplTest {
+public class ListenerConfigServiceImplTest {
 
     private ListenerConfigurationService listenerConfigurationService;
 
@@ -90,12 +90,12 @@ public class ListenerConfigurationServiceImplTest {
             }
 
             @Override
-            public String getBindAddress() {
+            public @NotNull String getBindAddress() {
                 return null;
             }
 
             @Override
-            public String readableName() {
+            public @NotNull String readableName() {
                 return null;
             }
 

@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.unsubscribe;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.packets.general.UserPropertiesImpl;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
@@ -38,11 +38,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiableUnsubscribePacketImplTest {
 
-    private @NotNull ConfigurationService configurationService;
+    private @NotNull ConfigService configService;
 
     @Before
     public void setUp() throws JAXBException, IOException {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ModifiableUnsubscribePacketImplTest {
                 UserPropertiesImpl.of(ImmutableList.of(MqttUserProperty.of("name", "value"))),
                 1);
         final ModifiableUnsubscribePacketImpl modifiablePacket =
-                new ModifiableUnsubscribePacketImpl(packet, configurationService);
+                new ModifiableUnsubscribePacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -67,7 +67,7 @@ public class ModifiableUnsubscribePacketImplTest {
                 UserPropertiesImpl.of(ImmutableList.of(MqttUserProperty.of("name", "value"))),
                 1);
         final ModifiableUnsubscribePacketImpl modifiablePacket =
-                new ModifiableUnsubscribePacketImpl(packet, configurationService);
+                new ModifiableUnsubscribePacketImpl(packet, configService);
 
         modifiablePacket.setTopicFilters(ImmutableList.of("test1", "test2", "test3"));
     }
@@ -78,7 +78,7 @@ public class ModifiableUnsubscribePacketImplTest {
                 UserPropertiesImpl.of(ImmutableList.of(MqttUserProperty.of("name", "value"))),
                 1);
         final ModifiableUnsubscribePacketImpl modifiablePacket =
-                new ModifiableUnsubscribePacketImpl(packet, configurationService);
+                new ModifiableUnsubscribePacketImpl(packet, configService);
 
         modifiablePacket.setTopicFilters(ImmutableList.of("test1"));
     }
@@ -89,7 +89,7 @@ public class ModifiableUnsubscribePacketImplTest {
                 UserPropertiesImpl.of(ImmutableList.of(MqttUserProperty.of("name", "value"))),
                 1);
         final ModifiableUnsubscribePacketImpl modifiablePacket =
-                new ModifiableUnsubscribePacketImpl(packet, configurationService);
+                new ModifiableUnsubscribePacketImpl(packet, configService);
 
         modifiablePacket.setTopicFilters(null);
     }
@@ -100,7 +100,7 @@ public class ModifiableUnsubscribePacketImplTest {
                 UserPropertiesImpl.of(ImmutableList.of(MqttUserProperty.of("name", "value"))),
                 1);
         final ModifiableUnsubscribePacketImpl modifiablePacket =
-                new ModifiableUnsubscribePacketImpl(packet, configurationService);
+                new ModifiableUnsubscribePacketImpl(packet, configService);
 
         modifiablePacket.setTopicFilters(Arrays.asList("test1", null));
     }
@@ -111,7 +111,7 @@ public class ModifiableUnsubscribePacketImplTest {
                 UserPropertiesImpl.of(ImmutableList.of(MqttUserProperty.of("name", "value"))),
                 1);
         final ModifiableUnsubscribePacketImpl modifiablePacket =
-                new ModifiableUnsubscribePacketImpl(packet, configurationService);
+                new ModifiableUnsubscribePacketImpl(packet, configService);
 
         final UnsubscribePacketImpl copy = modifiablePacket.copy();
 
@@ -124,7 +124,7 @@ public class ModifiableUnsubscribePacketImplTest {
                 UserPropertiesImpl.of(ImmutableList.of(MqttUserProperty.of("name", "value"))),
                 1);
         final ModifiableUnsubscribePacketImpl modifiablePacket =
-                new ModifiableUnsubscribePacketImpl(packet, configurationService);
+                new ModifiableUnsubscribePacketImpl(packet, configService);
 
         modifiablePacket.setTopicFilters(ImmutableList.of("test1", "test2"));
         modifiablePacket.getUserProperties().removeName("name");

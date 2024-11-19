@@ -17,7 +17,7 @@ package com.hivemq.mqtt.handler.publish;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
@@ -126,7 +126,7 @@ public class PublishFlushHandlerTest {
     public void whenMaxPublishesBeforeFlushIsOne_thenFlushIsTriggeredAfterEachPublish() {
         when(channel.isWritable()).thenReturn(true);
         when(channel.isActive()).thenReturn(true);
-        InternalConfigurations.COUNT_OF_PUBLISHES_WRITTEN_TO_CHANNEL_TO_TRIGGER_FLUSH.set(1);
+        InternalConfig.COUNT_OF_PUBLISHES_WRITTEN_TO_CHANNEL_TO_TRIGGER_FLUSH.set(1);
         publishFlushHandler = new PublishFlushHandler(metricsHolder);
         publishFlushHandler.handlerAdded(channelHandlerContext);
         final PUBLISH publish = new PUBLISHFactory.Mqtt5Builder().withTopic("topic")

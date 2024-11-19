@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.pubcomp;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.pubcomp.PubcompReasonCode;
 import com.hivemq.extensions.packets.general.UserPropertiesImpl;
@@ -39,11 +39,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiablePubcompPacketImplTest {
 
-    private @NotNull ConfigurationService configurationService;
+    private @NotNull ConfigService configService;
 
     @Before
     public void setUp() throws JAXBException, IOException {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ModifiablePubcompPacketImplTest {
         final PubcompPacketImpl packet =
                 new PubcompPacketImpl(1, PubcompReasonCode.SUCCESS, null, UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubcompPacketImpl modifiablePacket =
-                new ModifiablePubcompPacketImpl(packet, configurationService);
+                new ModifiablePubcompPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -68,7 +68,7 @@ public class ModifiablePubcompPacketImplTest {
                 "reason",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubcompPacketImpl modifiablePacket =
-                new ModifiablePubcompPacketImpl(packet, configurationService);
+                new ModifiablePubcompPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -83,7 +83,7 @@ public class ModifiablePubcompPacketImplTest {
         final PubcompPacketImpl packet =
                 new PubcompPacketImpl(1, PubcompReasonCode.SUCCESS, "same", UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubcompPacketImpl modifiablePacket =
-                new ModifiablePubcompPacketImpl(packet, configurationService);
+                new ModifiablePubcompPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -98,7 +98,7 @@ public class ModifiablePubcompPacketImplTest {
         final PubcompPacketImpl packet =
                 new PubcompPacketImpl(1, PubcompReasonCode.SUCCESS, null, UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubcompPacketImpl modifiablePacket =
-                new ModifiablePubcompPacketImpl(packet, configurationService);
+                new ModifiablePubcompPacketImpl(packet, configService);
 
         final PubcompPacketImpl copy = modifiablePacket.copy();
 
@@ -110,7 +110,7 @@ public class ModifiablePubcompPacketImplTest {
         final PubcompPacketImpl packet =
                 new PubcompPacketImpl(1, PubcompReasonCode.SUCCESS, null, UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiablePubcompPacketImpl modifiablePacket =
-                new ModifiablePubcompPacketImpl(packet, configurationService);
+                new ModifiablePubcompPacketImpl(packet, configService);
 
         modifiablePacket.setReasonString("reason");
         modifiablePacket.getUserProperties().addUserProperty("testName", "testValue");

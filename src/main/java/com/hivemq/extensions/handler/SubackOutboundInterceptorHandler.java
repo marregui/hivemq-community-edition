@@ -16,7 +16,7 @@
 package com.hivemq.extensions.handler;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
@@ -55,19 +55,19 @@ public class SubackOutboundInterceptorHandler {
 
     private static final Logger log = LoggerFactory.getLogger(SubackOutboundInterceptorHandler.class);
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final @NotNull PluginOutPutAsyncer asyncer;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull PluginTaskExecutorService executorService;
 
     @Inject
     public SubackOutboundInterceptorHandler(
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final @NotNull PluginOutPutAsyncer asyncer,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull PluginTaskExecutorService executorService) {
 
-        this.configurationService = configurationService;
+        this.configService = configService;
         this.asyncer = asyncer;
         this.hiveMQExtensions = hiveMQExtensions;
         this.executorService = executorService;
@@ -104,7 +104,7 @@ public class SubackOutboundInterceptorHandler {
         final ExtensionParameterHolder<SubackOutboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiableSubackPacketImpl modifiablePacket =
-                new ModifiableSubackPacketImpl(packet, configurationService);
+                new ModifiableSubackPacketImpl(packet, configService);
         final SubackOutboundOutputImpl output = new SubackOutboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<SubackOutboundOutputImpl> outputHolder = new ExtensionParameterHolder<>(output);
 

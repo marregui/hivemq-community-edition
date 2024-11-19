@@ -17,7 +17,7 @@ package com.hivemq.extensions.services.builder;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.RestrictionsConfigurationService;
 import com.hivemq.config.SecurityConfigurationService;
 import org.jetbrains.annotations.NotNull;
@@ -48,9 +48,9 @@ public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
     private final @NotNull SecurityConfigurationService securityConfigurationService;
 
     @Inject
-    public TopicPermissionBuilderImpl(final @NotNull ConfigurationService configurationService) {
-        this.securityConfigurationService = configurationService.securityConfiguration();
-        this.restrictionsConfig = configurationService.restrictionsConfiguration();
+    public TopicPermissionBuilderImpl(final @NotNull ConfigService configService) {
+        this.securityConfigurationService = configService.securityConfiguration();
+        this.restrictionsConfig = configService.restrictionsConfiguration();
     }
 
     @NotNull

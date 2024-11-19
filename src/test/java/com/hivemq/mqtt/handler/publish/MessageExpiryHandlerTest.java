@@ -17,7 +17,7 @@ package com.hivemq.mqtt.handler.publish;
 
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.event.PublishDroppedEvent;
 import com.hivemq.mqtt.event.PubrelDroppedEvent;
@@ -175,7 +175,7 @@ public class MessageExpiryHandlerTest {
 
     @Test
     public void test_message_expired_qos_2_dup() throws Exception {
-        InternalConfigurations.EXPIRE_INFLIGHT_MESSAGES_ENABLED = true;
+        InternalConfig.EXPIRE_INFLIGHT_MESSAGES_ENABLED = true;
         final PUBLISH publish = TestMessageUtil.createMqtt5Publish("topic", QoS.EXACTLY_ONCE);
         publish.setMessageExpiryInterval(1);
         publish.setDuplicateDelivery(true);
@@ -200,7 +200,7 @@ public class MessageExpiryHandlerTest {
 
     @Test
     public void test_pubrel_expired() throws InterruptedException {
-        InternalConfigurations.EXPIRE_INFLIGHT_PUBRELS_ENABLED = true;
+        InternalConfig.EXPIRE_INFLIGHT_PUBRELS_ENABLED = true;
 
         final PUBREL pubrel = new PUBREL(1);
         pubrel.setMessageExpiryInterval(0L);
@@ -224,7 +224,7 @@ public class MessageExpiryHandlerTest {
 
     @Test
     public void test_pubrel_dont_expired() throws InterruptedException {
-        InternalConfigurations.EXPIRE_INFLIGHT_PUBRELS_ENABLED = false;
+        InternalConfig.EXPIRE_INFLIGHT_PUBRELS_ENABLED = false;
         final PUBREL pubrel = new PUBREL(1);
         pubrel.setMessageExpiryInterval(0L);
         pubrel.setPublishTimestamp(System.currentTimeMillis());

@@ -15,22 +15,20 @@
  */
 package com.hivemq.config.entity;
 
+import com.hivemq.config.ConfigService;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 @XmlRootElement(name = "receive-maximum")
 @XmlAccessorType(XmlAccessType.NONE)
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public class ReceiveMaximumConfigEntity {
 
     @XmlElement(name = "server-receive-maximum", defaultValue = "10")
-    private int serverReceiveMaximum = MqttConfigurationDefaults.SERVER_RECEIVE_MAXIMUM_DEFAULT;
+    private int serverReceiveMaximum = ConfigService.SERVER_RECEIVE_MAXIMUM_DEFAULT;
 
     public int getServerReceiveMaximum() {
         return serverReceiveMaximum;

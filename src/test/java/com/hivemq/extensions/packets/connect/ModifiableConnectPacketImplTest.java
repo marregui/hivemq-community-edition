@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.connect;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.connect.WillPublishPacket;
 import com.hivemq.extension.sdk.api.packets.general.MqttVersion;
@@ -44,11 +44,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiableConnectPacketImplTest {
 
-    private @NotNull ConfigurationService configurationService;
+    private @NotNull ConfigService configService;
 
     @Before
     public void setUp() throws JAXBException, IOException {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 
     @Test
@@ -70,7 +70,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -99,7 +99,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -128,7 +128,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         modifiablePacket.setClientId(null);
     }
@@ -152,7 +152,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         modifiablePacket.setClientId("");
     }
@@ -176,7 +176,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         modifiablePacket.setClientId("\0");
     }
@@ -200,9 +200,9 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
-        configurationService.restrictionsConfiguration().setMaxClientIdLength(10);
+        configService.restrictionsConfiguration().setMaxClientIdLength(10);
         modifiablePacket.setClientId("0123456789_0123456789");
     }
 
@@ -225,7 +225,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -254,7 +254,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -283,7 +283,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -312,7 +312,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -341,9 +341,9 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
-        configurationService.mqttConfiguration().setMaxSessionExpiryInterval(60);
+        configService.mqttConfiguration().setMaxSessionExpiryInterval(60);
         modifiablePacket.setSessionExpiryInterval(61);
     }
 
@@ -366,7 +366,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -395,7 +395,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -424,9 +424,9 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
-        configurationService.mqttConfiguration().setKeepAliveMax(60);
+        configService.mqttConfiguration().setKeepAliveMax(60);
         modifiablePacket.setKeepAlive(61);
     }
 
@@ -449,7 +449,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -478,7 +478,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -507,7 +507,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -536,7 +536,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -565,9 +565,9 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
-        configurationService.mqttConfiguration().setMaxPacketSize(60);
+        configService.mqttConfiguration().setMaxPacketSize(60);
         modifiablePacket.setMaximumPacketSize(61);
     }
 
@@ -590,7 +590,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -619,7 +619,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -648,7 +648,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -677,7 +677,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -706,7 +706,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -735,7 +735,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -764,7 +764,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -793,7 +793,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -822,7 +822,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -851,7 +851,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -880,7 +880,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -909,7 +909,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -938,7 +938,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -967,7 +967,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -996,7 +996,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -1025,7 +1025,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         modifiablePacket.setAuthenticationMethod("\0");
     }
@@ -1049,7 +1049,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -1078,7 +1078,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -1107,7 +1107,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -1136,7 +1136,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -1155,7 +1155,7 @@ public class ModifiableConnectPacketImplTest {
         modifiablePacket.setWillPublish(willPublishPacket);
 
         assertTrue(modifiablePacket.isModified());
-        assertEquals(Optional.of(new ModifiableWillPublishImpl(willPublishPacket, configurationService)),
+        assertEquals(Optional.of(new ModifiableWillPublishImpl(willPublishPacket, configService)),
                 modifiablePacket.getWillPublish());
     }
 
@@ -1189,7 +1189,7 @@ public class ModifiableConnectPacketImplTest {
                         1234L),
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -1208,7 +1208,7 @@ public class ModifiableConnectPacketImplTest {
         modifiablePacket.setWillPublish(willPublishPacket);
 
         assertFalse(modifiablePacket.isModified());
-        assertEquals(Optional.of(new ModifiableWillPublishImpl(willPublishPacket, configurationService)),
+        assertEquals(Optional.of(new ModifiableWillPublishImpl(willPublishPacket, configService)),
                 modifiablePacket.getWillPublish());
     }
 
@@ -1242,7 +1242,7 @@ public class ModifiableConnectPacketImplTest {
                         1234L),
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -1282,7 +1282,7 @@ public class ModifiableConnectPacketImplTest {
                         1234L),
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -1312,7 +1312,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -1341,7 +1341,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         final ConnectPacketImpl copy = modifiablePacket.copy();
 
@@ -1367,7 +1367,7 @@ public class ModifiableConnectPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
 
         modifiablePacket.setClientId("modifiedClientId");
         modifiablePacket.setCleanStart(true);

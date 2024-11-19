@@ -18,7 +18,7 @@ package com.hivemq.config;
 import org.junit.Test;
 import util.EnumTestUtil;
 
-public class MqttConfigurationServiceTest {
+public class MqttConfigServiceTest {
 
     @Test
     public void test_all_queued_messages_strategy_value_of() {

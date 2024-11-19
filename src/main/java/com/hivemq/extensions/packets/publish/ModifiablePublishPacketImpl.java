@@ -17,7 +17,7 @@ package com.hivemq.extensions.packets.publish;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,11 +61,11 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
     final @NotNull ModifiableUserPropertiesImpl userProperties;
     final long timestamp;
 
-    final @NotNull ConfigurationService configurationService;
+    final @NotNull ConfigService configService;
     boolean modified = false;
 
     public ModifiablePublishPacketImpl(
-            final @NotNull PublishPacketImpl packet, final @NotNull ConfigurationService configurationService) {
+            final @NotNull PublishPacketImpl packet, final @NotNull ConfigService configService) {
 
         this.topic = packet.topic;
         this.qos = packet.qos;
@@ -81,10 +81,10 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
         this.correlationData = packet.correlationData;
         this.subscriptionIdentifiers = packet.subscriptionIdentifiers;
         this.userProperties = new ModifiableUserPropertiesImpl(packet.userProperties.asInternalList(),
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
         this.timestamp = packet.timestamp;
 
-        this.configurationService = configurationService;
+        this.configService = configService;
     }
 
     @Override
@@ -95,9 +95,9 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
     @Override
     public void setTopic(final @NotNull String topic) {
         checkNotNull(topic, "Topic must not be null");
-        checkArgument(topic.length() <= configurationService.restrictionsConfiguration().maxTopicLength(),
+        checkArgument(topic.length() <= configService.restrictionsConfiguration().maxTopicLength(),
                 "Topic filter length must not exceed '" +
-                        configurationService.restrictionsConfiguration().maxTopicLength() +
+                        configService.restrictionsConfiguration().maxTopicLength() +
                         "' characters, but has '" +
                         topic.length() +
                         "' characters");
@@ -106,7 +106,7 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
             throw new IllegalArgumentException("The topic (" + topic + ") is invalid for PUBLISH messages");
         }
 
-        if (!PluginBuilderUtil.isValidUtf8String(topic, configurationService.securityConfiguration().validateUTF8())) {
+        if (!PluginBuilderUtil.isValidUtf8String(topic, configService.securityConfiguration().validateUTF8())) {
             throw new IllegalArgumentException("The topic (" + topic + ") is UTF-8 malformed");
         }
 
@@ -124,7 +124,7 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
 
     @Override
     public void setQos(final @NotNull Qos qos) {
-        PluginBuilderUtil.checkQos(qos, configurationService.mqttConfiguration().maximumQos().getQosNumber());
+        PluginBuilderUtil.checkQos(qos, configService.mqttConfiguration().maximumQos().getQosNumber());
         if (qos.getQosNumber() == this.onwardQos.getQosNumber()) {
             return;
         }
@@ -168,7 +168,7 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
 
     @Override
     public void setRetain(final boolean retain) {
-        if (!configurationService.mqttConfiguration().retainedMessagesEnabled() && retain) {
+        if (!configService.mqttConfiguration().retainedMessagesEnabled() && retain) {
             throw new IllegalArgumentException("Retained messages are disabled");
         }
         if (this.retain == retain) {
@@ -190,7 +190,7 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
     @Override
     public void setMessageExpiryInterval(final long messageExpiryInterval) {
         PluginBuilderUtil.checkMessageExpiryInterval(messageExpiryInterval,
-                configurationService.mqttConfiguration().maxMessageExpiryInterval());
+                configService.mqttConfiguration().maxMessageExpiryInterval());
         if (this.messageExpiryInterval == messageExpiryInterval) {
             return;
         }
@@ -219,7 +219,7 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
 
     @Override
     public void setContentType(final @Nullable String contentType) {
-        PluginBuilderUtil.checkContentType(contentType, configurationService.securityConfiguration().validateUTF8());
+        PluginBuilderUtil.checkContentType(contentType, configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.contentType, contentType)) {
             return;
         }
@@ -235,7 +235,7 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
     @Override
     public void setResponseTopic(final @Nullable String responseTopic) {
         PluginBuilderUtil.checkResponseTopic(responseTopic,
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.responseTopic, responseTopic)) {
             return;
         }
@@ -295,7 +295,7 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
     }
 
     public @NotNull ModifiablePublishPacketImpl update(final @NotNull PublishPacketImpl packet) {
-        return new ModifiablePublishPacketImpl(packet, configurationService);
+        return new ModifiablePublishPacketImpl(packet, configService);
     }
 
     @Override

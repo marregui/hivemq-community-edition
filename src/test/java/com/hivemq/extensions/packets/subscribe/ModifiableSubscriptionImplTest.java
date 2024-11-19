@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.packets.subscribe;
 
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.subscribe.RetainHandling;
@@ -38,11 +38,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiableSubscriptionImplTest {
 
-    private @NotNull ConfigurationService configurationService;
+    private @NotNull ConfigService configService;
 
     @Before
     public void setUp() throws JAXBException, IOException {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         assertFalse(modifiableSubscription.isModified());
 
@@ -65,7 +65,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         assertFalse(modifiableSubscription.isModified());
 
@@ -79,7 +79,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         modifiableSubscription.setTopicFilter(null);
     }
@@ -89,7 +89,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         modifiableSubscription.setTopicFilter(RandomStringUtils.randomAlphanumeric(70000));
     }
@@ -99,7 +99,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         modifiableSubscription.setTopicFilter("");
     }
@@ -109,7 +109,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, true);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         modifiableSubscription.setTopicFilter("$share/group/topic");
     }
@@ -119,9 +119,9 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
-        configurationService.mqttConfiguration().setSharedSubscriptionsEnabled(false);
+        configService.mqttConfiguration().setSharedSubscriptionsEnabled(false);
         modifiableSubscription.setTopicFilter("$share/group/topic");
     }
 
@@ -130,7 +130,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         modifiableSubscription.setTopicFilter("$share/group/");
     }
@@ -140,7 +140,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         modifiableSubscription.setTopicFilter("topic/\u0000");
     }
@@ -150,7 +150,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         modifiableSubscription.setTopicFilter("topic/\uDC00");
     }
@@ -160,7 +160,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         assertFalse(modifiableSubscription.isModified());
 
@@ -175,7 +175,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         assertFalse(modifiableSubscription.isModified());
 
@@ -190,7 +190,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         modifiableSubscription.setQos(null);
     }
@@ -200,9 +200,9 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
-        configurationService.mqttConfiguration().setMaximumQos(QoS.AT_LEAST_ONCE);
+        configService.mqttConfiguration().setMaximumQos(QoS.AT_LEAST_ONCE);
         modifiableSubscription.setQos(Qos.EXACTLY_ONCE);
     }
 
@@ -211,7 +211,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         assertFalse(modifiableSubscription.isModified());
 
@@ -226,7 +226,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         assertFalse(modifiableSubscription.isModified());
 
@@ -241,7 +241,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         modifiableSubscription.setRetainHandling(null);
     }
@@ -251,7 +251,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         assertFalse(modifiableSubscription.isModified());
 
@@ -266,7 +266,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         assertFalse(modifiableSubscription.isModified());
 
@@ -281,7 +281,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("$share/group/topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         modifiableSubscription.setNoLocal(true);
     }
@@ -291,7 +291,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         assertFalse(modifiableSubscription.isModified());
 
@@ -306,7 +306,7 @@ public class ModifiableSubscriptionImplTest {
         final SubscriptionImpl subscription =
                 new SubscriptionImpl("topic", Qos.AT_LEAST_ONCE, RetainHandling.SEND, false, false);
         final ModifiableSubscriptionImpl modifiableSubscription =
-                new ModifiableSubscriptionImpl(subscription, configurationService);
+                new ModifiableSubscriptionImpl(subscription, configService);
 
         assertFalse(modifiableSubscription.isModified());
 

@@ -15,7 +15,7 @@
  */
 package util;
 
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.config.RestrictionsConfigurationService;
 import com.hivemq.config.SecurityConfigurationService;
@@ -26,11 +26,11 @@ import java.io.IOException;
 
 public class TestConfigurationBootstrap {
 
-    private ConfigurationService configurationService;
+    private ConfigService configService;
 
     public TestConfigurationBootstrap()  {
         try {
-            configurationService = new ConfigurationService();
+            configService = new ConfigService();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (JAXBException e) {
@@ -39,26 +39,26 @@ public class TestConfigurationBootstrap {
     }
 
     public SecurityConfigurationService getSecurityConfigurationService() {
-        return configurationService.securityConfiguration();
+        return configService.securityConfiguration();
     }
 
-    public ConfigurationService getFullConfigurationService() {
-        return configurationService;
+    public ConfigService getFullConfigurationService() {
+        return configService;
     }
 
-    public ConfigurationService getConfigurationService() {
-        return configurationService;
+    public ConfigService getConfigurationService() {
+        return configService;
     }
 
     public ListenerConfigurationService getListenerConfigurationService() {
-        return configurationService.listenerConfiguration();
+        return configService.listenerConfiguration();
     }
 
     public MqttConfigurationService getMqttConfigurationService() {
-        return configurationService.mqttConfiguration();
+        return configService.mqttConfiguration();
     }
 
     public RestrictionsConfigurationService getRestrictionsConfigurationService() {
-        return configurationService.restrictionsConfiguration();
+        return configService.restrictionsConfiguration();
     }
 }

@@ -18,7 +18,7 @@ package com.hivemq.mqtt.handler.connack;
 import com.google.common.base.Preconditions;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.general.DisconnectedReasonCode;
@@ -56,8 +56,8 @@ public class MqttConnackerImpl implements MqttConnacker {
     @Inject
     public MqttConnackerImpl(final @NotNull EventLog eventLog) {
         this.eventLog = eventLog;
-        connackWithReasonCode = InternalConfigurations.CONNACK_WITH_REASON_CODE_ENABLED.get();
-        connackWithReasonString = InternalConfigurations.CONNACK_WITH_REASON_STRING_ENABLED.get();
+        connackWithReasonCode = InternalConfig.CONNACK_WITH_REASON_CODE_ENABLED.get();
+        connackWithReasonString = InternalConfig.CONNACK_WITH_REASON_STRING_ENABLED.get();
     }
 
     @Override

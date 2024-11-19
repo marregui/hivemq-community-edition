@@ -19,7 +19,7 @@ package com.hivemq.extensions.handler;
 import com.google.common.collect.Lists;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.Async;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
@@ -119,7 +119,7 @@ public class IncomingPublishHandlerTest {
 
         final MessageDroppedService messageDroppedService = new TestDropService(dropLatch);
 
-        final ConfigurationService configurationService =
+        final ConfigService configService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
 
         messageAtomicReference = new AtomicReference<>();
@@ -132,8 +132,7 @@ public class IncomingPublishHandlerTest {
                 hiveMQExtensions,
                 messageDroppedService,
                 pluginAuthorizerService,
-                mqttServerDisconnector,
-                configurationService);
+                mqttServerDisconnector, configService);
 
         final PublishFlowHandler publishFlowHandler = new PublishFlowHandler(mock(PublishPollService.class),
                 mock(IncomingMessageFlowPersistence.class),

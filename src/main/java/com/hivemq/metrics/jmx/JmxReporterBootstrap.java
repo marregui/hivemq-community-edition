@@ -19,7 +19,7 @@ package com.hivemq.metrics.jmx;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.jmx.JmxReporter;
 import com.google.common.annotations.VisibleForTesting;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class JmxReporterBootstrap {
 
     @PostConstruct
     public void postConstruct() {
-        if (!InternalConfigurations.JMX_REPORTER_ENABLED.get()) {
+        if (!InternalConfig.JMX_REPORTER_ENABLED.get()) {
             return;
         }
         jmxReporter = JmxReporter.forRegistry(metricRegistry).createsObjectNamesWith((type, domain, name) -> {

@@ -28,14 +28,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-/**
- * @author Waldemar Ruck
- * @since 4.0
- */
-public class SecurityConfigurationServiceImplTest {
+public class SecurityConfigServiceImplTest {
 
-    private final SecurityConfigurationServiceImpl securityConfigurationService =
-            new SecurityConfigurationServiceImpl();
+    private final SecurityConfigurationService securityConfigurationService =
+            new SecurityConfigurationService();
 
     private LogbackCapturingAppender logCapture;
 

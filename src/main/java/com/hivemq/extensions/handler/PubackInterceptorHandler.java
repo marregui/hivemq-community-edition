@@ -16,7 +16,7 @@
 package com.hivemq.extensions.handler;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
@@ -59,19 +59,19 @@ public class PubackInterceptorHandler {
 
     private static final Logger log = LoggerFactory.getLogger(PubackInterceptorHandler.class);
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final @NotNull PluginOutPutAsyncer asyncer;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull PluginTaskExecutorService executorService;
 
     @Inject
     public PubackInterceptorHandler(
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final @NotNull PluginOutPutAsyncer asyncer,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull PluginTaskExecutorService executorService) {
 
-        this.configurationService = configurationService;
+        this.configService = configService;
         this.asyncer = asyncer;
         this.hiveMQExtensions = hiveMQExtensions;
         this.executorService = executorService;
@@ -105,7 +105,7 @@ public class PubackInterceptorHandler {
         final ExtensionParameterHolder<PubackInboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
         final PubackInboundOutputImpl output = new PubackInboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<PubackInboundOutputImpl> outputHolder = new ExtensionParameterHolder<>(output);
 
@@ -157,7 +157,7 @@ public class PubackInterceptorHandler {
         final ExtensionParameterHolder<PubackOutboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiablePubackPacketImpl modifiablePacket =
-                new ModifiablePubackPacketImpl(packet, configurationService);
+                new ModifiablePubackPacketImpl(packet, configService);
         final PubackOutboundOutputImpl output = new PubackOutboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<PubackOutboundOutputImpl> outputHolder = new ExtensionParameterHolder<>(output);
 

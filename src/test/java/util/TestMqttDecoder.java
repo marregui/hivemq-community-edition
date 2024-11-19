@@ -30,7 +30,7 @@ import com.hivemq.codec.decoder.mqtt5.Mqtt5PubrelDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5SubscribeDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5UnsubscribeDecoder;
 import com.hivemq.config.HivemqId;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.TopicAliasLimiter;
 import com.hivemq.logging.EventLog;
@@ -49,14 +49,14 @@ import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_MA
 public class TestMqttDecoder {
 
     public static MQTTMessageDecoder create()  {
-        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.securityConfiguration().setValidateUTF8(true);
         fullConfig.mqttConfiguration().setMaxSessionExpiryInterval(SESSION_EXPIRY_MAX);
         fullConfig.mqttConfiguration().setMaxMessageExpiryInterval(MESSAGE_EXPIRY_INTERVAL_MAX);
         return create(fullConfig);
     }
 
-    public static MQTTMessageDecoder create(final @NotNull ConfigurationService fullConfigurationService) {
+    public static MQTTMessageDecoder create(final @NotNull ConfigService fullConfigService) {
 
         final EventLog eventLog = new EventLog();
         final HivemqId hiveMQId = new HivemqId();
@@ -65,24 +65,23 @@ public class TestMqttDecoder {
         final MetricsHolder metricsHolder = new MetricsHolder(new MetricRegistry());
 
         final MqttConnectDecoder mqttConnectDecoder =
-                new MqttConnectDecoder(mqttConnacker, fullConfigurationService, hiveMQId, new ClientIds(hiveMQId));
+                new MqttConnectDecoder(mqttConnacker, fullConfigService, hiveMQId, new ClientIds(hiveMQId));
 
         return new MQTTMessageDecoder(mqttConnectDecoder,
                 mqttConnacker,
-                fullConfigurationService.mqttConfiguration(),
+                fullConfigService.mqttConfiguration(),
                 new MqttDecoders(new MqttPingreqDecoder(disconnector),
                         new Mqtt5PublishDecoder(disconnector,
-                                hiveMQId,
-                                fullConfigurationService,
+                                hiveMQId, fullConfigService,
                                 new TopicAliasLimiter()),
-                        new Mqtt5DisconnectDecoder(disconnector, fullConfigurationService),
-                        new Mqtt5SubscribeDecoder(disconnector, fullConfigurationService),
-                        new Mqtt5PubackDecoder(disconnector, fullConfigurationService),
-                        new Mqtt5PubrecDecoder(disconnector, fullConfigurationService),
-                        new Mqtt5PubrelDecoder(disconnector, fullConfigurationService),
-                        new Mqtt5PubcompDecoder(disconnector, fullConfigurationService),
-                        new Mqtt5AuthDecoder(disconnector, fullConfigurationService),
-                        new Mqtt5UnsubscribeDecoder(disconnector, fullConfigurationService)),
+                        new Mqtt5DisconnectDecoder(disconnector, fullConfigService),
+                        new Mqtt5SubscribeDecoder(disconnector, fullConfigService),
+                        new Mqtt5PubackDecoder(disconnector, fullConfigService),
+                        new Mqtt5PubrecDecoder(disconnector, fullConfigService),
+                        new Mqtt5PubrelDecoder(disconnector, fullConfigService),
+                        new Mqtt5PubcompDecoder(disconnector, fullConfigService),
+                        new Mqtt5AuthDecoder(disconnector, fullConfigService),
+                        new Mqtt5UnsubscribeDecoder(disconnector, fullConfigService)),
                 disconnector,
                 new GlobalMQTTMessageCounter(metricsHolder));
     }

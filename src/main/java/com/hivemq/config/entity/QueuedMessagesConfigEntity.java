@@ -15,6 +15,7 @@
  */
 package com.hivemq.config.entity;
 
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -38,7 +39,7 @@ public class QueuedMessagesConfigEntity {
     }
 
     @XmlElement(name = "max-queue-size", defaultValue = "1000")
-    private long maxQueueSize = MqttConfigurationDefaults.MAX_QUEUED_MESSAGES_DEFAULT;
+    private long maxQueueSize = ConfigService.MAX_QUEUED_MESSAGES_DEFAULT;
 
     @XmlElement(name = "strategy", defaultValue = "discard")
     private @NotNull QueuedMessagesStrategy queuedMessagesStrategy = QueuedMessagesStrategy.DISCARD;

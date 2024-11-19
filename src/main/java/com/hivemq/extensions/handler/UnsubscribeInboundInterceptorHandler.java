@@ -17,7 +17,7 @@ package com.hivemq.extensions.handler;
 
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
@@ -59,19 +59,19 @@ public class UnsubscribeInboundInterceptorHandler {
 
     private static final Logger log = LoggerFactory.getLogger(UnsubscribeInboundInterceptorHandler.class);
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final @NotNull PluginOutPutAsyncer asyncer;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull PluginTaskExecutorService executorService;
 
     @Inject
     public UnsubscribeInboundInterceptorHandler(
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final @NotNull PluginOutPutAsyncer asyncer,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull PluginTaskExecutorService executorService) {
 
-        this.configurationService = configurationService;
+        this.configService = configService;
         this.asyncer = asyncer;
         this.hiveMQExtensions = hiveMQExtensions;
         this.executorService = executorService;
@@ -107,7 +107,7 @@ public class UnsubscribeInboundInterceptorHandler {
         final ExtensionParameterHolder<UnsubscribeInboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiableUnsubscribePacketImpl modifiablePacket =
-                new ModifiableUnsubscribePacketImpl(packet, configurationService);
+                new ModifiableUnsubscribePacketImpl(packet, configService);
         final UnsubscribeInboundOutputImpl output = new UnsubscribeInboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<UnsubscribeInboundOutputImpl> outputHolder =
                 new ExtensionParameterHolder<>(output);

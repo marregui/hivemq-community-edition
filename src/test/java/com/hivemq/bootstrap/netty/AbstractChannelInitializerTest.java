@@ -17,7 +17,7 @@ package com.hivemq.bootstrap.netty;
 
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.config.RestrictionsConfigurationService;
 import com.hivemq.config.entity.Listener;
@@ -65,7 +65,7 @@ public class AbstractChannelInitializerTest {
 
     private final @NotNull SocketChannel socketChannel = mock(SocketChannel.class);
     private final @NotNull ChannelDependencies channelDependencies = mock(ChannelDependencies.class);
-    private final @NotNull ConfigurationService configurationService = mock(ConfigurationService.class);
+    private final @NotNull ConfigService configService = mock(ConfigService.class);
     private final @NotNull MqttConfigurationService mqttConfigurationService = mock(MqttConfigurationService.class);
     private final @NotNull ChannelPipeline pipeline = mock(ChannelPipeline.class);
     private final @NotNull RestrictionsConfigurationService restrictionsConfigurationService =
@@ -84,8 +84,8 @@ public class AbstractChannelInitializerTest {
         when(channelDependencies.getGlobalTrafficShapingHandler()).thenReturn(new GlobalTrafficShapingHandler(Executors.newSingleThreadScheduledExecutor(),
                 1000L));
 
-        when(channelDependencies.getConfigurationService()).thenReturn(configurationService);
-        when(configurationService.mqttConfiguration()).thenReturn(mqttConfigurationService);
+        when(channelDependencies.getConfigurationService()).thenReturn(configService);
+        when(configService.mqttConfiguration()).thenReturn(mqttConfigurationService);
 
         when(channelDependencies.getRestrictionsConfigurationService()).thenReturn(restrictionsConfigurationService);
 

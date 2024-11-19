@@ -22,7 +22,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.persistence.ProducerQueues;
 import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;
@@ -396,7 +396,7 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
 
     @NotNull
     public ListenableFuture<MultipleChunkResult<Map<String, ImmutableSet<Topic>>>> getAllLocalSubscribersChunk(@NotNull final ChunkCursor cursor) {
-        return chunker.getAllLocalChunk(cursor, InternalConfigurations.PERSISTENCE_SUBSCRIPTIONS_MAX_CHUNK_SIZE,
+        return chunker.getAllLocalChunk(cursor, InternalConfig.PERSISTENCE_SUBSCRIPTIONS_MAX_CHUNK_SIZE,
                 // Chunker.SingleWriterCall interface
                 (bucket, lastKey, maxResults) -> singleWriter.submit(bucket,
                         // actual single writer call

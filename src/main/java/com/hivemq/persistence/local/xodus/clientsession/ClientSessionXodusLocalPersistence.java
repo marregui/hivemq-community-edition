@@ -19,7 +19,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,7 +96,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
         super(environmentUtil,
                 localPersistenceFileUtil,
                 persistenceStartup,
-                InternalConfigurations.PERSISTENCE_BUCKET_COUNT.get(),
+                InternalConfig.PERSISTENCE_BUCKET_COUNT.get(),
                 true);
 
         this.payloadPersistence = payloadPersistence;

@@ -23,8 +23,8 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
-import com.hivemq.config.ConfigurationService;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.ConfigService;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.auth.ModifiableDefaultPermissions;
@@ -86,7 +86,7 @@ import static com.hivemq.bootstrap.netty.ChannelHandlerNames.MQTT_5_FLOW_CONTROL
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.MQTT_KEEPALIVE_IDLE_HANDLER;
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.MQTT_MESSAGE_BARRIER;
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.MQTT_PUBLISH_FLOW_HANDLER;
-import static com.hivemq.config.InternalConfigurations.AUTH_DENY_UNAUTHENTICATED_CONNECTIONS;
+import static com.hivemq.config.InternalConfig.AUTH_DENY_UNAUTHENTICATED_CONNECTIONS;
 import static com.hivemq.mqtt.message.connack.CONNACK.KEEP_ALIVE_NOT_SET;
 import static com.hivemq.mqtt.message.connack.Mqtt5CONNACK.DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT;
 
@@ -101,7 +101,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
 
     private final @NotNull ClientSessionPersistence clientSessionPersistence;
     private final @NotNull ConnectionPersistence connectionPersistence;
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final @NotNull Provider<PublishFlowHandler> publishFlowHandlerProvider;
     private final @NotNull Provider<FlowControlHandler> flowControlHandlerProvider;
     private final @NotNull MqttConnacker mqttConnacker;
@@ -125,7 +125,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
     public ConnectHandler(
             final @NotNull ClientSessionPersistence clientSessionPersistence,
             final @NotNull ConnectionPersistence connectionPersistence,
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final @NotNull Provider<PublishFlowHandler> publishFlowHandlerProvider,
             final @NotNull Provider<FlowControlHandler> flowControlHandlerProvider,
             final @NotNull MqttConnacker mqttConnacker,
@@ -140,7 +140,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
 
         this.clientSessionPersistence = clientSessionPersistence;
         this.connectionPersistence = connectionPersistence;
-        this.configurationService = configurationService;
+        this.configService = configService;
         this.publishFlowHandlerProvider = publishFlowHandlerProvider;
         this.flowControlHandlerProvider = flowControlHandlerProvider;
         this.mqttConnacker = mqttConnacker;
@@ -166,21 +166,21 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
     }
 
     private static double getGracePeriod() {
-        return InternalConfigurations.MQTT_CONNECTION_KEEP_ALIVE_FACTOR;
+        return InternalConfig.MQTT_CONNECTION_KEEP_ALIVE_FACTOR;
     }
 
     @PostConstruct
     public void postConstruct() {
-        maxClientIdLength = configurationService.restrictionsConfiguration().maxClientIdLength();
-        configuredSessionExpiryInterval = configurationService.mqttConfiguration().maxSessionExpiryInterval();
-        if (configurationService.mqttConfiguration().topicAliasEnabled()) {
-            topicAliasMaximum = configurationService.mqttConfiguration().topicAliasMaxPerClient();
+        maxClientIdLength = configService.restrictionsConfiguration().maxClientIdLength();
+        configuredSessionExpiryInterval = configService.mqttConfiguration().maxSessionExpiryInterval();
+        if (configService.mqttConfiguration().topicAliasEnabled()) {
+            topicAliasMaximum = configService.mqttConfiguration().topicAliasMaxPerClient();
         } else {
             topicAliasMaximum = 0;
         }
-        serverKeepAliveMaximum = configurationService.mqttConfiguration().keepAliveMax();
-        allowZeroKeepAlive = configurationService.mqttConfiguration().keepAliveAllowZero();
-        maxMessageExpiryInterval = configurationService.mqttConfiguration().maxMessageExpiryInterval();
+        serverKeepAliveMaximum = configService.mqttConfiguration().keepAliveMax();
+        allowZeroKeepAlive = configService.mqttConfiguration().keepAliveAllowZero();
+        maxMessageExpiryInterval = configService.mqttConfiguration().maxMessageExpiryInterval();
     }
 
     @Override
@@ -339,7 +339,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
             }
 
             final int willQos = msg.getWillPublish().getQos().getQosNumber();
-            final int maxQos = configurationService.mqttConfiguration().maximumQos().getQosNumber();
+            final int maxQos = configService.mqttConfiguration().maximumQos().getQosNumber();
             if (willQos > maxQos) {
                 mqttConnacker.connackError(ctx.channel(),
                         "A client (IP: {}) sent a CONNECT with a Will QoS higher than the maximum configured QoS. This is not allowed.",
@@ -349,7 +349,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
                 return false;
             }
 
-            final int maxTopicLength = configurationService.restrictionsConfiguration().maxTopicLength();
+            final int maxTopicLength = configService.restrictionsConfiguration().maxTopicLength();
             if (msg.getWillPublish().getTopic().length() > maxTopicLength) {
                 mqttConnacker.connackError(ctx.channel(),
                         "A client (IP: {}) sent a CONNECT with a Will Topic exceeding the max length. This is not allowed.",
@@ -365,7 +365,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
     private boolean checkWillRetained(final @NotNull ChannelHandlerContext ctx, final @NotNull CONNECT msg) {
         if (msg.getWillPublish() != null &&
                 msg.getWillPublish().isRetain() &&
-                !configurationService.mqttConfiguration().retainedMessagesEnabled()) {
+                !configService.mqttConfiguration().retainedMessagesEnabled()) {
             mqttConnacker.connackError(ctx.channel(),
                     "A client (IP: {}) sent a CONNECT with Will Retain set to 1 although retain is not available.",
                     "Sent a CONNECT with Will Retain set to 1 although retain is not available",
@@ -609,15 +609,15 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
         final CONNACKBuilder builder = CONNACK.builder()
                 .withSessionPresent(sessionPresent)
                 .withReasonCode(Mqtt5ConnAckReasonCode.SUCCESS)
-                .withReceiveMaximum(configurationService.mqttConfiguration().serverReceiveMaximum())
-                .withSubscriptionIdentifierAvailable(configurationService.mqttConfiguration()
+                .withReceiveMaximum(configService.mqttConfiguration().serverReceiveMaximum())
+                .withSubscriptionIdentifierAvailable(configService.mqttConfiguration()
                         .subscriptionIdentifierEnabled())
-                .withMaximumPacketSize(configurationService.mqttConfiguration().maxPacketSize())
-                .withWildcardSubscriptionAvailable(configurationService.mqttConfiguration()
+                .withMaximumPacketSize(configService.mqttConfiguration().maxPacketSize())
+                .withWildcardSubscriptionAvailable(configService.mqttConfiguration()
                         .wildcardSubscriptionsEnabled())
-                .withSharedSubscriptionAvailable(configurationService.mqttConfiguration().sharedSubscriptionsEnabled())
-                .withMaximumQoS(configurationService.mqttConfiguration().maximumQos())
-                .withRetainAvailable(configurationService.mqttConfiguration().retainedMessagesEnabled());
+                .withSharedSubscriptionAvailable(configService.mqttConfiguration().sharedSubscriptionsEnabled())
+                .withMaximumQoS(configService.mqttConfiguration().maximumQos())
+                .withRetainAvailable(configService.mqttConfiguration().retainedMessagesEnabled());
 
         final boolean overridden = msg.getSessionExpiryInterval() > configuredSessionExpiryInterval;
         final long sessionExpiryInterval =

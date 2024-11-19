@@ -17,39 +17,14 @@ package com.hivemq.config.entity;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A marker interface for a listener. Any listener implementation must implement this interface.
- *
- * @author Dominik Obermaier
- * @author Christoph Schaebel
- * @author Georg Held
- * @see TcpListener
- * @see TlsTcpListener
- * @see WebsocketListener
- * @see TlsWebsocketListener
- */
 public interface Listener {
-
-    /**
-     * @return the port of the listener
-     */
     int getPort();
 
     void setPort(int port);
 
-    /**
-     * @return the bind address of a listener
-     */
     @NotNull String getBindAddress();
 
-    /**
-     * @return the human readable, name of the listener
-     */
     @NotNull String readableName();
 
-    /**
-     * @return the name of the listener
-     * @since 4.1
-     */
     @NotNull String getName();
 }

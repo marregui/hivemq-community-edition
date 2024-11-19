@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.RestrictionsConfigurationService;
 import com.hivemq.config.entity.WebsocketListener;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -50,7 +50,7 @@ public class WebsocketChannelInitializerTest {
     private MqttServerDisconnector disconnector;
 
     @Mock
-    private ConfigurationService fullConfigurationService;
+    private ConfigService fullConfigService;
 
     @Mock
     private RestrictionsConfigurationService restrictionsConfigurationService;
@@ -65,7 +65,7 @@ public class WebsocketChannelInitializerTest {
 
         when(socketChannel.pipeline()).thenReturn(pipeline);
         when(nonSslHandlerProvider.get()).thenReturn(new NonSslHandler(disconnector));
-        when(channelDependencies.getConfigurationService()).thenReturn(fullConfigurationService);
+        when(channelDependencies.getConfigurationService()).thenReturn(fullConfigService);
         when(channelDependencies.getRestrictionsConfigurationService()).thenReturn(restrictionsConfigurationService);
         when(restrictionsConfigurationService.incomingLimit()).thenReturn(0L);
     }

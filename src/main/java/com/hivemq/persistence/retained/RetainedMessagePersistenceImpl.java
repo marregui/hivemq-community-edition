@@ -20,7 +20,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.persistence.ProducerQueues;
 import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;
@@ -156,7 +156,7 @@ public class RetainedMessagePersistenceImpl extends AbstractPersistence implemen
     public @NotNull ListenableFuture<MultipleChunkResult<Map<String, @NotNull RetainedMessage>>> getAllLocalRetainedMessagesChunk(
             @NotNull final ChunkCursor cursor) {
         return chunker.getAllLocalChunk(cursor,
-                InternalConfigurations.PERSISTENCE_RETAINED_MESSAGES_MAX_CHUNK_MEMORY_BYTES,
+                InternalConfig.PERSISTENCE_RETAINED_MESSAGES_MAX_CHUNK_MEMORY_BYTES,
                 // Chunker.SingleWriterCall interface
                 (bucket, lastKey, maxResults) ->
                         // actual single writer call

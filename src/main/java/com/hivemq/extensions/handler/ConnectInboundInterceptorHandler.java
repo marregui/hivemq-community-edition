@@ -19,7 +19,7 @@ package com.hivemq.extensions.handler;
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.config.HivemqId;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
@@ -66,7 +66,7 @@ public class ConnectInboundInterceptorHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ConnectInboundInterceptorHandler.class);
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final @NotNull PluginOutPutAsyncer asyncer;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull PluginTaskExecutorService executorService;
@@ -77,7 +77,7 @@ public class ConnectInboundInterceptorHandler {
 
     @Inject
     public ConnectInboundInterceptorHandler(
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final @NotNull PluginOutPutAsyncer asyncer,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull PluginTaskExecutorService executorService,
@@ -86,7 +86,7 @@ public class ConnectInboundInterceptorHandler {
             final @NotNull ServerInformation serverInformation,
             final @NotNull MqttConnacker connacker) {
 
-        this.configurationService = configurationService;
+        this.configService = configService;
         this.asyncer = asyncer;
         this.hiveMQExtensions = hiveMQExtensions;
         this.executorService = executorService;
@@ -125,7 +125,7 @@ public class ConnectInboundInterceptorHandler {
         final ExtensionParameterHolder<ConnectInboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiableConnectPacketImpl modifiablePacket =
-                new ModifiableConnectPacketImpl(packet, configurationService);
+                new ModifiableConnectPacketImpl(packet, configService);
         final ConnectInboundOutputImpl output = new ConnectInboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<ConnectInboundOutputImpl> outputHolder = new ExtensionParameterHolder<>(output);
 

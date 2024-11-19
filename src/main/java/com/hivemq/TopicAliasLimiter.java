@@ -15,7 +15,7 @@
  */
 package com.hivemq;
 
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,8 +27,8 @@ public class TopicAliasLimiter {
 
     private final @NotNull AtomicLong memoryUsage = new AtomicLong();
     private final @NotNull AtomicLong topicAliasesTotal = new AtomicLong();
-    private final int memorySoftLimit = InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_SOFT_LIMIT_BYTES.get();
-    private final int memoryHardLimit = InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.get();
+    private final int memorySoftLimit = InternalConfig.TOPIC_ALIAS_GLOBAL_MEMORY_SOFT_LIMIT_BYTES.get();
+    private final int memoryHardLimit = InternalConfig.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.get();
 
     private static int getEstimatedSize(final @NotNull String topic) {
         return 38 + 2 * topic.length();

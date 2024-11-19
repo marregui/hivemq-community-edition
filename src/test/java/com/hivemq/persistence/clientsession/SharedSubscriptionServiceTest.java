@@ -16,7 +16,7 @@
 package com.hivemq.persistence.clientsession;
 
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
 import com.hivemq.mqtt.message.subscribe.Topic;
@@ -58,8 +58,8 @@ public class SharedSubscriptionServiceTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        InternalConfigurations.SHARED_SUBSCRIBER_CACHE_CONCURRENCY_LEVEL.set(1);
-        InternalConfigurations.SHARED_SUBSCRIPTION_CACHE_CONCURRENCY_LEVEL.set(1);
+        InternalConfig.SHARED_SUBSCRIBER_CACHE_CONCURRENCY_LEVEL.set(1);
+        InternalConfig.SHARED_SUBSCRIPTION_CACHE_CONCURRENCY_LEVEL.set(1);
 
         service = new SharedSubscriptionService(topicTree);
     }

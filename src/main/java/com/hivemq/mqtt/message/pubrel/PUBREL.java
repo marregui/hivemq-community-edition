@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.message.pubrel;
 
-import com.hivemq.config.entity.MqttConfigurationDefaults;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.packets.pubrel.PubrelPacketImpl;
@@ -101,7 +101,7 @@ public class PUBREL extends MqttMessageWithUserProperties.MqttMessageWithIdAndRe
     }
 
     public boolean isExpiryDisabled() {
-        return (messageExpiryInterval == MqttConfigurationDefaults.TTL_DISABLED) ||
+        return (messageExpiryInterval == ConfigService.TTL_DISABLED) ||
                 (messageExpiryInterval == PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET);
     }
 
@@ -109,7 +109,7 @@ public class PUBREL extends MqttMessageWithUserProperties.MqttMessageWithIdAndRe
         if ((publishTimestamp == null) || (messageExpiryInterval == null)) {
             return false;
         }
-        if (messageExpiryInterval == MqttConfigurationDefaults.TTL_DISABLED ||
+        if (messageExpiryInterval == ConfigService.TTL_DISABLED ||
                 messageExpiryInterval == PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET) {
             return false;
         }

@@ -18,7 +18,7 @@ package com.hivemq.codec.decoder;
 import com.google.common.base.Utf8;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -38,8 +38,8 @@ public abstract class AbstractMqttPublishDecoder<T extends Message> extends Abst
 
     protected AbstractMqttPublishDecoder(
             final @NotNull MqttServerDisconnector disconnector,
-            final @NotNull ConfigurationService configurationService) {
-        super(disconnector, configurationService);
+            final @NotNull ConfigService configService) {
+        super(disconnector, configService);
     }
 
     /**
@@ -110,7 +110,7 @@ public abstract class AbstractMqttPublishDecoder<T extends Message> extends Abst
             final @NotNull Connection clientConnectionContext, final byte header) {
         final boolean retained = Bytes.isBitSet(header, 0);
 
-        if (retained && !configurationService.mqttConfiguration().retainedMessagesEnabled()) {
+        if (retained && !configService.mqttConfiguration().retainedMessagesEnabled()) {
             disconnector.disconnect(clientConnectionContext.getChannel(),
                     "A client (IP: {}) sent a PUBLISH with retain set to 1 although retain is not available. Disconnecting client.",
                     "Sent a PUBLISH with retain set to 1 although retain is not available",

@@ -15,7 +15,6 @@
  */
 package com.hivemq.extensions.config;
 
-import com.hivemq.config.ValidationError;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.HiveMQExtension;
@@ -29,6 +28,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -88,5 +88,38 @@ public class HiveMQExtensionXMLReader {
             return Optional.of(new ValidationError(message, "<version>"));
         }
         return Optional.empty();
+    }
+
+    public static class ValidationError {
+
+        private final String message;
+
+        public ValidationError(final String message, final Object... args) {
+
+            this.message = String.format(message, args);
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
+            final ValidationError that = (ValidationError) o;
+
+            return Objects.equals(message, that.message);
+        }
+
+        @Override
+        public int hashCode() {
+            return message != null ? message.hashCode() : 0;
+        }
     }
 }

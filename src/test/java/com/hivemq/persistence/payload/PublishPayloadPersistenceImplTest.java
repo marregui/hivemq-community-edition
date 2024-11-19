@@ -16,7 +16,7 @@
 package com.hivemq.persistence.payload;
 
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,8 +47,8 @@ public class PublishPayloadPersistenceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        InternalConfigurations.PAYLOAD_PERSISTENCE_CLEANUP_SCHEDULE_MSEC.set(10000);
-        InternalConfigurations.PAYLOAD_PERSISTENCE_BUCKET_COUNT.set(64);
+        InternalConfig.PAYLOAD_PERSISTENCE_CLEANUP_SCHEDULE_MSEC.set(10000);
+        InternalConfig.PAYLOAD_PERSISTENCE_BUCKET_COUNT.set(64);
 
         persistence = new PublishPayloadPersistenceImpl(localPersistence, scheduledExecutorService);
         persistence.init();
@@ -135,8 +135,8 @@ public class PublishPayloadPersistenceImplTest {
 
     @Test
     public void init_schedulesPayloadCleanup() {
-        InternalConfigurations.PAYLOAD_PERSISTENCE_CLEANUP_SCHEDULE_MSEC.set(250);
-        InternalConfigurations.PAYLOAD_PERSISTENCE_CLEANUP_THREADS.set(4);
+        InternalConfig.PAYLOAD_PERSISTENCE_CLEANUP_SCHEDULE_MSEC.set(250);
+        InternalConfig.PAYLOAD_PERSISTENCE_CLEANUP_THREADS.set(4);
         persistence = new PublishPayloadPersistenceImpl(localPersistence, scheduledExecutorService);
         persistence.init();
 

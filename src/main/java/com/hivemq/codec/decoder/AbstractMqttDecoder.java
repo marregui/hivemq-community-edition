@@ -20,8 +20,8 @@ import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.MqttBinaryData;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
-import com.hivemq.config.ConfigurationService;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.ConfigService;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -50,7 +50,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
 
     protected static final int DISCONNECTED = -1;
 
-    protected final @NotNull ConfigurationService configurationService;
+    protected final @NotNull ConfigService configService;
     protected final @NotNull MqttServerDisconnector disconnector;
 
     protected final boolean validateUTF8;
@@ -60,13 +60,13 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
 
     protected AbstractMqttDecoder(
             final @NotNull MqttServerDisconnector disconnector,
-            final @NotNull ConfigurationService configurationService) {
-        this.configurationService = configurationService;
+            final @NotNull ConfigService configService) {
+        this.configService = configService;
         this.disconnector = disconnector;
-        validateUTF8 = configurationService.securityConfiguration().validateUTF8();
-        maxMessageExpiryInterval = configurationService.mqttConfiguration().maxMessageExpiryInterval();
-        maxUserPropertiesLength = InternalConfigurations.USER_PROPERTIES_MAX_SIZE_BYTES;
-        subscriptionIdentifiersAvailable = configurationService.mqttConfiguration().subscriptionIdentifierEnabled();
+        validateUTF8 = configService.securityConfiguration().validateUTF8();
+        maxMessageExpiryInterval = configService.mqttConfiguration().maxMessageExpiryInterval();
+        maxUserPropertiesLength = InternalConfig.USER_PROPERTIES_MAX_SIZE_BYTES;
+        subscriptionIdentifiersAvailable = configService.mqttConfiguration().subscriptionIdentifierEnabled();
     }
 
     /**

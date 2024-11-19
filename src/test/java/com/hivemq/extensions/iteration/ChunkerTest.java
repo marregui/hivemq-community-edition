@@ -18,7 +18,7 @@ package com.hivemq.extensions.iteration;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
@@ -39,13 +39,13 @@ public class ChunkerTest {
 
     @Before
     public void setUp() throws Exception {
-        bucketCount = InternalConfigurations.PERSISTENCE_BUCKET_COUNT.get();
-        InternalConfigurations.PERSISTENCE_BUCKET_COUNT.set(4);
+        bucketCount = InternalConfig.PERSISTENCE_BUCKET_COUNT.get();
+        InternalConfig.PERSISTENCE_BUCKET_COUNT.set(4);
     }
 
     @After
     public void tearDown() throws Exception {
-        InternalConfigurations.PERSISTENCE_BUCKET_COUNT.set(bucketCount);
+        InternalConfig.PERSISTENCE_BUCKET_COUNT.set(bucketCount);
 
     }
 

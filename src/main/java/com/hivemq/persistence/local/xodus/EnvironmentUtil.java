@@ -15,21 +15,21 @@
  */
 package com.hivemq.persistence.local.xodus;
 
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import jetbrains.exodus.env.EnvironmentConfig;
 
 import javax.inject.Singleton;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.hivemq.config.InternalConfigurations.XODUS_LOG_CACHE_USE_NIO;
-import static com.hivemq.config.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_DURABLE_WRITES_ENABLED;
-import static com.hivemq.config.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_GC_DELETION_DELAY_MSEC;
-import static com.hivemq.config.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_GC_FILES_INTERVAL;
-import static com.hivemq.config.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_GC_MIN_AGE;
-import static com.hivemq.config.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_GC_RUN_PERIOD_MSEC;
-import static com.hivemq.config.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_JMX;
-import static com.hivemq.config.InternalConfigurations.XODUS_PERSISTENCE_ENVIRONMENT_SYNC_PERIOD_MSEC;
+import static com.hivemq.config.InternalConfig.XODUS_LOG_CACHE_USE_NIO;
+import static com.hivemq.config.InternalConfig.XODUS_PERSISTENCE_ENVIRONMENT_DURABLE_WRITES_ENABLED;
+import static com.hivemq.config.InternalConfig.XODUS_PERSISTENCE_ENVIRONMENT_GC_DELETION_DELAY_MSEC;
+import static com.hivemq.config.InternalConfig.XODUS_PERSISTENCE_ENVIRONMENT_GC_FILES_INTERVAL;
+import static com.hivemq.config.InternalConfig.XODUS_PERSISTENCE_ENVIRONMENT_GC_MIN_AGE;
+import static com.hivemq.config.InternalConfig.XODUS_PERSISTENCE_ENVIRONMENT_GC_RUN_PERIOD_MSEC;
+import static com.hivemq.config.InternalConfig.XODUS_PERSISTENCE_ENVIRONMENT_JMX;
+import static com.hivemq.config.InternalConfig.XODUS_PERSISTENCE_ENVIRONMENT_SYNC_PERIOD_MSEC;
 
 @Singleton
 public class EnvironmentUtil {
@@ -85,7 +85,7 @@ public class EnvironmentUtil {
         env.setLogDurableWrite(durableWrites);
         env.setManagementEnabled(jmxEnabled);
         env.setLogCacheUseNio(XODUS_LOG_CACHE_USE_NIO);
-        env.setMemoryUsagePercentage(InternalConfigurations.XODUS_PERSISTENCE_LOG_MEMORY_HEAP_PERCENTAGE);
+        env.setMemoryUsagePercentage(InternalConfig.XODUS_PERSISTENCE_LOG_MEMORY_HEAP_PERCENTAGE);
         return env;
     }
 }

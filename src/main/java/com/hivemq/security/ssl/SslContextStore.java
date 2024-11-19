@@ -44,8 +44,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import static com.hivemq.config.InternalConfigurations.SSL_RELOAD_ENABLED;
-import static com.hivemq.config.InternalConfigurations.SSL_RELOAD_INTERVAL_SEC;
+import static com.hivemq.config.InternalConfig.SSL_RELOAD_ENABLED;
+import static com.hivemq.config.InternalConfig.SSL_RELOAD_INTERVAL_SEC;
 
 @LazySingleton
 public class SslContextStore {

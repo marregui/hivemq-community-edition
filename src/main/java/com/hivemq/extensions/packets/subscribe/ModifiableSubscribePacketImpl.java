@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.subscribe;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 
 import com.hivemq.extension.sdk.api.packets.subscribe.ModifiableSubscribePacket;
@@ -40,21 +40,21 @@ public class ModifiableSubscribePacketImpl implements ModifiableSubscribePacket 
     private final int subscriptionIdentifier;
     private final int packetIdentifier;
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
 
     public ModifiableSubscribePacketImpl(
-            final @NotNull SubscribePacketImpl packet, final @NotNull ConfigurationService configurationService) {
+            final @NotNull SubscribePacketImpl packet, final @NotNull ConfigService configService) {
 
         final ImmutableList.Builder<ModifiableSubscriptionImpl> builder = ImmutableList.builder();
         packet.subscriptions.forEach(subscription -> builder.add(new ModifiableSubscriptionImpl(subscription,
-                configurationService)));
+                configService)));
         subscriptions = builder.build();
         userProperties = new ModifiableUserPropertiesImpl(packet.userProperties.asInternalList(),
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
         subscriptionIdentifier = packet.subscriptionIdentifier;
         packetIdentifier = packet.packetIdentifier;
 
-        this.configurationService = configurationService;
+        this.configService = configService;
     }
 
     @Override
@@ -100,6 +100,6 @@ public class ModifiableSubscribePacketImpl implements ModifiableSubscribePacket 
     }
 
     public @NotNull ModifiableSubscribePacketImpl update(final @NotNull SubscribePacketImpl packet) {
-        return new ModifiableSubscribePacketImpl(packet, configurationService);
+        return new ModifiableSubscribePacketImpl(packet, configService);
     }
 }

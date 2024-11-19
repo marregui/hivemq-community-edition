@@ -50,7 +50,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.hivemq.config.InternalConfigurations.DROP_MESSAGES_QOS_0_ENABLED;
+import static com.hivemq.config.InternalConfig.DROP_MESSAGES_QOS_0_ENABLED;
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.SESSION_EXPIRE_ON_DISCONNECT;
 
 /**

@@ -32,26 +32,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Singleton
 public class ListenerConfigurationService {
 
-    private static final Logger log = LoggerFactory.getLogger(ListenerConfigurationService.class);
+    private static final @NotNull Logger log = LoggerFactory.getLogger(ListenerConfigurationService.class);
 
-    private final List<Listener> listeners = new CopyOnWriteArrayList<>();
+    private final @NotNull List<Listener> listeners = new CopyOnWriteArrayList<>();
 
     public <T extends Listener> void addListener(final @NotNull T listener) {
         if (listener.getClass().equals(TcpListener.class) ||
                 listener.getClass().equals(TlsTcpListener.class) ||
                 listener.getClass().equals(WebsocketListener.class) ||
                 listener.getClass().equals(TlsWebsocketListener.class)) {
-
             log.debug("Adding {} on bind address {} and port {}. Name: {}.",
                     listener.readableName(),
                     listener.getBindAddress(),
                     listener.getPort(),
                     listener.getName());
-
             listeners.add(listener);
-
-            final ImmutableList<Listener> allListeners = ImmutableList.copyOf(listeners);
-            log.trace("Notifying {} update listeners for changes", allListeners.size());
         } else {
             throw new IllegalArgumentException(listener.getClass().getName() + " is not a valid listener type");
         }

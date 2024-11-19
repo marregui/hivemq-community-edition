@@ -19,7 +19,7 @@ package com.hivemq.extensions.handler;
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
@@ -62,19 +62,19 @@ public class DisconnectInterceptorHandler {
 
     private static final Logger log = LoggerFactory.getLogger(DisconnectInterceptorHandler.class);
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final @NotNull PluginOutPutAsyncer asyncer;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull PluginTaskExecutorService executorService;
 
     @Inject
     public DisconnectInterceptorHandler(
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final @NotNull PluginOutPutAsyncer asyncer,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull PluginTaskExecutorService executorService) {
 
-        this.configurationService = configurationService;
+        this.configService = configService;
         this.asyncer = asyncer;
         this.hiveMQExtensions = hiveMQExtensions;
         this.executorService = executorService;
@@ -112,7 +112,7 @@ public class DisconnectInterceptorHandler {
         final ExtensionParameterHolder<DisconnectInboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, originalSessionExpiryInterval);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, originalSessionExpiryInterval);
         final DisconnectInboundOutputImpl output = new DisconnectInboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<DisconnectInboundOutputImpl> outputHolder =
                 new ExtensionParameterHolder<>(output);
@@ -166,7 +166,7 @@ public class DisconnectInterceptorHandler {
         final ExtensionParameterHolder<DisconnectOutboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiableOutboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableOutboundDisconnectPacketImpl(packet, configurationService);
+                new ModifiableOutboundDisconnectPacketImpl(packet, configService);
         final DisconnectOutboundOutputImpl output = new DisconnectOutboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<DisconnectOutboundOutputImpl> outputHolder =
                 new ExtensionParameterHolder<>(output);

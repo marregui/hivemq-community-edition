@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.ImmutableIntArray;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
-import com.hivemq.config.entity.MqttConfigurationDefaults;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.MessageType;
@@ -310,7 +310,7 @@ public class PUBLISH extends MqttMessageWithUserProperties implements Mqtt5PUBLI
     }
 
     public boolean isExpiryDisabled() {
-        return (messageExpiryInterval == MqttConfigurationDefaults.TTL_DISABLED) ||
+        return (messageExpiryInterval == ConfigService.TTL_DISABLED) ||
                 (messageExpiryInterval == MESSAGE_EXPIRY_INTERVAL_NOT_SET);
     }
 

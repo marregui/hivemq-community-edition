@@ -16,7 +16,7 @@
 package com.hivemq.extensions.handler;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
@@ -89,7 +89,7 @@ public class IncomingPublishHandler {
     private final @NotNull MessageDroppedService messageDroppedService;
     private final @NotNull PluginAuthorizerService authorizerService;
     private final @NotNull MqttServerDisconnector mqttDisconnector;
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
 
     @Inject
     public IncomingPublishHandler(
@@ -99,7 +99,7 @@ public class IncomingPublishHandler {
             final @NotNull MessageDroppedService messageDroppedService,
             final @NotNull PluginAuthorizerService authorizerService,
             final @NotNull MqttServerDisconnector mqttDisconnector,
-            final @NotNull ConfigurationService configurationService) {
+            final @NotNull ConfigService configService) {
 
         this.executorService = executorService;
         this.asyncer = asyncer;
@@ -107,7 +107,7 @@ public class IncomingPublishHandler {
         this.messageDroppedService = messageDroppedService;
         this.authorizerService = authorizerService;
         this.mqttDisconnector = mqttDisconnector;
-        this.configurationService = configurationService;
+        this.configService = configService;
     }
 
     /**
@@ -140,7 +140,7 @@ public class IncomingPublishHandler {
         final ExtensionParameterHolder<PublishInboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiablePublishPacketImpl modifiablePacket =
-                new ModifiablePublishPacketImpl(packet, configurationService);
+                new ModifiablePublishPacketImpl(packet, configService);
         final PublishInboundOutputImpl output = new PublishInboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<PublishInboundOutputImpl> outputHolder = new ExtensionParameterHolder<>(output);
 

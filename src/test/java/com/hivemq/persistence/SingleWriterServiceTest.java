@@ -16,7 +16,7 @@
 package com.hivemq.persistence;
 
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
@@ -41,10 +41,10 @@ public class SingleWriterServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        InternalConfigurations.SINGLE_WRITER_THREAD_POOL_SIZE.set(4);
-        InternalConfigurations.SINGLE_WRITER_CREDITS_PER_EXECUTION.set(200);
-        InternalConfigurations.PERSISTENCE_SHUTDOWN_GRACE_PERIOD_MSEC.set(200);
-        InternalConfigurations.PERSISTENCE_BUCKET_COUNT.set(64);
+        InternalConfig.SINGLE_WRITER_THREAD_POOL_SIZE.set(4);
+        InternalConfig.SINGLE_WRITER_CREDITS_PER_EXECUTION.set(200);
+        InternalConfig.PERSISTENCE_SHUTDOWN_GRACE_PERIOD_MSEC.set(200);
+        InternalConfig.PERSISTENCE_BUCKET_COUNT.set(64);
 
         SingleWriterService = new SingleWriterService();
     }

@@ -20,7 +20,7 @@ import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.AbstractMqttDecoder;
 import com.hivemq.codec.encoder.mqtt5.MqttBinaryData;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -68,8 +68,8 @@ public class Mqtt5AuthDecoder extends AbstractMqttDecoder<AUTH> {
     @Inject
     public Mqtt5AuthDecoder(
             final @NotNull MqttServerDisconnector disconnector,
-            final @NotNull ConfigurationService configurationService) {
-        super(disconnector, configurationService);
+            final @NotNull ConfigService configService) {
+        super(disconnector, configService);
     }
 
     @Override

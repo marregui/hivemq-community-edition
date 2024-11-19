@@ -48,5 +48,4 @@ public class KeystoreEntity {
     public @NotNull String getPrivateKeyPassword() {
         return privateKeyPassword;
     }
-
 }

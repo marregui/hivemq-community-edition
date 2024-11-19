@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.puback;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.puback.ModifiablePubackPacket;
@@ -39,19 +39,19 @@ public class ModifiablePubackPacketImpl implements ModifiablePubackPacket {
     private @Nullable String reasonString;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private boolean modified = false;
 
     public ModifiablePubackPacketImpl(
-            final @NotNull PubackPacketImpl packet, final @NotNull ConfigurationService configurationService) {
+            final @NotNull PubackPacketImpl packet, final @NotNull ConfigService configService) {
 
         packetIdentifier = packet.packetIdentifier;
         reasonCode = packet.reasonCode;
         reasonString = packet.reasonString;
         userProperties = new ModifiableUserPropertiesImpl(packet.userProperties.asInternalList(),
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
 
-        this.configurationService = configurationService;
+        this.configService = configService;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ModifiablePubackPacketImpl implements ModifiablePubackPacket {
 
     @Override
     public void setReasonString(final @Nullable String reasonString) {
-        PluginBuilderUtil.checkReasonString(reasonString, configurationService.securityConfiguration().validateUTF8());
+        PluginBuilderUtil.checkReasonString(reasonString, configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.reasonString, reasonString)) {
             return;
         }
@@ -108,6 +108,6 @@ public class ModifiablePubackPacketImpl implements ModifiablePubackPacket {
     }
 
     public @NotNull ModifiablePubackPacketImpl update(final @NotNull PubackPacketImpl packet) {
-        return new ModifiablePubackPacketImpl(packet, configurationService);
+        return new ModifiablePubackPacketImpl(packet, configService);
     }
 }

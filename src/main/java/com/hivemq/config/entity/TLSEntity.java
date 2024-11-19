@@ -28,10 +28,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Dominik Obermaier
- * @author Florian Limpöck
- */
 @XmlRootElement(name = "tls")
 @XmlAccessorType(XmlAccessType.NONE)
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})

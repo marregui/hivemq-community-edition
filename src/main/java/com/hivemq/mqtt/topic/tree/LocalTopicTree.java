@@ -45,7 +45,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.hivemq.config.InternalConfigurations.TOPIC_TREE_MAP_CREATION_THRESHOLD;
+import static com.hivemq.config.InternalConfig.TOPIC_TREE_MAP_CREATION_THRESHOLD;
 
 /**
  * A topic tree implementation which works with a standard read write lock with fairness guarantees. Either the whole

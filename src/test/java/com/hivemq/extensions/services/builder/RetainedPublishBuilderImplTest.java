@@ -16,7 +16,7 @@
 package com.hivemq.extensions.services.builder;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
@@ -53,18 +53,18 @@ import static org.junit.Assert.assertTrue;
 public class RetainedPublishBuilderImplTest {
 
     private RetainedPublishBuilder retainedPublishBuilder;
-    private ConfigurationService configurationService;
+    private ConfigService configService;
 
     @Before
     public void setUp() throws Exception {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
-        retainedPublishBuilder = new RetainedPublishBuilderImpl(configurationService);
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
+        retainedPublishBuilder = new RetainedPublishBuilderImpl(configService);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_qos_validation() {
-        configurationService.mqttConfiguration().setMaximumQos(QoS.AT_LEAST_ONCE);
-        new RetainedPublishBuilderImpl(configurationService).qos(Qos.EXACTLY_ONCE);
+        configService.mqttConfiguration().setMaximumQos(QoS.AT_LEAST_ONCE);
+        new RetainedPublishBuilderImpl(configService).qos(Qos.EXACTLY_ONCE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -84,8 +84,8 @@ public class RetainedPublishBuilderImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_message_expiry_validation() {
-        configurationService.mqttConfiguration().setMaxMessageExpiryInterval(10);
-        new RetainedPublishBuilderImpl(configurationService).messageExpiryInterval(11);
+        configService.mqttConfiguration().setMaxMessageExpiryInterval(10);
+        new RetainedPublishBuilderImpl(configService).messageExpiryInterval(11);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -288,7 +288,8 @@ public class RetainedPublishBuilderImplTest {
         assertArrayEquals("payload".getBytes(), retainedPublish.getPayload().get().array());
         assertEquals(Optional.empty(), retainedPublish.getPayloadFormatIndicator());
         assertTrue(retainedPublish.getMessageExpiryInterval().isPresent());
-        assertEquals(configurationService.mqttConfiguration().maxMessageExpiryInterval(),
+        assertEquals(
+                configService.mqttConfiguration().maxMessageExpiryInterval(),
                 retainedPublish.getMessageExpiryInterval().get().longValue());
         assertEquals(Optional.empty(), retainedPublish.getResponseTopic());
         assertEquals(Optional.empty(), retainedPublish.getCorrelationData());

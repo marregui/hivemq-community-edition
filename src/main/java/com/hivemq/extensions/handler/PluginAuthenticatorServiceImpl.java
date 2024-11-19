@@ -21,8 +21,8 @@ import com.google.inject.Inject;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
-import com.hivemq.config.ConfigurationService;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.ConfigService;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.parameter.AuthenticatorProviderInput;
 import com.hivemq.extension.sdk.api.client.parameter.ServerInformation;
@@ -105,7 +105,7 @@ public class PluginAuthenticatorServiceImpl implements PluginAuthenticatorServic
             final @NotNull MqttConnacker connacker,
             final @NotNull MqttServerDisconnector disconnector,
             final @NotNull MqttAuthSender authSender,
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final @NotNull Authenticators authenticators,
             final @NotNull ChannelDependencies channelDependencies,
             final @NotNull PluginOutPutAsyncer asyncer,
@@ -123,8 +123,8 @@ public class PluginAuthenticatorServiceImpl implements PluginAuthenticatorServic
         this.authSender = authSender;
         this.priorityComparator = new ExtensionPriorityComparator(extensions);
         this.serverInformation = serverInformation;
-        this.timeout = InternalConfigurations.AUTH_PROCESS_TIMEOUT_SEC.get();
-        this.validateUTF8 = configurationService.securityConfiguration().validateUTF8();
+        this.timeout = InternalConfig.AUTH_PROCESS_TIMEOUT_SEC.get();
+        this.validateUTF8 = configService.securityConfiguration().validateUTF8();
     }
 
     @Override

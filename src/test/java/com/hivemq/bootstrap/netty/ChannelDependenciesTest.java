@@ -19,7 +19,7 @@ import com.hivemq.codec.decoder.MqttConnectDecoder;
 import com.hivemq.codec.decoder.MqttDecoders;
 import com.hivemq.codec.encoder.EncoderFactory;
 import com.hivemq.ShutdownHooks;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.RestrictionsConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.handler.ClientLifecycleEventHandler;
@@ -73,7 +73,7 @@ public class ChannelDependenciesTest {
     private @NotNull ChannelGroup channelGroup;
 
     @Mock
-    private @NotNull ConfigurationService fullConfigurationService;
+    private @NotNull ConfigService fullConfigService;
 
     @Mock
     private @NotNull GlobalTrafficShapingHandler globalTrafficShapingHandler;
@@ -156,8 +156,7 @@ public class ChannelDependenciesTest {
                 disconnectHandler,
                 () -> subscribeHandler,
                 unsubscribeHandler,
-                channelGroup,
-                fullConfigurationService,
+                channelGroup, fullConfigService,
                 globalTrafficShapingHandler,
                 metricsHolder,
                 exceptionHandler,

@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.unsuback;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.unsuback.UnsubackReasonCode;
 import com.hivemq.extensions.packets.general.UserPropertiesImpl;
@@ -40,11 +40,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiableUnsubackPacketImplTest {
 
-    private @NotNull ConfigurationService configurationService;
+    private @NotNull ConfigService configService;
 
     @Before
     public void setUp() throws JAXBException, IOException {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 
     @Test
@@ -55,7 +55,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -75,7 +75,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -95,7 +95,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         modifiablePacket.setReasonCodes(ImmutableList.of(UnsubackReasonCode.NO_SUBSCRIPTIONS_EXISTED,
                 UnsubackReasonCode.NOT_AUTHORIZED,
@@ -110,7 +110,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         modifiablePacket.setReasonCodes(ImmutableList.of(UnsubackReasonCode.NO_SUBSCRIPTIONS_EXISTED));
     }
@@ -123,7 +123,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         modifiablePacket.setReasonCodes(null);
     }
@@ -136,7 +136,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         modifiablePacket.setReasonCodes(Arrays.asList(UnsubackReasonCode.SUCCESS, null));
     }
@@ -148,7 +148,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -165,7 +165,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -182,7 +182,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -199,7 +199,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         modifiablePacket.setReasonString("topic" + '\u0001');
     }
@@ -211,7 +211,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         final StringBuilder s = new StringBuilder("s");
         for (int i = 0; i < 65535; i++) {
@@ -228,7 +228,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         final UnsubackPacketImpl copy = modifiablePacket.copy();
 
@@ -243,7 +243,7 @@ public class ModifiableUnsubackPacketImplTest {
                 1,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableUnsubackPacketImpl modifiablePacket =
-                new ModifiableUnsubackPacketImpl(packet, configurationService);
+                new ModifiableUnsubackPacketImpl(packet, configService);
 
         modifiablePacket.setReasonCodes(ImmutableList.of(UnsubackReasonCode.NO_SUBSCRIPTIONS_EXISTED,
                 UnsubackReasonCode.NOT_AUTHORIZED));

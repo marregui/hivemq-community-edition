@@ -17,7 +17,7 @@ package com.hivemq.extensions.packets.publish;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.publish.PayloadFormatIndicator;
@@ -41,11 +41,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiableWillPublishImplTest {
 
-    private @NotNull ConfigurationService configurationService;
+    private @NotNull ConfigService configService;
 
     @Before
     public void setUp() throws Exception {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 
     @Test
@@ -62,7 +62,7 @@ public class ModifiableWillPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 0,
                 1234L);
-        final ModifiableWillPublishImpl modifiablePacket = new ModifiableWillPublishImpl(packet, configurationService);
+        final ModifiableWillPublishImpl modifiablePacket = new ModifiableWillPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -86,7 +86,7 @@ public class ModifiableWillPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 0,
                 1234L);
-        final ModifiableWillPublishImpl modifiablePacket = new ModifiableWillPublishImpl(packet, configurationService);
+        final ModifiableWillPublishImpl modifiablePacket = new ModifiableWillPublishImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -110,7 +110,7 @@ public class ModifiableWillPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 0,
                 1234L);
-        final ModifiableWillPublishImpl modifiablePacket = new ModifiableWillPublishImpl(packet, configurationService);
+        final ModifiableWillPublishImpl modifiablePacket = new ModifiableWillPublishImpl(packet, configService);
 
         final PublishPacketImpl copy = modifiablePacket.copy();
 
@@ -131,7 +131,7 @@ public class ModifiableWillPublishImplTest {
                 UserPropertiesImpl.of(ImmutableList.of()),
                 0,
                 1234L);
-        final ModifiableWillPublishImpl modifiablePacket = new ModifiableWillPublishImpl(packet, configurationService);
+        final ModifiableWillPublishImpl modifiablePacket = new ModifiableWillPublishImpl(packet, configService);
 
         modifiablePacket.setTopic("modifiedTopic");
         modifiablePacket.setQos(Qos.EXACTLY_ONCE);

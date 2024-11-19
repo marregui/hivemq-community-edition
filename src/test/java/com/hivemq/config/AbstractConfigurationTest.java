@@ -40,8 +40,8 @@ public class AbstractConfigurationTest {
         listenerConfigurationService = new ListenerConfigurationService();
 
         xmlFile = temporaryFolder.newFile();
-        securityConfigurationService = new SecurityConfigurationServiceImpl();
-        mqttConfigurationService = new MqttConfigurationServiceImpl();
-        restrictionsConfigurationService = new RestrictionsConfigurationServiceImpl();
+        securityConfigurationService = new SecurityConfigurationService();
+        mqttConfigurationService = new MqttConfigurationService();
+        restrictionsConfigurationService = new RestrictionsConfigurationService();
     }
 }

@@ -16,7 +16,7 @@
 package com.hivemq.extensions.services.builder;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.config.RestrictionsConfigurationService;
 import com.hivemq.config.SecurityConfigurationService;
@@ -55,10 +55,10 @@ public class TopicSubscriptionBuilderImpl implements TopicSubscriptionBuilder {
     private final @NotNull SecurityConfigurationService securityConfigurationService;
 
     @Inject
-    public TopicSubscriptionBuilderImpl(final @NotNull ConfigurationService configurationService) {
-        this.mqttConfig = configurationService.mqttConfiguration();
-        this.restrictionsConfig = configurationService.restrictionsConfiguration();
-        this.securityConfigurationService = configurationService.securityConfiguration();
+    public TopicSubscriptionBuilderImpl(final @NotNull ConfigService configService) {
+        this.mqttConfig = configService.mqttConfiguration();
+        this.restrictionsConfig = configService.restrictionsConfiguration();
+        this.securityConfigurationService = configService.securityConfiguration();
     }
 
     @Override

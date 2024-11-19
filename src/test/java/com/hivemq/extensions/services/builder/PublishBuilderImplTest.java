@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.builder;
 
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
 import com.hivemq.extension.sdk.api.packets.publish.PayloadFormatIndicator;
@@ -40,162 +40,162 @@ import static org.junit.Assert.assertTrue;
 @SuppressWarnings("NullabilityAnnotations")
 public class PublishBuilderImplTest {
 
-    private ConfigurationService configurationService;
+    private ConfigService configService;
 
     @Before
     public void before() throws JAXBException, IOException {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_qos_validation() {
-        configurationService.mqttConfiguration().setMaximumQos(QoS.AT_LEAST_ONCE);
-        new PublishBuilderImpl(configurationService).qos(Qos.EXACTLY_ONCE);
+        configService.mqttConfiguration().setMaximumQos(QoS.AT_LEAST_ONCE);
+        new PublishBuilderImpl(configService).qos(Qos.EXACTLY_ONCE);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_retained_validation() {
-        configurationService.mqttConfiguration().setRetainedMessagesEnabled(false);
-        new PublishBuilderImpl(configurationService).retain(true);
+        configService.mqttConfiguration().setRetainedMessagesEnabled(false);
+        new PublishBuilderImpl(configService).retain(true);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_message_expiry_validation() {
-        configurationService.mqttConfiguration().setMaxMessageExpiryInterval(10);
-        new PublishBuilderImpl(configurationService).messageExpiryInterval(11);
+        configService.mqttConfiguration().setMaxMessageExpiryInterval(10);
+        new PublishBuilderImpl(configService).messageExpiryInterval(11);
     }
 
     @Test
     public void test_custom_max_message_expiry_value_validation() {
-        configurationService.mqttConfiguration().setMaxMessageExpiryInterval(10);
-        new PublishBuilderImpl(configurationService).messageExpiryInterval(10);
+        configService.mqttConfiguration().setMaxMessageExpiryInterval(10);
+        new PublishBuilderImpl(configService).messageExpiryInterval(10);
     }
 
     @Test
     public void test_max_message_expiry_value_validation() {
-        new PublishBuilderImpl(configurationService).messageExpiryInterval(4_294_967_296L);
+        new PublishBuilderImpl(configService).messageExpiryInterval(4_294_967_296L);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_message_expiry_less_than_zero() {
-        new PublishBuilderImpl(configurationService).messageExpiryInterval(-1);
+        new PublishBuilderImpl(configService).messageExpiryInterval(-1);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_topic_validation() {
-        new PublishBuilderImpl(configurationService).topic("#");
+        new PublishBuilderImpl(configService).topic("#");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_topic_validation_utf_8_should_not() {
-        new PublishBuilderImpl(configurationService).topic("topic" + '\u0001');
+        new PublishBuilderImpl(configService).topic("topic" + '\u0001');
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_topic_validation_utf_8_must_not() {
-        new PublishBuilderImpl(configurationService).topic("topic" + '\uD800');
+        new PublishBuilderImpl(configService).topic("topic" + '\uD800');
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_response_topic_validation_utf_8_should_not() {
-        new PublishBuilderImpl(configurationService).responseTopic("topic" + '\u0001');
+        new PublishBuilderImpl(configService).responseTopic("topic" + '\u0001');
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_response_topic_validation_utf_8_must_not() {
-        new PublishBuilderImpl(configurationService).responseTopic("topic" + '\uD800');
+        new PublishBuilderImpl(configService).responseTopic("topic" + '\uD800');
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_content_type_validation_utf_8_should_not() {
-        new PublishBuilderImpl(configurationService).contentType("topic" + '\u0001');
+        new PublishBuilderImpl(configService).contentType("topic" + '\u0001');
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_content_type_validation_utf_8_must_not() {
-        new PublishBuilderImpl(configurationService).contentType("topic" + '\uD800');
+        new PublishBuilderImpl(configService).contentType("topic" + '\uD800');
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_user_property_name_validation_utf_8_should_not() {
-        new PublishBuilderImpl(configurationService).userProperty("topic" + '\u0001', "val");
+        new PublishBuilderImpl(configService).userProperty("topic" + '\u0001', "val");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_user_property_name_validation_utf_8_must_not() {
-        new PublishBuilderImpl(configurationService).userProperty("topic" + '\uD800', "val");
+        new PublishBuilderImpl(configService).userProperty("topic" + '\uD800', "val");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_user_property_value_validation_utf_8_should_not() {
-        new PublishBuilderImpl(configurationService).userProperty("key", "val" + '\u0001');
+        new PublishBuilderImpl(configService).userProperty("key", "val" + '\u0001');
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_user_property_value_validation_utf_8_must_not() {
-        new PublishBuilderImpl(configurationService).userProperty("key", "val" + '\uD800');
+        new PublishBuilderImpl(configService).userProperty("key", "val" + '\uD800');
     }
 
 
     @Test(expected = NullPointerException.class)
     public void test_null_qos() {
-        new PublishBuilderImpl(configurationService).qos(null);
+        new PublishBuilderImpl(configService).qos(null);
     }
 
     @Test(expected = NullPointerException.class)
     public void test_null_topic() {
-        new PublishBuilderImpl(configurationService).topic(null);
+        new PublishBuilderImpl(configService).topic(null);
     }
 
     @Test(expected = NullPointerException.class)
     public void test_null_user_property_key() {
-        new PublishBuilderImpl(configurationService).userProperty(null, "value");
+        new PublishBuilderImpl(configService).userProperty(null, "value");
     }
 
     @Test(expected = NullPointerException.class)
     public void test_null_user_property_value() {
-        new PublishBuilderImpl(configurationService).userProperty("key", null);
+        new PublishBuilderImpl(configService).userProperty("key", null);
     }
 
     @Test(expected = NullPointerException.class)
     public void test_topic_not_set() {
-        new PublishBuilderImpl(configurationService).payload(ByteBuffer.wrap(new byte[]{1, 2, 3})).build();
+        new PublishBuilderImpl(configService).payload(ByteBuffer.wrap(new byte[]{1, 2, 3})).build();
     }
 
     @Test(expected = NullPointerException.class)
     public void test_payload_not_set() {
-        new PublishBuilderImpl(configurationService).topic("topic").build();
+        new PublishBuilderImpl(configService).topic("topic").build();
     }
 
     @Test(expected = DoNotImplementException.class)
     public void test_from_invalid_publish_implementation() {
-        new PublishBuilderImpl(configurationService).fromPublish(new TestPublish()).build();
+        new PublishBuilderImpl(configService).fromPublish(new TestPublish()).build();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_user_property_name_too_long() {
-        new PublishBuilderImpl(configurationService).userProperty(RandomStringUtils.randomAlphanumeric(65536), "val");
+        new PublishBuilderImpl(configService).userProperty(RandomStringUtils.randomAlphanumeric(65536), "val");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_user_property_value_too_long() {
-        new PublishBuilderImpl(configurationService).userProperty("name", RandomStringUtils.randomAlphanumeric(65536));
+        new PublishBuilderImpl(configService).userProperty("name", RandomStringUtils.randomAlphanumeric(65536));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_response_topic_too_long() {
-        new PublishBuilderImpl(configurationService).responseTopic(RandomStringUtils.randomAlphanumeric(65536));
+        new PublishBuilderImpl(configService).responseTopic(RandomStringUtils.randomAlphanumeric(65536));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_content_type_too_long() {
-        new PublishBuilderImpl(configurationService).contentType(RandomStringUtils.randomAlphanumeric(65536));
+        new PublishBuilderImpl(configService).contentType(RandomStringUtils.randomAlphanumeric(65536));
     }
 
 
     @Test
     public void test_all_values_set() {
-        final Publish publish = new PublishBuilderImpl(configurationService).topic("topic")
+        final Publish publish = new PublishBuilderImpl(configService).topic("topic")
                 .payload(ByteBuffer.wrap(new byte[]{1, 2, 3}))
                 .qos(Qos.EXACTLY_ONCE)
                 .retain(true)
@@ -221,7 +221,7 @@ public class PublishBuilderImplTest {
 
     @Test
     public void test_from_publish() {
-        final Publish original = new PublishBuilderImpl(configurationService).topic("topic")
+        final Publish original = new PublishBuilderImpl(configService).topic("topic")
                 .payload(ByteBuffer.wrap(new byte[]{1, 2, 3}))
                 .qos(Qos.EXACTLY_ONCE)
                 .retain(true)
@@ -244,7 +244,7 @@ public class PublishBuilderImplTest {
         assertEquals(PayloadFormatIndicator.UTF_8, original.getPayloadFormatIndicator().get());
         assertEquals("value", original.getUserProperties().getFirst("key").get());
 
-        final Publish copy = new PublishBuilderImpl(configurationService).fromPublish(original).build();
+        final Publish copy = new PublishBuilderImpl(configService).fromPublish(original).build();
         assertEquals("topic", copy.getTopic());
         assertArrayEquals(new byte[]{1, 2, 3}, copy.getPayload().get().array());
         assertEquals(2, copy.getQos().getQosNumber());

@@ -17,7 +17,7 @@ package com.hivemq.mqtt.handler.publish;
 
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.MqttConfigurationServiceImpl;
+import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.logging.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
@@ -52,7 +52,7 @@ public class FlowControlHandlerTest {
 
     private FlowControlHandler flowControlHandler;
 
-    private MqttConfigurationServiceImpl mqttConfigurationService;
+    private MqttConfigurationService mqttConfigurationService;
 
     @Mock
     EventLog eventLog;
@@ -62,7 +62,7 @@ public class FlowControlHandlerTest {
 
         MockitoAnnotations.initMocks(this);
 
-        mqttConfigurationService = new MqttConfigurationServiceImpl();
+        mqttConfigurationService = new MqttConfigurationService();
         mqttConfigurationService.setServerReceiveMaximum(10);
 
         final MqttServerDisconnector serverDisconnector = new MqttServerDisconnectorImpl(eventLog);

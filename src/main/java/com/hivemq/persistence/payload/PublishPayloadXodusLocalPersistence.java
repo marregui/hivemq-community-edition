@@ -19,7 +19,7 @@ package com.hivemq.persistence.payload;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.UnrecoverableException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -65,7 +65,7 @@ public class PublishPayloadXodusLocalPersistence extends XodusLocalPersistence
         super(environmentUtil,
                 localPersistenceFileUtil,
                 persistenceStartup,
-                InternalConfigurations.PAYLOAD_PERSISTENCE_BUCKET_COUNT.get(),
+                InternalConfig.PAYLOAD_PERSISTENCE_BUCKET_COUNT.get(),
                 true);
     }
 

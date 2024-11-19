@@ -25,8 +25,8 @@ import com.hivemq.bootstrap.ClientState;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
 import com.hivemq.bootstrap.netty.ChannelHandlerNames;
-import com.hivemq.config.ConfigurationService;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.ConfigService;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.config.entity.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -144,7 +144,7 @@ public class ConnectHandlerTest {
     @Mock
     private PluginAuthenticatorServiceImpl internalAuthServiceImpl;
 
-    private ConfigurationService configurationService;
+    private ConfigService configService;
     private MqttConnacker mqttConnacker;
     private ChannelHandlerContext ctx;
     private ConnectHandler handler;
@@ -170,8 +170,8 @@ public class ConnectHandlerTest {
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
         clientConnectionContext.setQueueSizeMaximum(null);
 
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
-        InternalConfigurations.AUTH_DENY_UNAUTHENTICATED_CONNECTIONS.set(false);
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
+        InternalConfig.AUTH_DENY_UNAUTHENTICATED_CONNECTIONS.set(false);
         mqttConnacker = new MqttConnackerImpl(eventLog);
         serverDisconnector = new MqttServerDisconnectorImpl(eventLog);
         connectionPersistence = new ConnectionPersistenceImpl();
@@ -202,7 +202,7 @@ public class ConnectHandlerTest {
 
     @After
     public void tearDown() {
-        InternalConfigurations.AUTH_DENY_UNAUTHENTICATED_CONNECTIONS.set(true);
+        InternalConfig.AUTH_DENY_UNAUTHENTICATED_CONNECTIONS.set(true);
     }
 
     @Test
@@ -254,8 +254,8 @@ public class ConnectHandlerTest {
     @Test
     public void test_connect_with_keep_alive_zero_not_allowed() {
 
-        configurationService.mqttConfiguration().setKeepAliveMax(65535);
-        configurationService.mqttConfiguration().setKeepAliveAllowZero(false);
+        configService.mqttConfiguration().setKeepAliveMax(65535);
+        configService.mqttConfiguration().setKeepAliveAllowZero(false);
 
         createHandler();
 
@@ -282,8 +282,8 @@ public class ConnectHandlerTest {
     @Test
     public void test_connect_with_keep_alive_higher_than_server() {
 
-        configurationService.mqttConfiguration().setKeepAliveMax(500);
-        configurationService.mqttConfiguration().setKeepAliveAllowZero(false);
+        configService.mqttConfiguration().setKeepAliveMax(500);
+        configService.mqttConfiguration().setKeepAliveAllowZero(false);
 
         createHandler();
 
@@ -324,8 +324,8 @@ public class ConnectHandlerTest {
     @Test
     public void test_connect_with_keep_alive_ok() {
 
-        configurationService.mqttConfiguration().setKeepAliveMax(500);
-        configurationService.mqttConfiguration().setKeepAliveAllowZero(false);
+        configService.mqttConfiguration().setKeepAliveMax(500);
+        configService.mqttConfiguration().setKeepAliveAllowZero(false);
 
         createHandler();
 
@@ -387,7 +387,7 @@ public class ConnectHandlerTest {
     @Test
     public void test_connect_with_session_expiry_interval_max() {
 
-        configurationService.mqttConfiguration().setMaxSessionExpiryInterval(SESSION_EXPIRY_MAX);
+        configService.mqttConfiguration().setMaxSessionExpiryInterval(SESSION_EXPIRY_MAX);
 
         createHandler();
 
@@ -409,8 +409,8 @@ public class ConnectHandlerTest {
     @Test
     public void test_connect_with_topic_alias_enabled() {
 
-        configurationService.mqttConfiguration().setTopicAliasMaxPerClient(5);
-        configurationService.mqttConfiguration().setTopicAliasEnabled(true);
+        configService.mqttConfiguration().setTopicAliasMaxPerClient(5);
+        configService.mqttConfiguration().setTopicAliasEnabled(true);
 
         createHandler();
 
@@ -431,8 +431,8 @@ public class ConnectHandlerTest {
     @Test
     public void test_connect_with_topic_alias_disabled() {
 
-        configurationService.mqttConfiguration().setTopicAliasMaxPerClient(5);
-        configurationService.mqttConfiguration().setTopicAliasEnabled(false);
+        configService.mqttConfiguration().setTopicAliasMaxPerClient(5);
+        configService.mqttConfiguration().setTopicAliasEnabled(false);
 
         createHandler();
 
@@ -453,7 +453,7 @@ public class ConnectHandlerTest {
     @Test
     public void test_connect_with_session_expiry_interval_overridden() {
 
-        configurationService.mqttConfiguration().setMaxSessionExpiryInterval(10000L);
+        configService.mqttConfiguration().setMaxSessionExpiryInterval(10000L);
 
         createHandler();
 
@@ -492,7 +492,7 @@ public class ConnectHandlerTest {
     @Test
     public void test_connect_with_assigned_client_identifier() throws InterruptedException {
 
-        configurationService.securityConfiguration().setAllowServerAssignedClientId(true);
+        configService.securityConfiguration().setAllowServerAssignedClientId(true);
 
         createHandler();
 
@@ -529,7 +529,7 @@ public class ConnectHandlerTest {
     @Test
     public void test_connect_with_own_client_identifier() throws InterruptedException {
 
-        configurationService.securityConfiguration().setAllowServerAssignedClientId(true);
+        configService.securityConfiguration().setAllowServerAssignedClientId(true);
 
         createHandler();
 
@@ -566,7 +566,7 @@ public class ConnectHandlerTest {
     @Test
     public void test_connect_with_auth_user_props() throws InterruptedException {
 
-        configurationService.securityConfiguration().setAllowServerAssignedClientId(true);
+        configService.securityConfiguration().setAllowServerAssignedClientId(true);
 
         createHandler();
 
@@ -666,7 +666,7 @@ public class ConnectHandlerTest {
 
     @Test
     public void test_will_topic_max_length_exceeded_mqtt5() throws Exception {
-        configurationService.restrictionsConfiguration().setMaxTopicLength(5);
+        configService.restrictionsConfiguration().setMaxTopicLength(5);
 
         createHandler();
 
@@ -694,7 +694,7 @@ public class ConnectHandlerTest {
     public void test_will_exceed_max_qos_mqtt5() throws Exception {
 
         createHandler();
-        configurationService.mqttConfiguration().setMaximumQos(QoS.AT_MOST_ONCE);
+        configService.mqttConfiguration().setMaximumQos(QoS.AT_MOST_ONCE);
 
         final CountDownLatch latch = new CountDownLatch(1);
 
@@ -720,7 +720,7 @@ public class ConnectHandlerTest {
     @Test
     public void test_too_long_clientid_mqtt5() throws Exception {
 
-        configurationService.restrictionsConfiguration().setMaxClientIdLength(5);
+        configService.restrictionsConfiguration().setMaxClientIdLength(5);
         createHandler();
 
         final CountDownLatch latch = new CountDownLatch(1);
@@ -755,7 +755,7 @@ public class ConnectHandlerTest {
     public void test_will_retain_not_supported_mqtt5() throws InterruptedException {
         clientConnectionContext.setProtocolVersion(ProtocolVersion.MQTTv5);
 
-        configurationService.mqttConfiguration().setRetainedMessagesEnabled(false);
+        configService.mqttConfiguration().setRetainedMessagesEnabled(false);
 
         createHandler();
 
@@ -784,7 +784,7 @@ public class ConnectHandlerTest {
     public void test_will_retain_supported_mqtt5() {
         clientConnectionContext.setProtocolVersion(ProtocolVersion.MQTTv5);
 
-        configurationService.mqttConfiguration().setRetainedMessagesEnabled(true);
+        configService.mqttConfiguration().setRetainedMessagesEnabled(true);
 
         createHandler();
 
@@ -1198,7 +1198,7 @@ public class ConnectHandlerTest {
             channel.pipeline().remove(ChannelHandlerNames.MESSAGE_EXPIRY_HANDLER);
         }
 
-        configurationService.mqttConfiguration().setServerReceiveMaximum(10);
+        configService.mqttConfiguration().setServerReceiveMaximum(10);
 
         final Provider<PublishFlowHandler> publishFlowHandlerProvider =
                 () -> new PublishFlowHandler(mock(PublishPollService.class),
@@ -1208,11 +1208,10 @@ public class ConnectHandlerTest {
                         mock(DropOutgoingPublishesHandler.class));
 
         final Provider<FlowControlHandler> flowControlHandlerProvider =
-                () -> new FlowControlHandler(configurationService.mqttConfiguration(), serverDisconnector);
+                () -> new FlowControlHandler(configService.mqttConfiguration(), serverDisconnector);
 
         handler = new ConnectHandler(clientSessionPersistence,
-                connectionPersistence,
-                configurationService,
+                connectionPersistence, configService,
                 publishFlowHandlerProvider,
                 flowControlHandlerProvider,
                 mqttConnacker,

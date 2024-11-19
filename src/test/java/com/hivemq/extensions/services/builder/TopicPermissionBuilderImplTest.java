@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.builder;
 
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.extension.sdk.api.auth.parameter.TopicPermission;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,12 +28,12 @@ public class TopicPermissionBuilderImplTest {
 
     private TopicPermissionBuilderImpl topicPermissionBuilder;
 
-    private ConfigurationService configurationService;
+    private ConfigService configService;
 
     @Before
     public void setUp() throws Exception {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
-        topicPermissionBuilder = new TopicPermissionBuilderImpl(configurationService);
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
+        topicPermissionBuilder = new TopicPermissionBuilderImpl(configService);
     }
 
     @Test(expected = NullPointerException.class)
@@ -63,14 +63,14 @@ public class TopicPermissionBuilderImplTest {
 
     @Test()
     public void test_topic_valid_utf8_should_not() {
-        configurationService.securityConfiguration().setValidateUTF8(false);
+        configService.securityConfiguration().setValidateUTF8(false);
         final TopicPermission topicPermission = topicPermissionBuilder.topicFilter("topic" + '\u0001').build();
         assertEquals("topic" + '\u0001', topicPermission.getTopicFilter());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_topic_invalid_to_long() {
-        configurationService.restrictionsConfiguration().setMaxTopicLength(10);
+        configService.restrictionsConfiguration().setMaxTopicLength(10);
         topicPermissionBuilder.topicFilter("topic123456");
     }
 
@@ -91,7 +91,7 @@ public class TopicPermissionBuilderImplTest {
 
     @Test()
     public void test_shared_topic_valid_utf8_should_not() {
-        configurationService.securityConfiguration().setValidateUTF8(false);
+        configService.securityConfiguration().setValidateUTF8(false);
         final TopicPermission topicPermission =
                 topicPermissionBuilder.sharedGroup("group" + '\u0001').topicFilter("topic").build();
         assertEquals("group" + '\u0001', topicPermission.getSharedGroup());

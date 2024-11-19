@@ -18,9 +18,9 @@ package com.hivemq.config;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.hivemq.config.entity.MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT;
+import static com.hivemq.config.ConfigService.MAX_EXPIRY_INTERVAL_DEFAULT;
 
-public class InternalConfigurations {
+public class InternalConfig {
 
     /**
      * The "persistence shutdown grace period" represents the time span,
@@ -36,9 +36,6 @@ public class InternalConfigurations {
      */
     public static final AtomicInteger PERSISTENCE_STARTUP_SHUTDOWN_TIMEOUT_SEC = new AtomicInteger(300);
 
-    /* ***************
-     *  Persistences *
-     *****************/
     public static final AtomicInteger PERSISTENCE_BUCKET_COUNT = new AtomicInteger(64);
     public static final AtomicInteger SINGLE_WRITER_CREDITS_PER_EXECUTION = new AtomicInteger(65);
     public static final AtomicInteger SINGLE_WRITER_INTERVAL_TO_CHECK_PENDING_TASKS_AND_SCHEDULE_MSEC =

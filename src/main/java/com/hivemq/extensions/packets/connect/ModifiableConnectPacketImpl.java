@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.connect;
 
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,11 +63,11 @@ public class ModifiableConnectPacketImpl implements ModifiableConnectPacket {
     private @Nullable ModifiableWillPublishImpl willPublish;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private boolean modified = false;
 
     public ModifiableConnectPacketImpl(
-            final @NotNull ConnectPacketImpl packet, final @NotNull ConfigurationService configurationService) {
+            final @NotNull ConnectPacketImpl packet, final @NotNull ConfigService configService) {
 
         mqttVersion = packet.mqttVersion;
         clientId = packet.clientId;
@@ -88,11 +88,11 @@ public class ModifiableConnectPacketImpl implements ModifiableConnectPacket {
 
         willPublish = (packet.willPublish == null) ?
                 null :
-                new ModifiableWillPublishImpl(packet.willPublish, configurationService);
+                new ModifiableWillPublishImpl(packet.willPublish, configService);
         userProperties = new ModifiableUserPropertiesImpl(packet.userProperties.asInternalList(),
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
 
-        this.configurationService = configurationService;
+        this.configService = configService;
     }
 
     @Override
@@ -107,7 +107,7 @@ public class ModifiableConnectPacketImpl implements ModifiableConnectPacket {
 
     @Override
     public void setClientId(final @NotNull String clientId) {
-        final int clientIdLength = configurationService.restrictionsConfiguration().maxClientIdLength();
+        final int clientIdLength = configService.restrictionsConfiguration().maxClientIdLength();
         checkArgument(!Utf8Utils.containsMustNotCharacters(clientId), clientId + " is not a valid client id");
         checkArgument(!Utf8Utils.hasControlOrNonCharacter(clientId), clientId + " is not a valid client id");
         checkArgument(clientId.length() < clientIdLength, "client ID exceeds the maximum client ID length");
@@ -140,7 +140,7 @@ public class ModifiableConnectPacketImpl implements ModifiableConnectPacket {
 
     @Override
     public void setSessionExpiryInterval(final long sessionExpiryInterval) {
-        final long configuredMaximum = configurationService.mqttConfiguration().maxSessionExpiryInterval();
+        final long configuredMaximum = configService.mqttConfiguration().maxSessionExpiryInterval();
         checkArgument(sessionExpiryInterval >= 0, "Session expiry interval must NOT be less than 0");
         checkArgument(sessionExpiryInterval < configuredMaximum,
                 "Expiry interval must be less than the configured maximum of" + configuredMaximum);
@@ -158,7 +158,7 @@ public class ModifiableConnectPacketImpl implements ModifiableConnectPacket {
 
     @Override
     public void setKeepAlive(final int keepAlive) {
-        final int configuredMaximum = configurationService.mqttConfiguration().keepAliveMax();
+        final int configuredMaximum = configService.mqttConfiguration().keepAliveMax();
         checkArgument(keepAlive >= 0, "Keep alive must NOT be less than 0");
         checkArgument(keepAlive < configuredMaximum,
                 "Keep alive must be less than the configured maximum of " + configuredMaximum);
@@ -193,7 +193,7 @@ public class ModifiableConnectPacketImpl implements ModifiableConnectPacket {
 
     @Override
     public void setMaximumPacketSize(final int maximumPacketSize) {
-        final int configuredMaximum = configurationService.mqttConfiguration().maxPacketSize();
+        final int configuredMaximum = configService.mqttConfiguration().maxPacketSize();
         checkArgument(maximumPacketSize > 0, "Maximum packet size must be bigger than 0");
         checkArgument(maximumPacketSize < configuredMaximum,
                 "Maximum packet must be less than the configured maximum of " + configuredMaximum);
@@ -337,7 +337,7 @@ public class ModifiableConnectPacketImpl implements ModifiableConnectPacket {
             modifiableWillPublish = null;
         } else if (willPublish instanceof WillPublishPacketImpl) {
             modifiableWillPublish =
-                    new ModifiableWillPublishImpl((WillPublishPacketImpl) willPublish, configurationService);
+                    new ModifiableWillPublishImpl((WillPublishPacketImpl) willPublish, configService);
         } else if (willPublish instanceof ModifiableWillPublishImpl) {
             modifiableWillPublish = (ModifiableWillPublishImpl) willPublish;
         } else {
@@ -379,6 +379,6 @@ public class ModifiableConnectPacketImpl implements ModifiableConnectPacket {
     }
 
     public @NotNull ModifiableConnectPacketImpl update(final @NotNull ConnectPacketImpl packet) {
-        return new ModifiableConnectPacketImpl(packet, configurationService);
+        return new ModifiableConnectPacketImpl(packet, configService);
     }
 }

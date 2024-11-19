@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.connack;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,13 +63,13 @@ public class ModifiableConnackPacketImpl implements ModifiableConnackPacket {
     private @Nullable String reasonString;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final boolean requestResponseInformation;
     private boolean modified = false;
 
     public ModifiableConnackPacketImpl(
             final @NotNull ConnackPacketImpl packet,
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final boolean requestResponseInformation) {
 
         reasonCode = packet.reasonCode;
@@ -94,9 +94,9 @@ public class ModifiableConnackPacketImpl implements ModifiableConnackPacket {
         serverReference = packet.serverReference;
         reasonString = packet.reasonString;
         userProperties = new ModifiableUserPropertiesImpl(packet.userProperties.asInternalList(),
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
 
-        this.configurationService = configurationService;
+        this.configService = configService;
         this.requestResponseInformation = requestResponseInformation;
     }
 
@@ -149,7 +149,7 @@ public class ModifiableConnackPacketImpl implements ModifiableConnackPacket {
     @Override
     public void setAssignedClientIdentifier(final @Nullable String assignedClientIdentifier) {
         PluginBuilderUtil.checkClientIdentifier(assignedClientIdentifier,
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.assignedClientId, assignedClientIdentifier)) {
             return;
         }
@@ -227,7 +227,7 @@ public class ModifiableConnackPacketImpl implements ModifiableConnackPacket {
     public void setResponseInformation(final @Nullable String responseInformation) {
         PluginBuilderUtil.checkResponseInformation(responseInformation,
                 requestResponseInformation,
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.responseInformation, responseInformation)) {
             return;
         }
@@ -243,7 +243,7 @@ public class ModifiableConnackPacketImpl implements ModifiableConnackPacket {
     @Override
     public void setServerReference(final @Nullable String serverReference) {
         PluginBuilderUtil.checkServerReference(serverReference,
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.serverReference, serverReference)) {
             return;
         }
@@ -262,7 +262,7 @@ public class ModifiableConnackPacketImpl implements ModifiableConnackPacket {
             Preconditions.checkState(reasonCode != ConnackReasonCode.SUCCESS,
                     "Reason string must not be set when reason code is successful");
         }
-        PluginBuilderUtil.checkReasonString(reasonString, configurationService.securityConfiguration().validateUTF8());
+        PluginBuilderUtil.checkReasonString(reasonString, configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.reasonString, reasonString)) {
             return;
         }
@@ -302,6 +302,6 @@ public class ModifiableConnackPacketImpl implements ModifiableConnackPacket {
     }
 
     public @NotNull ModifiableConnackPacketImpl update(final @NotNull ConnackPacketImpl packet) {
-        return new ModifiableConnackPacketImpl(packet, configurationService, requestResponseInformation);
+        return new ModifiableConnackPacketImpl(packet, configService, requestResponseInformation);
     }
 }

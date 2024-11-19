@@ -28,10 +28,6 @@ import static com.hivemq.config.RestrictionsConfigurationService.MAX_CONNECTIONS
 import static com.hivemq.config.RestrictionsConfigurationService.MAX_TOPIC_LENGTH_DEFAULT;
 import static com.hivemq.config.RestrictionsConfigurationService.NO_CONNECT_IDLE_TIMEOUT_DEFAULT;
 
-/**
- * @author Dominik Obermaier
- * @author Florian Limpöck
- */
 @XmlRootElement(name = "restrictions")
 @XmlAccessorType(XmlAccessType.NONE)
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})

@@ -35,12 +35,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.hivemq.config.InternalConfigurations.SHARED_SUBSCRIBER_CACHE_CONCURRENCY_LEVEL;
-import static com.hivemq.config.InternalConfigurations.SHARED_SUBSCRIBER_CACHE_MAX_SIZE_SUBSCRIBERS;
-import static com.hivemq.config.InternalConfigurations.SHARED_SUBSCRIBER_CACHE_TIME_TO_LIVE_MSEC;
-import static com.hivemq.config.InternalConfigurations.SHARED_SUBSCRIPTION_CACHE_CONCURRENCY_LEVEL;
-import static com.hivemq.config.InternalConfigurations.SHARED_SUBSCRIPTION_CACHE_MAX_SIZE_SUBSCRIPTIONS;
-import static com.hivemq.config.InternalConfigurations.SHARED_SUBSCRIPTION_CACHE_TIME_TO_LIVE_MSEC;
+import static com.hivemq.config.InternalConfig.SHARED_SUBSCRIBER_CACHE_CONCURRENCY_LEVEL;
+import static com.hivemq.config.InternalConfig.SHARED_SUBSCRIBER_CACHE_MAX_SIZE_SUBSCRIBERS;
+import static com.hivemq.config.InternalConfig.SHARED_SUBSCRIBER_CACHE_TIME_TO_LIVE_MSEC;
+import static com.hivemq.config.InternalConfig.SHARED_SUBSCRIPTION_CACHE_CONCURRENCY_LEVEL;
+import static com.hivemq.config.InternalConfig.SHARED_SUBSCRIPTION_CACHE_MAX_SIZE_SUBSCRIPTIONS;
+import static com.hivemq.config.InternalConfig.SHARED_SUBSCRIPTION_CACHE_TIME_TO_LIVE_MSEC;
 
 @LazySingleton
 

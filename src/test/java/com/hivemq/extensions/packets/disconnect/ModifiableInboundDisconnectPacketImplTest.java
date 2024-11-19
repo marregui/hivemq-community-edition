@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.disconnect;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.disconnect.DisconnectReasonCode;
 import com.hivemq.extensions.packets.general.UserPropertiesImpl;
@@ -37,11 +37,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiableInboundDisconnectPacketImplTest {
 
-    private @NotNull ConfigurationService configurationService;
+    private @NotNull ConfigService configService;
 
     @Before
     public void setUp() throws Exception {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 
     @Test
@@ -52,7 +52,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -70,7 +70,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -88,7 +88,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         modifiablePacket.setReasonCode(null);
     }
@@ -101,7 +101,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -119,7 +119,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -137,7 +137,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -155,7 +155,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         modifiablePacket.setReasonString("topic" + '\u0001');
     }
@@ -168,7 +168,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         final StringBuilder s = new StringBuilder("s");
         for (int i = 0; i < 65535; i++) {
@@ -185,7 +185,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -203,7 +203,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -221,7 +221,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -239,7 +239,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         modifiablePacket.setSessionExpiryInterval(-1L);
     }
@@ -252,7 +252,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         modifiablePacket.setSessionExpiryInterval(Long.MAX_VALUE);
     }
@@ -265,7 +265,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 0);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 0);
 
         modifiablePacket.setSessionExpiryInterval(1L);
     }
@@ -278,7 +278,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         final DisconnectPacketImpl copy = modifiablePacket.copy();
 
@@ -293,7 +293,7 @@ public class ModifiableInboundDisconnectPacketImplTest {
                 "serverReference",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableInboundDisconnectPacketImpl modifiablePacket =
-                new ModifiableInboundDisconnectPacketImpl(packet, configurationService, 5);
+                new ModifiableInboundDisconnectPacketImpl(packet, configService, 5);
 
         modifiablePacket.setReasonCode(DisconnectReasonCode.UNSPECIFIED_ERROR);
         modifiablePacket.setReasonString("modifiedReasonString");

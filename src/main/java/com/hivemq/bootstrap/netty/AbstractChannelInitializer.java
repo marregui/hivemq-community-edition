@@ -20,7 +20,7 @@ import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.codec.decoder.MQTTMessageDecoder;
 import com.hivemq.ShutdownHooks;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.config.RestrictionsConfigurationService;
 import com.hivemq.config.entity.Listener;
 import org.jetbrains.annotations.NotNull;
@@ -54,8 +54,8 @@ public abstract class AbstractChannelInitializer extends ChannelInitializer<Chan
         this.channelDependencies = channelDependencies;
         this.listener = listener;
         final boolean incomingEnabled = channelDependencies.getRestrictionsConfigurationService().incomingLimit() > 0;
-        final boolean outgoingEnabled = InternalConfigurations.OUTGOING_BANDWIDTH_THROTTLING_DEFAULT_BYTES_PER_SEC > 0;
-        legacyNettyShutdown = InternalConfigurations.NETTY_SHUTDOWN_LEGACY;
+        final boolean outgoingEnabled = InternalConfig.OUTGOING_BANDWIDTH_THROTTLING_DEFAULT_BYTES_PER_SEC > 0;
+        legacyNettyShutdown = InternalConfig.NETTY_SHUTDOWN_LEGACY;
         throttlingEnabled = incomingEnabled || outgoingEnabled;
     }
 

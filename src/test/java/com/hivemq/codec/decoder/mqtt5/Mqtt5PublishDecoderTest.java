@@ -21,8 +21,8 @@ import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
-import com.hivemq.config.ConfigurationService;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.ConfigService;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import com.hivemq.mqtt.message.QoS;
@@ -169,8 +169,8 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     public void test_decode_topic_alias_exceeds_limit() throws JAXBException, IOException {
 
 
-        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
-        InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(47);
+        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        InternalConfig.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(47);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
         clientConnection = new DummyClientConnection(channel, null);
@@ -199,8 +199,8 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     public void test_decode_topic_alias_override() throws JAXBException, IOException {
 
 
-        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
-        InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(100);
+        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        InternalConfig.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(100);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
         clientConnection = new DummyClientConnection(channel, null);
@@ -368,7 +368,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void test_decode_retain_not_supported() throws JAXBException, IOException {
 
-        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setRetainedMessagesEnabled(false);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
@@ -430,7 +430,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void test_decode_messageExpiryInterval_higher_than_config() throws JAXBException, IOException {
 
-        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setMaxMessageExpiryInterval(100);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
@@ -594,11 +594,11 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void test_decode_PayloadUtf8NotWellFormed_returnsNull() throws JAXBException, IOException {
 
-        final ConfigurationService fullConfigurationService =
+        final ConfigService fullConfigService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
-        fullConfigurationService.securityConfiguration().setPayloadFormatValidation(true);
+        fullConfigService.securityConfiguration().setPayloadFormatValidation(true);
 
-        channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfigurationService));
+        channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfigService));
         final ClientConnection clientConnection = new DummyClientConnection(channel, null);
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
@@ -1147,7 +1147,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
 
     @Test
     public void decode_noTopicAliasFound_returnsNull() throws JAXBException, IOException {
-        InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(1024 * 1024 * 200);
+        InternalConfig.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(1024 * 1024 * 200);
         channel = new EmbeddedChannel(TestMqttDecoder.create());
         clientConnection = new DummyClientConnection(channel, null);
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);

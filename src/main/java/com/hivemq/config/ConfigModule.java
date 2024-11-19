@@ -18,15 +18,15 @@ package com.hivemq.config;
 import com.hivemq.bootstrap.SingletonModule;
 import org.jetbrains.annotations.NotNull;
 
-public class ConfigurationModule extends SingletonModule<Class<ConfigurationModule>> {
+public class ConfigModule extends SingletonModule<Class<ConfigModule>> {
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final @NotNull HivemqId hiveMQId;
 
-    public ConfigurationModule(
-            final @NotNull ConfigurationService configurationService) {
-        super(ConfigurationModule.class);
-        this.configurationService = configurationService;
+    public ConfigModule(
+            final @NotNull ConfigService configService) {
+        super(ConfigModule.class);
+        this.configService = configService;
         this.hiveMQId = new HivemqId();
     }
 
@@ -37,11 +37,11 @@ public class ConfigurationModule extends SingletonModule<Class<ConfigurationModu
     @Override
     protected void configure() {
         bind(HivemqId.class).toInstance(hiveMQId);
-        bind(ListenerConfigurationService.class).toInstance(configurationService.listenerConfiguration());
-        bind(MqttConfigurationService.class).toInstance(configurationService.mqttConfiguration());
-        bind(RestrictionsConfigurationService.class).toInstance(configurationService.restrictionsConfiguration());
-        bind(ConfigurationService.class).toInstance(configurationService);
-        bind(ConfigurationService.class).toInstance(configurationService);
-        bind(SecurityConfigurationService.class).toInstance(configurationService.securityConfiguration());
+        bind(ListenerConfigurationService.class).toInstance(configService.listenerConfiguration());
+        bind(MqttConfigurationService.class).toInstance(configService.mqttConfiguration());
+        bind(RestrictionsConfigurationService.class).toInstance(configService.restrictionsConfiguration());
+        bind(ConfigService.class).toInstance(configService);
+        bind(ConfigService.class).toInstance(configService);
+        bind(SecurityConfigurationService.class).toInstance(configService.securityConfiguration());
     }
 }

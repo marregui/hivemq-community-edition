@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.disconnect;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,13 +46,13 @@ public class ModifiableInboundDisconnectPacketImpl implements ModifiableInboundD
     private final @Nullable String serverReference;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final long originalSessionExpiryInterval;
     private boolean modified = false;
 
     public ModifiableInboundDisconnectPacketImpl(
             final @NotNull DisconnectPacketImpl packet,
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final long originalSessionExpiryInterval) {
 
         reasonCode = packet.reasonCode;
@@ -60,9 +60,9 @@ public class ModifiableInboundDisconnectPacketImpl implements ModifiableInboundD
         sessionExpiryInterval = packet.sessionExpiryInterval;
         serverReference = packet.serverReference;
         userProperties = new ModifiableUserPropertiesImpl(packet.userProperties.asInternalList(),
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
 
-        this.configurationService = configurationService;
+        this.configService = configService;
         this.originalSessionExpiryInterval = originalSessionExpiryInterval;
     }
 
@@ -94,7 +94,7 @@ public class ModifiableInboundDisconnectPacketImpl implements ModifiableInboundD
 
     @Override
     public void setReasonString(final @Nullable String reasonString) {
-        PluginBuilderUtil.checkReasonString(reasonString, configurationService.securityConfiguration().validateUTF8());
+        PluginBuilderUtil.checkReasonString(reasonString, configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.reasonString, reasonString)) {
             return;
         }
@@ -117,7 +117,7 @@ public class ModifiableInboundDisconnectPacketImpl implements ModifiableInboundD
         } else {
             interval = sessionExpiryInterval;
             checkArgument(interval >= 0, "Session expiry interval must be greater than 0");
-            final long configuredMaximum = configurationService.mqttConfiguration().maxSessionExpiryInterval();
+            final long configuredMaximum = configService.mqttConfiguration().maxSessionExpiryInterval();
             checkArgument(interval < configuredMaximum,
                     "Session expiry interval must not be greater than the configured maximum of " + configuredMaximum);
             if (interval > 0) {
@@ -155,6 +155,6 @@ public class ModifiableInboundDisconnectPacketImpl implements ModifiableInboundD
     }
 
     public @NotNull ModifiableInboundDisconnectPacketImpl update(final @NotNull DisconnectPacketImpl packet) {
-        return new ModifiableInboundDisconnectPacketImpl(packet, configurationService, originalSessionExpiryInterval);
+        return new ModifiableInboundDisconnectPacketImpl(packet, configService, originalSessionExpiryInterval);
     }
 }

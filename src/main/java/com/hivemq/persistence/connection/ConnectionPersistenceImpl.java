@@ -25,7 +25,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.util.Exceptions;
@@ -57,8 +57,8 @@ public class ConnectionPersistenceImpl implements ConnectionPersistence {
 
     @Inject
     public ConnectionPersistenceImpl() {
-        shutdownLegacy = InternalConfigurations.NETTY_SHUTDOWN_LEGACY;
-        shutdownPartitionSize = InternalConfigurations.NETTY_COUNT_OF_CONNECTIONS_IN_SHUTDOWN_PARTITION;
+        shutdownLegacy = InternalConfig.NETTY_SHUTDOWN_LEGACY;
+        shutdownPartitionSize = InternalConfig.NETTY_COUNT_OF_CONNECTIONS_IN_SHUTDOWN_PARTITION;
         interrupted = new AtomicBoolean(false);
         clientConnectionMap = new ConcurrentHashMap<>();
         serverChannelMap = new ConcurrentHashMap<>();

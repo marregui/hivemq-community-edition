@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.subscribe;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.subscribe.RetainHandling;
@@ -38,11 +38,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiableSubscribePacketImplTest {
 
-    private @NotNull ConfigurationService configurationService;
+    private @NotNull ConfigService configService;
 
     @Before
     public void setUp() throws Exception {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
 
         final SubscribePacketImpl packet = new SubscribePacketImpl(ImmutableList.of(new SubscriptionImpl("topic",
                 Qos.AT_LEAST_ONCE,
@@ -50,7 +50,7 @@ public class ModifiableSubscribePacketImplTest {
                 false,
                 false)), UserPropertiesImpl.of(ImmutableList.of()), 1, 1);
         final ModifiableSubscribePacketImpl modifiablePacket =
-                new ModifiableSubscribePacketImpl(packet, configurationService);
+                new ModifiableSubscribePacketImpl(packet, configService);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ModifiableSubscribePacketImplTest {
                 false,
                 false)), UserPropertiesImpl.of(ImmutableList.of()), 1, 1);
         final ModifiableSubscribePacketImpl modifiablePacket =
-                new ModifiableSubscribePacketImpl(packet, configurationService);
+                new ModifiableSubscribePacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -79,7 +79,7 @@ public class ModifiableSubscribePacketImplTest {
                 false,
                 false)), UserPropertiesImpl.of(ImmutableList.of()), 1, 1);
         final ModifiableSubscribePacketImpl modifiablePacket =
-                new ModifiableSubscribePacketImpl(packet, configurationService);
+                new ModifiableSubscribePacketImpl(packet, configService);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -97,7 +97,7 @@ public class ModifiableSubscribePacketImplTest {
                 false,
                 false)), UserPropertiesImpl.of(ImmutableList.of()), 1, 1);
         final ModifiableSubscribePacketImpl modifiablePacket =
-                new ModifiableSubscribePacketImpl(packet, configurationService);
+                new ModifiableSubscribePacketImpl(packet, configService);
 
         final SubscribePacketImpl copy = modifiablePacket.copy();
 
@@ -112,7 +112,7 @@ public class ModifiableSubscribePacketImplTest {
                 false,
                 false)), UserPropertiesImpl.of(ImmutableList.of()), 1, 1);
         final ModifiableSubscribePacketImpl modifiablePacket =
-                new ModifiableSubscribePacketImpl(packet, configurationService);
+                new ModifiableSubscribePacketImpl(packet, configService);
 
         modifiablePacket.getSubscriptions().get(0).setTopicFilter("test");
         modifiablePacket.getUserProperties().addUserProperty("testName", "testValue");

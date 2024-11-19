@@ -16,81 +16,83 @@
 package com.hivemq.config;
 
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- * A Configuration service which allows to get information about the current restrictions configuration
- *
- * @author Dominik Obermaier
- * @author Florian Limpöck
- * @since 4.0
- */
-public interface RestrictionsConfigurationService {
+import javax.inject.Singleton;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
-    /**
-     * UNLIMITED
-     */
-    int UNLIMITED_CONNECTIONS = -1;
-    int UNLIMITED_BANDWIDTH = 0;
+@Singleton
+public class RestrictionsConfigurationService {
 
-    /**
-     * DEFAULT VALUES
-     */
-    long MAX_CONNECTIONS_DEFAULT = UNLIMITED_CONNECTIONS;
-    int MAX_CLIENT_ID_LENGTH_DEFAULT = 65535;
-    long NO_CONNECT_IDLE_TIMEOUT_DEFAULT = 10000;
-    long INCOMING_BANDWIDTH_THROTTLING_DEFAULT = UNLIMITED_BANDWIDTH;
-    int MAX_TOPIC_LENGTH_DEFAULT = UnsignedDataTypes.UNSIGNED_SHORT_MAX_VALUE;
+    public static final int UNLIMITED_CONNECTIONS = -1;
+    public static final int UNLIMITED_BANDWIDTH = 0;
+    public static final long MAX_CONNECTIONS_DEFAULT = UNLIMITED_CONNECTIONS;
+    public static final int MAX_CLIENT_ID_LENGTH_DEFAULT = 65535;
+    public static final long NO_CONNECT_IDLE_TIMEOUT_DEFAULT = 10000;
+    public static final long INCOMING_BANDWIDTH_THROTTLING_DEFAULT = UNLIMITED_BANDWIDTH;
+    public static final int MAX_TOPIC_LENGTH_DEFAULT = UnsignedDataTypes.UNSIGNED_SHORT_MAX_VALUE;
+    public static final long MAX_CONNECTIONS_MINIMUM = 0;
+    public static final int MAX_CLIENT_ID_LENGTH_MINIMUM = 1;
+    public static final int MAX_CLIENT_ID_LENGTH_MAXIMUM = UnsignedDataTypes.UNSIGNED_SHORT_MAX_VALUE;
+    public static final long NO_CONNECT_IDLE_TIMEOUT_MINIMUM = 1;
+    public static final long INCOMING_BANDWIDTH_THROTTLING_MINIMUM = 0;
+    public static final int MAX_TOPIC_LENGTH_MINIMUM = 1;
+    public static final int MAX_TOPIC_LENGTH_MAXIMUM = UnsignedDataTypes.UNSIGNED_SHORT_MAX_VALUE;
 
-    /**
-     * BOUNDARY VALUES
-     */
-    long MAX_CONNECTIONS_MINIMUM = 0;
-    int MAX_CLIENT_ID_LENGTH_MINIMUM = 1;
-    int MAX_CLIENT_ID_LENGTH_MAXIMUM = UnsignedDataTypes.UNSIGNED_SHORT_MAX_VALUE;
-    long NO_CONNECT_IDLE_TIMEOUT_MINIMUM = 1;
-    long INCOMING_BANDWIDTH_THROTTLING_MINIMUM = 0;
-    int MAX_TOPIC_LENGTH_MINIMUM = 1;
-    int MAX_TOPIC_LENGTH_MAXIMUM = UnsignedDataTypes.UNSIGNED_SHORT_MAX_VALUE;
+    private static final Logger log = LoggerFactory.getLogger(RestrictionsConfigurationService.class);
 
+    private final AtomicLong maxConnections = new AtomicLong(MAX_CONNECTIONS_DEFAULT);
+    private final AtomicInteger maxClientIdLength = new AtomicInteger(MAX_CLIENT_ID_LENGTH_DEFAULT);
+    private final AtomicLong noConnectIdleTimeout = new AtomicLong(NO_CONNECT_IDLE_TIMEOUT_DEFAULT);
+    private final AtomicLong incomingLimit = new AtomicLong(INCOMING_BANDWIDTH_THROTTLING_DEFAULT);
+    private final AtomicInteger maxTopicLength = new AtomicInteger(MAX_TOPIC_LENGTH_DEFAULT);
 
-    /**
-     * Returns the maximum allowed connections.
-     * <p>
-     * <b>This method only returns the configuration of maximum concurrent MQTT connections, not the value
-     * your HiveMQ license is limited to.</b>
-     *
-     * @return the maximum allowed connections.
-     */
-    long maxConnections();
+    public long maxConnections() {
+        return maxConnections.get();
+    }
 
-    /**
-     * @return the global maximum allowed client identifier length
-     */
-    int maxClientIdLength();
+    public int maxClientIdLength() {
+        return maxClientIdLength.get();
+    }
 
-    /**
-     * @return the global maximum timeout for idle TCP connections of clients which didn't send a CONNECT message.
-     */
-    long noConnectIdleTimeout();
+    public long noConnectIdleTimeout() {
+        return noConnectIdleTimeout.get();
+    }
 
-    /**
-     * @return the incoming bandwidth limit in bytes
-     */
-    long incomingLimit();
+    public long incomingLimit() {
+        return incomingLimit.get();
+    }
 
-    /**
-     * @return the global maximum allowed topic length
-     */
-    int maxTopicLength();
+    public int maxTopicLength() {
+        return maxTopicLength.get();
+    }
 
-    void setMaxConnections(long maxConnections);
+    public void setMaxConnections(final long maxConnections) {
+        log.debug("Setting global maximum allowed connections to {}", maxConnections);
+        this.maxConnections.set(maxConnections);
+    }
 
-    void setMaxClientIdLength(int maxClientIdLength);
+    public void setMaxClientIdLength(final int maxClientIdLength) {
+        log.debug("Setting the maximum client id length to {}", maxClientIdLength);
+        this.maxClientIdLength.set(maxClientIdLength);
+    }
 
-    void setNoConnectIdleTimeout(final long noConnectPacketIdleTimeout);
+    public void setNoConnectIdleTimeout(final long noConnectIdleTimeout) {
+        log.debug(
+                "Setting the timeout for disconnecting idle tcp connections before a connect message was received to {} milliseconds",
+                noConnectIdleTimeout);
+        this.noConnectIdleTimeout.set(noConnectIdleTimeout);
+    }
 
-    void setIncomingLimit(long incomingLimit);
+    public void setIncomingLimit(final long incomingLimit) {
+        log.debug("Throttling the global incoming traffic limit {} bytes/second", incomingLimit);
+        this.incomingLimit.set(incomingLimit);
+    }
 
-    void setMaxTopicLength(int maxTopicLength);
-
+    public void setMaxTopicLength(final int maxTopicLength) {
+        log.debug("Setting the maximum topic length to {}", maxTopicLength);
+        this.maxTopicLength.set(maxTopicLength);
+    }
 }

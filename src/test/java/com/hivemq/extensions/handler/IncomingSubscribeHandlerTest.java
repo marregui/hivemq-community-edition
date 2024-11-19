@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.netty.ChannelHandlerNames;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.Async;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
@@ -108,7 +108,7 @@ public class IncomingSubscribeHandlerTest {
 
         final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
 
-        final ConfigurationService configurationService =
+        final ConfigService configService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
 
         messageAtomicReference = new AtomicReference<>();
@@ -122,8 +122,7 @@ public class IncomingSubscribeHandlerTest {
                 new IncomingSubscribeHandler(pluginTaskExecutorService,
                         asyncer,
                         hiveMQExtensions,
-                        pluginAuthorizerService,
-                        configurationService,
+                        pluginAuthorizerService, configService,
                         mqttServerDisconnector);
 
         final SubscribeHandler subscribeHandler = new SubscribeHandler(incomingSubscribeHandler);

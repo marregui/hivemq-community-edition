@@ -19,7 +19,7 @@ package com.hivemq.mqtt.handler.connack;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.extensions.events.OnAuthFailedEvent;
 import com.hivemq.extensions.events.OnServerDisconnectEvent;
 import com.hivemq.logging.EventLog;
@@ -76,8 +76,8 @@ public class MqttConnackerTest {
     @After
     public void tearDown() throws Exception {
         LogbackCapturingAppender.Factory.cleanUp();
-        InternalConfigurations.CONNACK_WITH_REASON_CODE_ENABLED.set(true);
-        InternalConfigurations.CONNACK_WITH_REASON_STRING_ENABLED.set(true);
+        InternalConfig.CONNACK_WITH_REASON_CODE_ENABLED.set(true);
+        InternalConfig.CONNACK_WITH_REASON_STRING_ENABLED.set(true);
     }
 
     @Test(expected = NullPointerException.class)
@@ -167,7 +167,7 @@ public class MqttConnackerTest {
 
     @Test(timeout = 20000)
     public void test_connackError_mqtt_5_without_reason_string() throws InterruptedException {
-        InternalConfigurations.CONNACK_WITH_REASON_STRING_ENABLED.set(false);
+        InternalConfig.CONNACK_WITH_REASON_STRING_ENABLED.set(false);
         mqttConnacker = new MqttConnackerImpl(eventLog);
         final ClientConnection clientConnection = new DummyClientConnection(channel, null);
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
@@ -192,7 +192,7 @@ public class MqttConnackerTest {
 
     @Test(timeout = 20000)
     public void test_connackError_mqtt_5_without_reason_code() {
-        InternalConfigurations.CONNACK_WITH_REASON_CODE_ENABLED.set(false);
+        InternalConfig.CONNACK_WITH_REASON_CODE_ENABLED.set(false);
         mqttConnacker = new MqttConnackerImpl(eventLog);
         final ClientConnection clientConnection = new DummyClientConnection(channel, null);
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);

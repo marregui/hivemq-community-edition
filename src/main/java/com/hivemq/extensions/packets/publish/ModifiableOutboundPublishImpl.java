@@ -17,7 +17,7 @@ package com.hivemq.extensions.packets.publish;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,11 +60,11 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
     private final long timestamp;
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private boolean modified = false;
 
     public ModifiableOutboundPublishImpl(
-            final @NotNull PublishPacketImpl packet, final @NotNull ConfigurationService configurationService) {
+            final @NotNull PublishPacketImpl packet, final @NotNull ConfigService configService) {
 
         topic = packet.topic;
         qos = packet.qos;
@@ -80,10 +80,10 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
         correlationData = packet.correlationData;
         subscriptionIdentifiers = packet.subscriptionIdentifiers;
         userProperties = new ModifiableUserPropertiesImpl(packet.userProperties.asInternalList(),
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
         timestamp = packet.timestamp;
 
-        this.configurationService = configurationService;
+        this.configService = configService;
     }
 
     @Override
@@ -94,9 +94,9 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
     @Override
     public void setTopic(final @NotNull String topic) {
         checkNotNull(topic, "Topic must not be null");
-        checkArgument(topic.length() <= configurationService.restrictionsConfiguration().maxTopicLength(),
+        checkArgument(topic.length() <= configService.restrictionsConfiguration().maxTopicLength(),
                 "Topic filter length must not exceed '" +
-                        configurationService.restrictionsConfiguration().maxTopicLength() +
+                        configService.restrictionsConfiguration().maxTopicLength() +
                         "' characters, but has '" +
                         topic.length() +
                         "' characters");
@@ -105,7 +105,7 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
             throw new IllegalArgumentException("The topic (" + topic + ") is invalid for PUBLISH messages");
         }
 
-        if (!PluginBuilderUtil.isValidUtf8String(topic, configurationService.securityConfiguration().validateUTF8())) {
+        if (!PluginBuilderUtil.isValidUtf8String(topic, configService.securityConfiguration().validateUTF8())) {
             throw new IllegalArgumentException("The topic (" + topic + ") is UTF-8 malformed");
         }
 
@@ -168,7 +168,7 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
     @Override
     public void setMessageExpiryInterval(final long messageExpiryInterval) {
         PluginBuilderUtil.checkMessageExpiryInterval(messageExpiryInterval,
-                configurationService.mqttConfiguration().maxMessageExpiryInterval());
+                configService.mqttConfiguration().maxMessageExpiryInterval());
         if (this.messageExpiryInterval == messageExpiryInterval) {
             return;
         }
@@ -197,7 +197,7 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
 
     @Override
     public void setContentType(final @Nullable String contentType) {
-        PluginBuilderUtil.checkContentType(contentType, configurationService.securityConfiguration().validateUTF8());
+        PluginBuilderUtil.checkContentType(contentType, configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.contentType, contentType)) {
             return;
         }
@@ -213,7 +213,7 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
     @Override
     public void setResponseTopic(final @Nullable String responseTopic) {
         PluginBuilderUtil.checkResponseTopic(responseTopic,
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.responseTopic, responseTopic)) {
             return;
         }
@@ -287,6 +287,6 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
     }
 
     public @NotNull ModifiableOutboundPublishImpl update(final @NotNull PublishPacketImpl packet) {
-        return new ModifiableOutboundPublishImpl(packet, configurationService);
+        return new ModifiableOutboundPublishImpl(packet, configService);
     }
 }

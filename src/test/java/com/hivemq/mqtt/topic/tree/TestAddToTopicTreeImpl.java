@@ -17,7 +17,7 @@ package com.hivemq.mqtt.topic.tree;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.subscribe.Topic;
@@ -37,7 +37,7 @@ public class TestAddToTopicTreeImpl {
 
     @Before
     public void setUp() throws Exception {
-        InternalConfigurations.TOPIC_TREE_MAP_CREATION_THRESHOLD.set(1);
+        InternalConfig.TOPIC_TREE_MAP_CREATION_THRESHOLD.set(1);
     }
 
     @Test(expected = NullPointerException.class)
@@ -161,7 +161,7 @@ public class TestAddToTopicTreeImpl {
 
     @Test
     public void addTopic_whenAddedMultipleFirstLevelSubscriptions_thenSubscriptionsArePresentInTreeOnFirstLevelInMap() {
-        InternalConfigurations.TOPIC_TREE_MAP_CREATION_THRESHOLD.set(-1);
+        InternalConfig.TOPIC_TREE_MAP_CREATION_THRESHOLD.set(-1);
 
         final LocalTopicTree topicTree = new LocalTopicTree(new MetricsHolder(new MetricRegistry()));
         topicTree.addTopic("sub1", new Topic("a", QoS.AT_MOST_ONCE), (byte) 0, null);
@@ -300,7 +300,7 @@ public class TestAddToTopicTreeImpl {
 
     @Test
     public void addTopic_whenAddedMultipleSingleLevelWildcardSubscriptions_thenSubscriptionsArePresentInTreeOnCorrespondingLevelsInMap() {
-        InternalConfigurations.TOPIC_TREE_MAP_CREATION_THRESHOLD.set(-1);
+        InternalConfig.TOPIC_TREE_MAP_CREATION_THRESHOLD.set(-1);
         final LocalTopicTree topicTree = new LocalTopicTree(new MetricsHolder(new MetricRegistry()));
         topicTree.addTopic("sub1", new Topic("+", QoS.AT_MOST_ONCE), (byte) 0, null);
         topicTree.addTopic("sub2", new Topic("+/+", QoS.AT_MOST_ONCE), (byte) 0, null);

@@ -41,10 +41,10 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.hivemq.config.InternalConfigurations.CLEANUP_JOB_PARALLELISM;
-import static com.hivemq.config.InternalConfigurations.CLEANUP_JOB_TASK_TIMEOUT_SEC;
-import static com.hivemq.config.InternalConfigurations.INTERVAL_BETWEEN_CLEANUP_JOBS_SEC;
-import static com.hivemq.config.InternalConfigurations.PERSISTENCE_BUCKET_COUNT;
+import static com.hivemq.config.InternalConfig.CLEANUP_JOB_PARALLELISM;
+import static com.hivemq.config.InternalConfig.CLEANUP_JOB_TASK_TIMEOUT_SEC;
+import static com.hivemq.config.InternalConfig.INTERVAL_BETWEEN_CLEANUP_JOBS_SEC;
+import static com.hivemq.config.InternalConfig.PERSISTENCE_BUCKET_COUNT;
 
 /**
  * This service is used to remove full remove tombstones that are older than a certain amount of time

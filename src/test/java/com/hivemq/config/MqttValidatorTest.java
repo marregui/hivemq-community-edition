@@ -19,8 +19,8 @@ import com.google.common.io.Files;
 import com.hivemq.mqtt.message.QoS;
 import org.junit.Test;
 
-import static com.hivemq.config.entity.MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT;
-import static com.hivemq.config.entity.MqttConfigurationDefaults.TOPIC_ALIAS_MAX_PER_CLIENT_MAXIMUM;
+import static com.hivemq.config.ConfigService.MAX_EXPIRY_INTERVAL_DEFAULT;
+import static com.hivemq.config.ConfigService.TOPIC_ALIAS_MAX_PER_CLIENT_MAXIMUM;
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT;
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.SESSION_EXPIRE_ON_DISCONNECT;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -29,7 +29,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 
-public class MqttConfiguratorTest extends AbstractConfigurationTest {
+public class MqttValidatorTest extends AbstractConfigurationTest {
 
     @Test
     public void test_server_receive_max_negative_xml() throws Exception {

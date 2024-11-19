@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence;
 
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,7 +74,7 @@ public class PersistenceStartupTest {
     @Test
     public void test_shut_down_interrupts_environment_creation_at_timeout() throws InterruptedException {
 
-        InternalConfigurations.PERSISTENCE_STARTUP_SHUTDOWN_TIMEOUT_SEC.set(0);
+        InternalConfig.PERSISTENCE_STARTUP_SHUTDOWN_TIMEOUT_SEC.set(0);
 
         persistenceStartup = new PersistenceStartup();
 
@@ -102,7 +102,7 @@ public class PersistenceStartupTest {
     @Test
     public void test_shut_down_interrupts_start_at_timeout() throws InterruptedException {
 
-        InternalConfigurations.PERSISTENCE_STARTUP_SHUTDOWN_TIMEOUT_SEC.set(0);
+        InternalConfig.PERSISTENCE_STARTUP_SHUTDOWN_TIMEOUT_SEC.set(0);
 
         persistenceStartup = new PersistenceStartup();
 

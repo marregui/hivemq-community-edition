@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 @SuppressWarnings("NullabilityAnnotations")
 public class ConfigFileReaderTest {
 
-    ConfigurationService reader;
+    ConfigService reader;
     @Mock
     private MqttConfigurationService mqttConfigurationService;
     @Mock
@@ -44,7 +44,7 @@ public class ConfigFileReaderTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         listenerConfigurationService = new ListenerConfigurationService();
-        reader = new ConfigurationService();
+        reader = new ConfigService();
     }
 
     @Test

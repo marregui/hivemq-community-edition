@@ -19,7 +19,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.extensions.handler.IncomingPublishHandler;
 import com.hivemq.mqtt.event.PublishDroppedEvent;
 import com.hivemq.mqtt.message.MessageWithID;
@@ -91,7 +91,7 @@ public class PublishFlowHandlerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 5;
+        InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 5;
         when(ids.lockId()).thenReturn(100);
         orderedTopicService = new OrderedTopicService();
         channel = new EmbeddedChannel(new PublishFlowHandler(publishPollService,
@@ -107,7 +107,7 @@ public class PublishFlowHandlerTest {
 
     @After
     public void tearDown() throws Exception {
-        InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 50;
+        InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 50;
     }
 
     @Test
@@ -516,7 +516,7 @@ public class PublishFlowHandlerTest {
     @Test(timeout = 5000)
     public void test_qos1_release_next_message_on_dropped() throws Exception {
 
-        InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 1;
+        InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 1;
 
         final PUBLISH publish = createPublish("topic", 1, QoS.AT_LEAST_ONCE);
         final PUBLISH publish2 = createPublish("topic", 2, QoS.AT_LEAST_ONCE);
@@ -625,7 +625,7 @@ public class PublishFlowHandlerTest {
 
     @Test(timeout = 4_000)
     public void test_remove_messages() throws Exception {
-        InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 1;
+        InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 1;
 
         final PUBLISH publish1 = createPublish("topic", 1, QoS.AT_LEAST_ONCE);
         final PUBLISH publish2 = createPublish("topic", 2, QoS.AT_LEAST_ONCE);
@@ -663,7 +663,7 @@ public class PublishFlowHandlerTest {
     @Test(timeout = 5000)
     public void test_qos2_release_next_message_on_next_pubcomp() throws Exception {
 
-        InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 1;
+        InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 1;
 
         final PUBLISH publish = createPublish("topic", 1, QoS.EXACTLY_ONCE);
         final PUBLISH publish2 = createPublish("topic", 2, QoS.EXACTLY_ONCE);
@@ -691,7 +691,7 @@ public class PublishFlowHandlerTest {
     @Test(timeout = 5000)
     public void test_qos2_release_next_message_on_failed_pubrec() throws Exception {
 
-        InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 1;
+        InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 1;
 
         final PUBLISH publish = createPublish("topic", 1, QoS.EXACTLY_ONCE);
         final PUBLISH publish2 = createPublish("topic", 2, QoS.EXACTLY_ONCE);
@@ -728,7 +728,7 @@ public class PublishFlowHandlerTest {
     public void test_max_inflight_window() {
 
         ClientConnection.of(channel).setClientReceiveMaximum(50);
-        InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 3;
+        InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 3;
 
 
         final PUBLISH publish = createPublish("topic", 1, QoS.EXACTLY_ONCE);
@@ -752,7 +752,7 @@ public class PublishFlowHandlerTest {
 
     @Test()
     public void test_Qos2AndQos1PublishDoNotInterfereWithEachOther() {
-        InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 50;
+        InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES = 50;
         channel = new EmbeddedChannel(new PublishFlowHandler(publishPollService,
                 new IncomingMessageFlowPersistenceImpl(new IncomingMessageFlowInMemoryLocalPersistence()),
                 orderedTopicService,

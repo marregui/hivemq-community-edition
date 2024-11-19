@@ -23,7 +23,7 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.events.OnClientDisconnectEvent;
@@ -73,7 +73,7 @@ public class DisconnectHandler extends SimpleChannelInboundHandler<DISCONNECT> {
         this.topicAliasLimiter = topicAliasLimiter;
         this.clientSessionPersistence = clientSessionPersistence;
         this.connectionPersistence = connectionPersistence;
-        logClientReasonString = InternalConfigurations.LOG_CLIENT_REASON_STRING_ON_DISCONNECT_ENABLED;
+        logClientReasonString = InternalConfig.LOG_CLIENT_REASON_STRING_ON_DISCONNECT_ENABLED;
     }
 
     @Override

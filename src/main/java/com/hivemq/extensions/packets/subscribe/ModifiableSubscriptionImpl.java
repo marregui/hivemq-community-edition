@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.subscribe;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -40,12 +40,12 @@ public class ModifiableSubscriptionImpl implements ModifiableSubscription {
     private boolean retainAsPublished;
     private boolean noLocal;
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private boolean modified = false;
 
     public ModifiableSubscriptionImpl(
             final @NotNull SubscriptionImpl subscription,
-            final @NotNull ConfigurationService configurationService) {
+            final @NotNull ConfigService configService) {
 
         topicFilter = subscription.topicFilter;
         qos = subscription.qos;
@@ -53,7 +53,7 @@ public class ModifiableSubscriptionImpl implements ModifiableSubscription {
         retainAsPublished = subscription.retainAsPublished;
         noLocal = subscription.noLocal;
 
-        this.configurationService = configurationService;
+        this.configService = configService;
     }
 
     @Override
@@ -65,13 +65,13 @@ public class ModifiableSubscriptionImpl implements ModifiableSubscription {
     public void setTopicFilter(final @NotNull String topicFilter) {
         Preconditions.checkNotNull(topicFilter, "Topic filter must never be null");
         Preconditions.checkArgument(topicFilter.length() <=
-                        configurationService.restrictionsConfiguration().maxTopicLength(),
+                        configService.restrictionsConfiguration().maxTopicLength(),
                 "Topic filter length must not exceed '" +
-                        configurationService.restrictionsConfiguration().maxTopicLength() +
+                        configService.restrictionsConfiguration().maxTopicLength() +
                         "' characters, but has '" +
                         topicFilter.length() +
                         "' characters");
-        Preconditions.checkArgument(!(!configurationService.mqttConfiguration().wildcardSubscriptionsEnabled() &&
+        Preconditions.checkArgument(!(!configService.mqttConfiguration().wildcardSubscriptionsEnabled() &&
                 Topics.containsWildcard(topicFilter)), "Wildcard characters '+' or '#' are not allowed");
 
         if (this.topicFilter.equals(topicFilter)) {
@@ -82,7 +82,8 @@ public class ModifiableSubscriptionImpl implements ModifiableSubscription {
         Preconditions.checkArgument(!(noLocal && shared),
                 "Shared subscription is not allowed with no local flag set to true");
         if (shared) {
-            Preconditions.checkArgument(configurationService.mqttConfiguration().sharedSubscriptionsEnabled(),
+            Preconditions.checkArgument(
+                    configService.mqttConfiguration().sharedSubscriptionsEnabled(),
                     "Shared subscriptions not allowed");
             final SharedSubscriptionService.SharedSubscription sharedSubscription =
                     Topics.checkForSharedSubscription(topicFilter);
@@ -97,7 +98,7 @@ public class ModifiableSubscriptionImpl implements ModifiableSubscription {
         }
 
         if (!PluginBuilderUtil.isValidUtf8String(topicFilter,
-                configurationService.securityConfiguration().validateUTF8())) {
+                configService.securityConfiguration().validateUTF8())) {
             throw new IllegalArgumentException("The topic filter (" + topicFilter + ") is UTF-8 malformed");
         }
 
@@ -112,7 +113,7 @@ public class ModifiableSubscriptionImpl implements ModifiableSubscription {
 
     @Override
     public void setQos(final @NotNull Qos qos) {
-        PluginBuilderUtil.checkQos(qos, configurationService.mqttConfiguration().maximumQos().getQosNumber());
+        PluginBuilderUtil.checkQos(qos, configService.mqttConfiguration().maximumQos().getQosNumber());
         if (this.qos.getQosNumber() == qos.getQosNumber()) {
             return;
         }
@@ -174,6 +175,6 @@ public class ModifiableSubscriptionImpl implements ModifiableSubscription {
     }
 
     public @NotNull ModifiableSubscriptionImpl update(final @NotNull SubscriptionImpl subscription) {
-        return new ModifiableSubscriptionImpl(subscription, configurationService);
+        return new ModifiableSubscriptionImpl(subscription, configService);
     }
 }

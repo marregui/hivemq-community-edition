@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.packets.pubcomp;
 
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.pubcomp.ModifiablePubcompPacket;
@@ -37,19 +37,19 @@ public class ModifiablePubcompPacketImpl implements ModifiablePubcompPacket {
     private @Nullable String reasonString;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private boolean modified = false;
 
     public ModifiablePubcompPacketImpl(
-            final @NotNull PubcompPacketImpl packet, final @NotNull ConfigurationService configurationService) {
+            final @NotNull PubcompPacketImpl packet, final @NotNull ConfigService configService) {
 
         packetIdentifier = packet.packetIdentifier;
         reasonCode = packet.reasonCode;
         reasonString = packet.reasonString;
         userProperties = new ModifiableUserPropertiesImpl(packet.userProperties.asInternalList(),
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
 
-        this.configurationService = configurationService;
+        this.configService = configService;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ModifiablePubcompPacketImpl implements ModifiablePubcompPacket {
 
     @Override
     public void setReasonString(final @Nullable String reasonString) {
-        PluginBuilderUtil.checkReasonString(reasonString, configurationService.securityConfiguration().validateUTF8());
+        PluginBuilderUtil.checkReasonString(reasonString, configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.reasonString, reasonString)) {
             return;
         }
@@ -91,6 +91,6 @@ public class ModifiablePubcompPacketImpl implements ModifiablePubcompPacket {
     }
 
     public @NotNull ModifiablePubcompPacketImpl update(final @NotNull PubcompPacketImpl packet) {
-        return new ModifiablePubcompPacketImpl(packet, configurationService);
+        return new ModifiablePubcompPacketImpl(packet, configService);
     }
 }

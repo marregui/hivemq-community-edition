@@ -16,7 +16,7 @@
 package com.hivemq.extensions.services.builder;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.connect.WillPublishPacket;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -57,7 +57,7 @@ public class WillPublishBuilderImplTest {
 
     @Before
     public void setUp() throws Exception {
-        final ConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService service = new TestConfigurationBootstrap().getFullConfigurationService();
         willPublishBuilder = new WillPublishBuilderImpl(service);
     }
 
@@ -200,7 +200,7 @@ public class WillPublishBuilderImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_qos_not_allowed() throws JAXBException, IOException {
-        final ConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService service = new TestConfigurationBootstrap().getFullConfigurationService();
         service.mqttConfiguration().setMaximumQos(QoS.AT_MOST_ONCE);
         willPublishBuilder = new WillPublishBuilderImpl(service);
         willPublishBuilder.qos(Qos.AT_LEAST_ONCE);
@@ -208,7 +208,7 @@ public class WillPublishBuilderImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_retain_not_allowed() throws JAXBException, IOException {
-        final ConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService service = new TestConfigurationBootstrap().getFullConfigurationService();
         service.mqttConfiguration().setRetainedMessagesEnabled(false);
         willPublishBuilder = new WillPublishBuilderImpl(service);
         willPublishBuilder.retain(true);
@@ -216,7 +216,7 @@ public class WillPublishBuilderImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_topic_length_invalid() throws JAXBException, IOException {
-        final ConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService service = new TestConfigurationBootstrap().getFullConfigurationService();
         service.restrictionsConfiguration().setMaxTopicLength(5);
         willPublishBuilder = new WillPublishBuilderImpl(service);
         willPublishBuilder.topic("123456");

@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.topic.tree;
 
 import com.codahale.metrics.MetricRegistry;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.subscribe.Topic;
@@ -35,7 +35,7 @@ public class TopicTreeImplExistingSubscriptionTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        InternalConfigurations.TOPIC_TREE_MAP_CREATION_THRESHOLD.set(1);
+        InternalConfig.TOPIC_TREE_MAP_CREATION_THRESHOLD.set(1);
         topicTree = new LocalTopicTree(new MetricsHolder(new MetricRegistry()));
 
     }

@@ -19,7 +19,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.persistence.clientqueue.ClientQueuePersistence;
 import com.hivemq.persistence.clientsession.ClientSessionPersistence;
 import com.hivemq.persistence.clientsession.ClientSessionSubscriptionPersistence;
@@ -99,7 +99,7 @@ public class PersistenceShutdownHookTest {
         final SettableFuture<Void> voidSettableFuture = SettableFuture.create();
         when(retainedMessagePersistence.closeDB()).thenReturn(voidSettableFuture);
 
-        InternalConfigurations.PERSISTENCE_SHUTDOWN_TIMEOUT_SEC.set(1);
+        InternalConfig.PERSISTENCE_SHUTDOWN_TIMEOUT_SEC.set(1);
 
         final long start = System.currentTimeMillis();
         persistenceShutdownHook.run();

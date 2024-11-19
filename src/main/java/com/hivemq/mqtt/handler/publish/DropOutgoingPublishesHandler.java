@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.hivemq.config.InternalConfigurations.NOT_WRITABLE_QUEUE_SIZE;
+import static com.hivemq.config.InternalConfig.NOT_WRITABLE_QUEUE_SIZE;
 
 @LazySingleton
 public class DropOutgoingPublishesHandler {

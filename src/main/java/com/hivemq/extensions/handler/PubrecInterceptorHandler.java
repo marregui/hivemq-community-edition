@@ -16,7 +16,7 @@
 package com.hivemq.extensions.handler;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
@@ -58,19 +58,19 @@ public class PubrecInterceptorHandler {
 
     private static final Logger log = LoggerFactory.getLogger(PubrecInterceptorHandler.class);
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private final @NotNull PluginOutPutAsyncer asyncer;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull PluginTaskExecutorService executorService;
 
     @Inject
     public PubrecInterceptorHandler(
-            final @NotNull ConfigurationService configurationService,
+            final @NotNull ConfigService configService,
             final @NotNull PluginOutPutAsyncer asyncer,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull PluginTaskExecutorService executorService) {
 
-        this.configurationService = configurationService;
+        this.configService = configService;
         this.asyncer = asyncer;
         this.hiveMQExtensions = hiveMQExtensions;
         this.executorService = executorService;
@@ -104,7 +104,7 @@ public class PubrecInterceptorHandler {
         final ExtensionParameterHolder<PubrecInboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiablePubrecPacketImpl modifiablePacket =
-                new ModifiablePubrecPacketImpl(packet, configurationService);
+                new ModifiablePubrecPacketImpl(packet, configService);
         final PubrecInboundOutputImpl output = new PubrecInboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<PubrecInboundOutputImpl> outputHolder = new ExtensionParameterHolder<>(output);
 
@@ -156,7 +156,7 @@ public class PubrecInterceptorHandler {
         final ExtensionParameterHolder<PubrecOutboundInputImpl> inputHolder = new ExtensionParameterHolder<>(input);
 
         final ModifiablePubrecPacketImpl modifiablePacket =
-                new ModifiablePubrecPacketImpl(packet, configurationService);
+                new ModifiablePubrecPacketImpl(packet, configService);
         final PubrecOutboundOutputImpl output = new PubrecOutboundOutputImpl(asyncer, modifiablePacket);
         final ExtensionParameterHolder<PubrecOutboundOutputImpl> outputHolder = new ExtensionParameterHolder<>(output);
 

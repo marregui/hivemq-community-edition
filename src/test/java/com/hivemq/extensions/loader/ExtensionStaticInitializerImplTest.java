@@ -18,7 +18,7 @@ package com.hivemq.extensions.loader;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.ImmutableMap;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.extension.sdk.api.ExtensionMain;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.events.EventRegistry;
@@ -116,15 +116,15 @@ public class ExtensionStaticInitializerImplTest {
 
     @Before
     public void before() throws JAXBException, IOException {
-        final ConfigurationService fullConfigurationService =
+        final ConfigService fullConfigService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
         metricRegistry = new MetricRegistry();
         initializerRegistry = new InitializerRegistryImpl(new InitializersImpl(hiveMQExtensions));
-        retainedPublishBuilder = new RetainedPublishBuilderImpl(fullConfigurationService);
-        topicSubscriptionBuilder = new TopicSubscriptionBuilderImpl(fullConfigurationService);
-        topicPermissionBuilder = new TopicPermissionBuilderImpl(fullConfigurationService);
-        publishBuilder = new PublishBuilderImpl(fullConfigurationService);
-        willPublishBuilder = new WillPublishBuilderImpl(fullConfigurationService);
+        retainedPublishBuilder = new RetainedPublishBuilderImpl(fullConfigService);
+        topicSubscriptionBuilder = new TopicSubscriptionBuilderImpl(fullConfigService);
+        topicPermissionBuilder = new TopicPermissionBuilderImpl(fullConfigService);
+        publishBuilder = new PublishBuilderImpl(fullConfigService);
+        willPublishBuilder = new WillPublishBuilderImpl(fullConfigService);
         securityRegistry = new SecurityRegistryImpl(new AuthenticatorsImpl(hiveMQExtensions),
                 new AuthorizersImpl(hiveMQExtensions),
                 hiveMQExtensions);

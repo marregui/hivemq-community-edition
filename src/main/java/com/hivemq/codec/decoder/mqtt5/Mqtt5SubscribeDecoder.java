@@ -21,7 +21,7 @@ import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.AbstractMqttDecoder;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -53,8 +53,8 @@ public class Mqtt5SubscribeDecoder extends AbstractMqttDecoder<SUBSCRIBE> {
     @Inject
     public Mqtt5SubscribeDecoder(
             final @NotNull MqttServerDisconnector disconnector,
-            final @NotNull ConfigurationService configurationService) {
-        super(disconnector, configurationService);
+            final @NotNull ConfigService configService) {
+        super(disconnector, configService);
     }
 
     @Override

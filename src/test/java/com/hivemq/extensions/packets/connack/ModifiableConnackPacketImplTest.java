@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.connack;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.connect.ConnackReasonCode;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -40,11 +40,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiableConnackPacketImplTest {
 
-    private @NotNull ConfigurationService configurationService;
+    private @NotNull ConfigService configService;
 
     @Before
     public void setUp() throws JAXBException, IOException {
-        configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
+        configService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 
     @Test
@@ -69,7 +69,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -101,7 +101,7 @@ public class ModifiableConnackPacketImplTest {
                 "reasonString",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -133,7 +133,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         modifiablePacket.setReasonString("reasonString");
     }
@@ -160,7 +160,7 @@ public class ModifiableConnackPacketImplTest {
                 "reasonString",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -192,7 +192,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -224,7 +224,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -256,7 +256,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         modifiablePacket.setReasonCode(null);
     }
@@ -283,7 +283,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         modifiablePacket.setReasonCode(ConnackReasonCode.UNSPECIFIED_ERROR);
     }
@@ -310,7 +310,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         modifiablePacket.setReasonCode(ConnackReasonCode.SUCCESS);
     }
@@ -337,7 +337,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -369,7 +369,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -401,7 +401,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -433,7 +433,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, false);
+                new ModifiableConnackPacketImpl(packet, configService, false);
 
         modifiablePacket.setResponseInformation("responseInformation");
     }
@@ -460,7 +460,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -492,7 +492,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -524,7 +524,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -556,7 +556,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -588,7 +588,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -620,7 +620,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         modifiablePacket.setAssignedClientIdentifier("\0");
     }
@@ -647,7 +647,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         modifiablePacket.setAssignedClientIdentifier("");
     }
@@ -674,7 +674,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 
@@ -706,7 +706,7 @@ public class ModifiableConnackPacketImplTest {
                 "reason",
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         final ConnackPacketImpl copy = modifiablePacket.copy();
 
@@ -735,7 +735,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         modifiablePacket.setReasonCode(ConnackReasonCode.NOT_AUTHORIZED);
         modifiablePacket.setResponseInformation("responseInformation");
@@ -788,7 +788,7 @@ public class ModifiableConnackPacketImplTest {
                 null,
                 UserPropertiesImpl.of(ImmutableList.of()));
         final ModifiableConnackPacketImpl modifiablePacket =
-                new ModifiableConnackPacketImpl(packet, configurationService, true);
+                new ModifiableConnackPacketImpl(packet, configService, true);
 
         assertFalse(modifiablePacket.isModified());
 

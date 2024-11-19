@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.disconnect;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,20 +43,20 @@ public class ModifiableOutboundDisconnectPacketImpl implements ModifiableOutboun
     private @Nullable String serverReference;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull ConfigurationService configurationService;
+    private final @NotNull ConfigService configService;
     private boolean modified = false;
 
     public ModifiableOutboundDisconnectPacketImpl(
-            final @NotNull DisconnectPacketImpl packet, final @NotNull ConfigurationService configurationService) {
+            final @NotNull DisconnectPacketImpl packet, final @NotNull ConfigService configService) {
 
         reasonCode = packet.reasonCode;
         reasonString = packet.reasonString;
         sessionExpiryInterval = packet.sessionExpiryInterval;
         serverReference = packet.serverReference;
         userProperties = new ModifiableUserPropertiesImpl(packet.userProperties.asInternalList(),
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
 
-        this.configurationService = configurationService;
+        this.configService = configService;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class ModifiableOutboundDisconnectPacketImpl implements ModifiableOutboun
 
     @Override
     public void setReasonString(final @Nullable String reasonString) {
-        PluginBuilderUtil.checkReasonString(reasonString, configurationService.securityConfiguration().validateUTF8());
+        PluginBuilderUtil.checkReasonString(reasonString, configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.reasonString, reasonString)) {
             return;
         }
@@ -110,7 +110,7 @@ public class ModifiableOutboundDisconnectPacketImpl implements ModifiableOutboun
     @Override
     public void setServerReference(final @Nullable String serverReference) {
         PluginBuilderUtil.checkServerReference(serverReference,
-                configurationService.securityConfiguration().validateUTF8());
+                configService.securityConfiguration().validateUTF8());
         if (Objects.equals(this.serverReference, serverReference)) {
             return;
         }
@@ -136,6 +136,6 @@ public class ModifiableOutboundDisconnectPacketImpl implements ModifiableOutboun
     }
 
     public @NotNull ModifiableOutboundDisconnectPacketImpl update(final @NotNull DisconnectPacketImpl packet) {
-        return new ModifiableOutboundDisconnectPacketImpl(packet, configurationService);
+        return new ModifiableOutboundDisconnectPacketImpl(packet, configService);
     }
 }

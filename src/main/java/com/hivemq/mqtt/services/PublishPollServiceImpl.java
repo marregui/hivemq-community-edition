@@ -25,7 +25,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,7 +61,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.hivemq.config.InternalConfigurations.PUBLISH_POLL_BATCH_SIZE_BYTES;
+import static com.hivemq.config.InternalConfig.PUBLISH_POLL_BATCH_SIZE_BYTES;
 
 @LazySingleton
 public class PublishPollServiceImpl implements PublishPollService {
@@ -428,8 +428,8 @@ public class PublishPollServiceImpl implements PublishPollService {
     private int pollMessageLimit(final @NotNull Channel channel) {
         final ClientConnection clientConnection = ClientConnection.of(channel);
         final int maxInflightWindow =
-                clientConnection.getMaxInflightWindow(InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES);
-        return Math.max(InternalConfigurations.PUBLISH_POLL_BATCH_SIZE, maxInflightWindow);
+                clientConnection.getMaxInflightWindow(InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES);
+        return Math.max(InternalConfig.PUBLISH_POLL_BATCH_SIZE, maxInflightWindow);
     }
 
     private class PubrelResendCallback implements FutureCallback<PublishStatus> {

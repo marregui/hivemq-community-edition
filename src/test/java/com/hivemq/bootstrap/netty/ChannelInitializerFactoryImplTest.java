@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.RestrictionsConfigurationService;
 import com.hivemq.config.entity.Listener;
 import com.hivemq.config.entity.TcpListener;
@@ -61,7 +61,7 @@ public class ChannelInitializerFactoryImplTest {
     private EventLog eventLog;
 
     @Mock
-    private ConfigurationService fullConfigurationService;
+    private ConfigService fullConfigService;
 
     @Mock
     private RestrictionsConfigurationService restrictionsConfigurationService;
@@ -71,7 +71,7 @@ public class ChannelInitializerFactoryImplTest {
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
-        when(channelDependencies.getConfigurationService()).thenReturn(fullConfigurationService);
+        when(channelDependencies.getConfigurationService()).thenReturn(fullConfigService);
         when(channelDependencies.getRestrictionsConfigurationService()).thenReturn(restrictionsConfigurationService);
         when(restrictionsConfigurationService.incomingLimit()).thenReturn(0L);
         channelInitializerFactory =
@@ -239,12 +239,12 @@ public class ChannelInitializerFactoryImplTest {
         }
 
         @Override
-        public String getBindAddress() {
+        public @NotNull String getBindAddress() {
             return null;
         }
 
         @Override
-        public String readableName() {
+        public @NotNull String readableName() {
             return null;
         }
 

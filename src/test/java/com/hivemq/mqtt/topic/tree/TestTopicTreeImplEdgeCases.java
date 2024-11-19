@@ -19,7 +19,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.UnmodifiableIterator;
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.subscribe.Topic;
@@ -42,7 +42,7 @@ public class TestTopicTreeImplEdgeCases {
 
     @Before
     public void setUp() {
-        InternalConfigurations.TOPIC_TREE_MAP_CREATION_THRESHOLD.set(1);
+        InternalConfig.TOPIC_TREE_MAP_CREATION_THRESHOLD.set(1);
         topicTree = new LocalTopicTree(new MetricsHolder(new MetricRegistry()));
     }
 

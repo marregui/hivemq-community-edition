@@ -20,11 +20,9 @@ import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
-import com.hivemq.config.entity.MqttConfigurationDefaults;
+import com.hivemq.config.*;
 import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.config.RestrictionsConfigurationService;
-import com.hivemq.config.MqttConfigurationServiceImpl;
-import com.hivemq.config.RestrictionsConfigurationServiceImpl;
 import com.hivemq.extension.sdk.api.auth.parameter.TopicPermission;
 import com.hivemq.extension.sdk.api.packets.publish.AckReasonCode;
 import com.hivemq.extensions.handler.tasks.PublishAuthorizerResult;
@@ -91,8 +89,8 @@ public class IncomingPublishServiceTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        mqttConfigurationService = Mockito.spy(new MqttConfigurationServiceImpl());
-        restrictionsConfigurationService = Mockito.spy(new RestrictionsConfigurationServiceImpl());
+        mqttConfigurationService = Mockito.spy(new MqttConfigurationService());
+        restrictionsConfigurationService = Mockito.spy(new RestrictionsConfigurationService());
         when(publishService.publish(any(PUBLISH.class),
                 any(ExecutorService.class),
                 anyString())).thenReturn(Futures.immediateFuture(PublishReturnCode.DELIVERED));
@@ -446,7 +444,7 @@ public class IncomingPublishServiceTest {
                 QoS.EXACTLY_ONCE,
                 QoS.EXACTLY_ONCE,
                 false,
-                MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT,
+                ConfigService.MAX_EXPIRY_INTERVAL_DEFAULT,
                 Mqtt5PayloadFormatIndicator.UTF_8,
                 null,
                 "responseTopic",

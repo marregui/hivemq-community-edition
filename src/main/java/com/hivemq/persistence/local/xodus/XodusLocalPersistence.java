@@ -37,8 +37,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.hivemq.config.InternalConfigurations.PERSISTENCE_CLOSE_RETRIES;
-import static com.hivemq.config.InternalConfigurations.PERSISTENCE_CLOSE_RETRY_INTERVAL_MSEC;
+import static com.hivemq.config.InternalConfig.PERSISTENCE_CLOSE_RETRIES;
+import static com.hivemq.config.InternalConfig.PERSISTENCE_CLOSE_RETRY_INTERVAL_MSEC;
 
 public abstract class XodusLocalPersistence implements LocalPersistence, FilePersistence {
 

@@ -18,7 +18,7 @@ package com.hivemq.mqtt.handler.publish;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.publish.PUBLISH;
@@ -80,8 +80,8 @@ public class OrderedTopicService {
 
         final ClientConnection clientConnection = ClientConnection.of(ctx.channel());
         final int maxInflightWindow = (clientConnection == null) ?
-                InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES :
-                clientConnection.getMaxInflightWindow(InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES);
+                InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES :
+                clientConnection.getMaxInflightWindow(InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES);
 
         do {
             final QueuedMessage poll = queue.poll();
@@ -150,7 +150,7 @@ public class OrderedTopicService {
 
 
         if (unacknowledgedMessages.size() >=
-                clientConnection.getMaxInflightWindow(InternalConfigurations.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES)) {
+                clientConnection.getMaxInflightWindow(InternalConfig.MAX_INFLIGHT_WINDOW_SIZE_MESSAGES)) {
             queueMessage(promise, publish, clientId);
             return true;
         } else {

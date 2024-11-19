@@ -19,7 +19,7 @@ package com.hivemq.persistence;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import com.hivemq.util.ThreadFactoryUtil;
@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.hivemq.config.InternalConfigurations.SINGLE_WRITER_INTERVAL_TO_CHECK_PENDING_TASKS_AND_SCHEDULE_MSEC;
+import static com.hivemq.config.InternalConfig.SINGLE_WRITER_INTERVAL_TO_CHECK_PENDING_TASKS_AND_SCHEDULE_MSEC;
 
 @LazySingleton
 public class SingleWriterService {
@@ -66,10 +66,10 @@ public class SingleWriterService {
 
     @Inject
     public SingleWriterService() {
-        persistenceBucketCount = InternalConfigurations.PERSISTENCE_BUCKET_COUNT.get();
-        threadPoolSize = InternalConfigurations.SINGLE_WRITER_THREAD_POOL_SIZE.get();
-        creditsPerExecution = InternalConfigurations.SINGLE_WRITER_CREDITS_PER_EXECUTION.get();
-        shutdownGracePeriod = InternalConfigurations.PERSISTENCE_SHUTDOWN_GRACE_PERIOD_MSEC.get();
+        persistenceBucketCount = InternalConfig.PERSISTENCE_BUCKET_COUNT.get();
+        threadPoolSize = InternalConfig.SINGLE_WRITER_THREAD_POOL_SIZE.get();
+        creditsPerExecution = InternalConfig.SINGLE_WRITER_CREDITS_PER_EXECUTION.get();
+        shutdownGracePeriod = InternalConfig.PERSISTENCE_SHUTDOWN_GRACE_PERIOD_MSEC.get();
 
         final ThreadFactory threadFactory = ThreadFactoryUtil.create("single-writer-%d");
         singleWriterExecutor = Executors.newFixedThreadPool(threadPoolSize, threadFactory);

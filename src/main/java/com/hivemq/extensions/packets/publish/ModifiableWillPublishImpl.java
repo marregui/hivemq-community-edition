@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.publish;
 
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,9 +37,9 @@ public class ModifiableWillPublishImpl extends ModifiablePublishPacketImpl imple
 
     public ModifiableWillPublishImpl(
             final @NotNull WillPublishPacketImpl willPublishPacket,
-            final @NotNull ConfigurationService configurationService) {
+            final @NotNull ConfigService configService) {
 
-        super(willPublishPacket, configurationService);
+        super(willPublishPacket, configService);
         this.willDelay = willPublishPacket.willDelay;
     }
 

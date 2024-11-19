@@ -21,7 +21,7 @@ import com.hivemq.extension.sdk.api.services.exception.RateLimitExceededExceptio
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.hivemq.config.InternalConfigurations.EXTENSION_SERVICE_CALL_RATE_LIMIT_PER_SEC;
+import static com.hivemq.config.InternalConfig.EXTENSION_SERVICE_CALL_RATE_LIMIT_PER_SEC;
 
 
 @LazySingleton

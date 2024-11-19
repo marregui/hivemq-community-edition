@@ -20,12 +20,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import static com.hivemq.config.entity.MqttConfigurationDefaults.TOPIC_ALIAS_MAX_PER_CLIENT_DEFAULT;
+import static com.hivemq.config.ConfigService.TOPIC_ALIAS_MAX_PER_CLIENT_DEFAULT;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 @XmlRootElement(name = "topic-alias")
 @XmlAccessorType(XmlAccessType.NONE)
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})

@@ -19,8 +19,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.HivemqId;
-import com.hivemq.config.entity.MqttConfigurationDefaults;
 import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
@@ -168,12 +168,12 @@ public class SendRetainedMessagesListenerTest {
         ClientConnection.of(channel).setClientId("client");
 
         when(retainedMessagePersistence.get("topic")).thenReturn(Futures.immediateFuture(new RetainedMessage("test".getBytes(
-                UTF_8), QoS.EXACTLY_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED)));
+                UTF_8), QoS.EXACTLY_ONCE, 1L, ConfigService.TTL_DISABLED)));
         when(retainedMessagePersistence.get("anothertopic")).thenReturn(Futures.immediateFuture(new RetainedMessage(
                 "test".getBytes(UTF_8),
                 QoS.EXACTLY_ONCE,
                 1L,
-                MqttConfigurationDefaults.TTL_DISABLED)));
+                ConfigService.TTL_DISABLED)));
 
 
         listener.operationComplete(channel.newSucceededFuture());
@@ -186,7 +186,7 @@ public class SendRetainedMessagesListenerTest {
     public void test_wildcard_subscription_retained_messages_available_send() throws Exception {
 
         when(retainedMessagePersistence.get("topic")).thenReturn(Futures.immediateFuture(new RetainedMessage("test".getBytes(
-                UTF_8), QoS.EXACTLY_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED)));
+                UTF_8), QoS.EXACTLY_ONCE, 1L, ConfigService.TTL_DISABLED)));
 
         final ImmutableSet.Builder<String> builder = ImmutableSet.builder();
         builder.add("topic");
@@ -219,7 +219,7 @@ public class SendRetainedMessagesListenerTest {
     public void test_wildcard_subscription_retained_messages_available_do_not_send() throws Exception {
 
         when(retainedMessagePersistence.get("topic")).thenReturn(Futures.immediateFuture(new RetainedMessage("test".getBytes(
-                UTF_8), QoS.EXACTLY_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED)));
+                UTF_8), QoS.EXACTLY_ONCE, 1L, ConfigService.TTL_DISABLED)));
 
         final Set<String> set = ImmutableSet.of("topic");
         when(retainedMessagePersistence.getWithWildcards("#")).thenReturn(Futures.immediateFuture(set));
@@ -240,7 +240,7 @@ public class SendRetainedMessagesListenerTest {
     public void test_wildcard_subscription_retained_messages_available_send_if_not_existing_exists() throws Exception {
 
         when(retainedMessagePersistence.get("topic")).thenReturn(Futures.immediateFuture(new RetainedMessage("test".getBytes(
-                UTF_8), QoS.EXACTLY_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED)));
+                UTF_8), QoS.EXACTLY_ONCE, 1L, ConfigService.TTL_DISABLED)));
 
         final Set<String> set = ImmutableSet.of("topic");
         when(retainedMessagePersistence.getWithWildcards("#")).thenReturn(Futures.immediateFuture(set));
@@ -267,7 +267,7 @@ public class SendRetainedMessagesListenerTest {
             throws Exception {
 
         when(retainedMessagePersistence.get("topic")).thenReturn(Futures.immediateFuture(new RetainedMessage("test".getBytes(
-                UTF_8), QoS.EXACTLY_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED)));
+                UTF_8), QoS.EXACTLY_ONCE, 1L, ConfigService.TTL_DISABLED)));
 
         final Set<String> set = ImmutableSet.of("topic");
         when(retainedMessagePersistence.getWithWildcards("#")).thenReturn(Futures.immediateFuture(set));
@@ -303,9 +303,9 @@ public class SendRetainedMessagesListenerTest {
     public void test_wildcard_subscription_retained_messages_available_no_wildcard() throws Exception {
 
         when(retainedMessagePersistence.get("topic")).thenReturn(Futures.immediateFuture(new RetainedMessage("test".getBytes(
-                UTF_8), QoS.EXACTLY_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED)));
+                UTF_8), QoS.EXACTLY_ONCE, 1L, ConfigService.TTL_DISABLED)));
         when(retainedMessagePersistence.get("topic2")).thenReturn(Futures.immediateFuture(new RetainedMessage("test".getBytes(
-                UTF_8), QoS.AT_MOST_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED)));
+                UTF_8), QoS.AT_MOST_ONCE, 1L, ConfigService.TTL_DISABLED)));
 
         final ImmutableSet<String> set = ImmutableSet.of("topic", "topic2");
         when(retainedMessagePersistence.getWithWildcards("#")).thenReturn(Futures.immediateFuture(set));
@@ -343,7 +343,7 @@ public class SendRetainedMessagesListenerTest {
     public void test_wildcard_subscription_qos_downgraded_to_actual_subscription() throws Exception {
 
         when(retainedMessagePersistence.get("topic")).thenReturn(Futures.immediateFuture(new RetainedMessage("test".getBytes(
-                UTF_8), QoS.EXACTLY_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED)));
+                UTF_8), QoS.EXACTLY_ONCE, 1L, ConfigService.TTL_DISABLED)));
 
         final ImmutableSet.Builder<String> builder = ImmutableSet.builder();
         builder.add("topic");
@@ -367,7 +367,7 @@ public class SendRetainedMessagesListenerTest {
     public void test_wildcard_subscription_qos_not_upgraded_to_actual_subscription() throws Exception {
 
         when(retainedMessagePersistence.get("topic")).thenReturn(Futures.immediateFuture(new RetainedMessage("test".getBytes(
-                UTF_8), QoS.AT_MOST_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED)));
+                UTF_8), QoS.AT_MOST_ONCE, 1L, ConfigService.TTL_DISABLED)));
 
         final ImmutableSet.Builder<String> builder = ImmutableSet.builder();
         builder.add("topic");
@@ -433,7 +433,7 @@ public class SendRetainedMessagesListenerTest {
     public void test_subscription_shared() throws Exception {
 
         when(retainedMessagePersistence.get("topic")).thenReturn(Futures.immediateFuture(new RetainedMessage("test".getBytes(
-                UTF_8), QoS.EXACTLY_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED)));
+                UTF_8), QoS.EXACTLY_ONCE, 1L, ConfigService.TTL_DISABLED)));
 
         final Set<String> set = ImmutableSet.of("topic");
         when(retainedMessagePersistence.getWithWildcards("#")).thenReturn(Futures.immediateFuture(set));
@@ -454,9 +454,9 @@ public class SendRetainedMessagesListenerTest {
     public void test_wildcard_subscription_batched_send() throws Exception {
 
         when(retainedMessagePersistence.get("topic")).thenReturn(Futures.immediateFuture(new RetainedMessage("test".getBytes(
-                UTF_8), QoS.AT_LEAST_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED)));
+                UTF_8), QoS.AT_LEAST_ONCE, 1L, ConfigService.TTL_DISABLED)));
         when(retainedMessagePersistence.get("topic2")).thenReturn(Futures.immediateFuture(new RetainedMessage("test".getBytes(
-                UTF_8), QoS.AT_LEAST_ONCE, 1L, MqttConfigurationDefaults.TTL_DISABLED)));
+                UTF_8), QoS.AT_LEAST_ONCE, 1L, ConfigService.TTL_DISABLED)));
 
         final ImmutableSet<String> set = ImmutableSet.of("topic", "topic2");
         when(retainedMessagePersistence.getWithWildcards("#")).thenReturn(Futures.immediateFuture(set));

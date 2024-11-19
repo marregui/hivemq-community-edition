@@ -23,7 +23,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.bootstrap.lazysingleton.LazySingletonScope;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.config.RestrictionsConfigurationService;
 import com.hivemq.config.SecurityConfigurationService;
@@ -84,7 +84,7 @@ public class ExtensionModuleTest {
 
     @Before
     public void setUp() throws Exception {
-        final ConfigurationService config = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigService config = new TestConfigurationBootstrap().getFullConfigurationService();
         injector = Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
@@ -93,7 +93,7 @@ public class ExtensionModuleTest {
                 when(metricsHolder.getMetricRegistry()).thenReturn(new MetricRegistry());
                 install(new ExtensionModule());
                 bind(ConnectionPersistence.class).toInstance(mock(ConnectionPersistence.class));
-                bind(ConfigurationService.class).toInstance(config);
+                bind(ConfigService.class).toInstance(config);
                 bind(MqttConfigurationService.class).toInstance(mock(MqttConfigurationService.class));
                 bind(RestrictionsConfigurationService.class).toInstance(mock(RestrictionsConfigurationService.class));
                 bind(SecurityConfigurationService.class).toInstance(mock(SecurityConfigurationService.class));

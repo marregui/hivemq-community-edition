@@ -17,7 +17,7 @@ package com.hivemq.extensions.services.builder;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.config.SecurityConfigurationService;
 import org.jetbrains.annotations.NotNull;
@@ -84,9 +84,9 @@ public class PublishBuilderImpl implements PublishBuilder {
 
     @NotNull
     @Inject
-    public PublishBuilderImpl(@NotNull final ConfigurationService configurationService) {
-        this.mqttConfigurationService = configurationService.mqttConfiguration();
-        this.securityConfigurationService = configurationService.securityConfiguration();
+    public PublishBuilderImpl(@NotNull final ConfigService configService) {
+        this.mqttConfigurationService = configService.mqttConfiguration();
+        this.securityConfigurationService = configService.securityConfiguration();
     }
 
     @NotNull

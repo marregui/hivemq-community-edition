@@ -17,7 +17,7 @@ package com.hivemq.extensions.services.builder;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.config.RestrictionsConfigurationService;
 import com.hivemq.config.SecurityConfigurationService;
@@ -88,10 +88,10 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
     private final SecurityConfigurationService securityConfigurationService;
 
     @Inject
-    public RetainedPublishBuilderImpl(final @NotNull ConfigurationService fullConfigurationService) {
-        this.mqttConfigurationService = fullConfigurationService.mqttConfiguration();
-        this.restrictionsConfig = fullConfigurationService.restrictionsConfiguration();
-        this.securityConfigurationService = fullConfigurationService.securityConfiguration();
+    public RetainedPublishBuilderImpl(final @NotNull ConfigService fullConfigService) {
+        this.mqttConfigurationService = fullConfigService.mqttConfiguration();
+        this.restrictionsConfig = fullConfigService.restrictionsConfiguration();
+        this.securityConfigurationService = fullConfigService.securityConfiguration();
     }
 
     @NotNull

@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.ImmutableIntArray;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.InternalConfig;
 import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.config.MqttConfigurationService.QueuedMessagesStrategy;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +62,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.hivemq.config.InternalConfigurations.QOS_0_MEMORY_HARD_LIMIT_DIVISOR;
+import static com.hivemq.config.InternalConfig.QOS_0_MEMORY_HARD_LIMIT_DIVISOR;
 import static com.hivemq.persistence.clientqueue.ClientQueuePersistenceImpl.Key;
 import static com.hivemq.util.ThreadPreConditions.SINGLE_WRITER_THREAD_PREFIX;
 
@@ -106,10 +106,10 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
         super(environmentUtil,
                 localPersistenceFileUtil,
                 persistenceStartup,
-                InternalConfigurations.PERSISTENCE_BUCKET_COUNT.get(),
+                InternalConfig.PERSISTENCE_BUCKET_COUNT.get(),
                 true);
-        retainedMessageMax = InternalConfigurations.RETAINED_MESSAGE_QUEUE_SIZE.get();
-        qos0ClientMemoryLimit = InternalConfigurations.QOS_0_MEMORY_LIMIT_PER_CLIENT_BYTES.get();
+        retainedMessageMax = InternalConfig.RETAINED_MESSAGE_QUEUE_SIZE.get();
+        qos0ClientMemoryLimit = InternalConfig.QOS_0_MEMORY_LIMIT_PER_CLIENT_BYTES.get();
 
         serializer = new ClientQueuePersistenceSerializer();
         this.messageDroppedService = messageDroppedService;
@@ -120,7 +120,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
         qos0MemoryLimit = getQos0MemoryLimit();
         clientQos0MemoryMap = new ConcurrentHashMap<>();
         sharedSubLastPacketWithoutIdCache = CacheBuilder.newBuilder()
-                .maximumSize(InternalConfigurations.SHARED_SUBSCRIPTION_WITHOUT_PACKET_ID_CACHE_MAX_SIZE_ENTRIES.get())
+                .maximumSize(InternalConfig.SHARED_SUBSCRIPTION_WITHOUT_PACKET_ID_CACHE_MAX_SIZE_ENTRIES.get())
                 .expireAfterAccess(60, TimeUnit.SECONDS)
                 .build();
     }
@@ -794,8 +794,8 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
                     return packetId != ClientQueuePersistenceSerializer.NO_PACKET_ID;
                 });
                 if (!packetIdFound[0]) {
-                    if (InternalConfigurations.EXPIRE_INFLIGHT_PUBRELS_ENABLED) {
-                        pubrel.setMessageExpiryInterval(InternalConfigurations.MAXIMUM_INFLIGHT_PUBREL_EXPIRY);
+                    if (InternalConfig.EXPIRE_INFLIGHT_PUBRELS_ENABLED) {
+                        pubrel.setMessageExpiryInterval(InternalConfig.MAXIMUM_INFLIGHT_PUBREL_EXPIRY);
                         pubrel.setPublishTimestamp(System.currentTimeMillis());
                     }
                     getOrPutQueueSize(key, bucketIndex).incrementAndGet();
@@ -1041,10 +1041,10 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
                     final MessageWithID message = serializer.deserializeValue(serializedValue);
                     if (message instanceof PUBREL) {
                         final PUBREL pubrel = (PUBREL) message;
-                        if (!InternalConfigurations.EXPIRE_INFLIGHT_PUBRELS_ENABLED) {
+                        if (!InternalConfig.EXPIRE_INFLIGHT_PUBRELS_ENABLED) {
                             return true;
                         }
-                        if (!pubrel.hasExpired(InternalConfigurations.MAXIMUM_INFLIGHT_PUBREL_EXPIRY)) {
+                        if (!pubrel.hasExpired(InternalConfig.MAXIMUM_INFLIGHT_PUBREL_EXPIRY)) {
                             return true;
                         }
                         getOrPutQueueSize(key, bucketIndex).decrementAndGet();
@@ -1055,7 +1055,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
 
                     } else if (message instanceof PUBLISH) {
                         final PUBLISH publish = (PUBLISH) message;
-                        final boolean expireInflight = InternalConfigurations.EXPIRE_INFLIGHT_MESSAGES_ENABLED;
+                        final boolean expireInflight = InternalConfig.EXPIRE_INFLIGHT_MESSAGES_ENABLED;
                         final boolean isInflight =
                                 publish.getQoS() == QoS.EXACTLY_ONCE && publish.getPacketIdentifier() > 0;
                         final boolean drop = publish.isExpired() && (!isInflight || expireInflight);

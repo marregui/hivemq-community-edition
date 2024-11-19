@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.ConfigService;
 import com.hivemq.config.RestrictionsConfigurationService;
 import com.hivemq.config.entity.Listener;
 import com.hivemq.config.entity.Tls;
@@ -80,7 +80,7 @@ public class TlsTcpChannelInitializerTest {
     private EventLog eventLog;
 
     @Mock
-    private ConfigurationService fullConfigurationService;
+    private ConfigService fullConfigService;
 
     @Mock
     private RestrictionsConfigurationService restrictionsConfigurationService;
@@ -103,7 +103,7 @@ public class TlsTcpChannelInitializerTest {
         when(socketChannel.pipeline()).thenReturn(pipeline);
         when(socketChannel.attr(any(AttributeKey.class))).thenReturn(attribute);
         when(socketChannel.isActive()).thenReturn(true);
-        when(channelDependencies.getConfigurationService()).thenReturn(fullConfigurationService);
+        when(channelDependencies.getConfigurationService()).thenReturn(fullConfigService);
         when(channelDependencies.getRestrictionsConfigurationService()).thenReturn(restrictionsConfigurationService);
         when(restrictionsConfigurationService.incomingLimit()).thenReturn(0L);
 

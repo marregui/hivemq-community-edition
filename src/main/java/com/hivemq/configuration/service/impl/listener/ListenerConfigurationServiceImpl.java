@@ -29,19 +29,11 @@ import javax.inject.Singleton;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * The default implementation of the listener configuration service.
- *
- * @author Dominik Obermaier
- */
 @Singleton
 public class ListenerConfigurationServiceImpl implements ListenerConfigurationService {
 
     private static final Logger log = LoggerFactory.getLogger(ListenerConfigurationServiceImpl.class);
 
-    /**
-     * The actual listener. COWAL because we read a lot more than we write
-     */
     private final List<Listener> listeners = new CopyOnWriteArrayList<>();
 
     @Override

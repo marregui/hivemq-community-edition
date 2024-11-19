@@ -43,7 +43,6 @@ public class ThrottlingModule extends SingletonModule<Class<ThrottlingModule>> {
         bind(GlobalTrafficShapingHandler.class).toProvider(GlobalTrafficShapingProvider.class).in(Singleton.class);
     }
 
-
     private static class GlobalTrafficShapingProvider implements Provider<GlobalTrafficShapingHandler> {
         private static final Logger log = LoggerFactory.getLogger(GlobalTrafficShapingProvider.class);
 

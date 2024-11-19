@@ -25,14 +25,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- * The service which allows to inspect Listener configuration at runtime.
- * <p>
- * It's also possible to add new listeners at runtime.
- *
- * @author Dominik Obermaier
- * @since 3.0
- */
 public interface ListenerConfigurationService {
 
     /**

@@ -77,6 +77,7 @@ public class PersistenceStartup implements ShutdownHooks.Hook {
         return "PersistenceStartupShutdownHook";
     }
 
+    @NotNull
     public void run() {
         log.trace("Shutting down persistence startup executors");
         persistenceStartExecutor.shutdown();

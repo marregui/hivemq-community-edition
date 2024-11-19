@@ -21,10 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 public class SecurityConfigurationServiceImpl implements SecurityConfigurationService {
 
     private static final Logger log = LoggerFactory.getLogger(SecurityConfigurationServiceImpl.class);

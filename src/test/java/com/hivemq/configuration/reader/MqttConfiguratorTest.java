@@ -33,7 +33,6 @@ import static org.mockito.Mockito.when;
 
 public class MqttConfiguratorTest extends AbstractConfigurationTest {
 
-
     @Test
     public void test_server_receive_max_negative_xml() throws Exception {
 
@@ -172,9 +171,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
 
     @Test
     public void test_mqtt_xml_env_var() throws Exception {
-
-        when(envVarUtil.getValue(eq("MAX_QUEUED_MESSAGES"))).thenReturn("3");
-
         final String contents = "<hivemq>" +
                 " <mqtt>\n" +
                 "<queued-messages> " +

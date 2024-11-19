@@ -16,7 +16,6 @@
 
 package com.hivemq.configuration.service;
 
-import com.google.common.collect.ImmutableList;
 import com.hivemq.UnrecoverableException;
 import com.hivemq.configuration.entity.HiveMQConfigEntity;
 import com.hivemq.configuration.entity.listener.TCPListenerEntity;
@@ -30,25 +29,26 @@ import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImp
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
-import com.hivemq.util.EnvVarUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.nio.file.Files.readString;
 
 public class ConfigurationService {
 
-    private static final Logger log = LoggerFactory.getLogger(ConfigurationService.class);
+    private static final @NotNull Logger log = LoggerFactory.getLogger(ConfigurationService.class);
 
-    private final @NotNull File configFile;
     private final @NotNull ListenerConfigurationService listenerConfig;
     private final @NotNull MqttConfigurationService mqttConfig;
     private final @NotNull RestrictionsConfigurationService restrictionsConfig;
@@ -59,84 +59,59 @@ public class ConfigurationService {
     private final @NotNull RestrictionConfigurator restrictionConfigurator;
     private final @NotNull SecurityConfigurator securityConfigurator;
 
-    public ConfigurationService() {
+    public ConfigurationService() throws IOException, JAXBException {
         listenerConfig = new ListenerConfigurationServiceImpl();
         mqttConfig = new MqttConfigurationServiceImpl();
         restrictionsConfig = new RestrictionsConfigurationServiceImpl();
         securityConfig = new SecurityConfigurationServiceImpl();
-
-        this.listenerConfigurator =new ListenerConfigurator(listenerConfig);
-        this.mqttConfigurator = new MqttConfigurator(mqttConfig);
-        this.restrictionConfigurator = new RestrictionConfigurator(restrictionsConfig);
-        this.securityConfigurator = new SecurityConfigurator(securityConfig);
-
-        File file = new File(SystemInformation.INSTANCE.getConfigFolder(), "config.xml");
+        listenerConfigurator = new ListenerConfigurator(listenerConfig);
+        mqttConfigurator = new MqttConfigurator(mqttConfig);
+        restrictionConfigurator = new RestrictionConfigurator(restrictionsConfig);
+        securityConfigurator = new SecurityConfigurator(securityConfig);
+        final File file = new File(SystemInformation.INSTANCE.getConfigFolder(), "config.xml");
         if (!file.exists() || !file.isFile() || !file.canRead()) {
-            log.error("Cannot access config file {}. Using defaults", file.getAbsolutePath());
-            file = null;
-        }
-        this.configFile = file;
-        if (configFile != null) {
-            final File configFile = this.configFile;
-            log.debug("Reading configuration file {}", configFile);
-
-            try {
-                final Class<?>[] classes = ImmutableList.<Class<?>>builder()
-                        .add(getConfigEntityClass())
-                        .addAll(getInheritedEntityClasses())
-                        .build()
-                        .toArray(new Class<?>[0]);
-
-                final JAXBContext context = JAXBContext.newInstance(classes);
-                final Unmarshaller unmarshaller = context.createUnmarshaller();
-
-                //replace environment variable placeholders
-                String configFileContent = new String(Files.readAllBytes(configFile.toPath()), StandardCharsets.UTF_8);
-                configFileContent = new EnvVarUtil().replaceEnvironmentVariablePlaceholders(configFileContent);
-                final ByteArrayInputStream is =
-                        new ByteArrayInputStream(configFileContent.getBytes(StandardCharsets.UTF_8));
-                final StreamSource streamSource = new StreamSource(is);
-
-                setConfiguration(unmarshaller.unmarshal(streamSource, getConfigEntityClass()).getValue());
-
-            } catch (final Exception e) {
-                if (e.getCause() instanceof UnrecoverableException) {
-                    log.error("An unrecoverable Exception occurred. Exiting HiveMQ", e);
-                    log.debug("Original error message:", e);
-                    System.exit(1);
-                }
-                log.error("Could not read the configuration file {}. Using default config",
-                        configFile.getAbsolutePath());
-                log.debug("Original error message:", e);
-                setConfiguration(getDefaultConfig());
-            }
+            log.error("Cannot read config {}. Using defaults", file.getAbsolutePath());
+            setConfig(new HiveMQConfigEntity());
         } else {
-            setConfiguration(getDefaultConfig());
+            log.debug("Reading config {}", file.getAbsolutePath());
+            setConfig(JAXBContext.newInstance(HiveMQConfigEntity.class,
+                            TCPListenerEntity.class,
+                            WebsocketListenerEntity.class,
+                            TlsTCPListenerEntity.class,
+                            TlsWebsocketListenerEntity.class)
+                    .createUnmarshaller()
+                    .unmarshal(readFileContent(file), HiveMQConfigEntity.class)
+                    .getValue());
         }
     }
 
-    void setConfiguration(@NotNull final HiveMQConfigEntity config) {
+    private static @NotNull StreamSource readFileContent(final @NotNull File file) throws IOException {
+        final StringBuilder sb = new StringBuilder();
+        final Matcher env = Pattern.compile("\\$\\{(ENV:)*(.*?)}").matcher(readString(file.toPath()));
+        while (env.find()) {
+            if (env.groupCount() < 2) {
+                log.warn("unexpected env");
+                env.appendReplacement(sb, "");
+                continue;
+            }
+            final String varName = env.group(2);
+            final String prop = System.getProperty(varName);
+            final String varValue = prop != null ? prop : System.getenv(varName);
+            if (varValue == null) {
+                log.error("Env {} not set.", varName);
+                throw new UnrecoverableException();
+            }
+            env.appendReplacement(sb, varValue.replace("\\", "\\\\").replace("$", "\\$"));
+        }
+        env.appendTail(sb);
+        return new StreamSource(new ByteArrayInputStream(sb.toString().getBytes(StandardCharsets.UTF_8)));
+    }
+
+    private void setConfig(final @NotNull HiveMQConfigEntity config) {
         listenerConfigurator.setListenerConfig(config.getListenerConfig());
         mqttConfigurator.setMqttConfig(config.getMqttConfig());
         restrictionConfigurator.setRestrictionsConfig(config.getRestrictionsConfig());
         securityConfigurator.setSecurityConfig(config.getSecurityConfig());
-    }
-
-    @NotNull HiveMQConfigEntity getDefaultConfig() {
-        return new HiveMQConfigEntity();
-    }
-
-    @NotNull Class<? extends HiveMQConfigEntity> getConfigEntityClass() {
-        return HiveMQConfigEntity.class;
-    }
-
-    @NotNull List<Class<?>> getInheritedEntityClasses() {
-        return ImmutableList.of(
-                /* ListenerEntity */
-                TCPListenerEntity.class,
-                WebsocketListenerEntity.class,
-                TlsTCPListenerEntity.class,
-                TlsWebsocketListenerEntity.class);
     }
 
     public @NotNull ListenerConfigurationService listenerConfiguration() {

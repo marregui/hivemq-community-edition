@@ -23,25 +23,18 @@ import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImp
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
-import com.hivemq.util.EnvVarUtil;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.File;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 public class AbstractConfigurationTest {
 
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    @Mock
-    EnvVarUtil envVarUtil;
 
     ListenerConfigurationService listenerConfigurationService;
     File xmlFile;
@@ -58,7 +51,5 @@ public class AbstractConfigurationTest {
         securityConfigurationService = new SecurityConfigurationServiceImpl();
         mqttConfigurationService = new MqttConfigurationServiceImpl();
         restrictionsConfigurationService = new RestrictionsConfigurationServiceImpl();
-
-        when(envVarUtil.replaceEnvironmentVariablePlaceholders(anyString())).thenCallRealMethod();
     }
 }

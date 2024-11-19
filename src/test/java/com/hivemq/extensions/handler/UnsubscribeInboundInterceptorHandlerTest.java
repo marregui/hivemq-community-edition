@@ -52,6 +52,8 @@ import util.DummyClientConnection;
 import util.IsolatedExtensionClassloaderUtil;
 import util.TestConfigurationBootstrap;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -80,7 +82,7 @@ public class UnsubscribeInboundInterceptorHandlerTest {
     private @NotNull UnsubscribeInboundInterceptorHandler handler;
 
     @Before
-    public void setup() {
+    public void setup() throws JAXBException, IOException {
         isTriggered.set(false);
 
         executor = new PluginTaskExecutor(new AtomicLong());

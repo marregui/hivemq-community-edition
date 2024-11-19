@@ -33,6 +33,9 @@ import util.DummyClientConnection;
 import util.TestConfigurationBootstrap;
 import util.TestMqttDecoder;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -168,7 +171,8 @@ public class MQTTMessageDecoderTest {
     }
 
     @Test
-    public void decode_whenReceivesMqtt5CONNECTTooLarge_thenConnectionIsClosedAndCONNACKIsReceived() {
+    public void decode_whenReceivesMqtt5CONNECTTooLarge_thenConnectionIsClosedAndCONNACKIsReceived()
+            throws JAXBException, IOException {
         final byte[] mqtt5Connect = {
                 // fixed header
                 //   type, reserved
@@ -202,11 +206,12 @@ public class MQTTMessageDecoderTest {
     }
 
     @Test
-    public void decode_whenReceivesMqtt5PUBLISHTooLarge_thenConnectionIsClosed() {
+    public void decode_whenReceivesMqtt5PUBLISHTooLarge_thenConnectionIsClosed() throws JAXBException, IOException {
         testPublishPacketSizeTooLarge(ProtocolVersion.MQTTv5);
     }
 
-    private void testPublishPacketSizeTooLarge(final @NotNull ProtocolVersion protocolVersion) {
+    private void testPublishPacketSizeTooLarge(final @NotNull ProtocolVersion protocolVersion)
+            throws JAXBException, IOException {
         final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setMaxPacketSize(10);
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
@@ -239,7 +244,7 @@ public class MQTTMessageDecoderTest {
         assertFalse(channel.isOpen());
     }
 
-    private void testConnectPacketSizeTooLarge(final byte[] connect) {
+    private void testConnectPacketSizeTooLarge(final byte[] connect) throws JAXBException, IOException {
         final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setMaxPacketSize(10);
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));

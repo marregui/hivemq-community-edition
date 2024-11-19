@@ -28,7 +28,6 @@ import com.hivemq.configuration.service.impl.MqttConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
-import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +59,7 @@ public class ConfigurationService {
     private final @NotNull SecurityConfigurator securityConfigurator;
 
     public ConfigurationService() throws IOException, JAXBException {
-        listenerConfig = new ListenerConfigurationServiceImpl();
+        listenerConfig = new ListenerConfigurationService();
         mqttConfig = new MqttConfigurationServiceImpl();
         restrictionsConfig = new RestrictionsConfigurationServiceImpl();
         securityConfig = new SecurityConfigurationServiceImpl();

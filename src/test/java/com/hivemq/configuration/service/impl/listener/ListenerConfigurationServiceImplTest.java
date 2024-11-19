@@ -33,11 +33,11 @@ import static util.TlsTestUtil.createDefaultTLS;
 
 public class ListenerConfigurationServiceImplTest {
 
-    private ListenerConfigurationServiceImpl listenerConfigurationService;
+    private ListenerConfigurationService listenerConfigurationService;
 
     @Before
     public void setUp() throws Exception {
-        listenerConfigurationService = new ListenerConfigurationServiceImpl();
+        listenerConfigurationService = new ListenerConfigurationService();
     }
 
     /*

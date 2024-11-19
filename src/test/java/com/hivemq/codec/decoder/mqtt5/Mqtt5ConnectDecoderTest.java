@@ -36,6 +36,8 @@ import util.DummyClientConnection;
 import util.TestConfigurationBootstrap;
 import util.TestMqttDecoder;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static com.hivemq.mqtt.message.connack.Mqtt5CONNACK.DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT;
@@ -58,7 +60,7 @@ public class Mqtt5ConnectDecoderTest extends AbstractMqtt5DecoderTest {
 
     @Override
     @Before
-    public void setUp() {
+    public void setUp() throws JAXBException, IOException {
         super.setUp();
         //protocol version must not be set when a CONNECT is sent.
         clientConnection.setProtocolVersion(null);
@@ -1299,7 +1301,7 @@ public class Mqtt5ConnectDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void decode_with_client_id_assigned_not_allowed() {
+    public void decode_with_client_id_assigned_not_allowed() throws JAXBException, IOException {
 
         final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.securityConfiguration().setAllowServerAssignedClientId(false);
@@ -2011,7 +2013,8 @@ public class Mqtt5ConnectDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void decode_property_message_expiry_interval_larger_than_config_max_value() {
+    public void decode_property_message_expiry_interval_larger_than_config_max_value()
+            throws JAXBException, IOException {
 
         final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setMaxMessageExpiryInterval(100);

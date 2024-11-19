@@ -44,6 +44,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import util.TestConfigurationBootstrap;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -82,6 +84,9 @@ public class PublishServiceImplTest {
     private final ConfigurationService fullConfigurationService =
             new TestConfigurationBootstrap().getFullConfigurationService();
     private PublishServiceImpl publishService;
+
+    public PublishServiceImplTest() throws JAXBException, IOException {
+    }
 
     @Before
     public void setUp() throws Exception {

@@ -35,6 +35,8 @@ import util.DummyClientConnection;
 import util.TestConfigurationBootstrap;
 import util.TestMqttDecoder;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -164,7 +166,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void test_decode_topic_alias_exceeds_limit() {
+    public void test_decode_topic_alias_exceeds_limit() throws JAXBException, IOException {
 
 
         final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
@@ -194,7 +196,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void test_decode_topic_alias_override() {
+    public void test_decode_topic_alias_override() throws JAXBException, IOException {
 
 
         final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
@@ -364,7 +366,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void test_decode_retain_not_supported() {
+    public void test_decode_retain_not_supported() throws JAXBException, IOException {
 
         final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setRetainedMessagesEnabled(false);
@@ -426,7 +428,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void test_decode_messageExpiryInterval_higher_than_config() {
+    public void test_decode_messageExpiryInterval_higher_than_config() throws JAXBException, IOException {
 
         final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setMaxMessageExpiryInterval(100);
@@ -590,7 +592,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void test_decode_PayloadUtf8NotWellFormed_returnsNull() {
+    public void test_decode_PayloadUtf8NotWellFormed_returnsNull() throws JAXBException, IOException {
 
         final ConfigurationService fullConfigurationService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
@@ -1037,7 +1039,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void test_decode_responseTopicWithWildcards_returnsNull() {
+    public void test_decode_responseTopicWithWildcards_returnsNull() throws JAXBException, IOException {
         final byte[] encoded = {
                 // fixed header
                 //   type, flags
@@ -1144,7 +1146,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void decode_noTopicAliasFound_returnsNull() {
+    public void decode_noTopicAliasFound_returnsNull() throws JAXBException, IOException {
         InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(1024 * 1024 * 200);
         channel = new EmbeddedChannel(TestMqttDecoder.create());
         clientConnection = new DummyClientConnection(channel, null);
@@ -1274,7 +1276,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void test_decode_topicWithWildcard_returnsNull() {
+    public void test_decode_topicWithWildcard_returnsNull() throws JAXBException, IOException {
         final byte[] encoded = {
                 // fixed header
                 //   type, flags

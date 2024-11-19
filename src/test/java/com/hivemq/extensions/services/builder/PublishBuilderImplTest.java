@@ -27,6 +27,8 @@ import org.junit.Before;
 import org.junit.Test;
 import util.TestConfigurationBootstrap;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 
@@ -41,7 +43,7 @@ public class PublishBuilderImplTest {
     private ConfigurationService configurationService;
 
     @Before
-    public void before() {
+    public void before() throws JAXBException, IOException {
         configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 

@@ -30,6 +30,9 @@ import org.junit.Test;
 import util.DummyClientConnection;
 import util.TestMqttDecoder;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -51,7 +54,7 @@ public class Mqtt5AuthDecoderTest extends AbstractMqtt5DecoderTest {
 
     // Tests for Fixed/Variable Header
     @Test
-    public void test_fixed_header() {
+    public void test_fixed_header() throws JAXBException, IOException {
         final byte[] encoded0001 = {
                 // fixed header
                 //   type, flags

@@ -84,6 +84,7 @@ public class ExtensionModuleTest {
 
     @Before
     public void setUp() throws Exception {
+        final ConfigurationService config = new TestConfigurationBootstrap().getFullConfigurationService();
         injector = Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
@@ -92,7 +93,7 @@ public class ExtensionModuleTest {
                 when(metricsHolder.getMetricRegistry()).thenReturn(new MetricRegistry());
                 install(new ExtensionModule());
                 bind(ConnectionPersistence.class).toInstance(mock(ConnectionPersistence.class));
-                bind(ConfigurationService.class).toInstance(new TestConfigurationBootstrap().getFullConfigurationService());
+                bind(ConfigurationService.class).toInstance(config);
                 bind(MqttConfigurationService.class).toInstance(mock(MqttConfigurationService.class));
                 bind(RestrictionsConfigurationService.class).toInstance(mock(RestrictionsConfigurationService.class));
                 bind(SecurityConfigurationService.class).toInstance(mock(SecurityConfigurationService.class));

@@ -32,6 +32,9 @@ import util.DummyClientConnection;
 import util.TestConfigurationBootstrap;
 import util.TestMqttDecoder;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -228,7 +231,7 @@ public class Mqtt5SubscribeDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void test_decode_invalid_fixed_header() {
+    public void test_decode_invalid_fixed_header() throws JAXBException, IOException {
 
         final byte[] encoded = {
                 // fixed header
@@ -906,7 +909,7 @@ public class Mqtt5SubscribeDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void test_decode_failed_subscription_identifier_disabled() {
+    public void test_decode_failed_subscription_identifier_disabled() throws JAXBException, IOException {
 
         final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setSubscriptionIdentifierEnabled(false);

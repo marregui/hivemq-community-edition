@@ -25,6 +25,8 @@ import org.junit.Before;
 import org.junit.Test;
 import util.TestConfigurationBootstrap;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -40,7 +42,7 @@ public class ModifiablePubrelPacketImplTest {
     private @NotNull ConfigurationService configurationService;
 
     @Before
-    public void setUp() {
+    public void setUp() throws JAXBException, IOException {
         configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 

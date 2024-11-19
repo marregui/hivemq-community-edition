@@ -27,6 +27,9 @@ import org.junit.Test;
 import util.DummyClientConnection;
 import util.TestMqttDecoder;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -396,7 +399,7 @@ public class Mqtt5PubrelDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void test_decode_invalid_remaining_length() {
+    public void test_decode_invalid_remaining_length() throws JAXBException, IOException {
         final byte[] encoded = {
                 // fixed header
                 //   type, flags
@@ -416,7 +419,7 @@ public class Mqtt5PubrelDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void test_decode_invalid_remaining_length_and_property_length() {
+    public void test_decode_invalid_remaining_length_and_property_length() throws JAXBException, IOException {
         final byte[] encoded = {
                 // fixed header
                 //   type, flags
@@ -495,7 +498,7 @@ public class Mqtt5PubrelDecoderTest extends AbstractMqtt5DecoderTest {
         decodeNullExpected(encoded);
     }
 
-    private void decodeChannelOpen(final byte @NotNull [] encoded) {
+    private void decodeChannelOpen(final byte @NotNull [] encoded) throws JAXBException, IOException {
         final ByteBuf byteBuf = channel.alloc().buffer();
         byteBuf.writeBytes(encoded);
         channel.writeInbound(byteBuf);

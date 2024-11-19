@@ -19,14 +19,13 @@ import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.parameter.TopicPermission;
 import com.hivemq.extensions.services.builder.TopicPermissionBuilderImpl;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+
 @SuppressWarnings("deprecation")
 public class TestTopicPermissionsUtil {
 
-    public static TopicPermission getTopicPermission() {
+    public static TopicPermission getTopicPermission() throws JAXBException, IOException {
         return new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
                 "#").build();
     }

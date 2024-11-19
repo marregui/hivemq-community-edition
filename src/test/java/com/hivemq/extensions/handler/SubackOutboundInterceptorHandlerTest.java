@@ -54,6 +54,8 @@ import util.DummyClientConnection;
 import util.IsolatedExtensionClassloaderUtil;
 import util.TestConfigurationBootstrap;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -83,7 +85,7 @@ public class SubackOutboundInterceptorHandlerTest {
     private @NotNull EmbeddedChannel channel;
 
     @Before
-    public void setup() {
+    public void setup() throws JAXBException, IOException {
         isTriggered.set(false);
         executor = new PluginTaskExecutor(new AtomicLong());
         executor.postConstruct();

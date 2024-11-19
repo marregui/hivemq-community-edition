@@ -51,6 +51,8 @@ import util.DummyClientConnection;
 import util.IsolatedExtensionClassloaderUtil;
 import util.TestConfigurationBootstrap;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -80,7 +82,7 @@ public class DisconnectInboundInterceptorHandlerTest {
     private @NotNull DisconnectInterceptorHandler handler;
 
     @Before
-    public void setup() {
+    public void setup() throws JAXBException, IOException {
         executor = new PluginTaskExecutor(new AtomicLong());
         executor.postConstruct();
 

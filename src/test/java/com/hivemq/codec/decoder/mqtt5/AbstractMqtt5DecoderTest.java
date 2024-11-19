@@ -21,13 +21,16 @@ import com.hivemq.mqtt.message.ProtocolVersion;
 import io.netty.buffer.ByteBuf;
 import org.junit.Before;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 
 abstract class AbstractMqtt5DecoderTest extends AbstractMqttDecoderTest {
 
     @Before
-    public void customSetUp() {
+    public void customSetUp() throws JAXBException, IOException {
         protocolVersion = ProtocolVersion.MQTTv5;
         super.setUp();
     }
@@ -44,6 +47,12 @@ abstract class AbstractMqtt5DecoderTest extends AbstractMqttDecoderTest {
         assertFalse(channel.isOpen());
         assertFalse(channel.isActive());
 
-        createChannel();
+        try {
+            createChannel();
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

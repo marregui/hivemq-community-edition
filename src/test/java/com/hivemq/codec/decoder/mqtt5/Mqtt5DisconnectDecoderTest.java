@@ -38,6 +38,9 @@ import util.TestConfigurationBootstrap;
 import util.TestMqttDecoder;
 import util.encoder.TestMessageEncoder;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -374,7 +377,7 @@ public class Mqtt5DisconnectDecoderTest extends AbstractMqtt5DecoderTest {
     }
 
     @Test
-    public void decode_disconnect_with_session_expiry_to_large() {
+    public void decode_disconnect_with_session_expiry_to_large() throws JAXBException, IOException {
 
         final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setMaxSessionExpiryInterval(80);

@@ -26,7 +26,7 @@ import com.hivemq.codec.decoder.MQTTMessageDecoder;
 import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
-import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
+import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.EnhancedAuthenticator;
 import com.hivemq.extension.sdk.api.auth.SimpleAuthenticator;
@@ -127,7 +127,7 @@ public class PluginAuthenticatorServiceImplTest {
                 asyncer,
                 pluginTaskExecutorService,
                 extensions,
-                new ServerInformationImpl(new ListenerConfigurationServiceImpl()));
+                new ServerInformationImpl(new ListenerConfigurationService()));
     }
 
     @After

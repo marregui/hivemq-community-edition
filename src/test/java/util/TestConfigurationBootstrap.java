@@ -21,12 +21,21 @@ import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+
 public class TestConfigurationBootstrap {
 
     private ConfigurationService configurationService;
 
-    public TestConfigurationBootstrap() {
-        configurationService = new ConfigurationService();
+    public TestConfigurationBootstrap()  {
+        try {
+            configurationService = new ConfigurationService();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public SecurityConfigurationService getSecurityConfigurationService() {

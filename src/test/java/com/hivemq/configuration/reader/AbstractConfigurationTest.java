@@ -22,7 +22,6 @@ import com.hivemq.configuration.service.impl.MqttConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
-import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -45,7 +44,7 @@ public class AbstractConfigurationTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        listenerConfigurationService = new ListenerConfigurationServiceImpl();
+        listenerConfigurationService = new ListenerConfigurationService();
 
         xmlFile = temporaryFolder.newFile();
         securityConfigurationService = new SecurityConfigurationServiceImpl();

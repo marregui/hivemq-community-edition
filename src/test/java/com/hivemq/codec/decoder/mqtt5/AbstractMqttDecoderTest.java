@@ -28,6 +28,9 @@ import util.DummyClientConnection;
 import util.LogbackCapturingAppender;
 import util.TestMqttDecoder;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+
 public class AbstractMqttDecoderTest {
 
     protected @NotNull ProtocolVersion protocolVersion;
@@ -36,7 +39,7 @@ public class AbstractMqttDecoderTest {
     protected @NotNull LogbackCapturingAppender logCapture;
 
     @Before
-    public void setUp() {
+    public void setUp() throws JAXBException, IOException {
         logCapture =
                 LogbackCapturingAppender.Factory.weaveInto(LoggerFactory.getLogger(MqttServerDisconnectorImpl.class));
         channel = new EmbeddedChannel(TestMqttDecoder.create());
@@ -51,7 +54,7 @@ public class AbstractMqttDecoderTest {
         channel.close();
     }
 
-    protected void createChannel() {
+    protected void createChannel() throws JAXBException, IOException {
         channel = new EmbeddedChannel(TestMqttDecoder.create());
         clientConnection = new DummyClientConnection(channel, null);
         clientConnection.setProtocolVersion(protocolVersion);

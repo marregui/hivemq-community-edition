@@ -25,6 +25,9 @@ import org.junit.Before;
 import org.junit.Test;
 import util.TestConfigurationBootstrap;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -38,7 +41,7 @@ public class ModifiableSubscriptionImplTest {
     private @NotNull ConfigurationService configurationService;
 
     @Before
-    public void setUp() {
+    public void setUp() throws JAXBException, IOException {
         configurationService = new TestConfigurationBootstrap().getFullConfigurationService();
     }
 

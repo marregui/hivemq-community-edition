@@ -68,7 +68,9 @@ import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 import util.TestConfigurationBootstrap;
 
+import javax.xml.bind.JAXBException;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.function.Supplier;
@@ -113,7 +115,7 @@ public class ExtensionStaticInitializerImplTest {
     private @NotNull WillPublishBuilder willPublishBuilder;
 
     @Before
-    public void before() {
+    public void before() throws JAXBException, IOException {
         final ConfigurationService fullConfigurationService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
         metricRegistry = new MetricRegistry();

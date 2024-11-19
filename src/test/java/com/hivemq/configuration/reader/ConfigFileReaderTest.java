@@ -24,7 +24,6 @@ import com.hivemq.configuration.service.MqttConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
-import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
 import com.hivemq.mqtt.message.QoS;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +49,7 @@ public class ConfigFileReaderTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        listenerConfigurationService = new ListenerConfigurationServiceImpl();
+        listenerConfigurationService = new ListenerConfigurationService();
         reader = new ConfigurationService();
     }
 

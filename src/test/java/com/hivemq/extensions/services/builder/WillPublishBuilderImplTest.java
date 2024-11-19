@@ -36,6 +36,8 @@ import org.junit.Test;
 import util.TestConfigurationBootstrap;
 import util.TestMessageUtil;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Optional;
@@ -91,7 +93,7 @@ public class WillPublishBuilderImplTest {
     }
 
     @Test
-    public void test_from_publish() {
+    public void test_from_publish() throws JAXBException, IOException {
 
         final Publish publish =
                 new PublishBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topic("topic")
@@ -137,7 +139,7 @@ public class WillPublishBuilderImplTest {
     }
 
     @Test
-    public void test_from_will_publish() {
+    public void test_from_will_publish() throws JAXBException, IOException {
 
         final PublishPacket testPublishPacket = new PublishPacketImpl(TestMessageUtil.createFullMqtt5Publish());
 
@@ -197,7 +199,7 @@ public class WillPublishBuilderImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void test_qos_not_allowed() {
+    public void test_qos_not_allowed() throws JAXBException, IOException {
         final ConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
         service.mqttConfiguration().setMaximumQos(QoS.AT_MOST_ONCE);
         willPublishBuilder = new WillPublishBuilderImpl(service);
@@ -205,7 +207,7 @@ public class WillPublishBuilderImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void test_retain_not_allowed() {
+    public void test_retain_not_allowed() throws JAXBException, IOException {
         final ConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
         service.mqttConfiguration().setRetainedMessagesEnabled(false);
         willPublishBuilder = new WillPublishBuilderImpl(service);
@@ -213,7 +215,7 @@ public class WillPublishBuilderImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void test_topic_length_invalid() {
+    public void test_topic_length_invalid() throws JAXBException, IOException {
         final ConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
         service.restrictionsConfiguration().setMaxTopicLength(5);
         willPublishBuilder = new WillPublishBuilderImpl(service);

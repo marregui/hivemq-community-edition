@@ -55,6 +55,8 @@ import util.DummyClientConnection;
 import util.TestConfigurationBootstrap;
 import util.TestMessageUtil;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
 import static com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties.NO_USER_PROPERTIES;
@@ -130,7 +132,7 @@ public class IncomingPublishServiceTest {
     }
 
     @Test
-    public void test_publish_mqtt5_valid_qos1_authorized() throws InterruptedException {
+    public void test_publish_mqtt5_valid_qos1_authorized() throws InterruptedException, JAXBException, IOException {
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
         final PUBLISH publish = TestMessageUtil.createMqtt5Publish("topic1", QoS.AT_LEAST_ONCE);
@@ -308,7 +310,7 @@ public class IncomingPublishServiceTest {
     }
 
     @Test
-    public void test_publish_mqtt5_valid_qos1_not_authorized() throws InterruptedException {
+    public void test_publish_mqtt5_valid_qos1_not_authorized() throws InterruptedException, JAXBException, IOException {
 
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
@@ -339,7 +341,7 @@ public class IncomingPublishServiceTest {
     }
 
     @Test
-    public void test_publish_mqtt5_valid_qos0_authorized() throws InterruptedException {
+    public void test_publish_mqtt5_valid_qos0_authorized() throws InterruptedException, JAXBException, IOException {
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
         final PUBLISH publish = TestMessageUtil.createMqtt5Publish("topic1", QoS.AT_MOST_ONCE);
@@ -358,7 +360,7 @@ public class IncomingPublishServiceTest {
     }
 
     @Test
-    public void test_publish_mqtt5_valid_qos0_not_authorized() {
+    public void test_publish_mqtt5_valid_qos0_not_authorized() throws JAXBException, IOException {
 
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
@@ -383,7 +385,7 @@ public class IncomingPublishServiceTest {
     }
 
     @Test
-    public void test_publish_mqtt5_valid_qos2_authorized() throws InterruptedException {
+    public void test_publish_mqtt5_valid_qos2_authorized() throws InterruptedException, JAXBException, IOException {
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
         final PUBLISH publish = TestMessageUtil.createMqtt5Publish("topic1", QoS.EXACTLY_ONCE);
@@ -402,7 +404,7 @@ public class IncomingPublishServiceTest {
     }
 
     @Test
-    public void test_publish_mqtt5_valid_qos2_not_authorized() {
+    public void test_publish_mqtt5_valid_qos2_not_authorized() throws JAXBException, IOException {
 
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 

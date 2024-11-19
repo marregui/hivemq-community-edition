@@ -26,6 +26,9 @@ import org.junit.Test;
 import util.TestConfigurationBootstrap;
 import util.TestTopicPermissionsUtil;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -53,7 +56,7 @@ public class ModifiableDefaultPermissionsImplTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void test_addAll_element_in_list_null() {
+    public void test_addAll_element_in_list_null() throws JAXBException, IOException {
         modifiableDefaultPermissions.addAll(Lists.newArrayList(TestTopicPermissionsUtil.getTopicPermission(), null));
     }
 
@@ -85,7 +88,7 @@ public class ModifiableDefaultPermissionsImplTest {
 
 
     @Test
-    public void test_add_default_changes_to_deny() {
+    public void test_add_default_changes_to_deny() throws JAXBException, IOException {
 
         assertEquals(DefaultAuthorizationBehaviour.ALLOW, modifiableDefaultPermissions.getDefaultBehaviour());
 
@@ -95,7 +98,7 @@ public class ModifiableDefaultPermissionsImplTest {
     }
 
     @Test
-    public void test_add_default_not_changes_to_deny_overridden() {
+    public void test_add_default_not_changes_to_deny_overridden() throws JAXBException, IOException {
 
         assertEquals(DefaultAuthorizationBehaviour.ALLOW, modifiableDefaultPermissions.getDefaultBehaviour());
 
@@ -109,7 +112,7 @@ public class ModifiableDefaultPermissionsImplTest {
     }
 
     @Test
-    public void test_set_default_deny() {
+    public void test_set_default_deny() throws JAXBException, IOException {
 
         modifiableDefaultPermissions.setDefaultBehaviour(DefaultAuthorizationBehaviour.DENY);
 
@@ -121,7 +124,7 @@ public class ModifiableDefaultPermissionsImplTest {
     }
 
     @Test
-    public void test_add_remove_asList() {
+    public void test_add_remove_asList() throws JAXBException, IOException {
 
         final TopicPermission a =
                 new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
@@ -147,7 +150,7 @@ public class ModifiableDefaultPermissionsImplTest {
     }
 
     @Test
-    public void test_addAll() {
+    public void test_addAll() throws JAXBException, IOException {
 
         final TopicPermission a =
                 new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(
@@ -165,7 +168,7 @@ public class ModifiableDefaultPermissionsImplTest {
     }
 
     @Test
-    public void test_clear() {
+    public void test_clear() throws JAXBException, IOException {
 
         final TopicPermission a =
                 new TopicPermissionBuilderImpl(new TestConfigurationBootstrap().getFullConfigurationService()).topicFilter(

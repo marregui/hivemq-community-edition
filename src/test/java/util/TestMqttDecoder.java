@@ -48,7 +48,7 @@ import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_MA
 
 public class TestMqttDecoder {
 
-    public static MQTTMessageDecoder create() {
+    public static MQTTMessageDecoder create()  {
         final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.securityConfiguration().setValidateUTF8(true);
         fullConfig.mqttConfiguration().setMaxSessionExpiryInterval(SESSION_EXPIRY_MAX);

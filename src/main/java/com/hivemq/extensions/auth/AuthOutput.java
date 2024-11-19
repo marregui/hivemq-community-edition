@@ -29,6 +29,7 @@ import com.hivemq.extensions.packets.general.ModifiableUserPropertiesImpl;
 
 import java.nio.ByteBuffer;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -83,13 +84,13 @@ abstract class AuthOutput<T> extends AbstractAsyncOutput<T> {
     }
 
     public void authenticateSuccessfully(final @NotNull ByteBuffer authenticationData) {
-        Preconditions.checkNotNull(authenticationData, "Authentication data must never be null");
+        Objects.requireNonNull(authenticationData, "Authentication data must never be null");
         authenticateSuccessfully();
         this.authenticationData = authenticationData.asReadOnlyBuffer();
     }
 
     public void authenticateSuccessfully(final @NotNull byte[] authenticationData) {
-        Preconditions.checkNotNull(authenticationData, "Authentication data must never be null");
+        Objects.requireNonNull(authenticationData, "Authentication data must never be null");
         authenticateSuccessfully();
         this.authenticationData = ByteBuffer.wrap(authenticationData).asReadOnlyBuffer();
     }
@@ -100,13 +101,13 @@ abstract class AuthOutput<T> extends AbstractAsyncOutput<T> {
     }
 
     public void continueAuthentication(final @NotNull ByteBuffer authenticationData) {
-        Preconditions.checkNotNull(authenticationData, "Authentication data must never be null");
+        Objects.requireNonNull(authenticationData, "Authentication data must never be null");
         continueAuthentication();
         this.authenticationData = authenticationData.asReadOnlyBuffer();
     }
 
     public void continueAuthentication(final @NotNull byte[] authenticationData) {
-        Preconditions.checkNotNull(authenticationData, "Authentication data must never be null");
+        Objects.requireNonNull(authenticationData, "Authentication data must never be null");
         continueAuthentication();
         this.authenticationData = ByteBuffer.wrap(authenticationData).asReadOnlyBuffer();
     }

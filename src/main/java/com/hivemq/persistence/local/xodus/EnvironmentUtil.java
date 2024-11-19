@@ -21,7 +21,9 @@ import jetbrains.exodus.env.EnvironmentConfig;
 
 import com.google.inject.Singleton;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Objects;
+
 import static com.hivemq.config.InternalConfig.XODUS_LOG_CACHE_USE_NIO;
 import static com.hivemq.config.InternalConfig.XODUS_PERSISTENCE_ENVIRONMENT_DURABLE_WRITES_ENABLED;
 import static com.hivemq.config.InternalConfig.XODUS_PERSISTENCE_ENVIRONMENT_GC_DELETION_DELAY_MSEC;
@@ -75,7 +77,7 @@ public class EnvironmentUtil {
             final boolean durableWrites,
             final boolean jmxEnabled,
             @NotNull final String name) {
-        checkNotNull(name, "Name for environment config must not be null");
+        Objects.requireNonNull(name, "Name for environment config must not be null");
         final EnvironmentConfig env = new EnvironmentConfig();
         env.setGcFileMinAge(gcMinAge);
         env.setGcFilesDeletionDelay(gcDeletionDelay);

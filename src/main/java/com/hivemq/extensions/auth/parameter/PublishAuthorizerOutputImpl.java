@@ -25,6 +25,7 @@ import com.hivemq.extensions.executor.PluginOutPutAsyncer;
 import com.hivemq.extensions.executor.task.AbstractAsyncOutput;
 import com.hivemq.extensions.executor.task.PluginTaskOutput;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
@@ -76,7 +77,7 @@ public class PublishAuthorizerOutputImpl extends AbstractAsyncOutput<PublishAuth
     @Override
     public void failAuthorization(final @NotNull AckReasonCode reasonCode) {
         checkCompleted("failAuthorization");
-        Preconditions.checkNotNull(reasonCode, "reason code must never be null");
+        Objects.requireNonNull(reasonCode, "reason code must never be null");
         if (reasonCode == AckReasonCode.SUCCESS || reasonCode == AckReasonCode.NO_MATCHING_SUBSCRIBERS) {
             throw new IllegalArgumentException("Fail must use an Ack Error code");
         }
@@ -88,8 +89,8 @@ public class PublishAuthorizerOutputImpl extends AbstractAsyncOutput<PublishAuth
     @Override
     public void failAuthorization(final @NotNull AckReasonCode reasonCode, final @NotNull String reasonString) {
         checkCompleted("failAuthorization");
-        Preconditions.checkNotNull(reasonCode, "reason code must never be null");
-        Preconditions.checkNotNull(reasonString, "reason string must never be null");
+        Objects.requireNonNull(reasonCode, "reason code must never be null");
+        Objects.requireNonNull(reasonString, "reason string must never be null");
         if (reasonCode == AckReasonCode.SUCCESS || reasonCode == AckReasonCode.NO_MATCHING_SUBSCRIBERS) {
             throw new IllegalArgumentException("Fail must use an Ack Error code");
         }
@@ -109,7 +110,7 @@ public class PublishAuthorizerOutputImpl extends AbstractAsyncOutput<PublishAuth
     @Override
     public void disconnectClient(final @NotNull DisconnectReasonCode reasonCode) {
         checkCompleted("disconnectClient");
-        Preconditions.checkNotNull(reasonCode, "reason code must never be null");
+        Objects.requireNonNull(reasonCode, "reason code must never be null");
         this.disconnectReasonCode = reasonCode;
         authorizationState = AuthorizationState.DISCONNECT;
     }
@@ -117,8 +118,8 @@ public class PublishAuthorizerOutputImpl extends AbstractAsyncOutput<PublishAuth
     @Override
     public void disconnectClient(final @NotNull DisconnectReasonCode reasonCode, final @NotNull String reasonString) {
         checkCompleted("disconnectClient");
-        Preconditions.checkNotNull(reasonCode, "reason code must never be null");
-        Preconditions.checkNotNull(reasonString, "reason string must never be null");
+        Objects.requireNonNull(reasonCode, "reason code must never be null");
+        Objects.requireNonNull(reasonString, "reason string must never be null");
         this.disconnectReasonCode = reasonCode;
         this.reasonString = reasonString;
         authorizationState = AuthorizationState.DISCONNECT;

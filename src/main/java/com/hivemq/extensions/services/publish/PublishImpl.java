@@ -24,6 +24,7 @@ import com.hivemq.extension.sdk.api.services.publish.Publish;
 import com.hivemq.extensions.packets.general.UserPropertiesImpl;
 
 import java.nio.ByteBuffer;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -73,9 +74,9 @@ public class PublishImpl implements Publish {
             @Nullable final ByteBuffer payload,
             @NotNull final UserPropertiesImpl userProperties) {
 
-        Preconditions.checkNotNull(qos, "QoS must never be null");
-        Preconditions.checkNotNull(topic, "Topic must never be null");
-        Preconditions.checkNotNull(userProperties, "User properties must never be null");
+        Objects.requireNonNull(qos, "QoS must never be null");
+        Objects.requireNonNull(topic, "Topic must never be null");
+        Objects.requireNonNull(userProperties, "User properties must never be null");
 
         this.qos = qos;
         this.retained = retained;

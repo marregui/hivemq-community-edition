@@ -27,8 +27,7 @@ import com.hivemq.security.ssl.SslFactory;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 
 public class ChannelInitializerFactoryImpl implements ChannelInitializerFactory {
@@ -60,7 +59,7 @@ public class ChannelInitializerFactoryImpl implements ChannelInitializerFactory 
     @NotNull
     public AbstractChannelInitializer getChannelInitializer(@NotNull final Listener listener) {
 
-        checkNotNull(listener, "Listener must not be null");
+        Objects.requireNonNull(listener, "Listener must not be null");
 
         if (listener instanceof TcpListener) {
 

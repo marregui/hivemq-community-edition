@@ -23,6 +23,8 @@ import com.hivemq.extension.sdk.api.services.intializer.InitializerRegistry;
 import javax.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.Objects;
+
 /**
  * @author Florian Limpöck
  * @since 4.0.0
@@ -40,7 +42,7 @@ public class InitializerRegistryImpl implements InitializerRegistry {
 
     @Override
     public void setClientInitializer(@NotNull final ClientInitializer initializer) {
-        Preconditions.checkNotNull(initializer, "Client initializer must never be null");
+        Objects.requireNonNull(initializer, "Client initializer must never be null");
         initializers.addClientInitializer(initializer);
     }
 }

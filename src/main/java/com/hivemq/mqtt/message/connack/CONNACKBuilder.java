@@ -27,7 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.mqtt.message.connack.CONNACK.KEEP_ALIVE_NOT_SET;
 import static com.hivemq.mqtt.message.connack.CONNACK.SESSION_EXPIRY_NOT_SET;
 import static com.hivemq.mqtt.message.connack.Mqtt5CONNACK.DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT;
@@ -84,7 +84,7 @@ public class CONNACKBuilder {
                     "An auth method must never exceed 65.535 bytes");
         }
         if (authData != null) {
-            checkNotNull(authMethod, "Auth method must be set if auth data is set");
+            Objects.requireNonNull(authMethod, "Auth method must be set if auth data is set");
             checkArgument(UnsignedDataTypes.isUnsignedShort(authData.length),
                     "An auth data must never exceed 65.535 bytes");
         }
@@ -112,7 +112,7 @@ public class CONNACKBuilder {
                     "A server keep alive must never be larger than 65.535");
         }
 
-        checkNotNull(mqtt5ConnAckReasonCode);
+        Objects.requireNonNull(mqtt5ConnAckReasonCode);
 
         return new CONNACK(mqtt5ConnAckReasonCode,
                 reasonString,

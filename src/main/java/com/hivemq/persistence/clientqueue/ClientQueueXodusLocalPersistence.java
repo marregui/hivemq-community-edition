@@ -54,6 +54,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.TimeUnit;
@@ -61,7 +62,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.config.InternalConfig.QOS_0_MEMORY_HARD_LIMIT_DIVISOR;
 import static com.hivemq.persistence.clientqueue.ClientQueuePersistenceImpl.Key;
 import static com.hivemq.util.ThreadPreConditions.SINGLE_WRITER_THREAD_PREFIX;
@@ -170,7 +171,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
     protected void init() {
         log.debug("Initializing payload reference count and queue sizes for {} persistence.", PERSISTENCE_NAME);
 
-        checkNotNull(buckets, "Buckets must be initialized at this point");
+        Objects.requireNonNull(buckets, "Buckets must be initialized at this point");
 
         for (int i = 0; i < buckets.length; i++) {
             qos0MessageBuckets.put(i, new ConcurrentHashMap<>());
@@ -270,9 +271,9 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
             final boolean retained,
             final int bucketIndex) {
 
-        checkNotNull(queueId, "Queue ID must not be null");
-        checkNotNull(publish, "Publish must not be null");
-        checkNotNull(strategy, "Strategy must not be null");
+        Objects.requireNonNull(queueId, "Queue ID must not be null");
+        Objects.requireNonNull(publish, "Publish must not be null");
+        Objects.requireNonNull(strategy, "Strategy must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Key key = new Key(queueId, shared);
@@ -346,9 +347,9 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
             final boolean retained,
             final int bucketIndex) {
 
-        checkNotNull(queueId, "Queue ID must not be null");
-        checkNotNull(publishes, "Publishes must not be null");
-        checkNotNull(strategy, "Strategy must not be null");
+        Objects.requireNonNull(queueId, "Queue ID must not be null");
+        Objects.requireNonNull(publishes, "Publishes must not be null");
+        Objects.requireNonNull(strategy, "Strategy must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Key key = new Key(queueId, shared);
@@ -598,8 +599,8 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
             final @NotNull ImmutableIntArray packetIds,
             final long bytesLimit,
             final int bucketIndex) {
-        checkNotNull(queueId, "Queue ID must not be null");
-        checkNotNull(packetIds, "Packet IDs must not be null");
+        Objects.requireNonNull(queueId, "Queue ID must not be null");
+        Objects.requireNonNull(packetIds, "Packet IDs must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Key key = new Key(queueId, shared);
@@ -712,7 +713,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
             final int batchSize,
             final long bytesLimit,
             final int bucketIndex) {
-        checkNotNull(client, "client id must not be null");
+        Objects.requireNonNull(client, "client id must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Key key = new Key(client, shared);
@@ -757,8 +758,8 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
 
     @Override
     public @Nullable String replace(final @NotNull String client, final @NotNull PUBREL pubrel, final int bucketIndex) {
-        checkNotNull(client, "client id must not be null");
-        checkNotNull(pubrel, "pubrel must not be null");
+        Objects.requireNonNull(client, "client id must not be null");
+        Objects.requireNonNull(pubrel, "pubrel must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Key key = new Key(client, false);
@@ -815,7 +816,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
     @Override
     public @Nullable String remove(
             final @NotNull String client, final int packetId, @Nullable final String uniqueId, final int bucketIndex) {
-        checkNotNull(client, "client id must not be null");
+        Objects.requireNonNull(client, "client id must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Key key = new Key(client, false);
@@ -855,7 +856,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
 
     @Override
     public int size(final @NotNull String queueId, final boolean shared, final int bucketIndex) {
-        checkNotNull(queueId, "Queue ID must not be null");
+        Objects.requireNonNull(queueId, "Queue ID must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX); // QueueSizes are not thread save
         final Key key = new Key(queueId, shared);
         final AtomicInteger queueSize = queueSizeBuckets.get(bucketIndex).get(key);
@@ -864,7 +865,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
 
     @Override
     public void clear(final @NotNull String queueId, final boolean shared, final int bucketIndex) {
-        checkNotNull(queueId, "Queue ID must not be null");
+        Objects.requireNonNull(queueId, "Queue ID must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Key key = new Key(queueId, shared);
@@ -897,7 +898,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
 
     @Override
     public void removeAllQos0Messages(final @NotNull String queueId, final boolean shared, final int bucketIndex) {
-        checkNotNull(queueId, "Queue id must not be null");
+        Objects.requireNonNull(queueId, "Queue id must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Key key = new Key(queueId, shared);
@@ -942,8 +943,8 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
     @Override
     public void removeShared(
             final @NotNull String sharedSubscription, final @NotNull String uniqueId, final int bucketIndex) {
-        checkNotNull(sharedSubscription, "Shared subscription must not be null");
-        checkNotNull(uniqueId, "Unique id must not be null");
+        Objects.requireNonNull(sharedSubscription, "Shared subscription must not be null");
+        Objects.requireNonNull(uniqueId, "Unique id must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Key key = new Key(sharedSubscription, true);
@@ -976,8 +977,8 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
     @Override
     public void removeInFlightMarker(
             final @NotNull String sharedSubscription, final @NotNull String uniqueId, final int bucketIndex) {
-        checkNotNull(sharedSubscription, "Shared subscription must not be null");
-        checkNotNull(uniqueId, "Unique id must not be null");
+        Objects.requireNonNull(sharedSubscription, "Shared subscription must not be null");
+        Objects.requireNonNull(uniqueId, "Unique id must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Key key = new Key(sharedSubscription, true);
@@ -1153,7 +1154,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
     @VisibleForTesting
     public @NotNull ImmutableList<ClientQueueEntry> getAll(
             final @NotNull String queueId, final boolean shared, final int bucketIndex) {
-        checkNotNull(queueId, "Queue id must not be null");
+        Objects.requireNonNull(queueId, "Queue id must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Key key = new Key(queueId, shared);

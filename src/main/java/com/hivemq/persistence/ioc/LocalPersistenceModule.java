@@ -37,9 +37,7 @@ import com.hivemq.persistence.qos.IncomingMessageFlowPersistenceImpl;
 import com.hivemq.persistence.retained.RetainedMessagePersistence;
 import com.hivemq.persistence.retained.RetainedMessagePersistenceProvider;
 
-import com.google.inject.Singleton;
-
-public class LocalPersistenceModule extends SingletonModule<Class<LocalPersistenceModule>> {
+public class LocalPersistenceModule extends SingletonModule<LocalPersistenceModule> {
 
     private final @NotNull Injector persistenceInjector;
 

@@ -23,6 +23,8 @@ import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttMessageWithUserProperties;
 import com.hivemq.mqtt.message.reason.Mqtt5AuthReasonCode;
 
+import java.util.Objects;
+
 /**
  * AUTH Packet is used for the authentication.
  *
@@ -55,8 +57,8 @@ public class AUTH extends MqttMessageWithUserProperties.MqttMessageWithReasonCod
 
         super(reasonCode, reasonString, userProperties);
 
-        Preconditions.checkNotNull(reasonCode, "Reason code must never be null");
-        Preconditions.checkNotNull(authMethod, "Auth method must never be null");
+        Objects.requireNonNull(reasonCode, "Reason code must never be null");
+        Objects.requireNonNull(authMethod, "Auth method must never be null");
 
         this.authMethod = authMethod;
         this.authData = authData;

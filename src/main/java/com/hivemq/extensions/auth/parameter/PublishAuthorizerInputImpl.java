@@ -43,9 +43,9 @@ public class PublishAuthorizerInputImpl
 
     public PublishAuthorizerInputImpl(
             final @NotNull PUBLISH publish, final @NotNull Channel channel, final @NotNull String clientId) {
-        Preconditions.checkNotNull(publish, "publish must never be null");
-        Preconditions.checkNotNull(channel, "channel must never be null");
-        Preconditions.checkNotNull(clientId, "clientId must never be null");
+        Objects.requireNonNull(publish, "publish must never be null");
+        Objects.requireNonNull(channel, "channel must never be null");
+        Objects.requireNonNull(clientId, "clientId must never be null");
 
         this.publishPacket = new PublishPacketImpl(publish);
         this.clientInformation = ExtensionInformationUtil.getAndSetClientInformation(channel, clientId);
@@ -54,9 +54,9 @@ public class PublishAuthorizerInputImpl
 
     public PublishAuthorizerInputImpl(
             final @NotNull MqttWillPublish publish, final @NotNull Channel channel, final @NotNull String clientId) {
-        Preconditions.checkNotNull(publish, "publish must never be null");
-        Preconditions.checkNotNull(channel, "channel must never be null");
-        Preconditions.checkNotNull(clientId, "clientId must never be null");
+        Objects.requireNonNull(publish, "publish must never be null");
+        Objects.requireNonNull(channel, "channel must never be null");
+        Objects.requireNonNull(clientId, "clientId must never be null");
 
         final Long timestamp =
                 Objects.requireNonNullElse(

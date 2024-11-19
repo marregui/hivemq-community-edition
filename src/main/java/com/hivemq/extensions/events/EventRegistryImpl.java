@@ -23,6 +23,8 @@ import com.hivemq.extension.sdk.api.events.client.ClientLifecycleEventListenerPr
 import javax.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.Objects;
+
 /**
  * @author Florian Limpöck
  * @since 4.0.0
@@ -40,7 +42,7 @@ public class EventRegistryImpl implements EventRegistry {
 
     @Override
     public void setClientLifecycleEventListener(@NotNull final ClientLifecycleEventListenerProvider provider) {
-        Preconditions.checkNotNull(provider, "ClientLifecycleEventListenerProvider must never be null");
+        Objects.requireNonNull(provider, "ClientLifecycleEventListenerProvider must never be null");
         lifecycleEventListeners.addClientLifecycleEventListenerProvider(provider);
     }
 }

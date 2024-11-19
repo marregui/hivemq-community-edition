@@ -41,12 +41,13 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.persistence.local.xodus.RetainedMessageSerializer.deserializeKey;
 import static com.hivemq.persistence.local.xodus.RetainedMessageSerializer.deserializeValue;
 import static com.hivemq.persistence.local.xodus.RetainedMessageSerializer.serializeKey;
@@ -181,7 +182,7 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
 
     @Override
     public void remove(final @NotNull String topic, final int bucketIndex) {
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Bucket bucket = buckets[bucketIndex];
@@ -208,7 +209,7 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
 
     @Override
     public @Nullable RetainedMessage get(final @NotNull String topic, final int bucketIndex) {
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Bucket bucket = buckets[bucketIndex];
@@ -239,8 +240,8 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
     @Override
     public void put(
             final @NotNull RetainedMessage retainedMessage, final @NotNull String topic, final int bucketIndex) {
-        checkNotNull(topic, "Topic must not be null");
-        checkNotNull(retainedMessage, "Retained message must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
+        Objects.requireNonNull(retainedMessage, "Retained message must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Bucket bucket = buckets[bucketIndex];

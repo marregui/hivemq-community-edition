@@ -20,6 +20,8 @@ import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 
+import java.util.Objects;
+
 /**
  * @author Florian Limpöck
  * @since 4.0.0
@@ -31,7 +33,7 @@ public class ClientInformationImpl implements ClientInformation {
     private final String clientId;
 
     public ClientInformationImpl(@NotNull final String clientId) {
-        Preconditions.checkNotNull(clientId, "client id must never be null");
+        Objects.requireNonNull(clientId, "client id must never be null");
         this.clientId = clientId;
     }
 

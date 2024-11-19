@@ -22,8 +22,10 @@ import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.util.Topics;
 import com.hivemq.util.Utf8Utils;
 
+import java.util.Objects;
+
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * This class is tested by the Builder Impl unit tests.
@@ -130,7 +132,7 @@ public class PluginBuilderUtil {
     }
 
     public static void checkUserPropertyName(final @NotNull String name, final boolean validateUTF8) {
-        checkNotNull(name, "Name must never be null");
+        Objects.requireNonNull(name, "Name must never be null");
 
         checkUtf8StringLength(name, "User property name");
 
@@ -140,7 +142,7 @@ public class PluginBuilderUtil {
     }
 
     public static void checkUserPropertyValue(final @NotNull String value, final boolean validateUTF8) {
-        checkNotNull(value, "Value must never be null");
+        Objects.requireNonNull(value, "Value must never be null");
 
         checkUtf8StringLength(value, "User property value");
 
@@ -150,14 +152,14 @@ public class PluginBuilderUtil {
     }
 
     public static void checkQos(final @NotNull Qos qos, final int maxQos) {
-        checkNotNull(qos, "QoS must not be null");
+        Objects.requireNonNull(qos, "QoS must not be null");
         if (qos.getQosNumber() > maxQos) {
             throw new IllegalArgumentException("QoS " + qos.getQosNumber() + " not allowed. Maximum = " + maxQos);
         }
     }
 
     public static void checkTopic(final @NotNull String topic, final int maxTopicLength, final boolean validateUtf8) {
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
         checkArgument(topic.length() <= maxTopicLength,
                 "Topic length must not exceed '" +
                         maxTopicLength +

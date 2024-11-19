@@ -42,10 +42,11 @@ import com.hivemq.util.Topics;
 
 import javax.inject.Inject;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.mqtt.message.connect.MqttWillPublish.WILL_DELAY_INTERVAL_DEFAULT;
 import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET;
 
@@ -104,7 +105,7 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
     @Override
     public @NotNull WillPublishBuilder fromPublish(final @NotNull PublishPacket publishPacket) {
 
-        Preconditions.checkNotNull(publishPacket, "publish must not be null");
+        Objects.requireNonNull(publishPacket, "publish must not be null");
 
         if (!(publishPacket instanceof PublishPacketImpl)) {
             throw new DoNotImplementException(PublishPacket.class.getSimpleName());
@@ -126,7 +127,7 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
     @Override
     public @NotNull WillPublishBuilder fromPublish(final @NotNull Publish publish) {
 
-        Preconditions.checkNotNull(publish, "publish must not be null");
+        Objects.requireNonNull(publish, "publish must not be null");
 
         if (!(publish instanceof PublishImpl)) {
             throw new DoNotImplementException(Publish.class.getSimpleName());
@@ -148,7 +149,7 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
     @Override
     public @NotNull WillPublishBuilder fromWillPublish(final @NotNull WillPublishPacket willPublish) {
 
-        Preconditions.checkNotNull(willPublish, "publish must not be null");
+        Objects.requireNonNull(willPublish, "publish must not be null");
 
         if (!(willPublish instanceof WillPublishPacketImpl)) {
             throw new DoNotImplementException(WillPublishPacket.class.getSimpleName());
@@ -215,7 +216,7 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
 
     @Override
     public @NotNull WillPublishBuilder topic(final @NotNull String topic) {
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
         checkArgument(topic.length() <= restrictionsConfig.maxTopicLength(),
                 "Topic filter length must not exceed '" +
                         restrictionsConfig.maxTopicLength() +
@@ -271,7 +272,7 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
 
     @Override
     public @NotNull WillPublishBuilder payload(final @NotNull ByteBuffer payload) {
-        checkNotNull(payload, "Payload must not be null");
+        Objects.requireNonNull(payload, "Payload must not be null");
         this.payload = payload;
         return this;
     }
@@ -293,8 +294,8 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
     @Override
     public @NotNull WillPublishPacket build() {
 
-        Preconditions.checkNotNull(topic, "Topic must never be null");
-        Preconditions.checkNotNull(payload, "Payload must never be null");
+        Objects.requireNonNull(topic, "Topic must never be null");
+        Objects.requireNonNull(payload, "Payload must never be null");
 
         if (messageExpiryInterval == MESSAGE_EXPIRY_INTERVAL_NOT_SET) {
             messageExpiryInterval = mqttConfigService.maxMessageExpiryInterval();

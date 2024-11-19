@@ -31,9 +31,10 @@ import com.hivemq.util.ReasonStrings;
 
 import java.nio.ByteBuffer;
 import java.time.Duration;
+import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * @author Silvio Giebl
@@ -194,7 +195,7 @@ public class ConnectAuthOutput extends AuthOutput<EnhancedAuthOutput> implements
     }
 
     private static @NotNull Mqtt5ConnAckReasonCode checkReasonCode(final @NotNull ConnackReasonCode reasonCode) {
-        checkNotNull(reasonCode, "CONNACK reason code must never be null");
+        Objects.requireNonNull(reasonCode, "CONNACK reason code must never be null");
         checkArgument(reasonCode != ConnackReasonCode.SUCCESS,
                 "CONNACK reason code must not be SUCCESS for failed authentication");
         return Mqtt5ConnAckReasonCode.from(reasonCode);
@@ -203,7 +204,7 @@ public class ConnectAuthOutput extends AuthOutput<EnhancedAuthOutput> implements
     private static @NotNull Mqtt5ConnAckReasonCode checkReasonCode(
             final @NotNull DisconnectedReasonCode disconnectedReasonCode) {
 
-        Preconditions.checkNotNull(disconnectedReasonCode, "Disconnected reason code must never be null");
+        Objects.requireNonNull(disconnectedReasonCode, "Disconnected reason code must never be null");
         final Mqtt5ConnAckReasonCode connackReasonCode = Mqtt5ConnAckReasonCode.from(disconnectedReasonCode);
         Preconditions.checkArgument(connackReasonCode != null,
                 "The disconnected reason code " +

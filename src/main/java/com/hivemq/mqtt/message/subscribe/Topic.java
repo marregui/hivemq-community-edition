@@ -27,7 +27,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * Represents a MQTT topic with a string for the topic name and a quality of service.
@@ -64,9 +64,9 @@ public class Topic implements Serializable, Comparable<Topic>, Mqtt5Topic, Sizab
             final @NotNull Mqtt5RetainHandling retainHandling,
             final @Nullable Integer subscriptionIdentifier) {
 
-        checkNotNull(topic, "A Topic must not be null");
-        checkNotNull(qoS, "A QoS must not be null");
-        checkNotNull(retainHandling, "A RetainHandling must not be null");
+        Objects.requireNonNull(topic, "A Topic must not be null");
+        Objects.requireNonNull(qoS, "A QoS must not be null");
+        Objects.requireNonNull(retainHandling, "A RetainHandling must not be null");
         checkArgument((subscriptionIdentifier == null) ||
                         ((subscriptionIdentifier >= 1) && (subscriptionIdentifier <= 268_435_455)),
                 "Subscription identifier must be between 1 and 268_435_455");
@@ -126,7 +126,7 @@ public class Topic implements Serializable, Comparable<Topic>, Mqtt5Topic, Sizab
 
 
     public void setQoS(@NotNull final QoS qos) {
-        checkNotNull(qos, "QoS must not be null");
+        Objects.requireNonNull(qos, "QoS must not be null");
         this.qoS = qos;
     }
 

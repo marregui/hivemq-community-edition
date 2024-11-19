@@ -40,8 +40,8 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.Arrays;
+import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 @ChannelHandler.Sharable
@@ -66,7 +66,7 @@ public class UnsubscribeHandler extends SimpleChannelInboundHandler<UNSUBSCRIBE>
         SubscribeMessageBarrier.addToPipeline(ctx);
 
         final ClientConnection clientConnection = ClientConnection.of(ctx.channel());
-        final String clientId = checkNotNull(clientConnection.getClientId());
+        final String clientId = Objects.requireNonNull(clientConnection.getClientId());
 
         final UnsubscribeOperationCompletionCallback unsubscribeOperationCompletionCallback =
                 new UnsubscribeOperationCompletionCallback(ctx,

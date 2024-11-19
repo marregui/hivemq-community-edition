@@ -25,6 +25,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -38,31 +39,31 @@ public class ConnectionAttributeStoreImpl implements ConnectionAttributeStore {
     private final @NotNull Channel channel;
 
     public ConnectionAttributeStoreImpl(@NotNull final Channel channel) {
-        Preconditions.checkNotNull(channel, "channel must not be null");
+        Objects.requireNonNull(channel, "channel must not be null");
         this.channel = channel;
     }
 
     @Override
     public void put(@NotNull final String key, @NotNull final ByteBuffer value) {
-        Preconditions.checkNotNull(key, "Key of connection attribute must not be null.");
-        Preconditions.checkNotNull(value, "Value of connection attribute must not be null.");
+        Objects.requireNonNull(key, "Key of connection attribute must not be null.");
+        Objects.requireNonNull(value, "Value of connection attribute must not be null.");
 
         ConnectionAttributes.getInstance(channel).put(key, value);
     }
 
     @Override
     public void putAsString(@NotNull final String key, @NotNull final String value) {
-        Preconditions.checkNotNull(key, "Key of connection attribute must not be null.");
-        Preconditions.checkNotNull(value, "Value of connection attribute must not be null.");
+        Objects.requireNonNull(key, "Key of connection attribute must not be null.");
+        Objects.requireNonNull(value, "Value of connection attribute must not be null.");
 
         putAsString(key, value, DEFAULT_CHARSET);
     }
 
     @Override
     public void putAsString(@NotNull final String key, @NotNull final String value, @NotNull final Charset charset) {
-        Preconditions.checkNotNull(key, "Key of connection attribute must not be null.");
-        Preconditions.checkNotNull(value, "Value of connection attribute must not be null.");
-        Preconditions.checkNotNull(charset, "Charset of connection attribute must not be null.");
+        Objects.requireNonNull(key, "Key of connection attribute must not be null.");
+        Objects.requireNonNull(value, "Value of connection attribute must not be null.");
+        Objects.requireNonNull(charset, "Charset of connection attribute must not be null.");
 
         put(key, ByteBuffer.wrap(value.getBytes(charset)));
     }
@@ -70,7 +71,7 @@ public class ConnectionAttributeStoreImpl implements ConnectionAttributeStore {
     @NotNull
     @Override
     public Optional<ByteBuffer> get(@NotNull final String key) {
-        Preconditions.checkNotNull(key, "Key of connection attribute must not be null.");
+        Objects.requireNonNull(key, "Key of connection attribute must not be null.");
 
         final ConnectionAttributes connectionAttributes = ConnectionAttributes.getInstanceIfPresent(channel);
         if (connectionAttributes == null) {
@@ -82,7 +83,7 @@ public class ConnectionAttributeStoreImpl implements ConnectionAttributeStore {
     @NotNull
     @Override
     public Optional<String> getAsString(@NotNull final String key) {
-        Preconditions.checkNotNull(key, "Key of connection attribute must not be null.");
+        Objects.requireNonNull(key, "Key of connection attribute must not be null.");
 
         return getAsString(key, DEFAULT_CHARSET);
     }
@@ -90,8 +91,8 @@ public class ConnectionAttributeStoreImpl implements ConnectionAttributeStore {
     @NotNull
     @Override
     public Optional<String> getAsString(@NotNull final String key, @NotNull final Charset charset) {
-        Preconditions.checkNotNull(key, "Key of connection attribute must not be null.");
-        Preconditions.checkNotNull(charset, "Charset of connection attribute must not be null.");
+        Objects.requireNonNull(key, "Key of connection attribute must not be null.");
+        Objects.requireNonNull(charset, "Charset of connection attribute must not be null.");
 
         final byte[] bytes = Bytes.getBytesFromReadOnlyBuffer(get(key));
 
@@ -114,7 +115,7 @@ public class ConnectionAttributeStoreImpl implements ConnectionAttributeStore {
     @NotNull
     @Override
     public Optional<ByteBuffer> remove(@NotNull final String key) {
-        Preconditions.checkNotNull(key, "Key of connection attribute must not be null.");
+        Objects.requireNonNull(key, "Key of connection attribute must not be null.");
 
         final ConnectionAttributes connectionAttributes = ConnectionAttributes.getInstanceIfPresent(channel);
         if (connectionAttributes == null) {

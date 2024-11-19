@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.cert.X509Certificate;
+import java.util.Objects;
 
 /**
  * @author Florian Limpöck
@@ -68,9 +69,9 @@ public class ExtensionInformationUtil {
 
     public static @NotNull MqttVersion mqttVersionFromChannel(final @NotNull Channel channel) {
 
-        Preconditions.checkNotNull(channel, "channel must never be null");
+        Objects.requireNonNull(channel, "channel must never be null");
         final ProtocolVersion protocolVersion = Connection.of(channel).getProtocolVersion();
-        Preconditions.checkNotNull(protocolVersion, "protocol version must never be null");
+        Objects.requireNonNull(protocolVersion, "protocol version must never be null");
 
         return mqttVersionFromProtocolVersion(protocolVersion);
     }
@@ -81,7 +82,7 @@ public class ExtensionInformationUtil {
 
     public static @Nullable Listener getListenerFromChannel(final @NotNull Channel channel) {
 
-        Preconditions.checkNotNull(channel, "channel must never be null");
+        Objects.requireNonNull(channel, "channel must never be null");
         final com.hivemq.config.entity.Listener hiveMQListener =
                 Connection.of(channel).getConnectedListener();
         if (hiveMQListener == null) {
@@ -107,7 +108,7 @@ public class ExtensionInformationUtil {
 
     public static @Nullable ClientTlsInformation getTlsInformationFromChannel(final @NotNull Channel channel) {
 
-        Preconditions.checkNotNull(channel, "channel must never be null");
+        Objects.requireNonNull(channel, "channel must never be null");
 
         final Connection clientConnectionContext = Connection.of(channel);
         try {

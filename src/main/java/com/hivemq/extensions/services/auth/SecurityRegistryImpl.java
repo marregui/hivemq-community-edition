@@ -27,7 +27,7 @@ import com.hivemq.extensions.HiveMQExtensions;
 import javax.inject.Inject;
 import com.google.inject.Singleton;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 
 @Singleton
@@ -49,7 +49,7 @@ public class SecurityRegistryImpl implements SecurityRegistry {
 
     @Override
     public void setAuthenticatorProvider(final @NotNull AuthenticatorProvider authenticatorProvider) {
-        checkNotNull(authenticatorProvider, "authenticatorProvider must not be null");
+        Objects.requireNonNull(authenticatorProvider, "authenticatorProvider must not be null");
 
         final HiveMQExtension extension =
                 hiveMQExtensions.getExtensionForClassloader(authenticatorProvider.getClass().getClassLoader());
@@ -67,7 +67,7 @@ public class SecurityRegistryImpl implements SecurityRegistry {
     public void setEnhancedAuthenticatorProvider(
             final @NotNull EnhancedAuthenticatorProvider enhancedAuthenticatorProvider) {
 
-        checkNotNull(enhancedAuthenticatorProvider, "enhancedAuthenticatorProvider must not be null");
+        Objects.requireNonNull(enhancedAuthenticatorProvider, "enhancedAuthenticatorProvider must not be null");
 
         final HiveMQExtension extension =
                 hiveMQExtensions.getExtensionForClassloader(enhancedAuthenticatorProvider.getClass().getClassLoader());
@@ -83,7 +83,7 @@ public class SecurityRegistryImpl implements SecurityRegistry {
 
     @Override
     public void setAuthorizerProvider(final @NotNull AuthorizerProvider authorizerProvider) {
-        checkNotNull(authorizerProvider, "authorizerProvider must not be null");
+        Objects.requireNonNull(authorizerProvider, "authorizerProvider must not be null");
         authorizers.addAuthorizerProvider(authorizerProvider);
     }
 }

@@ -24,6 +24,7 @@ import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extensions.executor.PluginOutPutAsyncer;
 
 import java.time.Duration;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -44,7 +45,7 @@ public class AbstractSimpleAsyncOutput<T> implements PluginTaskOutput, SimpleAsy
 
     @Override
     public @NotNull Async<T> async(final @NotNull Duration timeout) {
-        Preconditions.checkNotNull(timeout, "Timeout duration must never be null");
+        Objects.requireNonNull(timeout, "Timeout duration must never be null");
         checkCalled();
         //noinspection unchecked: this cast is safe since this implements AsyncOutput and PluginTaskOutput
         return (Async<T>) asyncer.asyncify(this, timeout);

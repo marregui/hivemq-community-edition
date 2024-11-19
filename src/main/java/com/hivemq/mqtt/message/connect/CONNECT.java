@@ -27,6 +27,7 @@ import com.hivemq.mqtt.message.mqtt5.MqttMessageWithUserProperties;
 import com.hivemq.util.Bytes;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * @author Florian Limpöck
@@ -218,7 +219,7 @@ public class CONNECT extends MqttMessageWithUserProperties implements Mqtt5CONNE
         private @NotNull Mqtt5UserProperties userProperties = Mqtt5UserProperties.NO_USER_PROPERTIES;
 
         public @NotNull CONNECT build() {
-            Preconditions.checkNotNull(clientIdentifier, "client identifier must never be null");
+            Objects.requireNonNull(clientIdentifier, "client identifier must never be null");
             return new CONNECT(ProtocolVersion.MQTTv5,
                     clientIdentifier,
                     keepAlive,

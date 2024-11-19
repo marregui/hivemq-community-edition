@@ -49,9 +49,10 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 @Singleton
 public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistence
@@ -95,7 +96,7 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
     @NotNull
     @Override
     public ImmutableSet<Topic> getSubscriptions(@NotNull final String client) {
-        checkNotNull(client, "Client id must not be null");
+        Objects.requireNonNull(client, "Client id must not be null");
         return localPersistence.getSubscriptions(client);
     }
 
@@ -104,8 +105,8 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
     public ListenableFuture<SubscriptionResult> addSubscription(
             @NotNull final String client, @NotNull final Topic topic) {
         try {
-            checkNotNull(client, "Client id must not be null");
-            checkNotNull(topic, "Topic must not be null");
+            Objects.requireNonNull(client, "Client id must not be null");
+            Objects.requireNonNull(topic, "Topic must not be null");
 
             final long timestamp = System.currentTimeMillis();
 
@@ -181,8 +182,8 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
     public ListenableFuture<ImmutableList<SubscriptionResult>> addSubscriptions(
             @NotNull final String client, @NotNull final ImmutableSet<Topic> topics) {
         try {
-            checkNotNull(client, "Client id must not be null");
-            checkNotNull(topics, "Topics must not be null");
+            Objects.requireNonNull(client, "Client id must not be null");
+            Objects.requireNonNull(topics, "Topics must not be null");
 
             return addBatchedTopics(client, topics);
         } catch (final Throwable throwable) {
@@ -196,8 +197,8 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
     public ListenableFuture<Void> removeSubscriptions(
             @NotNull final String client, @NotNull final ImmutableSet<String> topics) {
         try {
-            checkNotNull(client, "Client id must not be null");
-            checkNotNull(topics, "Topics must not be null");
+            Objects.requireNonNull(client, "Client id must not be null");
+            Objects.requireNonNull(topics, "Topics must not be null");
 
             return removeBatchedTopics(client, topics);
         } catch (final Throwable throwable) {
@@ -210,8 +211,8 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
     @Override
     public ListenableFuture<Void> remove(@NotNull final String client, @NotNull final String topic) {
         try {
-            checkNotNull(client, "Client id must not be null");
-            checkNotNull(topic, "Topic must not be null");
+            Objects.requireNonNull(client, "Client id must not be null");
+            Objects.requireNonNull(topic, "Topic must not be null");
 
             final long timestamp = System.currentTimeMillis();
 
@@ -249,7 +250,7 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
     @Override
     public ListenableFuture<Void> removeAll(@NotNull final String clientId) {
         try {
-            checkNotNull(clientId, "Client id must not be null");
+            Objects.requireNonNull(clientId, "Client id must not be null");
 
             final Set<Topic> topics = localPersistence.getSubscriptions(clientId);
             final Set<TopicFilter> subscriptions = new HashSet<>();
@@ -361,8 +362,8 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
     public void invalidateSharedSubscriptionCacheAndPoll(
             final @NotNull String clientId, final @NotNull ImmutableSet<Subscription> sharedSubs) {
 
-        checkNotNull(clientId, "Client id must never be null");
-        checkNotNull(sharedSubs, "Subscriptions must never be null");
+        Objects.requireNonNull(clientId, "Client id must never be null");
+        Objects.requireNonNull(sharedSubs, "Subscriptions must never be null");
 
         final ClientSession session = clientSessionLocalPersistence.getSession(clientId);
 
@@ -456,7 +457,7 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
     @NotNull
     public ImmutableSet<Topic> getSharedSubscriptions(@NotNull final String client) {
 
-        checkNotNull(client, "Client id must not be null");
+        Objects.requireNonNull(client, "Client id must not be null");
         final ImmutableSet<Topic> subscriptions = getSubscriptions(client);
         final ImmutableSet.Builder<Topic> sharedSubscriptions = ImmutableSet.builder();
         for (final Topic subscription : subscriptions) {

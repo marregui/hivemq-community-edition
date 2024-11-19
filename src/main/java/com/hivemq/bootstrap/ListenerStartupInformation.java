@@ -20,9 +20,8 @@ import com.hivemq.config.entity.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Optional;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 
 public class ListenerStartupInformation {
@@ -32,13 +31,25 @@ public class ListenerStartupInformation {
     private final @Nullable Throwable exception;
 
     private ListenerStartupInformation(
-            final boolean successful, final @NotNull Listener listener, final @Nullable Throwable exception) {
+            final boolean successful,
+            final @NotNull Listener listener,
+            final @Nullable Throwable exception) {
 
-        checkNotNull(listener, "Original Listener must not be null");
+        Objects.requireNonNull(listener, "Original Listener must not be null");
 
         this.successful = successful;
         this.listener = listener;
         this.exception = exception;
+    }
+
+    public static ListenerStartupInformation successfulListenerStartup(final @NotNull Listener listener) {
+        return new ListenerStartupInformation(true, listener, null);
+    }
+
+    public static ListenerStartupInformation failedListenerStartup(
+            final @NotNull Listener listener,
+            final @Nullable Throwable exception) {
+        return new ListenerStartupInformation(false, listener, exception);
     }
 
     public boolean isSuccessful() {
@@ -51,14 +62,5 @@ public class ListenerStartupInformation {
 
     public @NotNull Optional<Throwable> getException() {
         return Optional.ofNullable(exception);
-    }
-
-    public static ListenerStartupInformation successfulListenerStartup(final @NotNull Listener listener) {
-        return new ListenerStartupInformation(true, listener, null);
-    }
-
-    public static ListenerStartupInformation failedListenerStartup(
-            final @NotNull Listener listener, final @Nullable Throwable exception) {
-        return new ListenerStartupInformation(false, listener, exception);
     }
 }

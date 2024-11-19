@@ -29,9 +29,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.persistence.payload.PayloadReferenceCounterRegistryImpl.REF_COUNT_ALREADY_ZERO;
 import static com.hivemq.persistence.payload.PayloadReferenceCounterRegistryImpl.UNKNOWN_PAYLOAD;
 
@@ -88,7 +89,7 @@ public class PublishPayloadPersistenceImpl implements PublishPayloadPersistence 
 
     @Override
     public void add(final byte @NotNull [] payload, final long id) {
-        checkNotNull(payload, "Payload must not be null");
+        Objects.requireNonNull(payload, "Payload must not be null");
         bucketLock.accessBucketByPayloadId(id, (bucketIndex) -> {
             if (payloadReferenceCounterRegistry.getAndIncrement(id) == UNKNOWN_PAYLOAD) {
                 localPersistence.put(id, payload);

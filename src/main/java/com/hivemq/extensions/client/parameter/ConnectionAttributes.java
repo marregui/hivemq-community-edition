@@ -29,6 +29,7 @@ import io.netty.channel.Channel;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -51,7 +52,7 @@ public class ConnectionAttributes {
      */
     @Nullable
     static ConnectionAttributes getInstanceIfPresent(@NotNull final Channel channel) {
-        Preconditions.checkNotNull(channel, "Channel for connection attributes must not be null.");
+        Objects.requireNonNull(channel, "Channel for connection attributes must not be null.");
 
         return Connection.of(channel).getConnectionAttributes();
     }
@@ -65,7 +66,7 @@ public class ConnectionAttributes {
      */
     @NotNull
     public static ConnectionAttributes getInstance(@NotNull final Channel channel) {
-        Preconditions.checkNotNull(channel, "Channel for connection attributes must not be null.");
+        Objects.requireNonNull(channel, "Channel for connection attributes must not be null.");
 
         final ConnectionAttributes connectionAttributes = getInstanceIfPresent(channel);
         if (connectionAttributes != null) {
@@ -91,8 +92,8 @@ public class ConnectionAttributes {
      * @throws LimitExceededException when the size of the passed value exceeds the maximum allowed size in bytes
      */
     public synchronized void put(@NotNull final String key, @NotNull final ByteBuffer value) {
-        Preconditions.checkNotNull(key, "Key of connection attribute must not be null.");
-        Preconditions.checkNotNull(value, "Value of connection attribute must not be null.");
+        Objects.requireNonNull(key, "Key of connection attribute must not be null.");
+        Objects.requireNonNull(value, "Value of connection attribute must not be null.");
 
         if (value.remaining() > maxValueSizeBytes) {
             throw new LimitExceededException("value with a size of " +
@@ -118,7 +119,7 @@ public class ConnectionAttributes {
      */
     @NotNull
     public synchronized Optional<ByteBuffer> get(@NotNull final String key) {
-        Preconditions.checkNotNull(key, "Key of connection attribute must not be null.");
+        Objects.requireNonNull(key, "Key of connection attribute must not be null.");
 
         if (data == null) {
             return Optional.empty();
@@ -155,7 +156,7 @@ public class ConnectionAttributes {
      */
     @NotNull
     public synchronized Optional<ByteBuffer> remove(@NotNull final String key) {
-        Preconditions.checkNotNull(key, "Key of connection attribute must not be null.");
+        Objects.requireNonNull(key, "Key of connection attribute must not be null.");
 
         if (data == null) {
             return Optional.empty();

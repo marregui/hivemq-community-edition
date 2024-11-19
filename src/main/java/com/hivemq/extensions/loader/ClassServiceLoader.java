@@ -26,8 +26,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -60,8 +61,8 @@ public class ClassServiceLoader {
     public <S> @NotNull Iterable<Class<? extends S>> load(
             final @NotNull Class<S> classToLoad, final @NotNull ClassLoader classLoader)
             throws IOException, ClassNotFoundException {
-        checkNotNull(classToLoad, "Class to load mus not be null");
-        checkNotNull(classLoader, "Classloader must not be null");
+        Objects.requireNonNull(classToLoad, "Class to load mus not be null");
+        Objects.requireNonNull(classLoader, "Classloader must not be null");
 
         final ImmutableList.Builder<Class<? extends S>> services = ImmutableList.builder();
         final Enumeration<URL> urls = classLoader.getResources(META_INF_SERVICES + classToLoad.getName());

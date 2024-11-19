@@ -30,6 +30,7 @@ import com.hivemq.extensions.ExtensionInformationUtil;
 import io.netty.channel.Channel;
 
 import java.net.InetAddress;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -44,10 +45,10 @@ public class ConnectionInformationImpl implements ConnectionInformation {
     private final @Nullable ClientTlsInformation tlsInformation;
 
     public ConnectionInformationImpl(final @NotNull Connection clientConnectionContext) {
-        Preconditions.checkNotNull(clientConnectionContext);
+        Objects.requireNonNull(clientConnectionContext);
 
         final Channel channel = clientConnectionContext.getChannel();
-        Preconditions.checkNotNull(channel);
+        Objects.requireNonNull(channel);
         mqttVersion = ExtensionInformationUtil.mqttVersionFromChannel(channel);
         inetAddress = clientConnectionContext.getChannelAddress().orElse(null);
         listener = ExtensionInformationUtil.getListenerFromChannel(channel);

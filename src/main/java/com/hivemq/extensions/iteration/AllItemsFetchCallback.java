@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 
 
 public abstract class AllItemsFetchCallback<R, I> implements FetchCallback<R> {
@@ -38,7 +39,7 @@ public abstract class AllItemsFetchCallback<R, I> implements FetchCallback<R> {
                 persistenceCall(cursor != null ? cursor : new ChunkCursor());
 
         return Futures.transform(persistenceFuture, input -> {
-            Preconditions.checkNotNull(input, "Chunk result cannot be null");
+            Objects.requireNonNull(input, "Chunk result cannot be null");
             return convertToChunkResult(input);
         }, MoreExecutors.directExecutor());
     }

@@ -27,6 +27,7 @@ import com.hivemq.extensions.ExtensionInformationUtil;
 import com.hivemq.extensions.executor.task.PluginTaskInput;
 import io.netty.channel.Channel;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -50,8 +51,8 @@ public class AuthenticationFailedInputImpl
             final @Nullable String reasonString,
             final @Nullable UserProperties userProperties) {
 
-        Preconditions.checkNotNull(channel, "channel must never be null");
-        Preconditions.checkNotNull(clientId, "Client id must never be null");
+        Objects.requireNonNull(channel, "channel must never be null");
+        Objects.requireNonNull(clientId, "Client id must never be null");
         this.reasonCode = reasonCode;
         this.reasonString = reasonString;
         this.userProperties = userProperties;

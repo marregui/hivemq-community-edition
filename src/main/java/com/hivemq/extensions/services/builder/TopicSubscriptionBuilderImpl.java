@@ -33,6 +33,8 @@ import com.hivemq.util.Topics;
 
 import javax.inject.Inject;
 
+import java.util.Objects;
+
 import static com.hivemq.persistence.clientsession.SharedSubscriptionService.SharedSubscription;
 
 /**
@@ -63,7 +65,7 @@ public class TopicSubscriptionBuilderImpl implements TopicSubscriptionBuilder {
 
     @Override
     public @NotNull TopicSubscriptionBuilder fromSubscription(@NotNull final Subscription subscription) {
-        Preconditions.checkNotNull(subscription, "Subscription must never be null");
+        Objects.requireNonNull(subscription, "Subscription must never be null");
 
         if (!(subscription instanceof SubscriptionImpl)) {
             throw new DoNotImplementException(Subscription.class.getSimpleName());
@@ -78,7 +80,7 @@ public class TopicSubscriptionBuilderImpl implements TopicSubscriptionBuilder {
 
     @Override
     public @NotNull TopicSubscriptionBuilder topicFilter(@NotNull final String topicFilter) {
-        Preconditions.checkNotNull(topicFilter, "Topic filter must never be null");
+        Objects.requireNonNull(topicFilter, "Topic filter must never be null");
         Preconditions.checkArgument(topicFilter.length() <= restrictionsConfig.maxTopicLength(),
                 "Topic filter length must not exceed '" +
                         restrictionsConfig.maxTopicLength() +
@@ -112,7 +114,7 @@ public class TopicSubscriptionBuilderImpl implements TopicSubscriptionBuilder {
 
     @Override
     public @NotNull TopicSubscriptionBuilder qos(@NotNull final Qos qos) {
-        Preconditions.checkNotNull(qos, "Qos must never be null");
+        Objects.requireNonNull(qos, "Qos must never be null");
         this.qos = qos;
         return this;
     }
@@ -142,7 +144,7 @@ public class TopicSubscriptionBuilderImpl implements TopicSubscriptionBuilder {
 
     @Override
     public @NotNull TopicSubscription build() {
-        Preconditions.checkNotNull(topicFilter, "Topic filter must never be null");
+        Objects.requireNonNull(topicFilter, "Topic filter must never be null");
         if (shared) {
             Preconditions.checkArgument(!noLocal, "No local for shared subscriptions is not allowed");
         }

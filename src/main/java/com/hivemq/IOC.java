@@ -96,7 +96,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import static com.hivemq.config.InternalConfig.MQTT_EVENT_EXECUTOR_THREAD_COUNT;
 
-public class IOC extends SingletonModule<Class<IOC>> {
+public class IOC extends SingletonModule<IOC> {
 
     private final @NotNull MetricRegistry metricRegistry;
     private final @NotNull LifecycleModule lifecycle = new LifecycleModule();

@@ -36,11 +36,13 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import com.google.inject.Singleton;
+
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.config.InternalConfig.CLEANUP_JOB_PARALLELISM;
 import static com.hivemq.config.InternalConfig.CLEANUP_JOB_TASK_TIMEOUT_SEC;
 import static com.hivemq.config.InternalConfig.INTERVAL_BETWEEN_CLEANUP_JOBS_SEC;
@@ -168,8 +170,8 @@ public class ScheduledCleanUpService {
                 final int cleanUpTaskTimeoutSec,
                 final int bucketIndex,
                 final int persistenceIndex) {
-            checkNotNull(scheduledCleanUpService, "Clean up service must not be null");
-            checkNotNull(scheduledExecutorService, "Executor service must not be null");
+            Objects.requireNonNull(scheduledCleanUpService, "Clean up service must not be null");
+            Objects.requireNonNull(scheduledExecutorService, "Executor service must not be null");
             this.scheduledCleanUpService = scheduledCleanUpService;
             this.scheduledExecutorService = scheduledExecutorService;
             this.cleanUpTaskTimeoutSec = cleanUpTaskTimeoutSec;

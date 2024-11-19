@@ -24,9 +24,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 import javax.inject.Provider;
 import com.google.inject.Singleton;
+
+import java.util.Objects;
 import java.util.concurrent.ThreadFactory;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * This Provider creates the configuration for Netty.
@@ -77,7 +79,7 @@ public class NettyConfigurationProvider implements Provider<NettyConfiguration> 
      */
     private ThreadFactory createThreadFactory(final @NotNull String nameFormat) {
 
-        checkNotNull(nameFormat, "Thread Factory Name Format must not be null");
+        Objects.requireNonNull(nameFormat, "Thread Factory Name Format must not be null");
         return new ThreadFactoryBuilder().setNameFormat(nameFormat).build();
     }
 }

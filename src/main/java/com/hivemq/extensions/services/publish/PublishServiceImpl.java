@@ -45,10 +45,11 @@ import com.hivemq.mqtt.topic.tree.LocalTopicTree;
 import com.hivemq.util.Bytes;
 
 import javax.inject.Inject;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET;
 
 /**
@@ -95,7 +96,7 @@ public class PublishServiceImpl implements PublishService {
     @Override
     @NotNull
     public CompletableFuture<Void> publish(@NotNull final Publish publish) {
-        checkNotNull(publish, "Publish must never be null");
+        Objects.requireNonNull(publish, "Publish must never be null");
         if (rateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);
         }
@@ -113,8 +114,8 @@ public class PublishServiceImpl implements PublishService {
     @NotNull
     public CompletableFuture<PublishToClientResult> publishToClient(
             @NotNull final Publish publish, @NotNull final String clientId) {
-        checkNotNull(publish, "Publish must never be null");
-        checkNotNull(clientId, "Client ID must never be null");
+        Objects.requireNonNull(publish, "Publish must never be null");
+        Objects.requireNonNull(clientId, "Client ID must never be null");
         checkArgument(!clientId.isEmpty(), "Client ID must not be empty");
         if (rateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);

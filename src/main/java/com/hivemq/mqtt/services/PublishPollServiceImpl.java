@@ -56,11 +56,12 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.config.InternalConfig.PUBLISH_POLL_BATCH_SIZE_BYTES;
 
 @Singleton
@@ -93,8 +94,8 @@ public class PublishPollServiceImpl implements PublishPollService {
 
     @Override
     public void pollMessages(final @NotNull String client, final @NotNull Channel channel) {
-        checkNotNull(client, "Client must not be null");
-        checkNotNull(channel, "Channel must not be null");
+        Objects.requireNonNull(client, "Client must not be null");
+        Objects.requireNonNull(channel, "Channel must not be null");
         // Null equal false, true will never be set
         final ClientConnection clientConnection = ClientConnection.of(channel);
         final boolean inflightMessagesSent = clientConnection.isInFlightMessagesSent();
@@ -343,7 +344,7 @@ public class PublishPollServiceImpl implements PublishPollService {
                             ImmutableIntArray.of();
                     int packetId = 0;
                     try {
-                        if (checkNotNull(minQos).getQosNumber() > 0) {
+                        if (Objects.requireNonNull(minQos).getQosNumber() > 0) {
                             packetId = freeIdsRanges.lockId();
                         }
                     } catch (final UnavailableIdException e) {

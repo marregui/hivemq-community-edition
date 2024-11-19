@@ -29,6 +29,7 @@ import com.hivemq.mqtt.message.reason.Mqtt5DisconnectReasonCode;
 import com.hivemq.util.ReasonStrings;
 
 import java.time.Duration;
+import java.util.Objects;
 
 /**
  * @author Silvio Giebl
@@ -125,7 +126,7 @@ public class ReAuthOutput extends AuthOutput<EnhancedAuthOutput> implements Enha
     private static @NotNull Mqtt5DisconnectReasonCode checkReasonCode(
             final @NotNull DisconnectedReasonCode disconnectedReasonCode) {
 
-        Preconditions.checkNotNull(disconnectedReasonCode, "Disconnected reason code must never be null");
+        Objects.requireNonNull(disconnectedReasonCode, "Disconnected reason code must never be null");
         final Mqtt5DisconnectReasonCode disconnectReasonCode = Mqtt5DisconnectReasonCode.from(disconnectedReasonCode);
         Preconditions.checkArgument(disconnectReasonCode != null,
                 "The disconnected reason code " +

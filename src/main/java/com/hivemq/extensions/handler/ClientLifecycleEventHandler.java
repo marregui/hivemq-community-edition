@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This handler fires all client lifecycle events available.
@@ -116,7 +117,7 @@ public class ClientLifecycleEventHandler extends SimpleChannelInboundHandler<CON
     public void userEventTriggered(@NotNull final ChannelHandlerContext ctx, @NotNull final Object evt)
             throws Exception {
 
-        Preconditions.checkNotNull(evt, "A user event must never be null");
+        Objects.requireNonNull(evt, "A user event must never be null");
 
         if (evt instanceof OnAuthSuccessEvent) {
             try {

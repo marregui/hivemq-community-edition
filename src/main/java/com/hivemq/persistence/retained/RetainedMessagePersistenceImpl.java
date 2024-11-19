@@ -35,10 +35,11 @@ import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 @Singleton
 public class RetainedMessagePersistenceImpl extends AbstractPersistence implements RetainedMessagePersistence {
@@ -61,7 +62,7 @@ public class RetainedMessagePersistenceImpl extends AbstractPersistence implemen
     @Override
     public @NotNull ListenableFuture<RetainedMessage> get(final @NotNull String topic) {
         try {
-            checkNotNull(topic, "Topic must not be null");
+            Objects.requireNonNull(topic, "Topic must not be null");
             if (topic.contains("+") || topic.contains("#")) {
                 throw new IllegalArgumentException(
                         "Topic contains wildcard characters. Call getWithWildcards method instead.");
@@ -81,7 +82,7 @@ public class RetainedMessagePersistenceImpl extends AbstractPersistence implemen
     @Override
     public @NotNull ListenableFuture<Void> remove(final @NotNull String topic) {
         try {
-            checkNotNull(topic, "Topic must not be null");
+            Objects.requireNonNull(topic, "Topic must not be null");
 
             return singleWriter.submit(topic, (bucketIndex) -> {
                 localPersistence.remove(topic, bucketIndex);
@@ -96,8 +97,8 @@ public class RetainedMessagePersistenceImpl extends AbstractPersistence implemen
     public @NotNull ListenableFuture<Void> persist(
             final @NotNull String topic, final @NotNull RetainedMessage retainedMessage) {
         try {
-            checkNotNull(topic, "Topic must not be null");
-            checkNotNull(retainedMessage, "Retained message must not be null");
+            Objects.requireNonNull(topic, "Topic must not be null");
+            Objects.requireNonNull(retainedMessage, "Retained message must not be null");
 
             return singleWriter.submit(topic, (bucketIndex) -> {
                 localPersistence.put(retainedMessage, topic, bucketIndex);
@@ -112,7 +113,7 @@ public class RetainedMessagePersistenceImpl extends AbstractPersistence implemen
     @Override
     public @NotNull ListenableFuture<Set<String>> getWithWildcards(final @NotNull String subscription) {
         try {
-            checkNotNull(subscription, "Topic must not be null");
+            Objects.requireNonNull(subscription, "Topic must not be null");
             if (!subscription.contains("+") && !subscription.contains("#")) {
                 throw new IllegalArgumentException(
                         "Topic does not contain wildcard characters. Call get method instead.");

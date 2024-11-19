@@ -35,7 +35,9 @@ import io.netty.buffer.ByteBuf;
 
 import javax.inject.Inject;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Objects;
+
 import static com.hivemq.mqtt.message.mqtt5.MessageProperties.AUTHENTICATION_DATA;
 import static com.hivemq.mqtt.message.mqtt5.MessageProperties.AUTHENTICATION_METHOD;
 import static com.hivemq.mqtt.message.mqtt5.MessageProperties.REASON_STRING;
@@ -78,8 +80,8 @@ public class Mqtt5AuthDecoder extends AbstractMqttDecoder<AUTH> {
             final @NotNull ByteBuf buf,
             final byte header) {
 
-        checkNotNull(clientConnectionContext, "ClientContext must not be null");
-        checkNotNull(buf, "ByteBuf must not be null");
+        Objects.requireNonNull(clientConnectionContext, "ClientContext must not be null");
+        Objects.requireNonNull(buf, "ByteBuf must not be null");
 
         // validate fixed header
         if (!validateHeader(header)) {

@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import com.google.inject.Singleton;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 @Singleton
 public class MqttConnackerImpl implements MqttConnacker {
@@ -64,9 +65,9 @@ public class MqttConnackerImpl implements MqttConnacker {
     public @NotNull ChannelFuture connackSuccess(
             final @NotNull ChannelHandlerContext ctx, final @NotNull CONNACK connack, final @NotNull CONNECT connect) {
 
-        Preconditions.checkNotNull(ctx, "ChannelHandlerContext must never be null");
-        Preconditions.checkNotNull(connack, "CONNACK must never be null");
-        Preconditions.checkNotNull(connect, "CONNECT must never be null");
+        Objects.requireNonNull(ctx, "ChannelHandlerContext must never be null");
+        Objects.requireNonNull(connack, "CONNACK must never be null");
+        Objects.requireNonNull(connect, "CONNECT must never be null");
         Preconditions.checkArgument(connack.getReasonCode() == Mqtt5ConnAckReasonCode.SUCCESS, "Error is no success");
         ThreadPreConditions.inNettyChildEventloop();
 
@@ -107,7 +108,7 @@ public class MqttConnackerImpl implements MqttConnacker {
             final @NotNull Mqtt5UserProperties userProperties,
             final boolean isAuthentication) {
 
-        Preconditions.checkNotNull(channel, "Channel must never be null");
+        Objects.requireNonNull(channel, "Channel must never be null");
         Preconditions.checkArgument(reasonCode != Mqtt5ConnAckReasonCode.SUCCESS, "Success is no error");
         ThreadPreConditions.inNettyChildEventloop();
 
@@ -155,7 +156,7 @@ public class MqttConnackerImpl implements MqttConnacker {
             final @NotNull Mqtt5UserProperties userProperties) {
 
         if (withReasonCode) {
-            Preconditions.checkNotNull(reasonCode, "Reason code must never be null for Mqtt 5");
+            Objects.requireNonNull(reasonCode, "Reason code must never be null for Mqtt 5");
             if (!withReasonString) {
                 reasonString = null;
             }

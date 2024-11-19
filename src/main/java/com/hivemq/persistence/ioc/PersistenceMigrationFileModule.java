@@ -29,7 +29,7 @@ import com.hivemq.persistence.retained.RetainedMessageLocalPersistence;
 
 import com.google.inject.Singleton;
 
-public class PersistenceMigrationFileModule extends SingletonModule<Class<PersistenceMigrationFileModule>> {
+public class PersistenceMigrationFileModule extends SingletonModule<PersistenceMigrationFileModule> {
 
     public PersistenceMigrationFileModule() {
         super(PersistenceMigrationFileModule.class);

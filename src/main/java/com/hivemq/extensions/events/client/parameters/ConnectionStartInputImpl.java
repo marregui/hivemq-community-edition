@@ -46,8 +46,8 @@ public class ConnectionStartInputImpl
     private final long connectTimestamp;
 
     public ConnectionStartInputImpl(final @NotNull CONNECT connect, final @NotNull Channel channel) {
-        Preconditions.checkNotNull(connect, "connect message must never be null");
-        Preconditions.checkNotNull(channel, "channel must never be null");
+        Objects.requireNonNull(connect, "connect message must never be null");
+        Objects.requireNonNull(channel, "channel must never be null");
         this.connect = connect;
         this.connectionInformation = ExtensionInformationUtil.getAndSetConnectionInformation(channel);
         this.clientInformation =

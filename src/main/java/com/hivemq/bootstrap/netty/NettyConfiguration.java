@@ -20,7 +20,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
+
 
 /**
  * The configuration for Netty
@@ -45,10 +46,10 @@ public class NettyConfiguration {
             final EventLoopGroup parentEventLoopGroup,
             final EventLoopGroup childEventLoopGroup) {
 
-        checkNotNull(serverSocketChannelClass, "Server Socket Channel Class must not be null");
-        checkNotNull(clientSocketChannelClass, "Client Socket Channel Class must not be null");
-        checkNotNull(parentEventLoopGroup, "Parent Event Loop Group must not be null");
-        checkNotNull(childEventLoopGroup, "Child Event Loop Group must not be null");
+        Objects.requireNonNull(serverSocketChannelClass, "Server Socket Channel Class must not be null");
+        Objects.requireNonNull(clientSocketChannelClass, "Client Socket Channel Class must not be null");
+        Objects.requireNonNull(parentEventLoopGroup, "Parent Event Loop Group must not be null");
+        Objects.requireNonNull(childEventLoopGroup, "Child Event Loop Group must not be null");
 
         this.serverSocketChannelClass = serverSocketChannelClass;
         this.clientSocketChannelClass = clientSocketChannelClass;

@@ -44,10 +44,11 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 @Singleton
 public class ExtensionLoaderImpl implements ExtensionLoader {
@@ -75,7 +76,7 @@ public class ExtensionLoaderImpl implements ExtensionLoader {
     @Override
     public @NotNull ImmutableSet<HiveMQExtensionEvent> loadExtensions(
             final @NotNull Path extensionFolder, final boolean permissive) {
-        checkNotNull(extensionFolder, "extension folder must not be null");
+        Objects.requireNonNull(extensionFolder, "extension folder must not be null");
 
         try {
             checkArgument(Files.exists(extensionFolder), "%s does not exist", extensionFolder.toAbsolutePath());
@@ -244,7 +245,7 @@ public class ExtensionLoaderImpl implements ExtensionLoader {
     @VisibleForTesting
     @NotNull Optional<Class<? extends ExtensionMain>> loadFromUrls(
             final @NotNull Collection<URL> urls, final @NotNull String extensionId) {
-        checkNotNull(urls, "urls must not be null");
+        Objects.requireNonNull(urls, "urls must not be null");
 
         if (urls.isEmpty()) {
             return Optional.empty();

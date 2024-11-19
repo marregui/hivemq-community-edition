@@ -18,7 +18,7 @@ package com.hivemq.config;
 import com.hivemq.bootstrap.SingletonModule;
 import org.jetbrains.annotations.NotNull;
 
-public class ConfigModule extends SingletonModule<Class<ConfigModule>> {
+public class ConfigModule extends SingletonModule<ConfigModule> {
 
     private final @NotNull ConfigService configService;
     private final @NotNull HivemqId hiveMQId;

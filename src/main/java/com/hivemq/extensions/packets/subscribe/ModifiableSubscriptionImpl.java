@@ -26,6 +26,8 @@ import com.hivemq.extensions.services.builder.PluginBuilderUtil;
 import com.hivemq.persistence.clientsession.SharedSubscriptionService;
 import com.hivemq.util.Topics;
 
+import java.util.Objects;
+
 /**
  * @author Florian Limpöck
  * @author Silvio Giebl
@@ -63,7 +65,7 @@ public class ModifiableSubscriptionImpl implements ModifiableSubscription {
 
     @Override
     public void setTopicFilter(final @NotNull String topicFilter) {
-        Preconditions.checkNotNull(topicFilter, "Topic filter must never be null");
+        Objects.requireNonNull(topicFilter, "Topic filter must never be null");
         Preconditions.checkArgument(topicFilter.length() <=
                         configService.restrictionsConfiguration().maxTopicLength(),
                 "Topic filter length must not exceed '" +
@@ -128,7 +130,7 @@ public class ModifiableSubscriptionImpl implements ModifiableSubscription {
 
     @Override
     public void setRetainHandling(final @NotNull RetainHandling retainHandling) {
-        Preconditions.checkNotNull(retainHandling, "Retain handling must never be null");
+        Objects.requireNonNull(retainHandling, "Retain handling must never be null");
         if (this.retainHandling.getCode() == retainHandling.getCode()) {
             return;
         }

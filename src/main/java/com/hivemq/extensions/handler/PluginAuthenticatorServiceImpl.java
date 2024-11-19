@@ -63,6 +63,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 import com.google.inject.Singleton;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ScheduledFuture;
 
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.AUTH_IN_PROGRESS_MESSAGE_HANDLER;
@@ -334,7 +335,7 @@ public class PluginAuthenticatorServiceImpl implements PluginAuthenticatorServic
     private static @NotNull ModifiableClientSettingsImpl getSettingsFromChannel(final @NotNull Channel channel) {
         final Connection clientConnectionContext = Connection.of(channel);
         final Integer receiveMax = clientConnectionContext.getClientReceiveMaximum();
-        Preconditions.checkNotNull(receiveMax, "Receive maximum must not be null here");
+        Objects.requireNonNull(receiveMax, "Receive maximum must not be null here");
         final Long queueSizeMaximum = clientConnectionContext.getQueueSizeMaximum();
         return new ModifiableClientSettingsImpl(receiveMax, queueSizeMaximum);
     }

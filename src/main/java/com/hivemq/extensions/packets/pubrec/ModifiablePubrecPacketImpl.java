@@ -66,7 +66,7 @@ public class ModifiablePubrecPacketImpl implements ModifiablePubrecPacket {
 
     @Override
     public void setReasonCode(final @NotNull AckReasonCode reasonCode) {
-        Preconditions.checkNotNull(reasonCode, "Reason code must never be null");
+        Objects.requireNonNull(reasonCode, "Reason code must never be null");
         if (this.reasonCode == reasonCode) {
             return;
         }

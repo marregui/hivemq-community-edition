@@ -32,7 +32,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * @author Georg Held
@@ -57,7 +57,7 @@ public class ModifiableUserPropertiesImpl implements ModifiableUserProperties {
 
     @Override
     public @NotNull Optional<String> getFirst(final @NotNull String name) {
-        checkNotNull(name, "Name must never be null");
+        Objects.requireNonNull(name, "Name must never be null");
 
         final Lock lock = readWriteLock.readLock();
         lock.lock();
@@ -73,7 +73,7 @@ public class ModifiableUserPropertiesImpl implements ModifiableUserProperties {
 
     @Override
     public @NotNull List<String> getAllForName(final @NotNull String name) {
-        checkNotNull(name, "Name must never be null");
+        Objects.requireNonNull(name, "Name must never be null");
 
         final Lock lock = readWriteLock.readLock();
         lock.lock();
@@ -121,7 +121,7 @@ public class ModifiableUserPropertiesImpl implements ModifiableUserProperties {
 
     @Override
     public void addUserProperty(final @NotNull UserProperty userProperty) {
-        checkNotNull(userProperty, "User property must never be null");
+        Objects.requireNonNull(userProperty, "User property must never be null");
         if (!(userProperty instanceof MqttUserProperty)) {
             throw new DoNotImplementException(UserProperty.class.getSimpleName());
         }

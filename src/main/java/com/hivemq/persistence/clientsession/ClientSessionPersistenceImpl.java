@@ -51,10 +51,11 @@ import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.SESSION_EXPIRE_ON_DISCONNECT;
 import static com.hivemq.mqtt.message.disconnect.DISCONNECT.SESSION_EXPIRY_NOT_SET;
 
@@ -98,7 +99,7 @@ public class ClientSessionPersistenceImpl extends AbstractPersistence implements
 
     @Override
     public boolean isExistent(final @NotNull String client) {
-        checkNotNull(client, "Client id must not be null");
+        Objects.requireNonNull(client, "Client id must not be null");
 
         return isExistent(getSession(client, false));
     }
@@ -118,7 +119,7 @@ public class ClientSessionPersistenceImpl extends AbstractPersistence implements
     public @NotNull ListenableFuture<Void> clientDisconnected(
             final @NotNull String client, final boolean sendWill, final long sessionExpiry) {
 
-        checkNotNull(client, "Client id must not be null");
+        Objects.requireNonNull(client, "Client id must not be null");
 
         final long timestamp = System.currentTimeMillis();
         final SettableFuture<Void> resultFuture = SettableFuture.create();
@@ -151,7 +152,7 @@ public class ClientSessionPersistenceImpl extends AbstractPersistence implements
             final @Nullable MqttWillPublish willPublish,
             final @Nullable Long queueLimit) {
 
-        checkNotNull(client, "Client id must not be null");
+        Objects.requireNonNull(client, "Client id must not be null");
 
         final long timestamp = System.currentTimeMillis();
 
@@ -224,8 +225,8 @@ public class ClientSessionPersistenceImpl extends AbstractPersistence implements
             final @Nullable Mqtt5DisconnectReasonCode reasonCode,
             final @Nullable String reasonString) {
 
-        checkNotNull(clientId, "Parameter clientId cannot be null");
-        checkNotNull(source, "Disconnect source cannot be null");
+        Objects.requireNonNull(clientId, "Parameter clientId cannot be null");
+        Objects.requireNonNull(source, "Disconnect source cannot be null");
 
         final ClientSession session = getSession(clientId, false);
         if (session == null) {
@@ -301,7 +302,7 @@ public class ClientSessionPersistenceImpl extends AbstractPersistence implements
 
     @Override
     public @Nullable ClientSession getSession(final @NotNull String clientId, final boolean includeWill) {
-        checkNotNull(clientId, "Client id must not be null");
+        Objects.requireNonNull(clientId, "Client id must not be null");
 
         return localPersistence.getSession(clientId, true, includeWill);
     }
@@ -310,7 +311,7 @@ public class ClientSessionPersistenceImpl extends AbstractPersistence implements
     public @NotNull ListenableFuture<Boolean> setSessionExpiryInterval(
             final @NotNull String clientId, final long sessionExpiryInterval) {
 
-        checkNotNull(clientId, "Client id must not be null");
+        Objects.requireNonNull(clientId, "Client id must not be null");
 
         final ListenableFuture<Boolean> setTTlFuture = singleWriter.submit(clientId, (bucketIndex) -> {
 
@@ -383,8 +384,8 @@ public class ClientSessionPersistenceImpl extends AbstractPersistence implements
     public @NotNull ListenableFuture<Boolean> invalidateSession(
             final @NotNull String clientId, final @NotNull DisconnectSource disconnectSource) {
 
-        checkNotNull(clientId, "ClientId cannot be null");
-        checkNotNull(disconnectSource, "Disconnect source cannot be null");
+        Objects.requireNonNull(clientId, "ClientId cannot be null");
+        Objects.requireNonNull(disconnectSource, "Disconnect source cannot be null");
 
         final ListenableFuture<Boolean> setTTLFuture = setSessionExpiryInterval(clientId, 0);
         final SettableFuture<Boolean> resultFuture = SettableFuture.create();
@@ -444,7 +445,7 @@ public class ClientSessionPersistenceImpl extends AbstractPersistence implements
 
     @Override
     public @NotNull ListenableFuture<Void> deleteWill(final @NotNull String clientId) {
-        checkNotNull(clientId, "Client id must not be null");
+        Objects.requireNonNull(clientId, "Client id must not be null");
         return singleWriter.submit(clientId, (bucketIndex) -> {
             localPersistence.deleteWill(clientId, bucketIndex);
             return null;

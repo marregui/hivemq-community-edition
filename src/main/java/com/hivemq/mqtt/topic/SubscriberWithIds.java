@@ -22,7 +22,7 @@ import com.hivemq.util.Bytes;
 
 import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
 
@@ -46,7 +46,7 @@ public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
             final @Nullable String sharedName,
             final @Nullable String topicFilter,
             final @NotNull ImmutableIntArray subscriptionIds) {
-        checkNotNull(subscriber, "Subscriber must not be null");
+        Objects.requireNonNull(subscriber, "Subscriber must not be null");
         this.subscriber = subscriber;
         this.qos = qos;
         this.flags = flags;

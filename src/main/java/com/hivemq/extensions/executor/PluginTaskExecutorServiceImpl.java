@@ -35,9 +35,11 @@ import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import com.google.inject.Singleton;
+
+import java.util.Objects;
 import java.util.function.Supplier;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.config.InternalConfig.EXTENSION_TASK_QUEUE_EXECUTOR_THREADS_COUNT;
 
 
@@ -70,9 +72,9 @@ public class PluginTaskExecutorServiceImpl implements PluginTaskExecutorService 
             @NotNull final PluginInTask<I> pluginTask) {
         final PluginTaskExecutor taskExecutor = getPluginTaskExecutor(pluginInTaskContext);
 
-        checkNotNull(pluginInTaskContext, "Extension context cannot be null");
-        checkNotNull(pluginInputSupplier, "Input supplier cannot be null");
-        checkNotNull(pluginTask, "Extension task cannot be null");
+        Objects.requireNonNull(pluginInTaskContext, "Extension context cannot be null");
+        Objects.requireNonNull(pluginInputSupplier, "Input supplier cannot be null");
+        Objects.requireNonNull(pluginTask, "Extension task cannot be null");
 
         taskExecutor.handlePluginTaskExecution(new PluginTaskExecution<I, DefaultPluginTaskOutput>(pluginInTaskContext,
                 pluginInputSupplier,
@@ -87,9 +89,9 @@ public class PluginTaskExecutorServiceImpl implements PluginTaskExecutorService 
             @NotNull final Supplier<O> pluginOutputSupplier,
             @NotNull final PluginOutTask<O> pluginTask) {
 
-        checkNotNull(pluginOutTaskContext, "Extension context cannot be null");
-        checkNotNull(pluginOutputSupplier, "Output supplier cannot be null");
-        checkNotNull(pluginTask, "Extension task cannot be null");
+        Objects.requireNonNull(pluginOutTaskContext, "Extension context cannot be null");
+        Objects.requireNonNull(pluginOutputSupplier, "Output supplier cannot be null");
+        Objects.requireNonNull(pluginTask, "Extension task cannot be null");
 
         final PluginTaskExecutor taskExecutor = getPluginTaskExecutor(pluginOutTaskContext);
         taskExecutor.handlePluginTaskExecution(new PluginTaskExecution<DefaultPluginTaskInput, O>(pluginOutTaskContext,
@@ -105,10 +107,10 @@ public class PluginTaskExecutorServiceImpl implements PluginTaskExecutorService 
             @NotNull final Supplier<O> pluginOutputSupplier,
             @NotNull final PluginInOutTask<I, O> pluginTask) {
 
-        checkNotNull(pluginInOutContext, "Extension context cannot be null");
-        checkNotNull(pluginInputSupplier, "Input supplier cannot be null");
-        checkNotNull(pluginOutputSupplier, "Output supplier cannot be null");
-        checkNotNull(pluginTask, "Extension task cannot be null");
+        Objects.requireNonNull(pluginInOutContext, "Extension context cannot be null");
+        Objects.requireNonNull(pluginInputSupplier, "Input supplier cannot be null");
+        Objects.requireNonNull(pluginOutputSupplier, "Output supplier cannot be null");
+        Objects.requireNonNull(pluginTask, "Extension task cannot be null");
 
         final PluginTaskExecutor taskExecutor = getPluginTaskExecutor(pluginInOutContext);
         taskExecutor.handlePluginTaskExecution(new PluginTaskExecution<>(pluginInOutContext,

@@ -23,6 +23,7 @@ import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extensions.executor.PluginOutPutAsyncer;
 
 import java.time.Duration;
+import java.util.Objects;
 
 
 public class AbstractAsyncOutput<T> extends AbstractSimpleAsyncOutput<T> implements AsyncOutput<T> {
@@ -35,7 +36,7 @@ public class AbstractAsyncOutput<T> extends AbstractSimpleAsyncOutput<T> impleme
 
     @Override
     public @NotNull Async<T> async(final @NotNull Duration timeout, final @NotNull TimeoutFallback fallback) {
-        Preconditions.checkNotNull(fallback, "Timeout fallback must never be null");
+        Objects.requireNonNull(fallback, "Timeout fallback must never be null");
         final Async<T> async = async(timeout);
         this.timeoutFallback = fallback;
         return async;

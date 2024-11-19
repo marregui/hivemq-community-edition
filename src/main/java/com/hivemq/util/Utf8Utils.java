@@ -20,6 +20,8 @@ import com.google.common.base.Utf8;
 import org.jetbrains.annotations.NotNull;
 import io.netty.buffer.ByteBuf;
 
+import java.util.Objects;
+
 public class Utf8Utils {
 
     /**
@@ -70,7 +72,7 @@ public class Utf8Utils {
      * @return true if the array contains a control character or a non character, else false.
      */
     public static boolean hasControlOrNonCharacter(final byte @NotNull [] bytes) {
-        Preconditions.checkNotNull(bytes);
+        Objects.requireNonNull(bytes);
         for (int i = 0; i < bytes.length; i++) {
             final byte byte1 = bytes[i];
             //control byte1s
@@ -142,7 +144,7 @@ public class Utf8Utils {
      * @return true if the text contains a control character or a non character else false
      */
     public static boolean hasControlOrNonCharacter(final @NotNull String text) {
-        Preconditions.checkNotNull(text);
+        Objects.requireNonNull(text);
         for (int i = 0; i < text.length(); i++) {
             final char character = text.charAt(i);
             //control characters
@@ -213,7 +215,7 @@ public class Utf8Utils {
      * ByteBuf implementation of guavas Utf8.isWellFormed(final byte[] bytes)
      */
     public static boolean isWellFormed(final @NotNull ByteBuf byteBuf, final int utf8StringLength) {
-        Preconditions.checkNotNull(byteBuf);
+        Objects.requireNonNull(byteBuf);
         byteBuf.markReaderIndex();
         final boolean wellFormed =
                 isSliceWellFormed(byteBuf.slice(byteBuf.readerIndex(), utf8StringLength), utf8StringLength);

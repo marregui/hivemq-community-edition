@@ -42,10 +42,11 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.google.common.base.Preconditions.checkState;
 import static com.hivemq.persistence.local.xodus.XodusUtils.byteIterableToBytes;
 import static com.hivemq.persistence.local.xodus.XodusUtils.bytesToByteIterable;
@@ -141,9 +142,9 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
     @Override
     public void addSubscription(
             @NotNull final String client, @NotNull final Topic topic, final long timestamp, final int bucketIndex) {
-        checkNotNull(client, "Clientid must not be null");
-        checkNotNull(topic, "Topic must not be null");
-        checkNotNull(topic.getTopic(), "Topic must not be null");
+        Objects.requireNonNull(client, "Clientid must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic.getTopic(), "Topic must not be null");
         checkState(timestamp > 0, "Timestamp must not be 0");
 
         final Bucket bucket = buckets[bucketIndex];
@@ -162,8 +163,8 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
             @NotNull final ImmutableSet<Topic> topics,
             final long timestamp,
             final int bucketIndex) {
-        checkNotNull(client, "Client id must not be null");
-        checkNotNull(topics, "Topics must not be null");
+        Objects.requireNonNull(client, "Client id must not be null");
+        Objects.requireNonNull(topics, "Topics must not be null");
         checkState(timestamp > 0, "Timestamp must not be 0");
 
         final Bucket bucket = buckets[bucketIndex];
@@ -183,8 +184,8 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
             final @NotNull ImmutableSet<String> topics,
             final long timestamp,
             final int bucketIndex) {
-        checkNotNull(client, "Client id must not be null");
-        checkNotNull(topics, "Topics must not be null");
+        Objects.requireNonNull(client, "Client id must not be null");
+        Objects.requireNonNull(topics, "Topics must not be null");
         checkState(timestamp > 0, "Timestamp must not be 0");
 
         final Bucket bucket = buckets[bucketIndex];
@@ -210,7 +211,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
     @Override
     @NotNull
     public ImmutableSet<Topic> getSubscriptions(@NotNull final String client) {
-        checkNotNull(client, "Clientid must not be null");
+        Objects.requireNonNull(client, "Clientid must not be null");
 
         final Bucket bucket = buckets[Bucket.getBucket(client, bucketCount)];
         return bucket.getEnv().computeInReadonlyTransaction(txn -> {
@@ -246,7 +247,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
 
     @Override
     public void removeAll(@NotNull final String client, final long timestamp, final int bucketIndex) {
-        checkNotNull(client, "Clientid must not be null");
+        Objects.requireNonNull(client, "Clientid must not be null");
         checkState(timestamp > 0, "Timestamp must not be 0");
 
         final Bucket bucket = buckets[bucketIndex];
@@ -260,8 +261,8 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
     @Override
     public void remove(
             @NotNull final String client, @NotNull final String topic, final long timestamp, final int bucketIndex) {
-        checkNotNull(client, "Clientid must not be null");
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(client, "Clientid must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
         checkState(timestamp > 0, "Timestamp must not be 0");
         removeSubscriptions(client, ImmutableSet.of(topic), timestamp, bucketIndex);
     }

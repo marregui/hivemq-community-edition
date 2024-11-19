@@ -53,11 +53,12 @@ import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.SESSION_EXPIRE_ON_DISCONNECT;
 import static com.hivemq.mqtt.message.disconnect.DISCONNECT.SESSION_EXPIRY_NOT_SET;
 import static com.hivemq.persistence.local.xodus.XodusUtils.byteIterableToBytes;
@@ -178,14 +179,14 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
 
     @Override
     public @Nullable ClientSession getSession(final @NotNull String clientId) {
-        checkNotNull(clientId, "Client id must not be null");
+        Objects.requireNonNull(clientId, "Client id must not be null");
 
         return getSession(clientId, getBucket(clientId), true, true);
     }
 
     @Override
     public @Nullable ClientSession getSession(final @NotNull String clientId, final int bucketIndex) {
-        checkNotNull(clientId, "Client id must not be null");
+        Objects.requireNonNull(clientId, "Client id must not be null");
         checkBucketIndex(bucketIndex);
 
         return getSession(clientId, buckets[bucketIndex], true, true);
@@ -193,7 +194,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
 
     @Override
     public @Nullable ClientSession getSession(final @NotNull String clientId, final boolean checkExpired) {
-        checkNotNull(clientId, "Client id must not be null");
+        Objects.requireNonNull(clientId, "Client id must not be null");
 
         return getSession(clientId, getBucket(clientId), checkExpired, true);
     }
@@ -202,7 +203,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
     public @Nullable ClientSession getSession(
             final @NotNull String clientId, final int bucketIndex, final boolean checkExpired) {
 
-        checkNotNull(clientId, "Client id must not be null");
+        Objects.requireNonNull(clientId, "Client id must not be null");
         checkBucketIndex(bucketIndex);
 
         return getSession(clientId, buckets[bucketIndex], checkExpired, true);
@@ -212,7 +213,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
     public @Nullable ClientSession getSession(
             final @NotNull String clientId, final boolean checkExpired, final boolean includeWill) {
 
-        checkNotNull(clientId, "Client id must not be null");
+        Objects.requireNonNull(clientId, "Client id must not be null");
 
         return getSession(clientId, getBucket(clientId), checkExpired, includeWill);
     }
@@ -277,8 +278,8 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
             final @NotNull ClientSession newClientSession,
             final long timestamp,
             final int bucketIndex) {
-        checkNotNull(clientId, "Client id must not be null");
-        checkNotNull(newClientSession, "Client session must not be null");
+        Objects.requireNonNull(clientId, "Client id must not be null");
+        Objects.requireNonNull(newClientSession, "Client session must not be null");
         checkArgument(timestamp > 0, "Timestamp must be greater than 0");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
@@ -329,7 +330,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
             final int bucketIndex,
             final long sessionExpiryInterval) {
 
-        checkNotNull(clientId, "Client id must not be null");
+        Objects.requireNonNull(clientId, "Client id must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Bucket bucket = buckets[bucketIndex];
@@ -373,7 +374,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
 
     @Override
     public @Nullable PersistenceEntry<ClientSession> deleteWill(final @NotNull String clientId, final int bucketIndex) {
-        checkNotNull(clientId, "Client id must not be null");
+        Objects.requireNonNull(clientId, "Client id must not be null");
         ThreadPreConditions.startsWith(SINGLE_WRITER_THREAD_PREFIX);
 
         final Bucket bucket = buckets[bucketIndex];
@@ -502,7 +503,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
     @Override
     public void setSessionExpiryInterval(
             final @NotNull String clientId, final long sessionExpiryInterval, final int bucketIndex) {
-        checkNotNull(clientId, "Client Id must not be null");
+        Objects.requireNonNull(clientId, "Client Id must not be null");
 
         if (sessionExpiryInterval < 0) {
             throw new InvalidSessionExpiryIntervalException("Invalid session expiry interval " + sessionExpiryInterval);

@@ -32,6 +32,7 @@ import com.hivemq.util.ThreadFactoryUtil;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -274,7 +275,7 @@ public class PluginTaskExecutor {
 
                 final ListenableFuture<Boolean> asyncFuture = output.getAsyncFuture();
 
-                Preconditions.checkNotNull(asyncFuture, "Async future cannot be null for an async task");
+                Objects.requireNonNull(asyncFuture, "Async future cannot be null for an async task");
 
                 Futures.addCallback(asyncFuture, new FutureCallback<Boolean>() {
                     @Override

@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.subscribe.Topic;
 
+import java.util.Objects;
+
 
 public class SubscriptionResult {
 
@@ -34,7 +36,7 @@ public class SubscriptionResult {
     public SubscriptionResult(
             @NotNull final Topic topic, final boolean subscriptionAlreadyExisted, @Nullable final String shareName) {
 
-        Preconditions.checkNotNull(topic, "Topic cannot be null");
+        Objects.requireNonNull(topic, "Topic cannot be null");
 
         this.topic = topic;
         this.subscriptionAlreadyExisted = subscriptionAlreadyExisted;

@@ -58,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -94,9 +95,9 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
     @Override
     public @NotNull CompletableFuture<Void> addSubscription(
             final @NotNull String clientID, final @NotNull TopicSubscription subscription) {
-        Preconditions.checkNotNull(clientID, "Client id must never be null");
+        Objects.requireNonNull(clientID, "Client id must never be null");
         Preconditions.checkArgument(!clientID.isEmpty(), "Client id must never be empty");
-        Preconditions.checkNotNull(subscription, "Topic subscription must never be null");
+        Objects.requireNonNull(subscription, "Topic subscription must never be null");
 
         if (rateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);
@@ -133,9 +134,9 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
     public @NotNull CompletableFuture<Void> addSubscriptions(
             final @NotNull String clientID, final @NotNull Set<TopicSubscription> subscriptions) {
 
-        Preconditions.checkNotNull(clientID, "Client id must never be null");
+        Objects.requireNonNull(clientID, "Client id must never be null");
         Preconditions.checkArgument(!clientID.isEmpty(), "Client id must never be empty");
-        Preconditions.checkNotNull(subscriptions, "Subscriptions must never be null");
+        Objects.requireNonNull(subscriptions, "Subscriptions must never be null");
         Preconditions.checkArgument(!subscriptions.isEmpty(), "Subscriptions must never be empty");
 
         if (rateLimitService.rateLimitExceeded()) {
@@ -144,7 +145,7 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
 
         final ImmutableSet.Builder<Topic> topicsToProcess = new ImmutableSet.Builder<>();
         for (final TopicSubscription topicSubscription : subscriptions) {
-            Preconditions.checkNotNull(topicSubscription, "Topic subscription must never be null");
+            Objects.requireNonNull(topicSubscription, "Topic subscription must never be null");
             if (!(topicSubscription instanceof TopicSubscriptionImpl)) {
                 return CompletableFuture.failedFuture(new DoNotImplementException(TopicSubscription.class.getSimpleName()));
             }
@@ -186,9 +187,9 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
     @Override
     public @NotNull CompletableFuture<Void> removeSubscription(
             final @NotNull String clientID, final @NotNull String topicFilter) {
-        Preconditions.checkNotNull(clientID, "Client id must never be null");
+        Objects.requireNonNull(clientID, "Client id must never be null");
         Preconditions.checkArgument(!clientID.isEmpty(), "Client id must never be empty");
-        Preconditions.checkNotNull(topicFilter, "Topic filter must never be null");
+        Objects.requireNonNull(topicFilter, "Topic filter must never be null");
 
         if (rateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);
@@ -204,9 +205,9 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
     public @NotNull CompletableFuture<Void> removeSubscriptions(
             final @NotNull String clientID, final @NotNull Set<String> topicFilters) {
 
-        Preconditions.checkNotNull(clientID, "Client id must never be null");
+        Objects.requireNonNull(clientID, "Client id must never be null");
         Preconditions.checkArgument(!clientID.isEmpty(), "Client id must never be empty");
-        Preconditions.checkNotNull(topicFilters, "Topic-filters must never be null");
+        Objects.requireNonNull(topicFilters, "Topic-filters must never be null");
         Preconditions.checkArgument(!topicFilters.isEmpty(), "Topics-filters must never be empty");
 
         if (rateLimitService.rateLimitExceeded()) {
@@ -215,7 +216,7 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
 
         final List<String> failedTopics = new ArrayList<>();
         for (final String topicFilter : topicFilters) {
-            Preconditions.checkNotNull(topicFilter, "Topic filter must never be null");
+            Objects.requireNonNull(topicFilter, "Topic filter must never be null");
             if (!Topics.isValidToSubscribe(topicFilter)) {
                 failedTopics.add(topicFilter);
             }
@@ -231,7 +232,7 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
 
     @Override
     public @NotNull CompletableFuture<Set<TopicSubscription>> getSubscriptions(final @NotNull String clientID) {
-        Preconditions.checkNotNull(clientID, "Client id must never be null");
+        Objects.requireNonNull(clientID, "Client id must never be null");
         Preconditions.checkArgument(!clientID.isEmpty(), "Client id must never be empty");
 
         if (rateLimitService.rateLimitExceeded()) {
@@ -270,9 +271,9 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
             final @NotNull IterationCallback<SubscriberForTopicResult> callback,
             final @NotNull Executor callbackExecutor) {
 
-        Preconditions.checkNotNull(topic, "Topic cannot be null");
-        Preconditions.checkNotNull(callback, "Callback cannot be null");
-        Preconditions.checkNotNull(callbackExecutor, "Executor cannot be null");
+        Objects.requireNonNull(topic, "Topic cannot be null");
+        Objects.requireNonNull(callback, "Callback cannot be null");
+        Objects.requireNonNull(callbackExecutor, "Executor cannot be null");
         Preconditions.checkArgument(Topics.isValidTopicToPublish(topic),
                 "Topic must be a valid topic and cannot contain wildcard characters, got '" + topic + "'");
 
@@ -348,10 +349,10 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
             final @NotNull SubscriptionType subscriptionType,
             final @NotNull IterationCallback<SubscriberWithFilterResult> callback,
             final @NotNull Executor callbackExecutor) {
-        Preconditions.checkNotNull(topicFilter, "Topic filter cannot be null");
-        Preconditions.checkNotNull(callback, "Callback cannot be null");
-        Preconditions.checkNotNull(callbackExecutor, "Executor cannot be null");
-        Preconditions.checkNotNull(subscriptionType, "SubscriptionType cannot be null");
+        Objects.requireNonNull(topicFilter, "Topic filter cannot be null");
+        Objects.requireNonNull(callback, "Callback cannot be null");
+        Objects.requireNonNull(callbackExecutor, "Executor cannot be null");
+        Objects.requireNonNull(subscriptionType, "SubscriptionType cannot be null");
         Preconditions.checkArgument(Topics.isValidToSubscribe(topicFilter),
                 "Topic filter must be a valid MQTT topic filter, got '" + topicFilter + "'");
 
@@ -402,8 +403,8 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
             @NotNull final IterationCallback<SubscriptionsForClientResult> callback,
             @NotNull final Executor callbackExecutor) {
 
-        Preconditions.checkNotNull(callback, "Callback cannot be null");
-        Preconditions.checkNotNull(callback, "Callback executor cannot be null");
+        Objects.requireNonNull(callback, "Callback cannot be null");
+        Objects.requireNonNull(callback, "Callback executor cannot be null");
 
         if (rateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);

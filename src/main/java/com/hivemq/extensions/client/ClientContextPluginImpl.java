@@ -41,8 +41,8 @@ import com.hivemq.extension.sdk.api.packets.auth.ModifiableDefaultPermissions;
 import com.hivemq.extensions.executor.task.AbstractOutput;
 
 import java.util.List;
+import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Florian Limpöck
@@ -62,187 +62,187 @@ public class ClientContextPluginImpl extends AbstractOutput implements ClientCon
 
     @Override
     public void addPublishInboundInterceptor(final @NotNull PublishInboundInterceptor interceptor) {
-        clientContext.addPublishInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addPublishInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addPublishOutboundInterceptor(final @NotNull PublishOutboundInterceptor interceptor) {
-        clientContext.addPublishOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addPublishOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addPubackInboundInterceptor(final @NotNull PubackInboundInterceptor interceptor) {
-        clientContext.addPubackInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addPubackInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addPubackOutboundInterceptor(final @NotNull PubackOutboundInterceptor interceptor) {
-        clientContext.addPubackOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addPubackOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addPubrecInboundInterceptor(final @NotNull PubrecInboundInterceptor interceptor) {
-        clientContext.addPubrecInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addPubrecInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addPubrecOutboundInterceptor(final @NotNull PubrecOutboundInterceptor interceptor) {
-        clientContext.addPubrecOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addPubrecOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addPubrelInboundInterceptor(final @NotNull PubrelInboundInterceptor interceptor) {
-        clientContext.addPubrelInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addPubrelInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addPubrelOutboundInterceptor(final @NotNull PubrelOutboundInterceptor interceptor) {
-        clientContext.addPubrelOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addPubrelOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addPubcompInboundInterceptor(final @NotNull PubcompInboundInterceptor interceptor) {
-        clientContext.addPubcompInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addPubcompInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addPubcompOutboundInterceptor(final @NotNull PubcompOutboundInterceptor interceptor) {
-        clientContext.addPubcompOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addPubcompOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addSubscribeInboundInterceptor(final @NotNull SubscribeInboundInterceptor interceptor) {
-        clientContext.addSubscribeInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addSubscribeInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addSubackOutboundInterceptor(final @NotNull SubackOutboundInterceptor interceptor) {
-        clientContext.addSubackOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addSubackOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addUnsubscribeInboundInterceptor(final @NotNull UnsubscribeInboundInterceptor interceptor) {
-        clientContext.addUnsubscribeInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addUnsubscribeInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addUnsubackOutboundInterceptor(final @NotNull UnsubackOutboundInterceptor interceptor) {
-        clientContext.addUnsubackOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addUnsubackOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addDisconnectInboundInterceptor(final @NotNull DisconnectInboundInterceptor interceptor) {
-        clientContext.addDisconnectInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addDisconnectInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addDisconnectOutboundInterceptor(final @NotNull DisconnectOutboundInterceptor interceptor) {
-        clientContext.addDisconnectOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addDisconnectOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addPingReqInboundInterceptor(final @NotNull PingReqInboundInterceptor interceptor) {
-        clientContext.addPingReqInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addPingReqInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void addPingRespOutboundInterceptor(final @NotNull PingRespOutboundInterceptor interceptor) {
-        clientContext.addPingRespOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.addPingRespOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removePublishInboundInterceptor(final @NotNull PublishInboundInterceptor interceptor) {
-        clientContext.removePublishInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.removePublishInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removePublishOutboundInterceptor(final @NotNull PublishOutboundInterceptor interceptor) {
-        clientContext.removePublishOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.removePublishOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removePubackInboundInterceptor(final @NotNull PubackInboundInterceptor interceptor) {
-        clientContext.removePubackInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.removePubackInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removePubackOutboundInterceptor(final @NotNull PubackOutboundInterceptor interceptor) {
-        clientContext.removePubackOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.removePubackOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removePubrecInboundInterceptor(final @NotNull PubrecInboundInterceptor interceptor) {
-        clientContext.removePubrecInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.removePubrecInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removePubrecOutboundInterceptor(final @NotNull PubrecOutboundInterceptor interceptor) {
-        clientContext.removePubrecOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.removePubrecOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removePubrelInboundInterceptor(final @NotNull PubrelInboundInterceptor interceptor) {
-        clientContext.removePubrelInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.removePubrelInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removePubrelOutboundInterceptor(final @NotNull PubrelOutboundInterceptor interceptor) {
-        clientContext.removePubrelOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.removePubrelOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removePubcompInboundInterceptor(final @NotNull PubcompInboundInterceptor interceptor) {
-        clientContext.removePubcompInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.removePubcompInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removePubcompOutboundInterceptor(final @NotNull PubcompOutboundInterceptor interceptor) {
-        clientContext.removePubcompOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.removePubcompOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removeSubscribeInboundInterceptor(final @NotNull SubscribeInboundInterceptor interceptor) {
-        clientContext.removeSubscribeInboundInterceptor(checkNotNull(interceptor,
+        clientContext.removeSubscribeInboundInterceptor(Objects.requireNonNull(interceptor,
                 "The interceptor must never be null"));
     }
 
     @Override
     public void removeSubackOutboundInterceptor(final @NotNull SubackOutboundInterceptor interceptor) {
-        clientContext.removeSubackOutboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.removeSubackOutboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removeUnsubscribeInboundInterceptor(final @NotNull UnsubscribeInboundInterceptor interceptor) {
-        clientContext.removeUnsubscribeInboundInterceptor(checkNotNull(interceptor,
+        clientContext.removeUnsubscribeInboundInterceptor(Objects.requireNonNull(interceptor,
                 "The interceptor must never be null"));
     }
 
     @Override
     public void removeUnsubackOutboundInterceptor(final @NotNull UnsubackOutboundInterceptor interceptor) {
-        clientContext.removeUnsubackOutboundInterceptor(checkNotNull(interceptor,
+        clientContext.removeUnsubackOutboundInterceptor(Objects.requireNonNull(interceptor,
                 "The interceptor must never be null"));
     }
 
     @Override
     public void removeDisconnectInboundInterceptor(final @NotNull DisconnectInboundInterceptor interceptor) {
-        clientContext.removeDisconnectInboundInterceptor(checkNotNull(interceptor,
+        clientContext.removeDisconnectInboundInterceptor(Objects.requireNonNull(interceptor,
                 "The interceptor must never be null"));
     }
 
     @Override
     public void removeDisconnectOutboundInterceptor(final @NotNull DisconnectOutboundInterceptor interceptor) {
-        clientContext.removeDisconnectOutboundInterceptor(checkNotNull(interceptor,
+        clientContext.removeDisconnectOutboundInterceptor(Objects.requireNonNull(interceptor,
                 "The interceptor must never be null"));
     }
 
     @Override
     public void removePingReqInboundInterceptor(final @NotNull PingReqInboundInterceptor interceptor) {
-        clientContext.removePingReqInboundInterceptor(checkNotNull(interceptor, "The interceptor must never be null"));
+        clientContext.removePingReqInboundInterceptor(Objects.requireNonNull(interceptor, "The interceptor must never be null"));
     }
 
     @Override
     public void removePingRespOutboundInterceptor(final @NotNull PingRespOutboundInterceptor interceptor) {
-        clientContext.removePingRespOutboundInterceptor(checkNotNull(interceptor,
+        clientContext.removePingRespOutboundInterceptor(Objects.requireNonNull(interceptor,
                 "The interceptor must never be null"));
     }
 

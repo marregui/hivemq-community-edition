@@ -25,6 +25,8 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.util.Bytes;
 
+import java.util.Objects;
+
 import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET;
 
 /**
@@ -85,9 +87,9 @@ public class PUBLISHFactory {
 
         public @NotNull PUBLISH build() {
 
-            Preconditions.checkNotNull(hivemqId, "HivemqId may never be null");
-            Preconditions.checkNotNull(topic, "Topic may never be null");
-            Preconditions.checkNotNull(qoS, "Quality of service may never be null");
+            Objects.requireNonNull(hivemqId, "HivemqId may never be null");
+            Objects.requireNonNull(topic, "Topic may never be null");
+            Objects.requireNonNull(qoS, "Quality of service may never be null");
 
             return new PUBLISH(hivemqId,
                     topic,

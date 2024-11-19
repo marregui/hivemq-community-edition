@@ -21,7 +21,6 @@ import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import com.hivemq.bootstrap.SingletonModule;
-import com.google.inject.Singleton;
 import com.hivemq.util.ThreadFactoryUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -43,7 +42,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
+public class LifecycleModule extends SingletonModule<LifecycleModule> {
 
     private static final Logger log = LoggerFactory.getLogger(LifecycleModule.class);
 
@@ -72,18 +71,17 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
     }
 
     private static <I> @NotNull InjectionListener<I> preDestroyInvocation(
-            final @NotNull List<PreDestroyCallable> invocable, final @NotNull Method method) {
+            final @NotNull List<PreDestroyCallable> invocable,
+            final @NotNull Method method) {
         return target -> invocable.add(new PreDestroyCallable(method, target));
     }
 
-    private <I> void invoke(
-            final @NotNull TypeEncounter<I> encounter, final @NotNull Class<? super I> type) {
+    private <I> void invoke(final @NotNull TypeEncounter<I> encounter, final @NotNull Class<? super I> type) {
         if (type.getSuperclass() != null) {
             invoke(encounter, type.getSuperclass());
         }
         if (type.isAnnotationPresent(javax.inject.Singleton.class) ||
-                type.isAnnotationPresent(com.google.inject.Singleton.class) ||
-                type.isAnnotationPresent(Singleton.class)) {
+                type.isAnnotationPresent(com.google.inject.Singleton.class)) {
             invokeStatus.putIfAbsent(type, new InvokeStatus());
         }
         for (final Method m : type.getDeclaredMethods()) {

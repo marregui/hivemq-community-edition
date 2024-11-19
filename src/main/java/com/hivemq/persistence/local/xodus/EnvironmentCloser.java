@@ -22,8 +22,10 @@ import jetbrains.exodus.env.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * An instance of this class tries to close a Xodus environment even if transactions are running at the moment.
@@ -57,8 +59,8 @@ public class EnvironmentCloser {
             final int maxTries,
             final int retryInterval) {
 
-        checkNotNull(name, "Name must not be null");
-        checkNotNull(environment, "Environment must not be null");
+        Objects.requireNonNull(name, "Name must not be null");
+        Objects.requireNonNull(environment, "Environment must not be null");
         checkArgument(maxTries > 0, "maxTries must be higher than 0. %s was provided", maxTries);
         checkArgument(retryInterval > 0, "retryInterval must be higher than 0. %s was provided", retryInterval);
 

@@ -25,6 +25,7 @@ import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttMessageWithUserProperties;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The MQTT UNSUBSCRIBE message
@@ -60,7 +61,7 @@ public class UNSUBSCRIBE extends MqttMessageWithUserProperties implements Mqtt5U
             final Mqtt5UserProperties userProperties) {
         super(userProperties);
 
-        Preconditions.checkNotNull(topicFilters);
+        Objects.requireNonNull(topicFilters);
         Preconditions.checkArgument(!topicFilters.isEmpty(), "topics may never be empty");
 
         this.topics = topicFilters;

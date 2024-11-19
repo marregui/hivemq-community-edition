@@ -21,6 +21,8 @@ import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.auth.parameter.ModifiableClientSettings;
 import com.hivemq.extension.sdk.api.auth.parameter.OverloadProtectionThrottlingLevel;
 
+import java.util.Objects;
+
 
 public class ModifiableClientSettingsImpl implements ModifiableClientSettings {
 
@@ -50,7 +52,7 @@ public class ModifiableClientSettingsImpl implements ModifiableClientSettings {
 
     @Override
     public void setOverloadProtectionThrottlingLevel(final @NotNull OverloadProtectionThrottlingLevel level) {
-        Preconditions.checkNotNull(level, "Overload protection throttling level must not be null");
+        Objects.requireNonNull(level, "Overload protection throttling level must not be null");
         if (this.overloadProtectionThrottlingLevel == level) {
             return;
         }

@@ -21,6 +21,8 @@ import com.hivemq.extension.sdk.api.client.parameter.Listener;
 import com.hivemq.extension.sdk.api.client.parameter.ListenerType;
 import com.hivemq.extensions.ExtensionInformationUtil;
 
+import java.util.Objects;
+
 /**
  * @author Florian Limpöck
  * @since 4.0.0
@@ -33,7 +35,7 @@ public class ListenerImpl implements Listener {
     private final @NotNull String name;
 
     public ListenerImpl(final @NotNull com.hivemq.config.entity.Listener hiveMQListener) {
-        Preconditions.checkNotNull(hiveMQListener, "listener must never be null");
+        Objects.requireNonNull(hiveMQListener, "listener must never be null");
         this.port = hiveMQListener.getPort();
         this.bindAddress = hiveMQListener.getBindAddress();
         this.listenerType = ExtensionInformationUtil.listenerTypeFromInstance(hiveMQListener);

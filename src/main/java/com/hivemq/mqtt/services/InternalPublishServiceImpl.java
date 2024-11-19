@@ -39,6 +39,7 @@ import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
@@ -77,8 +78,8 @@ public class InternalPublishServiceImpl implements InternalPublishService {
             final @NotNull ExecutorService executorService,
             final @Nullable String sender) {
 
-        Preconditions.checkNotNull(publish, "PUBLISH can not be null");
-        Preconditions.checkNotNull(executorService, "executorService can not be null");
+        Objects.requireNonNull(publish, "PUBLISH can not be null");
+        Objects.requireNonNull(executorService, "executorService can not be null");
 
         //reset dup-flag
         publish.setDuplicateDelivery(false);

@@ -31,6 +31,7 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
+import java.util.Objects;
 
 
 public class SslClientCertificateImpl implements SslClientCertificate {
@@ -38,7 +39,7 @@ public class SslClientCertificateImpl implements SslClientCertificate {
     private final Certificate[] certificates;
 
     public SslClientCertificateImpl(@NotNull final Certificate[] certificates) {
-        Preconditions.checkNotNull(certificates, "Certificates must not be null");
+        Objects.requireNonNull(certificates, "Certificates must not be null");
         this.certificates = certificates;
     }
 

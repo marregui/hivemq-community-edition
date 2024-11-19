@@ -23,10 +23,11 @@ import org.jetbrains.annotations.Nullable;
 import io.netty.buffer.ByteBuf;
 
 import java.nio.ByteBuffer;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 public final class Bytes {
 
@@ -73,7 +74,7 @@ public final class Bytes {
      * @throws java.lang.NullPointerException if the passed {@link io.netty.buffer.ByteBuf} is <code>null</code>
      */
     public static byte[] getPrefixedBytes(final ByteBuf buf) {
-        checkNotNull(buf);
+        Objects.requireNonNull(buf);
         if (buf.readableBytes() < 2) {
             return null;
         }
@@ -98,8 +99,8 @@ public final class Bytes {
      * @throws java.lang.NullPointerException if the passed byte[] is <code>null</code>
      */
     public static ByteBuf prefixBytes(final byte[] bytes, final ByteBuf buffer) {
-        checkNotNull(bytes);
-        checkNotNull(buffer);
+        Objects.requireNonNull(bytes);
+        Objects.requireNonNull(buffer);
 
         buffer.writeShort(bytes.length);
         buffer.writeBytes(bytes);
@@ -179,7 +180,7 @@ public final class Bytes {
      * @param prefix the position in the destination byte array, where to start.
      */
     public static void copyIntToByteArray(final int anInt, final byte[] bytes, final int prefix) {
-        checkNotNull(bytes, "bytes must not be null");
+        Objects.requireNonNull(bytes, "bytes must not be null");
         checkArgument(bytes.length >= prefix + Integer.BYTES, "bytes needs to be at least prefix + 4 in length");
         checkArgument(prefix >= 0, "prefix can't be less than 0");
 
@@ -197,7 +198,7 @@ public final class Bytes {
      * @param prefix the position in the destination byte array, where to start.
      */
     public static void copyLongToByteArray(final long aLong, final byte[] bytes, final int prefix) {
-        checkNotNull(bytes, "bytes must not be null");
+        Objects.requireNonNull(bytes, "bytes must not be null");
         checkArgument(bytes.length >= prefix + Long.BYTES, "bytes needs to be at least prefix + 8 in length");
         checkArgument(prefix >= 0, "prefix can't be less than 0");
 
@@ -219,7 +220,7 @@ public final class Bytes {
      * @param prefix        the position in the destination byte array, where to start.
      */
     public static void copyUnsignedShortToByteArray(final int unsignedShort, final byte[] bytes, final int prefix) {
-        checkNotNull(bytes, "bytes must not be null");
+        Objects.requireNonNull(bytes, "bytes must not be null");
         checkArgument(bytes.length >= prefix + Short.BYTES, "bytes needs to be at least prefix + 8 in length");
         checkArgument(prefix >= 0, "prefix can't be less than 0");
         checkArgument(unsignedShort <= 65535, "value must be less than 65535");
@@ -236,7 +237,7 @@ public final class Bytes {
      */
     @Nullable
     public static byte[] getBytesFromReadOnlyBuffer(@NotNull final Optional<ByteBuffer> optional) {
-        Preconditions.checkNotNull(optional, "optional must never be null");
+        Objects.requireNonNull(optional, "optional must never be null");
         return optional.map(Bytes::fromReadOnlyBuffer).orElse(null);
     }
 

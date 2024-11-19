@@ -23,7 +23,9 @@ import com.hivemq.mqtt.message.mqtt5.PropertiesSerializationUtil;
 import com.hivemq.persistence.RetainedMessage;
 import com.hivemq.util.Bytes;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Objects;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -55,13 +57,13 @@ public final class RetainedMessageSerializer {
     }
 
     public static byte @NotNull [] serializeKey(final @NotNull String topic) {
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
 
         return topic.getBytes(UTF_8);
     }
 
     public static @NotNull String deserializeKey(final byte @NotNull [] serialized) {
-        checkNotNull(serialized, "Byte array must not be null");
+        Objects.requireNonNull(serialized, "Byte array must not be null");
         return new String(serialized, UTF_8);
     }
 
@@ -135,7 +137,7 @@ public final class RetainedMessageSerializer {
     }
 
     public static @NotNull RetainedMessage deserializeValue(final byte @NotNull [] serialized) {
-        checkNotNull(serialized, "Byte array must not be null");
+        Objects.requireNonNull(serialized, "Byte array must not be null");
 
         final QoS qoS = QoS.valueOf(serialized[0] & 0b0000_0011);
 

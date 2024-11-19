@@ -41,9 +41,10 @@ import com.hivemq.mqtt.message.publish.PUBLISH;
 
 import javax.inject.Inject;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET;
 
 /**
@@ -98,7 +99,7 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
     @Override
     public RetainedPublishBuilder fromPublish(@NotNull final PublishPacket publish) {
 
-        Preconditions.checkNotNull(publish, "publish must not be null");
+        Objects.requireNonNull(publish, "publish must not be null");
 
         if (!(publish instanceof PublishPacketImpl)) {
             throw new DoNotImplementException(PublishPacket.class.getSimpleName());
@@ -119,7 +120,7 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
     @Override
     public RetainedPublishBuilder fromPublish(@NotNull final Publish publish) {
 
-        Preconditions.checkNotNull(publish, "publish must not be null");
+        Objects.requireNonNull(publish, "publish must not be null");
 
         if (!(publish instanceof PublishImpl)) {
             throw new DoNotImplementException(Publish.class.getSimpleName());
@@ -221,7 +222,7 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
     @NotNull
     @Override
     public RetainedPublishBuilder payload(@NotNull final ByteBuffer payload) {
-        checkNotNull(payload, "Payload must not be null");
+        Objects.requireNonNull(payload, "Payload must not be null");
         this.payload = payload;
         return this;
     }
@@ -238,8 +239,8 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
     @Override
     public RetainedPublish build() {
 
-        checkNotNull(topic, "Topic must never be null");
-        checkNotNull(payload, "Payload must never be null");
+        Objects.requireNonNull(topic, "Topic must never be null");
+        Objects.requireNonNull(payload, "Payload must never be null");
 
         if (messageExpiryInterval == MESSAGE_EXPIRY_INTERVAL_NOT_SET) {
             messageExpiryInterval = mqttConfigService.maxMessageExpiryInterval();

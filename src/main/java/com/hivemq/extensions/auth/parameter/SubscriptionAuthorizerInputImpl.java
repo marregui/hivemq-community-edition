@@ -28,6 +28,7 @@ import com.hivemq.extensions.packets.subscribe.SubscriptionImpl;
 import com.hivemq.mqtt.message.subscribe.Topic;
 import io.netty.channel.Channel;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -55,10 +56,10 @@ public class SubscriptionAuthorizerInputImpl
             final @NotNull Topic topic,
             final @NotNull Channel channel,
             final @NotNull String clientId) {
-        Preconditions.checkNotNull(userProperties, "userproperties must never be null");
-        Preconditions.checkNotNull(topic, "topic must never be null");
-        Preconditions.checkNotNull(channel, "channel must never be null");
-        Preconditions.checkNotNull(clientId, "clientId must never be null");
+        Objects.requireNonNull(userProperties, "userproperties must never be null");
+        Objects.requireNonNull(topic, "topic must never be null");
+        Objects.requireNonNull(channel, "channel must never be null");
+        Objects.requireNonNull(clientId, "clientId must never be null");
         this.userProperties = userProperties;
         this.subscriptionIdentifier =
                 topic.getSubscriptionIdentifier() != null && topic.getSubscriptionIdentifier() > 0 ?

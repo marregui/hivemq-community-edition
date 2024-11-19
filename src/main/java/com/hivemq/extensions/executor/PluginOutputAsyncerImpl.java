@@ -28,6 +28,7 @@ import com.hivemq.util.ThreadFactoryUtil;
 import javax.annotation.PostConstruct;
 import com.google.inject.Singleton;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -61,7 +62,7 @@ public class PluginOutputAsyncerImpl implements PluginOutPutAsyncer {
 
         final SettableFuture<Boolean> asyncFuture = output.getAsyncFuture();
 
-        Preconditions.checkNotNull(asyncFuture, "Async future cannot be null for async output");
+        Objects.requireNonNull(asyncFuture, "Async future cannot be null for async output");
 
         final ScheduledFuture<?> scheduledFuture = scheduledExecutor.schedule(() -> {
             output.markAsTimedOut();

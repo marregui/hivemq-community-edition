@@ -15,7 +15,6 @@
  */
 package com.hivemq.persistence;
 
-import com.google.common.base.Preconditions;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
@@ -72,7 +71,7 @@ public class RetainedMessage {
             @Nullable final byte[] correlationData,
             @Nullable final Mqtt5PayloadFormatIndicator payloadFormatIndicator,
             final long timestamp) {
-        Preconditions.checkNotNull(qos, "QoS must not be null");
+        Objects.requireNonNull(qos, "QoS must not be null");
         this.message = message;
         this.qos = qos;
         this.publishId = publishId;

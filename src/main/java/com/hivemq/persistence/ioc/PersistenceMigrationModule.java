@@ -31,9 +31,7 @@ import com.hivemq.persistence.ioc.provider.local.PayloadPersistenceScheduledExec
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.persistence.payload.PublishPayloadPersistenceImpl;
 
-import com.google.inject.Singleton;
-
-public class PersistenceMigrationModule extends SingletonModule<Class<PersistenceMigrationModule>> {
+public class PersistenceMigrationModule extends SingletonModule<PersistenceMigrationModule> {
 
     private final @NotNull MetricRegistry metricRegistry;
 

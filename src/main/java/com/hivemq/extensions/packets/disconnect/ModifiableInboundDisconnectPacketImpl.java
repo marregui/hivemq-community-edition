@@ -73,7 +73,7 @@ public class ModifiableInboundDisconnectPacketImpl implements ModifiableInboundD
 
     @Override
     public void setReasonCode(final @NotNull DisconnectReasonCode reasonCode) {
-        Preconditions.checkNotNull(reasonCode, "Reason code must never be null");
+        Objects.requireNonNull(reasonCode, "Reason code must never be null");
         Preconditions.checkArgument(reasonCode != DisconnectReasonCode.CLIENT_IDENTIFIER_NOT_VALID,
                 "Reason code %s must not be used for disconnect packets.",
                 reasonCode);

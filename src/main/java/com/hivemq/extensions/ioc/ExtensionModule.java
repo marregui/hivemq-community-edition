@@ -84,12 +84,11 @@ import com.hivemq.extensions.services.publish.RetainedMessageStoreImpl;
 import com.hivemq.extensions.services.session.ClientServiceImpl;
 import com.hivemq.extensions.services.subscription.SubscriptionStoreImpl;
 
-import com.google.inject.Singleton;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicLong;
 
 
-public class ExtensionModule extends SingletonModule<Class<ExtensionModule>> {
+public class ExtensionModule extends SingletonModule<ExtensionModule> {
 
     public ExtensionModule() {
         super(ExtensionModule.class);

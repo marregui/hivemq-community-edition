@@ -25,8 +25,10 @@ import com.hivemq.persistence.local.xodus.XodusUtils;
 import com.hivemq.util.Bytes;
 import jetbrains.exodus.ByteIterable;
 
+import java.util.Objects;
+
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -57,7 +59,7 @@ public class ClientSessionSubscriptionXodusSerializer {
     
     public byte[] serializeValue(@NotNull final Topic topic, final long timestamp, final long id) {
 
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
         final int retainHandling = topic.getRetainHandling().getCode();
         checkArgument(retainHandling >= 0 && retainHandling <= 2, "Retain handling code must be between 0 and 2");
 
@@ -117,7 +119,7 @@ public class ClientSessionSubscriptionXodusSerializer {
      */
     
     public byte[] serializeTopic(@NotNull final String topic) {
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
 
         final byte[] topicBytes = topic.getBytes(UTF_8);
 
@@ -142,7 +144,7 @@ public class ClientSessionSubscriptionXodusSerializer {
     
     public Topic deserializeValue(@NotNull final byte[] bytes) {
 
-        checkNotNull(bytes, "Bytes must not be null");
+        Objects.requireNonNull(bytes, "Bytes must not be null");
         checkArgument(bytes.length > 0, "Bytes must be greater than 1");
 
         int cursor = 0;
@@ -193,7 +195,7 @@ public class ClientSessionSubscriptionXodusSerializer {
     }
 
     public Topic deserializeValue(final ByteIterable value) {
-        checkNotNull(value, "ByteIterable must not be null");
+        Objects.requireNonNull(value, "ByteIterable must not be null");
         return deserializeValue(XodusUtils.byteIterableToBytes(value));
     }
 

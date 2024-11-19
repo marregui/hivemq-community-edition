@@ -70,9 +70,9 @@ abstract class Mqtt5MessageWithUserPropertiesEncoder<T extends Message> implemen
             final @NotNull T msg,
             final @NotNull ByteBuf out) {
 
-        Preconditions.checkNotNull(clientConnectionContext, "ClientContext must never be null");
-        Preconditions.checkNotNull(msg, "Message must never be null");
-        Preconditions.checkNotNull(out, "ByteBuf must never be null");
+        Objects.requireNonNull(clientConnectionContext, "ClientContext must never be null");
+        Objects.requireNonNull(msg, "Message must never be null");
+        Objects.requireNonNull(out, "ByteBuf must never be null");
 
         if (msg.getOmittedProperties() > 0) {
 
@@ -164,7 +164,7 @@ abstract class Mqtt5MessageWithUserPropertiesEncoder<T extends Message> implemen
     }
 
     private static long calculateMaxMessageSize(final @NotNull Connection clientConnectionContext) {
-        Preconditions.checkNotNull(clientConnectionContext, "ClientContext must never be null");
+        Objects.requireNonNull(clientConnectionContext, "ClientContext must never be null");
         final Long maxMessageSize = clientConnectionContext.getMaxPacketSizeSend();
         return Objects.requireNonNullElse(maxMessageSize, (long) MAXIMUM_PACKET_SIZE_LIMIT);
     }

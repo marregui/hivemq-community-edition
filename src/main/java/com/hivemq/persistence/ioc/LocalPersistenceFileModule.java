@@ -35,7 +35,7 @@ import com.hivemq.persistence.retained.RetainedMessageLocalPersistence;
 import com.google.inject.Singleton;
 
 
-class LocalPersistenceFileModule extends SingletonModule<Class<LocalPersistenceFileModule>> {
+class LocalPersistenceFileModule extends SingletonModule<LocalPersistenceFileModule> {
 
     private final @NotNull Injector persistenceInjector;
 

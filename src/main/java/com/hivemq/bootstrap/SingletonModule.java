@@ -16,31 +16,24 @@
 package com.hivemq.bootstrap;
 
 import com.google.inject.AbstractModule;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * A module which ensures that its {@link com.google.inject.AbstractModule#configure()} method is
- * only called once in the whole lifecycle of Guice for a given key. This ensures it's not problem to install
- * a module more than once.
- * <p>
- * Typically the key is the overriding class itself
- *
- * @author Dominik Obermaier
- */
 public abstract class SingletonModule<T> extends AbstractModule {
 
-    private static final Logger log = LoggerFactory.getLogger(SingletonModule.class);
+    private static final @NotNull Logger log = LoggerFactory.getLogger(SingletonModule.class);
 
-    protected T key;
+    private final @NotNull Class<T> key;
 
-    public SingletonModule(final T key) {
+    public SingletonModule(final @NotNull Class<T> key) {
         this.key = key;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        return obj instanceof SingletonModule && ((SingletonModule) obj).key.equals(key);
+    public boolean equals(final @Nullable Object obj) {
+        return obj instanceof SingletonModule && ((SingletonModule<?>) obj).key.equals(key);
     }
 
     @Override
@@ -49,24 +42,12 @@ public abstract class SingletonModule<T> extends AbstractModule {
     }
 
     @Override
-    public String toString() {
-        return getClass().getName() + "(key=" + key.toString() + ")";
+    public @NotNull String toString() {
+        return getClass().getName() + "(key=" + key + ')';
     }
 
-
-    /**
-     * Instantiates a class on startup of the dependency injection container.
-     * <p>
-     * This class is instantiated as singleton.
-     * <p>
-     * This method is most useful for application configuration and initialization logic
-     *
-     * @param clazz the class of the object to create on startup
-     */
     public void instantiateOnStartup(final Class<?> clazz) {
         log.trace("Instantiating {} as eager singleton", clazz.getCanonicalName());
         bind(clazz).asEagerSingleton();
     }
-
-
 }

@@ -24,6 +24,7 @@ import com.hivemq.extensions.ExtensionInformationUtil;
 import com.hivemq.extensions.executor.task.PluginTaskInput;
 import io.netty.channel.Channel;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -37,8 +38,8 @@ public class AuthenticationSuccessfulInputImpl
     private final @NotNull ConnectionInformation connectionInformation;
 
     public AuthenticationSuccessfulInputImpl(@NotNull final String clientId, @NotNull final Channel channel) {
-        Preconditions.checkNotNull(clientId, "client id must never be null");
-        Preconditions.checkNotNull(channel, "channel must never be null");
+        Objects.requireNonNull(clientId, "client id must never be null");
+        Objects.requireNonNull(channel, "channel must never be null");
         this.connectionInformation = ExtensionInformationUtil.getAndSetConnectionInformation(channel);
         this.clientInformation = ExtensionInformationUtil.getAndSetClientInformation(channel, clientId);
     }

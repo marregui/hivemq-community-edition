@@ -27,10 +27,11 @@ import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * This FutureCallback sends a retained message and schedules the sending of the next retained message.
@@ -54,10 +55,10 @@ public class SendRetainedMessageListenerAndScheduleNext implements FutureCallbac
             final @NotNull RetainedMessagesSender retainedMessagesSender,
             final int batchSizeMax) {
 
-        checkNotNull(subscription, "Subscription must not be null");
-        checkNotNull(topics, "Topics must not be null");
-        checkNotNull(channel, "Channel must not be null");
-        checkNotNull(retainedMessagesSender, "RetainedMessagesSender must not be null");
+        Objects.requireNonNull(subscription, "Subscription must not be null");
+        Objects.requireNonNull(topics, "Topics must not be null");
+        Objects.requireNonNull(channel, "Channel must not be null");
+        Objects.requireNonNull(retainedMessagesSender, "RetainedMessagesSender must not be null");
 
         this.subscription = subscription;
         this.topics = topics;

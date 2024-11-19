@@ -19,7 +19,8 @@ import com.codahale.metrics.Metric;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
+
 
 public class HiveMQMetric<T extends Metric> {
 
@@ -33,13 +34,14 @@ public class HiveMQMetric<T extends Metric> {
     }
 
     public static <T extends Metric> @NotNull HiveMQMetric<T> valueOf(
-            final @NotNull String name, final @NotNull Class<T> metricClass) {
-        checkNotNull(name, "Name cannot be null");
+            final @NotNull String name,
+            final @NotNull Class<T> metricClass) {
+        Objects.requireNonNull(name, "Name cannot be null");
         return new HiveMQMetric<>(name, metricClass);
     }
 
     public static @NotNull HiveMQMetric<Gauge> gaugeValue(final @NotNull String name) {
-        checkNotNull(name, "Name cannot be null");
+        Objects.requireNonNull(name, "Name cannot be null");
         return new HiveMQMetric<>(name, Gauge.class);
     }
 

@@ -45,8 +45,8 @@ public class TopicSubscriptionImpl implements TopicSubscription {
             final boolean retainAsPublished,
             final boolean noLocal,
             @Nullable final Integer subscriptionIdentifier) {
-        Preconditions.checkNotNull(topicFilter, "Topic filter must never be null");
-        Preconditions.checkNotNull(qos, "QoS must never be null");
+        Objects.requireNonNull(topicFilter, "Topic filter must never be null");
+        Objects.requireNonNull(qos, "QoS must never be null");
         this.topicFilter = topicFilter;
         this.qos = qos;
         this.retainAsPublished = retainAsPublished;
@@ -55,7 +55,7 @@ public class TopicSubscriptionImpl implements TopicSubscription {
     }
 
     public TopicSubscriptionImpl(final @NotNull Topic topic) {
-        Preconditions.checkNotNull(topic, "Topic must never be null");
+        Objects.requireNonNull(topic, "Topic must never be null");
         this.topicFilter = topic.getTopic();
         this.qos = topic.getQoS().toQos();
         this.retainAsPublished = topic.isRetainAsPublished();
@@ -89,7 +89,7 @@ public class TopicSubscriptionImpl implements TopicSubscription {
     }
 
     public static @NotNull Topic convertToTopic(@NotNull final TopicSubscription topicSubscription) {
-        Preconditions.checkNotNull(topicSubscription, "TopicSubscription must never be null");
+        Objects.requireNonNull(topicSubscription, "TopicSubscription must never be null");
         return new Topic(topicSubscription.getTopicFilter(),
                 Objects.requireNonNull(QoS.valueOf(topicSubscription.getQos().getQosNumber())),
                 topicSubscription.getNoLocal(),

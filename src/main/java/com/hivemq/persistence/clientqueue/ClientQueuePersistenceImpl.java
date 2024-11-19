@@ -43,7 +43,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 @Singleton
 public class ClientQueuePersistenceImpl extends AbstractPersistence implements ClientQueuePersistence {
@@ -84,8 +84,8 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
             final boolean retained,
             final long queueLimit) {
         try {
-            checkNotNull(queueId, "Queue ID must not be null");
-            checkNotNull(publish, "Publish must not be null");
+            Objects.requireNonNull(queueId, "Queue ID must not be null");
+            Objects.requireNonNull(publish, "Publish must not be null");
         } catch (final Exception exception) {
             return Futures.immediateFailedFuture(exception);
         }
@@ -118,8 +118,8 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
             final boolean retained,
             final long queueLimit) {
         try {
-            checkNotNull(queueId, "Queue ID must not be null");
-            checkNotNull(publishes, "Publishes must not be null");
+            Objects.requireNonNull(queueId, "Queue ID must not be null");
+            Objects.requireNonNull(publishes, "Publishes must not be null");
         } catch (final Exception exception) {
             return Futures.immediateFailedFuture(exception);
         }
@@ -176,8 +176,8 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
             final @NotNull ImmutableIntArray packetIds,
             final long byteLimit) {
         try {
-            checkNotNull(queueId, "Queue ID must not be null");
-            checkNotNull(packetIds, "Message ID's must not be null");
+            Objects.requireNonNull(queueId, "Queue ID must not be null");
+            Objects.requireNonNull(packetIds, "Message ID's must not be null");
         } catch (final Exception exception) {
             return Futures.immediateFailedFuture(exception);
         }
@@ -188,7 +188,7 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
     @Override
     public @NotNull ListenableFuture<ImmutableList<PUBLISH>> readShared(
             final @NotNull String sharedSubscription, final int messageLimit, final long byteLimit) {
-        checkNotNull(sharedSubscription, "Shared subscription must not be null");
+        Objects.requireNonNull(sharedSubscription, "Shared subscription must not be null");
         // We reuse the non shared read new logic but without providing real message ID's.
         final ImmutableIntArray.Builder builder = ImmutableIntArray.builder(messageLimit);
         for (int i = 0; i < messageLimit; i++) {
@@ -200,14 +200,14 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
     @Override
     public @NotNull ListenableFuture<ImmutableList<MessageWithID>> readInflight(
             final @NotNull String client, final long byteLimit, final int messageLimit) {
-        checkNotNull(client, "Client ID must not be null");
+        Objects.requireNonNull(client, "Client ID must not be null");
         return singleWriter.submit(client,
                 bucketIndex -> localPersistence.readInflight(client, false, messageLimit, byteLimit, bucketIndex));
     }
 
     @Override
     public @NotNull ListenableFuture<Void> remove(final @NotNull String client, final int packetId) {
-        checkNotNull(client, "Client ID must not be null");
+        Objects.requireNonNull(client, "Client ID must not be null");
         return singleWriter.submit(client, (bucketIndex) -> {
             localPersistence.remove(client, packetId, bucketIndex);
             return null;
@@ -216,7 +216,7 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
 
     @Override
     public @NotNull ListenableFuture<Void> putPubrel(final @NotNull String client, final int packetId) {
-        checkNotNull(client, "Client must not be null");
+        Objects.requireNonNull(client, "Client must not be null");
         return singleWriter.submit(client, (bucketIndex) -> {
             localPersistence.replace(client, new PUBREL(packetId), bucketIndex);
             return null;
@@ -225,7 +225,7 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
 
     @Override
     public @NotNull ListenableFuture<Void> clear(final @NotNull String queueId, final boolean shared) {
-        checkNotNull(queueId, "Queue ID must not be");
+        Objects.requireNonNull(queueId, "Queue ID must not be");
         return singleWriter.submit(queueId, (bucketIndex) -> {
             localPersistence.clear(queueId, shared, bucketIndex);
             return null;

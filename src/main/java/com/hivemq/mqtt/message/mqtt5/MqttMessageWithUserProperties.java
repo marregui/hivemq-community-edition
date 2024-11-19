@@ -24,6 +24,7 @@ import com.hivemq.mqtt.message.MessageWithID;
 import com.hivemq.mqtt.message.reason.Mqtt5ReasonCode;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * Base class for MQTT messages with optional User Properties.
@@ -34,7 +35,7 @@ public abstract class MqttMessageWithUserProperties extends MessageWithID {
     private Mqtt5UserProperties userProperties;
 
     public MqttMessageWithUserProperties(@NotNull final Mqtt5UserProperties userProperties) {
-        Preconditions.checkNotNull(userProperties, "User properties may never be null");
+        Objects.requireNonNull(userProperties, "User properties may never be null");
         this.userProperties = userProperties;
     }
 
@@ -134,7 +135,7 @@ public abstract class MqttMessageWithUserProperties extends MessageWithID {
                 @NotNull final Mqtt5UserProperties userProperties) {
 
             super(reasonString, userProperties);
-            Preconditions.checkNotNull(reasonCode, "A reason code may never be null");
+            Objects.requireNonNull(reasonCode, "A reason code may never be null");
             this.reasonCode = reasonCode;
         }
 

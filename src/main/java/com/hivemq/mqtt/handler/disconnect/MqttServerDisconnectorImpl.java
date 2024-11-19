@@ -39,6 +39,8 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.Objects;
+
 import static com.hivemq.mqtt.message.disconnect.DISCONNECT.SESSION_EXPIRY_NOT_SET;
 
 @Singleton
@@ -68,7 +70,7 @@ public class MqttServerDisconnectorImpl implements MqttServerDisconnector {
             final boolean isAuthentication,
             final boolean forceClose) {
 
-        Preconditions.checkNotNull(channel, "Channel must never be null");
+        Objects.requireNonNull(channel, "Channel must never be null");
         ThreadPreConditions.inNettyChildEventloop();
 
         final Connection clientConnectionContext = Connection.of(channel);
@@ -153,7 +155,7 @@ public class MqttServerDisconnectorImpl implements MqttServerDisconnector {
 
         if (withReasonCode) {
             if (version == ProtocolVersion.MQTTv5) {
-                Preconditions.checkNotNull(reasonCode, "Reason code must never be null for Mqtt 5");
+                Objects.requireNonNull(reasonCode, "Reason code must never be null for Mqtt 5");
             }
             if (!withReasonString) {
                 reasonString = null;

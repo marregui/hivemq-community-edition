@@ -37,13 +37,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * @author Georg Held
@@ -90,7 +91,7 @@ public class HiveMQExtensions {
     }
 
     public void addHiveMQExtension(final @NotNull HiveMQExtension extension) {
-        checkNotNull(extension, "can only add valid extensions");
+        Objects.requireNonNull(extension, "can only add valid extensions");
 
         final Lock lock = extensionsLock.writeLock();
         try {
@@ -106,7 +107,7 @@ public class HiveMQExtensions {
     }
 
     public boolean isHiveMQExtensionIDKnown(final @NotNull String hiveMQExtensionID) {
-        checkNotNull(hiveMQExtensionID, "every extension must have an id");
+        Objects.requireNonNull(hiveMQExtensionID, "every extension must have an id");
 
         final Lock lock = extensionsLock.readLock();
         try {
@@ -120,14 +121,14 @@ public class HiveMQExtensions {
     public boolean isHiveMQExtensionKnown(
             final @NotNull String hiveMQExtensionID, final @NotNull Path extensionFolder, final boolean enabled) {
 
-        checkNotNull(hiveMQExtensionID, "every extension must have an id");
+        Objects.requireNonNull(hiveMQExtensionID, "every extension must have an id");
 
         final HiveMQExtension extension = getExtension(hiveMQExtensionID, enabled);
         return (extension != null) && extension.getExtensionFolderPath().equals(extensionFolder);
     }
 
     public boolean isHiveMQExtensionEnabled(@NotNull final String hiveMQExtensionID) {
-        checkNotNull(hiveMQExtensionID, "every extension must have an id");
+        Objects.requireNonNull(hiveMQExtensionID, "every extension must have an id");
 
         return getExtension(hiveMQExtensionID, true) != null;
     }
@@ -197,7 +198,7 @@ public class HiveMQExtensions {
      * Returns false if the extension is not known to HiveMQ or not enabled
      */
     public boolean extensionStart(@NotNull final String extensionId) {
-        checkNotNull(extensionId, "every extension must have an id");
+        Objects.requireNonNull(extensionId, "every extension must have an id");
 
         final HiveMQExtension extension = getExtension(extensionId, true);
         if (extension == null) {
@@ -205,7 +206,7 @@ public class HiveMQExtensions {
         }
 
         final ClassLoader extensionClassloader = extension.getExtensionClassloader();
-        Preconditions.checkNotNull(extensionClassloader, "Extension ClassLoader cannot be null");
+        Objects.requireNonNull(extensionClassloader, "Extension ClassLoader cannot be null");
 
         final ClassLoader previousClassLoader = Thread.currentThread().getContextClassLoader();
         try {
@@ -258,7 +259,7 @@ public class HiveMQExtensions {
      * Returns false if the extension is not known to HiveMQ or not enabled
      */
     public boolean extensionStop(@NotNull final String extensionId, boolean disable) {
-        checkNotNull(extensionId, "every extension must have an id");
+        Objects.requireNonNull(extensionId, "every extension must have an id");
 
         final HiveMQExtension extension;
 
@@ -275,7 +276,7 @@ public class HiveMQExtensions {
         }
 
         final ClassLoader extensionClassloader = extension.getExtensionClassloader();
-        Preconditions.checkNotNull(extensionClassloader, "Extension ClassLoader cannot be null");
+        Objects.requireNonNull(extensionClassloader, "Extension ClassLoader cannot be null");
 
         notifyBeforeExtensionStopCallbacks(extension);
 

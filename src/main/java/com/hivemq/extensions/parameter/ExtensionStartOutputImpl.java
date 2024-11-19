@@ -19,9 +19,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.parameter.ExtensionStartOutput;
 
+import java.util.Objects;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 
 public class ExtensionStartOutputImpl implements ExtensionStartOutput {
@@ -30,7 +31,7 @@ public class ExtensionStartOutputImpl implements ExtensionStartOutput {
 
     @Override
     public void preventExtensionStartup(@NotNull final String reason) {
-        checkNotNull(reason, "A reason for preventing an extension startup must be given.");
+        Objects.requireNonNull(reason, "A reason for preventing an extension startup must be given.");
         this.reason = reason;
     }
 

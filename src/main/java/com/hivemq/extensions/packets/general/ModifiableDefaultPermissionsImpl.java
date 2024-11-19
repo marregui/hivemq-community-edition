@@ -26,6 +26,7 @@ import com.hivemq.extensions.auth.parameter.TopicPermissionImpl;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -46,7 +47,7 @@ public class ModifiableDefaultPermissionsImpl implements ModifiableDefaultPermis
 
     @Override
     public void add(@NotNull final TopicPermission permission) {
-        Preconditions.checkNotNull(permission, "Permission cannot be null");
+        Objects.requireNonNull(permission, "Permission cannot be null");
         if (!(permission instanceof TopicPermissionImpl)) {
             throw new DoNotImplementException("Topic permission must be created with Builders.topicPermission()");
         }
@@ -59,10 +60,10 @@ public class ModifiableDefaultPermissionsImpl implements ModifiableDefaultPermis
 
     @Override
     public void addAll(@NotNull final Collection<? extends TopicPermission> permissions) {
-        Preconditions.checkNotNull(permissions, "Permissions cannot be null");
+        Objects.requireNonNull(permissions, "Permissions cannot be null");
 
         for (final TopicPermission permission : permissions) {
-            Preconditions.checkNotNull(permission, "Permission in the list cannot be null");
+            Objects.requireNonNull(permission, "Permission in the list cannot be null");
             if (!(permission instanceof TopicPermissionImpl)) {
                 throw new DoNotImplementException("Topic permission must be created with Builders.topicPermission()");
             }
@@ -78,7 +79,7 @@ public class ModifiableDefaultPermissionsImpl implements ModifiableDefaultPermis
 
     @Override
     public void remove(@NotNull final TopicPermission permission) {
-        Preconditions.checkNotNull(permission, "Permission cannot be null");
+        Objects.requireNonNull(permission, "Permission cannot be null");
         if (!(permission instanceof TopicPermissionImpl)) {
             throw new DoNotImplementException("Topic permission must be created with Builders.topicPermission()");
         }
@@ -104,7 +105,7 @@ public class ModifiableDefaultPermissionsImpl implements ModifiableDefaultPermis
 
     @Override
     public void setDefaultBehaviour(@NotNull final DefaultAuthorizationBehaviour defaultBehaviour) {
-        Preconditions.checkNotNull(defaultBehaviour, "Default behaviour cannot be null");
+        Objects.requireNonNull(defaultBehaviour, "Default behaviour cannot be null");
         defaultAuthorizationBehaviourOverridden.set(true);
         defaultAuthorizationBehaviour.set(defaultBehaviour);
     }

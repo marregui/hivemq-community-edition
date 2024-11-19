@@ -48,9 +48,10 @@ import javax.inject.Inject;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 public class HiveMQNettyBootstrap {
 
@@ -251,7 +252,7 @@ public class HiveMQNettyBootstrap {
     public static @NotNull ClientWriteBufferProperties validateWriteBufferProperties(
             @NotNull final ClientWriteBufferProperties writeBufferProperties) {
 
-        checkNotNull(writeBufferProperties, "writeBufferProperties must not be null");
+        Objects.requireNonNull(writeBufferProperties, "writeBufferProperties must not be null");
 
         if (validateWriteBufferThresholds(writeBufferProperties.getHighThresholdBytes(),
                 writeBufferProperties.getLowThresholdBytes())) {

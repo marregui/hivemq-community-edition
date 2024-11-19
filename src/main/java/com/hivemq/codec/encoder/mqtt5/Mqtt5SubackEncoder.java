@@ -26,7 +26,8 @@ import io.netty.buffer.ByteBuf;
 
 import com.google.inject.Singleton;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
+
 
 /**
  * @author Silvio Giebl
@@ -45,8 +46,8 @@ public class Mqtt5SubackEncoder extends Mqtt5MessageWithReasonStringEncoder<SUBA
 
     @Override
     void encode(final @NotNull SUBACK suback, final @NotNull ByteBuf out) {
-        checkNotNull(suback, "Suback must not be null.");
-        checkNotNull(out, "ByteBuf must not be null.");
+        Objects.requireNonNull(suback, "Suback must not be null.");
+        Objects.requireNonNull(out, "ByteBuf must not be null.");
         encodeFixedHeader(out, suback.getRemainingLength());
         encodeVariableHeader(suback, out);
         encodePayload(suback, out);

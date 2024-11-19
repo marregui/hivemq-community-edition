@@ -27,8 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 
 @Singleton
@@ -46,8 +45,8 @@ public class Chunker {
             final int maxChunkSize,
             final @NotNull SingleWriterCall<T> singleWriterCall) {
         try {
-            checkNotNull(cursor, "Cursor must not be null");
-            checkNotNull(singleWriterCall, "Single writer call must not be null");
+            Objects.requireNonNull(cursor, "Cursor must not be null");
+            Objects.requireNonNull(singleWriterCall, "Single writer call must not be null");
 
 
             final ImmutableList.Builder<ListenableFuture<@NotNull BucketChunkResult<Map<String, T>>>> builder =
@@ -64,7 +63,7 @@ public class Chunker {
 
 
             return Futures.transform(Futures.allAsList(builder.build()), allBucketsResult -> {
-                Preconditions.checkNotNull(allBucketsResult, "Iteration result from all buckets cannot be null");
+                Objects.requireNonNull(allBucketsResult, "Iteration result from all buckets cannot be null");
 
                 final ImmutableMap.Builder<Integer, BucketChunkResult<Map<String, T>>> resultBuilder =
                         ImmutableMap.builder();

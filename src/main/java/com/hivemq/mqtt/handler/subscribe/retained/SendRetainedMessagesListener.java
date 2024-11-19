@@ -32,11 +32,12 @@ import io.netty.channel.ChannelFutureListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling.DO_NOT_SEND;
 import static com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling.SEND_IF_SUBSCRIPTION_DOES_NOT_EXIST;
 
@@ -60,8 +61,8 @@ public class SendRetainedMessagesListener implements ChannelFutureListener {
             @NotNull final RetainedMessagePersistence retainedMessagePersistence,
             @NotNull final RetainedMessagesSender retainedMessagesSender) {
 
-        checkNotNull(subscriptions, "Subscriptions must not be null");
-        checkNotNull(ignoredTopics, "ignoredTopics must not be null");
+        Objects.requireNonNull(subscriptions, "Subscriptions must not be null");
+        Objects.requireNonNull(ignoredTopics, "ignoredTopics must not be null");
 
         this.subscriptions = subscriptions;
         this.ignoredTopics = ignoredTopics;

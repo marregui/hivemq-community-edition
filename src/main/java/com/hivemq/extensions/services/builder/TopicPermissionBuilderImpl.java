@@ -31,6 +31,8 @@ import com.hivemq.extension.sdk.api.services.builder.TopicPermissionBuilder;
 import com.hivemq.extensions.auth.parameter.TopicPermissionImpl;
 import com.hivemq.util.Topics;
 
+import java.util.Objects;
+
 import static com.hivemq.extension.sdk.api.auth.parameter.TopicPermission.SharedSubscription;
 
 
@@ -56,7 +58,7 @@ public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
     @NotNull
     @Override
     public TopicPermissionBuilder topicFilter(@NotNull final String topicFilter) {
-        Preconditions.checkNotNull(topicFilter, "Topic filter cannot be null");
+        Objects.requireNonNull(topicFilter, "Topic filter cannot be null");
         Preconditions.checkArgument(!topicFilter.isEmpty(), "Topic filter cannot be empty");
         Preconditions.checkArgument(topicFilter.length() <= restrictionsConfig.maxTopicLength(),
                 "Topic filter length must not exceed '" +
@@ -82,7 +84,7 @@ public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
     @NotNull
     @Override
     public TopicPermissionBuilder type(@NotNull final PermissionType type) {
-        Preconditions.checkNotNull(type, "Type cannot be null");
+        Objects.requireNonNull(type, "Type cannot be null");
 
         this.type = type;
         return this;
@@ -91,7 +93,7 @@ public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
     @NotNull
     @Override
     public TopicPermissionBuilder qos(@NotNull final Qos qos) {
-        Preconditions.checkNotNull(qos, "QoS cannot be null");
+        Objects.requireNonNull(qos, "QoS cannot be null");
 
         this.qos = qos;
         return this;
@@ -100,7 +102,7 @@ public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
     @NotNull
     @Override
     public TopicPermissionBuilder activity(@NotNull final MqttActivity activity) {
-        Preconditions.checkNotNull(activity, "Activity cannot be null");
+        Objects.requireNonNull(activity, "Activity cannot be null");
 
         this.activity = activity;
         return this;
@@ -109,7 +111,7 @@ public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
     @NotNull
     @Override
     public TopicPermissionBuilder retain(@NotNull final Retain retain) {
-        Preconditions.checkNotNull(retain, "Retain cannot be null");
+        Objects.requireNonNull(retain, "Retain cannot be null");
 
         this.retain = retain;
         return this;
@@ -118,7 +120,7 @@ public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
     @NotNull
     @Override
     public TopicPermissionBuilder sharedSubscription(@NotNull final SharedSubscription sharedSubscription) {
-        Preconditions.checkNotNull(sharedSubscription, "Shared subscription cannot be null");
+        Objects.requireNonNull(sharedSubscription, "Shared subscription cannot be null");
 
         this.sharedSubscription = sharedSubscription;
         return this;
@@ -127,7 +129,7 @@ public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
     @NotNull
     @Override
     public TopicPermissionBuilder sharedGroup(@NotNull final String sharedGroup) {
-        Preconditions.checkNotNull(sharedGroup, "Shared group cannot be null");
+        Objects.requireNonNull(sharedGroup, "Shared group cannot be null");
         Preconditions.checkArgument(!sharedGroup.isEmpty(), "Shared group cannot be empty");
         Preconditions.checkArgument(!(sharedGroup.length() > 1 && sharedGroup.contains("#")),
                 "Shared group cannot contain wildcard character '#' inside the name");
@@ -143,7 +145,7 @@ public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
     @NotNull
     @Override
     public TopicPermission build() {
-        Preconditions.checkNotNull(topicFilter, "Topic filter must be set for a TopicPermission");
+        Objects.requireNonNull(topicFilter, "Topic filter must be set for a TopicPermission");
         return new TopicPermissionImpl(topicFilter, type, qos, activity, retain, sharedSubscription, sharedGroup);
     }
 }

@@ -38,10 +38,11 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.config.InternalConfig.WILL_DELAY_CHECK_INTERVAL_SEC;
 
 
@@ -77,8 +78,8 @@ public class PendingWillMessages {
     }
 
     public void sendOrEnqueueWillIfAvailable(final @NotNull String clientId, final @NotNull ClientSession session) {
-        checkNotNull(clientId, "Client id must not be null");
-        checkNotNull(session, "Client session must not be null");
+        Objects.requireNonNull(clientId, "Client id must not be null");
+        Objects.requireNonNull(session, "Client session must not be null");
         final ClientSessionWill sessionWill = session.getWillPublish();
         if (session.getWillPublish() == null) {
             return;

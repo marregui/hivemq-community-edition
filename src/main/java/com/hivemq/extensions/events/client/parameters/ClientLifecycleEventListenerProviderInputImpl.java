@@ -23,6 +23,8 @@ import com.hivemq.extension.sdk.api.events.client.parameters.ClientLifecycleEven
 import com.hivemq.extensions.ExtensionInformationUtil;
 import io.netty.channel.Channel;
 
+import java.util.Objects;
+
 /**
  * @author Florian Limpöck
  * @since 4.0.0
@@ -34,8 +36,8 @@ public class ClientLifecycleEventListenerProviderInputImpl implements ClientLife
 
     public ClientLifecycleEventListenerProviderInputImpl(
             final @NotNull String clientId, final @NotNull Channel channel) {
-        Preconditions.checkNotNull(clientId, "client id must never be null");
-        Preconditions.checkNotNull(channel, "channel must never be null");
+        Objects.requireNonNull(clientId, "client id must never be null");
+        Objects.requireNonNull(channel, "channel must never be null");
         this.connectionInformation = ExtensionInformationUtil.getAndSetConnectionInformation(channel);
         this.clientInformation = ExtensionInformationUtil.getAndSetClientInformation(channel, clientId);
     }

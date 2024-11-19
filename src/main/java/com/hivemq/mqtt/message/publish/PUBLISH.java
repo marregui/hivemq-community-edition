@@ -95,9 +95,9 @@ public class PUBLISH extends MqttMessageWithUserProperties implements Mqtt5PUBLI
 
         super(userProperties);
 
-        Preconditions.checkNotNull(hivemqId, "HivemqId may never be null");
-        Preconditions.checkNotNull(topic, "Topic may never be null");
-        Preconditions.checkNotNull(qos, "Quality of service may never be null");
+        Objects.requireNonNull(hivemqId, "HivemqId may never be null");
+        Objects.requireNonNull(topic, "Topic may never be null");
+        Objects.requireNonNull(qos, "Quality of service may never be null");
 
         this.topic = topic;
         this.payload = payload;
@@ -146,9 +146,9 @@ public class PUBLISH extends MqttMessageWithUserProperties implements Mqtt5PUBLI
 
         super(Mqtt5UserProperties.NO_USER_PROPERTIES);
 
-        Preconditions.checkNotNull(hivemqId, "Hivemq Id may never be null");
-        Preconditions.checkNotNull(topic, "Topic may never be null");
-        Preconditions.checkNotNull(qos, "Quality of service may never be null");
+        Objects.requireNonNull(hivemqId, "Hivemq Id may never be null");
+        Objects.requireNonNull(topic, "Topic may never be null");
+        Objects.requireNonNull(qos, "Quality of service may never be null");
 
         this.hivemqId = hivemqId;
         this.topic = topic;

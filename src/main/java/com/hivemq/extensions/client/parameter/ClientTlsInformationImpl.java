@@ -22,6 +22,7 @@ import com.hivemq.extension.sdk.api.client.parameter.ClientTlsInformation;
 import com.hivemq.extension.sdk.api.client.parameter.TlsInformation;
 
 import java.security.cert.X509Certificate;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -42,8 +43,8 @@ public class ClientTlsInformationImpl implements ClientTlsInformation, TlsInform
             final @NotNull String cipherSuite,
             final @NotNull String protocol,
             final @Nullable String hostname) {
-        Preconditions.checkNotNull(cipherSuite, "cipher suite must never be null");
-        Preconditions.checkNotNull(protocol, "protocol must never be null");
+        Objects.requireNonNull(cipherSuite, "cipher suite must never be null");
+        Objects.requireNonNull(protocol, "protocol must never be null");
         this.certificate = certificate;
         this.certificateChain = certificateChain;
         this.cipherSuite = cipherSuite;
@@ -55,14 +56,14 @@ public class ClientTlsInformationImpl implements ClientTlsInformation, TlsInform
     //legacy method, now deprecated
     @Override
     public @NotNull X509Certificate getCertificate() {
-        Preconditions.checkNotNull(certificate, "certificate must never be null");
+        Objects.requireNonNull(certificate, "certificate must never be null");
         return certificate;
     }
 
     //legacy method, now deprecated
     @Override
     public @NotNull X509Certificate[] getCertificateChain() {
-        Preconditions.checkNotNull(certificateChain, "certificate chain must never be null");
+        Objects.requireNonNull(certificateChain, "certificate chain must never be null");
         return certificateChain;
     }
 

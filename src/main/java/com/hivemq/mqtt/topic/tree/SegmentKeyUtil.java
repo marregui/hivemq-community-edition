@@ -15,8 +15,10 @@
  */
 package com.hivemq.mqtt.topic.tree;
 
+import java.util.Objects;
+
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 public final class SegmentKeyUtil {
 
@@ -24,7 +26,7 @@ public final class SegmentKeyUtil {
     }
 
     public static String segmentKey(final String topic, final int length) {
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
         checkArgument(!topic.isEmpty(), "Topic must not be empty");
         checkArgument(length > 0, "Segment key length must be grater than zero");
         int end = -1;

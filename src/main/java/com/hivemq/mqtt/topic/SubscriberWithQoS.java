@@ -23,7 +23,7 @@ import com.hivemq.util.Bytes;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * This represents a subscriber (client ID) with a Quality of Service Level
@@ -49,7 +49,7 @@ public class SubscriberWithQoS implements Comparable<SubscriberWithQoS> {
             final @Nullable String sharedName,
             final @Nullable Integer subscriptionId,
             final @Nullable String topicFilter) {
-        checkNotNull(subscriber, "Subscriber must not be null");
+        Objects.requireNonNull(subscriber, "Subscriber must not be null");
         checkArgument((qos <= 2 && qos >= 0), "Quality of Service level must be between 0 and 2");
         this.subscriber = subscriber;
         this.qos = qos;

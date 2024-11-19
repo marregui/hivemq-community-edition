@@ -35,7 +35,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * @author Florian Limpöck
@@ -94,7 +94,7 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
 
     @Override
     public void setTopic(final @NotNull String topic) {
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
         checkArgument(topic.length() <= configService.restrictionsConfiguration().maxTopicLength(),
                 "Topic filter length must not exceed '" +
                         configService.restrictionsConfiguration().maxTopicLength() +
@@ -153,7 +153,7 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
 
     @Override
     public void setPayload(final @NotNull ByteBuffer payload) {
-        Preconditions.checkNotNull(payload, "payload must never be null");
+        Objects.requireNonNull(payload, "payload must never be null");
         if (payload.equals(this.payload)) {
             return;
         }

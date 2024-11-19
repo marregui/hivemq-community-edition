@@ -39,9 +39,10 @@ import com.hivemq.util.Topics;
 
 import javax.inject.Inject;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET;
 
 
@@ -93,7 +94,7 @@ public class PublishBuilderImpl implements PublishBuilder {
     @Override
     public PublishBuilder fromPublish(@NotNull final PublishPacket publish) {
 
-        Preconditions.checkNotNull(publish, "publish must not be null");
+        Objects.requireNonNull(publish, "publish must not be null");
 
         if (!(publish instanceof PublishPacketImpl)) {
             throw new DoNotImplementException(PublishPacket.class.getSimpleName());
@@ -115,7 +116,7 @@ public class PublishBuilderImpl implements PublishBuilder {
     @Override
     public PublishBuilder fromPublish(@NotNull final Publish publish) {
 
-        Preconditions.checkNotNull(publish, "publish must not be null");
+        Objects.requireNonNull(publish, "publish must not be null");
 
         if (!(publish instanceof PublishImpl)) {
             throw new DoNotImplementException(Publish.class.getSimpleName());
@@ -181,7 +182,7 @@ public class PublishBuilderImpl implements PublishBuilder {
     @NotNull
     @Override
     public PublishBuilder topic(@NotNull final String topic) {
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
 
         if (!Topics.isValidTopicToPublish(topic)) {
             throw new IllegalArgumentException("The topic (" + topic + ") is invalid for PUBLISH messages ");
@@ -237,7 +238,7 @@ public class PublishBuilderImpl implements PublishBuilder {
     @NotNull
     @Override
     public PublishBuilder payload(@NotNull final ByteBuffer payload) {
-        checkNotNull(payload, "Payload must not be null");
+        Objects.requireNonNull(payload, "Payload must not be null");
         this.payload = payload;
         return this;
     }
@@ -254,8 +255,8 @@ public class PublishBuilderImpl implements PublishBuilder {
     @Override
     public Publish build() {
 
-        checkNotNull(topic, "Topic must never be null");
-        checkNotNull(payload, "Payload must never be null");
+        Objects.requireNonNull(topic, "Topic must never be null");
+        Objects.requireNonNull(payload, "Payload must never be null");
 
         if (messageExpiryInterval == MESSAGE_EXPIRY_INTERVAL_NOT_SET) {
             messageExpiryInterval = mqttConfigService.maxMessageExpiryInterval();

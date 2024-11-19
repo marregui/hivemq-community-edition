@@ -22,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class WebsocketListener implements Listener {
     private int port;
@@ -118,19 +118,19 @@ public class WebsocketListener implements Listener {
         }
 
         public @NotNull Builder bindAddress(final @NotNull String bindAddress) {
-            checkNotNull(bindAddress);
+            Objects.requireNonNull(bindAddress);
             this.bindAddress = bindAddress;
             return this;
         }
 
         public @NotNull Builder path(final @NotNull String path) {
-            checkNotNull(path);
+            Objects.requireNonNull(path);
             this.path = path;
             return this;
         }
 
         public @NotNull Builder name(final @NotNull String name) {
-            checkNotNull(name);
+            Objects.requireNonNull(name);
             this.name = name;
             return this;
         }
@@ -141,7 +141,7 @@ public class WebsocketListener implements Listener {
         }
 
         public @NotNull Builder subprotocols(final @NotNull List<String> subprotocols) {
-            checkNotNull(subprotocols);
+            Objects.requireNonNull(subprotocols);
             this.subprotocols = ImmutableList.copyOf(subprotocols);
             return this;
         }

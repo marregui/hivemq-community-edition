@@ -46,6 +46,7 @@ import com.hivemq.util.Exceptions;
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -79,7 +80,7 @@ public class ClientServiceImpl implements ClientService {
     @NotNull
     @Override
     public CompletableFuture<Boolean> isClientConnected(@NotNull final String clientId) {
-        Preconditions.checkNotNull(clientId, "A client id must never be null");
+        Objects.requireNonNull(clientId, "A client id must never be null");
         if (pluginServiceRateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);
         }
@@ -93,7 +94,7 @@ public class ClientServiceImpl implements ClientService {
     @NotNull
     @Override
     public CompletableFuture<Optional<SessionInformation>> getSession(@NotNull final String clientId) {
-        Preconditions.checkNotNull(clientId, "A client id must never be null");
+        Objects.requireNonNull(clientId, "A client id must never be null");
         if (pluginServiceRateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);
         }
@@ -128,7 +129,7 @@ public class ClientServiceImpl implements ClientService {
             final @Nullable DisconnectReasonCode reasonCode,
             final @Nullable String reasonString) {
 
-        Preconditions.checkNotNull(clientId, "A client id must never be null");
+        Objects.requireNonNull(clientId, "A client id must never be null");
         if (reasonCode != null) {
             Preconditions.checkArgument(reasonCode != DisconnectReasonCode.CLIENT_IDENTIFIER_NOT_VALID,
                     "Reason code %s must not be used for disconnect packets.",
@@ -157,7 +158,7 @@ public class ClientServiceImpl implements ClientService {
     @NotNull
     @Override
     public CompletableFuture<Boolean> invalidateSession(@NotNull final String clientId) {
-        Preconditions.checkNotNull(clientId, "A client id must never be null");
+        Objects.requireNonNull(clientId, "A client id must never be null");
         if (pluginServiceRateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);
         }
@@ -193,8 +194,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public @NotNull CompletableFuture<Void> iterateAllClients(
             @NotNull final IterationCallback<SessionInformation> callback, @NotNull final Executor callbackExecutor) {
-        Preconditions.checkNotNull(callback, "Callback cannot be null");
-        Preconditions.checkNotNull(callbackExecutor, "Callback executor cannot be null");
+        Objects.requireNonNull(callback, "Callback cannot be null");
+        Objects.requireNonNull(callbackExecutor, "Callback executor cannot be null");
 
         if (pluginServiceRateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);

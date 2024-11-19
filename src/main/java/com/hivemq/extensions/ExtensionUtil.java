@@ -26,8 +26,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 
 public class ExtensionUtil {
@@ -36,7 +35,7 @@ public class ExtensionUtil {
 
     static boolean isValidExtensionFolder(@NotNull final Path path, final boolean logErrors) {
 
-        checkNotNull(path, "extension path must not be null");
+        Objects.requireNonNull(path, "extension path must not be null");
 
         final File file = path.toFile();
         if (!file.isDirectory()) {
@@ -82,7 +81,7 @@ public class ExtensionUtil {
     @NotNull
     public static List<Path> findAllExtensionFolders(@NotNull final Path extensionPath) throws IOException {
 
-        checkNotNull(extensionPath, "provided extension folder path CAN NOT be null");
+        Objects.requireNonNull(extensionPath, "provided extension folder path CAN NOT be null");
 
         final ImmutableList.Builder<Path> builder = ImmutableList.builder();
         try (final DirectoryStream<Path> stream = Files.newDirectoryStream(extensionPath)) {

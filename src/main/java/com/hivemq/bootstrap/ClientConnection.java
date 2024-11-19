@@ -23,10 +23,11 @@ import com.hivemq.mqtt.message.pool.Ids;
 import io.netty.channel.Channel;
 import org.jetbrains.annotations.VisibleForTesting;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 public class ClientConnection extends Connection {
 
@@ -97,10 +98,10 @@ public class ClientConnection extends Connection {
     public static @NotNull ClientConnection from(final @NotNull Connection clientConnectionContext) {
         checkArgument(clientConnectionContext instanceof UndefinedClientConnection);
         final UndefinedClientConnection context = (UndefinedClientConnection) clientConnectionContext;
-        checkNotNull(context.clientId, "Client id must not be null.");
-        checkNotNull(context.clientState, "Client state must not be null.");
-        checkNotNull(context.protocolVersion, "Protocol version must not be null.");
-        checkNotNull(context.connectedListener, "Connected listener must not be null.");
+        Objects.requireNonNull(context.clientId, "Client id must not be null.");
+        Objects.requireNonNull(context.clientState, "Client state must not be null.");
+        Objects.requireNonNull(context.protocolVersion, "Protocol version must not be null.");
+        Objects.requireNonNull(context.connectedListener, "Connected listener must not be null.");
         final ClientConnection clientConnection = new ClientConnection(context);
         context.getChannel().attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         return clientConnection;

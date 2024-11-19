@@ -25,6 +25,8 @@ import com.hivemq.extensions.ExtensionInformationUtil;
 import com.hivemq.extensions.executor.task.PluginTaskInput;
 import io.netty.channel.Channel;
 
+import java.util.Objects;
+
 /**
  * @author Florian Limpöck
  * @since 4.0.0
@@ -44,9 +46,9 @@ public class InitializerInputImpl implements InitializerInput, PluginTaskInput {
             final @NotNull ServerInformation serverInformation,
             final @NotNull Channel channel,
             final @NotNull String clientId) {
-        Preconditions.checkNotNull(channel, "channel must never be null");
-        Preconditions.checkNotNull(clientId, "client id must never be null");
-        Preconditions.checkNotNull(serverInformation, "server information must never be null");
+        Objects.requireNonNull(channel, "channel must never be null");
+        Objects.requireNonNull(clientId, "client id must never be null");
+        Objects.requireNonNull(serverInformation, "server information must never be null");
 
         this.clientInformation = ExtensionInformationUtil.getAndSetClientInformation(channel, clientId);
         this.connectionInformation = ExtensionInformationUtil.getAndSetConnectionInformation(channel);

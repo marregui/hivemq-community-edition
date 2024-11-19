@@ -25,6 +25,7 @@ import com.hivemq.extensions.executor.PluginOutPutAsyncer;
 import com.hivemq.extensions.executor.task.AbstractAsyncOutput;
 import com.hivemq.extensions.executor.task.PluginTaskOutput;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
@@ -80,7 +81,7 @@ public class SubscriptionAuthorizerOutputImpl extends AbstractAsyncOutput<Subscr
     @Override
     public void failAuthorization(final @NotNull SubackReasonCode reasonCode) {
         checkCompleted("failAuthorization");
-        Preconditions.checkNotNull(reasonCode, "reason code must never be null");
+        Objects.requireNonNull(reasonCode, "reason code must never be null");
         if (reasonCode == SubackReasonCode.GRANTED_QOS_0 ||
                 reasonCode == SubackReasonCode.GRANTED_QOS_1 ||
                 reasonCode == SubackReasonCode.GRANTED_QOS_2) {
@@ -93,8 +94,8 @@ public class SubscriptionAuthorizerOutputImpl extends AbstractAsyncOutput<Subscr
     @Override
     public void failAuthorization(final @NotNull SubackReasonCode reasonCode, final @NotNull String reasonString) {
         checkCompleted("failAuthorization");
-        Preconditions.checkNotNull(reasonCode, "reason code must never be null");
-        Preconditions.checkNotNull(reasonString, "reason string must never be null");
+        Objects.requireNonNull(reasonCode, "reason code must never be null");
+        Objects.requireNonNull(reasonString, "reason string must never be null");
         if (reasonCode == SubackReasonCode.GRANTED_QOS_0 ||
                 reasonCode == SubackReasonCode.GRANTED_QOS_1 ||
                 reasonCode == SubackReasonCode.GRANTED_QOS_2) {
@@ -115,7 +116,7 @@ public class SubscriptionAuthorizerOutputImpl extends AbstractAsyncOutput<Subscr
     @Override
     public void disconnectClient(final @NotNull DisconnectReasonCode reasonCode) {
         checkCompleted("disconnectClient");
-        Preconditions.checkNotNull(reasonCode, "reason code must never be null");
+        Objects.requireNonNull(reasonCode, "reason code must never be null");
         this.disconnectReasonCode = reasonCode;
         authorizationState = AuthorizationState.DISCONNECT;
     }
@@ -123,8 +124,8 @@ public class SubscriptionAuthorizerOutputImpl extends AbstractAsyncOutput<Subscr
     @Override
     public void disconnectClient(final @NotNull DisconnectReasonCode reasonCode, final @NotNull String reasonString) {
         checkCompleted("disconnectClient");
-        Preconditions.checkNotNull(reasonCode, "reason code must never be null");
-        Preconditions.checkNotNull(reasonString, "reason string must never be null");
+        Objects.requireNonNull(reasonCode, "reason code must never be null");
+        Objects.requireNonNull(reasonString, "reason string must never be null");
         this.disconnectReasonCode = reasonCode;
         this.reasonString = reasonString;
         authorizationState = AuthorizationState.DISCONNECT;

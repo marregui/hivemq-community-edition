@@ -20,7 +20,8 @@ import com.hivemq.config.entity.Listener;
 import org.jetbrains.annotations.NotNull;
 import io.netty.channel.ChannelFuture;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
+
 
 public class BindInformation {
 
@@ -30,8 +31,8 @@ public class BindInformation {
 
 
     public BindInformation(@NotNull final Listener listener, @NotNull final ChannelFuture bindFuture) {
-        checkNotNull(listener, "Listener must not be null");
-        checkNotNull(bindFuture, "Future must not be null");
+        Objects.requireNonNull(listener, "Listener must not be null");
+        Objects.requireNonNull(bindFuture, "Future must not be null");
         this.listener = listener;
         this.bindFuture = bindFuture;
     }

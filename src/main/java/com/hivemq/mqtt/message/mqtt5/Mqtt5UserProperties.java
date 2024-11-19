@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import io.netty.buffer.ByteBuf;
 
+import java.util.Objects;
+
 /**
  * Collection of {@link MqttUserProperty User Properties}.
  *
@@ -39,7 +41,7 @@ public class Mqtt5UserProperties {
      */
     @NotNull
     public static Mqtt5UserProperties of(final @NotNull MqttUserProperty... userProperties) {
-        Preconditions.checkNotNull(userProperties);
+        Objects.requireNonNull(userProperties);
         return Mqtt5UserProperties.of(ImmutableList.copyOf(userProperties));
     }
 

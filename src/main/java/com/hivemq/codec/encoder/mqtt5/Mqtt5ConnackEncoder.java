@@ -23,7 +23,9 @@ import com.hivemq.mqtt.message.dropping.MessageDroppedService;
 import com.hivemq.mqtt.message.reason.Mqtt5ConnAckReasonCode;
 import io.netty.buffer.ByteBuf;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Objects;
+
 import static com.hivemq.codec.encoder.mqtt5.Mqtt5MessageEncoderUtil.booleanPropertyEncodedLength;
 import static com.hivemq.codec.encoder.mqtt5.Mqtt5MessageEncoderUtil.encodeBooleanProperty;
 import static com.hivemq.codec.encoder.mqtt5.Mqtt5MessageEncoderUtil.encodeIntProperty;
@@ -73,8 +75,8 @@ public class Mqtt5ConnackEncoder
 
     @Override
     void encode(final @NotNull CONNACK connack, final @NotNull ByteBuf out) {
-        checkNotNull(connack, "Connack must not be null.");
-        checkNotNull(out, "ByteBuf must not be null.");
+        Objects.requireNonNull(connack, "Connack must not be null.");
+        Objects.requireNonNull(out, "ByteBuf must not be null.");
 
         encodeFixedHeader(out, connack.getRemainingLength());
         encodeVariableHeader(connack, out);
@@ -82,14 +84,14 @@ public class Mqtt5ConnackEncoder
 
     @Override
     int calculateRemainingLengthWithoutProperties(final @NotNull CONNACK connack) {
-        checkNotNull(connack, "Connack must not be null.");
+        Objects.requireNonNull(connack, "Connack must not be null.");
 
         return 2; // ConnectFlags Byte + ReasonCode Byte
     }
 
     @Override
     int calculatePropertyLength(final @NotNull CONNACK connack) {
-        checkNotNull(connack, "Connack must not be null.");
+        Objects.requireNonNull(connack, "Connack must not be null.");
 
         int propertyLength = 0;
 
@@ -103,7 +105,7 @@ public class Mqtt5ConnackEncoder
     }
 
     private static int fixedPropertyLength(final @NotNull CONNACK connack) {
-        checkNotNull(connack, "Connack must not be null.");
+        Objects.requireNonNull(connack, "Connack must not be null.");
 
         int propertyLength = 0;
 
@@ -133,14 +135,14 @@ public class Mqtt5ConnackEncoder
     }
 
     private static void encodeFixedHeader(final @NotNull ByteBuf out, final int remainingLength) {
-        checkNotNull(out, "ByteBuf must not be null.");
+        Objects.requireNonNull(out, "ByteBuf must not be null.");
         out.writeByte(CONNACK_FIXED_HEADER);
         MqttVariableByteInteger.encode(remainingLength, out);
     }
 
     private void encodeVariableHeader(final @NotNull CONNACK connack, final @NotNull ByteBuf out) {
-        checkNotNull(connack, "Connack must not be null.");
-        checkNotNull(out, "ByteBuf must not be null.");
+        Objects.requireNonNull(connack, "Connack must not be null.");
+        Objects.requireNonNull(out, "ByteBuf must not be null.");
 
         //Connect Acknowledge Flags
         out.writeByte(connack.isSessionPresent() ? 0x01 : 0x00);
@@ -153,8 +155,8 @@ public class Mqtt5ConnackEncoder
     }
 
     private void encodeProperties(final @NotNull CONNACK connack, final @NotNull ByteBuf out) {
-        checkNotNull(connack, "Connack must not be null.");
-        checkNotNull(out, "ByteBuf must not be null.");
+        Objects.requireNonNull(connack, "Connack must not be null.");
+        Objects.requireNonNull(out, "ByteBuf must not be null.");
 
         MqttVariableByteInteger.encode(connack.getPropertyLength(), out);
 
@@ -163,8 +165,8 @@ public class Mqtt5ConnackEncoder
     }
 
     private static void encodeFixedProperties(final @NotNull CONNACK connack, final @NotNull ByteBuf out) {
-        checkNotNull(connack, "Connack must not be null.");
-        checkNotNull(out, "ByteBuf must not be null.");
+        Objects.requireNonNull(connack, "Connack must not be null.");
+        Objects.requireNonNull(out, "ByteBuf must not be null.");
 
         encodeIntProperty(SESSION_EXPIRY_INTERVAL, connack.getSessionExpiryInterval(), SESSION_EXPIRY_NOT_SET, out);
         encodeShortProperty(RECEIVE_MAXIMUM, connack.getReceiveMaximum(), DEFAULT_RECEIVE_MAXIMUM, out);

@@ -28,6 +28,7 @@ import com.hivemq.extensions.ExtensionInformationUtil;
 import com.hivemq.extensions.executor.task.PluginTaskInput;
 import io.netty.channel.Channel;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -54,8 +55,8 @@ public class ClientInitiatedDisconnectInputImpl
             final @Nullable UserProperties userProperties,
             final boolean graceful) {
 
-        Preconditions.checkNotNull(clientId, "client id must never be null");
-        Preconditions.checkNotNull(channel, "channel must never be null");
+        Objects.requireNonNull(clientId, "client id must never be null");
+        Objects.requireNonNull(channel, "channel must never be null");
         this.reasonCode = reasonCode;
         this.reasonString = reasonString;
         this.userProperties = userProperties;

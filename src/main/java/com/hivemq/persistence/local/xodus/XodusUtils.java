@@ -23,8 +23,8 @@ import jetbrains.exodus.ArrayByteIterable;
 import jetbrains.exodus.ByteIterable;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Various utilities for dealing with Xodus. This util class
@@ -46,7 +46,7 @@ public class XodusUtils {
      */
     @NotNull
     public static ByteIterable stringToByteIterable(@NotNull final String string) {
-        checkNotNull(string, "String must not be null");
+        Objects.requireNonNull(string, "String must not be null");
 
         final byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
         return new ArrayByteIterable(bytes);
@@ -60,7 +60,7 @@ public class XodusUtils {
      */
     @NotNull
     public static ByteIterable bytesToByteIterable(@NotNull final byte[] bytes) {
-        checkNotNull(bytes, "bytes must not be null");
+        Objects.requireNonNull(bytes, "bytes must not be null");
 
         return new ArrayByteIterable(bytes);
     }
@@ -73,7 +73,7 @@ public class XodusUtils {
      */
     @NotNull
     public static String byteIterableToString(@NotNull final ByteIterable byteIterable) {
-        checkNotNull(byteIterable, "ByteIterable must not be null");
+        Objects.requireNonNull(byteIterable, "ByteIterable must not be null");
 
         return new String(byteIterable.getBytesUnsafe(), 0, byteIterable.getLength(), StandardCharsets.UTF_8);
     }
@@ -86,7 +86,7 @@ public class XodusUtils {
      */
     @NotNull
     public static byte[] byteIterableToBytes(@NotNull final ByteIterable byteIterable) {
-        checkNotNull(byteIterable, "ByteIterable must not be null");
+        Objects.requireNonNull(byteIterable, "ByteIterable must not be null");
 
         final byte[] unsafeBytes = byteIterable.getBytesUnsafe();
         if (unsafeBytes.length == byteIterable.getLength()) {

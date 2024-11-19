@@ -40,6 +40,7 @@ import com.hivemq.persistence.retained.RetainedMessagePersistence;
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -76,7 +77,7 @@ public class RetainedMessageStoreImpl implements RetainedMessageStore {
     @NotNull
     @Override
     public CompletableFuture<Optional<RetainedPublish>> getRetainedMessage(@NotNull final String topic) {
-        Preconditions.checkNotNull(topic, "A topic must never be null");
+        Objects.requireNonNull(topic, "A topic must never be null");
         if (pluginServiceRateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);
         }
@@ -93,7 +94,7 @@ public class RetainedMessageStoreImpl implements RetainedMessageStore {
     @NotNull
     @Override
     public CompletableFuture<Void> remove(@NotNull final String topic) {
-        Preconditions.checkNotNull(topic, "A topic must never be null");
+        Objects.requireNonNull(topic, "A topic must never be null");
         if (pluginServiceRateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);
         }
@@ -120,7 +121,7 @@ public class RetainedMessageStoreImpl implements RetainedMessageStore {
     @NotNull
     @Override
     public CompletableFuture<Void> addOrReplace(@NotNull final RetainedPublish retainedPublish) {
-        Preconditions.checkNotNull(retainedPublish, "A retained publish must never be null");
+        Objects.requireNonNull(retainedPublish, "A retained publish must never be null");
         if (pluginServiceRateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);
         }
@@ -141,8 +142,8 @@ public class RetainedMessageStoreImpl implements RetainedMessageStore {
     @Override
     public @NotNull CompletableFuture<Void> iterateAllRetainedMessages(
             final @NotNull IterationCallback<RetainedPublish> callback, final @NotNull Executor callbackExecutor) {
-        Preconditions.checkNotNull(callback, "Callback cannot be null");
-        Preconditions.checkNotNull(callbackExecutor, "Callback executor cannot be null");
+        Objects.requireNonNull(callback, "Callback cannot be null");
+        Objects.requireNonNull(callbackExecutor, "Callback executor cannot be null");
 
         if (pluginServiceRateLimitService.rateLimitExceeded()) {
             return CompletableFuture.failedFuture(PluginServiceRateLimitService.RATE_LIMIT_EXCEEDED_EXCEPTION);

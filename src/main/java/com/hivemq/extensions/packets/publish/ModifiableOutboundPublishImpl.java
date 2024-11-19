@@ -34,7 +34,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * @author Lukas Brandl
@@ -93,7 +93,7 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
 
     @Override
     public void setTopic(final @NotNull String topic) {
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
         checkArgument(topic.length() <= configService.restrictionsConfiguration().maxTopicLength(),
                 "Topic filter length must not exceed '" +
                         configService.restrictionsConfiguration().maxTopicLength() +
@@ -138,7 +138,7 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
 
     @Override
     public void setPayload(final @NotNull ByteBuffer payload) {
-        Preconditions.checkNotNull(payload, "Payload must never be null");
+        Objects.requireNonNull(payload, "Payload must never be null");
         if (payload.equals(this.payload)) {
             return;
         }
@@ -242,9 +242,9 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
 
     @Override
     public void setSubscriptionIdentifiers(final @NotNull List<@NotNull Integer> subscriptionIdentifiers) {
-        checkNotNull(subscriptionIdentifiers, "Subscription identifiers must not be null null");
+        Objects.requireNonNull(subscriptionIdentifiers, "Subscription identifiers must not be null null");
         for (final Integer subscriptionIdentifier : subscriptionIdentifiers) {
-            checkNotNull(subscriptionIdentifier, "At least one element of the subscription identifiers was null");
+            Objects.requireNonNull(subscriptionIdentifier, "At least one element of the subscription identifiers was null");
         }
         final ImmutableIntArray immutableIntArray = ImmutableIntArray.copyOf(subscriptionIdentifiers);
         if (this.subscriptionIdentifiers.equals(immutableIntArray)) {

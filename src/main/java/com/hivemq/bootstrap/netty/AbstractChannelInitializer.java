@@ -34,6 +34,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.*;
@@ -61,7 +62,7 @@ public abstract class AbstractChannelInitializer extends ChannelInitializer<Chan
 
     @Override
     protected void initChannel(final @NotNull Channel ch) throws Exception {
-        Preconditions.checkNotNull(ch, "Channel must never be null");
+        Objects.requireNonNull(ch, "Channel must never be null");
         if (!legacyNettyShutdown && ShutdownHooks.INSTANCE.hooksHaveRun()) {
             //during shutting down, we dont want new clients to create any pipeline,
             //and we dont want to read from their socket

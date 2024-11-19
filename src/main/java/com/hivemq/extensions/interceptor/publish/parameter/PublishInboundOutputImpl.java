@@ -27,6 +27,7 @@ import com.hivemq.extensions.executor.task.AbstractAsyncOutput;
 import com.hivemq.extensions.packets.publish.ModifiablePublishPacketImpl;
 
 import java.time.Duration;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -66,7 +67,7 @@ public class PublishInboundOutputImpl extends AbstractAsyncOutput<PublishInbound
 
     @Override
     public void preventPublishDelivery(final @NotNull AckReasonCode reasonCode, final @Nullable String reasonString) {
-        Preconditions.checkNotNull(reasonCode, "reason code must never be null");
+        Objects.requireNonNull(reasonCode, "reason code must never be null");
         if (reasonCode == AckReasonCode.SUCCESS) {
             Preconditions.checkArgument(reasonString == null,
                     "reason string must not be set when ack reason code is success");
@@ -79,7 +80,7 @@ public class PublishInboundOutputImpl extends AbstractAsyncOutput<PublishInbound
     public void forciblyPreventPublishDelivery(
             final @NotNull AckReasonCode reasonCode, final @Nullable String reasonString) {
 
-        Preconditions.checkNotNull(reasonCode, "reason code must never be null");
+        Objects.requireNonNull(reasonCode, "reason code must never be null");
         this.preventDelivery.set(true);
         this.reasonCode = reasonCode;
         this.reasonString = reasonString;
@@ -101,8 +102,8 @@ public class PublishInboundOutputImpl extends AbstractAsyncOutput<PublishInbound
             final @NotNull AckReasonCode ackReasonCode,
             final @Nullable String reasonString) {
 
-        Preconditions.checkNotNull(duration, "Duration must never be null");
-        Preconditions.checkNotNull(timeoutFallback, "Fallback must never be null");
+        Objects.requireNonNull(duration, "Duration must never be null");
+        Objects.requireNonNull(timeoutFallback, "Fallback must never be null");
         if (timeoutFallback == TimeoutFallback.SUCCESS) {
             Preconditions.checkArgument(ackReasonCode == AckReasonCode.SUCCESS,
                     "reason code must be success when fallback success");
@@ -111,7 +112,7 @@ public class PublishInboundOutputImpl extends AbstractAsyncOutput<PublishInbound
             Preconditions.checkArgument(reasonString == null,
                     "reason string must not be set when ack reason code is success");
         }
-        Preconditions.checkNotNull(ackReasonCode, "Reason code must never be null");
+        Objects.requireNonNull(ackReasonCode, "Reason code must never be null");
 
         final Async<PublishInboundOutput> async = super.async(duration, timeoutFallback);
         this.reasonCode = ackReasonCode;

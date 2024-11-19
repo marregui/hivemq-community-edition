@@ -20,8 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import io.netty.buffer.ByteBuf;
 
 import java.util.Locale;
+import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Strings {
@@ -46,7 +47,7 @@ public class Strings {
      * @throws java.lang.NullPointerException if the passed {@link io.netty.buffer.ByteBuf} is <code>null</code>
      */
     public static String getPrefixedString(final ByteBuf buf) {
-        checkNotNull(buf);
+        Objects.requireNonNull(buf);
         if (buf.readableBytes() < 2) {
             return null;
         }
@@ -58,7 +59,7 @@ public class Strings {
     }
 
     public static String getPrefixedString(final ByteBuf buf, final int utf8StringLength) {
-        checkNotNull(buf);
+        Objects.requireNonNull(buf);
         final String string = buf.toString(buf.readerIndex(), utf8StringLength, UTF_8);
         //The ByteBuf.toString method, doesn't move the read index, therefor we have to do this manually.
         buf.skipBytes(utf8StringLength);
@@ -67,7 +68,7 @@ public class Strings {
 
     public static String getValidatedPrefixedString(
             @NotNull final ByteBuf buf, final int utf8StringLength, final boolean validateShouldNotCharacters) {
-        checkNotNull(buf);
+        Objects.requireNonNull(buf);
         if (buf.readableBytes() < utf8StringLength) {
             return null;
         }
@@ -94,8 +95,8 @@ public class Strings {
      * @return the encoded string as {@link io.netty.buffer.ByteBuf}
      */
     public static ByteBuf createPrefixedBytesFromString(final String string, final ByteBuf buffer) {
-        checkNotNull(string);
-        checkNotNull(buffer);
+        Objects.requireNonNull(string);
+        Objects.requireNonNull(buffer);
         if (Utf8Utils.stringIsOneByteCharsOnly(string)) {
             // In case ther is no character in the string that is encoded with more than one byte in UTF-8,
             // We can write the string character by character without copying it to a temporary byte array.

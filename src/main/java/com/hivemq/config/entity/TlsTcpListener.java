@@ -19,7 +19,8 @@ package com.hivemq.config.entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
+
 
 public class TlsTcpListener extends TcpListener implements TlsListener {
 
@@ -33,7 +34,7 @@ public class TlsTcpListener extends TcpListener implements TlsListener {
     public TlsTcpListener(
             final int port, final @NotNull String bindAddress, final @NotNull Tls tls, final @NotNull String name) {
         super(port, bindAddress, name);
-        checkNotNull(tls);
+        Objects.requireNonNull(tls);
         this.tls = tls;
     }
 
@@ -63,7 +64,7 @@ public class TlsTcpListener extends TcpListener implements TlsListener {
         }
 
         public @NotNull Builder tls(final @NotNull Tls tls) {
-            checkNotNull(tls);
+            Objects.requireNonNull(tls);
             this.tls = tls;
             return this;
         }
@@ -74,13 +75,13 @@ public class TlsTcpListener extends TcpListener implements TlsListener {
         }
 
         public @NotNull Builder bindAddress(final @NotNull String bindAddress) {
-            checkNotNull(bindAddress);
+            Objects.requireNonNull(bindAddress);
             this.bindAddress = bindAddress;
             return this;
         }
 
         public @NotNull Builder name(final @NotNull String name) {
-            checkNotNull(name);
+            Objects.requireNonNull(name);
             this.name = name;
             return this;
         }

@@ -42,6 +42,8 @@ import com.hivemq.util.Strings;
 import com.hivemq.util.Topics;
 import io.netty.buffer.ByteBuf;
 
+import java.util.Objects;
+
 import static com.hivemq.mqtt.message.connack.Mqtt5CONNACK.DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT;
 import static com.hivemq.mqtt.message.connect.CONNECT.DEFAULT_PROBLEM_INFORMATION_REQUESTED;
 import static com.hivemq.mqtt.message.connect.CONNECT.DEFAULT_RECEIVE_MAXIMUM;
@@ -97,8 +99,8 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
             final @NotNull ByteBuf buf,
             final byte header) {
 
-        Preconditions.checkNotNull(clientConnectionContext, "A ClientContext must never be null");
-        Preconditions.checkNotNull(buf, "A byte buffer must never be null");
+        Objects.requireNonNull(clientConnectionContext, "A ClientContext must never be null");
+        Objects.requireNonNull(buf, "A byte buffer must never be null");
 
         if (!validateHeader(header)) {
             disconnectByInvalidFixedHeader(clientConnectionContext);

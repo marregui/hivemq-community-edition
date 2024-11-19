@@ -30,6 +30,8 @@ import com.hivemq.persistence.Sizable;
 import com.hivemq.util.Bytes;
 import com.hivemq.util.TypeSize;
 
+import java.util.Objects;
+
 /**
  * @author Silvio Giebl
  * @author Florian Limpöck
@@ -71,9 +73,9 @@ public class MqttWillPublish implements Sizable {
             @NotNull final Mqtt5UserProperties userProperties,
             final long delayInterval) {
 
-        Preconditions.checkNotNull(topic, "A topic must never be null");
-        Preconditions.checkNotNull(qos, "Quality of service must never be null");
-        Preconditions.checkNotNull(userProperties, "User properties must never be null");
+        Objects.requireNonNull(topic, "A topic must never be null");
+        Objects.requireNonNull(qos, "Quality of service must never be null");
+        Objects.requireNonNull(userProperties, "User properties must never be null");
 
         this.hivemqId = hivemqId;
         this.topic = topic;
@@ -96,8 +98,8 @@ public class MqttWillPublish implements Sizable {
             final boolean retain,
             @NotNull final String hivemqId) {
 
-        Preconditions.checkNotNull(topic, "A topic must never be null");
-        Preconditions.checkNotNull(qos, "Quality of service must never be null");
+        Objects.requireNonNull(topic, "A topic must never be null");
+        Objects.requireNonNull(qos, "Quality of service must never be null");
 
         this.topic = topic;
         this.payload = payload;

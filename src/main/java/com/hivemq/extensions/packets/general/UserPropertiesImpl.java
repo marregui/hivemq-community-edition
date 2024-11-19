@@ -25,7 +25,7 @@ import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * @author Florian Limpöck
@@ -49,7 +49,7 @@ public class UserPropertiesImpl implements UserProperties {
 
     @Override
     public @NotNull Optional<String> getFirst(final @NotNull String name) {
-        checkNotNull(name, "Name must never be null");
+        Objects.requireNonNull(name, "Name must never be null");
         return list.stream()
                 .filter(userProperty -> userProperty.getName().equals(name))
                 .findFirst()
@@ -58,7 +58,7 @@ public class UserPropertiesImpl implements UserProperties {
 
     @Override
     public @NotNull ImmutableList<String> getAllForName(final @NotNull String name) {
-        checkNotNull(name, "Name must never be null");
+        Objects.requireNonNull(name, "Name must never be null");
         return list.stream()
                 .filter(userProperty -> userProperty.getName().equals(name))
                 .map(UserProperty::getValue)

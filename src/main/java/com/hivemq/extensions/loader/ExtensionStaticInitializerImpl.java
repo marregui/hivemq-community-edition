@@ -25,9 +25,10 @@ import com.hivemq.extensions.exception.ExtensionLoadingException;
 import javax.inject.Inject;
 import com.google.inject.Singleton;
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.function.Supplier;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 
 @Singleton
 public class ExtensionStaticInitializerImpl implements ExtensionStaticInitializer {
@@ -51,8 +52,8 @@ public class ExtensionStaticInitializerImpl implements ExtensionStaticInitialize
 
     public void initialize(final @NotNull String pluginId, final @NotNull ClassLoader classLoader)
             throws ExtensionLoadingException {
-        checkNotNull(pluginId, "extension id must not be null");
-        checkNotNull(classLoader, "classLoader must not be null");
+        Objects.requireNonNull(pluginId, "extension id must not be null");
+        Objects.requireNonNull(classLoader, "classLoader must not be null");
 
         initializeServices(pluginId, classLoader);
         initializeBuilders(pluginId, classLoader);

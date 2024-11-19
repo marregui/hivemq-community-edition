@@ -107,7 +107,7 @@ public class ModifiableConnackPacketImpl implements ModifiableConnackPacket {
 
     @Override
     public void setReasonCode(final @NotNull ConnackReasonCode reasonCode) {
-        Preconditions.checkNotNull(reasonCode, "Reason code must never be null");
+        Objects.requireNonNull(reasonCode, "Reason code must never be null");
         final boolean switched =
                 (reasonCode == ConnackReasonCode.SUCCESS && this.reasonCode != ConnackReasonCode.SUCCESS) ||
                         (reasonCode != ConnackReasonCode.SUCCESS && this.reasonCode == ConnackReasonCode.SUCCESS);

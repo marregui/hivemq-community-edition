@@ -23,6 +23,7 @@ import com.hivemq.extension.sdk.api.interceptor.connect.ConnectInboundIntercepto
 import com.hivemq.extension.sdk.api.services.interceptor.GlobalInterceptorRegistry;
 
 import javax.inject.Inject;
+import java.util.Objects;
 
 /**
  * @author Lukas Brandl
@@ -41,14 +42,14 @@ public class GlobalInterceptorRegistryImpl implements GlobalInterceptorRegistry 
 
     @Override
     public void setConnectInboundInterceptorProvider(@NotNull final ConnectInboundInterceptorProvider connectInboundInterceptorProvider) {
-        Preconditions.checkNotNull(connectInboundInterceptorProvider,
+        Objects.requireNonNull(connectInboundInterceptorProvider,
                 "Connect interceptor provider must never be null");
         interceptors.addConnectInboundInterceptorProvider(connectInboundInterceptorProvider);
     }
 
     @Override
     public void setConnackOutboundInterceptorProvider(@NotNull final ConnackOutboundInterceptorProvider provider) {
-        Preconditions.checkNotNull(provider, "Connack outbound interceptor provider must never be null");
+        Objects.requireNonNull(provider, "Connack outbound interceptor provider must never be null");
         interceptors.addConnackOutboundInterceptorProvider(provider);
     }
 }

@@ -21,12 +21,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Singleton;
+
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.config.ConfigService.KEEP_ALIVE_ALLOW_UNLIMITED_DEFAULT;
 import static com.hivemq.config.ConfigService.KEEP_ALIVE_MAX_DEFAULT;
 import static com.hivemq.config.ConfigService.MAXIMUM_QOS_DEFAULT;
@@ -91,7 +93,7 @@ public class MqttConfigService {
     }
 
     public void setQueuedMessagesStrategy(@NotNull final QueuedMessagesStrategy strategy) {
-        checkNotNull(strategy, "Queued Messages strategy must not be null");
+        Objects.requireNonNull(strategy, "Queued Messages strategy must not be null");
         log.debug("Setting queued messages strategy for each client to {}", strategy.name());
         queuedMessagesStrategy.set(strategy);
     }
@@ -163,7 +165,7 @@ public class MqttConfigService {
     }
 
     public void setMaximumQos(@NotNull final QoS maximumQos) {
-        checkNotNull(maximumQos, "Maximum QoS may never be null");
+        Objects.requireNonNull(maximumQos, "Maximum QoS may never be null");
         log.debug("Setting maximum qos to {} ", maximumQos);
         this.maximumQos.set(maximumQos);
     }

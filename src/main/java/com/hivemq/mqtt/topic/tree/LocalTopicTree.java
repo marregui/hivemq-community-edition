@@ -44,7 +44,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+
 import static com.hivemq.config.InternalConfig.TOPIC_TREE_MAP_CREATION_THRESHOLD;
 
 /**
@@ -351,7 +351,7 @@ public class LocalTopicTree {
      * @return the number of children nodes for the given node
      */
     public static int getChildrenCount(final @NotNull TopicTreeNode node) {
-        checkNotNull(node, "Node must not be null");
+        Objects.requireNonNull(node, "Node must not be null");
 
         //If the node has a children map instead of the array, we don't need to count
         if (node.childrenMap != null) {
@@ -383,8 +383,8 @@ public class LocalTopicTree {
             final byte flags,
             final @Nullable String sharedName) {
 
-        checkNotNull(subscriber, "Subscriber must not be null");
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(subscriber, "Subscriber must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
 
         final String[] contents = StringUtils.splitPreserveAllTokens(topic.getTopic(), '/');
 
@@ -497,7 +497,7 @@ public class LocalTopicTree {
             final boolean excludeRootLevelWildcard,
             final @NotNull SubscriptionsConsumer subscriberAndTopicConsumer) {
 
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
 
         //Root wildcard subscribers always match
         if (!excludeRootLevelWildcard) {
@@ -566,8 +566,8 @@ public class LocalTopicTree {
     public void removeSubscriber(
             final @NotNull String subscriber, final @NotNull String topic, final @Nullable String sharedName) {
 
-        checkNotNull(subscriber);
-        checkNotNull(topic);
+        Objects.requireNonNull(subscriber);
+        Objects.requireNonNull(topic);
 
         if ("#".equals(topic)) {
             removeRootWildcardSubscriber(subscriber, sharedName);
@@ -677,7 +677,7 @@ public class LocalTopicTree {
             final @NotNull Predicate<SubscriberWithQoS> itemFilter,
             final boolean excludeRootLevelWildcard) {
 
-        checkNotNull(topic, "Topic must not be null");
+        Objects.requireNonNull(topic, "Topic must not be null");
 
         final ImmutableSet.Builder<String> subscribers = ImmutableSet.builder();
 

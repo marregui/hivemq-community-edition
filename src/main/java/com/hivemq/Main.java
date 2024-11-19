@@ -37,9 +37,9 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
-public final class HiveMQServer {
+public final class Main {
 
-    private static final Logger log = LoggerFactory.getLogger(HiveMQServer.class);
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     static {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {

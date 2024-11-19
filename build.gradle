@@ -65,7 +65,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'com.hivemq.HiveMQServer'
+    mainClass = 'com.hivemq.Main'
     applicationDefaultJvmArgs = ['-Xmx2G', '-Xms2G', '-server', '-Dfile.encoding=UTF-8',
                                  '--add-opens',
                                  'java.base/java.lang=ALL-UNNAMED',

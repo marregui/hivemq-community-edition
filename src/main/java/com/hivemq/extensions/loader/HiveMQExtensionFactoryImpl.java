@@ -22,7 +22,7 @@ import com.hivemq.extensions.HiveMQExtension;
 import com.hivemq.extensions.HiveMQExtensionEntity;
 import com.hivemq.extensions.HiveMQExtensionImpl;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import java.nio.file.Path;
 
 @Singleton

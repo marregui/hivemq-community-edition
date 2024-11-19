@@ -15,7 +15,7 @@
  */
 package com.hivemq.codec.decoder;
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5AuthDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5DisconnectDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5PubackDecoder;
@@ -36,7 +36,7 @@ import javax.inject.Inject;
  * @author Lukas Brandl
  * @author Florian Limpöck
  */
-@LazySingleton
+@Singleton
 public class MqttDecoders {
 
     private final @Nullable MqttDecoder @NotNull [] mqtt5Decoder;

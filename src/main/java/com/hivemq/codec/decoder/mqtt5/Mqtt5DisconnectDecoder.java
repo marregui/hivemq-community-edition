@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder.mqtt5;
 
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.codec.decoder.AbstractMqttDecoder;
 import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ import static com.hivemq.mqtt.message.mqtt5.MessageProperties.SERVER_REFERENCE;
 import static com.hivemq.mqtt.message.mqtt5.MessageProperties.SESSION_EXPIRY_INTERVAL;
 import static com.hivemq.mqtt.message.mqtt5.MessageProperties.USER_PROPERTY;
 
-@LazySingleton
+@Singleton
 public class Mqtt5DisconnectDecoder extends AbstractMqttDecoder<DISCONNECT> {
 
     private static final Logger log = LoggerFactory.getLogger(Mqtt5DisconnectDecoder.class);

@@ -21,7 +21,7 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.publish.PublishReturnCode;
@@ -48,7 +48,7 @@ import static com.hivemq.config.InternalConfig.ACKNOWLEDGE_INCOMING_PUBLISH_AFTE
  * @author Christoph Schäbel
  * @author Dominik Obermaier
  */
-@LazySingleton
+@Singleton
 public class InternalPublishServiceImpl implements InternalPublishService {
 
     private static final Logger log = LoggerFactory.getLogger(InternalPublishServiceImpl.class);

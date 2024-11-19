@@ -16,7 +16,7 @@
 
 package com.hivemq.security.ssl;
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.entity.Tls;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.security.exception.SslException;
@@ -29,7 +29,7 @@ import io.netty.handler.ssl.SupportedCipherSuiteFilter;
 import javax.net.ssl.SSLException;
 import java.util.List;
 
-@LazySingleton
+@Singleton
 public class SslContextFactory {
 
     /**

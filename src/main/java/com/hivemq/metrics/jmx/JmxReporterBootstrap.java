@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 

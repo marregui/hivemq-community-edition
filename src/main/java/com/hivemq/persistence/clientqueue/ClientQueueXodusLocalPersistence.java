@@ -21,7 +21,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.config.MqttConfigService;
 import com.hivemq.config.MqttConfigService.QueuedMessagesStrategy;
@@ -66,7 +66,7 @@ import static com.hivemq.config.InternalConfig.QOS_0_MEMORY_HARD_LIMIT_DIVISOR;
 import static com.hivemq.persistence.clientqueue.ClientQueuePersistenceImpl.Key;
 import static com.hivemq.util.ThreadPreConditions.SINGLE_WRITER_THREAD_PREFIX;
 
-@LazySingleton
+@Singleton
 public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence implements ClientQueueLocalPersistence {
 
     private static final @NotNull Logger log = LoggerFactory.getLogger(ClientQueueXodusLocalPersistence.class);

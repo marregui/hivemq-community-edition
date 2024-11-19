@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.iteration;
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.util.ThreadFactoryUtil;
@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-@LazySingleton
+@Singleton
 public class AsyncIteratorFactory {
 
     private final @NotNull ExecutorService executorService;

@@ -22,7 +22,7 @@ import com.hivemq.mqtt.message.dropping.MessageDroppedService;
 import com.hivemq.mqtt.message.pubrec.PUBREC;
 import com.hivemq.mqtt.message.reason.Mqtt5PubRecReasonCode;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 /**
  * @author Waldemar Ruck

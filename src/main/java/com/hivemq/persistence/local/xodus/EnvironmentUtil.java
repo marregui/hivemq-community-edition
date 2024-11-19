@@ -19,7 +19,7 @@ import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import jetbrains.exodus.env.EnvironmentConfig;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.hivemq.config.InternalConfig.XODUS_LOG_CACHE_USE_NIO;

@@ -36,7 +36,7 @@ import com.hivemq.persistence.clientsession.ClientSessionPersistence;
 import com.hivemq.persistence.util.FutureUtils;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;

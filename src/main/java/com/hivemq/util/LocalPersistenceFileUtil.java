@@ -15,14 +15,14 @@
  */
 package com.hivemq.util;
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.SysInfo;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import java.io.File;
 
-@LazySingleton
+@Singleton
 public class LocalPersistenceFileUtil {
 
     private final @NotNull SysInfo sysInfo;

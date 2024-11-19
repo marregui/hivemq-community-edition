@@ -16,7 +16,7 @@
 package com.hivemq.persistence.ioc.provider.local;
 
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.persistence.local.IncomingMessageFlowInMemoryLocalPersistence;
 import com.hivemq.persistence.local.IncomingMessageFlowLocalPersistence;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ import javax.inject.Provider;
  *
  * @author Dominik Obermaier
  */
-@LazySingleton
+@Singleton
 public class IncomingMessageFlowPersistenceLocalProvider implements Provider<IncomingMessageFlowLocalPersistence> {
 
     private static final Logger log = LoggerFactory.getLogger(IncomingMessageFlowPersistenceLocalProvider.class);

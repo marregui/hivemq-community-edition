@@ -26,7 +26,7 @@ import com.hivemq.extension.sdk.api.services.builder.WillPublishBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import java.util.function.Supplier;
 
 @Singleton

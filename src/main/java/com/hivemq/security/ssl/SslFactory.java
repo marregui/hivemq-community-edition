@@ -18,7 +18,7 @@ package com.hivemq.security.ssl;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.entity.Listener;
 import com.hivemq.config.entity.Tls;
 import com.hivemq.UnrecoverableException;
@@ -39,7 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@LazySingleton
+@Singleton
 public class SslFactory {
     private static final @NotNull Logger log = LoggerFactory.getLogger(SslFactory.class);
 

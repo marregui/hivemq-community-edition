@@ -24,8 +24,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Stage;
 import com.hivemq.bootstrap.SingletonModule;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
+import com.google.inject.Singleton;
 import com.hivemq.bootstrap.netty.ChannelInitializerFactory;
 import com.hivemq.bootstrap.netty.ChannelInitializerFactoryImpl;
 import com.hivemq.bootstrap.netty.NettyConfiguration;
@@ -89,7 +88,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
+
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -101,7 +100,6 @@ public class IOC extends SingletonModule<Class<IOC>> {
 
     private final @NotNull MetricRegistry metricRegistry;
     private final @NotNull LifecycleModule lifecycle = new LifecycleModule();
-    private final @NotNull LazySingletonModule singletons = new LazySingletonModule();
     private final @NotNull ConfigModule configuration;
     private @Nullable Injector injector;
 
@@ -122,7 +120,7 @@ public class IOC extends SingletonModule<Class<IOC>> {
             }
         }, "shutdown-" + configuration.getHiveMQId()));
         injector = Guice.createInjector(Stage.PRODUCTION,
-                Arrays.asList(lifecycle, singletons, configuration, new PersistenceMigrationModule(metricRegistry)));
+                Arrays.asList(lifecycle, configuration, new PersistenceMigrationModule(metricRegistry)));
         injector.getInstance(PersistenceStartup.class).finish();
     }
 
@@ -132,7 +130,7 @@ public class IOC extends SingletonModule<Class<IOC>> {
 
     public @NotNull Injector init() {
         final Injector finalInjector = Guice.createInjector(Stage.PRODUCTION,
-                Arrays.asList(this, lifecycle, singletons, configuration, new ExtensionModule()));
+                Arrays.asList(this, lifecycle, configuration, new ExtensionModule()));
         injector = null;
         return finalInjector;
     }
@@ -159,34 +157,34 @@ public class IOC extends SingletonModule<Class<IOC>> {
         // mqtt service
         bind(InternalPublishService.class).to(InternalPublishServiceImpl.class);
         bind(PublishDistributor.class).to(PublishDistributorImpl.class);
-        bind(PublishPollService.class).to(PublishPollServiceImpl.class).in(LazySingleton.class);
+        bind(PublishPollService.class).to(PublishPollServiceImpl.class).in(Singleton.class);
 
         // throttling
         bind(GlobalTrafficShapingHandler.class).toProvider(GlobalTrafficShapingProvider.class).in(Singleton.class);
 
         // security
-        bind(SslFactory.class).in(LazySingleton.class);
-        bind(SslContextStore.class).in(LazySingleton.class);
+        bind(SslFactory.class).in(Singleton.class);
+        bind(SslContextStore.class).in(Singleton.class);
 
         bind(ScheduledExecutorService.class).annotatedWith(Security.class)
                 .toProvider(SecurityExecutorProvider.class)
-                .in(LazySingleton.class);
+                .in(Singleton.class);
 
         // persistence
         install(new LocalPersistenceModule(injector));
         bind(PersistenceShutdownHookInstaller.class).asEagerSingleton();
         bind(ExecutorService.class).annotatedWith(Persistence.class)
                 .toProvider(PersistenceExecutorProvider.class)
-                .in(LazySingleton.class);
+                .in(Singleton.class);
         bind(ListeningExecutorService.class).annotatedWith(Persistence.class)
                 .toProvider(PersistenceExecutorProvider.class)
-                .in(LazySingleton.class);
+                .in(Singleton.class);
         bind(ScheduledExecutorService.class).annotatedWith(Persistence.class)
                 .toProvider(PersistenceScheduledExecutorProvider.class)
-                .in(LazySingleton.class);
+                .in(Singleton.class);
         bind(ListeningScheduledExecutorService.class).annotatedWith(Persistence.class)
                 .toProvider(PersistenceScheduledExecutorProvider.class)
-                .in(LazySingleton.class);
+                .in(Singleton.class);
         bindIfAbsent(ListeningScheduledExecutorService.class,
                 PayloadPersistenceScheduledExecutorProvider.class,
                 PayloadPersistence.class);
@@ -212,7 +210,7 @@ public class IOC extends SingletonModule<Class<IOC>> {
         if (instance != null) {
             bind(type).annotatedWith(annotation).toInstance(instance);
         } else {
-            bind(type).annotatedWith(annotation).toProvider(provider).in(LazySingleton.class);
+            bind(type).annotatedWith(annotation).toProvider(provider).in(Singleton.class);
         }
     }
 

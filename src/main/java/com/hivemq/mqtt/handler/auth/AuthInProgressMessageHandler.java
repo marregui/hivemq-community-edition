@@ -28,7 +28,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 
 @ChannelHandler.Sharable

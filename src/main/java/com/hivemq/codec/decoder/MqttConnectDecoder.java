@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder;
 
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5ConnectDecoder;
 import com.hivemq.config.HivemqId;
 import com.hivemq.config.ConfigService;
@@ -36,7 +36,7 @@ import io.netty.buffer.ByteBuf;
  *
  * @author Dominik Obermaier
  */
-@LazySingleton
+@Singleton
 public class MqttConnectDecoder {
 
     private final @NotNull MqttConnacker mqttConnacker;

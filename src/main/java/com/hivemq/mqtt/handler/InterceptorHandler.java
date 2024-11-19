@@ -47,7 +47,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 /**
  * @author Daniel Krüger

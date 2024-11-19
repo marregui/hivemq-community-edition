@@ -18,7 +18,7 @@ package com.hivemq.persistence.ioc;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.hivemq.bootstrap.SingletonModule;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.metrics.ioc.provider.MetricsHolderProvider;
@@ -31,7 +31,7 @@ import com.hivemq.persistence.ioc.provider.local.PayloadPersistenceScheduledExec
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.persistence.payload.PublishPayloadPersistenceImpl;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 public class PersistenceMigrationModule extends SingletonModule<Class<PersistenceMigrationModule>> {
 
@@ -52,7 +52,7 @@ public class PersistenceMigrationModule extends SingletonModule<Class<Persistenc
         bind(MetricsHolder.class).toProvider(MetricsHolderProvider.class).asEagerSingleton();
         bind(ListeningScheduledExecutorService.class).annotatedWith(PayloadPersistence.class)
                 .toProvider(PayloadPersistenceScheduledExecutorProvider.class)
-                .in(LazySingleton.class);
+                .in(Singleton.class);
         bind(MessageDroppedService.class).toProvider(MessageDroppedServiceProvider.class).in(Singleton.class);
     }
 }

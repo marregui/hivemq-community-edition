@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 @Singleton
 public class OpenConnectionsGaugeProvider implements Provider<OpenConnectionsGauge> {

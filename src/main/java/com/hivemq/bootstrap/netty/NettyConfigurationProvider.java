@@ -23,7 +23,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import javax.inject.Provider;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import java.util.concurrent.ThreadFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;

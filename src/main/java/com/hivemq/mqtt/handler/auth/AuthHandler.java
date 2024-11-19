@@ -33,7 +33,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 /**
  * @author Florian Limpöck

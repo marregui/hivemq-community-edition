@@ -18,7 +18,7 @@ package com.hivemq.mqtt.handler.publish;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.dropping.MessageDroppedService;
@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.hivemq.config.InternalConfig.NOT_WRITABLE_QUEUE_SIZE;
 
-@LazySingleton
+@Singleton
 public class DropOutgoingPublishesHandler {
 
     private static final Logger log = LoggerFactory.getLogger(DropOutgoingPublishesHandler.class);

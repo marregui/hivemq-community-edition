@@ -21,7 +21,7 @@ import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import com.hivemq.bootstrap.SingletonModule;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.util.ThreadFactoryUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -83,7 +83,7 @@ public class LifecycleModule extends SingletonModule<Class<LifecycleModule>> {
         }
         if (type.isAnnotationPresent(javax.inject.Singleton.class) ||
                 type.isAnnotationPresent(com.google.inject.Singleton.class) ||
-                type.isAnnotationPresent(LazySingleton.class)) {
+                type.isAnnotationPresent(Singleton.class)) {
             invokeStatus.putIfAbsent(type, new InvokeStatus());
         }
         for (final Method m : type.getDeclaredMethods()) {

@@ -18,7 +18,7 @@ package com.hivemq.persistence.payload;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.UnrecoverableException;
 import org.jetbrains.annotations.NotNull;
@@ -46,8 +46,8 @@ import static com.hivemq.persistence.local.xodus.XodusUtils.bytesToByteIterable;
 import static com.hivemq.persistence.payload.PublishPayloadXodusSerializer.deserializeKey;
 import static com.hivemq.persistence.payload.PublishPayloadXodusSerializer.serializeKey;
 
-// The LazySingleton annotation is necessary here, because the PublishPayloadLocalPersistenceProvider is not used during migrations.
-@LazySingleton
+// The Singleton annotation is necessary here, because the PublishPayloadLocalPersistenceProvider is not used during migrations.
+@Singleton
 public class PublishPayloadXodusLocalPersistence extends XodusLocalPersistence
         implements PublishPayloadLocalPersistence {
 

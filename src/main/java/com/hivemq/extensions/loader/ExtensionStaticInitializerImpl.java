@@ -23,7 +23,7 @@ import com.hivemq.extension.sdk.api.services.builder.Builders;
 import com.hivemq.extensions.exception.ExtensionLoadingException;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import java.lang.reflect.Field;
 import java.util.function.Supplier;
 

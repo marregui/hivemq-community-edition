@@ -17,7 +17,7 @@ package com.hivemq.persistence.ioc.provider.local;
 
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.persistence.ioc.annotation.Persistence;
@@ -29,7 +29,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 
-@LazySingleton
+@Singleton
 public class PersistenceExecutorProvider implements Provider<ListeningExecutorService> {
 
     @Nullable

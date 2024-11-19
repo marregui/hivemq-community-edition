@@ -16,7 +16,7 @@
 
 package com.hivemq.extensions.services.initializer;
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 
 import com.hivemq.extension.sdk.api.services.intializer.ClientInitializer;
@@ -42,7 +42,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * @since 4.0.0
  */
-@LazySingleton
+@Singleton
 
 public class InitializersImpl implements Initializers {
 

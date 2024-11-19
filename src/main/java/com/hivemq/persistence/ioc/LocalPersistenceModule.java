@@ -17,7 +17,7 @@ package com.hivemq.persistence.ioc;
 
 import com.google.inject.Injector;
 import com.hivemq.bootstrap.SingletonModule;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.PersistenceStartup;
 import com.hivemq.persistence.clientqueue.ClientQueuePersistence;
@@ -37,7 +37,7 @@ import com.hivemq.persistence.qos.IncomingMessageFlowPersistenceImpl;
 import com.hivemq.persistence.retained.RetainedMessagePersistence;
 import com.hivemq.persistence.retained.RetainedMessagePersistenceProvider;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 public class LocalPersistenceModule extends SingletonModule<Class<LocalPersistenceModule>> {
 
@@ -56,25 +56,25 @@ public class LocalPersistenceModule extends SingletonModule<Class<LocalPersisten
 
         /* Retained Message */
         bind(RetainedMessagePersistence.class).toProvider(RetainedMessagePersistenceProvider.class)
-                .in(LazySingleton.class);
+                .in(Singleton.class);
 
         /* Connection */
         bind(ConnectionPersistence.class).to(ConnectionPersistenceImpl.class).in(Singleton.class);
 
         /* Client Session */
-        bind(ClientSessionPersistence.class).toProvider(ClientSessionPersistenceProvider.class).in(LazySingleton.class);
+        bind(ClientSessionPersistence.class).toProvider(ClientSessionPersistenceProvider.class).in(Singleton.class);
 
         /* Client Session Sub */
         bind(ClientSessionSubscriptionPersistence.class).toProvider(ClientSessionSubscriptionPersistenceProvider.class)
-                .in(LazySingleton.class);
+                .in(Singleton.class);
 
         /* QoS Handling */
         bind(IncomingMessageFlowPersistence.class).to(IncomingMessageFlowPersistenceImpl.class);
         bind(IncomingMessageFlowLocalPersistence.class).toProvider(IncomingMessageFlowPersistenceLocalProvider.class)
-                .in(LazySingleton.class);
+                .in(Singleton.class);
 
         /* Client Queue */
-        bind(ClientQueuePersistence.class).to(ClientQueuePersistenceImpl.class).in(LazySingleton.class);
+        bind(ClientQueuePersistence.class).to(ClientQueuePersistenceImpl.class).in(Singleton.class);
 
         /* Payload Persistence */
         bind(PublishPayloadPersistence.class).toInstance(persistenceInjector.getInstance(PublishPayloadPersistence.class));

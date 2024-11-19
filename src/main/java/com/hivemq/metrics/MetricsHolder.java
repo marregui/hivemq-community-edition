@@ -19,7 +19,7 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 import static com.hivemq.metrics.HiveMQMetrics.CONNECTIONS_CLOSED_COUNT;
 import static com.hivemq.metrics.HiveMQMetrics.DROPPED_MESSAGE_COUNT;

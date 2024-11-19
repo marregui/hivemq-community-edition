@@ -18,7 +18,7 @@ package com.hivemq.persistence.local.xodus.clientsession;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,7 +70,7 @@ import static com.hivemq.util.ThreadPreConditions.SINGLE_WRITER_THREAD_PREFIX;
  * This implementation is thread safe and all methods block.
  */
 
-@LazySingleton
+@Singleton
 public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence implements ClientSessionLocalPersistence {
 
     private static final @NotNull Logger log = LoggerFactory.getLogger(ClientSessionXodusLocalPersistence.class);

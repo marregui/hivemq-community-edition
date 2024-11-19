@@ -18,7 +18,7 @@ package com.hivemq.codec.decoder.mqtt5;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.codec.decoder.AbstractMqttDecoder;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
 import com.hivemq.config.ConfigService;
@@ -47,7 +47,7 @@ import static com.hivemq.mqtt.message.subscribe.Mqtt5SUBSCRIBE.DEFAULT_NO_SUBSCR
 /**
  * @author Florian Limpöck
  */
-@LazySingleton
+@Singleton
 public class Mqtt5SubscribeDecoder extends AbstractMqttDecoder<SUBSCRIBE> {
 
     @Inject

@@ -16,7 +16,7 @@
 package com.hivemq.extensions.ioc;
 
 import com.hivemq.bootstrap.SingletonModule;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.extension.sdk.api.client.parameter.ServerInformation;
 import com.hivemq.extension.sdk.api.events.EventRegistry;
 import com.hivemq.extension.sdk.api.services.admin.AdminService;
@@ -84,7 +84,7 @@ import com.hivemq.extensions.services.publish.RetainedMessageStoreImpl;
 import com.hivemq.extensions.services.session.ClientServiceImpl;
 import com.hivemq.extensions.services.subscription.SubscriptionStoreImpl;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -108,42 +108,42 @@ public class ExtensionModule extends SingletonModule<Class<ExtensionModule>> {
         bind(SecurityRegistry.class).to(SecurityRegistryImpl.class);
         bind(ExecutorService.class).annotatedWith(PluginStartStop.class)
                 .toProvider(ExtensionStartStopExecutorProvider.class)
-                .in(LazySingleton.class);
+                .in(Singleton.class);
 
         bind(PluginTaskExecutorService.class).to(PluginTaskExecutorServiceImpl.class);
         bind(PluginOutPutAsyncer.class).to(PluginOutputAsyncerImpl.class);
 
         bind(InitializerRegistry.class).to(InitializerRegistryImpl.class);
-        bind(Initializers.class).to(InitializersImpl.class).in(LazySingleton.class);
-        bind(ServerInformation.class).to(ServerInformationImpl.class).in(LazySingleton.class);
+        bind(Initializers.class).to(InitializersImpl.class).in(Singleton.class);
+        bind(ServerInformation.class).to(ServerInformationImpl.class).in(Singleton.class);
 
         bind(AtomicLong.class).annotatedWith(PluginTaskQueue.class).toInstance(new AtomicLong(0));
 
-        bind(RetainedMessageStore.class).to(RetainedMessageStoreImpl.class).in(LazySingleton.class);
-        bind(ClientService.class).to(ClientServiceImpl.class).in(LazySingleton.class);
+        bind(RetainedMessageStore.class).to(RetainedMessageStoreImpl.class).in(Singleton.class);
+        bind(ClientService.class).to(ClientServiceImpl.class).in(Singleton.class);
         bind(RetainedPublishBuilder.class).to(RetainedPublishBuilderImpl.class);
 
-        bind(SubscriptionStore.class).to(SubscriptionStoreImpl.class).in(LazySingleton.class);
+        bind(SubscriptionStore.class).to(SubscriptionStoreImpl.class).in(Singleton.class);
         bind(TopicSubscriptionBuilder.class).to(TopicSubscriptionBuilderImpl.class);
 
         bind(TopicPermissionBuilder.class).to(TopicPermissionBuilderImpl.class);
 
         bind(ExtensionBuilderDependencies.class).to(ExtensionBuilderDependenciesImpl.class);
 
-        bind(PublishService.class).to(PublishServiceImpl.class).in(LazySingleton.class);
+        bind(PublishService.class).to(PublishServiceImpl.class).in(Singleton.class);
         bind(PublishBuilder.class).to(PublishBuilderImpl.class);
         bind(WillPublishBuilder.class).to(WillPublishBuilderImpl.class);
 
         bind(EventRegistry.class).to(EventRegistryImpl.class).in(Singleton.class);
-        bind(LifecycleEventListeners.class).to(LifecycleEventListenersImpl.class).in(LazySingleton.class);
+        bind(LifecycleEventListeners.class).to(LifecycleEventListenersImpl.class).in(Singleton.class);
 
-        bind(ClusterService.class).to(ClusterServiceNoopImpl.class).in(LazySingleton.class);
+        bind(ClusterService.class).to(ClusterServiceNoopImpl.class).in(Singleton.class);
 
         bind(PluginAuthorizerService.class).to(PluginAuthorizerServiceImpl.class);
         bind(PluginAuthenticatorService.class).to(PluginAuthenticatorServiceImpl.class);
 
-        bind(GlobalInterceptorRegistry.class).to(GlobalInterceptorRegistryImpl.class).in(LazySingleton.class);
-        bind(Interceptors.class).to(InterceptorsImpl.class).in(LazySingleton.class);
-        bind(AdminService.class).to(AdminServiceImpl.class).in(LazySingleton.class);
+        bind(GlobalInterceptorRegistry.class).to(GlobalInterceptorRegistryImpl.class).in(Singleton.class);
+        bind(Interceptors.class).to(InterceptorsImpl.class).in(Singleton.class);
+        bind(AdminService.class).to(AdminServiceImpl.class).in(Singleton.class);
     }
 }

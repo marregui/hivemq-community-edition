@@ -18,7 +18,7 @@ package com.hivemq.persistence.local.xodus.clientsession;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.UnrecoverableException;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +55,7 @@ import static com.hivemq.persistence.local.xodus.XodusUtils.bytesToByteIterable;
  *
  * @author Dominik Obermaier
  */
-@LazySingleton
+@Singleton
 public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPersistence
         implements ClientSessionSubscriptionLocalPersistence {
 

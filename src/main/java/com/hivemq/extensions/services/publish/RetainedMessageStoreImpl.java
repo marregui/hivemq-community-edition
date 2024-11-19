@@ -18,7 +18,7 @@ package com.hivemq.extensions.services.publish;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.exception.DoNotImplementException;
 import com.hivemq.extension.sdk.api.services.general.IterationCallback;
@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
  * @author Georg Held
  * @since 4.0.0
  */
-@LazySingleton
+@Singleton
 public class RetainedMessageStoreImpl implements RetainedMessageStore {
 
     private final @NotNull RetainedMessagePersistence retainedMessagePersistence;

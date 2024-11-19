@@ -16,11 +16,11 @@
 package com.hivemq.persistence.payload;
 
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@LazySingleton
+@Singleton
 public class PublishPayloadNoopPersistenceImpl implements PublishPayloadPersistence {
 
     @Inject

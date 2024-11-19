@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder.mqtt5;
 
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.codec.decoder.AbstractMqttDecoder;
 import com.hivemq.codec.encoder.mqtt5.MqttBinaryData;
 import com.hivemq.config.ConfigService;
@@ -62,7 +62,7 @@ import static com.hivemq.mqtt.message.mqtt5.MessageProperties.USER_PROPERTY;
  * @author Waldemar Ruck
  * @since 4.0
  */
-@LazySingleton
+@Singleton
 public class Mqtt5AuthDecoder extends AbstractMqttDecoder<AUTH> {
 
     @Inject

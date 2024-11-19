@@ -16,7 +16,7 @@
 package com.hivemq.logging;
 
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.reason.Mqtt5AuthReasonCode;
@@ -31,7 +31,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-@LazySingleton
+@Singleton
 public class EventLog {
 
     public static final String EVENT_CLIENT_CONNECTED = "event.client-connected";

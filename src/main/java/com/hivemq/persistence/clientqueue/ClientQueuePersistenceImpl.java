@@ -21,7 +21,7 @@ import com.google.common.primitives.ImmutableIntArray;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.MqttConfigService;
 import com.hivemq.persistence.ProducerQueues;
 import com.hivemq.persistence.SingleWriterService;
@@ -45,7 +45,7 @@ import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@LazySingleton
+@Singleton
 public class ClientQueuePersistenceImpl extends AbstractPersistence implements ClientQueuePersistence {
 
     public static final int SHARED_IN_FLIGHT_MARKER = 1;

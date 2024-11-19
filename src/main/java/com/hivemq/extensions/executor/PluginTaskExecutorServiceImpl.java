@@ -34,7 +34,7 @@ import com.hivemq.persistence.local.xodus.bucket.Bucket;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import java.util.function.Supplier;
 
 import static com.google.common.base.Preconditions.checkNotNull;

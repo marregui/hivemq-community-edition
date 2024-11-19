@@ -18,7 +18,7 @@ package com.hivemq.codec.decoder.mqtt5;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.codec.decoder.AbstractMqttConnectDecoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.MqttBinaryData;
@@ -72,7 +72,7 @@ import static com.hivemq.util.Bytes.isBitSet;
 /**
  * @author Florian Limpöck
  */
-@LazySingleton
+@Singleton
 public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
 
     private static final String PROTOCOL_NAME = "MQTT";

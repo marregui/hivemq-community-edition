@@ -17,7 +17,7 @@ package com.hivemq.persistence.local.xodus;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.UnrecoverableException;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +57,7 @@ import static com.hivemq.persistence.local.xodus.XodusUtils.bytesToByteIterable;
 import static com.hivemq.persistence.local.xodus.XodusUtils.stringToByteIterable;
 import static com.hivemq.util.ThreadPreConditions.SINGLE_WRITER_THREAD_PREFIX;
 
-@LazySingleton
+@Singleton
 public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
         implements RetainedMessageLocalPersistence {
 

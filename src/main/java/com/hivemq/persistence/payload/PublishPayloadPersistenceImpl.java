@@ -19,7 +19,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.persistence.local.xodus.bucket.BucketLock;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +35,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.hivemq.persistence.payload.PayloadReferenceCounterRegistryImpl.REF_COUNT_ALREADY_ZERO;
 import static com.hivemq.persistence.payload.PayloadReferenceCounterRegistryImpl.UNKNOWN_PAYLOAD;
 
-@LazySingleton
+@Singleton
 public class PublishPayloadPersistenceImpl implements PublishPayloadPersistence {
 
     private static final @NotNull Logger log = LoggerFactory.getLogger(PublishPayloadPersistenceImpl.class);

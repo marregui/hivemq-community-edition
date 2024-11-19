@@ -15,13 +15,13 @@
  */
 package com.hivemq.persistence.clientsession;
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
 
-@LazySingleton
+@Singleton
 public class ClientSessionPersistenceProvider implements Provider<ClientSessionPersistence> {
 
     private final Provider<ClientSessionPersistenceImpl> provider;

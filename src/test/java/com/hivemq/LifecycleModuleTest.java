@@ -19,8 +19,7 @@ import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.ProvisionException;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
+import com.google.inject.Singleton;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +28,6 @@ import javax.annotation.PreDestroy;
 import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class LifecycleModuleTest {
 
@@ -43,7 +41,7 @@ public class LifecycleModuleTest {
     }
 
     private void createInjector() {
-        injector = Guice.createInjector(lifecycleModule, new LazySingletonModule());
+        injector = Guice.createInjector(lifecycleModule);
     }
 
     /* **********************
@@ -214,7 +212,7 @@ public class LifecycleModuleTest {
         }
     }
 
-    @LazySingleton
+    @Singleton
     static class LazySingletonWithPostConstruct {
 
         private final CountDownLatch latch = new CountDownLatch(1);
@@ -387,7 +385,7 @@ public class LifecycleModuleTest {
         }
     }
 
-    @LazySingleton
+    @Singleton
     static class LazySingletonWithPreDestroy {
 
         private final CountDownLatch latch = new CountDownLatch(1);
@@ -495,7 +493,7 @@ public class LifecycleModuleTest {
         }
     }
 
-    @LazySingleton
+    @Singleton
     static class LazySingletonWithPreDestroyAndPostConstruct {
 
         private final CountDownLatch preDestroyLatch = new CountDownLatch(1);

@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.cluster;
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.cluster.ClusterDiscoveryCallback;
 import com.hivemq.extension.sdk.api.services.cluster.ClusterService;
@@ -23,7 +23,7 @@ import com.hivemq.extension.sdk.api.services.cluster.ClusterService;
 /**
  * @author Silvio Giebl
  */
-@LazySingleton
+@Singleton
 public class ClusterServiceNoopImpl implements ClusterService {
 
     @Override

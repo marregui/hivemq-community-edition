@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.ioc;
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.util.ThreadFactoryUtil;
@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 
-@LazySingleton
+@Singleton
 public class ExtensionStartStopExecutorProvider implements Provider<ExecutorService> {
 
     private static final @NotNull Logger log = LoggerFactory.getLogger(ExtensionStartStopExecutorProvider.class);

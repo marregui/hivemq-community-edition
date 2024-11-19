@@ -24,7 +24,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;
@@ -63,7 +63,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.hivemq.config.InternalConfig.PUBLISH_POLL_BATCH_SIZE_BYTES;
 
-@LazySingleton
+@Singleton
 public class PublishPollServiceImpl implements PublishPollService {
 
     private static final @NotNull Logger log = LoggerFactory.getLogger(PublishPollService.class);

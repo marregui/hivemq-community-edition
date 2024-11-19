@@ -22,7 +22,7 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.services.exception.DoNotImplementException;
@@ -68,7 +68,7 @@ import java.util.stream.Collectors;
  * @author Florian Limpöck
  * @since 4.0.0
  */
-@LazySingleton
+@Singleton
 public class SubscriptionStoreImpl implements SubscriptionStore {
 
     private final @NotNull ClientSessionSubscriptionPersistence subscriptionPersistence;

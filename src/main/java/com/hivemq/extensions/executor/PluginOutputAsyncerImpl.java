@@ -26,7 +26,7 @@ import com.hivemq.extensions.executor.task.PluginTaskOutput;
 import com.hivemq.util.ThreadFactoryUtil;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import java.time.Duration;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;

@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder;
 
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -30,7 +30,7 @@ import io.netty.buffer.ByteBuf;
 /**
  * @author Florian Limpöck
  */
-@LazySingleton
+@Singleton
 public class MqttPingreqDecoder extends MqttDecoder<PINGREQ> {
 
     private final @NotNull MqttServerDisconnector serverDisconnector;

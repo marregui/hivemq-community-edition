@@ -32,7 +32,7 @@ import com.hivemq.persistence.payload.PublishPayloadLocalPersistence;
 import com.hivemq.persistence.payload.PublishPayloadXodusLocalPersistence;
 import com.hivemq.persistence.retained.RetainedMessageLocalPersistence;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 
 class LocalPersistenceFileModule extends SingletonModule<Class<LocalPersistenceFileModule>> {

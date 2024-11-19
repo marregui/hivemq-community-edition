@@ -23,7 +23,7 @@ import com.hivemq.mqtt.message.connect.CONNECT;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import java.util.concurrent.atomic.LongAdder;
 
 import static com.hivemq.metrics.HiveMQMetrics.BYTES_READ_TOTAL;

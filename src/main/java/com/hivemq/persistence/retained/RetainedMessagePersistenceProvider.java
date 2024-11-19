@@ -15,13 +15,13 @@
  */
 package com.hivemq.persistence.retained;
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
 
-@LazySingleton
+@Singleton
 public class RetainedMessagePersistenceProvider implements Provider<RetainedMessagePersistence> {
 
     private final Provider<RetainedMessagePersistenceImpl> provider;
@@ -32,7 +32,7 @@ public class RetainedMessagePersistenceProvider implements Provider<RetainedMess
     }
 
     @Override
-    @LazySingleton
+    @Singleton
     public RetainedMessagePersistence get() {
         return provider.get();
     }

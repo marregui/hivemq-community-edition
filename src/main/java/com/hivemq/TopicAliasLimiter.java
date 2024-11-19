@@ -19,7 +19,7 @@ import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Singleton

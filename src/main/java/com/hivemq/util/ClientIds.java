@@ -17,14 +17,14 @@ package com.hivemq.util;
 
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.HivemqId;
 
 import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicLong;
 
-@LazySingleton
+@Singleton
 public class ClientIds {
 
     private final AtomicLong clientIDCounter = new AtomicLong(0);

@@ -17,7 +17,7 @@
 package com.hivemq.extensions.services.interceptor;
 
 import com.google.common.collect.ImmutableMap;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.connack.ConnackOutboundInterceptorProvider;
 import com.hivemq.extension.sdk.api.interceptor.connect.ConnectInboundInterceptorProvider;
@@ -36,7 +36,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author Lukas Brandl
  * @author Florian Limpöck
  */
-@LazySingleton
+@Singleton
 public class InterceptorsImpl implements Interceptors {
 
     @NotNull

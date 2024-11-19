@@ -16,7 +16,7 @@
 package com.hivemq.extensions.client.parameter;
 
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.SysInfo;
 import com.hivemq.config.ListenerConfigService;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 
-@LazySingleton
+@Singleton
 public class ServerInformationImpl implements ServerInformation {
 
     @NotNull

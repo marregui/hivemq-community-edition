@@ -22,7 +22,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.hash.PrimitiveSink;
 import com.google.inject.Inject;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.entity.Tls;
 import com.hivemq.UnrecoverableException;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +47,7 @@ import java.util.function.Consumer;
 import static com.hivemq.config.InternalConfig.SSL_RELOAD_ENABLED;
 import static com.hivemq.config.InternalConfig.SSL_RELOAD_INTERVAL_SEC;
 
-@LazySingleton
+@Singleton
 public class SslContextStore {
 
     private static final @NotNull Logger log = LoggerFactory.getLogger(SslContextStore.class);

@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.persistence.ProducerQueues;
 import com.hivemq.persistence.SingleWriterService;
@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@LazySingleton
+@Singleton
 public class RetainedMessagePersistenceImpl extends AbstractPersistence implements RetainedMessagePersistence {
 
     private final @NotNull RetainedMessageLocalPersistence localPersistence;

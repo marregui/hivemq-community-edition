@@ -18,7 +18,7 @@ package com.hivemq.persistence.clientsession;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +42,7 @@ import static com.hivemq.config.InternalConfig.SHARED_SUBSCRIPTION_CACHE_CONCURR
 import static com.hivemq.config.InternalConfig.SHARED_SUBSCRIPTION_CACHE_MAX_SIZE_SUBSCRIPTIONS;
 import static com.hivemq.config.InternalConfig.SHARED_SUBSCRIPTION_CACHE_TIME_TO_LIVE_MSEC;
 
-@LazySingleton
+@Singleton
 
 public class SharedSubscriptionService {
 

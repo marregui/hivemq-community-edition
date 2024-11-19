@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.qos;
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.MessageWithID;
 import com.hivemq.persistence.local.IncomingMessageFlowLocalPersistence;
@@ -25,7 +25,7 @@ import javax.inject.Inject;
 /**
  * @author Dominik Obermaier
  */
-@LazySingleton
+@Singleton
 public class IncomingMessageFlowPersistenceImpl implements IncomingMessageFlowPersistence {
 
 

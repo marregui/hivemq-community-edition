@@ -20,7 +20,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.config.HivemqId;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +55,7 @@ import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NO
  * @author Lukas Brandl
  * @since 4.0.0
  */
-@LazySingleton
+@Singleton
 public class PublishServiceImpl implements PublishService {
 
     @NotNull

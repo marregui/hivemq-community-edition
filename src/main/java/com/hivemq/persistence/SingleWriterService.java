@@ -18,7 +18,7 @@ package com.hivemq.persistence;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.local.xodus.bucket.Bucket;
@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static com.hivemq.config.InternalConfig.SINGLE_WRITER_INTERVAL_TO_CHECK_PENDING_TASKS_AND_SCHEDULE_MSEC;
 
-@LazySingleton
+@Singleton
 public class SingleWriterService {
 
     private static final @NotNull Logger log = LoggerFactory.getLogger(SingleWriterService.class);

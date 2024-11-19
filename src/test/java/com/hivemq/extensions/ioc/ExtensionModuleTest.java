@@ -21,8 +21,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
 import com.hivemq.config.ConfigService;
 import com.hivemq.config.MqttConfigService;
 import com.hivemq.config.RestrictionsConfigService;
@@ -118,7 +116,6 @@ public class ExtensionModuleTest {
                 bind(ClientSessionSubscriptionPersistence.class).toInstance(mock(ClientSessionSubscriptionPersistence.class));
                 bind(ListenerConfigService.class).toInstance(mock(ListenerConfigService.class));
                 bind(OpenConnectionsGauge.class).toInstance(mock(OpenConnectionsGauge.class));
-                bindScope(LazySingleton.class, LazySingletonModule.SCOPE);
                 bind(MqttServerDisconnector.class).toInstance(mock(MqttServerDisconnector.class));
                 bind(MqttConnacker.class).toInstance(mock(MqttConnacker.class));
             }

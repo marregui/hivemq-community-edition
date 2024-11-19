@@ -21,7 +21,7 @@ import com.hivemq.metrics.jmx.JmxReporterBootstrap;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 @Singleton
 public class MetricsShutdownHook implements ShutdownHooks.Hook {

@@ -25,7 +25,7 @@ import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import io.netty.buffer.ByteBuf;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 import static com.hivemq.codec.encoder.mqtt5.Mqtt5MessageEncoderUtil.encodeIntProperty;
 import static com.hivemq.codec.encoder.mqtt5.Mqtt5MessageEncoderUtil.encodeNullableProperty;

@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.local;
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Dominik Obermaier
  */
-@LazySingleton
+@Singleton
 public class IncomingMessageFlowInMemoryLocalPersistence implements IncomingMessageFlowLocalPersistence {
 
 

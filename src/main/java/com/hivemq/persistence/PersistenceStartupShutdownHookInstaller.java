@@ -20,7 +20,7 @@ import com.hivemq.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 /**
  * @author Florian Limpöck

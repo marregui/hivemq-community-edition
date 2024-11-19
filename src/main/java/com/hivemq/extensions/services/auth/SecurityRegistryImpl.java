@@ -25,7 +25,7 @@ import com.hivemq.extensions.HiveMQExtension;
 import com.hivemq.extensions.HiveMQExtensions;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

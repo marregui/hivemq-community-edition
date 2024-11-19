@@ -29,7 +29,7 @@ import io.netty.channel.ChannelPromise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 import static com.hivemq.config.ConfigService.MAX_EXPIRY_INTERVAL_DEFAULT;
 

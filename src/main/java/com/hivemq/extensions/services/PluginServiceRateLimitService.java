@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services;
 
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.extension.sdk.api.services.exception.RateLimitExceededException;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import static com.hivemq.config.InternalConfig.EXTENSION_SERVICE_CALL_RATE_LIMIT_PER_SEC;
 
 
-@LazySingleton
+@Singleton
 public class PluginServiceRateLimitService {
 
     public static final RateLimitExceededException RATE_LIMIT_EXCEEDED_EXCEPTION = new RateLimitExceededException();

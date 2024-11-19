@@ -18,7 +18,7 @@ package com.hivemq.codec.decoder.mqtt5;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.codec.decoder.AbstractMqttPublishDecoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
@@ -52,7 +52,7 @@ import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NO
 /**
  * @author Florian Limpöck
  */
-@LazySingleton
+@Singleton
 public class Mqtt5PublishDecoder extends AbstractMqttPublishDecoder<Mqtt5PUBLISH> {
 
     private final @NotNull HivemqId hiveMQId;

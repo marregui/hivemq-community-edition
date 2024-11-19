@@ -17,7 +17,7 @@ package com.hivemq.persistence.ioc.provider.local;
 
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.hivemq.bootstrap.lazysingleton.LazySingleton;
+import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,13 +29,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
-@LazySingleton
+@Singleton
 public class PayloadPersistenceScheduledExecutorProvider implements Provider<ListeningScheduledExecutorService> {
 
     private @Nullable ListeningScheduledExecutorService executorService;
 
     @Override
-    @LazySingleton
+    @Singleton
     @PayloadPersistence
     public @NotNull ListeningScheduledExecutorService get() {
         if (executorService == null) {

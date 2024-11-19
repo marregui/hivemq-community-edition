@@ -16,9 +16,6 @@
 package com.hivemq.util;
 
 import com.google.common.io.Files;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
 import com.hivemq.config.SysInfo;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
@@ -29,7 +26,6 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class LocalPersistenceFileUtilTest {
@@ -43,17 +39,6 @@ public class LocalPersistenceFileUtilTest {
     public void setUp() throws Exception {
         systemFolder = temporaryFolder.newFolder();
     }
-
-
-    @Test
-    public void test_is_singleton() {
-        final Injector injector = Guice.createInjector(new LazySingletonModule());
-        final LocalPersistenceFileUtil instance = injector.getInstance(LocalPersistenceFileUtil.class);
-        final LocalPersistenceFileUtil instance2 = injector.getInstance(LocalPersistenceFileUtil.class);
-
-        assertSame(instance, instance2);
-    }
-
 
     @Test
     public void test_create_persistence_dir_if_it_doesnt_exist() throws Exception {

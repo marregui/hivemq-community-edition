@@ -42,7 +42,7 @@ import com.hivemq.util.ReasonStrings;
 import io.netty.channel.ChannelHandlerContext;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 
 /**

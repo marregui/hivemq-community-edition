@@ -25,7 +25,7 @@ import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;

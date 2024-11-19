@@ -23,7 +23,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.ssl.SslHandshakeCompletionEvent;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import javax.net.ssl.SSLSession;
 
 import static io.netty.channel.ChannelHandler.Sharable;

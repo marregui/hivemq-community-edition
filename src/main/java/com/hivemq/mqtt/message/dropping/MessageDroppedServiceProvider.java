@@ -20,7 +20,7 @@ import com.hivemq.metrics.MetricsHolder;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 
 @Singleton

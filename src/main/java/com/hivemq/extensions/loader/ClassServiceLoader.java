@@ -19,7 +19,7 @@ package com.hivemq.extensions.loader;
 import com.google.common.collect.ImmutableList;
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

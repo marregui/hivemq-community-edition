@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap;
 
-import com.hivemq.configuration.service.entity.TcpListener;
+import com.hivemq.config.entity.TcpListener;
 import io.netty.channel.ChannelFuture;
 import org.junit.Before;
 import org.junit.Test;

@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.disconnect;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.configuration.service.ConfigurationService;
+import com.hivemq.config.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.disconnect.DisconnectReasonCode;
 import com.hivemq.extensions.packets.general.UserPropertiesImpl;

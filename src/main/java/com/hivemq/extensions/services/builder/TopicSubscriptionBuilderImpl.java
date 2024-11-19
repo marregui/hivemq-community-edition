@@ -16,10 +16,10 @@
 package com.hivemq.extensions.services.builder;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.configuration.service.ConfigurationService;
-import com.hivemq.configuration.service.MqttConfigurationService;
-import com.hivemq.configuration.service.RestrictionsConfigurationService;
-import com.hivemq.configuration.service.SecurityConfigurationService;
+import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.SecurityConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.general.Qos;

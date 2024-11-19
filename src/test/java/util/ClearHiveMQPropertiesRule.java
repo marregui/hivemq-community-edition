@@ -15,7 +15,7 @@
  */
 package util;
 
-import com.hivemq.configuration.info.SystemInformation;
+import com.hivemq.config.SystemInformation;
 import org.junit.contrib.java.lang.system.ClearSystemProperties;
 
 public class ClearHiveMQPropertiesRule extends ClearSystemProperties {

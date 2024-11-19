@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.ImmutableIntArray;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.configuration.service.MqttConfigurationService;
+import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.mqtt.message.MessageWithID;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.publish.PUBLISH;
@@ -46,7 +46,7 @@ import util.TestSingleWriterFactory;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.hivemq.configuration.service.MqttConfigurationService.QueuedMessagesStrategy;
+import static com.hivemq.config.MqttConfigurationService.QueuedMessagesStrategy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;

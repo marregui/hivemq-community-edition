@@ -19,7 +19,7 @@ package com.hivemq.persistence;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import com.hivemq.util.ThreadFactoryUtil;
@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.hivemq.configuration.service.InternalConfigurations.SINGLE_WRITER_INTERVAL_TO_CHECK_PENDING_TASKS_AND_SCHEDULE_MSEC;
+import static com.hivemq.config.InternalConfigurations.SINGLE_WRITER_INTERVAL_TO_CHECK_PENDING_TASKS_AND_SCHEDULE_MSEC;
 
 @LazySingleton
 public class SingleWriterService {

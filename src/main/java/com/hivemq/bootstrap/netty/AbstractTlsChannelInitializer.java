@@ -15,8 +15,8 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.configuration.service.entity.Tls;
-import com.hivemq.configuration.service.entity.TlsListener;
+import com.hivemq.config.entity.Tls;
+import com.hivemq.config.entity.TlsListener;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.connect.NoTlsHandshakeIdleHandler;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;

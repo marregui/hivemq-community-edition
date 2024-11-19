@@ -19,11 +19,11 @@ package com.hivemq.extensions.client.parameter;
 import com.google.common.collect.Lists;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
-import com.hivemq.configuration.service.entity.TcpListener;
-import com.hivemq.configuration.service.entity.Tls;
-import com.hivemq.configuration.service.entity.TlsTcpListener;
-import com.hivemq.configuration.service.entity.TlsWebsocketListener;
-import com.hivemq.configuration.service.entity.WebsocketListener;
+import com.hivemq.config.entity.TcpListener;
+import com.hivemq.config.entity.Tls;
+import com.hivemq.config.entity.TlsTcpListener;
+import com.hivemq.config.entity.TlsWebsocketListener;
+import com.hivemq.config.entity.WebsocketListener;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientTlsInformation;
 import com.hivemq.extension.sdk.api.client.parameter.Listener;
@@ -67,7 +67,7 @@ public class ConnectionInformationImplTest {
         channel = new EmbeddedChannel();
         clientConnectionContext = new UndefinedClientConnection(channel,
                 mock(PublishFlushHandler.class),
-                mock(com.hivemq.configuration.service.entity.Listener.class));
+                mock(com.hivemq.config.entity.Listener.class));
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnectionContext);
     }
 

@@ -17,7 +17,7 @@ package com.hivemq.security.ssl;
 
 import com.google.common.hash.HashCode;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
-import com.hivemq.configuration.service.entity.Tls;
+import com.hivemq.config.entity.Tls;
 import com.hivemq.UnrecoverableException;
 import org.jetbrains.annotations.NotNull;
 import io.netty.handler.ssl.SslContext;

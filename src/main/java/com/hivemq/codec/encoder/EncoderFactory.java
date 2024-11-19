@@ -27,7 +27,7 @@ import com.hivemq.codec.encoder.mqtt5.Mqtt5PubrecEncoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PubrelEncoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5SubackEncoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5UnsubackEncoder;
-import com.hivemq.configuration.service.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;

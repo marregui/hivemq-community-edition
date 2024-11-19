@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.publish;
 
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.event.PublishDroppedEvent;
 import com.hivemq.mqtt.event.PubrelDroppedEvent;
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
 
-import static com.hivemq.configuration.entity.mqtt.MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT;
+import static com.hivemq.config.entity.MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT;
 
 /**
  * @author Florian Limpöck

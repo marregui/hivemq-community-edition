@@ -30,11 +30,11 @@ import com.hivemq.bootstrap.netty.ChannelInitializerFactory;
 import com.hivemq.bootstrap.netty.ChannelInitializerFactoryImpl;
 import com.hivemq.bootstrap.netty.NettyConfiguration;
 import com.hivemq.bootstrap.netty.NettyConfigurationProvider;
-import com.hivemq.configuration.info.SystemInformation;
-import com.hivemq.configuration.ioc.ConfigurationModule;
-import com.hivemq.configuration.service.ConfigurationService;
-import com.hivemq.configuration.service.InternalConfigurations;
-import com.hivemq.configuration.service.RestrictionsConfigurationService;
+import com.hivemq.config.SystemInformation;
+import com.hivemq.config.ConfigurationModule;
+import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.RestrictionsConfigurationService;
 import com.hivemq.extensions.ioc.ExtensionModule;
 import com.hivemq.metrics.MetricRegistryLogger;
 import com.hivemq.metrics.MetricsHolder;
@@ -95,7 +95,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import static com.hivemq.configuration.service.InternalConfigurations.MQTT_EVENT_EXECUTOR_THREAD_COUNT;
+import static com.hivemq.config.InternalConfigurations.MQTT_EVENT_EXECUTOR_THREAD_COUNT;
 
 public class IOC extends SingletonModule<Class<IOC>> {
 

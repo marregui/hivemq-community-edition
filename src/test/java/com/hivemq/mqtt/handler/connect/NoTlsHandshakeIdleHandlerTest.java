@@ -18,8 +18,8 @@ package com.hivemq.mqtt.handler.connect;
 
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
-import com.hivemq.configuration.service.entity.Listener;
-import com.hivemq.configuration.service.entity.TlsTcpListener;
+import com.hivemq.config.entity.Listener;
+import com.hivemq.config.entity.TlsTcpListener;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

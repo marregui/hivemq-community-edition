@@ -18,7 +18,7 @@ package com.hivemq.extensions.handler;
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
-import com.hivemq.configuration.service.ConfigurationService;
+import com.hivemq.config.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;

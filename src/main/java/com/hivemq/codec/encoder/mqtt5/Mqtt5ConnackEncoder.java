@@ -15,7 +15,7 @@
  */
 package com.hivemq.codec.encoder.mqtt5;
 
-import com.hivemq.configuration.service.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.MessageType;
 import com.hivemq.mqtt.message.connack.CONNACK;

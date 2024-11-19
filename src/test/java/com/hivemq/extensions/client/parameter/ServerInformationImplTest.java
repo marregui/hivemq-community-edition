@@ -17,11 +17,11 @@
 package com.hivemq.extensions.client.parameter;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.configuration.info.SystemInformation;
-import com.hivemq.configuration.service.entity.TcpListener;
-import com.hivemq.configuration.service.entity.Tls;
-import com.hivemq.configuration.service.entity.TlsTcpListener;
-import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
+import com.hivemq.config.SystemInformation;
+import com.hivemq.config.entity.TcpListener;
+import com.hivemq.config.entity.Tls;
+import com.hivemq.config.entity.TlsTcpListener;
+import com.hivemq.config.ListenerConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.Listener;
 import com.hivemq.extension.sdk.api.client.parameter.ListenerType;

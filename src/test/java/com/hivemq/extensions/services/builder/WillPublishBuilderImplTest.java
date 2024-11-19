@@ -16,7 +16,7 @@
 package com.hivemq.extensions.services.builder;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.configuration.service.ConfigurationService;
+import com.hivemq.config.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.connect.WillPublishPacket;
 import com.hivemq.extension.sdk.api.packets.general.Qos;

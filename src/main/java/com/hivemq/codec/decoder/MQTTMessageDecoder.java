@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder;
 
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
-import com.hivemq.configuration.service.MqttConfigurationService;
+import com.hivemq.config.MqttConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.metrics.handler.GlobalMQTTMessageCounter;

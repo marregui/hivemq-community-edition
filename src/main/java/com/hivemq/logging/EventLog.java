@@ -20,7 +20,7 @@ import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.reason.Mqtt5AuthReasonCode;
-import com.hivemq.configuration.service.entity.Listener;
+import com.hivemq.config.entity.Listener;
 
 import io.netty.channel.Channel;
 import org.slf4j.Logger;

@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.local.xodus;
 
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import jetbrains.exodus.env.EnvironmentConfig;
 import org.junit.Before;
 import org.junit.Test;

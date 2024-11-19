@@ -18,7 +18,7 @@ package com.hivemq.persistence.ioc.provider.local;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.persistence.ioc.annotation.PayloadPersistence;

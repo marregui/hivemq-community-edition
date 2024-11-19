@@ -17,7 +17,7 @@ package com.hivemq.websocket;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Joiner;
-import com.hivemq.configuration.service.entity.WebsocketListener;
+import com.hivemq.config.entity.WebsocketListener;
 import org.jetbrains.annotations.NotNull;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.HttpObjectAggregator;

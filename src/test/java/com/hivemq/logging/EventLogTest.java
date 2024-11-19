@@ -18,7 +18,7 @@ package com.hivemq.logging;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
-import com.hivemq.configuration.service.entity.TcpListener;
+import com.hivemq.config.entity.TcpListener;
 import org.jetbrains.annotations.NotNull;
 import io.netty.channel.Channel;
 import io.netty.util.Attribute;

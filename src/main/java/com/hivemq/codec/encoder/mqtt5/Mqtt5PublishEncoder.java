@@ -16,7 +16,7 @@
 package com.hivemq.codec.encoder.mqtt5;
 
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.configuration.service.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.MessageType;
 import com.hivemq.mqtt.message.QoS;
@@ -33,7 +33,7 @@ import static com.hivemq.codec.encoder.mqtt5.Mqtt5MessageEncoderUtil.encodeVaria
 import static com.hivemq.codec.encoder.mqtt5.Mqtt5MessageEncoderUtil.intPropertyEncodedLength;
 import static com.hivemq.codec.encoder.mqtt5.Mqtt5MessageEncoderUtil.nullablePropertyEncodedLength;
 import static com.hivemq.codec.encoder.mqtt5.Mqtt5MessageEncoderUtil.variableByteIntegerPropertyEncodedLength;
-import static com.hivemq.configuration.entity.mqtt.MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT;
+import static com.hivemq.config.entity.MqttConfigurationDefaults.MAX_EXPIRY_INTERVAL_DEFAULT;
 import static com.hivemq.mqtt.message.mqtt5.MessageProperties.CONTENT_TYPE;
 import static com.hivemq.mqtt.message.mqtt5.MessageProperties.CORRELATION_DATA;
 import static com.hivemq.mqtt.message.mqtt5.MessageProperties.MESSAGE_EXPIRY_INTERVAL;

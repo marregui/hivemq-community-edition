@@ -16,7 +16,7 @@
 package util;
 
 import com.google.common.util.concurrent.MoreExecutors;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import com.hivemq.persistence.SingleWriterService;
 
 

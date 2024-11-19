@@ -22,7 +22,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.configuration.service.MqttConfigurationService;
+import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.persistence.ProducerQueues;
 import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;

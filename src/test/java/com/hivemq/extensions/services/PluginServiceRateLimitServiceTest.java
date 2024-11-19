@@ -16,7 +16,7 @@
 package com.hivemq.extensions.services;
 
 
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;

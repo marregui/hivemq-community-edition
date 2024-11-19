@@ -17,8 +17,8 @@ package com.hivemq.codec.encoder.mqtt5;
 
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.configuration.HivemqId;
-import com.hivemq.configuration.entity.mqtt.MqttConfigurationDefaults;
+import com.hivemq.config.HivemqId;
+import com.hivemq.config.entity.MqttConfigurationDefaults;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;

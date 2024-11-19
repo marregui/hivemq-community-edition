@@ -15,11 +15,11 @@
  */
 package util;
 
-import com.hivemq.configuration.service.ConfigurationService;
-import com.hivemq.configuration.service.MqttConfigurationService;
-import com.hivemq.configuration.service.RestrictionsConfigurationService;
-import com.hivemq.configuration.service.SecurityConfigurationService;
-import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
+import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.ListenerConfigurationService;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;

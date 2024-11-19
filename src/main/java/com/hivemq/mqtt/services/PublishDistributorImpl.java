@@ -21,7 +21,7 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.configuration.service.MqttConfigurationService;
+import com.hivemq.config.MqttConfigurationService;
 import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

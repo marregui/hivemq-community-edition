@@ -22,7 +22,7 @@ import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.bootstrap.UndefinedClientConnection;
-import com.hivemq.configuration.service.entity.TcpListener;
+import com.hivemq.config.entity.TcpListener;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.TopicAliasLimiter;
 import com.hivemq.logging.EventLog;

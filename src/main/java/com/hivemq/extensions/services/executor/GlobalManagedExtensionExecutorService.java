@@ -16,7 +16,7 @@
 package com.hivemq.extensions.services.executor;
 
 import com.hivemq.ShutdownHooks;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.util.ThreadFactoryUtil;
@@ -38,7 +38,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import static com.hivemq.configuration.service.InternalConfigurations.MANAGED_EXTENSION_EXECUTOR_SHUTDOWN_TIMEOUT_SEC;
+import static com.hivemq.config.InternalConfigurations.MANAGED_EXTENSION_EXECUTOR_SHUTDOWN_TIMEOUT_SEC;
 
 /**
  * @author Florian Limpöck

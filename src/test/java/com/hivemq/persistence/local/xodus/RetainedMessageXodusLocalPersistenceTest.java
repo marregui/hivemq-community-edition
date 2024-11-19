@@ -16,8 +16,8 @@
 package com.hivemq.persistence.local.xodus;
 
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
-import com.hivemq.configuration.entity.mqtt.MqttConfigurationDefaults;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.entity.MqttConfigurationDefaults;
+import com.hivemq.config.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.iteration.BucketChunkResult;
 import com.hivemq.mqtt.message.QoS;

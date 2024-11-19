@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.builder;
 
-import com.hivemq.configuration.service.ConfigurationService;
+import com.hivemq.config.ConfigurationService;
 import com.hivemq.extension.sdk.api.auth.parameter.TopicPermission;
 import org.junit.Before;
 import org.junit.Test;

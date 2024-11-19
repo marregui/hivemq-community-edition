@@ -15,14 +15,14 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.configuration.service.ConfigurationService;
-import com.hivemq.configuration.service.RestrictionsConfigurationService;
-import com.hivemq.configuration.service.entity.Listener;
-import com.hivemq.configuration.service.entity.TcpListener;
-import com.hivemq.configuration.service.entity.Tls;
-import com.hivemq.configuration.service.entity.TlsTcpListener;
-import com.hivemq.configuration.service.entity.TlsWebsocketListener;
-import com.hivemq.configuration.service.entity.WebsocketListener;
+import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.entity.Listener;
+import com.hivemq.config.entity.TcpListener;
+import com.hivemq.config.entity.Tls;
+import com.hivemq.config.entity.TlsTcpListener;
+import com.hivemq.config.entity.TlsWebsocketListener;
+import com.hivemq.config.entity.WebsocketListener;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.logging.EventLog;
 import com.hivemq.security.ssl.NonSslHandler;

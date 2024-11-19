@@ -17,7 +17,7 @@ package com.hivemq.persistence.local.xodus.clientsession;
 
 import com.codahale.metrics.Counter;
 import com.google.common.collect.Lists;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.iteration.BucketChunkResult;
 import com.hivemq.logging.EventLog;

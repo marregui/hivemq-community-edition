@@ -17,7 +17,7 @@
 package com.hivemq.extensions.services.executor;
 
 import com.hivemq.ShutdownHooks;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.CompletableScheduledFuture;
 import com.hivemq.extensions.HiveMQExtension;

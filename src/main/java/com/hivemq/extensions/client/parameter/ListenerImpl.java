@@ -32,7 +32,7 @@ public class ListenerImpl implements Listener {
     private final @NotNull ListenerType listenerType;
     private final @NotNull String name;
 
-    public ListenerImpl(final @NotNull com.hivemq.configuration.service.entity.Listener hiveMQListener) {
+    public ListenerImpl(final @NotNull com.hivemq.config.entity.Listener hiveMQListener) {
         Preconditions.checkNotNull(hiveMQListener, "listener must never be null");
         this.port = hiveMQListener.getPort();
         this.bindAddress = hiveMQListener.getBindAddress();

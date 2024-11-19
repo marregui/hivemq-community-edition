@@ -17,8 +17,8 @@ package com.hivemq.security.ssl;
 
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
-import com.hivemq.configuration.service.entity.Listener;
-import com.hivemq.configuration.service.entity.TcpListener;
+import com.hivemq.config.entity.Listener;
+import com.hivemq.config.entity.TcpListener;
 import com.hivemq.logging.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;

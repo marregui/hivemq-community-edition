@@ -42,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.hivemq.configuration.service.InternalConfigurations.WILL_DELAY_CHECK_INTERVAL_SEC;
+import static com.hivemq.config.InternalConfigurations.WILL_DELAY_CHECK_INTERVAL_SEC;
 
 
 @Singleton

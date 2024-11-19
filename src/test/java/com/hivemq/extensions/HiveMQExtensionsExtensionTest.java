@@ -16,7 +16,7 @@
 
 package com.hivemq.extensions;
 
-import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
+import com.hivemq.config.ListenerConfigurationService;
 import com.hivemq.extension.sdk.api.ExtensionMain;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

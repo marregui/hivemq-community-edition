@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.configuration.service.entity.TcpListener;
+import com.hivemq.config.entity.TcpListener;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.security.ssl.NonSslHandler;
 import io.netty.channel.Channel;

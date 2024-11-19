@@ -17,8 +17,8 @@ package util.encoder;
 
 import com.codahale.metrics.MetricRegistry;
 import com.hivemq.codec.encoder.MQTTMessageEncoder;
-import com.hivemq.configuration.service.SecurityConfigurationService;
-import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
+import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigurationServiceImpl;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.logging.EventLog;
 import com.hivemq.metrics.MetricsHolder;

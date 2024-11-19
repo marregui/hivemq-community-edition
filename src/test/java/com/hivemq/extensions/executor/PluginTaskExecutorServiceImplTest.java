@@ -17,7 +17,7 @@ package com.hivemq.extensions.executor;
 
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;

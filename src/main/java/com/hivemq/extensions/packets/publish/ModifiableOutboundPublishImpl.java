@@ -17,7 +17,7 @@ package com.hivemq.extensions.packets.publish;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.configuration.service.ConfigurationService;
+import com.hivemq.config.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

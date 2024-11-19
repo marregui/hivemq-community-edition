@@ -27,8 +27,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static com.hivemq.configuration.service.InternalConfigurations.PERSISTENCE_STARTUP_SHUTDOWN_TIMEOUT_SEC;
-import static com.hivemq.configuration.service.InternalConfigurations.PERSISTENCE_STARTUP_THREAD_POOL_SIZE;
+import static com.hivemq.config.InternalConfigurations.PERSISTENCE_STARTUP_SHUTDOWN_TIMEOUT_SEC;
+import static com.hivemq.config.InternalConfigurations.PERSISTENCE_STARTUP_THREAD_POOL_SIZE;
 
 @Singleton
 public class PersistenceStartup implements ShutdownHooks.Hook {

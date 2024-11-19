@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence;
 
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

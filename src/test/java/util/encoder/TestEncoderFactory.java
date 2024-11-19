@@ -18,7 +18,7 @@ package util.encoder;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.EncoderFactory;
 import com.hivemq.codec.encoder.MqttEncoder;
-import com.hivemq.configuration.service.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;

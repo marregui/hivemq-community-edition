@@ -22,9 +22,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.ImmutableIntArray;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.configuration.service.InternalConfigurations;
-import com.hivemq.configuration.service.MqttConfigurationService;
-import com.hivemq.configuration.service.MqttConfigurationService.QueuedMessagesStrategy;
+import com.hivemq.config.InternalConfigurations;
+import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.MqttConfigurationService.QueuedMessagesStrategy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.MessageWithID;
@@ -62,7 +62,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.hivemq.configuration.service.InternalConfigurations.QOS_0_MEMORY_HARD_LIMIT_DIVISOR;
+import static com.hivemq.config.InternalConfigurations.QOS_0_MEMORY_HARD_LIMIT_DIVISOR;
 import static com.hivemq.persistence.clientqueue.ClientQueuePersistenceImpl.Key;
 import static com.hivemq.util.ThreadPreConditions.SINGLE_WRITER_THREAD_PREFIX;
 

@@ -17,9 +17,9 @@ package com.hivemq.extensions;
 
 import com.google.common.base.Preconditions;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.configuration.service.entity.TcpListener;
-import com.hivemq.configuration.service.entity.TlsTcpListener;
-import com.hivemq.configuration.service.entity.TlsWebsocketListener;
+import com.hivemq.config.entity.TcpListener;
+import com.hivemq.config.entity.TlsTcpListener;
+import com.hivemq.config.entity.TlsWebsocketListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
@@ -82,7 +82,7 @@ public class ExtensionInformationUtil {
     public static @Nullable Listener getListenerFromChannel(final @NotNull Channel channel) {
 
         Preconditions.checkNotNull(channel, "channel must never be null");
-        final com.hivemq.configuration.service.entity.Listener hiveMQListener =
+        final com.hivemq.config.entity.Listener hiveMQListener =
                 Connection.of(channel).getConnectedListener();
         if (hiveMQListener == null) {
             return null;
@@ -92,7 +92,7 @@ public class ExtensionInformationUtil {
 
     }
 
-    public static @NotNull ListenerType listenerTypeFromInstance(final @NotNull com.hivemq.configuration.service.entity.Listener hiveMQListener) {
+    public static @NotNull ListenerType listenerTypeFromInstance(final @NotNull com.hivemq.config.entity.Listener hiveMQListener) {
 
         if (hiveMQListener instanceof TlsTcpListener) {
             return ListenerType.TLS_TCP_LISTENER;

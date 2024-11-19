@@ -15,7 +15,7 @@
  */
 package util;
 
-import com.hivemq.configuration.service.entity.Tls;
+import com.hivemq.config.entity.Tls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

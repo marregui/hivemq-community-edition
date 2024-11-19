@@ -17,7 +17,7 @@ package com.hivemq.security.ssl;
 
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.netty.ChannelHandlerNames;
-import com.hivemq.configuration.service.entity.Tls;
+import com.hivemq.config.entity.Tls;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.security.auth.SslClientCertificate;

@@ -17,10 +17,10 @@ package com.hivemq.bootstrap.netty;
 
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
-import com.hivemq.configuration.service.ConfigurationService;
-import com.hivemq.configuration.service.MqttConfigurationService;
-import com.hivemq.configuration.service.RestrictionsConfigurationService;
-import com.hivemq.configuration.service.entity.Listener;
+import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.entity.Listener;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.logging.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;

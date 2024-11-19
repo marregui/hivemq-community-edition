@@ -16,7 +16,7 @@
 package com.hivemq.util;
 
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.configuration.info.SystemInformation;
+import com.hivemq.config.SystemInformation;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;

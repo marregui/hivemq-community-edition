@@ -23,8 +23,8 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
-import com.hivemq.configuration.service.ConfigurationService;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.auth.ModifiableDefaultPermissions;
@@ -86,7 +86,7 @@ import static com.hivemq.bootstrap.netty.ChannelHandlerNames.MQTT_5_FLOW_CONTROL
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.MQTT_KEEPALIVE_IDLE_HANDLER;
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.MQTT_MESSAGE_BARRIER;
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.MQTT_PUBLISH_FLOW_HANDLER;
-import static com.hivemq.configuration.service.InternalConfigurations.AUTH_DENY_UNAUTHENTICATED_CONNECTIONS;
+import static com.hivemq.config.InternalConfigurations.AUTH_DENY_UNAUTHENTICATED_CONNECTIONS;
 import static com.hivemq.mqtt.message.connack.CONNACK.KEEP_ALIVE_NOT_SET;
 import static com.hivemq.mqtt.message.connack.Mqtt5CONNACK.DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT;
 

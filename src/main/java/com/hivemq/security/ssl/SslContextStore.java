@@ -23,7 +23,7 @@ import com.google.common.hash.Hashing;
 import com.google.common.hash.PrimitiveSink;
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.configuration.service.entity.Tls;
+import com.hivemq.config.entity.Tls;
 import com.hivemq.UnrecoverableException;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.security.exception.SslException;
@@ -44,8 +44,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import static com.hivemq.configuration.service.InternalConfigurations.SSL_RELOAD_ENABLED;
-import static com.hivemq.configuration.service.InternalConfigurations.SSL_RELOAD_INTERVAL_SEC;
+import static com.hivemq.config.InternalConfigurations.SSL_RELOAD_ENABLED;
+import static com.hivemq.config.InternalConfigurations.SSL_RELOAD_INTERVAL_SEC;
 
 @LazySingleton
 public class SslContextStore {

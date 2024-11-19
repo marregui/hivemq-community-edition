@@ -16,7 +16,7 @@
 package com.hivemq.persistence.payload;
 
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;

@@ -15,9 +15,9 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.configuration.service.ConfigurationService;
-import com.hivemq.configuration.service.RestrictionsConfigurationService;
-import com.hivemq.configuration.service.entity.WebsocketListener;
+import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.entity.WebsocketListener;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.security.ssl.NonSslHandler;
 import io.netty.channel.ChannelPipeline;

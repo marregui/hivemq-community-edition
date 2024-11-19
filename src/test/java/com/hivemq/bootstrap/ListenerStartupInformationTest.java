@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap;
 
-import com.hivemq.configuration.service.entity.TcpListener;
+import com.hivemq.config.entity.TcpListener;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

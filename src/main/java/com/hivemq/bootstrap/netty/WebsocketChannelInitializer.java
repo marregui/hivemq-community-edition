@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.configuration.service.entity.WebsocketListener;
+import com.hivemq.config.entity.WebsocketListener;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.security.ssl.NonSslHandler;
 import com.hivemq.websocket.WebSocketInitializer;

@@ -18,7 +18,7 @@ package com.hivemq.codec.encoder.mqtt5;
 import com.google.common.base.Preconditions;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.MqttEncoder;
-import com.hivemq.configuration.service.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.event.PublishDroppedEvent;
 import com.hivemq.mqtt.message.Message;

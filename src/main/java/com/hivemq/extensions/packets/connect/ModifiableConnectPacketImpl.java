@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.connect;
 
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
-import com.hivemq.configuration.service.ConfigurationService;
+import com.hivemq.config.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

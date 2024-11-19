@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.message.publish;
 
-import com.hivemq.configuration.entity.mqtt.MqttConfigurationDefaults;
+import com.hivemq.config.entity.MqttConfigurationDefaults;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;

@@ -16,8 +16,8 @@
 package com.hivemq.codec.decoder;
 
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.configuration.service.ConfigurationService;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.ConfigurationService;
+import com.hivemq.config.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;

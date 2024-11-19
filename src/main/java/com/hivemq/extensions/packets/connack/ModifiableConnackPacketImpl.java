@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.connack;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.configuration.service.ConfigurationService;
+import com.hivemq.config.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

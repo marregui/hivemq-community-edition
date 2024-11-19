@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.configuration.service.entity.Listener;
+import com.hivemq.config.entity.Listener;
 import org.jetbrains.annotations.NotNull;
 
 /**

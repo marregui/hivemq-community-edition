@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.handler.publish;
 
 import com.codahale.metrics.Counter;
-import com.hivemq.configuration.service.InternalConfigurations;
+import com.hivemq.config.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.metrics.MetricsHolder;

@@ -63,7 +63,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.hivemq.configuration.service.InternalConfigurations.MQTT_ALLOW_DOLLAR_TOPICS;
+import static com.hivemq.config.InternalConfigurations.MQTT_ALLOW_DOLLAR_TOPICS;
 
 /**
  * @author Florian Limpöck

@@ -38,7 +38,7 @@ import javax.inject.Singleton;
 import java.util.function.Supplier;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.hivemq.configuration.service.InternalConfigurations.EXTENSION_TASK_QUEUE_EXECUTOR_THREADS_COUNT;
+import static com.hivemq.config.InternalConfigurations.EXTENSION_TASK_QUEUE_EXECUTOR_THREADS_COUNT;
 
 
 @Singleton

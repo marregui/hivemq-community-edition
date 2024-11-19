@@ -17,7 +17,7 @@ package com.hivemq.websocket;
 
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
-import com.hivemq.configuration.service.entity.Listener;
+import com.hivemq.config.entity.Listener;
 import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
 import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;

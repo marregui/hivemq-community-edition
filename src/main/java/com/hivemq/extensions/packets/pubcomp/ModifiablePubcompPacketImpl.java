@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.packets.pubcomp;
 
-import com.hivemq.configuration.service.ConfigurationService;
+import com.hivemq.config.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.pubcomp.ModifiablePubcompPacket;

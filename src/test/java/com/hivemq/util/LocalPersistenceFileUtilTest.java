@@ -19,7 +19,7 @@ import com.google.common.io.Files;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
-import com.hivemq.configuration.info.SystemInformation;
+import com.hivemq.config.SystemInformation;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Rule;

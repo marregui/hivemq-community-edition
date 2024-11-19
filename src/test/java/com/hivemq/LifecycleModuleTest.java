@@ -15,14 +15,12 @@
  */
 package com.hivemq;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.ProvisionException;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
-import com.hivemq.configuration.info.SystemInformation;
 import org.junit.Before;
 import org.junit.Test;
 

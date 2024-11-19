@@ -16,7 +16,7 @@
 package com.hivemq.bootstrap;
 
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.configuration.service.entity.Listener;
+import com.hivemq.config.entity.Listener;
 import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

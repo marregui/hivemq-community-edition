@@ -19,7 +19,7 @@ package com.hivemq.extensions;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.ShutdownHooks;
-import com.hivemq.configuration.info.SystemInformation;
+import com.hivemq.config.SystemInformation;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.loader.ExtensionLifecycleHandler;
 import com.hivemq.extensions.loader.ExtensionLoader;

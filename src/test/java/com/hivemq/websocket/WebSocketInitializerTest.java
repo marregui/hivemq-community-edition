@@ -16,7 +16,7 @@
 package com.hivemq.websocket;
 
 import com.google.common.collect.Lists;
-import com.hivemq.configuration.service.entity.WebsocketListener;
+import com.hivemq.config.entity.WebsocketListener;
 import io.netty.channel.embedded.EmbeddedChannel;
 import org.junit.Before;
 import org.junit.Test;

@@ -97,7 +97,6 @@ public class ExtensionModule extends SingletonModule<Class<ExtensionModule>> {
 
     @Override
     protected void configure() {
-
         bind(ExtensionBootstrap.class).to(ExtensionBootstrapImpl.class);
         bind(ExtensionStaticInitializer.class).to(ExtensionStaticInitializerImpl.class);
         bind(HiveMQExtensionFactory.class).to(HiveMQExtensionFactoryImpl.class);
@@ -107,7 +106,6 @@ public class ExtensionModule extends SingletonModule<Class<ExtensionModule>> {
         bind(Authenticators.class).to(AuthenticatorsImpl.class);
         bind(Authorizers.class).to(AuthorizersImpl.class);
         bind(SecurityRegistry.class).to(SecurityRegistryImpl.class);
-
         bind(ExecutorService.class).annotatedWith(PluginStartStop.class)
                 .toProvider(ExtensionStartStopExecutorProvider.class)
                 .in(LazySingleton.class);

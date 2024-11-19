@@ -23,11 +23,9 @@ import com.google.inject.Injector;
 import com.google.inject.ProvisionException;
 import com.google.inject.Stage;
 import com.google.inject.spi.Message;
-import com.hivemq.bootstrap.HiveMQMainModule;
 import com.hivemq.bootstrap.HiveMQNettyBootstrap;
 import com.hivemq.bootstrap.ListenerStartupInformation;
 import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
-import com.hivemq.bootstrap.netty.NettyModule;
 import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.ioc.ConfigurationFileProvider;
 import com.hivemq.configuration.ioc.ConfigurationModule;
@@ -45,13 +43,8 @@ import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
 import com.hivemq.extensions.ExtensionBootstrap;
 import com.hivemq.extensions.ioc.ExtensionModule;
-import com.hivemq.metrics.ioc.MetricsModule;
-import com.hivemq.mqtt.ioc.MQTTHandlerModule;
-import com.hivemq.mqtt.ioc.MQTTServiceModule;
 import com.hivemq.persistence.ioc.PersistenceMigrationModule;
-import com.hivemq.persistence.ioc.PersistenceModule;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
-import com.hivemq.security.ioc.SecurityModule;
 import com.hivemq.util.Checkpoints;
 import com.hivemq.util.EnvVarUtil;
 import org.jetbrains.annotations.NotNull;
@@ -126,21 +119,18 @@ public final class HiveMQServer {
         metricRegistry.addListener(new MetricRegistryLogger());
         final LifecycleModule lifecycle = new LifecycleModule();
         final LazySingletonModule singletons = new LazySingletonModule();
+
+
         final Injector persistence = Guice.createInjector(Stage.PRODUCTION,
                 Arrays.asList(lifecycle, singletons, configuration, new PersistenceMigrationModule(metricRegistry)));
         persistence.getInstance(PersistenceStartup.class).finish();
+
+
         final Injector injector = Guice.createInjector(Stage.PRODUCTION,
                 Arrays.asList(lifecycle,
                         singletons,
                         configuration,
-                        new NettyModule(),
-                        new HiveMQMainModule(),
-                        new MQTTHandlerModule(persistence),
-                        new PersistenceModule(persistence),
-                        new MetricsModule(metricRegistry, persistence),
-                        new ThrottlingModule(),
-                        new MQTTServiceModule(),
-                        new SecurityModule(),
+                        new UberModule(persistence, metricRegistry),
                         new ExtensionModule()));
 
         // start

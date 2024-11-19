@@ -45,8 +45,6 @@ public class RestrictionConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         assertEquals(500, restrictionsConfigurationService.maxConnections());
         assertEquals(400, restrictionsConfigurationService.maxClientIdLength());
         assertEquals(400, restrictionsConfigurationService.maxTopicLength());
@@ -69,8 +67,6 @@ public class RestrictionConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         assertEquals(MAX_CONNECTIONS_DEFAULT, restrictionsConfigurationService.maxConnections());
         assertEquals(MAX_CLIENT_ID_LENGTH_DEFAULT, restrictionsConfigurationService.maxClientIdLength());
         assertEquals(MAX_TOPIC_LENGTH_DEFAULT, restrictionsConfigurationService.maxTopicLength());
@@ -91,8 +87,6 @@ public class RestrictionConfiguratorTest extends AbstractConfigurationTest {
                 "</restrictions>" +
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        reader.applyConfig();
 
         assertEquals(500, restrictionsConfigurationService.maxConnections());
         assertEquals(MAX_CLIENT_ID_LENGTH_DEFAULT, restrictionsConfigurationService.maxClientIdLength());

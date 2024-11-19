@@ -17,7 +17,7 @@ package com.hivemq.bootstrap.netty;
 
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.MqttConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.entity.Listener;
@@ -65,7 +65,7 @@ public class AbstractChannelInitializerTest {
 
     private final @NotNull SocketChannel socketChannel = mock(SocketChannel.class);
     private final @NotNull ChannelDependencies channelDependencies = mock(ChannelDependencies.class);
-    private final @NotNull FullConfigurationService configurationService = mock(FullConfigurationService.class);
+    private final @NotNull ConfigurationService configurationService = mock(ConfigurationService.class);
     private final @NotNull MqttConfigurationService mqttConfigurationService = mock(MqttConfigurationService.class);
     private final @NotNull ChannelPipeline pipeline = mock(ChannelPipeline.class);
     private final @NotNull RestrictionsConfigurationService restrictionsConfigurationService =

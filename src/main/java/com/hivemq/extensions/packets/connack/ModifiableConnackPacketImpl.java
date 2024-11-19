@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.connack;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,13 +63,13 @@ public class ModifiableConnackPacketImpl implements ModifiableConnackPacket {
     private @Nullable String reasonString;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private final boolean requestResponseInformation;
     private boolean modified = false;
 
     public ModifiableConnackPacketImpl(
             final @NotNull ConnackPacketImpl packet,
-            final @NotNull FullConfigurationService configurationService,
+            final @NotNull ConfigurationService configurationService,
             final boolean requestResponseInformation) {
 
         reasonCode = packet.reasonCode;

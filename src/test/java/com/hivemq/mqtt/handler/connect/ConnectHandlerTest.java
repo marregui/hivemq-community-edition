@@ -25,7 +25,7 @@ import com.hivemq.bootstrap.ClientState;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
 import com.hivemq.bootstrap.netty.ChannelHandlerNames;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.configuration.service.entity.Listener;
 import org.jetbrains.annotations.NotNull;
@@ -144,7 +144,7 @@ public class ConnectHandlerTest {
     @Mock
     private PluginAuthenticatorServiceImpl internalAuthServiceImpl;
 
-    private FullConfigurationService configurationService;
+    private ConfigurationService configurationService;
     private MqttConnacker mqttConnacker;
     private ChannelHandlerContext ctx;
     private ConnectHandler handler;

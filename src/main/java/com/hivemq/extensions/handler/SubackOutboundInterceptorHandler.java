@@ -16,7 +16,7 @@
 package com.hivemq.extensions.handler;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionInformation;
@@ -55,14 +55,14 @@ public class SubackOutboundInterceptorHandler {
 
     private static final Logger log = LoggerFactory.getLogger(SubackOutboundInterceptorHandler.class);
 
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private final @NotNull PluginOutPutAsyncer asyncer;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull PluginTaskExecutorService executorService;
 
     @Inject
     public SubackOutboundInterceptorHandler(
-            final @NotNull FullConfigurationService configurationService,
+            final @NotNull ConfigurationService configurationService,
             final @NotNull PluginOutPutAsyncer asyncer,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull PluginTaskExecutorService executorService) {

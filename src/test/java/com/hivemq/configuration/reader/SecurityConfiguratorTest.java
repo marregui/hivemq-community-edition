@@ -44,8 +44,6 @@ public class SecurityConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         assertFalse(securityConfigurationService.validateUTF8());
         assertFalse(securityConfigurationService.allowServerAssignedClientId());
         assertTrue(securityConfigurationService.payloadFormatValidation());
@@ -58,8 +56,6 @@ public class SecurityConfiguratorTest extends AbstractConfigurationTest {
         final String contents = "<hivemq>" + "</hivemq>";
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        reader.applyConfig();
 
         assertTrue(securityConfigurationService.validateUTF8());
         assertTrue(securityConfigurationService.allowServerAssignedClientId());

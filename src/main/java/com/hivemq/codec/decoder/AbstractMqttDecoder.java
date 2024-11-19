@@ -20,7 +20,7 @@ import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.MqttBinaryData;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,7 +50,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
 
     protected static final int DISCONNECTED = -1;
 
-    protected final @NotNull FullConfigurationService configurationService;
+    protected final @NotNull ConfigurationService configurationService;
     protected final @NotNull MqttServerDisconnector disconnector;
 
     protected final boolean validateUTF8;
@@ -60,7 +60,7 @@ public abstract class AbstractMqttDecoder<T extends Message> extends MqttDecoder
 
     protected AbstractMqttDecoder(
             final @NotNull MqttServerDisconnector disconnector,
-            final @NotNull FullConfigurationService configurationService) {
+            final @NotNull ConfigurationService configurationService) {
         this.configurationService = configurationService;
         this.disconnector = disconnector;
         validateUTF8 = configurationService.securityConfiguration().validateUTF8();

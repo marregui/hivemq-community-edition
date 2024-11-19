@@ -18,7 +18,7 @@ package com.hivemq.codec.decoder;
 import com.google.common.base.Utf8;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -38,7 +38,7 @@ public abstract class AbstractMqttPublishDecoder<T extends Message> extends Abst
 
     protected AbstractMqttPublishDecoder(
             final @NotNull MqttServerDisconnector disconnector,
-            final @NotNull FullConfigurationService configurationService) {
+            final @NotNull ConfigurationService configurationService) {
         super(disconnector, configurationService);
     }
 

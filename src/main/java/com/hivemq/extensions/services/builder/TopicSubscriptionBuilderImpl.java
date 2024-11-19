@@ -16,7 +16,7 @@
 package com.hivemq.extensions.services.builder;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.MqttConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
@@ -55,7 +55,7 @@ public class TopicSubscriptionBuilderImpl implements TopicSubscriptionBuilder {
     private final @NotNull SecurityConfigurationService securityConfigurationService;
 
     @Inject
-    public TopicSubscriptionBuilderImpl(final @NotNull FullConfigurationService configurationService) {
+    public TopicSubscriptionBuilderImpl(final @NotNull ConfigurationService configurationService) {
         this.mqttConfig = configurationService.mqttConfiguration();
         this.restrictionsConfig = configurationService.restrictionsConfiguration();
         this.securityConfigurationService = configurationService.securityConfiguration();

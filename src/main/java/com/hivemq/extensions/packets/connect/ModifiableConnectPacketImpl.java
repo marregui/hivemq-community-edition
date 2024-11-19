@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.connect;
 
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,11 +63,11 @@ public class ModifiableConnectPacketImpl implements ModifiableConnectPacket {
     private @Nullable ModifiableWillPublishImpl willPublish;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private boolean modified = false;
 
     public ModifiableConnectPacketImpl(
-            final @NotNull ConnectPacketImpl packet, final @NotNull FullConfigurationService configurationService) {
+            final @NotNull ConnectPacketImpl packet, final @NotNull ConfigurationService configurationService) {
 
         mqttVersion = packet.mqttVersion;
         clientId = packet.clientId;

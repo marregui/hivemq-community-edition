@@ -20,7 +20,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.service.ConfigurationService;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.MqttConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
@@ -49,7 +49,7 @@ public class ConfigurationModuleTest {
         MockitoAnnotations.initMocks(this);
 
         testConfigurationBootstrap = new TestConfigurationBootstrap();
-        final FullConfigurationService fullConfigurationService =
+        final ConfigurationService fullConfigurationService =
                 testConfigurationBootstrap.getFullConfigurationService();
 
         injector = Guice.createInjector(new ConfigurationModule(fullConfigurationService),
@@ -105,7 +105,7 @@ public class ConfigurationModuleTest {
     public void test_configuration_service_same_as_full_configuration_service() throws Exception {
 
         final ConfigurationService instance = injector.getInstance(ConfigurationService.class);
-        final FullConfigurationService instance2 = injector.getInstance(FullConfigurationService.class);
+        final ConfigurationService instance2 = injector.getInstance(ConfigurationService.class);
 
         assertSame(instance, instance2);
         assertSame(testConfigurationBootstrap.getFullConfigurationService(), instance);
@@ -114,7 +114,7 @@ public class ConfigurationModuleTest {
     @Test
     public void test_configuration_service_bindings_same_as_direct_binding() throws Exception {
 
-        final FullConfigurationService configurationService = injector.getInstance(FullConfigurationService.class);
+        final ConfigurationService configurationService = injector.getInstance(ConfigurationService.class);
 
         assertSame(configurationService.listenerConfiguration(),
                 injector.getInstance(ListenerConfigurationService.class));

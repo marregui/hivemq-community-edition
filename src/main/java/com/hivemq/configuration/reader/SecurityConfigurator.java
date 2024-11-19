@@ -28,7 +28,7 @@ public class SecurityConfigurator {
         this.securityConfigurationService = securityConfigurationService;
     }
 
-    void setSecurityConfig(@NotNull final SecurityConfigEntity securityConfigEntity) {
+    public void setSecurityConfig(@NotNull final SecurityConfigEntity securityConfigEntity) {
         securityConfigurationService.setAllowServerAssignedClientId(securityConfigEntity.getAllowEmptyClientIdEntity()
                 .isEnabled());
         securityConfigurationService.setValidateUTF8(securityConfigEntity.getUtf8ValidationEntity().isEnabled());

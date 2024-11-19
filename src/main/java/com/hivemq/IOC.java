@@ -32,7 +32,7 @@ import com.hivemq.bootstrap.netty.NettyConfiguration;
 import com.hivemq.bootstrap.netty.NettyConfigurationProvider;
 import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.ioc.ConfigurationModule;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.extensions.ioc.ExtensionModule;
@@ -105,7 +105,7 @@ public class IOC extends SingletonModule<Class<IOC>> {
     private final @NotNull ConfigurationModule configuration;
     private @Nullable Injector injector;
 
-    public IOC(final @NotNull FullConfigurationService config) throws InterruptedException {
+    public IOC(final @NotNull ConfigurationService config) throws InterruptedException {
         super(IOC.class);
         configuration = new ConfigurationModule(config);
         metricRegistry = new MetricRegistry();

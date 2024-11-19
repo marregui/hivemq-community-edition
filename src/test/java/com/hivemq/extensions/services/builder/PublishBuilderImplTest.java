@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.builder;
 
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
 import com.hivemq.extension.sdk.api.packets.publish.PayloadFormatIndicator;
@@ -38,7 +38,7 @@ import static org.junit.Assert.assertTrue;
 @SuppressWarnings("NullabilityAnnotations")
 public class PublishBuilderImplTest {
 
-    private FullConfigurationService configurationService;
+    private ConfigurationService configurationService;
 
     @Before
     public void before() {

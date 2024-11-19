@@ -20,7 +20,7 @@ import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5ConnectDecoder;
 import com.hivemq.configuration.HivemqId;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;
@@ -45,7 +45,7 @@ public class MqttConnectDecoder {
     @Inject
     public MqttConnectDecoder(
             final @NotNull MqttConnacker mqttConnacker,
-            final @NotNull FullConfigurationService fullConfigurationService,
+            final @NotNull ConfigurationService fullConfigurationService,
             final @NotNull HivemqId hiveMQId,
             final @NotNull ClientIds clientIds) {
         this.mqttConnacker = mqttConnacker;

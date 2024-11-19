@@ -19,7 +19,7 @@ import com.hivemq.codec.decoder.MqttConnectDecoder;
 import com.hivemq.codec.decoder.MqttDecoders;
 import com.hivemq.codec.encoder.EncoderFactory;
 import com.hivemq.ShutdownHooks;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.handler.ClientLifecycleEventHandler;
@@ -73,7 +73,7 @@ public class ChannelDependenciesTest {
     private @NotNull ChannelGroup channelGroup;
 
     @Mock
-    private @NotNull FullConfigurationService fullConfigurationService;
+    private @NotNull ConfigurationService fullConfigurationService;
 
     @Mock
     private @NotNull GlobalTrafficShapingHandler globalTrafficShapingHandler;

@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.builder;
 
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.subscribe.RetainHandling;
@@ -40,7 +40,7 @@ import static org.junit.Assert.assertTrue;
 @SuppressWarnings("NullabilityAnnotations")
 public class TopicSubscriptionBuilderImplTest {
 
-    private FullConfigurationService fullConfigurationService;
+    private ConfigurationService fullConfigurationService;
 
     private TopicSubscriptionBuilder topicSubscriptionBuilder;
 

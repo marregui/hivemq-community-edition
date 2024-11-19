@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.entity.TcpListener;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
@@ -51,7 +51,7 @@ public class TcpChannelInitializerTest {
     private MqttServerDisconnectorImpl mqttServerDisconnector;
 
     @Mock
-    private FullConfigurationService fullConfigurationService;
+    private ConfigurationService fullConfigurationService;
 
     @Mock
     private RestrictionsConfigurationService restrictionsConfigurationService;

@@ -16,7 +16,7 @@
 package com.hivemq.extensions.services.builder;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
@@ -53,7 +53,7 @@ import static org.junit.Assert.assertTrue;
 public class RetainedPublishBuilderImplTest {
 
     private RetainedPublishBuilder retainedPublishBuilder;
-    private FullConfigurationService configurationService;
+    private ConfigurationService configurationService;
 
     @Before
     public void setUp() throws Exception {

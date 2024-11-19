@@ -23,7 +23,7 @@ import com.hivemq.bootstrap.ClientState;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
 import com.hivemq.bootstrap.netty.ChannelHandlerNames;
 import com.hivemq.codec.decoder.MQTTMessageDecoder;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
 import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
@@ -79,7 +79,7 @@ public class PluginAuthenticatorServiceImplTest {
 
     private final @NotNull MqttConnacker mqttConnacker = mock(MqttConnacker.class);
     private final @NotNull MqttServerDisconnector mqttServerDisconnector = mock(MqttServerDisconnector.class);
-    private final @NotNull FullConfigurationService configurationService = mock(FullConfigurationService.class);
+    private final @NotNull ConfigurationService configurationService = mock(ConfigurationService.class);
     private final @NotNull Authenticators authenticators = mock(Authenticators.class);
     private final @NotNull ChannelDependencies channelDependencies = mock(ChannelDependencies.class);
     private final @NotNull PluginOutPutAsyncer asyncer = mock(PluginOutPutAsyncer.class);

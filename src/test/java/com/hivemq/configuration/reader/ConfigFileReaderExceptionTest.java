@@ -34,7 +34,6 @@ public class ConfigFileReaderExceptionTest extends AbstractConfigurationTest {
         doAnswer(invocation -> {
             throw new UnrecoverableException();
         }).when(envVarUtil).replaceEnvironmentVariablePlaceholders(any(String.class));
-        reader.applyConfig();
     }
 
 }

@@ -68,8 +68,6 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         final TlsTcpListener tlsTcpListener = listenerConfigurationService.getTlsTcpListeners().get(0);
 
         assertEquals(8883, tlsTcpListener.getPort());
@@ -116,8 +114,6 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         final TlsTcpListener tlsTcpListener = listenerConfigurationService.getTlsTcpListeners().get(0);
 
         assertEquals(8883, tlsTcpListener.getPort());
@@ -158,8 +154,6 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         final TcpListener tcpListener1 = listenerConfigurationService.getTcpListeners().get(0);
         final TcpListener tcpListener2 = listenerConfigurationService.getTcpListeners().get(1);
         final TcpListener tcpListener3 = listenerConfigurationService.getTcpListeners().get(2);
@@ -184,8 +178,6 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         final TcpListener tcpListener = listenerConfigurationService.getTcpListeners().get(0);
 
         assertEquals(1883, tcpListener.getPort());
@@ -206,8 +198,6 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        reader.applyConfig();
 
         final TcpListener tcpListener = listenerConfigurationService.getTcpListeners().get(0);
 
@@ -233,8 +223,6 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        reader.applyConfig();
 
         final WebsocketListener websocketListener = listenerConfigurationService.getWebsocketListeners().get(0);
         assertEquals(8000, websocketListener.getPort());
@@ -275,8 +263,6 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        reader.applyConfig();
 
         final TlsWebsocketListener websocketListener = listenerConfigurationService.getTlsWebsocketListeners().get(0);
         assertEquals(8000, websocketListener.getPort());

@@ -18,7 +18,7 @@ package com.hivemq.codec.decoder.mqtt5;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.ProtocolVersion;
@@ -376,7 +376,7 @@ public class Mqtt5DisconnectDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void decode_disconnect_with_session_expiry_to_large() {
 
-        final FullConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setMaxSessionExpiryInterval(80);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));

@@ -19,7 +19,7 @@ package com.hivemq.extensions.handler;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.pubcomp.PubcompInboundInterceptor;
@@ -95,7 +95,7 @@ public class PubcompInterceptorHandlerTest {
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
         when(extension.getId()).thenReturn("extension");
 
-        final FullConfigurationService configurationService =
+        final ConfigurationService configurationService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
         final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         final PluginTaskExecutorService pluginTaskExecutorService =

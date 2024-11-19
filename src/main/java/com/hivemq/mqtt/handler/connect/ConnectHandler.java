@@ -23,7 +23,7 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -101,7 +101,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
 
     private final @NotNull ClientSessionPersistence clientSessionPersistence;
     private final @NotNull ConnectionPersistence connectionPersistence;
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private final @NotNull Provider<PublishFlowHandler> publishFlowHandlerProvider;
     private final @NotNull Provider<FlowControlHandler> flowControlHandlerProvider;
     private final @NotNull MqttConnacker mqttConnacker;
@@ -125,7 +125,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
     public ConnectHandler(
             final @NotNull ClientSessionPersistence clientSessionPersistence,
             final @NotNull ConnectionPersistence connectionPersistence,
-            final @NotNull FullConfigurationService configurationService,
+            final @NotNull ConfigurationService configurationService,
             final @NotNull Provider<PublishFlowHandler> publishFlowHandlerProvider,
             final @NotNull Provider<FlowControlHandler> flowControlHandlerProvider,
             final @NotNull MqttConnacker mqttConnacker,

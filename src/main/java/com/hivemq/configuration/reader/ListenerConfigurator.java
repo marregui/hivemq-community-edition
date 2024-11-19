@@ -58,7 +58,7 @@ public class ListenerConfigurator {
         this.chosenNames = new ArrayList<>();
     }
 
-    void setListenerConfig(final @NotNull List<ListenerEntity> entities) {
+    public void setListenerConfig(final @NotNull List<ListenerEntity> entities) {
         final ImmutableList<Listener> listeners = convertListenerEntities(entities);
 
         for (final Listener listener : listeners) {

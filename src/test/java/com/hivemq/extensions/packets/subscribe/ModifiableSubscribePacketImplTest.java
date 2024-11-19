@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.subscribe;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.subscribe.RetainHandling;
@@ -38,7 +38,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiableSubscribePacketImplTest {
 
-    private @NotNull FullConfigurationService configurationService;
+    private @NotNull ConfigurationService configurationService;
 
     @Before
     public void setUp() throws Exception {

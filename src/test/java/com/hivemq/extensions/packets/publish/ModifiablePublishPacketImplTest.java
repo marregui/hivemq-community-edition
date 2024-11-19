@@ -18,7 +18,7 @@ package com.hivemq.extensions.packets.publish;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.publish.PayloadFormatIndicator;
@@ -44,7 +44,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiablePublishPacketImplTest {
 
-    private @NotNull FullConfigurationService configurationService;
+    private @NotNull ConfigurationService configurationService;
 
     @Before
     public void setUp() throws Exception {

@@ -17,7 +17,7 @@
 package com.hivemq.extensions.handler;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
@@ -61,7 +61,7 @@ public class PublishOutboundInterceptorHandler {
     private static final Logger log = LoggerFactory.getLogger(PublishOutboundInterceptorHandler.class);
 
     private final @NotNull PluginOutPutAsyncer asyncer;
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private final @NotNull PluginTaskExecutorService pluginTaskExecutorService;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull MessageDroppedService messageDroppedService;
@@ -69,7 +69,7 @@ public class PublishOutboundInterceptorHandler {
     @Inject
     public PublishOutboundInterceptorHandler(
             final @NotNull PluginOutPutAsyncer asyncer,
-            final @NotNull FullConfigurationService configurationService,
+            final @NotNull ConfigurationService configurationService,
             final @NotNull PluginTaskExecutorService pluginTaskExecutorService,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull MessageDroppedService messageDroppedService) {

@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.packets.pubcomp;
 
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.pubcomp.ModifiablePubcompPacket;
@@ -37,11 +37,11 @@ public class ModifiablePubcompPacketImpl implements ModifiablePubcompPacket {
     private @Nullable String reasonString;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private boolean modified = false;
 
     public ModifiablePubcompPacketImpl(
-            final @NotNull PubcompPacketImpl packet, final @NotNull FullConfigurationService configurationService) {
+            final @NotNull PubcompPacketImpl packet, final @NotNull ConfigurationService configurationService) {
 
         packetIdentifier = packet.packetIdentifier;
         reasonCode = packet.reasonCode;

@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.entity.WebsocketListener;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -50,7 +50,7 @@ public class WebsocketChannelInitializerTest {
     private MqttServerDisconnector disconnector;
 
     @Mock
-    private FullConfigurationService fullConfigurationService;
+    private ConfigurationService fullConfigurationService;
 
     @Mock
     private RestrictionsConfigurationService restrictionsConfigurationService;

@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.puback;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.puback.ModifiablePubackPacket;
@@ -39,11 +39,11 @@ public class ModifiablePubackPacketImpl implements ModifiablePubackPacket {
     private @Nullable String reasonString;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private boolean modified = false;
 
     public ModifiablePubackPacketImpl(
-            final @NotNull PubackPacketImpl packet, final @NotNull FullConfigurationService configurationService) {
+            final @NotNull PubackPacketImpl packet, final @NotNull ConfigurationService configurationService) {
 
         packetIdentifier = packet.packetIdentifier;
         reasonCode = packet.reasonCode;

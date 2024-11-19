@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.connect;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.connect.WillPublishPacket;
 import com.hivemq.extension.sdk.api.packets.general.MqttVersion;
@@ -42,7 +42,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiableConnectPacketImplTest {
 
-    private @NotNull FullConfigurationService configurationService;
+    private @NotNull ConfigurationService configurationService;
 
     @Before
     public void setUp() {

@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap.netty;
 
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.entity.Listener;
 import com.hivemq.configuration.service.entity.Tls;
@@ -81,7 +81,7 @@ public class TlsWebsocketChannelInitializerTest {
     private EventLog eventLog;
 
     @Mock
-    private FullConfigurationService fullConfigurationService;
+    private ConfigurationService fullConfigurationService;
 
     @Mock
     private RestrictionsConfigurationService restrictionsConfigurationService;

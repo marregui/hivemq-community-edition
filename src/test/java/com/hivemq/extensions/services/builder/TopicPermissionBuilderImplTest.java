@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.builder;
 
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.extension.sdk.api.auth.parameter.TopicPermission;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class TopicPermissionBuilderImplTest {
 
     private TopicPermissionBuilderImpl topicPermissionBuilder;
 
-    private FullConfigurationService configurationService;
+    private ConfigurationService configurationService;
 
     @Before
     public void setUp() throws Exception {

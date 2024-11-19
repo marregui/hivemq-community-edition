@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder.mqtt5;
 
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.Message;
 import com.hivemq.mqtt.message.ProtocolVersion;
@@ -908,7 +908,7 @@ public class Mqtt5SubscribeDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void test_decode_failed_subscription_identifier_disabled() {
 
-        final FullConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setSubscriptionIdentifierEnabled(false);
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
         final byte[] encoded = {

@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.configuration.HivemqId;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
@@ -100,7 +100,7 @@ public class ConnectInboundInterceptorHandlerTest {
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
         when(extension.getId()).thenReturn("extension");
 
-        final FullConfigurationService configurationService =
+        final ConfigurationService configurationService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
         final PluginOutPutAsyncer asyncer = new PluginOutputAsyncerImpl();
         final PluginTaskExecutorService pluginTaskExecutorService =

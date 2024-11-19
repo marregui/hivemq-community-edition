@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.disconnect;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,13 +46,13 @@ public class ModifiableInboundDisconnectPacketImpl implements ModifiableInboundD
     private final @Nullable String serverReference;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private final long originalSessionExpiryInterval;
     private boolean modified = false;
 
     public ModifiableInboundDisconnectPacketImpl(
             final @NotNull DisconnectPacketImpl packet,
-            final @NotNull FullConfigurationService configurationService,
+            final @NotNull ConfigurationService configurationService,
             final long originalSessionExpiryInterval) {
 
         reasonCode = packet.reasonCode;

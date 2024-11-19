@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.pubrel;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.pubrel.PubrelReasonCode;
 import com.hivemq.extensions.packets.general.UserPropertiesImpl;
@@ -37,7 +37,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class ModifiablePubrelPacketImplTest {
 
-    private @NotNull FullConfigurationService configurationService;
+    private @NotNull ConfigurationService configurationService;
 
     @Before
     public void setUp() {

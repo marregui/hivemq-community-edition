@@ -19,6 +19,7 @@ import com.hivemq.configuration.entity.MqttConfigEntity;
 import com.hivemq.configuration.entity.RestrictionsEntity;
 import com.hivemq.configuration.entity.SecurityConfigEntity;
 import com.hivemq.configuration.info.SystemInformation;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.MqttConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
@@ -36,42 +37,28 @@ import static org.mockito.Mockito.verify;
 @SuppressWarnings("NullabilityAnnotations")
 public class ConfigFileReaderTest {
 
+    ConfigurationService reader;
     @Mock
     private MqttConfigurationService mqttConfigurationService;
-
     @Mock
     private RestrictionsConfigurationService restrictionsConfigurationService;
-
     @Mock
     private SecurityConfigurationService securityConfigurationService;
-
     @Mock
     private EnvVarUtil envVarUtil;
-
     @Mock
     private SystemInformation systemInformation;
-
     private ListenerConfigurationService listenerConfigurationService;
-
-    ConfigFileReader reader;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         listenerConfigurationService = new ListenerConfigurationServiceImpl();
-
-        final ConfigurationFile configurationFile = new ConfigurationFile(null);
-        reader = new ConfigFileReader(configurationFile,
-                new RestrictionConfigurator(restrictionsConfigurationService),
-                new SecurityConfigurator(securityConfigurationService),
-                envVarUtil,
-                new MqttConfigurator(mqttConfigurationService),
-                new ListenerConfigurator(listenerConfigurationService));
+        reader = new ConfigurationService();
     }
 
     @Test
     public void verify_mqtt_default_values() {
-        reader.applyConfig();
 
         final MqttConfigEntity defaultMqttValues = new MqttConfigEntity();
         verify(mqttConfigurationService).setQueuedMessagesStrategy(MqttConfigurationService.QueuedMessagesStrategy.valueOf(
@@ -107,10 +94,6 @@ public class ConfigFileReaderTest {
 
     @Test
     public void verify_restrictions_default_values() {
-
-
-        reader.applyConfig();
-
         final RestrictionsEntity defaultThrottlingValues = new RestrictionsEntity();
 
         verify(restrictionsConfigurationService).setMaxConnections(defaultThrottlingValues.getMaxConnections());
@@ -122,10 +105,6 @@ public class ConfigFileReaderTest {
 
     @Test
     public void verify_security_default_values() {
-
-
-        reader.applyConfig();
-
         final SecurityConfigEntity defaultSecurityValues = new SecurityConfigEntity();
 
         verify(securityConfigurationService).setValidateUTF8(defaultSecurityValues.getUtf8ValidationEntity()

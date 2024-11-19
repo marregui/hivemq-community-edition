@@ -16,7 +16,7 @@
 package com.hivemq.extensions.services.builder;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.connect.WillPublishPacket;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -55,7 +55,7 @@ public class WillPublishBuilderImplTest {
 
     @Before
     public void setUp() throws Exception {
-        final FullConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
         willPublishBuilder = new WillPublishBuilderImpl(service);
     }
 
@@ -198,7 +198,7 @@ public class WillPublishBuilderImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_qos_not_allowed() {
-        final FullConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
         service.mqttConfiguration().setMaximumQos(QoS.AT_MOST_ONCE);
         willPublishBuilder = new WillPublishBuilderImpl(service);
         willPublishBuilder.qos(Qos.AT_LEAST_ONCE);
@@ -206,7 +206,7 @@ public class WillPublishBuilderImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_retain_not_allowed() {
-        final FullConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
         service.mqttConfiguration().setRetainedMessagesEnabled(false);
         willPublishBuilder = new WillPublishBuilderImpl(service);
         willPublishBuilder.retain(true);
@@ -214,7 +214,7 @@ public class WillPublishBuilderImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_topic_length_invalid() {
-        final FullConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService service = new TestConfigurationBootstrap().getFullConfigurationService();
         service.restrictionsConfiguration().setMaxTopicLength(5);
         willPublishBuilder = new WillPublishBuilderImpl(service);
         willPublishBuilder.topic("123456");

@@ -23,7 +23,7 @@ import com.hivemq.codec.decoder.AbstractMqttPublishDecoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
 import com.hivemq.configuration.HivemqId;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.TopicAliasLimiter;
@@ -63,7 +63,7 @@ public class Mqtt5PublishDecoder extends AbstractMqttPublishDecoder<Mqtt5PUBLISH
     public Mqtt5PublishDecoder(
             final @NotNull MqttServerDisconnector disconnector,
             final @NotNull HivemqId hiveMQId,
-            final @NotNull FullConfigurationService fullConfigurationService,
+            final @NotNull ConfigurationService fullConfigurationService,
             final @NotNull TopicAliasLimiter topicAliasLimiter) {
         super(disconnector, fullConfigurationService);
         this.hiveMQId = hiveMQId;

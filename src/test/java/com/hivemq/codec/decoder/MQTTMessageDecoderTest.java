@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder;
 
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import com.hivemq.mqtt.message.connack.CONNACK;
@@ -207,7 +207,7 @@ public class MQTTMessageDecoderTest {
     }
 
     private void testPublishPacketSizeTooLarge(final @NotNull ProtocolVersion protocolVersion) {
-        final FullConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setMaxPacketSize(10);
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
         clientConnection = new DummyClientConnection(channel, null);
@@ -240,7 +240,7 @@ public class MQTTMessageDecoderTest {
     }
 
     private void testConnectPacketSizeTooLarge(final byte[] connect) {
-        final FullConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setMaxPacketSize(10);
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
         clientConnection = new DummyClientConnection(channel, null);

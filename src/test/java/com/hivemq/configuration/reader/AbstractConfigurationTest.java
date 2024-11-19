@@ -45,7 +45,6 @@ public class AbstractConfigurationTest {
 
     ListenerConfigurationService listenerConfigurationService;
     File xmlFile;
-    ConfigFileReader reader;
     MqttConfigurationService mqttConfigurationService;
     RestrictionsConfigurationService restrictionsConfigurationService;
     SecurityConfigurationService securityConfigurationService;
@@ -61,12 +60,5 @@ public class AbstractConfigurationTest {
         restrictionsConfigurationService = new RestrictionsConfigurationServiceImpl();
 
         when(envVarUtil.replaceEnvironmentVariablePlaceholders(anyString())).thenCallRealMethod();
-        final ConfigurationFile configurationFile = new ConfigurationFile(xmlFile);
-        reader = new ConfigFileReader(configurationFile,
-                new RestrictionConfigurator(restrictionsConfigurationService),
-                new SecurityConfigurator(securityConfigurationService),
-                envVarUtil,
-                new MqttConfigurator(mqttConfigurationService),
-                new ListenerConfigurator(listenerConfigurationService));
     }
 }

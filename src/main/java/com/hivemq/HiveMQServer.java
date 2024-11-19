@@ -23,23 +23,11 @@ import com.google.inject.spi.Message;
 import com.hivemq.bootstrap.HiveMQNettyBootstrap;
 import com.hivemq.bootstrap.ListenerStartupInformation;
 import com.hivemq.configuration.info.SystemInformation;
-import com.hivemq.configuration.ioc.ConfigurationFileProvider;
-import com.hivemq.configuration.reader.ConfigFileReader;
-import com.hivemq.configuration.reader.ListenerConfigurator;
-import com.hivemq.configuration.reader.MqttConfigurator;
-import com.hivemq.configuration.reader.RestrictionConfigurator;
-import com.hivemq.configuration.reader.SecurityConfigurator;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.entity.Listener;
-import com.hivemq.configuration.service.impl.ConfigurationServiceImpl;
-import com.hivemq.configuration.service.impl.MqttConfigurationServiceImpl;
-import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImpl;
-import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
-import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
 import com.hivemq.extensions.ExtensionBootstrap;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.util.Checkpoints;
-import com.hivemq.util.EnvVarUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,25 +65,9 @@ public final class HiveMQServer {
         }
     }
 
-    private static @NotNull FullConfigurationService configure( ){
-        final FullConfigurationService config = new ConfigurationServiceImpl(new ListenerConfigurationServiceImpl(),
-                new MqttConfigurationServiceImpl(),
-                new RestrictionsConfigurationServiceImpl(),
-                new SecurityConfigurationServiceImpl());
-        final ConfigFileReader configReader =
-                new ConfigFileReader(ConfigurationFileProvider.get(SystemInformation.INSTANCE),
-                        new RestrictionConfigurator(config.restrictionsConfiguration()),
-                        new SecurityConfigurator(config.securityConfiguration()),
-                        new EnvVarUtil(),
-                        new MqttConfigurator(config.mqttConfiguration()),
-                        new ListenerConfigurator(config.listenerConfiguration()));
-        configReader.applyConfig();
-        return config;
-    }
-
     public static void main(final String @NotNull [] args) throws Exception {
         Logging.initLogging(SystemInformation.INSTANCE.getConfigFolder());
-        final IOC ioc = new IOC(configure());
+        final IOC ioc = new IOC(new ConfigurationService());
         final Injector injector = ioc.init();
 
         // start

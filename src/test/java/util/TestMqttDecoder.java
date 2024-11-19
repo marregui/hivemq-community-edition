@@ -30,7 +30,7 @@ import com.hivemq.codec.decoder.mqtt5.Mqtt5PubrelDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5SubscribeDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5UnsubscribeDecoder;
 import com.hivemq.configuration.HivemqId;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.TopicAliasLimiter;
 import com.hivemq.logging.EventLog;
@@ -49,14 +49,14 @@ import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_MA
 public class TestMqttDecoder {
 
     public static MQTTMessageDecoder create() {
-        final FullConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.securityConfiguration().setValidateUTF8(true);
         fullConfig.mqttConfiguration().setMaxSessionExpiryInterval(SESSION_EXPIRY_MAX);
         fullConfig.mqttConfiguration().setMaxMessageExpiryInterval(MESSAGE_EXPIRY_INTERVAL_MAX);
         return create(fullConfig);
     }
 
-    public static MQTTMessageDecoder create(final @NotNull FullConfigurationService fullConfigurationService) {
+    public static MQTTMessageDecoder create(final @NotNull ConfigurationService fullConfigurationService) {
 
         final EventLog eventLog = new EventLog();
         final HivemqId hiveMQId = new HivemqId();

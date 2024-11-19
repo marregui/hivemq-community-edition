@@ -46,8 +46,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         // Default is 10
         assertEquals(10, mqttConfigurationService.serverReceiveMaximum());
     }
@@ -100,8 +98,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
 
         assertEquals(100, mqttConfigurationService.maxQueuedMessages());
         assertEquals(3600, mqttConfigurationService.maxSessionExpiryInterval());
@@ -135,8 +131,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         assertTrue(mqttConfigurationService.topicAliasEnabled());
         assertEquals(1, mqttConfigurationService.topicAliasMaxPerClient());
 
@@ -154,8 +148,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "</mqtt> " +
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        reader.applyConfig();
 
         assertTrue(mqttConfigurationService.topicAliasEnabled());
         assertEquals(TOPIC_ALIAS_MAX_PER_CLIENT_MAXIMUM, mqttConfigurationService.topicAliasMaxPerClient());
@@ -175,8 +167,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         assertEquals(65535, mqttConfigurationService.serverReceiveMaximum());
     }
 
@@ -193,8 +183,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "    </mqtt\n>" +
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        reader.applyConfig();
 
         assertEquals(3, mqttConfigurationService.maxQueuedMessages());
     }
@@ -213,8 +201,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "    </mqtt\n>" +
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        reader.applyConfig();
 
         assertEquals(SESSION_EXPIRE_ON_DISCONNECT, mqttConfigurationService.maxSessionExpiryInterval());
         assertEquals(MAX_EXPIRY_INTERVAL_DEFAULT, mqttConfigurationService.maxMessageExpiryInterval());
@@ -236,8 +222,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         assertEquals(maxPacketSize, mqttConfigurationService.maxPacketSize());
     }
 
@@ -255,8 +239,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "</mqtt>\n" +
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        reader.applyConfig();
 
         assertEquals(maxPacketSize, mqttConfigurationService.maxPacketSize());
     }
@@ -276,8 +258,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "</mqtt>\n" +
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        reader.applyConfig();
 
         // We expect the default to be set -> 268435460 and not 268435461
         assertEquals(DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT, mqttConfigurationService.maxPacketSize());
@@ -299,8 +279,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         // We expect the default to be set -> 268435460 and not -1
         assertEquals(268435460, mqttConfigurationService.maxPacketSize());
     }
@@ -321,8 +299,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        reader.applyConfig();
-
         // We expect the default to be set -> 268435460 and not 0
         assertEquals(268435460, mqttConfigurationService.maxPacketSize());
     }
@@ -339,8 +315,6 @@ public class MqttConfiguratorTest extends AbstractConfigurationTest {
                 "</mqtt>\n" +
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        reader.applyConfig();
 
         // We expect the default to be set -> 268435460 and not 'im a string'
         assertEquals(268435460, mqttConfigurationService.maxPacketSize());

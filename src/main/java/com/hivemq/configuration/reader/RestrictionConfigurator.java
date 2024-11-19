@@ -46,7 +46,7 @@ public class RestrictionConfigurator {
     }
 
 
-    void setRestrictionsConfig(@NotNull final RestrictionsEntity restrictionsEntity) {
+    public void setRestrictionsConfig(@NotNull final RestrictionsEntity restrictionsEntity) {
         restrictionsConfigurationService.setMaxConnections(validateMaxConnections(restrictionsEntity.getMaxConnections()));
         restrictionsConfigurationService.setMaxClientIdLength(validateMaxClientIdLength(restrictionsEntity.getMaxClientIdLength()));
         restrictionsConfigurationService.setNoConnectIdleTimeout(validateNoConnectIdleTimeout(restrictionsEntity.getNoConnectIdleTimeout()));

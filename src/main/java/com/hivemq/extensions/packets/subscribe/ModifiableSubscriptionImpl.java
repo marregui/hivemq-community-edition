@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.subscribe;
 
 import com.google.common.base.Preconditions;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -40,12 +40,12 @@ public class ModifiableSubscriptionImpl implements ModifiableSubscription {
     private boolean retainAsPublished;
     private boolean noLocal;
 
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private boolean modified = false;
 
     public ModifiableSubscriptionImpl(
             final @NotNull SubscriptionImpl subscription,
-            final @NotNull FullConfigurationService configurationService) {
+            final @NotNull ConfigurationService configurationService) {
 
         topicFilter = subscription.topicFilter;
         qos = subscription.qos;

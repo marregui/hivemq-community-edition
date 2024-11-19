@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.subscribe;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 
 import com.hivemq.extension.sdk.api.packets.subscribe.ModifiableSubscribePacket;
@@ -40,10 +40,10 @@ public class ModifiableSubscribePacketImpl implements ModifiableSubscribePacket 
     private final int subscriptionIdentifier;
     private final int packetIdentifier;
 
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
 
     public ModifiableSubscribePacketImpl(
-            final @NotNull SubscribePacketImpl packet, final @NotNull FullConfigurationService configurationService) {
+            final @NotNull SubscribePacketImpl packet, final @NotNull ConfigurationService configurationService) {
 
         final ImmutableList.Builder<ModifiableSubscriptionImpl> builder = ImmutableList.builder();
         packet.subscriptions.forEach(subscription -> builder.add(new ModifiableSubscriptionImpl(subscription,

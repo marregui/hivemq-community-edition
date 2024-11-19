@@ -21,7 +21,7 @@ import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.ProtocolVersion;
@@ -167,7 +167,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     public void test_decode_topic_alias_exceeds_limit() {
 
 
-        final FullConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(47);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
@@ -197,7 +197,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     public void test_decode_topic_alias_override() {
 
 
-        final FullConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         InternalConfigurations.TOPIC_ALIAS_GLOBAL_MEMORY_HARD_LIMIT_BYTES.set(100);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
@@ -366,7 +366,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void test_decode_retain_not_supported() {
 
-        final FullConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setRetainedMessagesEnabled(false);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
@@ -428,7 +428,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void test_decode_messageExpiryInterval_higher_than_config() {
 
-        final FullConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
+        final ConfigurationService fullConfig = new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfig.mqttConfiguration().setMaxMessageExpiryInterval(100);
 
         channel = new EmbeddedChannel(TestMqttDecoder.create(fullConfig));
@@ -592,7 +592,7 @@ public class Mqtt5PublishDecoderTest extends AbstractMqtt5DecoderTest {
     @Test
     public void test_decode_PayloadUtf8NotWellFormed_returnsNull() {
 
-        final FullConfigurationService fullConfigurationService =
+        final ConfigurationService fullConfigurationService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
         fullConfigurationService.securityConfiguration().setPayloadFormatValidation(true);
 

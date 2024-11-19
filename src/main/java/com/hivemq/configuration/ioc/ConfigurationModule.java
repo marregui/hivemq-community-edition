@@ -18,7 +18,7 @@ package com.hivemq.configuration.ioc;
 import com.hivemq.bootstrap.SingletonModule;
 import com.hivemq.configuration.HivemqId;
 import com.hivemq.configuration.service.ConfigurationService;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.MqttConfigurationService;
 import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
@@ -27,11 +27,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class ConfigurationModule extends SingletonModule<Class<ConfigurationModule>> {
 
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private final @NotNull HivemqId hiveMQId;
 
     public ConfigurationModule(
-            final @NotNull FullConfigurationService configurationService) {
+            final @NotNull ConfigurationService configurationService) {
         super(ConfigurationModule.class);
         this.configurationService = configurationService;
         this.hiveMQId = new HivemqId();
@@ -48,7 +48,7 @@ public class ConfigurationModule extends SingletonModule<Class<ConfigurationModu
         bind(MqttConfigurationService.class).toInstance(configurationService.mqttConfiguration());
         bind(RestrictionsConfigurationService.class).toInstance(configurationService.restrictionsConfiguration());
         bind(ConfigurationService.class).toInstance(configurationService);
-        bind(FullConfigurationService.class).toInstance(configurationService);
+        bind(ConfigurationService.class).toInstance(configurationService);
         bind(SecurityConfigurationService.class).toInstance(configurationService.securityConfiguration());
     }
 }

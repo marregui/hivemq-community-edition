@@ -19,7 +19,7 @@ import com.google.common.primitives.ImmutableIntArray;
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.ShutdownHooks;
 import com.hivemq.configuration.HivemqId;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
 import com.hivemq.extension.sdk.api.packets.publish.PayloadFormatIndicator;
@@ -79,7 +79,7 @@ public class PublishServiceImplTest {
     private GlobalManagedExtensionExecutorService managedPluginExecutorService;
 
     private final HivemqId hiveMQId = new HivemqId();
-    private final FullConfigurationService fullConfigurationService =
+    private final ConfigurationService fullConfigurationService =
             new TestConfigurationBootstrap().getFullConfigurationService();
     private PublishServiceImpl publishService;
 

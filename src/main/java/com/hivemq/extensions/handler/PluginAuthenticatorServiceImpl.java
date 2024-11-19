@@ -21,7 +21,7 @@ import com.google.inject.Inject;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.parameter.AuthenticatorProviderInput;
@@ -105,7 +105,7 @@ public class PluginAuthenticatorServiceImpl implements PluginAuthenticatorServic
             final @NotNull MqttConnacker connacker,
             final @NotNull MqttServerDisconnector disconnector,
             final @NotNull MqttAuthSender authSender,
-            final @NotNull FullConfigurationService configurationService,
+            final @NotNull ConfigurationService configurationService,
             final @NotNull Authenticators authenticators,
             final @NotNull ChannelDependencies channelDependencies,
             final @NotNull PluginOutPutAsyncer asyncer,

@@ -18,7 +18,7 @@ package com.hivemq.extensions.loader;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.ImmutableMap;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.extension.sdk.api.ExtensionMain;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.events.EventRegistry;
@@ -114,7 +114,7 @@ public class ExtensionStaticInitializerImplTest {
 
     @Before
     public void before() {
-        final FullConfigurationService fullConfigurationService =
+        final ConfigurationService fullConfigurationService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
         metricRegistry = new MetricRegistry();
         initializerRegistry = new InitializerRegistryImpl(new InitializersImpl(hiveMQExtensions));

@@ -17,7 +17,7 @@ package com.hivemq.extensions.packets.unsuback;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.unsuback.ModifiableUnsubackPacket;
@@ -41,11 +41,11 @@ public class ModifiableUnsubackPacketImpl implements ModifiableUnsubackPacket {
     private final int packetIdentifier;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
 
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private boolean modified = false;
 
     public ModifiableUnsubackPacketImpl(
-            final @NotNull UnsubackPacketImpl packet, final @NotNull FullConfigurationService configurationService) {
+            final @NotNull UnsubackPacketImpl packet, final @NotNull ConfigurationService configurationService) {
 
         reasonCodes = packet.reasonCodes;
         reasonString = packet.reasonString;

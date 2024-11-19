@@ -17,7 +17,7 @@ package com.hivemq.extensions.packets.publish;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,11 +60,11 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
     private final long timestamp;
 
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private boolean modified = false;
 
     public ModifiableOutboundPublishImpl(
-            final @NotNull PublishPacketImpl packet, final @NotNull FullConfigurationService configurationService) {
+            final @NotNull PublishPacketImpl packet, final @NotNull ConfigurationService configurationService) {
 
         topic = packet.topic;
         qos = packet.qos;

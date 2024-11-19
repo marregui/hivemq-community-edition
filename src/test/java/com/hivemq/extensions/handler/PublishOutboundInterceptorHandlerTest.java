@@ -19,7 +19,7 @@ package com.hivemq.extensions.handler;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.interceptor.publish.PublishOutboundInterceptor;
 import com.hivemq.extension.sdk.api.interceptor.publish.parameter.PublishOutboundInput;
@@ -80,7 +80,7 @@ public class PublishOutboundInterceptorHandlerTest {
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
         ClientConnection.of(channel).setClientId("test_client");
 
-        final FullConfigurationService configurationService =
+        final ConfigurationService configurationService =
                 new TestConfigurationBootstrap().getFullConfigurationService();
         handler = new PublishOutboundInterceptorHandler(asyncer,
                 configurationService,

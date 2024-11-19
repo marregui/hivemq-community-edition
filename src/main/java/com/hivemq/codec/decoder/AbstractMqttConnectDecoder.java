@@ -16,7 +16,7 @@
 package com.hivemq.codec.decoder;
 
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,7 +49,7 @@ public abstract class AbstractMqttConnectDecoder extends MqttDecoder<CONNECT> {
 
     protected AbstractMqttConnectDecoder(
             final @NotNull MqttConnacker mqttConnacker,
-            final @NotNull FullConfigurationService configurationService,
+            final @NotNull ConfigurationService configurationService,
             final @NotNull ClientIds clientIds) {
         this.mqttConnacker = mqttConnacker;
         this.clientIds = clientIds;

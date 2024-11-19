@@ -16,7 +16,7 @@
 package com.hivemq.extensions.handler;
 
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
 import com.hivemq.extension.sdk.api.client.parameter.ClientInformation;
@@ -66,7 +66,7 @@ public class IncomingSubscribeHandler {
     private final @NotNull PluginOutPutAsyncer asyncer;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull PluginAuthorizerService authorizerService;
-    private final @NotNull FullConfigurationService configurationService;
+    private final @NotNull ConfigurationService configurationService;
     private final @NotNull MqttServerDisconnector mqttServerDisconnector;
 
     @Inject
@@ -75,7 +75,7 @@ public class IncomingSubscribeHandler {
             final @NotNull PluginOutPutAsyncer asyncer,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull PluginAuthorizerService authorizerService,
-            final @NotNull FullConfigurationService configurationService,
+            final @NotNull ConfigurationService configurationService,
             final @NotNull MqttServerDisconnector mqttServerDisconnector) {
 
         this.executorService = executorService;

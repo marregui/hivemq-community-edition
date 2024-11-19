@@ -46,7 +46,7 @@ public class MqttConfigurator {
     }
 
 
-    void setMqttConfig(@NotNull final MqttConfigEntity mqttConfigEntity) {
+    public void setMqttConfig(@NotNull final MqttConfigEntity mqttConfigEntity) {
 
 
         mqttConfigurationService.setRetainedMessagesEnabled(mqttConfigEntity.getRetainedMessagesConfigEntity()

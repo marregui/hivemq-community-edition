@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.codec.decoder.AbstractMqttDecoder;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.ConfigurationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -51,7 +51,7 @@ public class Mqtt5DisconnectDecoder extends AbstractMqttDecoder<DISCONNECT> {
     @Inject
     public Mqtt5DisconnectDecoder(
             final @NotNull MqttServerDisconnector disconnector,
-            final @NotNull FullConfigurationService configurationService) {
+            final @NotNull ConfigurationService configurationService) {
         super(disconnector, configurationService);
         maxSessionExpiryInterval = configurationService.mqttConfiguration().maxSessionExpiryInterval();
     }

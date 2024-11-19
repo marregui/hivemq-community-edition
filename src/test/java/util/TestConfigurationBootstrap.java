@@ -16,39 +16,24 @@
 package util;
 
 import com.hivemq.configuration.service.ConfigurationService;
-import com.hivemq.configuration.service.FullConfigurationService;
+import com.hivemq.configuration.service.MqttConfigurationService;
+import com.hivemq.configuration.service.RestrictionsConfigurationService;
 import com.hivemq.configuration.service.SecurityConfigurationService;
-import com.hivemq.configuration.service.impl.ConfigurationServiceImpl;
-import com.hivemq.configuration.service.impl.MqttConfigurationServiceImpl;
-import com.hivemq.configuration.service.impl.RestrictionsConfigurationServiceImpl;
-import com.hivemq.configuration.service.impl.SecurityConfigurationServiceImpl;
-import com.hivemq.configuration.service.impl.listener.ListenerConfigurationServiceImpl;
+import com.hivemq.configuration.service.impl.listener.ListenerConfigurationService;
 
 public class TestConfigurationBootstrap {
 
-    private ListenerConfigurationServiceImpl listenerConfigurationService;
-    private MqttConfigurationServiceImpl mqttConfigurationService;
-    private RestrictionsConfigurationServiceImpl restrictionsConfigurationService;
-    private final SecurityConfigurationServiceImpl securityConfigurationService;
-    private ConfigurationServiceImpl configurationService;
+    private ConfigurationService configurationService;
 
     public TestConfigurationBootstrap() {
-        listenerConfigurationService = new ListenerConfigurationServiceImpl();
-        mqttConfigurationService = new MqttConfigurationServiceImpl();
-        restrictionsConfigurationService = new RestrictionsConfigurationServiceImpl();
-        securityConfigurationService = new SecurityConfigurationServiceImpl();
-
-        configurationService = new ConfigurationServiceImpl(listenerConfigurationService,
-                mqttConfigurationService,
-                restrictionsConfigurationService,
-                securityConfigurationService);
+        configurationService = new ConfigurationService();
     }
 
     public SecurityConfigurationService getSecurityConfigurationService() {
-        return securityConfigurationService;
+        return configurationService.securityConfiguration();
     }
 
-    public FullConfigurationService getFullConfigurationService() {
+    public ConfigurationService getFullConfigurationService() {
         return configurationService;
     }
 
@@ -56,27 +41,15 @@ public class TestConfigurationBootstrap {
         return configurationService;
     }
 
-    public ListenerConfigurationServiceImpl getListenerConfigurationService() {
-        return listenerConfigurationService;
+    public ListenerConfigurationService getListenerConfigurationService() {
+        return configurationService.listenerConfiguration();
     }
 
-    public MqttConfigurationServiceImpl getMqttConfigurationService() {
-        return mqttConfigurationService;
+    public MqttConfigurationService getMqttConfigurationService() {
+        return configurationService.mqttConfiguration();
     }
 
-    public void setMqttConfigurationService(final MqttConfigurationServiceImpl mqttConfigurationService) {
-        this.mqttConfigurationService = mqttConfigurationService;
-    }
-
-    public RestrictionsConfigurationServiceImpl getRestrictionsConfigurationService() {
-        return restrictionsConfigurationService;
-    }
-
-    public void setRestrictionsConfigurationService(final RestrictionsConfigurationServiceImpl restrictionsConfigurationService) {
-        this.restrictionsConfigurationService = restrictionsConfigurationService;
-    }
-
-    public void setConfigurationService(final ConfigurationServiceImpl configurationService) {
-        this.configurationService = configurationService;
+    public RestrictionsConfigurationService getRestrictionsConfigurationService() {
+        return configurationService.restrictionsConfiguration();
     }
 }

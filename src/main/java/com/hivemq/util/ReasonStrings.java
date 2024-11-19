@@ -15,9 +15,6 @@
  */
 package com.hivemq.util;
 
-/**
- * @author Florian Raschbichler
- */
 public class ReasonStrings {
 
     public static final String CONNACK_MALFORMED_PACKET_FIXED_HEADER = "Sent CONNECT with invalid fixed header.";
@@ -63,10 +60,7 @@ public class ReasonStrings {
 
     public static final String CONNACK_NOT_AUTHORIZED_WILL_WILDCARD =
             "Not authorized to connect. Will topic contained wildcard characters (#/+). The broker does not allow this.";
-    public static final String CONNACK_NOT_AUTHORIZED_NO_AUTHENTICATOR =
-            "Not authorized to connect. No authenticator registered.";
     public static final String CONNACK_PACKET_TOO_LARGE = "Sent CONNECT exceeded the maximum permissible size.";
-    public static final String CONNACK_NOT_AUTHORIZED_FAILED = "Not authorized to connect. Authentication failed.";
 
     public static final String CONNACK_TOPIC_NAME_INVALID_EMPTY = "CONNECT with empty %s.";
     public static final String CONNACK_TOPIC_NAME_INVALID_WILL_LENGTH =
@@ -80,16 +74,11 @@ public class ReasonStrings {
             "Retain flag of Will message was set to true. The broker does not allow this.";
     public static final String CONNACK_PACKET_TOO_LARGE_USER_PROPERTIES =
             "Sent CONNECT with too large user properties.";
-    public static final String CONNACK_MALFORMED_PACKET_INCORRECT_WILL_TOPIC_LENGTH =
-            "Incorrect CONNECT will-topic length.";
-    public static final String CONNACK_MALFORMED_PACKET_BAD_UTF8 = "Sent CONNECT with bad UTF-8 character.";
-    public static final String CONNACK_MALFORMED_PACKET_INVALID_WILL_TOPIC = "Sent CONNECT with invalid will-topic.";
 
     public static final String CONNACK_QOS_NOT_SUPPORTED_WILL =
             "Quality of service level of Will message in CONNECT exceeds maximum allowed QoS. QoS used: %s. Maximum allowed QoS: %s.";
     public static final String CONNACK_QOS_NOT_SUPPORTED_PUBLISH =
             "Quality of service level of PUBLISH exceeds maximum allowed QoS. QoS used: %s. Maximum allowed QoS: %s.";
-    public static final String CONNACK_CONNECT_TIMED_OUT = "Connect timed out.";
 
     public static final String DISCONNECT_MALFORMED_USER_PROPERTY = "%s containing a malformed user property was sent.";
     public static final String DISCONNECT_MALFORMED_UTF8_LENGTH =
@@ -118,14 +107,12 @@ public class ReasonStrings {
     public static final String DISCONNECT_MALFORMED_SUBSCRIPTION_OPTIONS =
             "SUBSCRIBE with malformed subscription options was sent.";
     public static final String DISCONNECT_MALFORMED_UTF8_STRING = "%s with malformed UTF-8 String for %s was sent.";
-    public static final String DISCONNECT_MALFORMED_EMPTY_UNSUB_TOPIC = "Sent UNSUBSCRIBE with an invalid topic filter.";
     public static final String DISCONNECT_SUBSCRIBE_TOPIC_FILTER_INVALID =
             "Sent SUBSCRIBE with an invalid topic filter.";
 
     public static final String DISCONNECT_PROTOCOL_ERROR_MESSAGE_ID = "%s without message id was sent.";
     public static final String DISCONNECT_PROTOCOL_ERROR_AUTH_METHOD =
             "%s with invalid authentication method was sent.";
-    public static final String DISCONNECT_PROTOCOL_ERROR_FIXED_HEADER = "Sent DISCONNECT with invalid fixed header.";
     public static final String DISCONNECT_PROTOCOL_ERROR_SESSION_EXPIRY =
             "Sent DISCONNECT with invalid session expiry interval. Session expiry was set to zero on CONNECT and DISCONNECT contained a different value. This is a protocol violation.";
     public static final String DISCONNECT_PROTOCOL_ERROR_REASON_CODE =
@@ -142,11 +129,6 @@ public class ReasonStrings {
             "PUBLISH with quality of service set to '0' and DUP flag set to true was sent. This is a protocol violation.";
     public static final String DISCONNECT_PROTOCOL_ERROR_PUBLISH_SUBSCRIPTION_IDENTIFIER =
             "PUBLISH containing subscription identifiers was sent. This is a protocol violation.";
-    public static final String DISCONNECT_PROTOCOL_ERROR_PUBACK_HEADER = "PUBACK with incorrect fixed header was sent.";
-    public static final String DISCONNECT_PROTOCOL_ERROR_PUBREC_HEADER = "PUBREC with incorrect fixed header was sent.";
-    public static final String DISCONNECT_PROTOCOL_ERROR_PUBREL_HEADER = "PUBREL with incorrect fixed header was sent.";
-    public static final String DISCONNECT_PROTOCOL_ERROR_PUBCOMP_HEADER =
-            "PUBCOMP with incorrect fixed header was sent.";
     public static final String DISCONNECT_PROTOCOL_ERROR_NO_SUBSCRIPTIONS =
             "SUBSCRIBE with zero subscriptions was sent.";
     public static final String DISCONNECT_PROTOCOL_ERROR_NO_SUBSCRIPTION_OPTIONS =
@@ -155,8 +137,6 @@ public class ReasonStrings {
             "SUBSCRIBE with a shared subscription and the no local flag set to true was sent. This is a protocol violation.";
     public static final String DISCONNECT_PROTOCOL_ERROR_SUBSCRIPTION_IDENTIFIER_ZERO =
             "SUBSCRIBE with a subscription identifier of '0' was sent. This is a protocol violation.";
-    public static final String DISCONNECT_PROTOCOL_ERROR_SUBSCRIBE_NO_QOS =
-            "SUBSCRIBE without a quality of service level was sent. This is a protocol violation.";
     public static final String DISCONNECT_PROTOCOL_ERROR_SUBSCRIBE_QOS_3 =
             "SUBSCRIBE with a quality of service level set to '3' was sent. This is a protocol violation.";
     public static final String DISCONNECT_PROTOCOL_ERROR_SUBSCRIBE_RETAIN_HANDLING_3 =

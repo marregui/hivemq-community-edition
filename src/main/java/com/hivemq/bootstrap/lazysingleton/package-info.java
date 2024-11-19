@@ -13,11 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Unfortunately Guice does not have the concept of lazy singletons when using
- * {@link com.google.inject.Stage#PRODUCTION},
- * so we need to provide it our own. This package contains everything we need for lazy Singletons
- *
- * @author Dominik Obermaier
- */
+
 package com.hivemq.bootstrap.lazysingleton;

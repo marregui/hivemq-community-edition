@@ -20,7 +20,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.bootstrap.lazysingleton.LazySingletonScope;
+import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
 import com.hivemq.config.SysInfo;
 import com.hivemq.config.MqttConfigService;
 import com.hivemq.persistence.PersistenceStartup;
@@ -55,7 +55,7 @@ public class PersistenceMigrationModuleTest {
                     @Override
                     protected void configure() {
                         bind(SysInfo.class).toInstance(sysInfo);
-                        bindScope(LazySingleton.class, LazySingletonScope.get());
+                        bindScope(LazySingleton.class, LazySingletonModule.SCOPE);
                         bind(MqttConfigService.class).toInstance(mqttConfigService);
                     }
                 });

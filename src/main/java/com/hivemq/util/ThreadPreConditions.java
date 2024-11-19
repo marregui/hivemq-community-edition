@@ -32,10 +32,6 @@ public class ThreadPreConditions {
         }
     }
 
-    public static boolean enabled() {
-        return enabled;
-    }
-
     public static void enable() {
         enabled = true;
     }

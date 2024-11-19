@@ -15,9 +15,13 @@
  */
 package com.hivemq.bootstrap.lazysingleton;
 
+import com.google.inject.Scope;
+import com.google.inject.Scopes;
 import com.hivemq.bootstrap.SingletonModule;
 
 public class LazySingletonModule extends SingletonModule<Class<LazySingletonModule>> {
+
+    public static final Scope SCOPE = Scopes.SINGLETON;
 
     public LazySingletonModule() {
         super(LazySingletonModule.class);
@@ -25,6 +29,6 @@ public class LazySingletonModule extends SingletonModule<Class<LazySingletonModu
 
     @Override
     protected void configure() {
-        bindScope(LazySingleton.class, LazySingletonScope.get());
+        bindScope(LazySingleton.class, Scopes.SINGLETON);
     }
 }

@@ -101,8 +101,4 @@ public class TypeSize {
     public static int collectionOverhead() {
         return COLLECTION_OVERHEAD;
     }
-
-    public static int linkedListNodeOverhead() {
-        return LINKED_LIST_NODE_OVERHEAD;
-    }
 }

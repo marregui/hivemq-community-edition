@@ -18,7 +18,7 @@ package util.encoder;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.EncoderFactory;
 import com.hivemq.codec.encoder.MqttEncoder;
-import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -35,11 +35,11 @@ public class TestEncoderFactory extends EncoderFactory {
 
     public TestEncoderFactory(
             final @NotNull MessageDroppedService messageDroppedService,
-            final @NotNull SecurityConfigurationService securityConfigurationService,
+            final @NotNull SecurityConfigService securityConfigService,
             final @NotNull MqttServerDisconnector mqttServerDisconnector,
             final @NotNull PingreqEncoder pingreqEncoder) {
 
-        super(messageDroppedService, securityConfigurationService, mqttServerDisconnector);
+        super(messageDroppedService, securityConfigService, mqttServerDisconnector);
 
         this.pingreqEncoder = pingreqEncoder;
     }

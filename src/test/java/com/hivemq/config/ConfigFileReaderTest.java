@@ -31,19 +31,19 @@ public class ConfigFileReaderTest {
 
     ConfigService reader;
     @Mock
-    private MqttConfigurationService mqttConfigurationService;
+    private MqttConfigService mqttConfigService;
     @Mock
-    private RestrictionsConfigurationService restrictionsConfigurationService;
+    private RestrictionsConfigService restrictionsConfigService;
     @Mock
-    private SecurityConfigurationService securityConfigurationService;
+    private SecurityConfigService securityConfigService;
     @Mock
-    private SystemInformation systemInformation;
-    private ListenerConfigurationService listenerConfigurationService;
+    private SysInfo sysInfo;
+    private ListenerConfigService listenerConfigService;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        listenerConfigurationService = new ListenerConfigurationService();
+        listenerConfigService = new ListenerConfigService();
         reader = new ConfigService();
     }
 
@@ -51,34 +51,34 @@ public class ConfigFileReaderTest {
     public void verify_mqtt_default_values() {
 
         final MqttConfigEntity defaultMqttValues = new MqttConfigEntity();
-        verify(mqttConfigurationService).setQueuedMessagesStrategy(MqttConfigurationService.QueuedMessagesStrategy.valueOf(
+        verify(mqttConfigService).setQueuedMessagesStrategy(MqttConfigService.QueuedMessagesStrategy.valueOf(
                 defaultMqttValues.getQueuedMessagesConfigEntity().getQueuedMessagesStrategy().name()));
-        verify(mqttConfigurationService).setMaxPacketSize(defaultMqttValues.getPacketsConfigEntity()
+        verify(mqttConfigService).setMaxPacketSize(defaultMqttValues.getPacketsConfigEntity()
                 .getMaxPacketSize());
-        verify(mqttConfigurationService).setServerReceiveMaximum(defaultMqttValues.getReceiveMaximumConfigEntity()
+        verify(mqttConfigService).setServerReceiveMaximum(defaultMqttValues.getReceiveMaximumConfigEntity()
                 .getServerReceiveMaximum());
-        verify(mqttConfigurationService).setMaxQueuedMessages(defaultMqttValues.getQueuedMessagesConfigEntity()
+        verify(mqttConfigService).setMaxQueuedMessages(defaultMqttValues.getQueuedMessagesConfigEntity()
                 .getMaxQueueSize());
-        verify(mqttConfigurationService).setMaxSessionExpiryInterval(defaultMqttValues.getSessionExpiryConfigEntity()
+        verify(mqttConfigService).setMaxSessionExpiryInterval(defaultMqttValues.getSessionExpiryConfigEntity()
                 .getMaxInterval());
-        verify(mqttConfigurationService).setMaxMessageExpiryInterval(defaultMqttValues.getMessageExpiryConfigEntity()
+        verify(mqttConfigService).setMaxMessageExpiryInterval(defaultMqttValues.getMessageExpiryConfigEntity()
                 .getMaxInterval());
-        verify(mqttConfigurationService).setRetainedMessagesEnabled(defaultMqttValues.getRetainedMessagesConfigEntity()
+        verify(mqttConfigService).setRetainedMessagesEnabled(defaultMqttValues.getRetainedMessagesConfigEntity()
                 .isEnabled());
-        verify(mqttConfigurationService).setWildcardSubscriptionsEnabled(defaultMqttValues.getWildcardSubscriptionsConfigEntity()
+        verify(mqttConfigService).setWildcardSubscriptionsEnabled(defaultMqttValues.getWildcardSubscriptionsConfigEntity()
                 .isEnabled());
-        verify(mqttConfigurationService).setMaximumQos(QoS.valueOf(defaultMqttValues.getQoSConfigEntity().getMaxQos()));
-        verify(mqttConfigurationService).setTopicAliasEnabled(defaultMqttValues.getTopicAliasConfigEntity()
+        verify(mqttConfigService).setMaximumQos(QoS.valueOf(defaultMqttValues.getQoSConfigEntity().getMaxQos()));
+        verify(mqttConfigService).setTopicAliasEnabled(defaultMqttValues.getTopicAliasConfigEntity()
                 .isEnabled());
-        verify(mqttConfigurationService).setTopicAliasMaxPerClient(defaultMqttValues.getTopicAliasConfigEntity()
+        verify(mqttConfigService).setTopicAliasMaxPerClient(defaultMqttValues.getTopicAliasConfigEntity()
                 .getMaxPerClient());
-        verify(mqttConfigurationService).setSubscriptionIdentifierEnabled(defaultMqttValues.getSubscriptionIdentifierConfigEntity()
+        verify(mqttConfigService).setSubscriptionIdentifierEnabled(defaultMqttValues.getSubscriptionIdentifierConfigEntity()
                 .isEnabled());
-        verify(mqttConfigurationService).setSharedSubscriptionsEnabled(defaultMqttValues.getSharedSubscriptionsConfigEntity()
+        verify(mqttConfigService).setSharedSubscriptionsEnabled(defaultMqttValues.getSharedSubscriptionsConfigEntity()
                 .isEnabled());
-        verify(mqttConfigurationService).setKeepAliveAllowZero(defaultMqttValues.getKeepAliveConfigEntity()
+        verify(mqttConfigService).setKeepAliveAllowZero(defaultMqttValues.getKeepAliveConfigEntity()
                 .isAllowUnlimted());
-        verify(mqttConfigurationService).setKeepAliveMax(defaultMqttValues.getKeepAliveConfigEntity()
+        verify(mqttConfigService).setKeepAliveMax(defaultMqttValues.getKeepAliveConfigEntity()
                 .getMaxKeepAlive());
     }
 
@@ -86,22 +86,22 @@ public class ConfigFileReaderTest {
     public void verify_restrictions_default_values() {
         final RestrictionsEntity defaultThrottlingValues = new RestrictionsEntity();
 
-        verify(restrictionsConfigurationService).setMaxConnections(defaultThrottlingValues.getMaxConnections());
-        verify(restrictionsConfigurationService).setMaxClientIdLength(defaultThrottlingValues.getMaxClientIdLength());
-        verify(restrictionsConfigurationService).setMaxTopicLength(defaultThrottlingValues.getMaxTopicLength());
-        verify(restrictionsConfigurationService).setNoConnectIdleTimeout(defaultThrottlingValues.getNoConnectIdleTimeout());
-        verify(restrictionsConfigurationService).setIncomingLimit(defaultThrottlingValues.getIncomingBandwidthThrottling());
+        verify(restrictionsConfigService).setMaxConnections(defaultThrottlingValues.getMaxConnections());
+        verify(restrictionsConfigService).setMaxClientIdLength(defaultThrottlingValues.getMaxClientIdLength());
+        verify(restrictionsConfigService).setMaxTopicLength(defaultThrottlingValues.getMaxTopicLength());
+        verify(restrictionsConfigService).setNoConnectIdleTimeout(defaultThrottlingValues.getNoConnectIdleTimeout());
+        verify(restrictionsConfigService).setIncomingLimit(defaultThrottlingValues.getIncomingBandwidthThrottling());
     }
 
     @Test
     public void verify_security_default_values() {
         final SecurityConfigEntity defaultSecurityValues = new SecurityConfigEntity();
 
-        verify(securityConfigurationService).setValidateUTF8(defaultSecurityValues.getUtf8ValidationEntity()
+        verify(securityConfigService).setValidateUTF8(defaultSecurityValues.getUtf8ValidationEntity()
                 .isEnabled());
-        verify(securityConfigurationService).setPayloadFormatValidation(defaultSecurityValues.getPayloadFormatValidationEntity()
+        verify(securityConfigService).setPayloadFormatValidation(defaultSecurityValues.getPayloadFormatValidationEntity()
                 .isEnabled());
-        verify(securityConfigurationService).setAllowServerAssignedClientId(defaultSecurityValues.getAllowEmptyClientIdEntity()
+        verify(securityConfigService).setAllowServerAssignedClientId(defaultSecurityValues.getAllowEmptyClientIdEntity()
                 .isEnabled());
 
     }

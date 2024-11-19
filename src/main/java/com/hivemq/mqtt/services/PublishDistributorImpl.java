@@ -21,7 +21,7 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.MqttConfigService;
 import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,18 +52,18 @@ public class PublishDistributorImpl implements PublishDistributor {
     private final @NotNull ClientQueuePersistence clientQueuePersistence;
     private final @NotNull ClientSessionPersistence clientSessionPersistence;
     private final SingleWriterService singleWriterService;
-    private final @NotNull MqttConfigurationService mqttConfigurationService;
+    private final @NotNull MqttConfigService mqttConfigService;
 
     @Inject
     public PublishDistributorImpl(
             final @NotNull ClientQueuePersistence clientQueuePersistence,
             final @NotNull ClientSessionPersistence clientSessionPersistence,
             final @NotNull SingleWriterService singleWriterService,
-            final @NotNull MqttConfigurationService mqttConfigurationService) {
+            final @NotNull MqttConfigService mqttConfigService) {
         this.clientQueuePersistence = clientQueuePersistence;
         this.clientSessionPersistence = clientSessionPersistence;
         this.singleWriterService = singleWriterService;
-        this.mqttConfigurationService = mqttConfigurationService;
+        this.mqttConfigService = mqttConfigService;
     }
 
     @Override
@@ -189,7 +189,7 @@ public class PublishDistributorImpl implements PublishDistributor {
                 shared,
                 createPublish(publish, subscriptionQos, retainAsPublished, subscriptionIdentifier),
                 false,
-                Objects.requireNonNullElseGet(queueLimit, mqttConfigurationService::maxQueuedMessages));
+                Objects.requireNonNullElseGet(queueLimit, mqttConfigService::maxQueuedMessages));
 
         final SettableFuture<PublishStatus> statusFuture = SettableFuture.create();
 

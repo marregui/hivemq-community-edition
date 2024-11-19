@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Singleton
-public class RestrictionsConfigurationService {
+public class RestrictionsConfigService {
 
     public static final int UNLIMITED_CONNECTIONS = -1;
     public static final int UNLIMITED_BANDWIDTH = 0;
@@ -41,7 +41,7 @@ public class RestrictionsConfigurationService {
     public static final int MAX_TOPIC_LENGTH_MINIMUM = 1;
     public static final int MAX_TOPIC_LENGTH_MAXIMUM = UnsignedDataTypes.UNSIGNED_SHORT_MAX_VALUE;
 
-    private static final Logger log = LoggerFactory.getLogger(RestrictionsConfigurationService.class);
+    private static final Logger log = LoggerFactory.getLogger(RestrictionsConfigService.class);
 
     private final AtomicLong maxConnections = new AtomicLong(MAX_CONNECTIONS_DEFAULT);
     private final AtomicInteger maxClientIdLength = new AtomicInteger(MAX_CLIENT_ID_LENGTH_DEFAULT);

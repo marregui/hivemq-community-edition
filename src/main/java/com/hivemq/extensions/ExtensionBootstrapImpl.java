@@ -19,7 +19,7 @@ package com.hivemq.extensions;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.ShutdownHooks;
-import com.hivemq.config.SystemInformation;
+import com.hivemq.config.SysInfo;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.loader.ExtensionLifecycleHandler;
 import com.hivemq.extensions.loader.ExtensionLoader;
@@ -61,7 +61,7 @@ public class ExtensionBootstrapImpl implements ExtensionBootstrap {
         log.info("Starting HiveMQ extension system.");
 
         ShutdownHooks.INSTANCE.add(new ExtensionSystemShutdownHook(this));
-        final Path extensionFolder = SystemInformation.INSTANCE.getExtensionsFolder().toPath();
+        final Path extensionFolder = SysInfo.INSTANCE.getExtensionsFolder().toPath();
 
         // load already installed extensions
         final ImmutableCollection<HiveMQExtensionEvent> hiveMQExtensionEvents =

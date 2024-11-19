@@ -22,7 +22,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.MqttConfigService;
 import com.hivemq.persistence.ProducerQueues;
 import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +52,7 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
 
     private final @NotNull ClientQueueLocalPersistence localPersistence;
     private final @NotNull ProducerQueues singleWriter;
-    private final @NotNull MqttConfigurationService mqttConfigurationService;
+    private final @NotNull MqttConfigService mqttConfigService;
     private final @NotNull ClientSessionLocalPersistence clientSessionLocalPersistence;
     private final @NotNull LocalTopicTree topicTree;
     private final @NotNull ConnectionPersistence connectionPersistence;
@@ -62,13 +62,13 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
     public ClientQueuePersistenceImpl(
             final @NotNull ClientQueueLocalPersistence localPersistence,
             final @NotNull SingleWriterService singleWriterService,
-            final @NotNull MqttConfigurationService mqttConfigurationService,
+            final @NotNull MqttConfigService mqttConfigService,
             final @NotNull ClientSessionLocalPersistence clientSessionLocalPersistence,
             final @NotNull LocalTopicTree topicTree,
             final @NotNull ConnectionPersistence connectionPersistence,
             final @NotNull PublishPollService publishPollService) {
         this.localPersistence = localPersistence;
-        this.mqttConfigurationService = mqttConfigurationService;
+        this.mqttConfigService = mqttConfigService;
         this.clientSessionLocalPersistence = clientSessionLocalPersistence;
         this.topicTree = topicTree;
         this.connectionPersistence = connectionPersistence;
@@ -95,7 +95,7 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
                     shared,
                     publish,
                     queueLimit,
-                    mqttConfigurationService.getQueuedMessagesStrategy(),
+                    mqttConfigService.getQueuedMessagesStrategy(),
                     retained,
                     bucketIndex);
             final int queueSize = localPersistence.size(queueId, shared, bucketIndex);
@@ -130,7 +130,7 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
                     shared,
                     publishes,
                     queueLimit,
-                    mqttConfigurationService.getQueuedMessagesStrategy(),
+                    mqttConfigService.getQueuedMessagesStrategy(),
                     retained,
                     bucketIndex);
             if (queueWasEmpty) {

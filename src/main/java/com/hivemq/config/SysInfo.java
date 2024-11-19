@@ -23,9 +23,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class SystemInformation {
+public class SysInfo {
 
-    public static final @NotNull SystemInformation INSTANCE = new SystemInformation();
+    public static final @NotNull SysInfo INSTANCE = new SysInfo();
 
     public static final @NotNull String HIVEMQ_HOME = "hivemq.home";
     public static final @NotNull String VERSION = "Origin";
@@ -36,7 +36,7 @@ public class SystemInformation {
     private final @NotNull File data;
     private final @NotNull File extensions;
 
-    public SystemInformation()  {
+    public SysInfo()  {
         this.home = resolveHome();
         this.log = resolveFolder("hivemq.log.folder", "log");
         this.config = resolveFolder("hivemq.config.folder", "conf");

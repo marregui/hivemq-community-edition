@@ -33,11 +33,11 @@ import static util.TlsTestUtil.createDefaultTLS;
 
 public class ListenerConfigServiceImplTest {
 
-    private ListenerConfigurationService listenerConfigurationService;
+    private ListenerConfigService listenerConfigService;
 
     @Before
     public void setUp() throws Exception {
-        listenerConfigurationService = new ListenerConfigurationService();
+        listenerConfigService = new ListenerConfigService();
     }
 
     /*
@@ -55,30 +55,30 @@ public class ListenerConfigServiceImplTest {
         final TlsWebsocketListener tlsWebsocketListener =
                 new TlsWebsocketListener.Builder().port(1886).bindAddress("localhost").tls(createDefaultTLS()).build();
 
-        listenerConfigurationService.addListener(tcpListener);
-        listenerConfigurationService.addListener(websocketListener);
-        listenerConfigurationService.addListener(tlsTcpListener);
-        listenerConfigurationService.addListener(tlsWebsocketListener);
+        listenerConfigService.addListener(tcpListener);
+        listenerConfigService.addListener(websocketListener);
+        listenerConfigService.addListener(tlsTcpListener);
+        listenerConfigService.addListener(tlsWebsocketListener);
 
-        final List<Listener> listeners = listenerConfigurationService.getListeners();
+        final List<Listener> listeners = listenerConfigService.getListeners();
 
         assertEquals(4, listeners.size());
 
-        assertEquals(1, listenerConfigurationService.getTcpListeners().size());
-        assertEquals(1, listenerConfigurationService.getTlsTcpListeners().size());
-        assertEquals(1, listenerConfigurationService.getWebsocketListeners().size());
-        assertEquals(1, listenerConfigurationService.getTlsWebsocketListeners().size());
+        assertEquals(1, listenerConfigService.getTcpListeners().size());
+        assertEquals(1, listenerConfigService.getTlsTcpListeners().size());
+        assertEquals(1, listenerConfigService.getWebsocketListeners().size());
+        assertEquals(1, listenerConfigService.getTlsWebsocketListeners().size());
 
-        assertSame(listenerConfigurationService.getTcpListeners().get(0), tcpListener);
-        assertSame(listenerConfigurationService.getTlsTcpListeners().get(0), tlsTcpListener);
-        assertSame(listenerConfigurationService.getWebsocketListeners().get(0), websocketListener);
-        assertSame(listenerConfigurationService.getTlsWebsocketListeners().get(0), tlsWebsocketListener);
+        assertSame(listenerConfigService.getTcpListeners().get(0), tcpListener);
+        assertSame(listenerConfigService.getTlsTcpListeners().get(0), tlsTcpListener);
+        assertSame(listenerConfigService.getWebsocketListeners().get(0), websocketListener);
+        assertSame(listenerConfigService.getTlsWebsocketListeners().get(0), tlsWebsocketListener);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_add_invalid_listener_type() {
 
-        listenerConfigurationService.addListener(new Listener() {
+        listenerConfigService.addListener(new Listener() {
             @Override
             public int getPort() {
                 return 0;
@@ -110,14 +110,14 @@ public class ListenerConfigServiceImplTest {
     @Test(expected = IllegalArgumentException.class)
     public void test_add_invalid_listener_type_subclass_of_tcplistener() {
 
-        listenerConfigurationService.addListener(new TcpListener(1883, "localhost") {
+        listenerConfigService.addListener(new TcpListener(1883, "localhost") {
         });
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_add_invalid_listener_type_subclass_of_tlstcplistener() {
 
-        listenerConfigurationService.addListener(new TlsTcpListener(1883, "localhost", createDefaultTLS()) {
+        listenerConfigService.addListener(new TlsTcpListener(1883, "localhost", createDefaultTLS()) {
         });
     }
 
@@ -127,15 +127,15 @@ public class ListenerConfigServiceImplTest {
         final WebsocketListener subclass = new WebsocketListener(123, null, null, false, null, null) {
         };
 
-        listenerConfigurationService.addListener(subclass);
+        listenerConfigService.addListener(subclass);
     }
 
     @Test
     public void test_get_listeners_immutable() {
 
-        listenerConfigurationService.addListener(new TcpListener(1883, "localhost"));
+        listenerConfigService.addListener(new TcpListener(1883, "localhost"));
 
-        final List<Listener> listeners = listenerConfigurationService.getListeners();
+        final List<Listener> listeners = listenerConfigService.getListeners();
 
         try {
             listeners.add(new TcpListener(1884, "localhost"));

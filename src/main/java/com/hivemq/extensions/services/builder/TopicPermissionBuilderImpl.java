@@ -18,8 +18,8 @@ package com.hivemq.extensions.services.builder;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.hivemq.config.ConfigService;
-import com.hivemq.config.RestrictionsConfigurationService;
-import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.RestrictionsConfigService;
+import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.auth.parameter.TopicPermission;
@@ -44,12 +44,12 @@ public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
     private @NotNull SharedSubscription sharedSubscription = SharedSubscription.ALL;
     private @NotNull String sharedGroup = "#";
 
-    private final @NotNull RestrictionsConfigurationService restrictionsConfig;
-    private final @NotNull SecurityConfigurationService securityConfigurationService;
+    private final @NotNull RestrictionsConfigService restrictionsConfig;
+    private final @NotNull SecurityConfigService securityConfigService;
 
     @Inject
     public TopicPermissionBuilderImpl(final @NotNull ConfigService configService) {
-        this.securityConfigurationService = configService.securityConfiguration();
+        this.securityConfigService = configService.securityConfiguration();
         this.restrictionsConfig = configService.restrictionsConfiguration();
     }
 
@@ -71,7 +71,7 @@ public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
                     " please use methods sharedSubscription and sharedGroup to apply permissions for shared subscriptions");
         }
 
-        if (!PluginBuilderUtil.isValidUtf8String(topicFilter, securityConfigurationService.validateUTF8())) {
+        if (!PluginBuilderUtil.isValidUtf8String(topicFilter, securityConfigService.validateUTF8())) {
             throw new IllegalArgumentException("The topic filter (" + topicFilter + ") is UTF-8 malformed");
         }
 
@@ -134,7 +134,7 @@ public class TopicPermissionBuilderImpl implements TopicPermissionBuilder {
         Preconditions.checkArgument(!(sharedGroup.contains("+")), "Shared group cannot contain wildcard character '+'");
         Preconditions.checkArgument(!(sharedGroup.contains("/")), "Shared group cannot contain character '/'");
         Preconditions.checkArgument(PluginBuilderUtil.isValidUtf8String(sharedGroup,
-                securityConfigurationService.validateUTF8()), "Shared group contains invalid UTF-8 character");
+                securityConfigService.validateUTF8()), "Shared group contains invalid UTF-8 character");
 
         this.sharedGroup = sharedGroup;
         return this;

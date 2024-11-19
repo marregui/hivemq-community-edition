@@ -44,10 +44,10 @@ public class SecurityConfiguratorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        assertFalse(securityConfigurationService.validateUTF8());
-        assertFalse(securityConfigurationService.allowServerAssignedClientId());
-        assertTrue(securityConfigurationService.payloadFormatValidation());
-        assertFalse(securityConfigurationService.allowRequestProblemInformation());
+        assertFalse(securityConfigService.validateUTF8());
+        assertFalse(securityConfigService.allowServerAssignedClientId());
+        assertTrue(securityConfigService.payloadFormatValidation());
+        assertFalse(securityConfigService.allowRequestProblemInformation());
     }
 
 
@@ -57,10 +57,10 @@ public class SecurityConfiguratorTest extends AbstractConfigurationTest {
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        assertTrue(securityConfigurationService.validateUTF8());
-        assertTrue(securityConfigurationService.allowServerAssignedClientId());
-        assertFalse(securityConfigurationService.payloadFormatValidation());
-        assertTrue(securityConfigurationService.allowRequestProblemInformation());
+        assertTrue(securityConfigService.validateUTF8());
+        assertTrue(securityConfigService.allowServerAssignedClientId());
+        assertFalse(securityConfigService.payloadFormatValidation());
+        assertTrue(securityConfigService.allowRequestProblemInformation());
     }
 
 }

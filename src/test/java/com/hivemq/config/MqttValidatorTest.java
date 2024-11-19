@@ -44,7 +44,7 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
         // Default is 10
-        assertEquals(10, mqttConfigurationService.serverReceiveMaximum());
+        assertEquals(10, mqttConfigService.serverReceiveMaximum());
     }
 
     @Test
@@ -96,22 +96,23 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
 
-        assertEquals(100, mqttConfigurationService.maxQueuedMessages());
-        assertEquals(3600, mqttConfigurationService.maxSessionExpiryInterval());
-        assertEquals(3600, mqttConfigurationService.maxMessageExpiryInterval());
-        assertEquals(120, mqttConfigurationService.serverReceiveMaximum());
-        assertEquals(2684, mqttConfigurationService.maxPacketSize());
-        assertEquals(MqttConfigurationService.QueuedMessagesStrategy.DISCARD_OLDEST,
-                mqttConfigurationService.getQueuedMessagesStrategy());
-        assertFalse(mqttConfigurationService.retainedMessagesEnabled());
-        assertFalse(mqttConfigurationService.wildcardSubscriptionsEnabled());
-        assertEquals(QoS.AT_LEAST_ONCE, mqttConfigurationService.maximumQos());
-        assertTrue(mqttConfigurationService.topicAliasEnabled());
-        assertEquals(5, mqttConfigurationService.topicAliasMaxPerClient());
-        assertTrue(mqttConfigurationService.subscriptionIdentifierEnabled());
-        assertFalse(mqttConfigurationService.sharedSubscriptionsEnabled());
-        assertFalse(mqttConfigurationService.keepAliveAllowZero());
-        assertEquals(65, mqttConfigurationService.keepAliveMax());
+        assertEquals(100, mqttConfigService.maxQueuedMessages());
+        assertEquals(3600, mqttConfigService.maxSessionExpiryInterval());
+        assertEquals(3600, mqttConfigService.maxMessageExpiryInterval());
+        assertEquals(120, mqttConfigService.serverReceiveMaximum());
+        assertEquals(2684, mqttConfigService.maxPacketSize());
+        assertEquals(
+                MqttConfigService.QueuedMessagesStrategy.DISCARD_OLDEST,
+                mqttConfigService.getQueuedMessagesStrategy());
+        assertFalse(mqttConfigService.retainedMessagesEnabled());
+        assertFalse(mqttConfigService.wildcardSubscriptionsEnabled());
+        assertEquals(QoS.AT_LEAST_ONCE, mqttConfigService.maximumQos());
+        assertTrue(mqttConfigService.topicAliasEnabled());
+        assertEquals(5, mqttConfigService.topicAliasMaxPerClient());
+        assertTrue(mqttConfigService.subscriptionIdentifierEnabled());
+        assertFalse(mqttConfigService.sharedSubscriptionsEnabled());
+        assertFalse(mqttConfigService.keepAliveAllowZero());
+        assertEquals(65, mqttConfigService.keepAliveMax());
 
     }
 
@@ -128,8 +129,8 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        assertTrue(mqttConfigurationService.topicAliasEnabled());
-        assertEquals(1, mqttConfigurationService.topicAliasMaxPerClient());
+        assertTrue(mqttConfigService.topicAliasEnabled());
+        assertEquals(1, mqttConfigService.topicAliasMaxPerClient());
 
     }
 
@@ -146,8 +147,8 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        assertTrue(mqttConfigurationService.topicAliasEnabled());
-        assertEquals(TOPIC_ALIAS_MAX_PER_CLIENT_MAXIMUM, mqttConfigurationService.topicAliasMaxPerClient());
+        assertTrue(mqttConfigService.topicAliasEnabled());
+        assertEquals(TOPIC_ALIAS_MAX_PER_CLIENT_MAXIMUM, mqttConfigService.topicAliasMaxPerClient());
 
     }
 
@@ -164,7 +165,7 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        assertEquals(65535, mqttConfigurationService.serverReceiveMaximum());
+        assertEquals(65535, mqttConfigService.serverReceiveMaximum());
     }
 
     @Test
@@ -178,7 +179,7 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        assertEquals(3, mqttConfigurationService.maxQueuedMessages());
+        assertEquals(3, mqttConfigService.maxQueuedMessages());
     }
 
     @Test
@@ -196,8 +197,8 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        assertEquals(SESSION_EXPIRE_ON_DISCONNECT, mqttConfigurationService.maxSessionExpiryInterval());
-        assertEquals(MAX_EXPIRY_INTERVAL_DEFAULT, mqttConfigurationService.maxMessageExpiryInterval());
+        assertEquals(SESSION_EXPIRE_ON_DISCONNECT, mqttConfigService.maxSessionExpiryInterval());
+        assertEquals(MAX_EXPIRY_INTERVAL_DEFAULT, mqttConfigService.maxMessageExpiryInterval());
     }
 
 
@@ -216,7 +217,7 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        assertEquals(maxPacketSize, mqttConfigurationService.maxPacketSize());
+        assertEquals(maxPacketSize, mqttConfigService.maxPacketSize());
     }
 
     @Test
@@ -234,7 +235,7 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        assertEquals(maxPacketSize, mqttConfigurationService.maxPacketSize());
+        assertEquals(maxPacketSize, mqttConfigService.maxPacketSize());
     }
 
     @Test
@@ -254,7 +255,7 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
         // We expect the default to be set -> 268435460 and not 268435461
-        assertEquals(DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT, mqttConfigurationService.maxPacketSize());
+        assertEquals(DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT, mqttConfigService.maxPacketSize());
     }
 
     @Test
@@ -274,7 +275,7 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
         // We expect the default to be set -> 268435460 and not -1
-        assertEquals(268435460, mqttConfigurationService.maxPacketSize());
+        assertEquals(268435460, mqttConfigService.maxPacketSize());
     }
 
     @Test
@@ -294,7 +295,7 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
         // We expect the default to be set -> 268435460 and not 0
-        assertEquals(268435460, mqttConfigurationService.maxPacketSize());
+        assertEquals(268435460, mqttConfigService.maxPacketSize());
     }
 
     @Test
@@ -311,7 +312,7 @@ public class MqttValidatorTest extends AbstractConfigurationTest {
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
         // We expect the default to be set -> 268435460 and not 'im a string'
-        assertEquals(268435460, mqttConfigurationService.maxPacketSize());
+        assertEquals(268435460, mqttConfigService.maxPacketSize());
     }
 
 }

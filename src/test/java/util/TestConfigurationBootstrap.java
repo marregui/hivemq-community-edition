@@ -16,10 +16,10 @@
 package util;
 
 import com.hivemq.config.ConfigService;
-import com.hivemq.config.MqttConfigurationService;
-import com.hivemq.config.RestrictionsConfigurationService;
-import com.hivemq.config.SecurityConfigurationService;
-import com.hivemq.config.ListenerConfigurationService;
+import com.hivemq.config.MqttConfigService;
+import com.hivemq.config.RestrictionsConfigService;
+import com.hivemq.config.SecurityConfigService;
+import com.hivemq.config.ListenerConfigService;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class TestConfigurationBootstrap {
         }
     }
 
-    public SecurityConfigurationService getSecurityConfigurationService() {
+    public SecurityConfigService getSecurityConfigurationService() {
         return configService.securityConfiguration();
     }
 
@@ -50,15 +50,15 @@ public class TestConfigurationBootstrap {
         return configService;
     }
 
-    public ListenerConfigurationService getListenerConfigurationService() {
+    public ListenerConfigService getListenerConfigurationService() {
         return configService.listenerConfiguration();
     }
 
-    public MqttConfigurationService getMqttConfigurationService() {
+    public MqttConfigService getMqttConfigurationService() {
         return configService.mqttConfiguration();
     }
 
-    public RestrictionsConfigurationService getRestrictionsConfigurationService() {
+    public RestrictionsConfigService getRestrictionsConfigurationService() {
         return configService.restrictionsConfiguration();
     }
 }

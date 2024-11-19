@@ -28,20 +28,20 @@ public class AbstractConfigurationTest {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    ListenerConfigurationService listenerConfigurationService;
+    ListenerConfigService listenerConfigService;
     File xmlFile;
-    MqttConfigurationService mqttConfigurationService;
-    RestrictionsConfigurationService restrictionsConfigurationService;
-    SecurityConfigurationService securityConfigurationService;
+    MqttConfigService mqttConfigService;
+    RestrictionsConfigService restrictionsConfigService;
+    SecurityConfigService securityConfigService;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        listenerConfigurationService = new ListenerConfigurationService();
+        listenerConfigService = new ListenerConfigService();
 
         xmlFile = temporaryFolder.newFile();
-        securityConfigurationService = new SecurityConfigurationService();
-        mqttConfigurationService = new MqttConfigurationService();
-        restrictionsConfigurationService = new RestrictionsConfigurationService();
+        securityConfigService = new SecurityConfigService();
+        mqttConfigService = new MqttConfigService();
+        restrictionsConfigService = new RestrictionsConfigService();
     }
 }

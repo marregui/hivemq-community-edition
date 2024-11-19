@@ -21,14 +21,14 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class SecurityConfigurationService {
+public class SecurityConfigService {
 
     public static final boolean ALLOW_SERVER_ASSIGNED_CLIENT_ID_DEFAULT = true;
     public static final boolean VALIDATE_UTF_8_DEFAULT = true;
     public static final boolean PAYLOAD_FORMAT_VALIDATION_DEFAULT = false;
     public static final boolean ALLOW_REQUEST_PROBLEM_INFORMATION_DEFAULT = true;
 
-    private static final Logger log = LoggerFactory.getLogger(SecurityConfigurationService.class);
+    private static final Logger log = LoggerFactory.getLogger(SecurityConfigService.class);
 
     private final AtomicBoolean allowServerAssignedClientId =
             new AtomicBoolean(ALLOW_SERVER_ASSIGNED_CLIENT_ID_DEFAULT);

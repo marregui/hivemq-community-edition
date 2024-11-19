@@ -37,11 +37,11 @@ public class ConfigModule extends SingletonModule<Class<ConfigModule>> {
     @Override
     protected void configure() {
         bind(HivemqId.class).toInstance(hiveMQId);
-        bind(ListenerConfigurationService.class).toInstance(configService.listenerConfiguration());
-        bind(MqttConfigurationService.class).toInstance(configService.mqttConfiguration());
-        bind(RestrictionsConfigurationService.class).toInstance(configService.restrictionsConfiguration());
+        bind(ListenerConfigService.class).toInstance(configService.listenerConfiguration());
+        bind(MqttConfigService.class).toInstance(configService.mqttConfiguration());
+        bind(RestrictionsConfigService.class).toInstance(configService.restrictionsConfiguration());
         bind(ConfigService.class).toInstance(configService);
         bind(ConfigService.class).toInstance(configService);
-        bind(SecurityConfigurationService.class).toInstance(configService.securityConfiguration());
+        bind(SecurityConfigService.class).toInstance(configService.securityConfiguration());
     }
 }

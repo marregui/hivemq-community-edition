@@ -54,19 +54,19 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.hivemq.config.RestrictionsConfigurationService.INCOMING_BANDWIDTH_THROTTLING_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.INCOMING_BANDWIDTH_THROTTLING_MINIMUM;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_CLIENT_ID_LENGTH_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_CLIENT_ID_LENGTH_MAXIMUM;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_CLIENT_ID_LENGTH_MINIMUM;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_CONNECTIONS_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_CONNECTIONS_MINIMUM;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_TOPIC_LENGTH_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_TOPIC_LENGTH_MAXIMUM;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_TOPIC_LENGTH_MINIMUM;
-import static com.hivemq.config.RestrictionsConfigurationService.NO_CONNECT_IDLE_TIMEOUT_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.NO_CONNECT_IDLE_TIMEOUT_MINIMUM;
-import static com.hivemq.config.RestrictionsConfigurationService.UNLIMITED_CONNECTIONS;
+import static com.hivemq.config.RestrictionsConfigService.INCOMING_BANDWIDTH_THROTTLING_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.INCOMING_BANDWIDTH_THROTTLING_MINIMUM;
+import static com.hivemq.config.RestrictionsConfigService.MAX_CLIENT_ID_LENGTH_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.MAX_CLIENT_ID_LENGTH_MAXIMUM;
+import static com.hivemq.config.RestrictionsConfigService.MAX_CLIENT_ID_LENGTH_MINIMUM;
+import static com.hivemq.config.RestrictionsConfigService.MAX_CONNECTIONS_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.MAX_CONNECTIONS_MINIMUM;
+import static com.hivemq.config.RestrictionsConfigService.MAX_TOPIC_LENGTH_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.MAX_TOPIC_LENGTH_MAXIMUM;
+import static com.hivemq.config.RestrictionsConfigService.MAX_TOPIC_LENGTH_MINIMUM;
+import static com.hivemq.config.RestrictionsConfigService.NO_CONNECT_IDLE_TIMEOUT_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.NO_CONNECT_IDLE_TIMEOUT_MINIMUM;
+import static com.hivemq.config.RestrictionsConfigService.UNLIMITED_CONNECTIONS;
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.DEFAULT_MAXIMUM_PACKET_SIZE_NO_LIMIT;
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.DEFAULT_RECEIVE_MAXIMUM;
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.SESSION_EXPIRE_ON_DISCONNECT;
@@ -78,8 +78,8 @@ public class ConfigService {
     public static final int TTL_DISABLED = -1;
     public static final int SERVER_RECEIVE_MAXIMUM_DEFAULT = 10;
     public static final long MAX_QUEUED_MESSAGES_DEFAULT = 1000;
-    public static final MqttConfigurationService.QueuedMessagesStrategy QUEUED_MESSAGES_STRATEGY_DEFAULT =
-            MqttConfigurationService.QueuedMessagesStrategy.DISCARD;
+    public static final MqttConfigService.QueuedMessagesStrategy QUEUED_MESSAGES_STRATEGY_DEFAULT =
+            MqttConfigService.QueuedMessagesStrategy.DISCARD;
     public static final long MAX_EXPIRY_INTERVAL_DEFAULT = UnsignedDataTypes.UNSIGNED_INT_MAX_VALUE + 1;
     public static final boolean RETAINED_MESSAGES_ENABLED_DEFAULT = true;
     public static final QoS MAXIMUM_QOS_DEFAULT = QoS.EXACTLY_ONCE;
@@ -95,19 +95,19 @@ public class ConfigService {
     private static final @NotNull Logger log = LoggerFactory.getLogger(ConfigService.class);
     private static final @NotNull String JKS = "JKS";
 
-    private final @NotNull ListenerConfigurationService listener;
-    private final @NotNull MqttConfigurationService mqtt;
-    private final @NotNull RestrictionsConfigurationService restrictions;
-    private final @NotNull SecurityConfigurationService security;
+    private final @NotNull ListenerConfigService listener;
+    private final @NotNull MqttConfigService mqtt;
+    private final @NotNull RestrictionsConfigService restrictions;
+    private final @NotNull SecurityConfigService security;
     private final @NotNull List<String> listenerNames;
 
     public ConfigService() throws IOException, JAXBException {
-        listener = new ListenerConfigurationService();
-        mqtt = new MqttConfigurationService();
-        restrictions = new RestrictionsConfigurationService();
-        security = new SecurityConfigurationService();
+        listener = new ListenerConfigService();
+        mqtt = new MqttConfigService();
+        restrictions = new RestrictionsConfigService();
+        security = new SecurityConfigService();
         listenerNames = new ArrayList<>();
-        final File file = new File(SystemInformation.INSTANCE.getConfigFolder(), "config.xml");
+        final File file = new File(SysInfo.INSTANCE.getConfigFolder(), "config.xml");
         if (!file.exists() || !file.isFile() || !file.canRead()) {
             log.error("Cannot read config {}. Using defaults", file.getAbsolutePath());
             setConfig(new HiveMQConfigEntity());
@@ -154,7 +154,7 @@ public class ConfigService {
             if (file.isAbsolute()) {
                 return file.getAbsolutePath();
             } else {
-                return new File(SystemInformation.INSTANCE.getHiveMQHomeFolder(), path).getAbsolutePath();
+                return new File(SysInfo.INSTANCE.getHiveMQHomeFolder(), path).getAbsolutePath();
             }
         }
     }
@@ -372,7 +372,7 @@ public class ConfigService {
         mqtt.setTopicAliasEnabled(mqttEntity.getTopicAliasConfigEntity().isEnabled());
         mqtt.setTopicAliasMaxPerClient(validateMaxPerClient(mqttEntity.getTopicAliasConfigEntity().getMaxPerClient()));
         mqtt.setMaxQueuedMessages(mqttEntity.getQueuedMessagesConfigEntity().getMaxQueueSize());
-        mqtt.setQueuedMessagesStrategy(MqttConfigurationService.QueuedMessagesStrategy.valueOf(mqttEntity.getQueuedMessagesConfigEntity()
+        mqtt.setQueuedMessagesStrategy(MqttConfigService.QueuedMessagesStrategy.valueOf(mqttEntity.getQueuedMessagesConfigEntity()
                 .getQueuedMessagesStrategy()
                 .name()));
         mqtt.setMaxSessionExpiryInterval(validateSessionExpiryInterval(mqttEntity.getSessionExpiryConfigEntity()
@@ -400,19 +400,19 @@ public class ConfigService {
                 .isEnabled());
     }
 
-    public @NotNull ListenerConfigurationService listenerConfiguration() {
+    public @NotNull ListenerConfigService listenerConfiguration() {
         return listener;
     }
 
-    public @NotNull MqttConfigurationService mqttConfiguration() {
+    public @NotNull MqttConfigService mqttConfiguration() {
         return mqtt;
     }
 
-    public @NotNull RestrictionsConfigurationService restrictionsConfiguration() {
+    public @NotNull RestrictionsConfigService restrictionsConfiguration() {
         return restrictions;
     }
 
-    public @NotNull SecurityConfigurationService securityConfiguration() {
+    public @NotNull SecurityConfigService securityConfiguration() {
         return security;
     }
 

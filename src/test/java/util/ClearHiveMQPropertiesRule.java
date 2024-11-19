@@ -15,13 +15,13 @@
  */
 package util;
 
-import com.hivemq.config.SystemInformation;
+import com.hivemq.config.SysInfo;
 import org.junit.contrib.java.lang.system.ClearSystemProperties;
 
 public class ClearHiveMQPropertiesRule extends ClearSystemProperties {
 
     public ClearHiveMQPropertiesRule() {
-        super(SystemInformation.HIVEMQ_HOME, "hivemq.log.folder", "hivemq.config.folder", "hivemq.data.folder");
+        super(SysInfo.HIVEMQ_HOME, "hivemq.log.folder", "hivemq.config.folder", "hivemq.data.folder");
     }
 
     public void reset() {

@@ -27,7 +27,7 @@ import com.hivemq.persistence.LocalPersistence;
 
 import java.util.List;
 
-import static com.hivemq.config.MqttConfigurationService.QueuedMessagesStrategy;
+import static com.hivemq.config.MqttConfigService.QueuedMessagesStrategy;
 
 public interface ClientQueueLocalPersistence extends LocalPersistence {
 

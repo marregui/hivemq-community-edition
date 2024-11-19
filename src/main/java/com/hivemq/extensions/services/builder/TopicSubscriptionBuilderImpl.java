@@ -17,9 +17,9 @@ package com.hivemq.extensions.services.builder;
 
 import com.google.common.base.Preconditions;
 import com.hivemq.config.ConfigService;
-import com.hivemq.config.MqttConfigurationService;
-import com.hivemq.config.RestrictionsConfigurationService;
-import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.MqttConfigService;
+import com.hivemq.config.RestrictionsConfigService;
+import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -50,15 +50,15 @@ public class TopicSubscriptionBuilderImpl implements TopicSubscriptionBuilder {
     private boolean shared = false;
     private @Nullable Integer subscriptionIdentifier;
 
-    private final @NotNull MqttConfigurationService mqttConfig;
-    private final @NotNull RestrictionsConfigurationService restrictionsConfig;
-    private final @NotNull SecurityConfigurationService securityConfigurationService;
+    private final @NotNull MqttConfigService mqttConfig;
+    private final @NotNull RestrictionsConfigService restrictionsConfig;
+    private final @NotNull SecurityConfigService securityConfigService;
 
     @Inject
     public TopicSubscriptionBuilderImpl(final @NotNull ConfigService configService) {
         this.mqttConfig = configService.mqttConfiguration();
         this.restrictionsConfig = configService.restrictionsConfiguration();
-        this.securityConfigurationService = configService.securityConfiguration();
+        this.securityConfigService = configService.securityConfiguration();
     }
 
     @Override
@@ -102,7 +102,7 @@ public class TopicSubscriptionBuilderImpl implements TopicSubscriptionBuilder {
             throw new IllegalArgumentException("The topic filter (" + topicFilter + ") is invalid for subscriptions");
         }
 
-        if (!PluginBuilderUtil.isValidUtf8String(topicFilter, securityConfigurationService.validateUTF8())) {
+        if (!PluginBuilderUtil.isValidUtf8String(topicFilter, securityConfigService.validateUTF8())) {
             throw new IllegalArgumentException("The topic filter (" + topicFilter + ") is UTF-8 malformed");
         }
 

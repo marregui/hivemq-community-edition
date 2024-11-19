@@ -17,7 +17,7 @@ package com.hivemq.codec.decoder;
 
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.netty.ChannelDependencies;
-import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.MqttConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.metrics.handler.GlobalMQTTMessageCounter;
@@ -50,7 +50,7 @@ public class MQTTMessageDecoder extends ByteToMessageDecoder {
 
     private final @NotNull MqttConnectDecoder connectDecoder;
     private final @NotNull MqttConnacker mqttConnacker;
-    private final @NotNull MqttConfigurationService mqttConfig;
+    private final @NotNull MqttConfigService mqttConfig;
     private final @NotNull MqttDecoders mqttDecoders;
     private final @NotNull MqttServerDisconnector mqttServerDisconnector;
     private final @NotNull GlobalMQTTMessageCounter globalMQTTMessageCounter;
@@ -58,7 +58,7 @@ public class MQTTMessageDecoder extends ByteToMessageDecoder {
     public MQTTMessageDecoder(
             final @NotNull MqttConnectDecoder connectDecoder,
             final @NotNull MqttConnacker mqttConnacker,
-            final @NotNull MqttConfigurationService mqttConfig,
+            final @NotNull MqttConfigService mqttConfig,
             final @NotNull MqttDecoders mqttDecoders,
             final @NotNull MqttServerDisconnector mqttServerDisconnector,
             final @NotNull GlobalMQTTMessageCounter globalMQTTMessageCounter) {

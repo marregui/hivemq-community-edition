@@ -21,7 +21,7 @@ import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.codec.decoder.MQTTMessageDecoder;
 import com.hivemq.ShutdownHooks;
 import com.hivemq.config.InternalConfig;
-import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.RestrictionsConfigService;
 import com.hivemq.config.entity.Listener;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.connect.MessageBarrier;
@@ -117,7 +117,7 @@ public abstract class AbstractChannelInitializer extends ChannelInitializer<Chan
     protected void addNoConnectIdleHandler(final @NotNull Channel ch) {
 
         //get timeout value from internal config
-        final RestrictionsConfigurationService restrictionsConfig =
+        final RestrictionsConfigService restrictionsConfig =
                 channelDependencies.getRestrictionsConfigurationService();
 
         final long timeoutMillis = restrictionsConfig.noConnectIdleTimeout();

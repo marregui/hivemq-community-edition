@@ -24,7 +24,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.config.HivemqId;
-import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.MqttConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.publish.PublishStatus;
@@ -66,19 +66,19 @@ public class RetainedMessagesSender {
     private final @NotNull HivemqId hiveMQId;
     private final @NotNull RetainedMessagePersistence retainedMessagePersistence;
     private final @NotNull ClientQueuePersistence clientQueuePersistence;
-    private final @NotNull MqttConfigurationService mqttConfigurationService;
+    private final @NotNull MqttConfigService mqttConfigService;
 
     @Inject
     public RetainedMessagesSender(
             final @NotNull HivemqId hiveMQId,
             final @NotNull RetainedMessagePersistence retainedMessagePersistence,
             final @NotNull ClientQueuePersistence clientQueuePersistence,
-            final @NotNull MqttConfigurationService mqttConfigurationService) {
+            final @NotNull MqttConfigService mqttConfigService) {
 
         this.hiveMQId = hiveMQId;
         this.retainedMessagePersistence = retainedMessagePersistence;
         this.clientQueuePersistence = clientQueuePersistence;
-        this.mqttConfigurationService = mqttConfigurationService;
+        this.mqttConfigService = mqttConfigService;
     }
 
     /**
@@ -111,8 +111,7 @@ public class RetainedMessagesSender {
                         clientId,
                         resultFuture,
                         channel,
-                        clientQueuePersistence,
-                        mqttConfigurationService),
+                        clientQueuePersistence, mqttConfigService),
                 channel.eventLoop());
 
         return resultFuture;
@@ -127,7 +126,7 @@ public class RetainedMessagesSender {
         private final @NotNull SettableFuture<Void> resultFuture;
         private final @NotNull Channel channel;
         private final @NotNull ClientQueuePersistence clientQueuePersistence;
-        private final @NotNull MqttConfigurationService mqttConfigurationService;
+        private final @NotNull MqttConfigService mqttConfigService;
 
         SendRetainedMessageCallback(
                 final @NotNull Topic[] subscribedTopics,
@@ -136,7 +135,7 @@ public class RetainedMessagesSender {
                 final @NotNull SettableFuture<Void> resultFuture,
                 final @NotNull Channel channel,
                 final @NotNull ClientQueuePersistence clientQueuePersistence,
-                final @NotNull MqttConfigurationService mqttConfigurationService) {
+                final @NotNull MqttConfigService mqttConfigService) {
 
             this.subscribedTopics = subscribedTopics;
             this.hivemqId = hivemqId;
@@ -144,7 +143,7 @@ public class RetainedMessagesSender {
             this.resultFuture = resultFuture;
             this.channel = channel;
             this.clientQueuePersistence = clientQueuePersistence;
-            this.mqttConfigurationService = mqttConfigurationService;
+            this.mqttConfigService = mqttConfigService;
         }
 
         @Override
@@ -224,7 +223,7 @@ public class RetainedMessagesSender {
                     false,
                     qos1and2Messages,
                     true,
-                    Objects.requireNonNullElseGet(queueLimit, mqttConfigurationService::maxQueuedMessages)));
+                    Objects.requireNonNullElseGet(queueLimit, mqttConfigService::maxQueuedMessages)));
             resultFuture.setFuture(FutureUtils.voidFutureFromList(futures.build()));
         }
 

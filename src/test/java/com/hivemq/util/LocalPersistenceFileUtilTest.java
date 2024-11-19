@@ -19,7 +19,7 @@ import com.google.common.io.Files;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hivemq.bootstrap.lazysingleton.LazySingletonModule;
-import com.hivemq.config.SystemInformation;
+import com.hivemq.config.SysInfo;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Rule;
@@ -59,7 +59,7 @@ public class LocalPersistenceFileUtilTest {
     public void test_create_persistence_dir_if_it_doesnt_exist() throws Exception {
 
         final File dataFolder = temporaryFolder.newFolder();
-        final SystemInformation systemInfoForTest = createInfoForTest(dataFolder);
+        final SysInfo systemInfoForTest = createInfoForTest(dataFolder);
         final LocalPersistenceFileUtil util = new LocalPersistenceFileUtil(systemInfoForTest);
 
 
@@ -80,7 +80,7 @@ public class LocalPersistenceFileUtilTest {
         final File tempFile = new File(persistenceFolder, "testfile.tmp");
         Files.touch(tempFile);
 
-        final SystemInformation systemInfoForTest = createInfoForTest(dataFolder);
+        final SysInfo systemInfoForTest = createInfoForTest(dataFolder);
         final LocalPersistenceFileUtil util = new LocalPersistenceFileUtil(systemInfoForTest);
 
 
@@ -91,8 +91,8 @@ public class LocalPersistenceFileUtilTest {
     }
 
     @NotNull
-    private SystemInformation createInfoForTest(final File dataFolder) {
-        return new SystemInformation() {
+    private SysInfo createInfoForTest(final File dataFolder) {
+        return new SysInfo() {
 
             @NotNull
             @Override

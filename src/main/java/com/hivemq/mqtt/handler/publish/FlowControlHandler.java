@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.publish;
 
-import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.MqttConfigService;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.puback.PUBACK;
@@ -57,8 +57,8 @@ public class FlowControlHandler extends ChannelDuplexHandler {
 
     @Inject
     public FlowControlHandler(
-            final MqttConfigurationService mqttConfigurationService, final MqttServerDisconnector serverDisconnector) {
-        this.serverReceiveMaximum = mqttConfigurationService.serverReceiveMaximum();
+            final MqttConfigService mqttConfigService, final MqttServerDisconnector serverDisconnector) {
+        this.serverReceiveMaximum = mqttConfigService.serverReceiveMaximum();
         this.serverDisconnector = serverDisconnector;
         this.serverSendQuota = new AtomicInteger(serverReceiveMaximum);
     }

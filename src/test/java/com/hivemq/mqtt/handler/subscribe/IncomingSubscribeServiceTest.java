@@ -22,8 +22,8 @@ import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.MqttConfigurationService;
-import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.MqttConfigService;
+import com.hivemq.config.RestrictionsConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.parameter.TopicPermission;
 import com.hivemq.extension.sdk.api.packets.auth.DefaultAuthorizationBehaviour;
@@ -93,10 +93,10 @@ public class IncomingSubscribeServiceTest {
     private SharedSubscriptionService sharedSubscriptionService;
 
     @Mock
-    private MqttConfigurationService mqttConfigurationService;
+    private MqttConfigService mqttConfigService;
 
     @Mock
-    private RestrictionsConfigurationService restrictionsConfigurationService;
+    private RestrictionsConfigService restrictionsConfigService;
 
     private EmbeddedChannel channel;
     private IncomingSubscribeService incomingSubscribeService;
@@ -110,9 +110,7 @@ public class IncomingSubscribeServiceTest {
         incomingSubscribeService = new IncomingSubscribeService(clientSessionSubscriptionPersistence,
                 retainedMessagePersistence,
                 sharedSubscriptionService,
-                retainedMessagesSender,
-                mqttConfigurationService,
-                restrictionsConfigurationService,
+                retainedMessagesSender, mqttConfigService, restrictionsConfigService,
                 new MqttServerDisconnectorImpl(eventLog));
 
         channel = new EmbeddedChannel();
@@ -127,7 +125,7 @@ public class IncomingSubscribeServiceTest {
         when(ctx.channel()).thenReturn(channel);
         when(ctx.writeAndFlush(any())).thenReturn(channelFuture);
         when(ctx.executor()).thenReturn(ImmediateEventExecutor.INSTANCE);
-        when(restrictionsConfigurationService.maxTopicLength()).thenReturn(65535);
+        when(restrictionsConfigService.maxTopicLength()).thenReturn(65535);
     }
 
 
@@ -292,7 +290,7 @@ public class IncomingSubscribeServiceTest {
 
     @Test
     public void test_subscribe_wildcard_disabled_mqtt5() {
-        when(mqttConfigurationService.wildcardSubscriptionsEnabled()).thenReturn(false);
+        when(mqttConfigService.wildcardSubscriptionsEnabled()).thenReturn(false);
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
         final Topic topic = new Topic("#", QoS.EXACTLY_ONCE);
 
@@ -307,7 +305,7 @@ public class IncomingSubscribeServiceTest {
 
     @Test
     public void test_shared_subscription_disabled_mqtt5() {
-        when(mqttConfigurationService.sharedSubscriptionsEnabled()).thenReturn(false);
+        when(mqttConfigService.sharedSubscriptionsEnabled()).thenReturn(false);
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);
         final Topic topic = new Topic("$share/group1/topic1", QoS.EXACTLY_ONCE);
 
@@ -465,7 +463,7 @@ public class IncomingSubscribeServiceTest {
 
     @Test
     public void test_subscribe_topic_length_exceeded() throws Exception {
-        when(restrictionsConfigurationService.maxTopicLength()).thenReturn(5);
+        when(restrictionsConfigService.maxTopicLength()).thenReturn(5);
 
         final ArgumentCaptor<ImmutableSet> captor = ArgumentCaptor.forClass(ImmutableSet.class);
         final Topic topic1 = new Topic("123456", QoS.AT_LEAST_ONCE);

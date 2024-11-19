@@ -20,7 +20,7 @@ import com.hivemq.codec.decoder.MqttDecoders;
 import com.hivemq.codec.encoder.EncoderFactory;
 import com.hivemq.ShutdownHooks;
 import com.hivemq.config.ConfigService;
-import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.RestrictionsConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.handler.ClientLifecycleEventHandler;
 import com.hivemq.extensions.handler.IncomingPublishHandler;
@@ -88,7 +88,7 @@ public class ChannelDependenciesTest {
     private @NotNull PingRequestHandler pingRequestHandler;
 
     @Mock
-    private @NotNull RestrictionsConfigurationService restrictionsConfigurationService;
+    private @NotNull RestrictionsConfigService restrictionsConfigService;
 
     @Mock
     private @NotNull MqttConnectDecoder mqttConnectDecoder;
@@ -160,8 +160,7 @@ public class ChannelDependenciesTest {
                 globalTrafficShapingHandler,
                 metricsHolder,
                 exceptionHandler,
-                pingRequestHandler,
-                restrictionsConfigurationService,
+                pingRequestHandler, restrictionsConfigService,
                 mqttConnectDecoder,
                 mqttConnacker,
                 eventLog,

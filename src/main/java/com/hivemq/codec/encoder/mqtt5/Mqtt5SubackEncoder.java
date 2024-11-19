@@ -16,7 +16,7 @@
 package com.hivemq.codec.encoder.mqtt5;
 
 import com.hivemq.codec.encoder.mqtt5.Mqtt5MessageWithUserPropertiesEncoder.Mqtt5MessageWithReasonStringEncoder;
-import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.MessageType;
 import com.hivemq.mqtt.message.dropping.MessageDroppedService;
@@ -39,8 +39,8 @@ public class Mqtt5SubackEncoder extends Mqtt5MessageWithReasonStringEncoder<SUBA
 
     public Mqtt5SubackEncoder(
             final @NotNull MessageDroppedService messageDroppedService,
-            final @NotNull SecurityConfigurationService securityConfigurationService) {
-        super(messageDroppedService, securityConfigurationService);
+            final @NotNull SecurityConfigService securityConfigService) {
+        super(messageDroppedService, securityConfigService);
     }
 
     @Override

@@ -16,7 +16,7 @@
 package com.hivemq.codec.encoder.mqtt5;
 
 import com.google.common.primitives.ImmutableIntArray;
-import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.MessageType;
 import com.hivemq.mqtt.message.QoS;
@@ -52,8 +52,8 @@ public class Mqtt5PublishEncoder extends Mqtt5MessageWithUserPropertiesEncoder<P
 
     public Mqtt5PublishEncoder(
             final @NotNull MessageDroppedService messageDroppedService,
-            final @NotNull SecurityConfigurationService securityConfigurationService) {
-        super(messageDroppedService, securityConfigurationService);
+            final @NotNull SecurityConfigService securityConfigService) {
+        super(messageDroppedService, securityConfigService);
     }
 
     @Override

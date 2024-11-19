@@ -68,7 +68,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        final TlsTcpListener tlsTcpListener = listenerConfigurationService.getTlsTcpListeners().get(0);
+        final TlsTcpListener tlsTcpListener = listenerConfigService.getTlsTcpListeners().get(0);
 
         assertEquals(8883, tlsTcpListener.getPort());
         assertEquals("0.0.0.0", tlsTcpListener.getBindAddress());
@@ -114,7 +114,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        final TlsTcpListener tlsTcpListener = listenerConfigurationService.getTlsTcpListeners().get(0);
+        final TlsTcpListener tlsTcpListener = listenerConfigService.getTlsTcpListeners().get(0);
 
         assertEquals(8883, tlsTcpListener.getPort());
         assertEquals("0.0.0.0", tlsTcpListener.getBindAddress());
@@ -154,9 +154,9 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        final TcpListener tcpListener1 = listenerConfigurationService.getTcpListeners().get(0);
-        final TcpListener tcpListener2 = listenerConfigurationService.getTcpListeners().get(1);
-        final TcpListener tcpListener3 = listenerConfigurationService.getTcpListeners().get(2);
+        final TcpListener tcpListener1 = listenerConfigService.getTcpListeners().get(0);
+        final TcpListener tcpListener2 = listenerConfigService.getTcpListeners().get(1);
+        final TcpListener tcpListener3 = listenerConfigService.getTcpListeners().get(2);
 
         assertEquals("my-tcp-listener", tcpListener1.getName());
         assertEquals("my-tcp-listener-1", tcpListener2.getName());
@@ -178,7 +178,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        final TcpListener tcpListener = listenerConfigurationService.getTcpListeners().get(0);
+        final TcpListener tcpListener = listenerConfigService.getTcpListeners().get(0);
 
         assertEquals(1883, tcpListener.getPort());
         assertEquals("0.0.0.0", tcpListener.getBindAddress());
@@ -199,7 +199,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        final TcpListener tcpListener = listenerConfigurationService.getTcpListeners().get(0);
+        final TcpListener tcpListener = listenerConfigService.getTcpListeners().get(0);
 
         assertEquals(1883, tcpListener.getPort());
         assertEquals("0.0.0.0", tcpListener.getBindAddress());
@@ -224,7 +224,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        final WebsocketListener websocketListener = listenerConfigurationService.getWebsocketListeners().get(0);
+        final WebsocketListener websocketListener = listenerConfigService.getWebsocketListeners().get(0);
         assertEquals(8000, websocketListener.getPort());
         assertEquals("0.0.0.0", websocketListener.getBindAddress());
         assertEquals("/mqtt", websocketListener.getPath());
@@ -264,7 +264,7 @@ public class ListenerConfiguratorTest extends AbstractConfigurationTest {
 
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        final TlsWebsocketListener websocketListener = listenerConfigurationService.getTlsWebsocketListeners().get(0);
+        final TlsWebsocketListener websocketListener = listenerConfigService.getTlsWebsocketListeners().get(0);
         assertEquals(8000, websocketListener.getPort());
         assertEquals("0.0.0.0", websocketListener.getBindAddress());
         assertEquals("/mqtt", websocketListener.getPath());

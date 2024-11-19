@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.connect;
 
-import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.RestrictionsConfigService;
 import com.hivemq.metrics.gauges.OpenConnectionsGauge;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;
 import com.hivemq.mqtt.message.connect.CONNECT;
@@ -61,7 +61,7 @@ public class ConnectionLimiterHandlerTest {
     MqttConnacker mqttConnacker;
 
     @Mock
-    RestrictionsConfigurationService restrictionsEntity;
+    RestrictionsConfigService restrictionsEntity;
 
     @Mock
     CONNECT connect;

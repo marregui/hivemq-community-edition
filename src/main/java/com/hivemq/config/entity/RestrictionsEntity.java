@@ -22,11 +22,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import static com.hivemq.config.RestrictionsConfigurationService.INCOMING_BANDWIDTH_THROTTLING_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_CLIENT_ID_LENGTH_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_CONNECTIONS_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_TOPIC_LENGTH_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.NO_CONNECT_IDLE_TIMEOUT_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.INCOMING_BANDWIDTH_THROTTLING_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.MAX_CLIENT_ID_LENGTH_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.MAX_CONNECTIONS_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.MAX_TOPIC_LENGTH_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.NO_CONNECT_IDLE_TIMEOUT_DEFAULT;
 
 @XmlRootElement(name = "restrictions")
 @XmlAccessorType(XmlAccessType.NONE)

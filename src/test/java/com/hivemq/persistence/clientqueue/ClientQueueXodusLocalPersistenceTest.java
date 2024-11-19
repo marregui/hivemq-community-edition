@@ -43,8 +43,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static com.hivemq.config.MqttConfigurationService.QueuedMessagesStrategy.DISCARD;
-import static com.hivemq.config.MqttConfigurationService.QueuedMessagesStrategy.DISCARD_OLDEST;
+import static com.hivemq.config.MqttConfigService.QueuedMessagesStrategy.DISCARD;
+import static com.hivemq.config.MqttConfigService.QueuedMessagesStrategy.DISCARD_OLDEST;
 import static com.hivemq.persistence.clientqueue.ClientQueuePersistenceImpl.Key;
 import static com.hivemq.persistence.clientqueue.ClientQueuePersistenceImpl.SHARED_IN_FLIGHT_MARKER;
 import static org.junit.Assert.assertEquals;

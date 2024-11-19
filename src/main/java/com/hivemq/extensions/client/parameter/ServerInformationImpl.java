@@ -17,8 +17,8 @@ package com.hivemq.extensions.client.parameter;
 
 import com.google.common.collect.ImmutableSet;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.config.SystemInformation;
-import com.hivemq.config.ListenerConfigurationService;
+import com.hivemq.config.SysInfo;
+import com.hivemq.config.ListenerConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.Listener;
 import com.hivemq.extension.sdk.api.client.parameter.ServerInformation;
@@ -32,49 +32,49 @@ import java.util.Set;
 public class ServerInformationImpl implements ServerInformation {
 
     @NotNull
-    private final ListenerConfigurationService listenerConfigurationService;
+    private final ListenerConfigService listenerConfigService;
 
     @Inject
     public ServerInformationImpl(
-            @NotNull final ListenerConfigurationService listenerConfigurationService) {
-        this.listenerConfigurationService = listenerConfigurationService;
+            @NotNull final ListenerConfigService listenerConfigService) {
+        this.listenerConfigService = listenerConfigService;
     }
 
     @NotNull
     @Override
     public String getVersion() {
-        return SystemInformation.VERSION;
+        return SysInfo.VERSION;
     }
 
     @NotNull
     @Override
     public File getHomeFolder() {
-        return SystemInformation.INSTANCE.getHiveMQHomeFolder();
+        return SysInfo.INSTANCE.getHiveMQHomeFolder();
     }
 
     @NotNull
     @Override
     public File getDataFolder() {
-        return SystemInformation.INSTANCE.getDataFolder();
+        return SysInfo.INSTANCE.getDataFolder();
     }
 
     @NotNull
     @Override
     public File getLogFolder() {
-        return SystemInformation.INSTANCE.getLogFolder();
+        return SysInfo.INSTANCE.getLogFolder();
     }
 
     @NotNull
     @Override
     public File getExtensionsFolder() {
-        return SystemInformation.INSTANCE.getExtensionsFolder();
+        return SysInfo.INSTANCE.getExtensionsFolder();
     }
 
     @NotNull
     @Override
     public Set<Listener> getListener() {
         final List<com.hivemq.config.entity.Listener> listeners =
-                listenerConfigurationService.getListeners();
+                listenerConfigService.getListeners();
         final ImmutableSet.Builder<Listener> builder = ImmutableSet.builder();
         for (final com.hivemq.config.entity.Listener listener : listeners) {
             builder.add(new ListenerImpl(listener));

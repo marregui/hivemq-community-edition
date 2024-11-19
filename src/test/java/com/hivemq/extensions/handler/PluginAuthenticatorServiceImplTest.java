@@ -25,8 +25,8 @@ import com.hivemq.bootstrap.netty.ChannelHandlerNames;
 import com.hivemq.codec.decoder.MQTTMessageDecoder;
 import com.hivemq.config.ConfigService;
 import com.hivemq.config.InternalConfig;
-import com.hivemq.config.SecurityConfigurationService;
-import com.hivemq.config.ListenerConfigurationService;
+import com.hivemq.config.SecurityConfigService;
+import com.hivemq.config.ListenerConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.auth.EnhancedAuthenticator;
 import com.hivemq.extension.sdk.api.auth.SimpleAuthenticator;
@@ -101,7 +101,7 @@ public class PluginAuthenticatorServiceImplTest {
     public void setUp() throws Exception {
         clientConnection = new DummyClientConnection(channel, mock(PublishFlushHandler.class));
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
-        final SecurityConfigurationService securityConfig = new SecurityConfigurationService();
+        final SecurityConfigService securityConfig = new SecurityConfigService();
         channel = new EmbeddedChannel();
         clientConnection = new DummyClientConnection(channel, mock(PublishFlushHandler.class));
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
@@ -126,7 +126,7 @@ public class PluginAuthenticatorServiceImplTest {
                 asyncer,
                 pluginTaskExecutorService,
                 extensions,
-                new ServerInformationImpl(new ListenerConfigurationService()));
+                new ServerInformationImpl(new ListenerConfigService()));
     }
 
     @After

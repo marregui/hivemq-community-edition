@@ -25,8 +25,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.config.MqttConfigurationService;
-import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.MqttConfigService;
+import com.hivemq.config.RestrictionsConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.auth.DefaultAuthorizationBehaviour;
@@ -96,9 +96,9 @@ public class IncomingSubscribeService {
 
     private final @NotNull RetainedMessagesSender retainedMessagesSender;
 
-    private final @NotNull MqttConfigurationService mqttConfigurationService;
+    private final @NotNull MqttConfigService mqttConfigService;
 
-    private final @NotNull RestrictionsConfigurationService restrictionsConfigurationService;
+    private final @NotNull RestrictionsConfigService restrictionsConfigService;
 
     private final @NotNull MqttServerDisconnector mqttServerDisconnector;
 
@@ -108,16 +108,16 @@ public class IncomingSubscribeService {
             final @NotNull RetainedMessagePersistence retainedMessagePersistence,
             final @NotNull SharedSubscriptionService sharedSubscriptionService,
             final @NotNull RetainedMessagesSender retainedMessagesSender,
-            final @NotNull MqttConfigurationService mqttConfigurationService,
-            final @NotNull RestrictionsConfigurationService restrictionsConfigurationService,
+            final @NotNull MqttConfigService mqttConfigService,
+            final @NotNull RestrictionsConfigService restrictionsConfigService,
             final @NotNull MqttServerDisconnector mqttServerDisconnector) {
 
         this.clientSessionSubscriptionPersistence = clientSessionSubscriptionPersistence;
         this.retainedMessagePersistence = retainedMessagePersistence;
         this.sharedSubscriptionService = sharedSubscriptionService;
         this.retainedMessagesSender = retainedMessagesSender;
-        this.mqttConfigurationService = mqttConfigurationService;
-        this.restrictionsConfigurationService = restrictionsConfigurationService;
+        this.mqttConfigService = mqttConfigService;
+        this.restrictionsConfigService = restrictionsConfigService;
         this.mqttServerDisconnector = mqttServerDisconnector;
     }
 
@@ -215,7 +215,7 @@ public class IncomingSubscribeService {
         final ClientConnection clientConnection = ClientConnection.of(ctx.channel());
         log.trace("Checking SUBSCRIBE message of client '{}' if topics are valid", clientConnection.getClientId());
 
-        final int maxTopicLength = restrictionsConfigurationService.maxTopicLength();
+        final int maxTopicLength = restrictionsConfigService.maxTopicLength();
         for (final Topic topic : msg.getTopics()) {
             final String topicString = topic.getTopic();
             if (!Topics.isValidToSubscribe(topicString)) {
@@ -270,7 +270,7 @@ public class IncomingSubscribeService {
             final Topic topic = msg.getTopics().get(i);
 
             if (answerCodes[i] == null || answerCodes[i].getCode() < 128) {
-                if (!mqttConfigurationService.wildcardSubscriptionsEnabled() &&
+                if (!mqttConfigService.wildcardSubscriptionsEnabled() &&
                         Topics.containsWildcard(topic.getTopic())) {
                     final String logMessage = "Client '" +
                             clientId +
@@ -285,7 +285,7 @@ public class IncomingSubscribeService {
                             Mqtt5DisconnectReasonCode.WILDCARD_SUBSCRIPTION_NOT_SUPPORTED,
                             ReasonStrings.DISCONNECT_WILDCARD_SUBSCRIPTIONS_NOT_SUPPORTED);
                     return;
-                } else if (!mqttConfigurationService.sharedSubscriptionsEnabled() &&
+                } else if (!mqttConfigService.sharedSubscriptionsEnabled() &&
                         Topics.isSharedSubscriptionTopic(topic.getTopic())) {
                     final String logMessage = "Client '" +
                             clientId +

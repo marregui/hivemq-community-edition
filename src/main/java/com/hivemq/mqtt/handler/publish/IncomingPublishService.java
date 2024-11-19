@@ -19,8 +19,8 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.config.MqttConfigurationService;
-import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.MqttConfigService;
+import com.hivemq.config.RestrictionsConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.auth.DefaultAuthorizationBehaviour;
@@ -56,20 +56,20 @@ import javax.inject.Singleton;
 public class IncomingPublishService {
 
     private final @NotNull InternalPublishService publishService;
-    private final @NotNull MqttConfigurationService mqttConfigurationService;
-    private final @NotNull RestrictionsConfigurationService restrictionsConfigurationService;
+    private final @NotNull MqttConfigService mqttConfigService;
+    private final @NotNull RestrictionsConfigService restrictionsConfigService;
     private final @NotNull MqttServerDisconnector mqttServerDisconnector;
 
     @Inject
     IncomingPublishService(
             final @NotNull InternalPublishService publishService,
-            final @NotNull MqttConfigurationService mqttConfigurationService,
-            final @NotNull RestrictionsConfigurationService restrictionsConfigurationService,
+            final @NotNull MqttConfigService mqttConfigService,
+            final @NotNull RestrictionsConfigService restrictionsConfigService,
             final @NotNull MqttServerDisconnector mqttServerDisconnector) {
 
         this.publishService = publishService;
-        this.mqttConfigurationService = mqttConfigurationService;
-        this.restrictionsConfigurationService = restrictionsConfigurationService;
+        this.mqttConfigService = mqttConfigService;
+        this.restrictionsConfigService = restrictionsConfigService;
         this.mqttServerDisconnector = mqttServerDisconnector;
     }
 
@@ -80,7 +80,7 @@ public class IncomingPublishService {
 
         final ClientConnection clientConnection = ClientConnection.of(ctx.channel());
 
-        final int maxQos = mqttConfigurationService.maximumQos().getQosNumber();
+        final int maxQos = mqttConfigService.maximumQos().getQosNumber();
         final int qos = publish.getQoS().getQosNumber();
         if (qos > maxQos) {
             final String clientId = clientConnection.getClientId();
@@ -91,7 +91,7 @@ public class IncomingPublishService {
                             " Got QoS " +
                             publish.getQoS() +
                             ", maximum: " +
-                            mqttConfigurationService.maximumQos() +
+                            mqttConfigService.maximumQos() +
                             ". Disconnecting client.",
                     "Sent PUBLISH with QoS (" + qos + ") higher than the allowed maximum (" + maxQos + ")",
                     Mqtt5DisconnectReasonCode.QOS_NOT_SUPPORTED,
@@ -100,7 +100,7 @@ public class IncomingPublishService {
         }
 
         final String topic = publish.getTopic();
-        final int maxTopicLength = restrictionsConfigurationService.maxTopicLength();
+        final int maxTopicLength = restrictionsConfigService.maxTopicLength();
         if (topic.length() > maxTopicLength) {
             final String clientId = clientConnection.getClientId();
             final String logMessage = "Client '" +

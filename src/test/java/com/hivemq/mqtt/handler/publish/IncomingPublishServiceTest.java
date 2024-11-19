@@ -21,8 +21,8 @@ import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.config.*;
-import com.hivemq.config.MqttConfigurationService;
-import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.MqttConfigService;
+import com.hivemq.config.RestrictionsConfigService;
 import com.hivemq.extension.sdk.api.auth.parameter.TopicPermission;
 import com.hivemq.extension.sdk.api.packets.publish.AckReasonCode;
 import com.hivemq.extensions.handler.tasks.PublishAuthorizerResult;
@@ -78,8 +78,8 @@ public class IncomingPublishServiceTest {
     @Mock
     private MqttServerDisconnectorImpl mqttServerDisconnector;
 
-    private MqttConfigurationService mqttConfigurationService;
-    private RestrictionsConfigurationService restrictionsConfigurationService;
+    private MqttConfigService mqttConfigService;
+    private RestrictionsConfigService restrictionsConfigService;
     private EmbeddedChannel channel;
     private ChannelHandlerContext ctx;
     private IncomingPublishService incomingPublishService;
@@ -89,8 +89,8 @@ public class IncomingPublishServiceTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        mqttConfigurationService = Mockito.spy(new MqttConfigurationService());
-        restrictionsConfigurationService = Mockito.spy(new RestrictionsConfigurationService());
+        mqttConfigService = Mockito.spy(new MqttConfigService());
+        restrictionsConfigService = Mockito.spy(new RestrictionsConfigService());
         when(publishService.publish(any(PUBLISH.class),
                 any(ExecutorService.class),
                 anyString())).thenReturn(Futures.immediateFuture(PublishReturnCode.DELIVERED));
@@ -103,9 +103,8 @@ public class IncomingPublishServiceTest {
 
     private void setupHandlerAndChannel() {
 
-        incomingPublishService = new IncomingPublishService(publishService,
-                mqttConfigurationService,
-                restrictionsConfigurationService,
+        incomingPublishService = new IncomingPublishService(publishService, mqttConfigService,
+                restrictionsConfigService,
                 mqttServerDisconnector);
 
         final CheckUserEventTriggeredOnSuper triggeredUserEvents = new CheckUserEventTriggeredOnSuper();
@@ -434,7 +433,7 @@ public class IncomingPublishServiceTest {
 
     @Test
     public void test_qos_exceeded_disconnect() {
-        when(mqttConfigurationService.maximumQos()).thenReturn(QoS.AT_MOST_ONCE);
+        when(mqttConfigService.maximumQos()).thenReturn(QoS.AT_MOST_ONCE);
         setupHandlerAndChannel();
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
@@ -487,7 +486,7 @@ public class IncomingPublishServiceTest {
 
     @Test(timeout = 20000)
     public void test_topic_length_exceeded_mqtt5() {
-        when(restrictionsConfigurationService.maxTopicLength()).thenReturn(3);
+        when(restrictionsConfigService.maxTopicLength()).thenReturn(3);
         clientConnection.setProtocolVersion(ProtocolVersion.MQTTv5);
 
         final PUBLISH publish = TestMessageUtil.createMqtt5Publish("topic", QoS.AT_LEAST_ONCE);

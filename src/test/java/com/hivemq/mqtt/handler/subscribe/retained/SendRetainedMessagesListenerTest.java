@@ -21,7 +21,7 @@ import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.config.ConfigService;
 import com.hivemq.config.HivemqId;
-import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.MqttConfigService;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
 import com.hivemq.mqtt.message.publish.PUBLISH;
@@ -76,7 +76,7 @@ public class SendRetainedMessagesListenerTest {
     private ClientQueuePersistence queuePersistence;
 
     @Mock
-    private MqttConfigurationService mqttConfigurationService;
+    private MqttConfigService mqttConfigService;
 
     @Before
     public void setUp() throws Exception {
@@ -504,8 +504,7 @@ public class SendRetainedMessagesListenerTest {
 
         final RetainedMessagesSender retainedMessagesSender = new RetainedMessagesSender(new HivemqId(),
                 retainedMessagePersistence,
-                queuePersistence,
-                mqttConfigurationService);
+                queuePersistence, mqttConfigService);
 
         return new SendRetainedMessagesListener(subscriptions,
                 ignoredTopics,
@@ -518,8 +517,7 @@ public class SendRetainedMessagesListenerTest {
 
         final RetainedMessagesSender retainedMessagesSender = new RetainedMessagesSender(new HivemqId(),
                 retainedMessagePersistence,
-                queuePersistence,
-                mqttConfigurationService);
+                queuePersistence, mqttConfigService);
 
         return new SendRetainedMessageResultListener(channel, topic, retainedMessagesSender);
     }

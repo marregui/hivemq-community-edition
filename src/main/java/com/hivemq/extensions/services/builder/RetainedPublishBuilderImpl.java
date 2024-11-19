@@ -18,9 +18,9 @@ package com.hivemq.extensions.services.builder;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.config.ConfigService;
-import com.hivemq.config.MqttConfigurationService;
-import com.hivemq.config.RestrictionsConfigurationService;
-import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.MqttConfigService;
+import com.hivemq.config.RestrictionsConfigService;
+import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -79,19 +79,19 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
     private final ImmutableList.Builder<MqttUserProperty> userPropertyBuilder = ImmutableList.builder();
 
     @NotNull
-    private final MqttConfigurationService mqttConfigurationService;
+    private final MqttConfigService mqttConfigService;
 
     @NotNull
-    private final RestrictionsConfigurationService restrictionsConfig;
+    private final RestrictionsConfigService restrictionsConfig;
 
     @NotNull
-    private final SecurityConfigurationService securityConfigurationService;
+    private final SecurityConfigService securityConfigService;
 
     @Inject
     public RetainedPublishBuilderImpl(final @NotNull ConfigService fullConfigService) {
-        this.mqttConfigurationService = fullConfigService.mqttConfiguration();
+        this.mqttConfigService = fullConfigService.mqttConfiguration();
         this.restrictionsConfig = fullConfigService.restrictionsConfiguration();
-        this.securityConfigurationService = fullConfigService.securityConfiguration();
+        this.securityConfigService = fullConfigService.securityConfiguration();
     }
 
     @NotNull
@@ -164,7 +164,7 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
     @NotNull
     @Override
     public RetainedPublishBuilder qos(@NotNull final Qos qos) {
-        PluginBuilderUtil.checkQos(qos, mqttConfigurationService.maximumQos().getQosNumber());
+        PluginBuilderUtil.checkQos(qos, mqttConfigService.maximumQos().getQosNumber());
         this.qos = qos;
         return this;
     }
@@ -174,7 +174,7 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
     public RetainedPublishBuilder topic(@NotNull final String topic) {
         PluginBuilderUtil.checkTopic(topic,
                 restrictionsConfig.maxTopicLength(),
-                securityConfigurationService.validateUTF8());
+                securityConfigService.validateUTF8());
         this.topic = topic;
         return this;
     }
@@ -190,7 +190,7 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
     @Override
     public RetainedPublishBuilder messageExpiryInterval(final long messageExpiryInterval) {
         PluginBuilderUtil.checkMessageExpiryInterval(messageExpiryInterval,
-                mqttConfigurationService.maxMessageExpiryInterval());
+                mqttConfigService.maxMessageExpiryInterval());
         this.messageExpiryInterval = messageExpiryInterval;
         return this;
     }
@@ -198,7 +198,7 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
     @NotNull
     @Override
     public RetainedPublishBuilder responseTopic(@Nullable final String responseTopic) {
-        PluginBuilderUtil.checkResponseTopic(responseTopic, securityConfigurationService.validateUTF8());
+        PluginBuilderUtil.checkResponseTopic(responseTopic, securityConfigService.validateUTF8());
         this.responseTopic = responseTopic;
         return this;
     }
@@ -213,7 +213,7 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
     @NotNull
     @Override
     public RetainedPublishBuilder contentType(@Nullable final String contentType) {
-        PluginBuilderUtil.checkContentType(contentType, securityConfigurationService.validateUTF8());
+        PluginBuilderUtil.checkContentType(contentType, securityConfigService.validateUTF8());
         this.contentType = contentType;
         return this;
     }
@@ -229,7 +229,7 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
     @NotNull
     @Override
     public RetainedPublishBuilder userProperty(@NotNull final String name, @NotNull final String value) {
-        PluginBuilderUtil.checkUserProperty(name, value, securityConfigurationService.validateUTF8());
+        PluginBuilderUtil.checkUserProperty(name, value, securityConfigService.validateUTF8());
         this.userPropertyBuilder.add(new MqttUserProperty(name, value));
         return this;
     }
@@ -242,7 +242,7 @@ public class RetainedPublishBuilderImpl implements RetainedPublishBuilder {
         checkNotNull(payload, "Payload must never be null");
 
         if (messageExpiryInterval == MESSAGE_EXPIRY_INTERVAL_NOT_SET) {
-            messageExpiryInterval = mqttConfigurationService.maxMessageExpiryInterval();
+            messageExpiryInterval = mqttConfigService.maxMessageExpiryInterval();
         }
 
         return new RetainedPublishImpl(qos,

@@ -15,7 +15,7 @@
  */
 package com.hivemq.codec.encoder.mqtt5;
 
-import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.MessageType;
 import com.hivemq.mqtt.message.dropping.MessageDroppedService;
@@ -36,8 +36,8 @@ public class Mqtt5PubrelEncoder extends
 
     public Mqtt5PubrelEncoder(
             final @NotNull MessageDroppedService messageDroppedService,
-            final @NotNull SecurityConfigurationService securityConfigurationService) {
-        super(messageDroppedService, securityConfigurationService);
+            final @NotNull SecurityConfigService securityConfigService) {
+        super(messageDroppedService, securityConfigService);
     }
 
     @Override

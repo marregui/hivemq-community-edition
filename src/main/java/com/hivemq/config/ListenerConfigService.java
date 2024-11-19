@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Singleton
-public class ListenerConfigurationService {
+public class ListenerConfigService {
 
-    private static final @NotNull Logger log = LoggerFactory.getLogger(ListenerConfigurationService.class);
+    private static final @NotNull Logger log = LoggerFactory.getLogger(ListenerConfigService.class);
 
     private final @NotNull List<Listener> listeners = new CopyOnWriteArrayList<>();
 

@@ -18,7 +18,7 @@ package com.hivemq.mqtt.services;
 import com.google.common.primitives.ImmutableIntArray;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.MqttConfigService;
 import com.hivemq.persistence.SingleWriterService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.publish.PublishStatus;
@@ -59,7 +59,7 @@ public class PublishDistributorImplTest {
     @Mock
     private @NotNull ClientSessionPersistence clientSessionPersistence;
     @Mock
-    private @NotNull MqttConfigurationService mqttConfigurationService;
+    private @NotNull MqttConfigService mqttConfigService;
 
     private @NotNull PublishDistributorImpl publishDistributor;
     private @NotNull SingleWriterService singleWriterService;
@@ -70,8 +70,7 @@ public class PublishDistributorImplTest {
         singleWriterService = TestSingleWriterFactory.defaultSingleWriter();
         publishDistributor = new PublishDistributorImpl(clientQueuePersistence,
                 clientSessionPersistence,
-                singleWriterService,
-                mqttConfigurationService);
+                singleWriterService, mqttConfigService);
     }
 
     @After

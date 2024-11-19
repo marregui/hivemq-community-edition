@@ -16,7 +16,7 @@
 package com.hivemq.util;
 
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
-import com.hivemq.config.SystemInformation;
+import com.hivemq.config.SysInfo;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
@@ -25,15 +25,15 @@ import java.io.File;
 @LazySingleton
 public class LocalPersistenceFileUtil {
 
-    private final @NotNull SystemInformation systemInformation;
+    private final @NotNull SysInfo sysInfo;
 
     @Inject
-    LocalPersistenceFileUtil(final @NotNull SystemInformation systemInformation) {
-        this.systemInformation = systemInformation;
+    LocalPersistenceFileUtil(final @NotNull SysInfo sysInfo) {
+        this.sysInfo = sysInfo;
     }
 
     public synchronized @NotNull File getLocalPersistenceFolder() {
-        return ensureExists(new File(systemInformation.getDataFolder(), "persistence"),
+        return ensureExists(new File(sysInfo.getDataFolder(), "persistence"),
                 "Could not create persistence folder");
     }
 

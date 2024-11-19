@@ -30,7 +30,7 @@ import com.hivemq.config.entity.TcpListener;
 import com.hivemq.config.entity.TlsTcpListener;
 import com.hivemq.config.entity.TlsWebsocketListener;
 import com.hivemq.config.entity.WebsocketListener;
-import com.hivemq.config.ListenerConfigurationService;
+import com.hivemq.config.ListenerConfigService;
 
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.persistence.connection.ConnectionPersistence;
@@ -56,7 +56,7 @@ public class HiveMQNettyBootstrap {
 
     private static final Logger log = LoggerFactory.getLogger(HiveMQNettyBootstrap.class);
 
-    private final @NotNull ListenerConfigurationService listenerConfigurationService;
+    private final @NotNull ListenerConfigService listenerConfigService;
     private final @NotNull ChannelInitializerFactory channelInitializerFactory;
     private final @NotNull ConnectionPersistence connectionPersistence;
     private final @NotNull NettyConfiguration nettyConfiguration;
@@ -66,12 +66,12 @@ public class HiveMQNettyBootstrap {
 
     @Inject
     HiveMQNettyBootstrap(
-            final @NotNull ListenerConfigurationService listenerConfigurationService,
+            final @NotNull ListenerConfigService listenerConfigService,
             final @NotNull ChannelInitializerFactory channelInitializerFactory,
             final @NotNull ConnectionPersistence connectionPersistence,
             final @NotNull NettyConfiguration nettyConfiguration) {
 
-        this.listenerConfigurationService = listenerConfigurationService;
+        this.listenerConfigService = listenerConfigService;
         this.channelInitializerFactory = channelInitializerFactory;
         this.connectionPersistence = connectionPersistence;
         this.nettyConfiguration = nettyConfiguration;
@@ -92,17 +92,17 @@ public class HiveMQNettyBootstrap {
 
         addDefaultListeners();
 
-        futures.addAll(bindTcpListeners(listenerConfigurationService.getTcpListeners()));
-        futures.addAll(tlsTcpListeners(listenerConfigurationService.getTlsTcpListeners()));
-        futures.addAll(websocketListeners(listenerConfigurationService.getWebsocketListeners()));
-        futures.addAll(tlsWebsocketListeners(listenerConfigurationService.getTlsWebsocketListeners()));
+        futures.addAll(bindTcpListeners(listenerConfigService.getTcpListeners()));
+        futures.addAll(tlsTcpListeners(listenerConfigService.getTlsTcpListeners()));
+        futures.addAll(websocketListeners(listenerConfigService.getWebsocketListeners()));
+        futures.addAll(tlsWebsocketListeners(listenerConfigService.getTlsWebsocketListeners()));
 
         return aggregatedFuture(futures);
     }
 
     private void addDefaultListeners() {
-        if (listenerConfigurationService.getListeners().isEmpty()) {
-            listenerConfigurationService.addListener(new TcpListener(1883, "0.0.0.0"));
+        if (listenerConfigService.getListeners().isEmpty()) {
+            listenerConfigService.addListener(new TcpListener(1883, "0.0.0.0"));
         }
     }
 

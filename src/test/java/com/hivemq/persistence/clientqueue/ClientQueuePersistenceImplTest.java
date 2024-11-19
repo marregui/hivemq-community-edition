@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.ImmutableIntArray;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.MqttConfigService;
 import com.hivemq.mqtt.message.MessageWithID;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.publish.PUBLISH;
@@ -46,7 +46,7 @@ import util.TestSingleWriterFactory;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.hivemq.config.MqttConfigurationService.QueuedMessagesStrategy;
+import static com.hivemq.config.MqttConfigService.QueuedMessagesStrategy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -71,7 +71,7 @@ public class ClientQueuePersistenceImplTest {
     PublishPayloadPersistence payloadPersistence;
 
     @Mock
-    MqttConfigurationService mqttConfigurationService;
+    MqttConfigService mqttConfigService;
 
     @Mock
     ClientSessionLocalPersistence clientSessionLocalPersistence;
@@ -94,11 +94,10 @@ public class ClientQueuePersistenceImplTest {
     public void setUp() throws Exception {
         closeableMock = MockitoAnnotations.openMocks(this);
         singleWriterService = TestSingleWriterFactory.defaultSingleWriter();
-        when(mqttConfigurationService.maxQueuedMessages()).thenReturn(1000L);
-        when(mqttConfigurationService.getQueuedMessagesStrategy()).thenReturn(QueuedMessagesStrategy.DISCARD);
+        when(mqttConfigService.maxQueuedMessages()).thenReturn(1000L);
+        when(mqttConfigService.getQueuedMessagesStrategy()).thenReturn(QueuedMessagesStrategy.DISCARD);
         clientQueuePersistence = new ClientQueuePersistenceImpl(localPersistence,
-                singleWriterService,
-                mqttConfigurationService,
+                singleWriterService, mqttConfigService,
                 clientSessionLocalPersistence,
                 topicTree,
                 connectionPersistence,

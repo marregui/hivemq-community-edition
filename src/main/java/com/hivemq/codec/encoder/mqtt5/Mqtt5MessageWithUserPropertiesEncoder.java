@@ -18,7 +18,7 @@ package com.hivemq.codec.encoder.mqtt5;
 import com.google.common.base.Preconditions;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.MqttEncoder;
-import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.event.PublishDroppedEvent;
 import com.hivemq.mqtt.message.Message;
@@ -55,13 +55,13 @@ abstract class Mqtt5MessageWithUserPropertiesEncoder<T extends Message> implemen
 
     private final @NotNull MessageDroppedService messageDroppedService;
     // Need the security service here for enabling / disabling configuration on runtime.
-    private final @NotNull SecurityConfigurationService securityConfigurationService;
+    private final @NotNull SecurityConfigService securityConfigService;
 
     Mqtt5MessageWithUserPropertiesEncoder(
             final @NotNull MessageDroppedService messageDroppedService,
-            final @NotNull SecurityConfigurationService securityConfigurationService) {
+            final @NotNull SecurityConfigService securityConfigService) {
         this.messageDroppedService = messageDroppedService;
-        this.securityConfigurationService = securityConfigurationService;
+        this.securityConfigService = securityConfigService;
     }
 
     @Override
@@ -122,7 +122,7 @@ abstract class Mqtt5MessageWithUserPropertiesEncoder<T extends Message> implemen
         int omittedProperties = 0;
         int propertyLength = calculatePropertyLength(msg);
 
-        if (!securityConfigurationService.allowRequestProblemInformation() ||
+        if (!securityConfigService.allowRequestProblemInformation() ||
                 !Objects.requireNonNullElse(clientConnectionContext.getRequestProblemInformation(),
                         Mqtt5CONNECT.DEFAULT_PROBLEM_INFORMATION_REQUESTED)) {
 
@@ -240,8 +240,8 @@ abstract class Mqtt5MessageWithUserPropertiesEncoder<T extends Message> implemen
 
         Mqtt5MessageWithReasonStringEncoder(
                 final @NotNull MessageDroppedService messageDroppedService,
-                final @NotNull SecurityConfigurationService securityConfigurationService) {
-            super(messageDroppedService, securityConfigurationService);
+                final @NotNull SecurityConfigService securityConfigService) {
+            super(messageDroppedService, securityConfigService);
         }
 
         @Override
@@ -292,8 +292,8 @@ abstract class Mqtt5MessageWithUserPropertiesEncoder<T extends Message> implemen
 
         Mqtt5MessageWithOmissibleReasonCodeEncoder(
                 final @NotNull MessageDroppedService messageDroppedService,
-                final @NotNull SecurityConfigurationService securityConfigurationService) {
-            super(messageDroppedService, securityConfigurationService);
+                final @NotNull SecurityConfigService securityConfigService) {
+            super(messageDroppedService, securityConfigService);
         }
 
         abstract int getFixedHeader();
@@ -369,8 +369,8 @@ abstract class Mqtt5MessageWithUserPropertiesEncoder<T extends Message> implemen
 
         Mqtt5MessageWithIdAndOmissibleReasonCodeEncoder(
                 final @NotNull MessageDroppedService messageDroppedService,
-                final @NotNull SecurityConfigurationService securityConfigurationService) {
-            super(messageDroppedService, securityConfigurationService);
+                final @NotNull SecurityConfigService securityConfigService) {
+            super(messageDroppedService, securityConfigService);
         }
 
         @Override

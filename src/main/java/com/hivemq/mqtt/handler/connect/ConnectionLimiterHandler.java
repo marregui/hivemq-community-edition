@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.handler.connect;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.RestrictionsConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.gauges.OpenConnectionsGauge;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;
@@ -44,7 +44,7 @@ public class ConnectionLimiterHandler extends ChannelInboundHandlerAdapter {
     private final static Logger log = LoggerFactory.getLogger(ConnectionLimiterHandler.class);
 
     private final @NotNull MqttConnacker mqttConnacker;
-    private final @NotNull RestrictionsConfigurationService restrictionsConfigurationService;
+    private final @NotNull RestrictionsConfigService restrictionsConfigService;
     private final @NotNull OpenConnectionsGauge openConnectionsGauge;
     private volatile long maxConnections;
     private volatile long warnThreshold;
@@ -52,19 +52,19 @@ public class ConnectionLimiterHandler extends ChannelInboundHandlerAdapter {
     @Inject
     public ConnectionLimiterHandler(
             final @NotNull MqttConnacker mqttConnacker,
-            final @NotNull RestrictionsConfigurationService restrictionsConfigurationService,
+            final @NotNull RestrictionsConfigService restrictionsConfigService,
             final @NotNull OpenConnectionsGauge openConnectionsGauge) {
         this.mqttConnacker = mqttConnacker;
-        this.restrictionsConfigurationService = restrictionsConfigurationService;
+        this.restrictionsConfigService = restrictionsConfigService;
         this.openConnectionsGauge = openConnectionsGauge;
     }
 
     @Override
     public void channelActive(final @NotNull ChannelHandlerContext ctx) throws Exception {
 
-        final long configuredCount = restrictionsConfigurationService.maxConnections();
+        final long configuredCount = restrictionsConfigService.maxConnections();
 
-        if (configuredCount > RestrictionsConfigurationService.UNLIMITED_CONNECTIONS) {
+        if (configuredCount > RestrictionsConfigService.UNLIMITED_CONNECTIONS) {
             // If we use the max connections configured in the config file, we set the Threshold to 90% of the maximum allowed connections.
             this.warnThreshold = 90 * configuredCount / 100;
             this.maxConnections = configuredCount;

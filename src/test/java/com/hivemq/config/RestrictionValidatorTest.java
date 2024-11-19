@@ -20,11 +20,11 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static com.hivemq.config.RestrictionsConfigurationService.INCOMING_BANDWIDTH_THROTTLING_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_CLIENT_ID_LENGTH_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_CONNECTIONS_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.MAX_TOPIC_LENGTH_DEFAULT;
-import static com.hivemq.config.RestrictionsConfigurationService.NO_CONNECT_IDLE_TIMEOUT_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.INCOMING_BANDWIDTH_THROTTLING_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.MAX_CLIENT_ID_LENGTH_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.MAX_CONNECTIONS_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.MAX_TOPIC_LENGTH_DEFAULT;
+import static com.hivemq.config.RestrictionsConfigService.NO_CONNECT_IDLE_TIMEOUT_DEFAULT;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 
@@ -45,11 +45,11 @@ public class RestrictionValidatorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        assertEquals(500, restrictionsConfigurationService.maxConnections());
-        assertEquals(400, restrictionsConfigurationService.maxClientIdLength());
-        assertEquals(400, restrictionsConfigurationService.maxTopicLength());
-        assertEquals(300, restrictionsConfigurationService.noConnectIdleTimeout());
-        assertEquals(200, restrictionsConfigurationService.incomingLimit());
+        assertEquals(500, restrictionsConfigService.maxConnections());
+        assertEquals(400, restrictionsConfigService.maxClientIdLength());
+        assertEquals(400, restrictionsConfigService.maxTopicLength());
+        assertEquals(300, restrictionsConfigService.noConnectIdleTimeout());
+        assertEquals(200, restrictionsConfigService.incomingLimit());
 
     }
 
@@ -67,11 +67,11 @@ public class RestrictionValidatorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        assertEquals(MAX_CONNECTIONS_DEFAULT, restrictionsConfigurationService.maxConnections());
-        assertEquals(MAX_CLIENT_ID_LENGTH_DEFAULT, restrictionsConfigurationService.maxClientIdLength());
-        assertEquals(MAX_TOPIC_LENGTH_DEFAULT, restrictionsConfigurationService.maxTopicLength());
-        assertEquals(NO_CONNECT_IDLE_TIMEOUT_DEFAULT, restrictionsConfigurationService.noConnectIdleTimeout());
-        assertEquals(INCOMING_BANDWIDTH_THROTTLING_DEFAULT, restrictionsConfigurationService.incomingLimit());
+        assertEquals(MAX_CONNECTIONS_DEFAULT, restrictionsConfigService.maxConnections());
+        assertEquals(MAX_CLIENT_ID_LENGTH_DEFAULT, restrictionsConfigService.maxClientIdLength());
+        assertEquals(MAX_TOPIC_LENGTH_DEFAULT, restrictionsConfigService.maxTopicLength());
+        assertEquals(NO_CONNECT_IDLE_TIMEOUT_DEFAULT, restrictionsConfigService.noConnectIdleTimeout());
+        assertEquals(INCOMING_BANDWIDTH_THROTTLING_DEFAULT, restrictionsConfigService.incomingLimit());
 
     }
 
@@ -88,10 +88,10 @@ public class RestrictionValidatorTest extends AbstractConfigurationTest {
                 "</hivemq>";
         Files.write(contents.getBytes(UTF_8), xmlFile);
 
-        assertEquals(500, restrictionsConfigurationService.maxConnections());
-        assertEquals(MAX_CLIENT_ID_LENGTH_DEFAULT, restrictionsConfigurationService.maxClientIdLength());
-        assertEquals(MAX_TOPIC_LENGTH_DEFAULT, restrictionsConfigurationService.maxTopicLength());
-        assertEquals(300, restrictionsConfigurationService.noConnectIdleTimeout());
-        assertEquals(200, restrictionsConfigurationService.incomingLimit());
+        assertEquals(500, restrictionsConfigService.maxConnections());
+        assertEquals(MAX_CLIENT_ID_LENGTH_DEFAULT, restrictionsConfigService.maxClientIdLength());
+        assertEquals(MAX_TOPIC_LENGTH_DEFAULT, restrictionsConfigService.maxTopicLength());
+        assertEquals(300, restrictionsConfigService.noConnectIdleTimeout());
+        assertEquals(200, restrictionsConfigService.incomingLimit());
     }
 }

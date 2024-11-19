@@ -44,9 +44,9 @@ import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.DEFAULT_MAXIMUM_PACKE
 import static com.hivemq.mqtt.message.connect.Mqtt5CONNECT.SESSION_EXPIRY_MAX;
 
 @Singleton
-public class MqttConfigurationService {
+public class MqttConfigService {
 
-    private static final Logger log = LoggerFactory.getLogger(MqttConfigurationService.class);
+    private static final Logger log = LoggerFactory.getLogger(MqttConfigService.class);
     private final AtomicLong maxClientSessionExpiryInterval = new AtomicLong(SESSION_EXPIRY_MAX);
     private final AtomicLong maxMessageExpiryInterval = new AtomicLong(MAX_EXPIRY_INTERVAL_DEFAULT);
     private final AtomicInteger serverReceiveMaximum = new AtomicInteger(SERVER_RECEIVE_MAXIMUM_DEFAULT);

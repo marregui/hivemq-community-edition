@@ -16,7 +16,7 @@
 package com.hivemq.bootstrap.netty;
 
 import com.hivemq.config.ConfigService;
-import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.RestrictionsConfigService;
 import com.hivemq.config.entity.Listener;
 import com.hivemq.config.entity.TcpListener;
 import com.hivemq.config.entity.Tls;
@@ -64,7 +64,7 @@ public class ChannelInitializerFactoryImplTest {
     private ConfigService fullConfigService;
 
     @Mock
-    private RestrictionsConfigurationService restrictionsConfigurationService;
+    private RestrictionsConfigService restrictionsConfigService;
 
     private ChannelInitializerFactoryImpl channelInitializerFactory;
 
@@ -72,8 +72,8 @@ public class ChannelInitializerFactoryImplTest {
     public void before() {
         MockitoAnnotations.initMocks(this);
         when(channelDependencies.getConfigurationService()).thenReturn(fullConfigService);
-        when(channelDependencies.getRestrictionsConfigurationService()).thenReturn(restrictionsConfigurationService);
-        when(restrictionsConfigurationService.incomingLimit()).thenReturn(0L);
+        when(channelDependencies.getRestrictionsConfigurationService()).thenReturn(restrictionsConfigService);
+        when(restrictionsConfigService.incomingLimit()).thenReturn(0L);
         channelInitializerFactory =
                 new TestChannelInitializerFactory(channelDependencies, sslFactory, nonSslHandlerProvider);
     }

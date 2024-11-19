@@ -18,9 +18,9 @@ package com.hivemq.extensions.services.builder;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.config.ConfigService;
-import com.hivemq.config.MqttConfigurationService;
-import com.hivemq.config.RestrictionsConfigurationService;
-import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.MqttConfigService;
+import com.hivemq.config.RestrictionsConfigService;
+import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.connect.WillPublishPacket;
@@ -86,19 +86,19 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
     private final ImmutableList.Builder<MqttUserProperty> userPropertyBuilder = ImmutableList.builder();
 
     @NotNull
-    private final MqttConfigurationService mqttConfigurationService;
+    private final MqttConfigService mqttConfigService;
 
     @NotNull
-    private final RestrictionsConfigurationService restrictionsConfig;
+    private final RestrictionsConfigService restrictionsConfig;
 
     @NotNull
-    private final SecurityConfigurationService securityConfigurationService;
+    private final SecurityConfigService securityConfigService;
 
     @Inject
     public WillPublishBuilderImpl(final @NotNull ConfigService fullConfigService) {
-        this.mqttConfigurationService = fullConfigService.mqttConfiguration();
+        this.mqttConfigService = fullConfigService.mqttConfiguration();
         this.restrictionsConfig = fullConfigService.restrictionsConfiguration();
-        this.securityConfigurationService = fullConfigService.securityConfiguration();
+        this.securityConfigService = fullConfigService.securityConfiguration();
     }
 
     @Override
@@ -199,14 +199,14 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
 
     @Override
     public @NotNull WillPublishBuilder qos(final @NotNull Qos qos) {
-        PluginBuilderUtil.checkQos(qos, mqttConfigurationService.maximumQos().getQosNumber());
+        PluginBuilderUtil.checkQos(qos, mqttConfigService.maximumQos().getQosNumber());
         this.qos = qos;
         return this;
     }
 
     @Override
     public @NotNull WillPublishBuilder retain(final boolean retain) {
-        if (!mqttConfigurationService.retainedMessagesEnabled() && retain) {
+        if (!mqttConfigService.retainedMessagesEnabled() && retain) {
             throw new IllegalArgumentException("Retained messages are disabled");
         }
         this.retain = retain;
@@ -227,7 +227,7 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
             throw new IllegalArgumentException("The topic (" + topic + ") is invalid for PUBLISH messages");
         }
 
-        if (!PluginBuilderUtil.isValidUtf8String(topic, securityConfigurationService.validateUTF8())) {
+        if (!PluginBuilderUtil.isValidUtf8String(topic, securityConfigService.validateUTF8())) {
             throw new IllegalArgumentException("The topic (" + topic + ") is UTF-8 malformed");
         }
 
@@ -244,14 +244,14 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
     @Override
     public @NotNull WillPublishBuilder messageExpiryInterval(final long messageExpiryInterval) {
         PluginBuilderUtil.checkMessageExpiryInterval(messageExpiryInterval,
-                mqttConfigurationService.maxMessageExpiryInterval());
+                mqttConfigService.maxMessageExpiryInterval());
         this.messageExpiryInterval = messageExpiryInterval;
         return this;
     }
 
     @Override
     public @NotNull WillPublishBuilder responseTopic(@Nullable final String responseTopic) {
-        PluginBuilderUtil.checkResponseTopic(responseTopic, securityConfigurationService.validateUTF8());
+        PluginBuilderUtil.checkResponseTopic(responseTopic, securityConfigService.validateUTF8());
         this.responseTopic = responseTopic;
         return this;
     }
@@ -264,7 +264,7 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
 
     @Override
     public @NotNull WillPublishBuilder contentType(@Nullable final String contentType) {
-        PluginBuilderUtil.checkContentType(contentType, securityConfigurationService.validateUTF8());
+        PluginBuilderUtil.checkContentType(contentType, securityConfigService.validateUTF8());
         this.contentType = contentType;
         return this;
     }
@@ -278,7 +278,7 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
 
     @Override
     public @NotNull WillPublishBuilder userProperty(final @NotNull String name, final @NotNull String value) {
-        PluginBuilderUtil.checkUserProperty(name, value, securityConfigurationService.validateUTF8());
+        PluginBuilderUtil.checkUserProperty(name, value, securityConfigService.validateUTF8());
         this.userPropertyBuilder.add(new MqttUserProperty(name, value));
         return this;
     }
@@ -297,7 +297,7 @@ public class WillPublishBuilderImpl implements WillPublishBuilder {
         Preconditions.checkNotNull(payload, "Payload must never be null");
 
         if (messageExpiryInterval == MESSAGE_EXPIRY_INTERVAL_NOT_SET) {
-            messageExpiryInterval = mqttConfigurationService.maxMessageExpiryInterval();
+            messageExpiryInterval = mqttConfigService.maxMessageExpiryInterval();
         }
 
         return new WillPublishPacketImpl(topic,

@@ -17,8 +17,7 @@ package util.encoder;
 
 import com.codahale.metrics.MetricRegistry;
 import com.hivemq.codec.encoder.MQTTMessageEncoder;
-import com.hivemq.config.SecurityConfigurationService;
-import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.logging.EventLog;
 import com.hivemq.metrics.MetricsHolder;
@@ -36,25 +35,24 @@ import static org.mockito.Mockito.mock;
 @ChannelHandler.Sharable
 public class TestMessageEncoder extends MQTTMessageEncoder {
 
-    private final @NotNull SecurityConfigurationService securityConfigurationService;
+    private final @NotNull SecurityConfigService securityConfigService;
 
     public TestMessageEncoder() {
-        this(mock(MessageDroppedService.class), new SecurityConfigurationService());
+        this(mock(MessageDroppedService.class), new SecurityConfigService());
     }
 
     public TestMessageEncoder(
             final MessageDroppedService messageDroppedService,
-            final SecurityConfigurationService securityConfigurationService) {
+            final SecurityConfigService securityConfigService) {
 
-        super(new TestEncoderFactory(messageDroppedService,
-                securityConfigurationService,
+        super(new TestEncoderFactory(messageDroppedService, securityConfigService,
                 new MqttServerDisconnectorImpl(new EventLog()),
                 new PingreqEncoder()), new GlobalMQTTMessageCounter(new MetricsHolder(new MetricRegistry())));
 
-        this.securityConfigurationService = securityConfigurationService;
+        this.securityConfigService = securityConfigService;
     }
 
-    public @NotNull SecurityConfigurationService getSecurityConfigurationService() {
-        return securityConfigurationService;
+    public @NotNull SecurityConfigService getSecurityConfigurationService() {
+        return securityConfigService;
     }
 }

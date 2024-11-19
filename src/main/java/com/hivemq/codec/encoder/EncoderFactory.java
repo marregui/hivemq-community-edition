@@ -27,7 +27,7 @@ import com.hivemq.codec.encoder.mqtt5.Mqtt5PubrecEncoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PubrelEncoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5SubackEncoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5UnsubackEncoder;
-import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -61,9 +61,9 @@ public class EncoderFactory {
     @Inject
     public EncoderFactory(
             final @NotNull MessageDroppedService messageDroppedService,
-            final @NotNull SecurityConfigurationService securityConfigurationService,
+            final @NotNull SecurityConfigService securityConfigService,
             final @NotNull MqttServerDisconnector mqttServerDisconnector) {
-        mqtt5Instance = new Mqtt5EncoderFactory(messageDroppedService, securityConfigurationService);
+        mqtt5Instance = new Mqtt5EncoderFactory(messageDroppedService, securityConfigService);
     }
 
     /**
@@ -144,17 +144,17 @@ public class EncoderFactory {
 
         Mqtt5EncoderFactory(
                 final @NotNull MessageDroppedService messageDroppedService,
-                final @NotNull SecurityConfigurationService securityConfigurationService) {
-            mqtt5PublishEncoder = new Mqtt5PublishEncoder(messageDroppedService, securityConfigurationService);
-            mqtt5DisconnectEncoder = new Mqtt5DisconnectEncoder(messageDroppedService, securityConfigurationService);
-            mqtt5SubackEncoder = new Mqtt5SubackEncoder(messageDroppedService, securityConfigurationService);
-            mqtt5ConnackEncoder = new Mqtt5ConnackEncoder(messageDroppedService, securityConfigurationService);
-            mqtt5PubackEncoder = new Mqtt5PubackEncoder(messageDroppedService, securityConfigurationService);
-            mqtt5PubrecEncoder = new Mqtt5PubrecEncoder(messageDroppedService, securityConfigurationService);
-            mqtt5PubrelEncoder = new Mqtt5PubrelEncoder(messageDroppedService, securityConfigurationService);
-            mqtt5PubCompEncoder = new Mqtt5PubCompEncoder(messageDroppedService, securityConfigurationService);
-            mqtt5AuthEncoder = new Mqtt5AuthEncoder(messageDroppedService, securityConfigurationService);
-            mqtt5UnsubackEncoder = new Mqtt5UnsubackEncoder(messageDroppedService, securityConfigurationService);
+                final @NotNull SecurityConfigService securityConfigService) {
+            mqtt5PublishEncoder = new Mqtt5PublishEncoder(messageDroppedService, securityConfigService);
+            mqtt5DisconnectEncoder = new Mqtt5DisconnectEncoder(messageDroppedService, securityConfigService);
+            mqtt5SubackEncoder = new Mqtt5SubackEncoder(messageDroppedService, securityConfigService);
+            mqtt5ConnackEncoder = new Mqtt5ConnackEncoder(messageDroppedService, securityConfigService);
+            mqtt5PubackEncoder = new Mqtt5PubackEncoder(messageDroppedService, securityConfigService);
+            mqtt5PubrecEncoder = new Mqtt5PubrecEncoder(messageDroppedService, securityConfigService);
+            mqtt5PubrelEncoder = new Mqtt5PubrelEncoder(messageDroppedService, securityConfigService);
+            mqtt5PubCompEncoder = new Mqtt5PubCompEncoder(messageDroppedService, securityConfigService);
+            mqtt5AuthEncoder = new Mqtt5AuthEncoder(messageDroppedService, securityConfigService);
+            mqtt5UnsubackEncoder = new Mqtt5UnsubackEncoder(messageDroppedService, securityConfigService);
             mqttPingrespEncoder = new MqttPingrespEncoder();
         }
 

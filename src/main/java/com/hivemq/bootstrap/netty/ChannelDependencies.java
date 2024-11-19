@@ -20,7 +20,7 @@ import com.hivemq.codec.decoder.MqttDecoders;
 import com.hivemq.codec.encoder.EncoderFactory;
 import com.hivemq.codec.encoder.MQTTMessageEncoder;
 import com.hivemq.config.ConfigService;
-import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.RestrictionsConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.handler.ClientLifecycleEventHandler;
 import com.hivemq.extensions.handler.IncomingPublishHandler;
@@ -64,7 +64,7 @@ public class ChannelDependencies {
     private final @NotNull MetricsHolder metricsHolder;
     private final @NotNull ExceptionHandler exceptionHandler;
     private final @NotNull PingRequestHandler pingRequestHandler;
-    private final @NotNull RestrictionsConfigurationService restrictionsConfigurationService;
+    private final @NotNull RestrictionsConfigService restrictionsConfigService;
     private final @NotNull MqttConnectDecoder mqttConnectDecoder;
     private final @NotNull MqttConnacker mqttConnacker;
     private final @NotNull MQTTMessageEncoder mqttMessageEncoder;
@@ -97,7 +97,7 @@ public class ChannelDependencies {
             final @NotNull MetricsHolder metricsHolder,
             final @NotNull ExceptionHandler exceptionHandler,
             final @NotNull PingRequestHandler pingRequestHandler,
-            final @NotNull RestrictionsConfigurationService restrictionsConfigurationService,
+            final @NotNull RestrictionsConfigService restrictionsConfigService,
             final @NotNull MqttConnectDecoder mqttConnectDecoder,
             final @NotNull MqttConnacker mqttConnacker,
             final @NotNull EventLog eventLog,
@@ -127,7 +127,7 @@ public class ChannelDependencies {
         this.metricsHolder = metricsHolder;
         this.exceptionHandler = exceptionHandler;
         this.pingRequestHandler = pingRequestHandler;
-        this.restrictionsConfigurationService = restrictionsConfigurationService;
+        this.restrictionsConfigService = restrictionsConfigService;
         this.mqttConnectDecoder = mqttConnectDecoder;
         this.mqttConnacker = mqttConnacker;
         this.mqttMessageEncoder = new MQTTMessageEncoder(encoderFactory, globalMQTTMessageCounter);
@@ -207,8 +207,8 @@ public class ChannelDependencies {
     }
 
     @NotNull
-    public RestrictionsConfigurationService getRestrictionsConfigurationService() {
-        return restrictionsConfigurationService;
+    public RestrictionsConfigService getRestrictionsConfigurationService() {
+        return restrictionsConfigService;
     }
 
     @NotNull

@@ -18,8 +18,8 @@ package com.hivemq.bootstrap.netty;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.config.ConfigService;
-import com.hivemq.config.MqttConfigurationService;
-import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.MqttConfigService;
+import com.hivemq.config.RestrictionsConfigService;
 import com.hivemq.config.entity.Listener;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.logging.EventLog;
@@ -66,10 +66,10 @@ public class AbstractChannelInitializerTest {
     private final @NotNull SocketChannel socketChannel = mock(SocketChannel.class);
     private final @NotNull ChannelDependencies channelDependencies = mock(ChannelDependencies.class);
     private final @NotNull ConfigService configService = mock(ConfigService.class);
-    private final @NotNull MqttConfigurationService mqttConfigurationService = mock(MqttConfigurationService.class);
+    private final @NotNull MqttConfigService mqttConfigService = mock(MqttConfigService.class);
     private final @NotNull ChannelPipeline pipeline = mock(ChannelPipeline.class);
-    private final @NotNull RestrictionsConfigurationService restrictionsConfigurationService =
-            mock(RestrictionsConfigurationService.class);
+    private final @NotNull RestrictionsConfigService restrictionsConfigService =
+            mock(RestrictionsConfigService.class);
     private final @NotNull EventLog eventLog = mock(EventLog.class);
     private final @NotNull Listener listener = mock(Listener.class);
     private @NotNull TestAbstractChannelInitializer abstractChannelInitializer;
@@ -85,12 +85,12 @@ public class AbstractChannelInitializerTest {
                 1000L));
 
         when(channelDependencies.getConfigurationService()).thenReturn(configService);
-        when(configService.mqttConfiguration()).thenReturn(mqttConfigurationService);
+        when(configService.mqttConfiguration()).thenReturn(mqttConfigService);
 
-        when(channelDependencies.getRestrictionsConfigurationService()).thenReturn(restrictionsConfigurationService);
+        when(channelDependencies.getRestrictionsConfigurationService()).thenReturn(restrictionsConfigService);
 
-        when(restrictionsConfigurationService.noConnectIdleTimeout()).thenReturn(500L);
-        when(restrictionsConfigurationService.incomingLimit()).thenReturn(0L);
+        when(restrictionsConfigService.noConnectIdleTimeout()).thenReturn(500L);
+        when(restrictionsConfigService.incomingLimit()).thenReturn(0L);
 
         final MqttServerDisconnector mqttServerDisconnector = new MqttServerDisconnectorImpl(eventLog);
 
@@ -112,7 +112,7 @@ public class AbstractChannelInitializerTest {
     @Test
     public void test_init_channel_with_throttling() throws Exception {
 
-        when(restrictionsConfigurationService.incomingLimit()).thenReturn(1000L);
+        when(restrictionsConfigService.incomingLimit()).thenReturn(1000L);
         final MqttServerDisconnector mqttServerDisconnector = new MqttServerDisconnectorImpl(eventLog);
         when(channelDependencies.getMqttServerDisconnector()).thenReturn(mqttServerDisconnector);
         abstractChannelInitializer = new TestAbstractChannelInitializer(channelDependencies);
@@ -126,7 +126,7 @@ public class AbstractChannelInitializerTest {
     @Test
     public void test_no_connect_idle_handler_disabled() throws Exception {
 
-        when(restrictionsConfigurationService.noConnectIdleTimeout()).thenReturn(0L);
+        when(restrictionsConfigService.noConnectIdleTimeout()).thenReturn(0L);
 
         final ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
 

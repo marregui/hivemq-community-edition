@@ -22,7 +22,7 @@ import com.google.inject.ProvisionException;
 import com.google.inject.spi.Message;
 import com.hivemq.bootstrap.HiveMQNettyBootstrap;
 import com.hivemq.bootstrap.ListenerStartupInformation;
-import com.hivemq.config.SystemInformation;
+import com.hivemq.config.SysInfo;
 import com.hivemq.config.ConfigService;
 import com.hivemq.config.entity.Listener;
 import com.hivemq.extensions.ExtensionBootstrap;
@@ -66,7 +66,7 @@ public final class HiveMQServer {
     }
 
     public static void main(final String @NotNull [] args) throws Exception {
-        Logging.initLogging(SystemInformation.INSTANCE.getConfigFolder());
+        Logging.initLogging(SysInfo.INSTANCE.getConfigFolder());
         final IOC ioc = new IOC(new ConfigService());
         final Injector injector = ioc.init();
 

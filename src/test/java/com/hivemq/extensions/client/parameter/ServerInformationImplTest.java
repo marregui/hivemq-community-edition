@@ -17,11 +17,11 @@
 package com.hivemq.extensions.client.parameter;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.config.SystemInformation;
+import com.hivemq.config.SysInfo;
 import com.hivemq.config.entity.TcpListener;
 import com.hivemq.config.entity.Tls;
 import com.hivemq.config.entity.TlsTcpListener;
-import com.hivemq.config.ListenerConfigurationService;
+import com.hivemq.config.ListenerConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.Listener;
 import com.hivemq.extension.sdk.api.client.parameter.ListenerType;
@@ -38,29 +38,29 @@ import static org.mockito.Mockito.when;
 
 public class ServerInformationImplTest {
 
-    private final @NotNull ListenerConfigurationService listenerConfigurationService =
-            mock(ListenerConfigurationService.class);
+    private final @NotNull ListenerConfigService listenerConfigService =
+            mock(ListenerConfigService.class);
 
     private @NotNull ServerInformation serverInformation;
 
     @Before
     public void setUp() throws Exception {
-        serverInformation = new ServerInformationImpl(listenerConfigurationService);
+        serverInformation = new ServerInformationImpl(listenerConfigService);
     }
 
     @Test
     public void test_server_and_system_information_equal() {
-        assertEquals(SystemInformation.INSTANCE.getDataFolder(), serverInformation.getDataFolder());
-        assertEquals(SystemInformation.INSTANCE.getHiveMQHomeFolder(), serverInformation.getHomeFolder());
-        assertEquals(SystemInformation.INSTANCE.getLogFolder(), serverInformation.getLogFolder());
-        assertEquals(SystemInformation.INSTANCE.getExtensionsFolder(), serverInformation.getExtensionsFolder());
+        assertEquals(SysInfo.INSTANCE.getDataFolder(), serverInformation.getDataFolder());
+        assertEquals(SysInfo.INSTANCE.getHiveMQHomeFolder(), serverInformation.getHomeFolder());
+        assertEquals(SysInfo.INSTANCE.getLogFolder(), serverInformation.getLogFolder());
+        assertEquals(SysInfo.INSTANCE.getExtensionsFolder(), serverInformation.getExtensionsFolder());
     }
 
     @Test
     public void test_get_listeners() {
         final TcpListener tcpListener = new TcpListener(1883, "127.0.0.1", "test");
         final TlsTcpListener tlsTcpListener = new TlsTcpListener(1883, "127.0.0.1", mock(Tls.class), "test");
-        when(listenerConfigurationService.getListeners()).thenReturn(ImmutableList.of(tcpListener, tlsTcpListener));
+        when(listenerConfigService.getListeners()).thenReturn(ImmutableList.of(tcpListener, tlsTcpListener));
         final Set<Listener> listeners = serverInformation.getListener();
         final Iterator<Listener> iterator = listeners.iterator();
         final Listener first = iterator.next();

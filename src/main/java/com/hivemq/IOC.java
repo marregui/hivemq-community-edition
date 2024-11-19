@@ -30,11 +30,11 @@ import com.hivemq.bootstrap.netty.ChannelInitializerFactory;
 import com.hivemq.bootstrap.netty.ChannelInitializerFactoryImpl;
 import com.hivemq.bootstrap.netty.NettyConfiguration;
 import com.hivemq.bootstrap.netty.NettyConfigurationProvider;
-import com.hivemq.config.SystemInformation;
+import com.hivemq.config.SysInfo;
 import com.hivemq.config.ConfigModule;
 import com.hivemq.config.ConfigService;
 import com.hivemq.config.InternalConfig;
-import com.hivemq.config.RestrictionsConfigurationService;
+import com.hivemq.config.RestrictionsConfigService;
 import com.hivemq.extensions.ioc.ExtensionModule;
 import com.hivemq.metrics.MetricRegistryLogger;
 import com.hivemq.metrics.MetricsHolder;
@@ -112,7 +112,7 @@ public class IOC extends SingletonModule<Class<IOC>> {
         metricRegistry.addListener(new MetricRegistryLogger());
         // lock data folder
         final DataFolderLock dataLock = new DataFolderLock();
-        dataLock.lock(SystemInformation.INSTANCE.getDataFolder().toPath());
+        dataLock.lock(SysInfo.INSTANCE.getDataFolder().toPath());
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 ShutdownHooks.INSTANCE.shutdown();
@@ -225,7 +225,7 @@ public class IOC extends SingletonModule<Class<IOC>> {
         private final long inLimit;
 
         @Inject
-        GlobalTrafficShapingProvider(final @NotNull RestrictionsConfigurationService config) {
+        GlobalTrafficShapingProvider(final @NotNull RestrictionsConfigService config) {
             inLimit = config.incomingLimit();
             log.debug("Throttling incoming traffic to {} B/s", inLimit);
             log.debug("Throttling outgoing traffic to {} B/s", outLimit);

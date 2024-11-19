@@ -16,7 +16,7 @@
 
 package com.hivemq.extensions;
 
-import com.hivemq.config.ListenerConfigurationService;
+import com.hivemq.config.ListenerConfigService;
 import com.hivemq.extension.sdk.api.ExtensionMain;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,8 +63,8 @@ public class HiveMQExtensionsExtensionTest extends AbstractExtensionTest {
     private final @NotNull HiveMQExtension extension2 = mock(HiveMQExtension.class);
     private final @NotNull IsolatedExtensionClassloader loader1 = mock(IsolatedExtensionClassloader.class);
     private final @NotNull IsolatedExtensionClassloader loader2 = mock(IsolatedExtensionClassloader.class);
-    private final @NotNull ListenerConfigurationService listenerConfigurationService =
-            mock(ListenerConfigurationService.class);
+    private final @NotNull ListenerConfigService listenerConfigService =
+            mock(ListenerConfigService.class);
 
     private @NotNull String id1;
     private @NotNull String id2;
@@ -86,7 +86,7 @@ public class HiveMQExtensionsExtensionTest extends AbstractExtensionTest {
         when(extension1.getExtensionClassloader()).thenReturn(loader1);
         when(extension2.getExtensionClassloader()).thenReturn(loader2);
 
-        hiveMQExtensions = new HiveMQExtensions(new ServerInformationImpl(listenerConfigurationService));
+        hiveMQExtensions = new HiveMQExtensions(new ServerInformationImpl(listenerConfigService));
         hiveMQExtensions.addHiveMQExtension(extension1);
     }
 

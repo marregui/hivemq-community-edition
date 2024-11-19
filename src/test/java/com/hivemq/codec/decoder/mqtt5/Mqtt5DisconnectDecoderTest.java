@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.config.ConfigService;
-import com.hivemq.config.SecurityConfigurationService;
+import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import com.hivemq.mqtt.message.disconnect.DISCONNECT;
@@ -56,12 +56,12 @@ public class Mqtt5DisconnectDecoderTest extends AbstractMqtt5DecoderTest {
     private @NotNull MessageDroppedService messageDroppedService;
 
     @Mock
-    private @NotNull SecurityConfigurationService securityConfigurationService;
+    private @NotNull SecurityConfigService securityConfigService;
 
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
-        when(securityConfigurationService.allowRequestProblemInformation()).thenReturn(true);
+        when(securityConfigService.allowRequestProblemInformation()).thenReturn(true);
         ClientConnection.of(channel).setClientSessionExpiryInterval(100L);
     }
 
@@ -160,7 +160,7 @@ public class Mqtt5DisconnectDecoderTest extends AbstractMqtt5DecoderTest {
 
         //Now Encode
 
-        channel = new EmbeddedChannel(new TestMessageEncoder(messageDroppedService, securityConfigurationService));
+        channel = new EmbeddedChannel(new TestMessageEncoder(messageDroppedService, securityConfigService));
         channel.config().setAllocator(new UnpooledByteBufAllocator(false));
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(new DummyClientConnection(channel, null));
         ClientConnection.of(channel).setProtocolVersion(ProtocolVersion.MQTTv5);

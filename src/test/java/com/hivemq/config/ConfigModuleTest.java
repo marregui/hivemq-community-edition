@@ -58,8 +58,8 @@ public class ConfigModuleTest {
     @Test
     public void test_listener_configuration_service_singleton() throws Exception {
 
-        final ListenerConfigurationService instance = injector.getInstance(ListenerConfigurationService.class);
-        final ListenerConfigurationService instance2 = injector.getInstance(ListenerConfigurationService.class);
+        final ListenerConfigService instance = injector.getInstance(ListenerConfigService.class);
+        final ListenerConfigService instance2 = injector.getInstance(ListenerConfigService.class);
 
         assertSame(instance, instance2);
         assertSame(testConfigurationBootstrap.getListenerConfigurationService(), instance);
@@ -68,8 +68,8 @@ public class ConfigModuleTest {
     @Test
     public void test_mqtt_configuration_service_singleton() throws Exception {
 
-        final MqttConfigurationService instance = injector.getInstance(MqttConfigurationService.class);
-        final MqttConfigurationService instance2 = injector.getInstance(MqttConfigurationService.class);
+        final MqttConfigService instance = injector.getInstance(MqttConfigService.class);
+        final MqttConfigService instance2 = injector.getInstance(MqttConfigService.class);
 
         assertSame(instance, instance2);
         assertSame(testConfigurationBootstrap.getMqttConfigurationService(), instance);
@@ -78,8 +78,8 @@ public class ConfigModuleTest {
     @Test
     public void test_throttling_configuration_service_singleton() throws Exception {
 
-        final RestrictionsConfigurationService instance = injector.getInstance(RestrictionsConfigurationService.class);
-        final RestrictionsConfigurationService instance2 = injector.getInstance(RestrictionsConfigurationService.class);
+        final RestrictionsConfigService instance = injector.getInstance(RestrictionsConfigService.class);
+        final RestrictionsConfigService instance2 = injector.getInstance(RestrictionsConfigService.class);
 
         assertSame(instance, instance2);
         assertSame(testConfigurationBootstrap.getRestrictionsConfigurationService(), instance);
@@ -112,10 +112,10 @@ public class ConfigModuleTest {
 
         assertSame(
                 configService.listenerConfiguration(),
-                injector.getInstance(ListenerConfigurationService.class));
-        assertSame(configService.mqttConfiguration(), injector.getInstance(MqttConfigurationService.class));
+                injector.getInstance(ListenerConfigService.class));
+        assertSame(configService.mqttConfiguration(), injector.getInstance(MqttConfigService.class));
         assertSame(
                 configService.restrictionsConfiguration(),
-                injector.getInstance(RestrictionsConfigurationService.class));
+                injector.getInstance(RestrictionsConfigService.class));
     }
 }

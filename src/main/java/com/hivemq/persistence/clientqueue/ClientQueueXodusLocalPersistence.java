@@ -23,8 +23,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.ImmutableIntArray;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.config.InternalConfig;
-import com.hivemq.config.MqttConfigurationService;
-import com.hivemq.config.MqttConfigurationService.QueuedMessagesStrategy;
+import com.hivemq.config.MqttConfigService;
+import com.hivemq.config.MqttConfigService.QueuedMessagesStrategy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.MessageWithID;
@@ -319,7 +319,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
             final boolean shared,
             final boolean retained,
             final @NotNull PUBLISH publish,
-            final @NotNull MqttConfigurationService.QueuedMessagesStrategy strategy,
+            final @NotNull MqttConfigService.QueuedMessagesStrategy strategy,
             final @NotNull Key key,
             final @NotNull Bucket bucket) {
 

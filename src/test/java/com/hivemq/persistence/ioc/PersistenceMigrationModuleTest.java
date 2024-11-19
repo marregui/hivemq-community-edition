@@ -21,8 +21,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hivemq.bootstrap.lazysingleton.LazySingleton;
 import com.hivemq.bootstrap.lazysingleton.LazySingletonScope;
-import com.hivemq.config.SystemInformation;
-import com.hivemq.config.MqttConfigurationService;
+import com.hivemq.config.SysInfo;
+import com.hivemq.config.MqttConfigService;
 import com.hivemq.persistence.PersistenceStartup;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,10 +38,10 @@ import static org.junit.Assert.assertSame;
 public class PersistenceMigrationModuleTest {
 
     @Mock
-    private SystemInformation systemInformation;
+    private SysInfo sysInfo;
 
     @Mock
-    private MqttConfigurationService mqttConfigurationService;
+    private MqttConfigService mqttConfigService;
 
     @Before
     public void setUp() throws Exception {
@@ -54,9 +54,9 @@ public class PersistenceMigrationModuleTest {
                 Guice.createInjector(new PersistenceMigrationModule(new MetricRegistry()), new AbstractModule() {
                     @Override
                     protected void configure() {
-                        bind(SystemInformation.class).toInstance(systemInformation);
+                        bind(SysInfo.class).toInstance(sysInfo);
                         bindScope(LazySingleton.class, LazySingletonScope.get());
-                        bind(MqttConfigurationService.class).toInstance(mqttConfigurationService);
+                        bind(MqttConfigService.class).toInstance(mqttConfigService);
                     }
                 });
 

@@ -77,9 +77,7 @@ public final class HiveMQServer {
         }
     }
 
-    public static void main(final String @NotNull [] args) throws Exception {
-        Logging.initLogging(SystemInformation.INSTANCE.getConfigFolder());
-
+    private static @NotNull FullConfigurationService configure( ){
         final FullConfigurationService config = new ConfigurationServiceImpl(new ListenerConfigurationServiceImpl(),
                 new MqttConfigurationServiceImpl(),
                 new RestrictionsConfigurationServiceImpl(),
@@ -92,34 +90,28 @@ public final class HiveMQServer {
                         new MqttConfigurator(config.mqttConfiguration()),
                         new ListenerConfigurator(config.listenerConfiguration()));
         configReader.applyConfig();
+        return config;
+    }
 
-        final UberModule uberModule = new UberModule(config);
-
-        final DataFolderLock dataLock = new DataFolderLock();
-        dataLock.lock(SystemInformation.INSTANCE.getDataFolder().toPath());
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                ShutdownHooks.INSTANCE.shutdown();
-            } finally {
-                dataLock.unlock();
-                Logging.resetLogging();
-            }
-        }, "shutdown-" + uberModule.getHiveMQId()));
+    public static void main(final String @NotNull [] args) throws Exception {
+        Logging.initLogging(SystemInformation.INSTANCE.getConfigFolder());
+        final IOC ioc = new IOC(configure());
+        final Injector injector = ioc.init();
 
         // start
-        final Injector injector = uberModule.init();
-        final long startTime = System.nanoTime();
+        final long start = System.nanoTime();
         injector.getInstance(PublishPayloadPersistence.class).init();
         injector.getInstance(ExtensionBootstrap.class).startExtensionSystem().get();
-        final List<ListenerStartupInformation> startupInformation =
+        // check start status
+        final List<ListenerStartupInformation> startupInfo =
                 Objects.requireNonNull(injector.getInstance(HiveMQNettyBootstrap.class).bootstrapServer().get());
         Checkpoints.checkpoint("listener-started");
-        if (startupInformation.isEmpty()) {
+        if (startupInfo.isEmpty()) {
             log.error("No listener was configured");
             throw new UnrecoverableException();
         }
         int success = 0;
-        for (final ListenerStartupInformation info : startupInformation) {
+        for (final ListenerStartupInformation info : startupInfo) {
             if (info.isSuccessful()) {
                 final Listener listener = info.getListener();
                 log.info("Started {} on address {} and on port {}.",
@@ -141,7 +133,7 @@ public final class HiveMQServer {
         }
         System.gc();
         log.info("Started HiveMQ [{}] in {}ms",
-                uberModule.getHiveMQId(),
-                TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime));
+                ioc.getHiveMQId(),
+                TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start));
     }
 }

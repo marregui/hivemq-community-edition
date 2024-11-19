@@ -30,6 +30,7 @@ import com.hivemq.bootstrap.netty.ChannelInitializerFactory;
 import com.hivemq.bootstrap.netty.ChannelInitializerFactoryImpl;
 import com.hivemq.bootstrap.netty.NettyConfiguration;
 import com.hivemq.bootstrap.netty.NettyConfigurationProvider;
+import com.hivemq.configuration.info.SystemInformation;
 import com.hivemq.configuration.ioc.ConfigurationModule;
 import com.hivemq.configuration.service.FullConfigurationService;
 import com.hivemq.configuration.service.InternalConfigurations;
@@ -82,6 +83,7 @@ import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,30 +97,33 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import static com.hivemq.configuration.service.InternalConfigurations.MQTT_EVENT_EXECUTOR_THREAD_COUNT;
 
-public class UberModule extends SingletonModule<Class<UberModule>> {
+public class IOC extends SingletonModule<Class<IOC>> {
 
-    private final @NotNull Injector persistence;
     private final @NotNull MetricRegistry metricRegistry;
     private final @NotNull LifecycleModule lifecycle = new LifecycleModule();
     private final @NotNull LazySingletonModule singletons = new LazySingletonModule();
     private final @NotNull ConfigurationModule configuration;
+    private @Nullable Injector injector;
 
-    public UberModule(final @NotNull FullConfigurationService config) throws InterruptedException {
-        super(UberModule.class);
+    public IOC(final @NotNull FullConfigurationService config) throws InterruptedException {
+        super(IOC.class);
         configuration = new ConfigurationModule(config);
         metricRegistry = new MetricRegistry();
         metricRegistry.addListener(new MetricRegistryLogger());
-        persistence = Guice.createInjector(Stage.PRODUCTION,
+        // lock data folder
+        final DataFolderLock dataLock = new DataFolderLock();
+        dataLock.lock(SystemInformation.INSTANCE.getDataFolder().toPath());
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                ShutdownHooks.INSTANCE.shutdown();
+            } finally {
+                dataLock.unlock();
+                Logging.resetLogging();
+            }
+        }, "shutdown-" + configuration.getHiveMQId()));
+        injector = Guice.createInjector(Stage.PRODUCTION,
                 Arrays.asList(lifecycle, singletons, configuration, new PersistenceMigrationModule(metricRegistry)));
-        persistence.getInstance(PersistenceStartup.class).finish();
-    }
-
-    public @NotNull Injector getPersistence() {
-        return persistence;
-    }
-
-    public @NotNull MetricRegistry getMetricRegistry() {
-        return metricRegistry;
+        injector.getInstance(PersistenceStartup.class).finish();
     }
 
     public @NotNull String getHiveMQId() {
@@ -126,8 +131,10 @@ public class UberModule extends SingletonModule<Class<UberModule>> {
     }
 
     public @NotNull Injector init() {
-        return Guice.createInjector(Stage.PRODUCTION,
-                Arrays.asList(lifecycle, singletons, configuration, this, new ExtensionModule()));
+        final Injector finalInjector = Guice.createInjector(Stage.PRODUCTION,
+                Arrays.asList(this, lifecycle, singletons, configuration, new ExtensionModule()));
+        injector = null;
+        return finalInjector;
     }
 
     @Override
@@ -145,7 +152,7 @@ public class UberModule extends SingletonModule<Class<UberModule>> {
                 MQTT_EVENT_EXECUTOR_THREAD_COUNT.get(),
                 new ThreadFactoryBuilder().setNameFormat("hivemq-event-executor-%d").build());
         bind(EventExecutorGroup.class).toInstance(mqttHandlerWorker);
-        bind(MessageDroppedService.class).toInstance(persistence.getInstance(MessageDroppedService.class));
+        bind(MessageDroppedService.class).toInstance(injector.getInstance(MessageDroppedService.class));
         bind(MqttServerDisconnector.class).to(MqttServerDisconnectorImpl.class).in(Singleton.class);
         bind(MqttConnacker.class).to(MqttConnackerImpl.class).in(Singleton.class);
 
@@ -166,7 +173,7 @@ public class UberModule extends SingletonModule<Class<UberModule>> {
                 .in(LazySingleton.class);
 
         // persistence
-        install(new LocalPersistenceModule(persistence));
+        install(new LocalPersistenceModule(injector));
         bind(PersistenceShutdownHookInstaller.class).asEagerSingleton();
         bind(ExecutorService.class).annotatedWith(Persistence.class)
                 .toProvider(PersistenceExecutorProvider.class)
@@ -189,7 +196,7 @@ public class UberModule extends SingletonModule<Class<UberModule>> {
 
         // metrics
         bind(MetricRegistry.class).toInstance(metricRegistry);
-        bind(MetricsHolder.class).toInstance(persistence.getInstance(MetricsHolder.class));
+        bind(MetricsHolder.class).toInstance(injector.getInstance(MetricsHolder.class));
         bind(SessionsGauge.class).toProvider(SessionsGaugeProvider.class).asEagerSingleton();
         bind(OpenConnectionsGauge.class).toProvider(OpenConnectionsGaugeProvider.class).asEagerSingleton();
         bind(RetainedMessagesGauge.class).toProvider(RetainedMessagesGaugeProvider.class).asEagerSingleton();
@@ -197,8 +204,11 @@ public class UberModule extends SingletonModule<Class<UberModule>> {
         bind(MetricsShutdownHook.class).asEagerSingleton();
     }
 
-    private void bindIfAbsent(final @NotNull Class type, final @NotNull Class provider, final @NotNull Class annotation) {
-        final Object instance = persistence.getInstance(Key.get(type, annotation));
+    private void bindIfAbsent(
+            final @NotNull Class type,
+            final @NotNull Class provider,
+            final @NotNull Class annotation) {
+        final Object instance = injector.getInstance(Key.get(type, annotation));
         if (instance != null) {
             bind(type).annotatedWith(annotation).toInstance(instance);
         } else {

@@ -15,33 +15,37 @@
  */
 package com.hivemq.config;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
-import org.mockito.MockitoAnnotations;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.util.Objects;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertNotNull;
 
 
-public class AbstractConfigurationTest {
+public class BaseConfigTest {
 
     @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+    public @NotNull TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    ListenerConfigService listenerConfigService;
-    File xmlFile;
-    MqttConfigService mqttConfigService;
-    RestrictionsConfigService restrictionsConfigService;
-    SecurityConfigService securityConfigService;
-    ConfigService configService;
+    protected @Nullable File file;
+    protected @Nullable ConfigService configService;
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        listenerConfigService = new ListenerConfigService();
-        xmlFile = temporaryFolder.newFile();
-        securityConfigService = new SecurityConfigService();
-        mqttConfigService = new MqttConfigService();
-        restrictionsConfigService = new RestrictionsConfigService();
+        file = temporaryFolder.newFile();
+    }
+
+    protected void loadConfig(final @NotNull String contents) throws Exception {
+        Files.write(Objects.requireNonNull(file).toPath(), contents.getBytes(UTF_8), StandardOpenOption.WRITE);
+        configService = new ConfigService(file);
+        assertNotNull(configService);
     }
 }

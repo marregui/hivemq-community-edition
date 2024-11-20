@@ -15,18 +15,15 @@
  */
 package com.hivemq.config;
 
-import com.google.common.io.Files;
 import org.junit.Test;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class SecurityConfiguratorTest extends AbstractConfigurationTest {
+public class SecurityConfiguratorTest extends BaseConfigTest {
     @Test
     public void test_security_xml() throws Exception {
-
-        final String contents = "<hivemq>" +
+        loadConfig("<hivemq>" +
                 "<security>" +
                 "<utf8-validation>" +
                 "<enabled>false</enabled>" +
@@ -41,26 +38,21 @@ public class SecurityConfiguratorTest extends AbstractConfigurationTest {
                 "<enabled>false</enabled>" +
                 "</allow-request-problem-information>" +
                 "</security>" +
-                "</hivemq>";
-        Files.write(contents.getBytes(UTF_8), xmlFile);
+                "</hivemq>");
 
-        assertFalse(securityConfigService.validateUTF8());
-        assertFalse(securityConfigService.allowServerAssignedClientId());
-        assertTrue(securityConfigService.payloadFormatValidation());
-        assertFalse(securityConfigService.allowRequestProblemInformation());
+        assertFalse(configService.security.validateUTF8());
+        assertFalse(configService.security.allowServerAssignedClientId());
+        assertTrue(configService.security.payloadFormatValidation());
+        assertFalse(configService.security.allowRequestProblemInformation());
     }
 
 
     @Test
     public void test_security_defaults() throws Exception {
-        final String contents = "<hivemq>" + "</hivemq>";
-
-        Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        assertTrue(securityConfigService.validateUTF8());
-        assertTrue(securityConfigService.allowServerAssignedClientId());
-        assertFalse(securityConfigService.payloadFormatValidation());
-        assertTrue(securityConfigService.allowRequestProblemInformation());
+        loadConfig("<hivemq>" + "</hivemq>");
+        assertTrue(configService.security.validateUTF8());
+        assertTrue(configService.security.allowServerAssignedClientId());
+        assertFalse(configService.security.payloadFormatValidation());
+        assertTrue(configService.security.allowRequestProblemInformation());
     }
-
 }

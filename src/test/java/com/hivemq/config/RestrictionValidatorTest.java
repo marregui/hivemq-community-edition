@@ -15,26 +15,22 @@
  */
 package com.hivemq.config;
 
-import com.google.common.io.Files;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static com.hivemq.config.RestrictionsConfigService.INCOMING_BANDWIDTH_THROTTLING_DEFAULT;
 import static com.hivemq.config.RestrictionsConfigService.MAX_CLIENT_ID_LENGTH_DEFAULT;
 import static com.hivemq.config.RestrictionsConfigService.MAX_CONNECTIONS_DEFAULT;
 import static com.hivemq.config.RestrictionsConfigService.MAX_TOPIC_LENGTH_DEFAULT;
 import static com.hivemq.config.RestrictionsConfigService.NO_CONNECT_IDLE_TIMEOUT_DEFAULT;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("UnstableApiUsage")
-public class RestrictionValidatorTest extends AbstractConfigurationTest {
+public class RestrictionValidatorTest extends BaseConfigTest {
 
     @Test
     public void test_restrictions_xml() throws Exception {
 
-        final String contents = "<hivemq>" +
+        loadConfig("<hivemq>" +
                 "<restrictions>" +
                 "<max-connections>500</max-connections>" +
                 "<max-client-id-length>400</max-client-id-length>" +
@@ -42,21 +38,18 @@ public class RestrictionValidatorTest extends AbstractConfigurationTest {
                 "<no-connect-idle-timeout>300</no-connect-idle-timeout>" +
                 "<incoming-bandwidth-throttling>200</incoming-bandwidth-throttling>" +
                 "</restrictions>" +
-                "</hivemq>";
-        Files.write(contents.getBytes(UTF_8), xmlFile);
+                "</hivemq>");
 
-        assertEquals(500, restrictionsConfigService.maxConnections());
-        assertEquals(400, restrictionsConfigService.maxClientIdLength());
-        assertEquals(400, restrictionsConfigService.maxTopicLength());
-        assertEquals(300, restrictionsConfigService.noConnectIdleTimeout());
-        assertEquals(200, restrictionsConfigService.incomingLimit());
-
+        assertEquals(500, configService.restrictions.maxConnections());
+        assertEquals(400, configService.restrictions.maxClientIdLength());
+        assertEquals(400, configService.restrictions.maxTopicLength());
+        assertEquals(300, configService.restrictions.noConnectIdleTimeout());
+        assertEquals(200, configService.restrictions.incomingLimit());
     }
 
     @Test
     public void test_restriction_negative_values() throws Exception {
-
-        final String contents = "<hivemq>" +
+        loadConfig("<hivemq>" +
                 "<restrictions>" +
                 "<max-connections>-100</max-connections>" +
                 "<max-client-id-length>-100</max-client-id-length>" +
@@ -64,20 +57,18 @@ public class RestrictionValidatorTest extends AbstractConfigurationTest {
                 "<no-connect-idle-timeout>-100</no-connect-idle-timeout>" +
                 "<incoming-bandwidth-throttling>-100</incoming-bandwidth-throttling>" +
                 "</restrictions>" +
-                "</hivemq>";
-        Files.write(contents.getBytes(UTF_8), xmlFile);
+                "</hivemq>");
 
-        assertEquals(MAX_CONNECTIONS_DEFAULT, restrictionsConfigService.maxConnections());
-        assertEquals(MAX_CLIENT_ID_LENGTH_DEFAULT, restrictionsConfigService.maxClientIdLength());
-        assertEquals(MAX_TOPIC_LENGTH_DEFAULT, restrictionsConfigService.maxTopicLength());
-        assertEquals(NO_CONNECT_IDLE_TIMEOUT_DEFAULT, restrictionsConfigService.noConnectIdleTimeout());
-        assertEquals(INCOMING_BANDWIDTH_THROTTLING_DEFAULT, restrictionsConfigService.incomingLimit());
-
+        assertEquals(MAX_CONNECTIONS_DEFAULT, configService.restrictions.maxConnections());
+        assertEquals(MAX_CLIENT_ID_LENGTH_DEFAULT, configService.restrictions.maxClientIdLength());
+        assertEquals(MAX_TOPIC_LENGTH_DEFAULT, configService.restrictions.maxTopicLength());
+        assertEquals(NO_CONNECT_IDLE_TIMEOUT_DEFAULT, configService.restrictions.noConnectIdleTimeout());
+        assertEquals(INCOMING_BANDWIDTH_THROTTLING_DEFAULT, configService.restrictions.incomingLimit());
     }
 
     @Test
-    public void test_tooHigh() throws IOException {
-        final String contents = "<hivemq>" +
+    public void test_tooHigh() throws Exception {
+        loadConfig("<hivemq>" +
                 "<restrictions>" +
                 "<max-connections>500</max-connections>" +
                 "<max-client-id-length>123456</max-client-id-length>" +
@@ -85,13 +76,11 @@ public class RestrictionValidatorTest extends AbstractConfigurationTest {
                 "<no-connect-idle-timeout>300</no-connect-idle-timeout>" +
                 "<incoming-bandwidth-throttling>200</incoming-bandwidth-throttling>" +
                 "</restrictions>" +
-                "</hivemq>";
-        Files.write(contents.getBytes(UTF_8), xmlFile);
-
-        assertEquals(500, restrictionsConfigService.maxConnections());
-        assertEquals(MAX_CLIENT_ID_LENGTH_DEFAULT, restrictionsConfigService.maxClientIdLength());
-        assertEquals(MAX_TOPIC_LENGTH_DEFAULT, restrictionsConfigService.maxTopicLength());
-        assertEquals(300, restrictionsConfigService.noConnectIdleTimeout());
-        assertEquals(200, restrictionsConfigService.incomingLimit());
+                "</hivemq>");
+        assertEquals(500, configService.restrictions.maxConnections());
+        assertEquals(MAX_CLIENT_ID_LENGTH_DEFAULT, configService.restrictions.maxClientIdLength());
+        assertEquals(MAX_TOPIC_LENGTH_DEFAULT, configService.restrictions.maxTopicLength());
+        assertEquals(300, configService.restrictions.noConnectIdleTimeout());
+        assertEquals(200, configService.restrictions.incomingLimit());
     }
 }

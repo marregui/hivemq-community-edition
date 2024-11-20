@@ -95,19 +95,22 @@ public class ConfigService {
     private static final @NotNull Logger log = LoggerFactory.getLogger(ConfigService.class);
     private static final @NotNull String JKS = "JKS";
 
-    private final @NotNull ListenerConfigService listener;
-    private final @NotNull MqttConfigService mqtt;
-    private final @NotNull RestrictionsConfigService restrictions;
-    private final @NotNull SecurityConfigService security;
+    final @NotNull ListenerConfigService listener;
+    final @NotNull MqttConfigService mqtt;
+    final @NotNull RestrictionsConfigService restrictions;
+    final @NotNull SecurityConfigService security;
     private final @NotNull List<String> listenerNames;
 
     public ConfigService() throws IOException, JAXBException {
+        this(new File(SysInfo.INSTANCE.getConfigFolder(), "config.xml"));
+    }
+
+    public ConfigService(final @NotNull File file) throws IOException, JAXBException {
         listener = new ListenerConfigService();
         mqtt = new MqttConfigService();
         restrictions = new RestrictionsConfigService();
         security = new SecurityConfigService();
         listenerNames = new ArrayList<>();
-        final File file = new File(SysInfo.INSTANCE.getConfigFolder(), "config.xml");
         if (!file.exists() || !file.isFile() || !file.canRead()) {
             log.error("Cannot read config {}. Using defaults", file.getAbsolutePath());
             setConfig(new HiveMQConfigEntity());
@@ -125,8 +128,9 @@ public class ConfigService {
     }
 
     private static @NotNull StreamSource readFileContent(final @NotNull File file) throws IOException {
+        final String originalContent = readString(file.toPath());
+        final Matcher env = Pattern.compile("\\$\\{(ENV:)*(.*?)}").matcher(originalContent);
         final StringBuilder sb = new StringBuilder();
-        final Matcher env = Pattern.compile("\\$\\{(ENV:)*(.*?)}").matcher(readString(file.toPath()));
         while (env.find()) {
             if (env.groupCount() < 2) {
                 log.warn("unexpected env");
@@ -142,7 +146,12 @@ public class ConfigService {
             }
             env.appendReplacement(sb, varValue.replace("\\", "\\\\").replace("$", "\\$"));
         }
-        env.appendTail(sb);
+        if (sb.length() > 0) {
+            env.appendTail(sb);
+        } else {
+            sb.append(originalContent);
+        }
+        System.out.printf("POLLO %s%n", sb);
         return new StreamSource(new ByteArrayInputStream(sb.toString().getBytes(StandardCharsets.UTF_8)));
     }
 

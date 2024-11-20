@@ -162,7 +162,7 @@ public class ModifiableWillPublishImplTest {
         EqualsVerifier.forClass(ModifiableWillPublishImpl.class)
                 .withIgnoredAnnotations(NotNull.class) // EqualsVerifier thinks @NotNull Optional is @NotNull
                 .withNonnullFields("topic", "qos", "subscriptionIdentifiers", "userProperties")
-                .withIgnoredFields("configurationService", "modified")
+                .withIgnoredFields("configService", "modified")
                 .withRedefinedSuperclass()
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
                 .withPrefabValues(ImmutableIntArray.class, ImmutableIntArray.of(), ImmutableIntArray.of(123))

@@ -36,12 +36,6 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkArgument;
 
 
-/**
- * @author Florian Limpöck
- * @author Silvio Giebl
- * @since 4.0.0
- */
-
 public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
 
     @NotNull String topic;

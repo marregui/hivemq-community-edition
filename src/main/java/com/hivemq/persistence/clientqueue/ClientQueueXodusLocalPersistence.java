@@ -138,7 +138,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
         } else {
             maxHardLimit = maxHeap / hardLimitDivisor;
         }
-        log.debug("{} allocated for qos 0 inflight messages", Strings.convertBytes(maxHardLimit));
+        log.debug("{} allocated for qos 0 inflight messages", Strings.toHumanReadableSize(maxHardLimit));
         return maxHardLimit;
     }
 

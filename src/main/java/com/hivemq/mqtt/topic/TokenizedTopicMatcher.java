@@ -28,18 +28,18 @@ public class TokenizedTopicMatcher implements TopicMatcher {
     public boolean matches(@NotNull final String topicSubscription, @NotNull final String actualTopic)
             throws InvalidTopicException {
 
-        if (Strings.containsAny(actualTopic, "#+")) {
+        if (!Strings.hasNoWildcards(actualTopic)) {
             throw new InvalidTopicException("The actual topic must not contain a wildcard character (# or +)");
         }
-        final String subscription = Strings.stripEnd(topicSubscription, "/");
+        final String subscription = Strings.stripSlash(topicSubscription);
 
         String topic = actualTopic;
 
         if (topic.length() > 1) {
-            topic = Strings.stripEnd(topic, "/");
+            topic = Strings.stripSlash(topic);
         }
 
-        if (Strings.containsNone(topicSubscription, "#+")) {
+        if (Strings.hasNoWildcards(topicSubscription)) {
             return subscription.equals(topic);
         }
         if (actualTopic.startsWith("$") && !topicSubscription.startsWith("$")) {
@@ -51,13 +51,13 @@ public class TokenizedTopicMatcher implements TopicMatcher {
     private static boolean matchesWildcards(final String topicSubscription, final String actualTopic) {
 
         if (topicSubscription.contains("#")) {
-            if (!Strings.endsWith(topicSubscription, "/#") && topicSubscription.length() > 1) {
+            if (!Strings.endsWithSharp(topicSubscription) && topicSubscription.length() > 1) {
                 return false;
             }
         }
 
-        final String[] subscription = Strings.splitPreserveAllTokens(topicSubscription, "/");
-        final String[] topic = Strings.splitPreserveAllTokens(actualTopic, "/");
+        final String[] subscription = Strings.splitOnFwdSlash(topicSubscription);
+        final String[] topic = Strings.splitOnFwdSlash(actualTopic);
 
         final int smallest = min(subscription.length, topic.length);
 

@@ -51,11 +51,11 @@ public class TopicPermissionImpl implements InternalTopicPermission {
         this.sharedGroup = sharedGroup;
 
         //these are used to speed up the evaluation of permissions
-        final String strippedPermissionTopic = Strings.stripEnd(topic, "/");
-        splitTopic = Strings.splitPreserveAllTokens(strippedPermissionTopic, "/");
-        containsWildcardCharacter = !Strings.containsNone(strippedPermissionTopic, "#+");
+        final String strippedPermissionTopic = Strings.stripSlash(topic);
+        splitTopic = Strings.splitOnFwdSlash(strippedPermissionTopic);
+        containsWildcardCharacter = !Strings.hasNoWildcards(strippedPermissionTopic);
         isRootWildcard = strippedPermissionTopic.contains("#");
-        endsWithWildcard = Strings.endsWith(strippedPermissionTopic, "/#");
+        endsWithWildcard = Strings.endsWithSharp(strippedPermissionTopic);
     }
 
     @NotNull

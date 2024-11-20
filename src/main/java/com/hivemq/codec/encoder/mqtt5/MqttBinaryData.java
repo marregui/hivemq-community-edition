@@ -15,9 +15,9 @@
  */
 package com.hivemq.codec.encoder.mqtt5;
 
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.hivemq.util.Utf8Utils;
 import io.netty.buffer.ByteBuf;
 
 import java.nio.ByteBuffer;
@@ -58,10 +58,10 @@ public final class MqttBinaryData {
 
     public static @Nullable String decodeString(final @NotNull ByteBuf byteBuf, final boolean validateUTF8) {
         final byte[] binary = decode(byteBuf);
-        if (binary != null && Utf8Utils.containsMustNotCharacters(binary)) {
+        if (binary != null && Strings.containsMustNotCharacters(binary)) {
             return null;
         }
-        if (binary != null && validateUTF8 && Utf8Utils.hasControlOrNonCharacter(binary)) {
+        if (binary != null && validateUTF8 && Strings.hasControlOrNonChars(binary)) {
             return null;
         }
         return (binary == null) ? null : new String(binary, StandardCharsets.UTF_8);

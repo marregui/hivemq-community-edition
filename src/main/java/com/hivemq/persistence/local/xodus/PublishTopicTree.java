@@ -34,20 +34,20 @@ public class PublishTopicTree {
 
     public void add(@NotNull final String topic) {
         final ArrayList<String> subTopics =
-                new ArrayList<>(Arrays.asList(Strings.splitPreserveAllTokens(topic, "/")));
+                new ArrayList<>(Arrays.asList(Strings.splitOnFwdSlash(topic)));
         root.add(subTopics);
     }
 
     @NotNull
     public Set<String> get(@NotNull final String topic) {
         final ArrayList<String> subTopics =
-                new ArrayList<>(Arrays.asList(Strings.splitPreserveAllTokens(topic, "/")));
+                new ArrayList<>(Arrays.asList(Strings.splitOnFwdSlash(topic)));
         return root.get(subTopics, null, false);
     }
 
     public void remove(@NotNull final String topic) {
         final ArrayList<String> subTopics =
-                new ArrayList<>(Arrays.asList(Strings.splitPreserveAllTokens(topic, "/")));
+                new ArrayList<>(Arrays.asList(Strings.splitOnFwdSlash(topic)));
         root.remove(subTopics);
     }
 

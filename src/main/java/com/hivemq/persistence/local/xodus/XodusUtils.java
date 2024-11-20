@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.local.xodus;
 
-import com.google.common.base.Utf8;
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.util.Bytes;
@@ -116,7 +116,7 @@ public class XodusUtils {
     }
 
     public static int shortLengthStringSize(@Nullable final String string) {
-        return Short.BYTES + ((string == null) ? 0 : Utf8.encodedLength(string));
+        return Short.BYTES + ((string == null) ? 0 : Strings.utf8EncodedLen(string));
     }
 
     public static int shortLengthArraySize(@Nullable final byte[] bytes) {
@@ -124,14 +124,18 @@ public class XodusUtils {
     }
 
     public static int serializeShortLengthString(
-            @Nullable final String string, @NotNull final byte[] serialized, final int offset) {
+            @Nullable final String string,
+            @NotNull final byte[] serialized,
+            final int offset) {
         return serializeShortLengthArray((string == null) ? null : string.getBytes(StandardCharsets.UTF_8),
                 serialized,
                 offset);
     }
 
     public static int serializeShortLengthArray(
-            @Nullable final byte[] bytes, @NotNull final byte[] serialized, int offset) {
+            @Nullable final byte[] bytes,
+            @NotNull final byte[] serialized,
+            int offset) {
         final int length = (bytes == null) ? 0 : bytes.length;
         Bytes.copyUnsignedShortToByteArray(length, serialized, offset);
         offset += Short.BYTES;

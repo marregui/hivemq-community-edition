@@ -17,6 +17,7 @@ package com.hivemq.extensions.packets.connect;
 
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
 import com.hivemq.config.ConfigService;
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +29,6 @@ import com.hivemq.extension.sdk.api.services.exception.DoNotImplementException;
 import com.hivemq.extensions.packets.general.ModifiableUserPropertiesImpl;
 import com.hivemq.extensions.packets.publish.ModifiableWillPublishImpl;
 import com.hivemq.extensions.packets.publish.WillPublishPacketImpl;
-import com.hivemq.util.Utf8Utils;
 
 import java.nio.ByteBuffer;
 import java.util.Objects;
@@ -108,8 +108,8 @@ public class ModifiableConnectPacketImpl implements ModifiableConnectPacket {
     @Override
     public void setClientId(final @NotNull String clientId) {
         final int clientIdLength = configService.restrictionsConfiguration().maxClientIdLength();
-        checkArgument(!Utf8Utils.containsMustNotCharacters(clientId), clientId + " is not a valid client id");
-        checkArgument(!Utf8Utils.hasControlOrNonCharacter(clientId), clientId + " is not a valid client id");
+        checkArgument(!Strings.containsMustNotCharacters(clientId), clientId + " is not a valid client id");
+        checkArgument(!Strings.hasControlOrNonChars(clientId), clientId + " is not a valid client id");
         checkArgument(clientId.length() < clientIdLength, "client ID exceeds the maximum client ID length");
         checkArgument(!clientId.isEmpty(), "client ID must not be empty");
         if (this.clientId.equals(clientId)) {
@@ -294,9 +294,9 @@ public class ModifiableConnectPacketImpl implements ModifiableConnectPacket {
     @Override
     public void setAuthenticationMethod(final @Nullable String authenticationMethod) {
         if (authenticationMethod != null) {
-            checkArgument(!Utf8Utils.containsMustNotCharacters(authenticationMethod),
+            checkArgument(!Strings.containsMustNotCharacters(authenticationMethod),
                     authenticationMethod + " is not a valid authentication method");
-            checkArgument(!Utf8Utils.hasControlOrNonCharacter(authenticationMethod),
+            checkArgument(!Strings.hasControlOrNonChars(authenticationMethod),
                     authenticationMethod + " is not a valid authentication method");
         }
         if (Objects.equals(this.authenticationMethod, authenticationMethod)) {

@@ -15,10 +15,10 @@
  */
 package com.hivemq.codec.decoder;
 
-import com.google.common.base.Utf8;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.config.ConfigService;
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -29,9 +29,6 @@ import com.hivemq.util.ReasonStrings;
 import io.netty.buffer.ByteBuf;
 
 
-/**
- * @author Florian Limpöck
- */
 public abstract class AbstractMqttPublishDecoder<T extends Message> extends AbstractMqttDecoder<T> {
 
     private static final byte @NotNull [] EMPTY_PAYLOAD = new byte[0];
@@ -176,7 +173,7 @@ public abstract class AbstractMqttPublishDecoder<T extends Message> extends Abst
 
             if (payloadFormatIndicator == Mqtt5PayloadFormatIndicator.UTF_8) {
                 if (validatePayloadFormat) {
-                    if (!Utf8.isWellFormed(payload)) {
+                    if (!Strings.isValidUtf8(payload)) {
                         disconnector.disconnect(clientConnectionContext.getChannel(),
                                 "A client (IP: {}) sent a PUBLISH with an invalid UTF-8 payload. This is not allowed. Disconnecting client.",
                                 "Sent a PUBLISH with an invalid UTF-8 payload",

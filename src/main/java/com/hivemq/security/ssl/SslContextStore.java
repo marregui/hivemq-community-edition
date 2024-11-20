@@ -165,7 +165,7 @@ public class SslContextStore {
         public void funnel(final @NotNull Tls tls, final @NotNull PrimitiveSink sink) {
             funnelFile(tls.getKeystorePath(), sink);
 
-            if (!Strings.isBlank(tls.getTruststorePath())) {
+            if (Strings.isNotBlank(tls.getTruststorePath())) {
                 funnelFile(tls.getTruststorePath(), sink);
             }
         }

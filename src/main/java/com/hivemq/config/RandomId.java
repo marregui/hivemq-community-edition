@@ -25,7 +25,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Singleton
 public class RandomId {
 
-    private final @NotNull String hivemqId = random(5);
+    private final @NotNull String hivemqId = randomAlphanumeric(5);
 
     public static @NotNull String random(final int count) {
         return random(count, 0, 0, false, false);

@@ -21,9 +21,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Florian Limpöck
- */
 public class ClientIdsTest {
 
     @Test
@@ -35,8 +32,8 @@ public class ClientIdsTest {
 
             final String next = clientIds.generateNext();
 
-            assertFalse(Utf8Utils.containsMustNotCharacters(next));
-            assertFalse(Utf8Utils.hasControlOrNonCharacter(next));
+            assertFalse(Strings.containsMustNotCharacters(next));
+            assertFalse(Strings.hasControlOrNonChars(next));
             assertTrue(next.length() >= 44);
 
         }

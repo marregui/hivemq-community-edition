@@ -16,11 +16,11 @@
 package com.hivemq.extensions.services.builder;
 
 import com.google.common.base.Preconditions;
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.util.Topics;
-import com.hivemq.util.Utf8Utils;
 
 import java.util.Objects;
 
@@ -38,10 +38,10 @@ public class PluginBuilderUtil {
     public final static int UTF_8_STRING_MAX_LENGTH = 65535;
 
     public static boolean isValidUtf8String(final @NotNull String stringToValidate, final boolean validateUTF8) {
-        if (Utf8Utils.containsMustNotCharacters(stringToValidate)) {
+        if (Strings.containsMustNotCharacters(stringToValidate)) {
             return false;
         }
-        return !validateUTF8 || !Utf8Utils.hasControlOrNonCharacter(stringToValidate);
+        return !validateUTF8 || !Strings.hasControlOrNonChars(stringToValidate);
     }
 
     public static void checkMessageExpiryInterval(

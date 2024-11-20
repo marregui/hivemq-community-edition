@@ -72,7 +72,7 @@ public final class SslUtil {
     }
 
     public static @Nullable TrustManagerFactory getTrustManagerFactory(final @NotNull Tls tls) throws SslException {
-        return !Strings.isBlank(tls.getTruststorePath()) &&
+        return Strings.isNotBlank(tls.getTruststorePath()) &&
                 tls.getTruststoreType() != null &&
                 tls.getTruststorePassword() != null ?
                 createTrustManagerFactory(tls.getTruststoreType(),

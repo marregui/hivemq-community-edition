@@ -26,7 +26,6 @@ public class TypeSize {
     public static final int STRING_OVERHEAD = 38;
     public static final int ARRAY_OVERHEAD = 12;
     public static final int COLLECTION_OVERHEAD = 12;
-    public static final int LINKED_LIST_NODE_OVERHEAD = 24;
     public static final int LONG_WRAPPER_SIZE = 24;
     public static final int INT_WRAPPER_SIZE = 16;
     public static final int LONG_SIZE = 8;

@@ -386,7 +386,7 @@ public class LocalTopicTree {
         Objects.requireNonNull(subscriber, "Subscriber must not be null");
         Objects.requireNonNull(topic, "Topic must not be null");
 
-        final String[] contents = Strings.splitPreserveAllTokens(topic.getTopic(), "/");
+        final String[] contents = Strings.splitOnFwdSlash(topic.getTopic());
 
         //Do not store subscriptions with more than 1000 segments
         if (contents.length > 1000) {
@@ -509,7 +509,7 @@ public class LocalTopicTree {
             return;
         }
 
-        final String[] topicPart = Strings.splitPreserveAllTokens(topic, "/");
+        final String[] topicPart = Strings.splitOnFwdSlash(topic);
         final String segmentKey = topicPart[0];
 
         final Lock lock = segmentLocks.get(segmentKey).readLock();
@@ -583,7 +583,7 @@ public class LocalTopicTree {
             return;
         }
 
-        final String[] topicPart = Strings.splitPreserveAllTokens(topic, "/");
+        final String[] topicPart = Strings.splitOnFwdSlash(topic);
 
         final TopicTreeNode[] nodes = new TopicTreeNode[topicPart.length];
         final String segmentKey = topicPart[0];
@@ -693,7 +693,7 @@ public class LocalTopicTree {
             return subscribers.build();
         }
 
-        final String[] topicPart = Strings.splitPreserveAllTokens(topic, "/");
+        final String[] topicPart = Strings.splitOnFwdSlash(topic);
         final String segmentKey = topicPart[0];
 
         final Lock lock = segmentLocks.get(segmentKey).readLock();
@@ -738,7 +738,7 @@ public class LocalTopicTree {
             return subscribers.build();
         }
 
-        final String[] contents = Strings.splitPreserveAllTokens(topicFilter, "/");
+        final String[] contents = Strings.splitOnFwdSlash(topicFilter);
         final String firstSegment = contents[0];
         final Lock lock = segmentLocks.get(firstSegment).readLock();
         lock.lock();

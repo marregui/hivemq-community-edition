@@ -70,10 +70,10 @@ public final class DefaultPermissionsEvaluator {
             return permissions.getDefaultBehaviour() == DefaultAuthorizationBehaviour.ALLOW;
         }
 
-        final String[] splitTopic = Strings.splitPreserveAllTokens(topic, "/");
+        final String[] splitTopic = Strings.splitOnFwdSlash(topic);
         final String stripedTopic;
         if (topic.length() > 1) {
-            stripedTopic = Strings.stripEnd(topic, "/");
+            stripedTopic = Strings.stripSlash(topic);
         } else {
             stripedTopic = topic;
         }
@@ -118,10 +118,10 @@ public final class DefaultPermissionsEvaluator {
             isShared = false;
         }
 
-        final String[] splitTopic = Strings.splitPreserveAllTokens(topic, "/");
+        final String[] splitTopic = Strings.splitOnFwdSlash(topic);
         final String stripedTopic;
         if (topic.length() > 1) {
-            stripedTopic = Strings.stripEnd(topic, "/");
+            stripedTopic = Strings.stripSlash(topic);
         } else {
             stripedTopic = topic;
         }
@@ -246,7 +246,7 @@ public final class DefaultPermissionsEvaluator {
         try {
             if (topicPermission instanceof InternalTopicPermission) {
                 final InternalTopicPermission internalTopicPermission = (InternalTopicPermission) topicPermission;
-                return PermissionTopicMatcherUtils.matches(Strings.stripEnd(topicPermission.getTopicFilter(), "/"),
+                return PermissionTopicMatcherUtils.matches(Strings.stripSlash(topicPermission.getTopicFilter()),
                         ((InternalTopicPermission) topicPermission).getSplitTopic(),
                         !internalTopicPermission.containsWildcardCharacter(),
                         internalTopicPermission.endsWithWildcard(),

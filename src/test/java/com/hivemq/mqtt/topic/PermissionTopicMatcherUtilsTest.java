@@ -27,6 +27,26 @@ public class PermissionTopicMatcherUtilsTest {
 
     private final @NotNull String actual = "my/test/topic/for/the/unit/test";
 
+    private static boolean matches(final @NotNull String permissionTopic, final @NotNull String actualTopic)
+            throws InvalidTopicException {
+
+        final String stripedPermissionTopic = Strings.stripSlash(permissionTopic);
+        final String[] splitPermissionTopic = Strings.splitOnFwdSlash(stripedPermissionTopic);
+        final boolean nonWildCard = Strings.hasNoWildcards(stripedPermissionTopic);
+        final boolean rootWildCard = stripedPermissionTopic.contains("#");
+        final boolean endsWithWildCard = Strings.endsWithSharp(stripedPermissionTopic);
+
+        final String stripedActualTopic = Strings.stripSlash(actualTopic);
+        final String[] splitActualTopic = Strings.splitOnFwdSlash(stripedActualTopic);
+        return PermissionTopicMatcherUtils.matches(stripedPermissionTopic,
+                splitPermissionTopic,
+                nonWildCard,
+                endsWithWildCard,
+                rootWildCard,
+                stripedActualTopic,
+                splitActualTopic);
+    }
+
     @Test
     public void testMatchesWithoutWildcards() throws Exception {
 
@@ -110,25 +130,5 @@ public class PermissionTopicMatcherUtilsTest {
         assertFalse(matches("my/t+", "my/t"));
         assertFalse(matches("my/+t", "my/t"));
         assertFalse(matches("my/t+t", "my/ttt"));
-    }
-
-    private boolean matches(
-            final @NotNull String permissionTopic, final @NotNull String actualTopic) throws InvalidTopicException {
-
-        final String stripedPermissionTopic = Strings.stripEnd(permissionTopic, "/");
-        final String[] splitPermissionTopic = Strings.splitPreserveAllTokens(stripedPermissionTopic, "/");
-        final boolean nonWildCard = Strings.containsNone(stripedPermissionTopic, "#+");
-        final boolean rootWildCard = stripedPermissionTopic.contains("#");
-        final boolean endsWithWildCard = Strings.endsWith(stripedPermissionTopic, "/#");
-
-        final String stripedActualTopic = Strings.stripEnd(actualTopic, "/");
-        final String[] splitActualTopic = Strings.splitPreserveAllTokens(stripedActualTopic, "/");
-        return PermissionTopicMatcherUtils.matches(stripedPermissionTopic,
-                splitPermissionTopic,
-                nonWildCard,
-                endsWithWildCard,
-                rootWildCard,
-                stripedActualTopic,
-                splitActualTopic);
     }
 }

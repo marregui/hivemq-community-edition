@@ -11,8 +11,6 @@ import ch.qos.logback.core.util.StatusPrinter;
 import com.hivemq.logging.LogLevelModifierTurboFilter;
 import com.hivemq.logging.modifier.NettyLogLevelModifier;
 import com.hivemq.logging.modifier.XodusEnvironmentImplLogLevelModifier;
-import com.hivemq.logging.modifier.XodusFileDataWriterLogLevelModifier;
-import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,10 +87,6 @@ public class Logging {
         DEFAULT_APPENDERS.clear();
         LIST_APPENDER.list.clear();
 
-        // must be added here, as addLoglevelModifiers() is much to late
-        if (SystemUtils.IS_OS_WINDOWS) {
-            LOG_LEVEL_MODIFIER_TURBO_FILTER.registerLogLevelModifier(new XodusFileDataWriterLogLevelModifier());
-        }
         LOG_LEVEL_MODIFIER_TURBO_FILTER.registerLogLevelModifier(new NettyLogLevelModifier());
         LOG_LEVEL_MODIFIER_TURBO_FILTER.registerLogLevelModifier(new XodusEnvironmentImplLogLevelModifier());
     }

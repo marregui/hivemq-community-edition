@@ -20,13 +20,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.ImmutableIntArray;
 import com.google.common.util.concurrent.Striped;
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.subscribe.Topic;
 import com.hivemq.mqtt.topic.SubscriberWithIds;
 import com.hivemq.mqtt.topic.SubscriberWithQoS;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -386,7 +386,7 @@ public class LocalTopicTree {
         Objects.requireNonNull(subscriber, "Subscriber must not be null");
         Objects.requireNonNull(topic, "Topic must not be null");
 
-        final String[] contents = StringUtils.splitPreserveAllTokens(topic.getTopic(), '/');
+        final String[] contents = Strings.splitPreserveAllTokens(topic.getTopic(), "/");
 
         //Do not store subscriptions with more than 1000 segments
         if (contents.length > 1000) {
@@ -509,7 +509,7 @@ public class LocalTopicTree {
             return;
         }
 
-        final String[] topicPart = StringUtils.splitPreserveAllTokens(topic, '/');
+        final String[] topicPart = Strings.splitPreserveAllTokens(topic, "/");
         final String segmentKey = topicPart[0];
 
         final Lock lock = segmentLocks.get(segmentKey).readLock();
@@ -583,7 +583,7 @@ public class LocalTopicTree {
             return;
         }
 
-        final String[] topicPart = StringUtils.splitPreserveAllTokens(topic, "/");
+        final String[] topicPart = Strings.splitPreserveAllTokens(topic, "/");
 
         final TopicTreeNode[] nodes = new TopicTreeNode[topicPart.length];
         final String segmentKey = topicPart[0];
@@ -693,7 +693,7 @@ public class LocalTopicTree {
             return subscribers.build();
         }
 
-        final String[] topicPart = StringUtils.splitPreserveAllTokens(topic, '/');
+        final String[] topicPart = Strings.splitPreserveAllTokens(topic, "/");
         final String segmentKey = topicPart[0];
 
         final Lock lock = segmentLocks.get(segmentKey).readLock();
@@ -738,7 +738,7 @@ public class LocalTopicTree {
             return subscribers.build();
         }
 
-        final String[] contents = StringUtils.splitPreserveAllTokens(topicFilter, '/');
+        final String[] contents = Strings.splitPreserveAllTokens(topicFilter, "/");
         final String firstSegment = contents[0];
         final Lock lock = segmentLocks.get(firstSegment).readLock();
         lock.lock();

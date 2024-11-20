@@ -16,9 +16,9 @@
 package com.hivemq.persistence.local.xodus;
 
 import com.google.common.collect.ImmutableSet;
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,20 +34,20 @@ public class PublishTopicTree {
 
     public void add(@NotNull final String topic) {
         final ArrayList<String> subTopics =
-                new ArrayList<>(Arrays.asList(StringUtils.splitPreserveAllTokens(topic, '/')));
+                new ArrayList<>(Arrays.asList(Strings.splitPreserveAllTokens(topic, "/")));
         root.add(subTopics);
     }
 
     @NotNull
     public Set<String> get(@NotNull final String topic) {
         final ArrayList<String> subTopics =
-                new ArrayList<>(Arrays.asList(StringUtils.splitPreserveAllTokens(topic, '/')));
+                new ArrayList<>(Arrays.asList(Strings.splitPreserveAllTokens(topic, "/")));
         return root.get(subTopics, null, false);
     }
 
     public void remove(@NotNull final String topic) {
         final ArrayList<String> subTopics =
-                new ArrayList<>(Arrays.asList(StringUtils.splitPreserveAllTokens(topic, '/')));
+                new ArrayList<>(Arrays.asList(Strings.splitPreserveAllTokens(topic, "/")));
         root.remove(subTopics);
     }
 

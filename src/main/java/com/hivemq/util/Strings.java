@@ -15,20 +15,299 @@
  */
 package com.hivemq.util;
 
-import com.google.common.annotations.VisibleForTesting;
 import org.jetbrains.annotations.NotNull;
 import io.netty.buffer.ByteBuf;
+import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Strings {
+    public static final String[] EMPTY_STRING_ARRAY = {};
+    public static final char[] EMPTY_CHAR_ARRAY = {};
 
     private Strings() {
         //This is a utility class, don't instantiate it!
+    }
+
+    public static String[] splitPreserveAllTokens(final String str, final String separatorChars) {
+        return splitWorker(str, separatorChars, -1, true);
+    }
+
+    public static boolean containsNone(final CharSequence cs, final String invalidChars) {
+        if (invalidChars == null) {
+            return true;
+        }
+        return containsNone(cs, invalidChars.toCharArray());
+    }
+
+    public static boolean endsWith(final CharSequence str, final CharSequence suffix) {
+        return endsWith(str, suffix, false);
+    }
+
+    private static boolean endsWith(final CharSequence str, final CharSequence suffix, final boolean ignoreCase) {
+        if (str == null || suffix == null) {
+            return str == suffix;
+        }
+        if (suffix.length() > str.length()) {
+            return false;
+        }
+        final int strOffset = str.length() - suffix.length();
+        return regionMatches(str, ignoreCase, strOffset, suffix, 0, suffix.length());
+    }
+
+    public static boolean containsAny(final CharSequence cs, final CharSequence searchChars) {
+        if (searchChars == null) {
+            return false;
+        }
+        return containsAny(cs, toCharArray(searchChars));
+    }
+
+    public static char[] toCharArray(final CharSequence source) {
+        final int len = source == null ? 0 : source.length();
+        if (len == 0) {
+            return EMPTY_CHAR_ARRAY;
+        }
+        if (source instanceof String) {
+            return ((String) source).toCharArray();
+        }
+        final char[] array = new char[len];
+        for (int i = 0; i < len; i++) {
+            array[i] = source.charAt(i);
+        }
+        return array;
+    }
+
+    public static boolean isEmpty(final CharSequence cs) {
+        return cs == null || cs.length() == 0;
+    }
+
+    public static boolean containsAny(final CharSequence cs, final char... searchChars) {
+        if (cs == null || cs.length() == 0 || searchChars == null || Array.getLength(searchChars) == 0) {
+            return false;
+        }
+
+
+        final int csLength = cs.length();
+        final int searchLength = searchChars.length;
+        final int csLast = csLength - 1;
+        final int searchLast = searchLength - 1;
+        for (int i = 0; i < csLength; i++) {
+            final char ch = cs.charAt(i);
+            for (int j = 0; j < searchLength; j++) {
+                if (searchChars[j] == ch) {
+                    if (!Character.isHighSurrogate(ch)) {
+                        // ch is in the Basic Multilingual Plane
+                        return true;
+                    }
+                    if (j == searchLast) {
+                        // missing low surrogate, fine, like String.indexOf(String)
+                        return true;
+                    }
+                    if (i < csLast && searchChars[j + 1] == cs.charAt(i + 1)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    static boolean regionMatches(
+            final CharSequence cs,
+            final boolean ignoreCase,
+            final int thisStart,
+            final CharSequence substring,
+            final int start,
+            final int length) {
+        if (cs instanceof String && substring instanceof String) {
+            return ((String) cs).regionMatches(ignoreCase, thisStart, (String) substring, start, length);
+        }
+        int index1 = thisStart;
+        int index2 = start;
+        int tmpLen = length;
+
+        // Extract these first so we detect NPEs the same as the java.lang.String version
+        final int srcLen = cs.length() - thisStart;
+        final int otherLen = substring.length() - start;
+
+        // Check for invalid parameters
+        if (thisStart < 0 || start < 0 || length < 0) {
+            return false;
+        }
+
+        // Check that the regions are long enough
+        if (srcLen < length || otherLen < length) {
+            return false;
+        }
+
+        while (tmpLen-- > 0) {
+            final char c1 = cs.charAt(index1++);
+            final char c2 = substring.charAt(index2++);
+
+            if (c1 == c2) {
+                continue;
+            }
+
+            if (!ignoreCase) {
+                return false;
+            }
+
+            // The real same check as in String.regionMatches():
+            final char u1 = Character.toUpperCase(c1);
+            final char u2 = Character.toUpperCase(c2);
+            if (u1 != u2 && Character.toLowerCase(u1) != Character.toLowerCase(u2)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    public static boolean containsNone(final CharSequence cs, final char... searchChars) {
+        if (cs == null || searchChars == null) {
+            return true;
+        }
+        final int csLen = cs.length();
+        final int csLast = csLen - 1;
+        final int searchLen = searchChars.length;
+        final int searchLast = searchLen - 1;
+        for (int i = 0; i < csLen; i++) {
+            final char ch = cs.charAt(i);
+            for (int j = 0; j < searchLen; j++) {
+                if (searchChars[j] == ch) {
+                    if (!Character.isHighSurrogate(ch)) {
+                        // ch is in the Basic Multilingual Plane
+                        return false;
+                    }
+                    if (j == searchLast) {
+                        // missing low surrogate, fine, like String.indexOf(String)
+                        return false;
+                    }
+                    if (i < csLast && searchChars[j + 1] == cs.charAt(i + 1)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private static String[] splitWorker(
+            final String str,
+            final String separatorChars,
+            final int max,
+            final boolean preserveAllTokens) {
+        // Performance tuned for 2.0 (JDK1.4)
+        // Direct code is quicker than StringTokenizer.
+        // Also, StringTokenizer uses isSpace() not isWhitespace()
+
+        if (str == null) {
+            return null;
+        }
+        final int len = str.length();
+        if (len == 0) {
+            return EMPTY_STRING_ARRAY;
+        }
+        final List<String> list = new ArrayList<>();
+        int sizePlus1 = 1;
+        int i = 0;
+        int start = 0;
+        boolean match = false;
+        boolean lastMatch = false;
+        if (separatorChars == null) {
+            // Null separator means use whitespace
+            while (i < len) {
+                if (Character.isWhitespace(str.charAt(i))) {
+                    if (match || preserveAllTokens) {
+                        lastMatch = true;
+                        if (sizePlus1++ == max) {
+                            i = len;
+                            lastMatch = false;
+                        }
+                        list.add(str.substring(start, i));
+                        match = false;
+                    }
+                    start = ++i;
+                    continue;
+                }
+                lastMatch = false;
+                match = true;
+                i++;
+            }
+        } else if (separatorChars.length() == 1) {
+            // Optimise 1 character case
+            final char sep = separatorChars.charAt(0);
+            while (i < len) {
+                if (str.charAt(i) == sep) {
+                    if (match || preserveAllTokens) {
+                        lastMatch = true;
+                        if (sizePlus1++ == max) {
+                            i = len;
+                            lastMatch = false;
+                        }
+                        list.add(str.substring(start, i));
+                        match = false;
+                    }
+                    start = ++i;
+                    continue;
+                }
+                lastMatch = false;
+                match = true;
+                i++;
+            }
+        } else {
+            // standard case
+            while (i < len) {
+                if (separatorChars.indexOf(str.charAt(i)) >= 0) {
+                    if (match || preserveAllTokens) {
+                        lastMatch = true;
+                        if (sizePlus1++ == max) {
+                            i = len;
+                            lastMatch = false;
+                        }
+                        list.add(str.substring(start, i));
+                        match = false;
+                    }
+                    start = ++i;
+                    continue;
+                }
+                lastMatch = false;
+                match = true;
+                i++;
+            }
+        }
+        if (match || preserveAllTokens && lastMatch) {
+            list.add(str.substring(start, i));
+        }
+        return list.toArray(EMPTY_STRING_ARRAY);
+    }
+
+
+    public static String stripEnd(final @Nullable String str, final @Nullable String stripChars) {
+        int end = str == null ? 0 : str.length();
+        if (end == 0) {
+            return str;
+        }
+
+        if (stripChars == null) {
+            while (end != 0 && Character.isWhitespace(str.charAt(end - 1))) {
+                end--;
+            }
+        } else if (stripChars.isEmpty()) {
+            return str;
+        } else {
+            while (end != 0 && stripChars.indexOf(str.charAt(end - 1)) != -1) {
+                end--;
+            }
+        }
+        return str.substring(0, end);
     }
 
     /**
@@ -67,7 +346,9 @@ public class Strings {
     }
 
     public static String getValidatedPrefixedString(
-            @NotNull final ByteBuf buf, final int utf8StringLength, final boolean validateShouldNotCharacters) {
+            @NotNull final ByteBuf buf,
+            final int utf8StringLength,
+            final boolean validateShouldNotCharacters) {
         Objects.requireNonNull(buf);
         if (buf.readableBytes() < utf8StringLength) {
             return null;
@@ -123,7 +404,6 @@ public class Strings {
      * @param bytes the long value to convert
      * @return the human readable converted String
      */
-    @VisibleForTesting
     public static String convertBytes(final long bytes) {
         final long kbDivisor = 1024L;
         final long mbDivisor = kbDivisor * kbDivisor;
@@ -144,5 +424,18 @@ public class Strings {
             final double tb = (double) bytes / tbDivisor;
             return String.format(Locale.US, "%.2f", tb) + " TB";
         }
+    }
+
+    public static boolean isBlank(final @Nullable CharSequence cs) {
+        final int strLen = cs == null ? 0 : cs.length();
+        if (strLen == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -24,14 +24,17 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.CorruptedFrameException;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+
 import com.google.inject.Singleton;
+
 import javax.net.ssl.SSLException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.channels.ClosedChannelException;
 import java.util.Optional;
 
@@ -82,19 +85,22 @@ public class ExceptionHandler extends ChannelHandlerAdapter {
                     Mqtt5DisconnectReasonCode.UNSPECIFIED_ERROR,
                     null);
             return;
-
-
         } else if (cause instanceof IllegalArgumentException) {
-
             //do not log IllegalArgumentException as error
-
         } else {
             final Connection clientConnectionContext = Connection.of(channel);
             final Optional<String> channelIP = clientConnectionContext.getChannelIP();
 
-            log.error("An unexpected error occurred for client with IP {}: {}",
-                    channelIP.orElse("UNKNOWN"),
-                    ExceptionUtils.getStackTrace(cause));
+            String stack;
+            if (cause == null) {
+                stack = "";
+            } else {
+                try (final StringWriter sw = new StringWriter()) {
+                    cause.printStackTrace(new PrintWriter(sw, true));
+                    stack = sw.toString();
+                }
+            }
+            log.error("An unexpected error occurred for client with IP {}: {}", channelIP.orElse("UNKNOWN"), stack);
         }
 
         if (channel != null) {

@@ -15,15 +15,52 @@
  */
 package com.hivemq.config;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.inject.Singleton;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 @Singleton
 public class HivemqId {
 
-    private final @NotNull String hivemqId = RandomStringUtils.randomAlphanumeric(5);
+    private static final int ID_LENGTH = 5;
+    private static final int ID_START = ' ';
+    private static final int ID_END = 'z' + 1;
+    private static final int GAP = ID_END - ID_START;
+
+    private final @NotNull String hivemqId = random();
+
+    private static String random() {
+        final Random random = ThreadLocalRandom.current();
+        final StringBuilder builder = new StringBuilder(ID_LENGTH);
+        int count = ID_LENGTH;
+        while (count-- != 0) {
+            final int codePoint = random.nextInt(GAP) + ID_START;
+            switch (Character.getType(codePoint)) {
+                case Character.UNASSIGNED:
+                case Character.PRIVATE_USE:
+                case Character.SURROGATE:
+                    count++;
+                    continue;
+            }
+            final int len = Character.charCount(codePoint);
+            if (count == 0 && len > 1) {
+                count++;
+                continue;
+            }
+            if (Character.isLetter(codePoint) || Character.isDigit(codePoint)) {
+                builder.appendCodePoint(codePoint);
+                if (len == 2) {
+                    count--;
+                }
+            } else {
+                count++;
+            }
+        }
+        return builder.toString();
+    }
 
     public @NotNull String get() {
         return hivemqId;

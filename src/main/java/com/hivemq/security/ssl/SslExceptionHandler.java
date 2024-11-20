@@ -29,6 +29,9 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.hivemq.logging.LoggingUtils.appendListenerToMessage;
 
 /**
@@ -76,6 +79,20 @@ public class SslExceptionHandler extends ChannelHandlerAdapter {
 
         //Rethrow Exception, we can only handle SSL Exceptions
         ctx.fireExceptionCaught(cause);
+    }
+
+    public static Throwable getRootCause(final Throwable throwable) {
+        final List<Throwable> list = getThrowableList(throwable);
+        return list.isEmpty() ? null : list.get(list.size() - 1);
+    }
+
+    public static List<Throwable> getThrowableList(Throwable throwable) {
+        final List<Throwable> list = new ArrayList<>();
+        while (throwable != null && !list.contains(throwable)) {
+            list.add(throwable);
+            throwable = throwable.getCause();
+        }
+        return list;
     }
 
     private static void logSSLException(final @NotNull ChannelHandlerContext ctx, final @NotNull Throwable cause) {

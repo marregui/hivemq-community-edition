@@ -15,8 +15,8 @@
  */
 package com.hivemq.mqtt.topic;
 
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
-import org.apache.commons.lang3.StringUtils;
 
 import static java.lang.Math.min;
 
@@ -28,18 +28,18 @@ public class TokenizedTopicMatcher implements TopicMatcher {
     public boolean matches(@NotNull final String topicSubscription, @NotNull final String actualTopic)
             throws InvalidTopicException {
 
-        if (StringUtils.containsAny(actualTopic, "#+")) {
+        if (Strings.containsAny(actualTopic, "#+")) {
             throw new InvalidTopicException("The actual topic must not contain a wildcard character (# or +)");
         }
-        final String subscription = StringUtils.stripEnd(topicSubscription, "/");
+        final String subscription = Strings.stripEnd(topicSubscription, "/");
 
         String topic = actualTopic;
 
         if (topic.length() > 1) {
-            topic = StringUtils.stripEnd(topic, "/");
+            topic = Strings.stripEnd(topic, "/");
         }
 
-        if (StringUtils.containsNone(topicSubscription, "#+")) {
+        if (Strings.containsNone(topicSubscription, "#+")) {
             return subscription.equals(topic);
         }
         if (actualTopic.startsWith("$") && !topicSubscription.startsWith("$")) {
@@ -51,13 +51,13 @@ public class TokenizedTopicMatcher implements TopicMatcher {
     private static boolean matchesWildcards(final String topicSubscription, final String actualTopic) {
 
         if (topicSubscription.contains("#")) {
-            if (!StringUtils.endsWith(topicSubscription, "/#") && topicSubscription.length() > 1) {
+            if (!Strings.endsWith(topicSubscription, "/#") && topicSubscription.length() > 1) {
                 return false;
             }
         }
 
-        final String[] subscription = StringUtils.splitPreserveAllTokens(topicSubscription, "/");
-        final String[] topic = StringUtils.splitPreserveAllTokens(actualTopic, "/");
+        final String[] subscription = Strings.splitPreserveAllTokens(topicSubscription, "/");
+        final String[] topic = Strings.splitPreserveAllTokens(actualTopic, "/");
 
         final int smallest = min(subscription.length, topic.length);
 

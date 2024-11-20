@@ -15,6 +15,7 @@
  */
 package com.hivemq.mqtt.handler.publish;
 
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.auth.parameter.TopicPermission;
@@ -28,7 +29,6 @@ import com.hivemq.mqtt.message.subscribe.Topic;
 import com.hivemq.mqtt.topic.InvalidTopicException;
 import com.hivemq.mqtt.topic.PermissionTopicMatcherUtils;
 import com.hivemq.util.Topics;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -40,13 +40,15 @@ public final class DefaultPermissionsEvaluator {
     }
 
     public static boolean checkWillPublish(
-            final @Nullable ModifiableDefaultPermissions permissions, final @NotNull MqttWillPublish willPublish) {
+            final @Nullable ModifiableDefaultPermissions permissions,
+            final @NotNull MqttWillPublish willPublish) {
 
         return checkPublish(permissions, willPublish.getTopic(), willPublish.getQos(), willPublish.isRetain());
     }
 
     public static boolean checkPublish(
-            final @Nullable ModifiableDefaultPermissions permissions, final @NotNull PUBLISH publish) {
+            final @Nullable ModifiableDefaultPermissions permissions,
+            final @NotNull PUBLISH publish) {
 
         return checkPublish(permissions, publish.getTopic(), publish.getQoS(), publish.isRetain());
     }
@@ -68,10 +70,10 @@ public final class DefaultPermissionsEvaluator {
             return permissions.getDefaultBehaviour() == DefaultAuthorizationBehaviour.ALLOW;
         }
 
-        final String[] splitTopic = StringUtils.splitPreserveAllTokens(topic, "/");
+        final String[] splitTopic = Strings.splitPreserveAllTokens(topic, "/");
         final String stripedTopic;
         if (topic.length() > 1) {
-            stripedTopic = StringUtils.stripEnd(topic, "/");
+            stripedTopic = Strings.stripEnd(topic, "/");
         } else {
             stripedTopic = topic;
         }
@@ -85,7 +87,8 @@ public final class DefaultPermissionsEvaluator {
     }
 
     public static boolean checkSubscription(
-            final @Nullable ModifiableDefaultPermissions permissions, final @NotNull Topic subscription) {
+            final @Nullable ModifiableDefaultPermissions permissions,
+            final @NotNull Topic subscription) {
 
         if (permissions == null) {
             //no permissions set -> default to ALLOW
@@ -115,10 +118,10 @@ public final class DefaultPermissionsEvaluator {
             isShared = false;
         }
 
-        final String[] splitTopic = StringUtils.splitPreserveAllTokens(topic, "/");
+        final String[] splitTopic = Strings.splitPreserveAllTokens(topic, "/");
         final String stripedTopic;
         if (topic.length() > 1) {
-            stripedTopic = StringUtils.stripEnd(topic, "/");
+            stripedTopic = Strings.stripEnd(topic, "/");
         } else {
             stripedTopic = topic;
         }
@@ -243,7 +246,7 @@ public final class DefaultPermissionsEvaluator {
         try {
             if (topicPermission instanceof InternalTopicPermission) {
                 final InternalTopicPermission internalTopicPermission = (InternalTopicPermission) topicPermission;
-                return PermissionTopicMatcherUtils.matches(StringUtils.stripEnd(topicPermission.getTopicFilter(), "/"),
+                return PermissionTopicMatcherUtils.matches(Strings.stripEnd(topicPermission.getTopicFilter(), "/"),
                         ((InternalTopicPermission) topicPermission).getSplitTopic(),
                         !internalTopicPermission.containsWildcardCharacter(),
                         internalTopicPermission.endsWithWildcard(),

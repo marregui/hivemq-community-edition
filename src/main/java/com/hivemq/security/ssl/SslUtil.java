@@ -16,6 +16,7 @@
 package com.hivemq.security.ssl;
 
 import com.hivemq.config.entity.Tls;
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.security.exception.SslException;
@@ -30,8 +31,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public final class SslUtil {
 
@@ -73,7 +72,7 @@ public final class SslUtil {
     }
 
     public static @Nullable TrustManagerFactory getTrustManagerFactory(final @NotNull Tls tls) throws SslException {
-        return isNotBlank(tls.getTruststorePath()) &&
+        return !Strings.isBlank(tls.getTruststorePath()) &&
                 tls.getTruststoreType() != null &&
                 tls.getTruststorePassword() != null ?
                 createTrustManagerFactory(tls.getTruststoreType(),

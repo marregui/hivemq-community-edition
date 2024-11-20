@@ -16,10 +16,8 @@
 package com.hivemq.extensions.auth.parameter;
 
 
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
-import org.apache.commons.lang3.StringUtils;
-
-
 
 public class TopicPermissionImpl implements InternalTopicPermission {
 
@@ -53,11 +51,11 @@ public class TopicPermissionImpl implements InternalTopicPermission {
         this.sharedGroup = sharedGroup;
 
         //these are used to speed up the evaluation of permissions
-        final String strippedPermissionTopic = StringUtils.stripEnd(topic, "/");
-        splitTopic = StringUtils.splitPreserveAllTokens(strippedPermissionTopic, "/");
-        containsWildcardCharacter = !StringUtils.containsNone(strippedPermissionTopic, "#+");
+        final String strippedPermissionTopic = Strings.stripEnd(topic, "/");
+        splitTopic = Strings.splitPreserveAllTokens(strippedPermissionTopic, "/");
+        containsWildcardCharacter = !Strings.containsNone(strippedPermissionTopic, "#+");
         isRootWildcard = strippedPermissionTopic.contains("#");
-        endsWithWildcard = StringUtils.endsWith(strippedPermissionTopic, "/#");
+        endsWithWildcard = Strings.endsWith(strippedPermissionTopic, "/#");
     }
 
     @NotNull

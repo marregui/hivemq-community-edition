@@ -25,11 +25,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hivemq.config.entity.Tls;
 import com.hivemq.UnrecoverableException;
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.security.exception.SslException;
 import com.hivemq.security.ioc.Security;
 import io.netty.handler.ssl.SslContext;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -165,7 +165,7 @@ public class SslContextStore {
         public void funnel(final @NotNull Tls tls, final @NotNull PrimitiveSink sink) {
             funnelFile(tls.getKeystorePath(), sink);
 
-            if (StringUtils.isNotBlank(tls.getTruststorePath())) {
+            if (!Strings.isBlank(tls.getTruststorePath())) {
                 funnelFile(tls.getTruststorePath(), sink);
             }
         }
@@ -177,6 +177,6 @@ public class SslContextStore {
                 throw new UncheckedIOException(e);
             }
         }
-    }
 
+    }
 }

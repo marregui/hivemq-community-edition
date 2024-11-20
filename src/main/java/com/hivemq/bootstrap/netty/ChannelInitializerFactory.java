@@ -18,28 +18,8 @@ package com.hivemq.bootstrap.netty;
 import com.hivemq.config.entity.Listener;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Interface for {@link ChannelInitializerFactoryImpl}
- *
- * @author Florian Limpöck
- * @since 4.0.0
- */
 public interface ChannelInitializerFactory {
 
-    /**
-     * The returned channel initializer ca be:
-     * <ul>
-     * <li>{@link TcpChannelInitializer}</li>
-     * <li>{@link TlsTcpChannelInitializer}</li>
-     * <li>{@link WebsocketChannelInitializer}</li>
-     * <li>{@link TlsWebsocketChannelInitializer}</li>
-     * </ul>
-     *
-     * @param listener the listener to create a channel initializer for
-     * @return a channel initializer for a specific listener.
-     * @throws NullPointerException     If listener is null.
-     * @throws IllegalArgumentException If listener type is unknown.
-     */
     @NotNull AbstractChannelInitializer getChannelInitializer(final @NotNull Listener listener);
 
 }

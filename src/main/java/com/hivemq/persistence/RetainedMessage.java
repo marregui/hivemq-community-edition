@@ -118,9 +118,9 @@ public class RetainedMessage {
         }
         int size = 0;
         // The payload size is not calculated because the payload is removed before the message is stored
-        size += TypeSize.enumSize(); // QoS
-        size += TypeSize.longWrapperSize(); // Payload ID
-        size += TypeSize.longSize(); // expiry interval
+        size += TypeSize.ENUM_OVERHEAD; // QoS
+        size += TypeSize.LONG_WRAPPER_SIZE; // Payload ID
+        size += TypeSize.LONG_SIZE; // expiry interval
 
         size += 24; //User Properties Overhead
         for (final MqttUserProperty userProperty : getUserProperties().asList()) {
@@ -133,9 +133,9 @@ public class RetainedMessage {
         size += TypeSize.stringSize(contentType);
         size += TypeSize.byteArraySize(correlationData);
 
-        size += TypeSize.enumSize(); // Payload format indicator
-        size += TypeSize.longSize(); // timestamp
-        size += TypeSize.intSize(); // size
+        size += TypeSize.ENUM_OVERHEAD; // Payload format indicator
+        size += TypeSize.LONG_SIZE; // timestamp
+        size += TypeSize.INT_SIZE; // size
 
         sizeInMemory = size;
         return sizeInMemory;

@@ -53,10 +53,10 @@ public class IterablePersistenceEntry<T extends Collection<? extends Sizable>> i
     }
 
     public static int getFixedSize() {
-        int size = TypeSize.objectShellSize(); // object overhead
-        size += TypeSize.longSize(); // timestamp
-        size += TypeSize.intSize(); // sizeInMemory
-        size += TypeSize.collectionOverhead(); // collection overhead
+        int size = TypeSize.OBJECT_SHELL_SIZE; // object overhead
+        size += TypeSize.LONG_SIZE; // timestamp
+        size += TypeSize.INT_SIZE; // sizeInMemory
+        size += TypeSize.COLLECTION_OVERHEAD; // collection overhead
         return size;
     }
 
@@ -69,7 +69,7 @@ public class IterablePersistenceEntry<T extends Collection<? extends Sizable>> i
 
         int size = getFixedSize();
         for (final Sizable item : object) {
-            size += TypeSize.objectRefSize();
+            size += TypeSize.OBJECT_REF_SIZE;
             size += item.getEstimatedSize();
         }
 

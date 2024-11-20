@@ -98,11 +98,11 @@ public class PUBRELTest {
                 100L);
 
         final int fixedSize =
-                TypeSize.objectShellSize() + TypeSize.intSize() + // sizeInMemory
-                        TypeSize.intSize() + // packet id
-                        TypeSize.enumSize() + // reason code
-                        TypeSize.longWrapperSize() + //publish timestamp
-                        TypeSize.longWrapperSize() + //expiry interval
+                TypeSize.OBJECT_SHELL_SIZE + TypeSize.INT_SIZE + // sizeInMemory
+                        TypeSize.INT_SIZE + // packet id
+                        TypeSize.ENUM_OVERHEAD + // reason code
+                        TypeSize.LONG_WRAPPER_SIZE + //publish timestamp
+                        TypeSize.LONG_WRAPPER_SIZE + //expiry interval
                         24; //user props overhead
 
         final int pubrel3Size = fixedSize + reasonStringSize + userPropertiesSize;

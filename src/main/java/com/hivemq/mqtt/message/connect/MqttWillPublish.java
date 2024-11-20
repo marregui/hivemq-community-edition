@@ -229,8 +229,8 @@ public class MqttWillPublish implements Sizable {
             return sizeInMemory;
         }
         int size = 0;
-        size += TypeSize.objectShellSize(); // the will himself
-        size += TypeSize.intSize(); // sizeInMemory
+        size += TypeSize.OBJECT_SHELL_SIZE; // the will himself
+        size += TypeSize.INT_SIZE; // sizeInMemory
         size += TypeSize.stringSize(topic);
         size += TypeSize.byteArraySize(payload);
         size += TypeSize.byteArraySize(correlationData);
@@ -244,10 +244,10 @@ public class MqttWillPublish implements Sizable {
             size += TypeSize.stringSize(userProperty.getName());
             size += TypeSize.stringSize(userProperty.getValue());
         }
-        size += TypeSize.longSize(); // messageExpiryInterval
-        size += TypeSize.enumSize(); // QoS
-        size += TypeSize.enumSize(); // payloadFormatIndicator
-        size += TypeSize.longSize(); // will delay interval
+        size += TypeSize.LONG_SIZE; // messageExpiryInterval
+        size += TypeSize.ENUM_OVERHEAD; // QoS
+        size += TypeSize.ENUM_OVERHEAD; // payloadFormatIndicator
+        size += TypeSize.LONG_SIZE; // will delay interval
 
         sizeInMemory = size;
         return sizeInMemory;

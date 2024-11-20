@@ -19,6 +19,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.spi.FilterReply;
+import com.hivemq.logging.NettyLogLevelModifier;
 import org.junit.Before;
 import org.junit.Test;
 

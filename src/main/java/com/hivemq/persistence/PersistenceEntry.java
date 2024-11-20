@@ -52,11 +52,11 @@ public class PersistenceEntry<T extends Sizable> implements Sizable {
             return sizeInMemory;
         }
 
-        int size = TypeSize.objectShellSize();
-        size += TypeSize.longSize(); // timestamp
-        size += TypeSize.intSize(); // sizeInMemory
+        int size = TypeSize.OBJECT_SHELL_SIZE;
+        size += TypeSize.LONG_SIZE; // timestamp
+        size += TypeSize.INT_SIZE; // sizeInMemory
         // contained object
-        size += TypeSize.objectRefSize();
+        size += TypeSize.OBJECT_REF_SIZE;
         size += object.getEstimatedSize();
         sizeInMemory = size;
         return sizeInMemory;

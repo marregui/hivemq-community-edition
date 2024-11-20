@@ -134,13 +134,13 @@ public class PUBREL extends MqttMessageWithUserProperties.MqttMessageWithIdAndRe
             return sizeInMemory;
         }
         int size = 0;
-        size += TypeSize.objectShellSize();
-        size += TypeSize.intSize(); // sizeInMemory
-        size += TypeSize.intSize(); // packet id
-        size += TypeSize.enumSize(); // reason code
+        size += TypeSize.OBJECT_SHELL_SIZE;
+        size += TypeSize.INT_SIZE; // sizeInMemory
+        size += TypeSize.INT_SIZE; // packet id
+        size += TypeSize.ENUM_OVERHEAD; // reason code
         size += TypeSize.stringSize(getReasonString()); // reason code
-        size += TypeSize.longWrapperSize(); //publish timestamp
-        size += TypeSize.longWrapperSize(); //expiry interval
+        size += TypeSize.LONG_WRAPPER_SIZE; //publish timestamp
+        size += TypeSize.LONG_WRAPPER_SIZE; //expiry interval
 
         size += 24; //User Properties Overhead
         for (final MqttUserProperty userProperty : getUserProperties().asList()) {

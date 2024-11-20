@@ -21,6 +21,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
+import com.hivemq.logging.XodusEnvironmentImplLogLevelModifier;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.logging.LogLevelModifierTurboFilter;
 import jetbrains.exodus.env.EnvironmentImpl;

@@ -21,7 +21,6 @@ import ch.qos.logback.classic.turbo.TurboFilter;
 import ch.qos.logback.core.spi.FilterReply;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.hivemq.logging.modifier.LogLevelModifier;
 import org.slf4j.Marker;
 
 import java.util.List;

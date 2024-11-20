@@ -96,17 +96,17 @@ public class ClientSession implements Sizable {
             return inMemorySize;
         }
 
-        int size = TypeSize.objectShellSize();
-        size += TypeSize.intSize(); // inMemorySize
-        size += TypeSize.booleanSize(); // connected
-        size += TypeSize.longSize(); // sessionExpiryInterval
+        int size = TypeSize.OBJECT_SHELL_SIZE;
+        size += TypeSize.INT_SIZE; // inMemorySize
+        size += TypeSize.BOOLEAN_SIZE; // connected
+        size += TypeSize.LONG_SIZE; // sessionExpiryInterval
 
-        size += TypeSize.objectRefSize(); // reference to will
+        size += TypeSize.OBJECT_REF_SIZE; // reference to will
         if (willPublish != null) {
             size += willPublish.getEstimatedSize();
         }
         if (queueLimit != null) {
-            size += TypeSize.longSize();
+            size += TypeSize.LONG_SIZE;
         }
 
         inMemorySize = size;

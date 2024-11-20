@@ -37,18 +37,18 @@ import static org.junit.Assert.assertTrue;
 
 public class PUBLISHTest {
 
-    private static final int FIXED_SIZE = TypeSize.objectShellSize() +  // shell size
-            TypeSize.intSize() +  // size size
-            TypeSize.longSize() +  // timestamp
+    private static final int FIXED_SIZE = TypeSize.OBJECT_SHELL_SIZE +  // shell size
+            TypeSize.INT_SIZE +  // size size
+            TypeSize.LONG_SIZE +  // timestamp
             24 + // user props overhead
-            TypeSize.booleanSize() +  // duplicateDelivery
-            TypeSize.booleanSize() +  // retain
-            TypeSize.booleanSize() +  // isNewTopicAlias
-            TypeSize.longSize() +  // messageExpiryInterval
-            TypeSize.longSize() +  // publishId
-            TypeSize.longWrapperSize() + // payloadId
-            TypeSize.enumSize() +  // QoS
-            TypeSize.enumSize();   // payloadFormatIndicator
+            TypeSize.BOOLEAN_SIZE +  // duplicateDelivery
+            TypeSize.BOOLEAN_SIZE +  // retain
+            TypeSize.BOOLEAN_SIZE +  // isNewTopicAlias
+            TypeSize.LONG_SIZE +  // messageExpiryInterval
+            TypeSize.LONG_SIZE +  // publishId
+            TypeSize.LONG_WRAPPER_SIZE + // payloadId
+            TypeSize.ENUM_OVERHEAD +  // QoS
+            TypeSize.ENUM_OVERHEAD;   // payloadFormatIndicator
 
     @Test(expected = NullPointerException.class)
     public void test_publish_qos_null() {

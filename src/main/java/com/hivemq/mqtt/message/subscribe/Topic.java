@@ -197,13 +197,13 @@ public class Topic implements Serializable, Comparable<Topic>, Mqtt5Topic, Sizab
         }
         int size = 0;
 
-        size += TypeSize.objectShellSize();
+        size += TypeSize.OBJECT_SHELL_SIZE;
         size += TypeSize.stringSize(topic);
-        size += TypeSize.enumSize(); // QoS
-        size += TypeSize.booleanSize(); // no local
-        size += TypeSize.booleanSize(); // retain as published
-        size += TypeSize.enumSize(); // retain handling
-        size += TypeSize.intWrapperSize(); // sub id
+        size += TypeSize.ENUM_OVERHEAD; // QoS
+        size += TypeSize.BOOLEAN_SIZE; // no local
+        size += TypeSize.BOOLEAN_SIZE; // retain as published
+        size += TypeSize.ENUM_OVERHEAD; // retain handling
+        size += TypeSize.INT_WRAPPER_SIZE; // sub id
 
         sizeInMemory = size;
         return sizeInMemory;

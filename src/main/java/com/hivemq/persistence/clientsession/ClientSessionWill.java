@@ -113,11 +113,11 @@ public class ClientSessionWill implements Sizable {
             return inMemorySize;
         }
 
-        int size = TypeSize.objectShellSize(); // will himself
-        size += TypeSize.intSize(); // inMemorySize
+        int size = TypeSize.OBJECT_SHELL_SIZE; // will himself
+        size += TypeSize.INT_SIZE; // inMemorySize
 
-        size += TypeSize.longWrapperSize(); //payload id
-        size += TypeSize.objectRefSize(); // will publish reference
+        size += TypeSize.LONG_WRAPPER_SIZE; //payload id
+        size += TypeSize.OBJECT_REF_SIZE; // will publish reference
         size += mqttWillPublish.getEstimatedSize();
 
         inMemorySize = size;

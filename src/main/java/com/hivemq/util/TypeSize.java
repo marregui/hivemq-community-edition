@@ -33,21 +33,16 @@ public class TypeSize {
     public static final int CHAR_SIZE = 2;
     public static final int BOOLEAN_SIZE = 1;
 
-    public static int enumSize() {
-        return ENUM_OVERHEAD;
-    }
-
-    public static int stringSize(@Nullable final String string) {
+    public static int stringSize(final @Nullable String string) {
         if (string == null) {
             return 0;
         }
-
         int size = STRING_OVERHEAD;
         size += string.length() * CHAR_SIZE;
         return size;
     }
 
-    public static int byteArraySize(@Nullable final byte[] array) {
+    public static int byteArraySize(final byte @Nullable [] array) {
         if (array == null) {
             return 0;
         }
@@ -57,47 +52,15 @@ public class TypeSize {
         return size;
     }
 
-    public static int immutableIntArraySize(@Nullable final ImmutableIntArray array) {
+    public static int immutableIntArraySize(final @Nullable ImmutableIntArray array) {
         if (array == null) {
             return 0;
         }
 
         int size = ARRAY_OVERHEAD;
-        size += intSize(); // start;
-        size += intSize(); // end;
+        size += INT_SIZE; // start;
+        size += INT_SIZE; // end;
         size += array.length() * INT_SIZE;
         return size;
-    }
-
-    public static int longWrapperSize() {
-        return LONG_WRAPPER_SIZE;
-    }
-
-    public static int intWrapperSize() {
-        return INT_WRAPPER_SIZE;
-    }
-
-    public static int longSize() {
-        return LONG_SIZE;
-    }
-
-    public static int intSize() {
-        return INT_SIZE;
-    }
-
-    public static int booleanSize() {
-        return BOOLEAN_SIZE;
-    }
-
-    public static int objectShellSize() {
-        return OBJECT_SHELL_SIZE;
-    }
-
-    public static int objectRefSize() {
-        return OBJECT_REF_SIZE;
-    }
-
-    public static int collectionOverhead() {
-        return COLLECTION_OVERHEAD;
     }
 }

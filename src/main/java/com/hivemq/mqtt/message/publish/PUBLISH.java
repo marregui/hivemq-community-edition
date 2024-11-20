@@ -397,9 +397,9 @@ public class PUBLISH extends MqttMessageWithUserProperties implements Mqtt5PUBLI
             return sizeInMemory;
         }
         int size = 0;
-        size += TypeSize.objectShellSize(); // the publish himself
-        size += TypeSize.intSize(); // sizeInMemory
-        size += TypeSize.longSize(); // timestamp
+        size += TypeSize.OBJECT_SHELL_SIZE; // the publish himself
+        size += TypeSize.INT_SIZE; // sizeInMemory
+        size += TypeSize.LONG_SIZE; // timestamp
         size += TypeSize.stringSize(topic);
         size += TypeSize.byteArraySize(payload);
         size += TypeSize.byteArraySize(correlationData);
@@ -416,14 +416,14 @@ public class PUBLISH extends MqttMessageWithUserProperties implements Mqtt5PUBLI
             size += TypeSize.stringSize(userProperty.getName());
             size += TypeSize.stringSize(userProperty.getValue());
         }
-        size += TypeSize.booleanSize(); // duplicateDelivery
-        size += TypeSize.booleanSize(); // retain
-        size += TypeSize.booleanSize(); // isNewTopicAlias
-        size += TypeSize.longSize(); // messageExpiryInterval
-        size += TypeSize.longSize(); // publishId
-        size += TypeSize.longWrapperSize(); // payloadId
-        size += TypeSize.enumSize(); // QoS
-        size += TypeSize.enumSize(); // payloadFormatIndicator
+        size += TypeSize.BOOLEAN_SIZE; // duplicateDelivery
+        size += TypeSize.BOOLEAN_SIZE; // retain
+        size += TypeSize.BOOLEAN_SIZE; // isNewTopicAlias
+        size += TypeSize.LONG_SIZE; // messageExpiryInterval
+        size += TypeSize.LONG_SIZE; // publishId
+        size += TypeSize.LONG_WRAPPER_SIZE; // payloadId
+        size += TypeSize.ENUM_OVERHEAD; // QoS
+        size += TypeSize.ENUM_OVERHEAD; // payloadFormatIndicator
         size += TypeSize.immutableIntArraySize(subscriptionIdentifiers);
 
         sizeInMemory = size;

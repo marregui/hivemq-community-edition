@@ -16,14 +16,13 @@
 package com.hivemq.extensions.packets.subscribe;
 
 import com.hivemq.config.ConfigService;
+import com.hivemq.config.RandomId;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.subscribe.RetainHandling;
 import com.hivemq.mqtt.message.QoS;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
-import util.TestConfigurationBootstrap;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -32,10 +31,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Florian Limpöck
- * @author Silvio Giebl
- */
 public class ModifiableSubscriptionImplTest {
 
     private @NotNull ConfigService configService;
@@ -91,7 +86,7 @@ public class ModifiableSubscriptionImplTest {
         final ModifiableSubscriptionImpl modifiableSubscription =
                 new ModifiableSubscriptionImpl(subscription, configService);
 
-        modifiableSubscription.setTopicFilter(RandomStringUtils.randomAlphanumeric(70000));
+        modifiableSubscription.setTopicFilter(RandomId.randomAlphanumeric(70000));
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -17,6 +17,7 @@ package com.hivemq.persistence.local.xodus.clientsession;
 
 import com.codahale.metrics.Counter;
 import com.google.common.collect.Lists;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.iteration.BucketChunkResult;
@@ -36,7 +37,6 @@ import com.hivemq.persistence.local.xodus.EnvironmentUtil;
 import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.util.LocalPersistenceFileUtil;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -719,7 +719,7 @@ public class ClientSessionXodusLocalPersistenceTest {
 
         final Random random = new Random();
         while (clientIdSet.size() < 100) {
-            clientIdSet.add(RandomStringUtils.randomAlphanumeric(random.nextInt(100)));
+            clientIdSet.add(RandomId.randomAlphanumeric(random.nextInt(100)));
         }
         return new ArrayList<>(clientIdSet);
     }

@@ -19,7 +19,7 @@ package com.hivemq.extensions.handler;
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.HivemqId;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +51,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import util.DummyClientConnection;
 import util.IsolatedExtensionClassloaderUtil;
-import util.TestConfigurationBootstrap;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -75,7 +74,7 @@ public class ConnectInboundInterceptorHandlerTest {
     @Rule
     public final @NotNull TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private final @NotNull HivemqId hivemqId = new HivemqId();
+    private final @NotNull RandomId randomId = new RandomId();
 
     private final @NotNull HiveMQExtensions hiveMQExtensions = mock(HiveMQExtensions.class);
     private final @NotNull HiveMQExtension extension = mock(HiveMQExtension.class);
@@ -110,8 +109,7 @@ public class ConnectInboundInterceptorHandlerTest {
                 configService,
                 asyncer,
                 hiveMQExtensions,
-                pluginTaskExecutorService,
-                hivemqId,
+                pluginTaskExecutorService, randomId,
                 interceptors,
                 serverInformation,
                 connacker);

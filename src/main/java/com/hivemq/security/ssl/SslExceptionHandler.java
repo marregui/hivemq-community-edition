@@ -22,7 +22,6 @@ import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.ssl.NotSslRecordException;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,7 +97,7 @@ public class SslExceptionHandler extends ChannelHandlerAdapter {
     private static void logSSLException(final @NotNull ChannelHandlerContext ctx, final @NotNull Throwable cause) {
         if (log.isDebugEnabled()) {
 
-            final Throwable rootCause = ExceptionUtils.getRootCause(cause);
+            final Throwable rootCause = getRootCause(cause);
 
             final Connection clientConnection = Connection.of(ctx.channel());
             final String clientId = clientConnection.getClientId();
@@ -117,7 +116,7 @@ public class SslExceptionHandler extends ChannelHandlerAdapter {
             final @NotNull ChannelHandlerContext ctx, final @NotNull Throwable cause) {
         if (log.isDebugEnabled()) {
 
-            final Throwable rootCause = ExceptionUtils.getRootCause(cause);
+            final Throwable rootCause = getRootCause(cause);
 
             final Connection clientConnectionContext = Connection.of(ctx.channel());
             final String clientId = clientConnectionContext.getClientId();

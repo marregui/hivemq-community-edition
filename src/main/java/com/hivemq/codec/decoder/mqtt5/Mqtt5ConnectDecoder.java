@@ -22,7 +22,7 @@ import com.hivemq.codec.decoder.AbstractMqttConnectDecoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.MqttBinaryData;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
-import com.hivemq.config.HivemqId;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -77,7 +77,7 @@ import static com.hivemq.util.Bytes.isBitSet;
 public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
 
     private static final String PROTOCOL_NAME = "MQTT";
-    private final @NotNull HivemqId hiveMQId;
+    private final @NotNull RandomId hiveMQId;
     private static final long SESSION_EXPIRY_NOT_SET = Long.MAX_VALUE;
     private static final int RECEIVE_MAXIMUM_NOT_SET = Integer.MAX_VALUE;
     private static final int TOPIC_ALIAS_MAXIMUM_NOT_SET = Integer.MAX_VALUE;
@@ -85,7 +85,7 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
 
     public Mqtt5ConnectDecoder(
             final @NotNull MqttConnacker mqttConnacker,
-            final @NotNull HivemqId hiveMQId,
+            final @NotNull RandomId hiveMQId,
             final @NotNull ClientIds clientIds,
             final @NotNull ConfigService configService) {
         super(mqttConnacker, configService, clientIds);

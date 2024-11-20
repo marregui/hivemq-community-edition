@@ -29,7 +29,7 @@ import com.hivemq.codec.decoder.mqtt5.Mqtt5PubrecDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5PubrelDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5SubscribeDecoder;
 import com.hivemq.codec.decoder.mqtt5.Mqtt5UnsubscribeDecoder;
-import com.hivemq.config.HivemqId;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.TopicAliasLimiter;
@@ -69,7 +69,7 @@ public class TestMqttDecoder {
     public static MQTTMessageDecoder create(final @NotNull ConfigService fullConfigService) {
 
         final EventLog eventLog = new EventLog();
-        final HivemqId hiveMQId = new HivemqId();
+        final RandomId hiveMQId = new RandomId();
         final MqttServerDisconnector disconnector = new MqttServerDisconnectorImpl(eventLog);
         final MqttConnacker mqttConnacker = new MqttConnackerImpl(eventLog);
         final MetricsHolder metricsHolder = new MetricsHolder(new MetricRegistry());

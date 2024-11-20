@@ -16,8 +16,8 @@
 package com.hivemq;
 
 
+import com.hivemq.config.RandomId;
 import com.hivemq.config.InternalConfig;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
@@ -25,10 +25,6 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 public class TopicAliasLimiterImplTest {
 
     private TopicAliasLimiter topicAliasLimiter;
@@ -66,16 +62,16 @@ public class TopicAliasLimiterImplTest {
     @Test
     public void test_add_usage() {
 
-        topicAliasLimiter.addUsage(RandomStringUtils.randomAlphanumeric(6));
+        topicAliasLimiter.addUsage(RandomId.randomAlphanumeric(6));
         assertFalse(topicAliasLimiter.limitExceeded());
         assertFalse(topicAliasLimiter.aliasesAvailable());
 
-        topicAliasLimiter.addUsage(RandomStringUtils.randomAlphanumeric(56));
+        topicAliasLimiter.addUsage(RandomId.randomAlphanumeric(56));
 
         assertFalse(topicAliasLimiter.limitExceeded());
         assertFalse(topicAliasLimiter.aliasesAvailable());
 
-        topicAliasLimiter.addUsage(RandomStringUtils.randomAlphanumeric(1));
+        topicAliasLimiter.addUsage(RandomId.randomAlphanumeric(1));
 
         assertTrue(topicAliasLimiter.limitExceeded());
         assertFalse(topicAliasLimiter.aliasesAvailable());
@@ -85,18 +81,18 @@ public class TopicAliasLimiterImplTest {
     @Test
     public void test_remove_usage() {
 
-        topicAliasLimiter.addUsage(RandomStringUtils.randomAlphanumeric(107));
+        topicAliasLimiter.addUsage(RandomId.randomAlphanumeric(107));
 
-        topicAliasLimiter.removeUsage(RandomStringUtils.randomAlphanumeric(6));
+        topicAliasLimiter.removeUsage(RandomId.randomAlphanumeric(6));
         assertTrue(topicAliasLimiter.limitExceeded());
         assertFalse(topicAliasLimiter.aliasesAvailable());
 
-        topicAliasLimiter.removeUsage(RandomStringUtils.randomAlphanumeric(1));
+        topicAliasLimiter.removeUsage(RandomId.randomAlphanumeric(1));
 
         assertFalse(topicAliasLimiter.limitExceeded());
         assertFalse(topicAliasLimiter.aliasesAvailable());
 
-        topicAliasLimiter.removeUsage(RandomStringUtils.randomAlphanumeric(151));
+        topicAliasLimiter.removeUsage(RandomId.randomAlphanumeric(151));
 
         assertFalse(topicAliasLimiter.limitExceeded());
         assertTrue(topicAliasLimiter.aliasesAvailable());
@@ -105,7 +101,7 @@ public class TopicAliasLimiterImplTest {
     @Test
     public void test_finish_usage() {
 
-        final String topic = RandomStringUtils.randomAlphanumeric(6);
+        final String topic = RandomId.randomAlphanumeric(6);
 
         topicAliasLimiter.initUsage(5);
 

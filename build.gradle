@@ -44,7 +44,6 @@ dependencies {
 
     // common
     implementation(libs.jctools)
-
     implementation(libs.jetbrains.annotations)
 
     /* ******************** test ******************** */

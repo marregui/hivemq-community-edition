@@ -15,20 +15,20 @@
  */
 package util;
 
+import com.hivemq.config.RandomId;
 import com.hivemq.persistence.local.xodus.bucket.Bucket;
-import org.apache.commons.lang3.RandomStringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
 
 public class TestBucketUtil {
 
-
-    public static String getId(final int desiredBucket, final int bucketSize) {
+    public static @NotNull String getId(final int desiredBucket, final int bucketSize) {
         checkArgument(0 <= desiredBucket && desiredBucket < bucketSize);
-        String id = RandomStringUtils.randomAlphanumeric(15);
+        String id = RandomId.random(15);
         while (Bucket.getBucket(id, bucketSize) != desiredBucket) {
-            id = RandomStringUtils.randomAlphanumeric(15);
+            id = RandomId.random(15);
         }
         return id;
     }

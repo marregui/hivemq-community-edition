@@ -16,13 +16,13 @@
 
 package com.hivemq.persistence.payload;
 
+import com.hivemq.config.RandomId;
 import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.persistence.PersistenceStartup;
 import com.hivemq.persistence.local.xodus.EnvironmentUtil;
 import com.hivemq.util.LocalPersistenceFileUtil;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -111,7 +111,8 @@ public class PublishPayloadXodusLocalPersistenceTest {
     public void test_add_get_big_payload() {
 
         final byte[] payload1 = "payload".getBytes();
-        final byte[] payload2 = RandomStringUtils.random(10 * 1024 * 1024 + 100, true, true).getBytes();
+        final byte[] payload2 =
+                RandomId.randomAlphanumeric(10 * 1024 * 1024 + 100).getBytes();
 
         persistence.put(0L, payload1);
         persistence.put(1L, payload2);
@@ -127,7 +128,8 @@ public class PublishPayloadXodusLocalPersistenceTest {
     public void test_add_remove_get_big_payload() {
 
         final byte[] payload1 = "payload".getBytes();
-        final byte[] payload2 = RandomStringUtils.random(10 * 1024 * 1024 + 100, true, true).getBytes();
+        final byte[] payload2 =
+                RandomId.randomAlphanumeric(10 * 1024 * 1024 + 100).getBytes();
 
         persistence.put(0L, payload1);
         persistence.put(1L, payload2);

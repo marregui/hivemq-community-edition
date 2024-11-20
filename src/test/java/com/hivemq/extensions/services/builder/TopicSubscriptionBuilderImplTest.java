@@ -16,6 +16,7 @@
 package com.hivemq.extensions.services.builder;
 
 import com.hivemq.config.ConfigService;
+import com.hivemq.config.RandomId;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.subscribe.RetainHandling;
@@ -27,7 +28,6 @@ import com.hivemq.extensions.packets.subscribe.SubscriptionImpl;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
@@ -131,7 +131,7 @@ public class TopicSubscriptionBuilderImplTest {
     @Test(expected = IllegalArgumentException.class)
     public void test_with_topic_to_large() {
 
-        topicSubscriptionBuilder.topicFilter(RandomStringUtils.randomAlphanumeric(70000))
+        topicSubscriptionBuilder.topicFilter(RandomId.randomAlphanumeric(70000))
                 .qos(Qos.AT_LEAST_ONCE)
                 .retainAsPublished(true)
                 .noLocal(false)

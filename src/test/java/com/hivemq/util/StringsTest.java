@@ -15,10 +15,9 @@
  */
 package com.hivemq.util;
 
+import com.hivemq.config.RandomId;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,7 +48,7 @@ public class StringsTest {
 
     @Test
     public void test_get_prefixed_random_data() throws Exception {
-        final String randomString = RandomStringUtils.random(5000);
+        final String randomString = RandomId.random(5000);
         final byte[] bytes = randomString.getBytes(UTF_8);
         buffer.writeShort(bytes.length);
         buffer.writeBytes(bytes);
@@ -60,7 +59,7 @@ public class StringsTest {
     @Test
     public void test_get_prefixed_bytes_buffer_not_filled() throws Exception {
         buffer.writeShort(10);
-        buffer.writeBytes(RandomUtils.nextBytes(9));
+        buffer.writeBytes(RandomId.nextBytes(9));
 
         assertNull(Strings.getPrefixedString(buffer));
     }
@@ -111,7 +110,7 @@ public class StringsTest {
 
     @Test
     public void test_create_prefixed_max_length() throws Exception {
-        final String randomString = RandomStringUtils.randomAscii(Short.MAX_VALUE);
+        final String randomString = RandomId.randomAscii(Short.MAX_VALUE);
         final ByteBuf buf = Strings.createPrefixedBytesFromString(randomString, Unpooled.buffer());
 
         assertEquals(Short.MAX_VALUE, buf.readShort());

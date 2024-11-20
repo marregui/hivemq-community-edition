@@ -17,6 +17,7 @@ package com.hivemq.extensions.services.builder;
 
 import com.google.common.collect.ImmutableList;
 import com.hivemq.config.ConfigService;
+import com.hivemq.config.RandomId;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
@@ -31,10 +32,8 @@ import com.hivemq.extensions.packets.publish.PublishPacketImpl;
 import com.hivemq.extensions.services.publish.RetainedPublishImpl;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
-import util.TestConfigurationBootstrap;
 import util.TestMessageUtil;
 
 import java.nio.ByteBuffer;
@@ -45,10 +44,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 @SuppressWarnings("NullabilityAnnotations")
 public class RetainedPublishBuilderImplTest {
 
@@ -161,22 +156,22 @@ public class RetainedPublishBuilderImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_user_property_name_too_long() {
-        retainedPublishBuilder.userProperty(RandomStringUtils.randomAlphanumeric(65536), "val");
+        retainedPublishBuilder.userProperty(RandomId.randomAlphanumeric(65536), "val");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_user_property_value_too_long() {
-        retainedPublishBuilder.userProperty("name", RandomStringUtils.randomAlphanumeric(65536));
+        retainedPublishBuilder.userProperty("name", RandomId.randomAlphanumeric(65536));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_response_topic_too_long() {
-        retainedPublishBuilder.responseTopic(RandomStringUtils.randomAlphanumeric(65536));
+        retainedPublishBuilder.responseTopic(RandomId.randomAlphanumeric(65536));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_content_type_too_long() {
-        retainedPublishBuilder.contentType(RandomStringUtils.randomAlphanumeric(65536));
+        retainedPublishBuilder.contentType(RandomId.randomAlphanumeric(65536));
     }
 
     @Test

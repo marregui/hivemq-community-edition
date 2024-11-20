@@ -17,9 +17,9 @@ package com.hivemq.util;
 
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
+import com.hivemq.config.RandomId;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -46,7 +46,7 @@ public class BytesTest {
     @Test
     public void test_get_prefixed_random_data() throws Exception {
         final ByteBuf buffer = Unpooled.buffer();
-        final byte[] bytes = RandomUtils.nextBytes(5000);
+        final byte[] bytes = RandomId.nextBytes(5000);
         buffer.writeShort(bytes.length);
         buffer.writeBytes(bytes);
 
@@ -59,7 +59,7 @@ public class BytesTest {
     public void test_get_prefixed_bytes_buffer_not_filled() throws Exception {
         final ByteBuf buffer = Unpooled.buffer();
         buffer.writeShort(10);
-        buffer.writeBytes(RandomUtils.nextBytes(9));
+        buffer.writeBytes(RandomId.nextBytes(9));
 
         final byte[] prefixedBytes = Bytes.getPrefixedBytes(buffer);
 

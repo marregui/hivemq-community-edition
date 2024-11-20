@@ -17,6 +17,7 @@ package com.hivemq.extensions.services.builder;
 
 import com.google.common.collect.ImmutableList;
 import com.hivemq.config.ConfigService;
+import com.hivemq.config.RandomId;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.connect.WillPublishPacket;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -30,7 +31,6 @@ import com.hivemq.extensions.packets.publish.PublishPacketImpl;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
 import com.hivemq.util.Bytes;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import util.TestConfigurationBootstrap;
@@ -46,10 +46,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 @SuppressWarnings("NullabilityAnnotations")
 public class WillPublishBuilderImplTest {
 
@@ -314,22 +310,22 @@ public class WillPublishBuilderImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_user_property_name_too_long() {
-        willPublishBuilder.userProperty(RandomStringUtils.randomAlphanumeric(65536), "val");
+        willPublishBuilder.userProperty(RandomId.randomAlphanumeric(65536), "val");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_user_property_value_too_long() {
-        willPublishBuilder.userProperty("name", RandomStringUtils.randomAlphanumeric(65536));
+        willPublishBuilder.userProperty("name", RandomId.randomAlphanumeric(65536));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_response_topic_too_long() {
-        willPublishBuilder.responseTopic(RandomStringUtils.randomAlphanumeric(65536));
+        willPublishBuilder.responseTopic(RandomId.randomAlphanumeric(65536));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_content_type_too_long() {
-        willPublishBuilder.contentType(RandomStringUtils.randomAlphanumeric(65536));
+        willPublishBuilder.contentType(RandomId.randomAlphanumeric(65536));
     }
 
     class TestPublishPacket implements PublishPacket {

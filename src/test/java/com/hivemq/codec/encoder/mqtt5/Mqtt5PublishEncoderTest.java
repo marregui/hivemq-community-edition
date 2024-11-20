@@ -18,7 +18,7 @@ package com.hivemq.codec.encoder.mqtt5;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.config.ConfigService;
-import com.hivemq.config.HivemqId;
+import com.hivemq.config.RandomId;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
@@ -37,11 +37,11 @@ import static com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties.NO_USER_PROPERTI
  */
 public class Mqtt5PublishEncoderTest extends AbstractMqtt5EncoderTest {
 
-    private HivemqId hiveMQId;
+    private RandomId hiveMQId;
 
     @Before
     public void setUp() throws Exception {
-        hiveMQId = new HivemqId();
+        hiveMQId = new RandomId();
         super.setUp();
         testMessageEncoder.getSecurityConfigurationService().setAllowRequestProblemInformation(true);
     }

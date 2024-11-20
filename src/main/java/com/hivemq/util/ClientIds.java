@@ -18,7 +18,7 @@ package com.hivemq.util;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.google.inject.Singleton;
-import com.hivemq.config.HivemqId;
+import com.hivemq.config.RandomId;
 
 import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
@@ -32,7 +32,7 @@ public class ClientIds {
     private final HashFunction hashFunction = Hashing.murmur3_128();
 
     @Inject
-    public ClientIds(final HivemqId hiveMQId) {
+    public ClientIds(final RandomId hiveMQId) {
         this.hivemqId = hiveMQId.get();
     }
 

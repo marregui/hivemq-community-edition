@@ -16,11 +16,11 @@
 package com.hivemq.mqtt.message.publish;
 
 import com.hivemq.config.ConfigService;
+import com.hivemq.config.RandomId;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
 import com.hivemq.util.TypeSize;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -35,9 +35,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @since 4.0.0
- */
 public class PUBLISHTest {
 
     private static final int FIXED_SIZE = TypeSize.objectShellSize() +  // shell size
@@ -189,8 +186,8 @@ public class PUBLISHTest {
                 .withHivemqId("hivemqId") // 16+38 = 54 bytes
                 .withPayload(new byte[1024 * 1024 * 5]) // 5MB + 12 bytes
                 .withCorrelationData(new byte[1024 * 1024 * 5])  // 5MB + 12 bytes
-                .withResponseTopic(RandomStringUtils.randomAlphanumeric(65000)) // 130.038 bytes
-                .withTopic(RandomStringUtils.randomAlphanumeric(65000)) // 130.038 bytes
+                .withResponseTopic(RandomId.randomAlphanumeric(65000)) // 130.038 bytes
+                .withTopic(RandomId.randomAlphanumeric(65000)) // 130.038 bytes
                 .withUserProperties(getManyProperties()) // 12.777.790 bytes
                 .build();
 

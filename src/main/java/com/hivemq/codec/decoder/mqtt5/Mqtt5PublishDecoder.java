@@ -22,7 +22,7 @@ import com.google.inject.Singleton;
 import com.hivemq.codec.decoder.AbstractMqttPublishDecoder;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.MqttVariableByteInteger;
-import com.hivemq.config.HivemqId;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,14 +55,14 @@ import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NO
 @Singleton
 public class Mqtt5PublishDecoder extends AbstractMqttPublishDecoder<Mqtt5PUBLISH> {
 
-    private final @NotNull HivemqId hiveMQId;
+    private final @NotNull RandomId hiveMQId;
     private final @NotNull TopicAliasLimiter topicAliasLimiter;
     private final boolean validatePayloadFormat;
 
     @Inject
     public Mqtt5PublishDecoder(
             final @NotNull MqttServerDisconnector disconnector,
-            final @NotNull HivemqId hiveMQId,
+            final @NotNull RandomId hiveMQId,
             final @NotNull ConfigService fullConfigService,
             final @NotNull TopicAliasLimiter topicAliasLimiter) {
         super(disconnector, fullConfigService);

@@ -17,6 +17,7 @@ package com.hivemq.extensions.executor;
 
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.SettableFuture;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +34,6 @@ import com.hivemq.extensions.executor.task.PluginTaskExecutor;
 import com.hivemq.extensions.executor.task.PluginTaskInput;
 import com.hivemq.extensions.executor.task.PluginTaskOutput;
 import com.hivemq.persistence.local.xodus.bucket.Bucket;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -128,7 +128,7 @@ public class PluginTaskExecutorServiceImplTest {
 
     private String getIdForBucket(final int index) {
         for (; ; ) {
-            final String s = RandomStringUtils.randomAlphanumeric(10);
+            final String s = RandomId.randomAlphanumeric(10);
             final int bucket = Bucket.getBucket(s, 2);
             if (bucket == index) {
                 return s;

@@ -23,7 +23,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
-import com.hivemq.config.HivemqId;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.MqttConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,14 +63,14 @@ public class RetainedMessagesSender {
         CLOSED_CHANNEL_EXCEPTION.setStackTrace(new StackTraceElement[0]);
     }
 
-    private final @NotNull HivemqId hiveMQId;
+    private final @NotNull RandomId hiveMQId;
     private final @NotNull RetainedMessagePersistence retainedMessagePersistence;
     private final @NotNull ClientQueuePersistence clientQueuePersistence;
     private final @NotNull MqttConfigService mqttConfigService;
 
     @Inject
     public RetainedMessagesSender(
-            final @NotNull HivemqId hiveMQId,
+            final @NotNull RandomId hiveMQId,
             final @NotNull RetainedMessagePersistence retainedMessagePersistence,
             final @NotNull ClientQueuePersistence clientQueuePersistence,
             final @NotNull MqttConfigService mqttConfigService) {
@@ -121,7 +121,7 @@ public class RetainedMessagesSender {
     private static class SendRetainedMessageCallback implements FutureCallback<List<RetainedMessage>> {
 
         private final @NotNull Topic[] subscribedTopics;
-        private final @NotNull HivemqId hivemqId;
+        private final @NotNull RandomId randomId;
         private final @NotNull String clientId;
         private final @NotNull SettableFuture<Void> resultFuture;
         private final @NotNull Channel channel;
@@ -130,7 +130,7 @@ public class RetainedMessagesSender {
 
         SendRetainedMessageCallback(
                 final @NotNull Topic[] subscribedTopics,
-                final @NotNull HivemqId hivemqId,
+                final @NotNull RandomId randomId,
                 final @NotNull String clientId,
                 final @NotNull SettableFuture<Void> resultFuture,
                 final @NotNull Channel channel,
@@ -138,7 +138,7 @@ public class RetainedMessagesSender {
                 final @NotNull MqttConfigService mqttConfigService) {
 
             this.subscribedTopics = subscribedTopics;
-            this.hivemqId = hivemqId;
+            this.randomId = randomId;
             this.clientId = clientId;
             this.resultFuture = resultFuture;
             this.channel = channel;
@@ -173,7 +173,7 @@ public class RetainedMessagesSender {
 
                 final PUBLISHFactory.Mqtt5Builder publishBuilder =
                         new PUBLISHFactory.Mqtt5Builder().withTimestamp(System.currentTimeMillis())
-                                .withHivemqId(hivemqId.get())
+                                .withHivemqId(randomId.get())
                                 .withPayload(retainedMessage.getMessage())
                                 .withPublishId(retainedMessage.getPublishId())
                                 .withMessageExpiryInterval(retainedMessage.getMessageExpiryInterval())

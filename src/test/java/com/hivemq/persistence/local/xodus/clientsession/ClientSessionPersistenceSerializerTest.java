@@ -17,12 +17,12 @@ package com.hivemq.persistence.local.xodus.clientsession;
 
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
+import com.hivemq.config.RandomId;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.connect.MqttWillPublish;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.persistence.clientsession.ClientSession;
 import com.hivemq.persistence.clientsession.ClientSessionWill;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,7 +45,7 @@ public class ClientSessionPersistenceSerializerTest {
     @Test
     public void test_serialize_deserialize_key() throws Exception {
 
-        final String key = RandomStringUtils.randomAlphanumeric(40);
+        final String key = RandomId.randomAlphanumeric(40);
 
         final byte[] bytes = serializer.serializeKey(key);
         final String result = serializer.deserializeKey(bytes);

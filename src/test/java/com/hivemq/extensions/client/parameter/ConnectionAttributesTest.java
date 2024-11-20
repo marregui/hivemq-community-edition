@@ -19,11 +19,11 @@ package com.hivemq.extensions.client.parameter;
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
+import com.hivemq.config.RandomId;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.services.exception.LimitExceededException;
 import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
 import io.netty.channel.Channel;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
 import util.DummyClientConnection;
@@ -309,12 +309,12 @@ public class ConnectionAttributesTest {
 
     @Test(expected = LimitExceededException.class)
     public void test_limit_exceeded() {
-        connectionAttributes.put("key", ByteBuffer.wrap(RandomUtils.nextBytes(1001)));
+        connectionAttributes.put("key", ByteBuffer.wrap(RandomId.nextBytes(1001)));
     }
 
     @Test
     public void test_limit_matched() {
-        connectionAttributes.put("key", ByteBuffer.wrap(RandomUtils.nextBytes(1000)));
+        connectionAttributes.put("key", ByteBuffer.wrap(RandomId.nextBytes(1000)));
 
         final Optional<ByteBuffer> key = connectionAttributes.get("key");
 
@@ -324,7 +324,7 @@ public class ConnectionAttributesTest {
 
     @Test
     public void test_limit_smaller() {
-        connectionAttributes.put("key", ByteBuffer.wrap(RandomUtils.nextBytes(999)));
+        connectionAttributes.put("key", ByteBuffer.wrap(RandomId.nextBytes(999)));
 
         final Optional<ByteBuffer> key = connectionAttributes.get("key");
 

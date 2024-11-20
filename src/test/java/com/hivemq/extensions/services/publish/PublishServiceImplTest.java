@@ -18,7 +18,7 @@ package com.hivemq.extensions.services.publish;
 import com.google.common.primitives.ImmutableIntArray;
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.ShutdownHooks;
-import com.hivemq.config.HivemqId;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.ConfigService;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
@@ -42,7 +42,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import util.TestConfigurationBootstrap;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -80,7 +79,7 @@ public class PublishServiceImplTest {
 
     private GlobalManagedExtensionExecutorService managedPluginExecutorService;
 
-    private final HivemqId hiveMQId = new HivemqId();
+    private final RandomId hiveMQId = new RandomId();
     private final ConfigService fullConfigService =
             new ConfigService();
     private PublishServiceImpl publishService;

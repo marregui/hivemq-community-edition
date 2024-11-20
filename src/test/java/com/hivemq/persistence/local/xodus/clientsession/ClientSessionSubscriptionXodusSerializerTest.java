@@ -15,10 +15,10 @@
  */
 package com.hivemq.persistence.local.xodus.clientsession;
 
+import com.hivemq.config.RandomId;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,9 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Dominik Obermaier
- */
+
 public class ClientSessionSubscriptionXodusSerializerTest {
 
     private ClientSessionSubscriptionXodusSerializer serializer;
@@ -79,7 +77,7 @@ public class ClientSessionSubscriptionXodusSerializerTest {
     @Test
     public void test_serialize_deserialize_huge_utf8_topic_value() throws Exception {
 
-        final String topicString = RandomStringUtils.random(20000);
+        final String topicString = RandomId.random(20000);
 
         final byte[] bytes = serializer.serializeValue(new Topic(topicString, QoS.EXACTLY_ONCE), 123456790L, 1L);
 
@@ -94,7 +92,7 @@ public class ClientSessionSubscriptionXodusSerializerTest {
     @Test
     public void test_serialize_deserialize_max_topic_value() throws Exception {
 
-        final String topicString = RandomStringUtils.randomAlphanumeric(65535);
+        final String topicString = RandomId.randomAlphanumeric(65535);
 
         final byte[] bytes = serializer.serializeValue(new Topic(topicString,
                 QoS.EXACTLY_ONCE,

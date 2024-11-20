@@ -19,12 +19,12 @@ package com.hivemq.extensions.client.parameter;
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
+import com.hivemq.config.RandomId;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.client.parameter.ConnectionAttributeStore;
 import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
 import io.netty.channel.Channel;
 import io.netty.util.Attribute;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import util.DummyClientConnection;
@@ -555,7 +555,7 @@ public class ConnectionAttributeStoreImplTest {
                 @Override
                 public void runCount() {
                     connectionAttributeStore.putAsString("test.key" + random.nextInt(EXECUTIONS / 10),
-                            RandomStringUtils.random(10));
+                            RandomId.random(10));
                 }
             };
             getRunnables[i] = new ExceptionCountRunnable(EXECUTIONS) {

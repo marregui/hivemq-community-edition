@@ -18,6 +18,7 @@ package com.hivemq.persistence.local.xodus.clientsession;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.UnmodifiableIterator;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.iteration.BucketChunkResult;
@@ -29,7 +30,6 @@ import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import com.hivemq.util.LocalPersistenceFileUtil;
 import jetbrains.exodus.env.Cursor;
 import net.jodah.concurrentunit.Waiter;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -740,7 +740,7 @@ public class ClientSessionSubscriptionXodusLocalPersistenceTest {
 
         final Random random = new Random();
         while (clientIdSet.size() < 100) {
-            clientIdSet.add(RandomStringUtils.randomAlphanumeric(random.nextInt(100)));
+            clientIdSet.add(RandomId.randomAlphanumeric(random.nextInt(100)));
         }
         return new ArrayList<>(clientIdSet);
     }

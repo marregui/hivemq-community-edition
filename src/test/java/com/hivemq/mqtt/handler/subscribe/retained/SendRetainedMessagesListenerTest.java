@@ -20,7 +20,7 @@ import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.config.ConfigService;
-import com.hivemq.config.HivemqId;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.MqttConfigService;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
@@ -502,7 +502,7 @@ public class SendRetainedMessagesListenerTest {
     private SendRetainedMessagesListener createListener(
             final List<SubscriptionResult> subscriptions, final Set<Topic> ignoredTopics) {
 
-        final RetainedMessagesSender retainedMessagesSender = new RetainedMessagesSender(new HivemqId(),
+        final RetainedMessagesSender retainedMessagesSender = new RetainedMessagesSender(new RandomId(),
                 retainedMessagePersistence,
                 queuePersistence, mqttConfigService);
 
@@ -515,7 +515,7 @@ public class SendRetainedMessagesListenerTest {
     private SendRetainedMessageResultListener createSendRetainedMessageSingleListener(final EmbeddedChannel channel) {
         final Topic topic = new Topic("topic", QoS.AT_LEAST_ONCE);
 
-        final RetainedMessagesSender retainedMessagesSender = new RetainedMessagesSender(new HivemqId(),
+        final RetainedMessagesSender retainedMessagesSender = new RetainedMessagesSender(new RandomId(),
                 retainedMessagePersistence,
                 queuePersistence, mqttConfigService);
 

@@ -15,8 +15,8 @@
  */
 package com.hivemq.mqtt.topic;
 
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -115,14 +115,14 @@ public class PermissionTopicMatcherUtilsTest {
     private boolean matches(
             final @NotNull String permissionTopic, final @NotNull String actualTopic) throws InvalidTopicException {
 
-        final String stripedPermissionTopic = StringUtils.stripEnd(permissionTopic, "/");
-        final String[] splitPermissionTopic = StringUtils.splitPreserveAllTokens(stripedPermissionTopic, "/");
-        final boolean nonWildCard = StringUtils.containsNone(stripedPermissionTopic, "#+");
+        final String stripedPermissionTopic = Strings.stripEnd(permissionTopic, "/");
+        final String[] splitPermissionTopic = Strings.splitPreserveAllTokens(stripedPermissionTopic, "/");
+        final boolean nonWildCard = Strings.containsNone(stripedPermissionTopic, "#+");
         final boolean rootWildCard = stripedPermissionTopic.contains("#");
-        final boolean endsWithWildCard = StringUtils.endsWith(stripedPermissionTopic, "/#");
+        final boolean endsWithWildCard = Strings.endsWith(stripedPermissionTopic, "/#");
 
-        final String stripedActualTopic = StringUtils.stripEnd(actualTopic, "/");
-        final String[] splitActualTopic = StringUtils.splitPreserveAllTokens(stripedActualTopic, "/");
+        final String stripedActualTopic = Strings.stripEnd(actualTopic, "/");
+        final String[] splitActualTopic = Strings.splitPreserveAllTokens(stripedActualTopic, "/");
         return PermissionTopicMatcherUtils.matches(stripedPermissionTopic,
                 splitPermissionTopic,
                 nonWildCard,

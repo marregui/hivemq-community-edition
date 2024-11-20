@@ -16,9 +16,8 @@
 package com.hivemq.persistence.local.xodus;
 
 import com.google.common.collect.Lists;
+import com.hivemq.config.RandomId;
 import jetbrains.exodus.ByteIterable;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
@@ -32,9 +31,6 @@ import static com.hivemq.persistence.local.xodus.XodusUtils.stringToByteIterable
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-/**
- * @author Dominik Obermaier
- */
 public class XodusUtilsTest {
 
     @Before
@@ -46,7 +42,7 @@ public class XodusUtilsTest {
     public void test_byteiterable_to_string_conversion() throws Exception {
         final String[] input = new String[]{
                 "string",
-                RandomStringUtils.randomAlphabetic(65535),
+                RandomId.randomAlphabetic(65535),
                 "Я Б Г Д Ж Й",
                 "Ł Ą Ż Ę Ć Ń Ś Ź",
                 "てすと",
@@ -85,10 +81,10 @@ public class XodusUtilsTest {
 
     @Test
     public void test_byteiterable_to_bytes_conversion() throws Exception {
-        final List<byte[]> bytes = Lists.newArrayList(RandomUtils.nextBytes(1),
-                RandomUtils.nextBytes(1024),
-                RandomUtils.nextBytes(65535),
-                RandomUtils.nextBytes(1024 * 1024 * 10));
+        final List<byte[]> bytes = Lists.newArrayList(RandomId.nextBytes(1),
+                RandomId.nextBytes(1024),
+                RandomId.nextBytes(65535),
+                RandomId.nextBytes(1024 * 1024 * 10));
 
         for (final byte[] input : bytes) {
             final ByteIterable byteIterable = bytesToByteIterable(input);

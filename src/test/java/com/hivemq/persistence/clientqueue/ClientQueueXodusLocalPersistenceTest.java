@@ -18,6 +18,7 @@ package com.hivemq.persistence.clientqueue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.mqtt.message.MessageWithID;
 import com.hivemq.mqtt.message.QoS;
@@ -30,7 +31,6 @@ import com.hivemq.persistence.local.xodus.EnvironmentUtil;
 import com.hivemq.persistence.local.xodus.bucket.Bucket;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.util.LocalPersistenceFileUtil;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -1534,9 +1534,9 @@ public class ClientQueueXodusLocalPersistenceTest {
         return new PUBLISHFactory.Mqtt5Builder().withPacketIdentifier(packetId)
                 .withQoS(qos)
                 .withOnwardQos(qos)
-                .withPayload(RandomStringUtils.randomAlphanumeric(queueLimit).getBytes())
-                .withCorrelationData(RandomStringUtils.randomAlphanumeric(65000).getBytes())
-                .withResponseTopic(RandomStringUtils.randomAlphanumeric(65000))
+                .withPayload(RandomId.randomAlphanumeric(queueLimit).getBytes())
+                .withCorrelationData(RandomId.randomAlphanumeric(65000).getBytes())
+                .withResponseTopic(RandomId.randomAlphanumeric(65000))
                 .withTopic(topic)
                 .withHivemqId("hivemqId")
                 .withPublishId(publishId)

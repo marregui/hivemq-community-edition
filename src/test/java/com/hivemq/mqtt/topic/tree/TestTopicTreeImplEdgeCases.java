@@ -19,12 +19,12 @@ import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.UnmodifiableIterator;
 import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.subscribe.Topic;
 import com.hivemq.mqtt.topic.SubscriberWithIds;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -201,7 +201,7 @@ public class TestTopicTreeImplEdgeCases {
     public void test_edge_case_more_than_1000_segments() {
         String topic = "";
         for (int i = 0; i < 1000; i++) {
-            topic += RandomStringUtils.randomAlphanumeric(1) + "/";
+            topic += RandomId.randomAlphanumeric(1) + "/";
         }
         topic += "topic";
 

@@ -16,13 +16,13 @@
 package com.hivemq.extensions.packets.general;
 
 import com.google.common.collect.ImmutableList;
+import com.hivemq.config.RandomId;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.UserProperty;
 import com.hivemq.extension.sdk.api.services.exception.DoNotImplementException;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -104,7 +104,7 @@ public class ModifiableUserPropertiesImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_add_name_to_long() {
-        filledProps.addUserProperty(RandomStringUtils.randomAlphanumeric(UTF_8_STRING_MAX_LENGTH + 1), "value");
+        filledProps.addUserProperty(RandomId.randomAlphanumeric(UTF_8_STRING_MAX_LENGTH + 1), "value");
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -114,7 +114,7 @@ public class ModifiableUserPropertiesImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_add_value_to_long() {
-        filledProps.addUserProperty("name", RandomStringUtils.randomAlphanumeric(UTF_8_STRING_MAX_LENGTH + 1));
+        filledProps.addUserProperty("name", RandomId.randomAlphanumeric(UTF_8_STRING_MAX_LENGTH + 1));
     }
 
     @Test(expected = NullPointerException.class)
@@ -154,7 +154,7 @@ public class ModifiableUserPropertiesImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_remove_property_name_to_long() {
-        filledProps.removeUserProperty(RandomStringUtils.randomAlphanumeric(UTF_8_STRING_MAX_LENGTH + 1), "value");
+        filledProps.removeUserProperty(RandomId.randomAlphanumeric(UTF_8_STRING_MAX_LENGTH + 1), "value");
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -164,7 +164,7 @@ public class ModifiableUserPropertiesImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_remove_property_value_to_long() {
-        filledProps.removeUserProperty("name", RandomStringUtils.randomAlphanumeric(UTF_8_STRING_MAX_LENGTH + 1));
+        filledProps.removeUserProperty("name", RandomId.randomAlphanumeric(UTF_8_STRING_MAX_LENGTH + 1));
     }
 
     @Test(expected = NullPointerException.class)
@@ -179,7 +179,7 @@ public class ModifiableUserPropertiesImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_remove_name_to_long() {
-        filledProps.removeName(RandomStringUtils.randomAlphanumeric(UTF_8_STRING_MAX_LENGTH + 1));
+        filledProps.removeName(RandomId.randomAlphanumeric(UTF_8_STRING_MAX_LENGTH + 1));
     }
 
     @Test

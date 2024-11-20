@@ -15,7 +15,7 @@
  */
 package com.hivemq.util;
 
-import com.hivemq.config.HivemqId;
+import com.hivemq.config.RandomId;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -29,7 +29,7 @@ public class ClientIdsTest {
     @Test
     public void test_100_000_ids_utf_well_formed_and_length_44() {
 
-        final ClientIds clientIds = new ClientIds(new HivemqId());
+        final ClientIds clientIds = new ClientIds(new RandomId());
 
         for (int i = 0; i < 100000; i++) {
 

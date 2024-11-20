@@ -19,6 +19,7 @@ import ch.qos.logback.classic.Logger;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.entity.Tls;
 import com.hivemq.config.entity.TlsTcpListener;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,6 @@ import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslHandler;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -127,14 +127,14 @@ public class SslFactoryTest {
     public void test_invalid_keystore() {
 
 
-        final Tls tls = new Tls.Builder().withKeystorePath(RandomStringUtils.randomAlphabetic(32))
+        final Tls tls = new Tls.Builder().withKeystorePath(RandomId.randomAlphabetic(32))
                 .withKeystoreType("JKS")
-                .withKeystorePassword(RandomStringUtils.randomAlphabetic(32))
-                .withPrivateKeyPassword(RandomStringUtils.randomAlphabetic(32))
+                .withKeystorePassword(RandomId.randomAlphabetic(32))
+                .withPrivateKeyPassword(RandomId.randomAlphabetic(32))
                 .withProtocols(new ArrayList<>())
-                .withTruststorePath(RandomStringUtils.randomAlphabetic(32))
+                .withTruststorePath(RandomId.randomAlphabetic(32))
                 .withTruststoreType("JKS")
-                .withTruststorePassword(RandomStringUtils.randomAlphabetic(32))
+                .withTruststorePassword(RandomId.randomAlphabetic(32))
                 .withClientAuthMode(Tls.ClientAuthMode.NONE)
                 .withCipherSuites(new ArrayList<>())
                 .withHandshakeTimeout(10)
@@ -156,9 +156,9 @@ public class SslFactoryTest {
                 .withKeystorePassword("passwd1")
                 .withPrivateKeyPassword("passwd2")
                 .withProtocols(new ArrayList<>())
-                .withTruststorePath(RandomStringUtils.randomAlphabetic(32))
+                .withTruststorePath(RandomId.randomAlphabetic(32))
                 .withTruststoreType("JKS")
-                .withTruststorePassword(RandomStringUtils.randomAlphabetic(32))
+                .withTruststorePassword(RandomId.randomAlphabetic(32))
                 .withClientAuthMode(Tls.ClientAuthMode.NONE)
                 .withCipherSuites(new ArrayList<>())
                 .withHandshakeTimeout(12345)

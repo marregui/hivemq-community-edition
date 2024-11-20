@@ -21,13 +21,13 @@ import org.jetbrains.annotations.NotNull;
 public class ConfigModule extends SingletonModule<ConfigModule> {
 
     private final @NotNull ConfigService configService;
-    private final @NotNull HivemqId hiveMQId;
+    private final @NotNull RandomId hiveMQId;
 
     public ConfigModule(
             final @NotNull ConfigService configService) {
         super(ConfigModule.class);
         this.configService = configService;
-        this.hiveMQId = new HivemqId();
+        this.hiveMQId = new RandomId();
     }
 
     public @NotNull String getHiveMQId() {
@@ -36,7 +36,7 @@ public class ConfigModule extends SingletonModule<ConfigModule> {
 
     @Override
     protected void configure() {
-        bind(HivemqId.class).toInstance(hiveMQId);
+        bind(RandomId.class).toInstance(hiveMQId);
         bind(ListenerConfigService.class).toInstance(configService.listenerConfiguration());
         bind(MqttConfigService.class).toInstance(configService.mqttConfiguration());
         bind(RestrictionsConfigService.class).toInstance(configService.restrictionsConfiguration());

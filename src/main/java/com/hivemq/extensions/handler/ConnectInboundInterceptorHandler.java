@@ -18,7 +18,7 @@ package com.hivemq.extensions.handler;
 
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.config.HivemqId;
+import com.hivemq.config.RandomId;
 import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.async.TimeoutFallback;
@@ -70,7 +70,7 @@ public class ConnectInboundInterceptorHandler {
     private final @NotNull PluginOutPutAsyncer asyncer;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
     private final @NotNull PluginTaskExecutorService executorService;
-    private final @NotNull HivemqId hivemqId;
+    private final @NotNull RandomId randomId;
     private final @NotNull Interceptors interceptors;
     private final @NotNull ServerInformation serverInformation;
     private final @NotNull MqttConnacker connacker;
@@ -81,7 +81,7 @@ public class ConnectInboundInterceptorHandler {
             final @NotNull PluginOutPutAsyncer asyncer,
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull PluginTaskExecutorService executorService,
-            final @NotNull HivemqId hivemqId,
+            final @NotNull RandomId randomId,
             final @NotNull Interceptors interceptors,
             final @NotNull ServerInformation serverInformation,
             final @NotNull MqttConnacker connacker) {
@@ -90,7 +90,7 @@ public class ConnectInboundInterceptorHandler {
         this.asyncer = asyncer;
         this.hiveMQExtensions = hiveMQExtensions;
         this.executorService = executorService;
-        this.hivemqId = hivemqId;
+        this.randomId = randomId;
         this.interceptors = interceptors;
         this.serverInformation = serverInformation;
         this.connacker = connacker;
@@ -210,7 +210,7 @@ public class ConnectInboundInterceptorHandler {
                         Mqtt5ConnAckReasonCode.UNSPECIFIED_ERROR,
                         reasonString);
             } else {
-                final CONNECT connect = CONNECT.from(inputHolder.get().getConnectPacket(), hivemqId.get());
+                final CONNECT connect = CONNECT.from(inputHolder.get().getConnectPacket(), randomId.get());
                 final Connection clientConnectionContext = Connection.of(ctx.channel());
                 clientConnectionContext.setClientId(connect.getClientIdentifier());
                 clientConnectionContext.setExtensionClientInformation(new ClientInformationImpl(connect.getClientIdentifier()));

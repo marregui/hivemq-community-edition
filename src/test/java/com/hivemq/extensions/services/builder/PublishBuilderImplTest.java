@@ -16,16 +16,15 @@
 package com.hivemq.extensions.services.builder;
 
 import com.hivemq.config.ConfigService;
+import com.hivemq.config.RandomId;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
 import com.hivemq.extension.sdk.api.packets.publish.PayloadFormatIndicator;
 import com.hivemq.extension.sdk.api.services.exception.DoNotImplementException;
 import com.hivemq.extension.sdk.api.services.publish.Publish;
 import com.hivemq.mqtt.message.QoS;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
-import util.TestConfigurationBootstrap;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -174,22 +173,22 @@ public class PublishBuilderImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_user_property_name_too_long() {
-        new PublishBuilderImpl(configService).userProperty(RandomStringUtils.randomAlphanumeric(65536), "val");
+        new PublishBuilderImpl(configService).userProperty(RandomId.randomAlphanumeric(65536), "val");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_user_property_value_too_long() {
-        new PublishBuilderImpl(configService).userProperty("name", RandomStringUtils.randomAlphanumeric(65536));
+        new PublishBuilderImpl(configService).userProperty("name", RandomId.randomAlphanumeric(65536));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_response_topic_too_long() {
-        new PublishBuilderImpl(configService).responseTopic(RandomStringUtils.randomAlphanumeric(65536));
+        new PublishBuilderImpl(configService).responseTopic(RandomId.randomAlphanumeric(65536));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_content_type_too_long() {
-        new PublishBuilderImpl(configService).contentType(RandomStringUtils.randomAlphanumeric(65536));
+        new PublishBuilderImpl(configService).contentType(RandomId.randomAlphanumeric(65536));
     }
 
 

@@ -22,7 +22,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Singleton;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
-import com.hivemq.config.HivemqId;
+import com.hivemq.config.RandomId;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.services.exception.DoNotImplementException;
@@ -72,7 +72,7 @@ public class PublishServiceImpl implements PublishService {
     private final PublishDistributor publishDistributor;
 
     @NotNull
-    private final HivemqId hiveMQId;
+    private final RandomId hiveMQId;
 
     @NotNull
     private final LocalTopicTree topicTree;
@@ -83,7 +83,7 @@ public class PublishServiceImpl implements PublishService {
             @NotNull final GlobalManagedExtensionExecutorService globalManagedExtensionExecutorService,
             @NotNull final InternalPublishService internalPublishService,
             @NotNull final PublishDistributor publishDistributor,
-            @NotNull final HivemqId hiveMQId,
+            @NotNull final RandomId hiveMQId,
             @NotNull final LocalTopicTree topicTree) {
         this.rateLimitService = rateLimitService;
         this.globalManagedExtensionExecutorService = globalManagedExtensionExecutorService;

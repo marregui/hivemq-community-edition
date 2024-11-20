@@ -151,7 +151,6 @@ public class ConfigService {
         } else {
             sb.append(originalContent);
         }
-        System.out.printf("POLLO %s%n", sb);
         return new StreamSource(new ByteArrayInputStream(sb.toString().getBytes(StandardCharsets.UTF_8)));
     }
 

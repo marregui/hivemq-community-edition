@@ -39,11 +39,12 @@ dependencies {
     implementation(libs.dropwizard.metrics)
     implementation(libs.dropwizard.metrics.jmx)
     runtimeOnly(libs.dropwizard.metrics.logback)
+
+    // keep alive
+    implementation(libs.jctools)
+
     implementation(libs.guice)
     implementation(libs.javax.annotation.api)
-
-    // common
-    implementation(libs.jctools)
     implementation(libs.jetbrains.annotations)
 
     /* ******************** test ******************** */

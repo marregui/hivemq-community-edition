@@ -29,9 +29,6 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Creates JAR files for a given class on the fly and loads them via the {@link IsolatedExtensionClassloader}.
- */
 public class IsolatedExtensionClassloaderUtil {
 
     /**

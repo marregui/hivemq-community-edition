@@ -111,7 +111,7 @@ public class ExtensionLoaderImpl implements ExtensionLoader {
     @Override
     public @Nullable HiveMQExtensionEvent processSingleExtensionFolder(final @NotNull Path extensionFolder) {
         final Optional<HiveMQExtensionEntity> xmlEntityOptional =
-                HiveMQExtensionXMLReader.getExtensionEntityFromXML(extensionFolder, true);
+                HiveMQExtensionXMLReader.getExtension(extensionFolder);
         if (xmlEntityOptional.isEmpty()) {
             return null;
         }

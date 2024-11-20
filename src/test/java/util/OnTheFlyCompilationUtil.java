@@ -16,11 +16,7 @@
 package util;
 
 import com.google.common.collect.Iterables;
-import com.google.common.io.Files;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.NameFileFilter;
-import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
@@ -33,23 +29,22 @@ import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-/**
- * Various utilities for compilation of Java classes on the fly
- *
- * @author Dominik Obermaier
- * @author Georg Held
- */
 public class OnTheFlyCompilationUtil {
 
     public static File compileJavaFile(final File javaFile, final File toFolder) throws IOException {
@@ -69,12 +64,20 @@ public class OnTheFlyCompilationUtil {
                 fileManager.getJavaFileObjectsFromFiles(Collections.singletonList(javaFile))).call();
         fileManager.close();
 
-        final Collection<File> files =
-                FileUtils.listFiles(toFolder, new SuffixFileFilter("class"), TrueFileFilter.INSTANCE);
-
-        return Iterables.getOnlyElement(files);
+        return Iterables.getOnlyElement(findFiles(toFolder.toPath(), "class"));
     }
 
+    public static Collection<File> findFiles(final @NotNull Path path, final @NotNull String fileExtension)
+            throws IOException {
+        if (!Files.isDirectory(path)) {
+            throw new IllegalArgumentException("Path must be a directory!");
+        }
+        try (final Stream<Path> walk = Files.walk(path)) {
+            return walk.filter(p -> !Files.isDirectory(p) && p.toString().toLowerCase().endsWith(fileExtension))
+                    .map(Path::toFile)
+                    .collect(Collectors.toList());
+        }
+    }
 
     public static ClassLoader compile(final StringJavaFileObject... toCompile) throws Exception {
         final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -119,7 +122,7 @@ public class OnTheFlyCompilationUtil {
 
         public MemClassLoader() throws Exception {
             super(ClassLoader.getSystemClassLoader());
-            final File tempDir = Files.createTempDir();
+            final File tempDir = Files.createTempDirectory("tests").toFile();
             tempDir.deleteOnExit();
             this.tempDir = tempDir;
 
@@ -131,10 +134,9 @@ public class OnTheFlyCompilationUtil {
 
         public void persist() throws Exception {
             for (final Map.Entry<String, MemJavaFileObject> objectEntry : classFiles.entrySet()) {
-
                 final MemJavaFileObject value = objectEntry.getValue();
                 final File file = new File(tempDir, value.getClassName() + ".class");
-                Files.write(value.getClassBytes(), file);
+                Files.write(file.toPath(), value.getClassBytes());
             }
         }
 
@@ -151,8 +153,13 @@ public class OnTheFlyCompilationUtil {
         }
 
         @Override
-        public URL getResource(final String name) {
-            final String[] list = tempDir.list(new NameFileFilter(name));
+        public URL getResource(final @NotNull String name) {
+            final String[] list = tempDir.list(new FilenameFilter() {
+                @Override
+                public boolean accept(final File dir, final String n) {
+                    return name.equals(n);
+                }
+            });
             if (list.length == 0) {
                 return super.getResource(name);
             } else {

@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Singleton;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -38,37 +39,34 @@ public class HiveMQExtensionXMLReader {
     private static final Logger log = LoggerFactory.getLogger(HiveMQExtensionXMLReader.class);
 
     @NotNull
-    public static Optional<HiveMQExtensionEntity> getExtensionEntityFromXML(
-            @NotNull final Path extensionFolder, final boolean logging) {
+    public static Optional<HiveMQExtensionEntity> getExtension(@NotNull final Path folder) {
 
-        final Path extensionXMLPath = extensionFolder.resolve(HiveMQExtension.HIVEMQ_EXTENSION_XML_FILE);
-        if (Files.exists(extensionXMLPath) && logging) {
+        final Path extensionXMLPath = folder.resolve(HiveMQExtension.HIVEMQ_EXTENSION_XML_FILE);
+        if (Files.exists(extensionXMLPath)) {
             log.trace("Found hivemq-extension.xml {}", extensionXMLPath);
         }
         try {
-            final JAXBContext context = JAXBContext.newInstance(HiveMQExtensionEntity.class);
-            final Unmarshaller unmarshaller = context.createUnmarshaller();
             final HiveMQExtensionEntity unmarshal =
-                    (HiveMQExtensionEntity) unmarshaller.unmarshal(extensionXMLPath.toFile());
+                    (HiveMQExtensionEntity) JAXBContext.newInstance(HiveMQExtensionEntity.class)
+                            .createUnmarshaller()
+                            .unmarshal(extensionXMLPath.toFile());
 
             final Optional<ValidationError> validationError = validateHiveMQExtensionEntity(unmarshal);
 
             if (validationError.isPresent()) {
-                if (logging) {
                     log.warn("Could not parse \"{}\" in {} because of {}. Not loading extension.",
-                            HiveMQExtension.HIVEMQ_EXTENSION_XML_FILE, extensionFolder,
+                            HiveMQExtension.HIVEMQ_EXTENSION_XML_FILE,
+                            folder,
                             validationError.get().getMessage());
-                }
                 return Optional.empty();
             }
 
             return Optional.of(unmarshal);
         } catch (final JAXBException e) {
-            if (logging) {
                 log.warn("Could not parse \"{}\" in {}. Not loading extension.",
-                        HiveMQExtension.HIVEMQ_EXTENSION_XML_FILE, extensionFolder,
+                        HiveMQExtension.HIVEMQ_EXTENSION_XML_FILE,
+                        folder,
                         e);
-            }
             return Optional.empty();
         }
     }

@@ -43,7 +43,6 @@ dependencies {
     implementation(libs.javax.annotation.api)
 
     // common
-    implementation(libs.apache.commonsIO)
     implementation(libs.apache.commonsLang)
     implementation(libs.jctools)
 

@@ -28,7 +28,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
-public class ExtensionUtilExtensionTest extends AbstractExtensionTest {
+public class ExtensionUtilExtensionTest {
 
     @Rule
     public final @NotNull TemporaryFolder folder = new TemporaryFolder();

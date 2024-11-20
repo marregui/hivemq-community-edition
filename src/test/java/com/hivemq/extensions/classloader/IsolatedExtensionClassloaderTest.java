@@ -20,7 +20,6 @@ import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.classloader.ClassLoaderTestClass;
 import com.hivemq.extension.sdk.api.services.Services;
-import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,6 +30,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -65,7 +66,7 @@ public class IsolatedExtensionClassloaderTest {
     public void test_modified_class_loaded() throws Exception {
         final File javaSrcFile = getJavaSrcFileForClassFile(ClassLoadedClass.class);
         final File file = temporaryFolder.newFile(ClassLoadedClass.class.getSimpleName() + ".java");
-        FileUtils.copyFile(javaSrcFile, file);
+        Files.copy(javaSrcFile.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
         replaceFileContent(file, "original", "modified");
 
@@ -108,7 +109,7 @@ public class IsolatedExtensionClassloaderTest {
     public void test_restricted_class_loaded_from_parent() throws Exception {
         final File javaSrcFile = getJavaSrcFileForClassFile(ClassLoaderTestClass.class);
         final File file = temporaryFolder.newFile(ClassLoaderTestClass.class.getSimpleName() + ".java");
-        FileUtils.copyFile(javaSrcFile, file);
+        Files.copy(javaSrcFile.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
         replaceFileContent(file, "original", "modified");
 
@@ -137,7 +138,7 @@ public class IsolatedExtensionClassloaderTest {
     public void test_restricted_class_loaded_from_parent_not_found_fallback_to_child() throws Exception {
         final File javaSrcFile = getJavaSrcFileForClassFile(ClassLoadedClass.class);
         final File file = temporaryFolder.newFile(ClassLoadedClass.class.getSimpleName() + ".java");
-        FileUtils.copyFile(javaSrcFile, file);
+        Files.copy(javaSrcFile.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
         replaceFileContent(file,
                 "package com.hivemq.extensions.classloader;",
@@ -264,10 +265,12 @@ public class IsolatedExtensionClassloaderTest {
     }
 
     private void replaceFileContent(
-            final @NotNull File file, final @NotNull String original, final @NotNull String modified) throws Exception {
-        String content = FileUtils.readFileToString(file, UTF_8);
+            final @NotNull File file,
+            final @NotNull String original,
+            final @NotNull String modified) throws Exception {
+        String content = Files.readString(file.toPath(), UTF_8);
         content = content.replaceAll(original, modified);
-        FileUtils.writeStringToFile(file, content, UTF_8);
+        Files.writeString(file.toPath(), content, UTF_8);
     }
 
     private File getJavaSrcFileForClassFile(final Class<?> clazz) {

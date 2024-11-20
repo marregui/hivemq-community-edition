@@ -1,5 +1,4 @@
 [versions]
-apache-commonsIO = "2.16.1"
 apache-commonsLang = "3.14.0"
 awaitility = "4.2.2"
 bouncycastle = "1.78.1"
@@ -23,7 +22,6 @@ wiremock = "3.0.1"
 xodus = "1.2.3"
 
 [libraries]
-apache-commonsIO = { module = "commons-io:commons-io", version.ref = "apache-commonsIO" }
 apache-commonsLang = { module = "org.apache.commons:commons-lang3", version.ref = "apache-commonsLang" }
 bouncycastle-pkix = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncycastle" }
 bouncycastle-prov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }

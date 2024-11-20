@@ -43,7 +43,7 @@ import static org.mockito.Mockito.mock;
 
 
 @SuppressWarnings("NullabilityAnnotations")
-public class HiveMQExtensionExtensionTest extends AbstractExtensionTest {
+public class HiveMQExtensionExtensionTest {
 
     @Rule
     public final @NotNull TemporaryFolder tmpFolder = new TemporaryFolder();
@@ -60,25 +60,17 @@ public class HiveMQExtensionExtensionTest extends AbstractExtensionTest {
 
     @Before
     public void setUp() throws Exception {
-        final File validExtensionFolder =
-                TestExtensionUtil.createValidExtension(tmpFolder.newFolder("extension"), "id");
-        final Optional<HiveMQExtensionEntity> extensionEntityFromXML =
-                HiveMQExtensionXMLReader.getExtensionEntityFromXML(validExtensionFolder.toPath(), true);
-        assertTrue(extensionEntityFromXML.isPresent());
-        final HiveMQExtensionEntity hiveMQExtensionEntity = extensionEntityFromXML.get();
+        final File extensions = TestExtensionUtil.createValidExtension(tmpFolder.newFolder("extensions"), "id");
+        final Optional<HiveMQExtensionEntity> entity = HiveMQExtensionXMLReader.getExtension(extensions.toPath());
+        assertTrue(entity.isPresent());
+        final HiveMQExtensionEntity hiveMQExtensionEntity = entity.get();
 
-        startExtension = new HiveMQExtensionImpl(hiveMQExtensionEntity,
-                validExtensionFolder.toPath(),
-                new StartTestExtension(),
-                true);
-        stopExtension = new HiveMQExtensionImpl(hiveMQExtensionEntity,
-                validExtensionFolder.toPath(),
-                new StopTestExtension(),
-                true);
-        reasonExtension = new HiveMQExtensionImpl(hiveMQExtensionEntity,
-                validExtensionFolder.toPath(),
-                new ReasonTestExtension(),
-                true);
+        startExtension =
+                new HiveMQExtensionImpl(hiveMQExtensionEntity, extensions.toPath(), new StartTestExtension(), true);
+        stopExtension =
+                new HiveMQExtensionImpl(hiveMQExtensionEntity, extensions.toPath(), new StopTestExtension(), true);
+        reasonExtension =
+                new HiveMQExtensionImpl(hiveMQExtensionEntity, extensions.toPath(), new ReasonTestExtension(), true);
 
         extensionStartOutput = new ExtensionStartOutputImpl();
         extensionStopOutput = new ExtensionStopOutputImpl();
@@ -115,7 +107,8 @@ public class HiveMQExtensionExtensionTest extends AbstractExtensionTest {
 
         @Override
         public void extensionStart(
-                final @NotNull ExtensionStartInput input, final @NotNull ExtensionStartOutput output) {
+                final @NotNull ExtensionStartInput input,
+                final @NotNull ExtensionStartOutput output) {
             start = true;
         }
 
@@ -130,7 +123,8 @@ public class HiveMQExtensionExtensionTest extends AbstractExtensionTest {
 
         @Override
         public void extensionStart(
-                final @NotNull ExtensionStartInput input, final @NotNull ExtensionStartOutput output) {
+                final @NotNull ExtensionStartInput input,
+                final @NotNull ExtensionStartOutput output) {
         }
 
         @Override
@@ -145,7 +139,8 @@ public class HiveMQExtensionExtensionTest extends AbstractExtensionTest {
 
         @Override
         public void extensionStart(
-                final @NotNull ExtensionStartInput input, final @NotNull ExtensionStartOutput output) {
+                final @NotNull ExtensionStartInput input,
+                final @NotNull ExtensionStartOutput output) {
             output.preventExtensionStartup(reason);
         }
 

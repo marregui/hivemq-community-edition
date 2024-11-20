@@ -54,7 +54,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
-public class HiveMQExtensionsExtensionTest extends AbstractExtensionTest {
+public class HiveMQExtensionsExtensionTest {
 
     @Rule
     public final @NotNull TemporaryFolder tmpFolder = new TemporaryFolder();
@@ -63,8 +63,7 @@ public class HiveMQExtensionsExtensionTest extends AbstractExtensionTest {
     private final @NotNull HiveMQExtension extension2 = mock(HiveMQExtension.class);
     private final @NotNull IsolatedExtensionClassloader loader1 = mock(IsolatedExtensionClassloader.class);
     private final @NotNull IsolatedExtensionClassloader loader2 = mock(IsolatedExtensionClassloader.class);
-    private final @NotNull ListenerConfigService listenerConfigService =
-            mock(ListenerConfigService.class);
+    private final @NotNull ListenerConfigService listenerConfigService = mock(ListenerConfigService.class);
 
     private @NotNull String id1;
     private @NotNull String id2;

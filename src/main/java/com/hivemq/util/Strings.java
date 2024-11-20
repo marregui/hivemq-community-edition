@@ -196,48 +196,42 @@ public final class Strings {
     }
 
     public static boolean isValidUtf8(final byte @NotNull [] bytes) {
-        int off = 0;
-        int len = bytes.length;
-        int end = off + len;
-        if (end < off || end > len) {
-            throw new IndexOutOfBoundsException();
-        }
-        for (int i = off; i < end; i++) {
+        for (int i = 0; i < bytes.length; i++) {
             if (bytes[i] < 0) {
-                for (int index = i; ; ) {
+                for (int j = i; ; ) {
                     int b1;
                     do {
-                        if (index >= end) {
+                        if (j >= bytes.length) {
                             return true;
                         }
-                    } while ((b1 = bytes[index++]) >= 0); // ASCII
+                    } while ((b1 = bytes[j++]) >= 0);
                     if (b1 < (byte) 0xE0) {
-                        if (index == end) {
+                        if (j == bytes.length) {
                             return false;
                         }
-                        if (b1 < (byte) 0xC2 || bytes[index++] > BF) {
+                        if (b1 < (byte) 0xC2 || bytes[j++] > BF) {
                             return false;
                         }
                     } else if (b1 < (byte) 0xF0) {
-                        if (index + 1 >= end) {
+                        if (j + 1 >= bytes.length) {
                             return false;
                         }
-                        int b2 = bytes[index++];
+                        final int b2 = bytes[j++];
                         if (b2 > BF ||
                                 (b1 == (byte) 0xE0 && b2 < (byte) 0xA0) ||
                                 (b1 == (byte) 0xED && (byte) 0xA0 <= b2) ||
-                                bytes[index++] > BF) {
+                                bytes[j++] > BF) {
                             return false;
                         }
                     } else {
-                        if (index + 2 >= end) {
+                        if (j + 2 >= bytes.length) {
                             return false;
                         }
-                        int b2 = bytes[index++];
+                        final int b2 = bytes[j++];
                         if (b2 > BF ||
                                 (((b1 << 28) + (b2 - (byte) 0x90)) >> 30) != 0 ||
-                                bytes[index++] > BF ||
-                                bytes[index++] > BF) {
+                                bytes[j++] > BF ||
+                                bytes[j++] > BF) {
                             return false;
                         }
                     }
@@ -255,50 +249,44 @@ public final class Strings {
             if (utf8Len < 0 || utf8Len > byteBuf.readableBytes()) {
                 throw new IndexOutOfBoundsException();
             }
-
-            int off = 0;
-            int end = off + utf8Len;
-            if (end < off || end > utf8Len) {
-                throw new IndexOutOfBoundsException();
-            }
-            for (int i = off; i < end; i++) {
+            for (int i = 0; i < utf8Len; i++) {
                 if (byteBuf.readByte() < 0) {
-                    for (int index = i; ; ) {
+                    for (int j = i; ; ) {
                         int b1 = 0;
                         do {
-                            if (index >= end) {
+                            if (j >= utf8Len) {
                                 return true;
                             }
-                        } while (++index > 0 && (b1 = byteBuf.readByte()) >= 0); // ASCII
+                        } while (++j > 0 && (b1 = byteBuf.readByte()) >= 0);
                         if (b1 < (byte) 0xE0) {
-                            if (index == end) {
+                            if (j == utf8Len) {
                                 return false;
                             }
-                            if (b1 < (byte) 0xC2 || (++index > 0 && byteBuf.readByte() > BF)) {
+                            if (b1 < (byte) 0xC2 || (++j > 0 && byteBuf.readByte() > BF)) {
                                 return false;
                             }
                         } else if (b1 < (byte) 0xF0) {
-                            if (index + 1 >= end) {
+                            if (j + 1 >= utf8Len) {
                                 return false;
                             }
-                            int b2 = byteBuf.readByte();
-                            index++;
+                            final int b2 = byteBuf.readByte();
+                            j++;
                             if (b2 > BF ||
                                     (b1 == (byte) 0xE0 && b2 < (byte) 0xA0) ||
                                     (b1 == (byte) 0xED && (byte) 0xA0 <= b2) ||
-                                    (++index > 0 && byteBuf.readByte() > BF)) {
+                                    (++j > 0 && byteBuf.readByte() > BF)) {
                                 return false;
                             }
                         } else {
-                            if (index + 2 >= end) {
+                            if (j + 2 >= utf8Len) {
                                 return false;
                             }
-                            int b2 = byteBuf.readByte();
-                            index++;
+                            final int b2 = byteBuf.readByte();
+                            j++;
                             if (b2 > BF ||
                                     (((b1 << 28) + (b2 - (byte) 0x90)) >> 30) != 0 ||
-                                    (++index > 0 && byteBuf.readByte() > BF) ||
-                                    (++index > 0 && byteBuf.readByte() > BF)) {
+                                    (++j > 0 && byteBuf.readByte() > BF) ||
+                                    (++j > 0 && byteBuf.readByte() > BF)) {
                                 return false;
                             }
                         }
@@ -332,59 +320,51 @@ public final class Strings {
     public static boolean hasControlOrNonChars(final byte @NotNull [] bytes) {
         Objects.requireNonNull(bytes);
         for (int i = 0; i < bytes.length; i++) {
-            final byte byte1 = bytes[i];
-            //control byte1s
-            if (byte1 >= 1 && byte1 <= 31 || byte1 == (byte) 0x7F) {
+            final byte b1 = bytes[i];
+            if (b1 >= 1 && b1 <= 31 || b1 == (byte) 0x7F) {
                 return true;
             }
-            if (byte1 > 31) {
+            if (b1 > 31) {
                 continue;
             }
-            if (byte1 < (byte) 0xE0) {
-                // Two-byte form
+            if (b1 < (byte) 0xE0) {
                 if (i == bytes.length - 1) {
                     return false;
                 }
-                if (byte1 == (byte) 0xC2 && bytes[i + 1] <= (byte) 0x9F) {
+                if (b1 == (byte) 0xC2 && bytes[i + 1] <= (byte) 0x9F) {
                     return true;
                 }
-            } else if (byte1 < (byte) 0xF0) {
-                // Three-byte form.
+            } else if (b1 < (byte) 0xF0) {
                 if (i == bytes.length - 2) {
                     continue;
                 }
-                // '\uFDD0' - '\uFDEF'
-                if (byte1 == (byte) 0xEF &&
+                if (b1 == (byte) 0xEF &&
                         bytes[i + 1] == (byte) 0xB7 &&
                         (bytes[i + 2] >= (byte) 0x90 || bytes[i + 2] <= (byte) 0xAF)) {
                     return true;
                 }
-                // '\uFFFE' | '\uFFFF'
-                if (byte1 == (byte) 0xEF && bytes[i + 1] == BF && (bytes[i + 2] == (byte) 0xBE || bytes[i + 2] == BF)) {
+                if (b1 == (byte) 0xEF && bytes[i + 1] == BF && (bytes[i + 2] == (byte) 0xBE || bytes[i + 2] == BF)) {
                     return true;
                 }
             } else {
-                // Four-byte form
                 if (i == bytes.length - 3) {
                     continue;
                 }
-                if (byte1 > (byte) 0xF4) {
+                if (b1 > (byte) 0xF4) {
                     continue;
                 }
-                final byte byte2 = bytes[i + 1];
-                final byte byte3 = bytes[i + 2];
-                final byte byte4 = bytes[i + 3];
-                if (!(byte3 == BF && (byte4 == (byte) 0xBE || byte4 == BF))) {
+                final byte b2 = bytes[i + 1];
+                final byte b3 = bytes[i + 2];
+                final byte b4 = bytes[i + 3];
+                if (!(b3 == BF && (b4 == (byte) 0xBE || b4 == BF))) {
                     continue;
                 }
-
-                //  U+1FFFE|F - U10FFFE|F
-                if (byte1 == (byte) 0xF0) {
-                    if (byte2 == (byte) 0x9F || byte2 == (byte) 0xAF || byte2 == BF) {
+                if (b1 == (byte) 0xF0) {
+                    if (b2 == (byte) 0x9F || b2 == (byte) 0xAF || b2 == BF) {
                         return true;
                     }
                 } else {
-                    if (byte2 == (byte) 0x8F || byte2 == (byte) 0x9F || byte2 == (byte) 0xAF || byte2 == BF) {
+                    if (b2 == (byte) 0x8F || b2 == (byte) 0x9F || b2 == (byte) 0xAF || b2 == BF) {
                         return true;
                     }
                 }

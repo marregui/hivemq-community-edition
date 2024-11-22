@@ -53,7 +53,7 @@ public class TopicPermissionImpl implements InternalTopicPermission {
         //these are used to speed up the evaluation of permissions
         final String strippedPermissionTopic = Strings.stripSlash(topic);
         splitTopic = Strings.splitOnFwdSlash(strippedPermissionTopic);
-        containsWildcardCharacter = !Strings.hasNoWildcards(strippedPermissionTopic);
+        containsWildcardCharacter = !Strings.containsNotWildcard(strippedPermissionTopic);
         isRootWildcard = strippedPermissionTopic.contains("#");
         endsWithWildcard = Strings.endsWithSharp(strippedPermissionTopic);
     }

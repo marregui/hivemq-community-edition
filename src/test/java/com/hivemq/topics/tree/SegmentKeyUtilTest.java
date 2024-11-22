@@ -15,52 +15,72 @@
  */
 package com.hivemq.topics.tree;
 
-import com.hivemq.topics.tree.SegmentKeyUtil;
+import com.hivemq.util.Strings;
 import org.junit.Test;
 
+import java.util.Objects;
+
+import static com.google.common.base.Preconditions.checkArgument;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
 public class SegmentKeyUtilTest {
+    private static String firstSegmentKey(final String topic) {
+        return  topic.isEmpty()? "" :  segmentKey(topic, 1);
+    }
+
+    private static String segmentKey(final String topic, final int length) {
+        Objects.requireNonNull(topic, "Topic must not be null");
+        checkArgument(!topic.isEmpty(), "Topic must not be empty");
+        checkArgument(length > 0, "Segment key length must be grater than zero");
+        int end = -1;
+        for (int i = 0; i < length; i++) {
+            end = topic.indexOf('/', end + 1);
+            if (end == -1) {
+                return topic;
+            }
+        }
+        return topic.substring(0, end);
+    }
+
     @Test
     public void test_segnemt_key_util() {
-        assertEquals("topic", SegmentKeyUtil.segmentKey("topic", 1));
-        assertEquals("topic", SegmentKeyUtil.segmentKey("topic", 2));
-        assertEquals("topic", SegmentKeyUtil.segmentKey("topic/1", 1));
-        assertEquals("topic/1", SegmentKeyUtil.segmentKey("topic/1", 2));
-        assertEquals("topic/1", SegmentKeyUtil.segmentKey("topic/1", 3));
-        assertEquals("topic/1", SegmentKeyUtil.segmentKey("topic/1/2", 2));
-        assertEquals("topic/", SegmentKeyUtil.segmentKey("topic//", 2));
-        assertEquals("topic//", SegmentKeyUtil.segmentKey("topic//", 3));
-        assertEquals("/topic", SegmentKeyUtil.segmentKey("/topic", 2));
-        assertEquals("", SegmentKeyUtil.segmentKey("/topic", 1));
+        assertEquals("topic", segmentKey("topic", 1));
+        assertEquals("topic", segmentKey("topic", 2));
+        assertEquals("topic", segmentKey("topic/1", 1));
+        assertEquals("topic/1", segmentKey("topic/1", 2));
+        assertEquals("topic/1", segmentKey("topic/1", 3));
+        assertEquals("topic/1", segmentKey("topic/1/2", 2));
+        assertEquals("topic/", segmentKey("topic//", 2));
+        assertEquals("topic//", segmentKey("topic//", 3));
+        assertEquals("/topic", segmentKey("/topic", 2));
+        assertEquals("", segmentKey("/topic", 1));
     }
 
     @Test
     public void name() {
-        assertEquals("", SegmentKeyUtil.segmentKey("/topic", 1));
+        assertEquals("", segmentKey("/topic", 1));
     }
 
     @Test
     public void test_first_segment_key() {
-        assertEquals("topic", SegmentKeyUtil.firstSegmentKey("topic"));
-        assertEquals("topic", SegmentKeyUtil.firstSegmentKey("topic/1"));
-        assertEquals("topic", SegmentKeyUtil.firstSegmentKey("topic/"));
-        assertEquals("", SegmentKeyUtil.firstSegmentKey("/topic"));
+        assertEquals("topic", firstSegmentKey("topic"));
+        assertEquals("topic", firstSegmentKey("topic/1"));
+        assertEquals("topic", firstSegmentKey("topic/"));
+        assertEquals("", firstSegmentKey("/topic"));
     }
 
     @Test
     public void test_contains_wildcard() {
-        assertTrue(SegmentKeyUtil.containsWildcard("topic/+"));
-        assertTrue(SegmentKeyUtil.containsWildcard("topic/#"));
-        assertTrue(SegmentKeyUtil.containsWildcard("+/topic"));
-        assertTrue(SegmentKeyUtil.containsWildcard("+"));
-        assertTrue(SegmentKeyUtil.containsWildcard("#"));
-        assertTrue(SegmentKeyUtil.containsWildcard("/#"));
-        assertTrue(SegmentKeyUtil.containsWildcard("/+"));
-
-        assertFalse(SegmentKeyUtil.containsWildcard("topic"));
+        assertFalse(Strings.containsNotWildcard("topic/+"));
+        assertFalse(Strings.containsNotWildcard("topic/#"));
+        assertFalse(Strings.containsNotWildcard("+/topic"));
+        assertFalse(Strings.containsNotWildcard("+"));
+        assertFalse(Strings.containsNotWildcard("#"));
+        assertFalse(Strings.containsNotWildcard("/#"));
+        assertFalse(Strings.containsNotWildcard("/+"));
+        assertTrue(Strings.containsNotWildcard("topic"));
     }
 }

@@ -23,15 +23,15 @@ import java.util.function.Predicate;
 
 public class SubscriptionTypeItemFilter implements Predicate<SubscriberWithQoS> {
 
-    private final @NotNull SubscriptionType subscriptionType;
+    private final @NotNull SubscriptionType type;
 
-    public SubscriptionTypeItemFilter(@NotNull final SubscriptionType subscriptionType) {
-        this.subscriptionType = subscriptionType;
+    public SubscriptionTypeItemFilter(@NotNull final SubscriptionType type) {
+        this.type = type;
     }
 
     @Override
     public boolean test(final @NotNull SubscriberWithQoS subscriber) {
-        switch (subscriptionType) {
+        switch (type) {
             case ALL:
                 return true;
             case INDIVIDUAL:
@@ -39,7 +39,6 @@ public class SubscriptionTypeItemFilter implements Predicate<SubscriberWithQoS> 
             case SHARED:
                 return subscriber.isSharedSubscription();
         }
-        //to support potential new types
         return false;
     }
 }

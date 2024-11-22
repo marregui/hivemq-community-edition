@@ -54,7 +54,7 @@ public final class Strings {
         return EMPTY_STR;
     }
 
-    public static boolean hasNoWildcards(final @Nullable String str) {
+    public static boolean containsNotWildcard(final @Nullable String str) {
         if (str != null) {
             for (int i = 0, n = str.length(); i < n; i++) {
                 final char ch = str.charAt(i);

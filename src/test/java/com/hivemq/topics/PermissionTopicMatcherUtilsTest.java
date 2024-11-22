@@ -31,7 +31,7 @@ public class PermissionTopicMatcherUtilsTest {
     private static boolean matches(final @NotNull String permissionTopic, final @NotNull String actualTopic) {
         final String stripedPermissionTopic = Strings.stripSlash(permissionTopic);
         final String[] splitPermissionTopic = Strings.splitOnFwdSlash(stripedPermissionTopic);
-        final boolean nonWildCard = Strings.hasNoWildcards(stripedPermissionTopic);
+        final boolean nonWildCard = Strings.containsNotWildcard(stripedPermissionTopic);
         final boolean rootWildCard = stripedPermissionTopic.contains("#");
         final boolean endsWithWildCard = Strings.endsWithSharp(stripedPermissionTopic);
         final String stripedActualTopic = Strings.stripSlash(actualTopic);

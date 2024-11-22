@@ -29,8 +29,8 @@ final class PublishPayloadXodusSerializer {
 
         final byte[] bytes = new byte[16];
 
-        Bytes.copyLongToByteArray(id, bytes, 0);
-        Bytes.copyLongToByteArray(chunkIndex, bytes, 8);
+        Bytes.copyLongToBytes(id, bytes, 0);
+        Bytes.copyLongToBytes(chunkIndex, bytes, 8);
 
         return bytes;
     }

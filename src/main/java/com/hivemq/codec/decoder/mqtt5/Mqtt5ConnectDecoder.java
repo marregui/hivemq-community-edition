@@ -68,7 +68,7 @@ import static com.hivemq.mqtt.message.mqtt5.MessageProperties.TOPIC_ALIAS_MAXIMU
 import static com.hivemq.mqtt.message.mqtt5.MessageProperties.USER_PROPERTY;
 import static com.hivemq.mqtt.message.mqtt5.MessageProperties.WILL_DELAY_INTERVAL;
 import static com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET;
-import static com.hivemq.util.Bytes.isBitSet;
+import static com.hivemq.util.Bytes.isSet;
 
 /**
  * @author Florian Limpöck
@@ -139,12 +139,12 @@ public class Mqtt5ConnectDecoder extends AbstractMqttConnectDecoder {
             final byte connectFlagsByte,
             final @NotNull ByteBuf fixedVariableHeader) {
 
-        final boolean cleanStart = isBitSet(connectFlagsByte, 1);
-        final boolean will = isBitSet(connectFlagsByte, 2);
+        final boolean cleanStart = isSet(connectFlagsByte, 1);
+        final boolean will = isSet(connectFlagsByte, 2);
         final int willQos = (connectFlagsByte & 0b0001_1000) >> 3; // flag bit 3 & 4
-        final boolean willRetain = isBitSet(connectFlagsByte, 5);
-        final boolean passwordRequired = isBitSet(connectFlagsByte, 6);
-        final boolean usernameRequired = isBitSet(connectFlagsByte, 7);
+        final boolean willRetain = isSet(connectFlagsByte, 5);
+        final boolean passwordRequired = isSet(connectFlagsByte, 6);
+        final boolean usernameRequired = isSet(connectFlagsByte, 7);
 
         if (!validateWill(will, willRetain, willQos, clientConnectionContext)) {
             return null;

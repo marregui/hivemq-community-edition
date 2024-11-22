@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.publish;
 
-import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.util.ImmutableIntArray;
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.ShutdownHooks;
 import com.hivemq.config.RandomId;

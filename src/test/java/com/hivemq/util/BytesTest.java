@@ -15,122 +15,23 @@
  */
 package com.hivemq.util;
 
-import com.hivemq.config.RandomId;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import org.junit.Test;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class BytesTest {
 
 
-    @Test
-    public void test_get_prefixed_bytes() throws Exception {
-        final ByteBuf buffer = Unpooled.buffer();
-        final byte[] bytes = "test".getBytes(UTF_8);
-        buffer.writeShort(bytes.length);
-        buffer.writeBytes(bytes);
-
-        final byte[] prefixedBytes = Bytes.getPrefixedBytes(buffer);
-
-        assertEquals(bytes.length, prefixedBytes.length);
-    }
-
-    @Test
-    public void test_get_prefixed_random_data() throws Exception {
-        final ByteBuf buffer = Unpooled.buffer();
-        final byte[] bytes = RandomId.nextBytes(5000);
-        buffer.writeShort(bytes.length);
-        buffer.writeBytes(bytes);
-
-        final byte[] prefixedBytes = Bytes.getPrefixedBytes(buffer);
-
-        assertEquals(bytes.length, prefixedBytes.length);
-    }
-
-    @Test
-    public void test_get_prefixed_bytes_buffer_not_filled() throws Exception {
-        final ByteBuf buffer = Unpooled.buffer();
-        buffer.writeShort(10);
-        buffer.writeBytes(RandomId.nextBytes(9));
-
-        final byte[] prefixedBytes = Bytes.getPrefixedBytes(buffer);
-
-        assertNull(prefixedBytes);
-    }
-
-    @Test
-    public void test_get_prefixed_bytes_empty() throws Exception {
-        final ByteBuf buffer = Unpooled.buffer();
-
-        final byte[] prefixedBytes = Bytes.getPrefixedBytes(buffer);
-
-        assertNull(prefixedBytes);
-    }
-
-    @Test
-    public void test_get_prefixed_bytes_empty_byte_array() throws Exception {
-        final ByteBuf buffer = Unpooled.buffer();
-        buffer.writeShort(0);
-
-        final byte[] prefixedBytes = Bytes.getPrefixedBytes(buffer);
-
-        assertEquals(0, prefixedBytes.length);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void test_get_prefixed_bytes_null_passed() throws Exception {
-
-        Bytes.getPrefixedBytes(null);
-    }
-
-    @Test
-    public void test_prefix_bytes() throws Exception {
-        final ByteBuf byteBuf = Bytes.prefixBytes(new byte[]{0, 1, (byte) 128}, Unpooled.buffer());
-        final int size = byteBuf.readUnsignedShort();
-
-        assertEquals(3, size);
-        assertEquals(0, byteBuf.readByte());
-        assertEquals(1, byteBuf.readByte());
-        assertEquals((byte) 128, byteBuf.readByte());
-        assertFalse(byteBuf.isReadable());
-    }
-
-
-    @Test
-    public void test_prefix_bytes_empty() throws Exception {
-        final ByteBuf byteBuf = Bytes.prefixBytes(new byte[0], Unpooled.buffer());
-        final int size = byteBuf.readUnsignedShort();
-
-        assertEquals(0, size);
-        assertFalse(byteBuf.isReadable());
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void test_prefixed_bytes_null_passed() throws Exception {
-
-        Bytes.prefixBytes(null, Unpooled.buffer());
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void test_prefixed_bytes_null_buffer() throws Exception {
-
-        Bytes.prefixBytes(new byte[]{1, 2, 3}, null);
-    }
-
     @Test(expected = IllegalArgumentException.class)
     public void test_is_bit_setinvalid_argument_too_high() throws Exception {
-        Bytes.isBitSet((byte) 0, 8);
+        Bytes.isSet((byte) 0, 8);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_is_bit_setinvalid_argument_too_small() throws Exception {
-        Bytes.isBitSet((byte) 0, -1);
+        Bytes.isSet((byte) 0, -1);
     }
 
     @Test
@@ -139,7 +40,7 @@ public class BytesTest {
         final byte b = 0b0000_0000;
 
         for (int i = 0; i < 8; i++) {
-            assertFalse(Bytes.isBitSet(b, i));
+            assertFalse(Bytes.isSet(b, i));
         }
     }
 
@@ -149,7 +50,7 @@ public class BytesTest {
         final byte b = (byte) 0b1111_1111;
 
         for (int i = 0; i < 8; i++) {
-            assertTrue(Bytes.isBitSet(b, i));
+            assertTrue(Bytes.isSet(b, i));
         }
     }
 
@@ -158,14 +59,14 @@ public class BytesTest {
 
         final byte b = (byte) 0b0000_0001;
 
-        assertTrue(Bytes.isBitSet(b, 0));
-        assertFalse(Bytes.isBitSet(b, 1));
-        assertFalse(Bytes.isBitSet(b, 2));
-        assertFalse(Bytes.isBitSet(b, 3));
-        assertFalse(Bytes.isBitSet(b, 4));
-        assertFalse(Bytes.isBitSet(b, 5));
-        assertFalse(Bytes.isBitSet(b, 6));
-        assertFalse(Bytes.isBitSet(b, 7));
+        assertTrue(Bytes.isSet(b, 0));
+        assertFalse(Bytes.isSet(b, 1));
+        assertFalse(Bytes.isSet(b, 2));
+        assertFalse(Bytes.isSet(b, 3));
+        assertFalse(Bytes.isSet(b, 4));
+        assertFalse(Bytes.isSet(b, 5));
+        assertFalse(Bytes.isSet(b, 6));
+        assertFalse(Bytes.isSet(b, 7));
     }
 
     @Test
@@ -173,14 +74,14 @@ public class BytesTest {
 
         final byte b = (byte) 0b0000_0010;
 
-        assertFalse(Bytes.isBitSet(b, 0));
-        assertTrue(Bytes.isBitSet(b, 1));
-        assertFalse(Bytes.isBitSet(b, 2));
-        assertFalse(Bytes.isBitSet(b, 3));
-        assertFalse(Bytes.isBitSet(b, 4));
-        assertFalse(Bytes.isBitSet(b, 5));
-        assertFalse(Bytes.isBitSet(b, 6));
-        assertFalse(Bytes.isBitSet(b, 7));
+        assertFalse(Bytes.isSet(b, 0));
+        assertTrue(Bytes.isSet(b, 1));
+        assertFalse(Bytes.isSet(b, 2));
+        assertFalse(Bytes.isSet(b, 3));
+        assertFalse(Bytes.isSet(b, 4));
+        assertFalse(Bytes.isSet(b, 5));
+        assertFalse(Bytes.isSet(b, 6));
+        assertFalse(Bytes.isSet(b, 7));
     }
 
     @Test
@@ -188,14 +89,14 @@ public class BytesTest {
 
         final byte b = (byte) 0b0000_0100;
 
-        assertFalse(Bytes.isBitSet(b, 0));
-        assertFalse(Bytes.isBitSet(b, 1));
-        assertTrue(Bytes.isBitSet(b, 2));
-        assertFalse(Bytes.isBitSet(b, 3));
-        assertFalse(Bytes.isBitSet(b, 4));
-        assertFalse(Bytes.isBitSet(b, 5));
-        assertFalse(Bytes.isBitSet(b, 6));
-        assertFalse(Bytes.isBitSet(b, 7));
+        assertFalse(Bytes.isSet(b, 0));
+        assertFalse(Bytes.isSet(b, 1));
+        assertTrue(Bytes.isSet(b, 2));
+        assertFalse(Bytes.isSet(b, 3));
+        assertFalse(Bytes.isSet(b, 4));
+        assertFalse(Bytes.isSet(b, 5));
+        assertFalse(Bytes.isSet(b, 6));
+        assertFalse(Bytes.isSet(b, 7));
     }
 
     @Test
@@ -203,14 +104,14 @@ public class BytesTest {
 
         final byte b = (byte) 0b0000_1000;
 
-        assertFalse(Bytes.isBitSet(b, 0));
-        assertFalse(Bytes.isBitSet(b, 1));
-        assertFalse(Bytes.isBitSet(b, 2));
-        assertTrue(Bytes.isBitSet(b, 3));
-        assertFalse(Bytes.isBitSet(b, 4));
-        assertFalse(Bytes.isBitSet(b, 5));
-        assertFalse(Bytes.isBitSet(b, 6));
-        assertFalse(Bytes.isBitSet(b, 7));
+        assertFalse(Bytes.isSet(b, 0));
+        assertFalse(Bytes.isSet(b, 1));
+        assertFalse(Bytes.isSet(b, 2));
+        assertTrue(Bytes.isSet(b, 3));
+        assertFalse(Bytes.isSet(b, 4));
+        assertFalse(Bytes.isSet(b, 5));
+        assertFalse(Bytes.isSet(b, 6));
+        assertFalse(Bytes.isSet(b, 7));
     }
 
     @Test
@@ -218,14 +119,14 @@ public class BytesTest {
 
         final byte b = (byte) 0b0001_0000;
 
-        assertFalse(Bytes.isBitSet(b, 0));
-        assertFalse(Bytes.isBitSet(b, 1));
-        assertFalse(Bytes.isBitSet(b, 2));
-        assertFalse(Bytes.isBitSet(b, 3));
-        assertTrue(Bytes.isBitSet(b, 4));
-        assertFalse(Bytes.isBitSet(b, 5));
-        assertFalse(Bytes.isBitSet(b, 6));
-        assertFalse(Bytes.isBitSet(b, 7));
+        assertFalse(Bytes.isSet(b, 0));
+        assertFalse(Bytes.isSet(b, 1));
+        assertFalse(Bytes.isSet(b, 2));
+        assertFalse(Bytes.isSet(b, 3));
+        assertTrue(Bytes.isSet(b, 4));
+        assertFalse(Bytes.isSet(b, 5));
+        assertFalse(Bytes.isSet(b, 6));
+        assertFalse(Bytes.isSet(b, 7));
     }
 
     @Test
@@ -233,14 +134,14 @@ public class BytesTest {
 
         final byte b = (byte) 0b0010_0000;
 
-        assertFalse(Bytes.isBitSet(b, 0));
-        assertFalse(Bytes.isBitSet(b, 1));
-        assertFalse(Bytes.isBitSet(b, 2));
-        assertFalse(Bytes.isBitSet(b, 3));
-        assertFalse(Bytes.isBitSet(b, 4));
-        assertTrue(Bytes.isBitSet(b, 5));
-        assertFalse(Bytes.isBitSet(b, 6));
-        assertFalse(Bytes.isBitSet(b, 7));
+        assertFalse(Bytes.isSet(b, 0));
+        assertFalse(Bytes.isSet(b, 1));
+        assertFalse(Bytes.isSet(b, 2));
+        assertFalse(Bytes.isSet(b, 3));
+        assertFalse(Bytes.isSet(b, 4));
+        assertTrue(Bytes.isSet(b, 5));
+        assertFalse(Bytes.isSet(b, 6));
+        assertFalse(Bytes.isSet(b, 7));
     }
 
     @Test
@@ -248,14 +149,14 @@ public class BytesTest {
 
         final byte b = (byte) 0b0100_0000;
 
-        assertFalse(Bytes.isBitSet(b, 0));
-        assertFalse(Bytes.isBitSet(b, 1));
-        assertFalse(Bytes.isBitSet(b, 2));
-        assertFalse(Bytes.isBitSet(b, 3));
-        assertFalse(Bytes.isBitSet(b, 4));
-        assertFalse(Bytes.isBitSet(b, 5));
-        assertTrue(Bytes.isBitSet(b, 6));
-        assertFalse(Bytes.isBitSet(b, 7));
+        assertFalse(Bytes.isSet(b, 0));
+        assertFalse(Bytes.isSet(b, 1));
+        assertFalse(Bytes.isSet(b, 2));
+        assertFalse(Bytes.isSet(b, 3));
+        assertFalse(Bytes.isSet(b, 4));
+        assertFalse(Bytes.isSet(b, 5));
+        assertTrue(Bytes.isSet(b, 6));
+        assertFalse(Bytes.isSet(b, 7));
     }
 
     @Test
@@ -263,14 +164,14 @@ public class BytesTest {
 
         final byte b = (byte) 0b1000_0000;
 
-        assertFalse(Bytes.isBitSet(b, 0));
-        assertFalse(Bytes.isBitSet(b, 1));
-        assertFalse(Bytes.isBitSet(b, 2));
-        assertFalse(Bytes.isBitSet(b, 3));
-        assertFalse(Bytes.isBitSet(b, 4));
-        assertFalse(Bytes.isBitSet(b, 5));
-        assertFalse(Bytes.isBitSet(b, 6));
-        assertTrue(Bytes.isBitSet(b, 7));
+        assertFalse(Bytes.isSet(b, 0));
+        assertFalse(Bytes.isSet(b, 1));
+        assertFalse(Bytes.isSet(b, 2));
+        assertFalse(Bytes.isSet(b, 3));
+        assertFalse(Bytes.isSet(b, 4));
+        assertFalse(Bytes.isSet(b, 5));
+        assertFalse(Bytes.isSet(b, 6));
+        assertTrue(Bytes.isSet(b, 7));
     }
 
     @Test
@@ -278,29 +179,19 @@ public class BytesTest {
 
         final byte b = (byte) 0b1010_1010;
 
-        assertFalse(Bytes.isBitSet(b, 0));
-        assertTrue(Bytes.isBitSet(b, 1));
-        assertFalse(Bytes.isBitSet(b, 2));
-        assertTrue(Bytes.isBitSet(b, 3));
-        assertFalse(Bytes.isBitSet(b, 4));
-        assertTrue(Bytes.isBitSet(b, 5));
-        assertFalse(Bytes.isBitSet(b, 6));
-        assertTrue(Bytes.isBitSet(b, 7));
-    }
-
-    @Test
-    public void test_read_long() throws Exception {
-        assertEquals(10, Bytes.readLong(Bytes.toByteArray(10L), 0));
+        assertFalse(Bytes.isSet(b, 0));
+        assertTrue(Bytes.isSet(b, 1));
+        assertFalse(Bytes.isSet(b, 2));
+        assertTrue(Bytes.isSet(b, 3));
+        assertFalse(Bytes.isSet(b, 4));
+        assertTrue(Bytes.isSet(b, 5));
+        assertFalse(Bytes.isSet(b, 6));
+        assertTrue(Bytes.isSet(b, 7));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_read_long_buffer_overflow() throws Exception {
         Bytes.readLong(new byte[10], 3);
-    }
-
-    @Test
-    public void test_read_int() throws Exception {
-        assertEquals(10, Bytes.readInt(Bytes.toByteArray(10), 0));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -311,116 +202,116 @@ public class BytesTest {
     @Test
     public void test_copy_int_to_array() {
         final byte[] bytes = new byte[4];
-        Bytes.copyIntToByteArray(Integer.MAX_VALUE, bytes, 0);
+        Bytes.copyIntToBytes(Integer.MAX_VALUE, bytes, 0);
         assertEquals(Integer.MAX_VALUE, Bytes.readInt(bytes, 0));
 
-        Bytes.copyIntToByteArray(Integer.MIN_VALUE, bytes, 0);
+        Bytes.copyIntToBytes(Integer.MIN_VALUE, bytes, 0);
         assertEquals(Integer.MIN_VALUE, Bytes.readInt(bytes, 0));
 
-        Bytes.copyIntToByteArray(1, bytes, 0);
+        Bytes.copyIntToBytes(1, bytes, 0);
         assertEquals(1, Bytes.readInt(bytes, 0));
 
-        Bytes.copyIntToByteArray(-1, bytes, 0);
+        Bytes.copyIntToBytes(-1, bytes, 0);
         assertEquals(-1, Bytes.readInt(bytes, 0));
 
-        Bytes.copyIntToByteArray(0, bytes, 0);
+        Bytes.copyIntToBytes(0, bytes, 0);
         assertEquals(0, Bytes.readInt(bytes, 0));
 
         final byte[] withOffset = new byte[7];
-        Bytes.copyIntToByteArray(Integer.MIN_VALUE, withOffset, 3);
+        Bytes.copyIntToBytes(Integer.MIN_VALUE, withOffset, 3);
         assertEquals(Integer.MIN_VALUE, Bytes.readInt(withOffset, 3));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_copy_int_to_array_to_short() {
         final byte[] bytes = new byte[7];
-        Bytes.copyIntToByteArray(Integer.MAX_VALUE, bytes, 4);
+        Bytes.copyIntToBytes(Integer.MAX_VALUE, bytes, 4);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_copy_int_to_array_offset_negative() {
         final byte[] bytes = new byte[10];
-        Bytes.copyIntToByteArray(Integer.MAX_VALUE, bytes, -1);
+        Bytes.copyIntToBytes(Integer.MAX_VALUE, bytes, -1);
     }
 
     @Test
     public void test_copy_long_to_byte_array() throws Exception {
         final byte[] bytes = new byte[8];
 
-        Bytes.copyLongToByteArray(Long.MAX_VALUE, bytes, 0);
+        Bytes.copyLongToBytes(Long.MAX_VALUE, bytes, 0);
         assertEquals(Long.MAX_VALUE, Bytes.readLong(bytes, 0));
 
-        Bytes.copyLongToByteArray(Long.MIN_VALUE, bytes, 0);
+        Bytes.copyLongToBytes(Long.MIN_VALUE, bytes, 0);
         assertEquals(Long.MIN_VALUE, Bytes.readLong(bytes, 0));
 
-        Bytes.copyLongToByteArray(0, bytes, 0);
+        Bytes.copyLongToBytes(0, bytes, 0);
         assertEquals(0, Bytes.readLong(bytes, 0));
 
-        Bytes.copyLongToByteArray(-1, bytes, 0);
+        Bytes.copyLongToBytes(-1, bytes, 0);
         assertEquals(-1, Bytes.readLong(bytes, 0));
 
-        Bytes.copyLongToByteArray(1, bytes, 0);
+        Bytes.copyLongToBytes(1, bytes, 0);
         assertEquals(1, Bytes.readLong(bytes, 0));
 
         final byte[] withOffset = new byte[11];
-        Bytes.copyLongToByteArray(Long.MIN_VALUE, withOffset, 3);
+        Bytes.copyLongToBytes(Long.MIN_VALUE, withOffset, 3);
         assertEquals(Long.MIN_VALUE, Bytes.readLong(withOffset, 3));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_copy_long_to_array_to_short() {
         final byte[] bytes = new byte[11];
-        Bytes.copyLongToByteArray(Long.MAX_VALUE, bytes, 4);
+        Bytes.copyLongToBytes(Long.MAX_VALUE, bytes, 4);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_copy_long_to_array_offset_negative() {
         final byte[] bytes = new byte[10];
-        Bytes.copyLongToByteArray(Long.MAX_VALUE, bytes, -1);
+        Bytes.copyLongToBytes(Long.MAX_VALUE, bytes, -1);
     }
 
     @Test(expected = NullPointerException.class)
     public void test_copy_long_to_array_null() {
-        Bytes.copyLongToByteArray(Long.MAX_VALUE, null, 0);
+        Bytes.copyLongToBytes(Long.MAX_VALUE, null, 0);
     }
 
     @Test
     public void test_copy_short_to_array() {
         final byte[] bytes = new byte[2];
-        Bytes.copyUnsignedShortToByteArray(65535, bytes, 0);
-        assertEquals(65535, Bytes.readUnsignedShort(bytes, 0));
+        Bytes.copyUShortToBytes(65535, bytes, 0);
+        assertEquals(65535, Bytes.readUShort(bytes, 0));
 
-        Bytes.copyUnsignedShortToByteArray(0, bytes, 0);
-        assertEquals(0, Bytes.readUnsignedShort(bytes, 0));
+        Bytes.copyUShortToBytes(0, bytes, 0);
+        assertEquals(0, Bytes.readUShort(bytes, 0));
 
-        Bytes.copyUnsignedShortToByteArray(1, bytes, 0);
-        assertEquals(1, Bytes.readUnsignedShort(bytes, 0));
+        Bytes.copyUShortToBytes(1, bytes, 0);
+        assertEquals(1, Bytes.readUShort(bytes, 0));
 
-        Bytes.copyUnsignedShortToByteArray(1, bytes, 0);
-        assertEquals(1, Bytes.readUnsignedShort(bytes, 0));
+        Bytes.copyUShortToBytes(1, bytes, 0);
+        assertEquals(1, Bytes.readUShort(bytes, 0));
 
-        Bytes.copyUnsignedShortToByteArray(0, bytes, 0);
-        assertEquals(0, Bytes.readUnsignedShort(bytes, 0));
+        Bytes.copyUShortToBytes(0, bytes, 0);
+        assertEquals(0, Bytes.readUShort(bytes, 0));
 
         final byte[] withOffset = new byte[7];
-        Bytes.copyUnsignedShortToByteArray(65535, withOffset, 5);
-        assertEquals(65535, Bytes.readUnsignedShort(withOffset, 5));
+        Bytes.copyUShortToBytes(65535, withOffset, 5);
+        assertEquals(65535, Bytes.readUShort(withOffset, 5));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_copy_short_less_than_zero() {
         final byte[] bytes = new byte[2];
-        Bytes.copyUnsignedShortToByteArray(-1, bytes, 0);
+        Bytes.copyUShortToBytes(-1, bytes, 0);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_copy_short_more_than_max() {
         final byte[] bytes = new byte[2];
-        Bytes.copyUnsignedShortToByteArray(65535 + 1, bytes, 0);
+        Bytes.copyUShortToBytes(65535 + 1, bytes, 0);
     }
 
     @Test(expected = NullPointerException.class)
     public void test_copy_short_null() {
-        Bytes.copyUnsignedShortToByteArray(65535, null, 0);
+        Bytes.copyUShortToBytes(65535, null, 0);
     }
 }

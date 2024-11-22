@@ -72,15 +72,15 @@ public class SubscriberWithQoS implements Comparable<SubscriberWithQoS> {
     }
 
     public boolean isSharedSubscription() {
-        return Bytes.isBitSet(flags, SubscriptionFlag.SHARED);
+        return Bytes.isSet(flags, SubscriptionFlag.SHARED);
     }
 
     public boolean isRetainAsPublished() {
-        return Bytes.isBitSet(flags, SubscriptionFlag.RETAIN);
+        return Bytes.isSet(flags, SubscriptionFlag.RETAIN);
     }
 
     public boolean isNoLocal() {
-        return Bytes.isBitSet(flags, SubscriptionFlag.NON_LOCAL);
+        return Bytes.isSet(flags, SubscriptionFlag.NON_LOCAL);
     }
 
     @Nullable

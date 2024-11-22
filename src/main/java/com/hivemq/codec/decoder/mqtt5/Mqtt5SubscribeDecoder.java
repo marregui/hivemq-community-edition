@@ -175,7 +175,7 @@ public class Mqtt5SubscribeDecoder extends AbstractMqttDecoder<SUBSCRIBE> {
         }
         final byte subscriptionOptions = buf.readByte();
 
-        if (Bytes.isBitSet(subscriptionOptions, 6) || Bytes.isBitSet(subscriptionOptions, 7)) {
+        if (Bytes.isSet(subscriptionOptions, 6) || Bytes.isSet(subscriptionOptions, 7)) {
             disconnector.disconnect(clientConnectionContext.getChannel(),
                     "A client (IP: {}) sent a SUBSCRIBE with malformed subscription options. Disconnecting client.",
                     "Sent a SUBSCRIBE with malformed subscription options",
@@ -189,7 +189,7 @@ public class Mqtt5SubscribeDecoder extends AbstractMqttDecoder<SUBSCRIBE> {
             return null;
         }
 
-        final boolean noLocal = Bytes.isBitSet(subscriptionOptions, 2);
+        final boolean noLocal = Bytes.isSet(subscriptionOptions, 2);
         if (noLocal && Topics.isSharedSubscriptionTopic(topicFilter)) {
             disconnector.disconnect(clientConnectionContext.getChannel(),
                     "A client (IP: {}) sent SUBSCRIBE with a shared subscription and no local set to true. This is not allowed. Disconnecting client.",
@@ -199,7 +199,7 @@ public class Mqtt5SubscribeDecoder extends AbstractMqttDecoder<SUBSCRIBE> {
             return null;
         }
 
-        final boolean retainAsPublished = Bytes.isBitSet(subscriptionOptions, 3);
+        final boolean retainAsPublished = Bytes.isSet(subscriptionOptions, 3);
         final Mqtt5RetainHandling retainHandling = decodeRetainHandling(clientConnectionContext, subscriptionOptions);
         if (retainHandling == null) {
             return null;

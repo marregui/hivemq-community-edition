@@ -20,7 +20,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.util.ImmutableIntArray;
 import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.config.MqttConfigService;

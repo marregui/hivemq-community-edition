@@ -53,7 +53,7 @@ public class MqttAuthSender {
 
         final AUTH auth = new AUTH(
                 Connection.of(channel).getAuthMethod(),
-                Bytes.fromReadOnlyBuffer(authData),
+                Bytes.toBytes(authData),
                 reasonCode,
                 userProperties,
                 reasonString);

@@ -133,14 +133,14 @@ public class MqttWillPublish implements Sizable {
         }
         return new MqttWillPublish(hivemqId,
                 packet.getTopic(),
-                Bytes.getBytesFromReadOnlyBuffer(packet.getPayload()),
+                Bytes.toBytes(packet.getPayload()),
                 QoS.valueOf(packet.getQos().getQosNumber()),
                 packet.getRetain(),
                 packet.getMessageExpiryInterval().orElse(PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET),
                 payloadFormatIndicator,
                 packet.getContentType().orElse(null),
                 packet.getResponseTopic().orElse(null),
-                Bytes.getBytesFromReadOnlyBuffer(packet.getCorrelationData()),
+                Bytes.toBytes(packet.getCorrelationData()),
                 Mqtt5UserProperties.of(userProperties.build()),
                 packet.getWillDelay());
     }

@@ -181,12 +181,12 @@ public class WillPublishBuilderImplTest {
                 .build();
 
         assertEquals("topic", willPublishPacket.getTopic());
-        assertArrayEquals(new byte[]{1, 2, 3}, Bytes.getBytesFromReadOnlyBuffer(willPublishPacket.getPayload()));
+        assertArrayEquals(new byte[]{1, 2, 3}, Bytes.toBytes(willPublishPacket.getPayload()));
         assertEquals(2, willPublishPacket.getQos().getQosNumber());
         assertTrue(willPublishPacket.getRetain());
         assertEquals("TYPE", willPublishPacket.getContentType().get());
         assertArrayEquals(new byte[]{1, 2, 3, 4},
-                Bytes.getBytesFromReadOnlyBuffer(willPublishPacket.getCorrelationData()));
+                Bytes.toBytes(willPublishPacket.getCorrelationData()));
         assertEquals("responseTopic", willPublishPacket.getResponseTopic().get());
         assertEquals(10L, willPublishPacket.getMessageExpiryInterval().get().longValue());
         assertEquals(PayloadFormatIndicator.UTF_8, willPublishPacket.getPayloadFormatIndicator().get());

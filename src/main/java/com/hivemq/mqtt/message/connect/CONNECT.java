@@ -325,9 +325,9 @@ public class CONNECT extends MqttMessageWithUserProperties implements Mqtt5CONNE
                 packet.getRequestResponseInformation(),
                 packet.getRequestProblemInformation(),
                 packet.getUserName().orElse(null),
-                Bytes.getBytesFromReadOnlyBuffer(packet.getPassword()),
+                Bytes.toBytes(packet.getPassword()),
                 packet.getAuthenticationMethod().orElse(null),
-                Bytes.getBytesFromReadOnlyBuffer(packet.getAuthenticationData()),
+                Bytes.toBytes(packet.getAuthenticationData()),
                 MqttWillPublish.fromWillPacket(clusterId, packet.getWillPublish().orElse(null)),
                 Mqtt5UserProperties.of(packet.getUserProperties().asInternalList()));
     }

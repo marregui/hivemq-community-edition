@@ -93,7 +93,7 @@ public class ConnectionAttributeStoreImpl implements ConnectionAttributeStore {
         Objects.requireNonNull(key, "Key of connection attribute must not be null.");
         Objects.requireNonNull(charset, "Charset of connection attribute must not be null.");
 
-        final byte[] bytes = Bytes.getBytesFromReadOnlyBuffer(get(key));
+        final byte[] bytes = Bytes.toBytes(get(key));
 
         if (bytes == null) {
             return Optional.empty();

@@ -113,19 +113,19 @@ public class ClientSessionPersistenceSerializer {
                 willLength + queueLimitLength];
         int cursor = 0;
 
-        Bytes.copyLongToByteArray(timestamp, bytes, 0);
+        Bytes.copyLongToBytes(timestamp, bytes, 0);
         cursor += 8;
-        Bytes.copyLongToByteArray(clientSession.getSessionExpiryIntervalSec(), bytes, cursor);
+        Bytes.copyLongToBytes(clientSession.getSessionExpiryIntervalSec(), bytes, cursor);
         cursor += 8;
 
         byte flags = (byte) 0b0000_0000;
-        flags = Bytes.setBit(flags, CLIENT_CONNECTED_BIT, clientSession.isConnected());
-        flags = Bytes.setBit(flags, QUEUE_SIZE_PRESENT_BIT, clientSession.getQueueLimit() != null);
+        flags = Bytes.set(flags, CLIENT_CONNECTED_BIT, clientSession.isConnected());
+        flags = Bytes.set(flags, QUEUE_SIZE_PRESENT_BIT, clientSession.getQueueLimit() != null);
         bytes[cursor] = flags;
         cursor += 1;
 
         if (clientSession.getQueueLimit() != null) {
-            Bytes.copyLongToByteArray(clientSession.getQueueLimit(), bytes, cursor);
+            Bytes.copyLongToBytes(clientSession.getQueueLimit(), bytes, cursor);
             cursor += Long.BYTES;
         }
 
@@ -137,11 +137,11 @@ public class ClientSessionPersistenceSerializer {
             bytes[cursor] = (byte) willPublish.getQos().getQosNumber();
             cursor += 1;
 
-            Bytes.copyLongToByteArray(willPublish.getPublishId(), bytes, cursor);
+            Bytes.copyLongToBytes(willPublish.getPublishId(), bytes, cursor);
             cursor += 8;
-            Bytes.copyLongToByteArray(willPublish.getDelayInterval(), bytes, cursor);
+            Bytes.copyLongToBytes(willPublish.getDelayInterval(), bytes, cursor);
             cursor += 8;
-            Bytes.copyLongToByteArray(willPublish.getMessageExpiryInterval(), bytes, cursor);
+            Bytes.copyLongToBytes(willPublish.getMessageExpiryInterval(), bytes, cursor);
             cursor += 8;
 
             bytes[cursor] = payloadFormatIndicator;
@@ -150,29 +150,29 @@ public class ClientSessionPersistenceSerializer {
             bytes[cursor] = (byte) (willPublish.isRetain() ? 1 : 0);
             cursor += 1;
 
-            Bytes.copyIntToByteArray(topicLength, bytes, cursor);
+            Bytes.copyIntToBytes(topicLength, bytes, cursor);
             cursor += 4;
             System.arraycopy(topic, 0, bytes, cursor, topicLength);
             cursor += topicLength;
 
-            Bytes.copyIntToByteArray(hivemqIdLength, bytes, cursor);
+            Bytes.copyIntToBytes(hivemqIdLength, bytes, cursor);
             cursor += 4;
             System.arraycopy(hivemqId, 0, bytes, cursor, hivemqIdLength);
             cursor += hivemqIdLength;
 
-            Bytes.copyIntToByteArray(responseTopicLength, bytes, cursor);
+            Bytes.copyIntToBytes(responseTopicLength, bytes, cursor);
             cursor += 4;
             if (responseTopicLength > 0) {
                 System.arraycopy(responseTopic, 0, bytes, cursor, responseTopicLength);
                 cursor += responseTopicLength;
             }
-            Bytes.copyIntToByteArray(correlationDataLength, bytes, cursor);
+            Bytes.copyIntToBytes(correlationDataLength, bytes, cursor);
             cursor += 4;
             if (correlationDataLength > 0) {
                 System.arraycopy(correlationData, 0, bytes, cursor, correlationDataLength);
                 cursor += correlationDataLength;
             }
-            Bytes.copyIntToByteArray(contentTypeLength, bytes, cursor);
+            Bytes.copyIntToBytes(contentTypeLength, bytes, cursor);
             cursor += 4;
             if (contentTypeLength > 0) {
                 System.arraycopy(contentType, 0, bytes, cursor, contentTypeLength);
@@ -192,11 +192,11 @@ public class ClientSessionPersistenceSerializer {
         final long timeToLive = Bytes.readLong(bytes, cursor);
         cursor += Long.BYTES;
         final byte flags = bytes[cursor];
-        final boolean connected = Bytes.isBitSet(flags, CLIENT_CONNECTED_BIT);
+        final boolean connected = Bytes.isSet(flags, CLIENT_CONNECTED_BIT);
         cursor += 1;
 
         Long queueLimit = null;
-        if (Bytes.isBitSet(flags, QUEUE_SIZE_PRESENT_BIT)) {
+        if (Bytes.isSet(flags, QUEUE_SIZE_PRESENT_BIT)) {
             queueLimit = Bytes.readLong(bytes, cursor);
             cursor += Long.BYTES;
         }
@@ -276,11 +276,11 @@ public class ClientSessionPersistenceSerializer {
         final long timeToLive = Bytes.readLong(bytes, cursor);
         cursor += Long.BYTES;
         final byte flags = bytes[cursor];
-        final boolean connected = Bytes.isBitSet(flags, 0);
+        final boolean connected = Bytes.isSet(flags, 0);
         cursor += 1;
 
         Long queueLimit = null;
-        if (Bytes.isBitSet(flags, QUEUE_SIZE_PRESENT_BIT)) {
+        if (Bytes.isSet(flags, QUEUE_SIZE_PRESENT_BIT)) {
             queueLimit = Bytes.readLong(bytes, cursor);
             cursor += Long.BYTES;
         }

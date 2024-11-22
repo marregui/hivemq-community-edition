@@ -95,16 +95,16 @@ public final class RetainedMessageSerializer {
         bytes[cursor] = ((byte) retainedMessage.getQos().getQosNumber());
         cursor += 1;
 
-        Bytes.copyLongToByteArray(retainedMessage.getTimestamp(), bytes, cursor);
+        Bytes.copyLongToBytes(retainedMessage.getTimestamp(), bytes, cursor);
         cursor += 8;
 
-        Bytes.copyLongToByteArray(retainedMessage.getPublishId(), bytes, cursor);
+        Bytes.copyLongToBytes(retainedMessage.getPublishId(), bytes, cursor);
         cursor += 8;
 
-        Bytes.copyLongToByteArray(retainedMessage.getMessageExpiryInterval(), bytes, cursor);
+        Bytes.copyLongToBytes(retainedMessage.getMessageExpiryInterval(), bytes, cursor);
         cursor += 8;
 
-        Bytes.copyIntToByteArray(responseTopicLength, bytes, cursor);
+        Bytes.copyIntToBytes(responseTopicLength, bytes, cursor);
         cursor += 4;
 
         if (responseTopicLength != 0) {
@@ -112,7 +112,7 @@ public final class RetainedMessageSerializer {
             cursor += responseTopicLength;
         }
 
-        Bytes.copyIntToByteArray(contentTypeLength, bytes, cursor);
+        Bytes.copyIntToBytes(contentTypeLength, bytes, cursor);
         cursor += 4;
 
         if (contentTypeLength != 0) {
@@ -120,7 +120,7 @@ public final class RetainedMessageSerializer {
             cursor += contentTypeLength;
         }
 
-        Bytes.copyIntToByteArray(correlationDataLength, bytes, cursor);
+        Bytes.copyIntToBytes(correlationDataLength, bytes, cursor);
         cursor += 4;
 
         if (correlationDataLength != 0) {

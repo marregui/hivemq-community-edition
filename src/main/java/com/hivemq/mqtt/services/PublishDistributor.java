@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.services;
 
-import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.util.ImmutableIntArray;
 import com.google.common.util.concurrent.ListenableFuture;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -27,15 +27,12 @@ public class PermissionTopicMatcherUtilsTest {
 
     private final @NotNull String actual = "my/test/topic/for/the/unit/test";
 
-    private static boolean matches(final @NotNull String permissionTopic, final @NotNull String actualTopic)
-            throws NotCompliantTopicException {
-
+    private static boolean matches(final @NotNull String permissionTopic, final @NotNull String actualTopic) {
         final String stripedPermissionTopic = Strings.stripSlash(permissionTopic);
         final String[] splitPermissionTopic = Strings.splitOnFwdSlash(stripedPermissionTopic);
         final boolean nonWildCard = Strings.hasNoWildcards(stripedPermissionTopic);
         final boolean rootWildCard = stripedPermissionTopic.contains("#");
         final boolean endsWithWildCard = Strings.endsWithSharp(stripedPermissionTopic);
-
         final String stripedActualTopic = Strings.stripSlash(actualTopic);
         final String[] splitActualTopic = Strings.splitOnFwdSlash(stripedActualTopic);
         return PermissionTopicMatcherUtils.matches(stripedPermissionTopic,

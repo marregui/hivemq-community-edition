@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.message.publish;
 
-import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.util.ImmutableIntArray;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -213,7 +213,7 @@ public class PUBLISHFactory {
                 .withTopic(packet.getTopic())
                 .withQoS(QoS.from(packet.getQos()))
                 .withOnwardQos(QoS.from(packet.getOnwardQos()))
-                .withPayload(Bytes.getBytesFromReadOnlyBuffer(packet.getPayload()))
+                .withPayload(Bytes.toBytes(packet.getPayload()))
                 .withRetain(packet.getRetain())
                 .withMessageExpiryInterval(packet.getMessageExpiryInterval().orElse(MESSAGE_EXPIRY_INTERVAL_NOT_SET))
                 .withDuplicateDelivery(packet.getDupFlag())
@@ -221,7 +221,7 @@ public class PUBLISHFactory {
                 .withPayloadFormatIndicator(payloadFormatIndicator)
                 .withContentType(packet.getContentType().orElse(null))
                 .withResponseTopic(packet.getResponseTopic().orElse(null))
-                .withCorrelationData(Bytes.getBytesFromReadOnlyBuffer(packet.getCorrelationData()))
+                .withCorrelationData(Bytes.toBytes(packet.getCorrelationData()))
                 .withNewTopicAlias(origin.isNewTopicAlias())
                 .withSubscriptionIdentifiers(ImmutableIntArray.copyOf(packet.getSubscriptionIdentifiers()))
                 .withUserProperties(Mqtt5UserProperties.of(packet.getUserProperties().asInternalList()))

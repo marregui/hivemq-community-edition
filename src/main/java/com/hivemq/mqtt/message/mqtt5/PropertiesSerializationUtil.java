@@ -34,7 +34,7 @@ public class PropertiesSerializationUtil {
     }
 
     public static int write(@NotNull final Mqtt5UserProperties properties, @NotNull final byte[] bytes, int offset) {
-        Bytes.copyIntToByteArray(properties.asList().size(), bytes, offset);
+        Bytes.copyIntToBytes(properties.asList().size(), bytes, offset);
         offset += Integer.BYTES;
         for (final MqttUserProperty property : properties.asList()) {
             offset = XodusUtils.serializeShortLengthString(property.getName(), bytes, offset);
@@ -50,12 +50,12 @@ public class PropertiesSerializationUtil {
         final ImmutableList.Builder<MqttUserProperty> builder = ImmutableList.builderWithExpectedSize(size);
 
         for (int i = 0; i < size; i++) {
-            final int nameLength = Bytes.readUnsignedShort(bytes, offset);
+            final int nameLength = Bytes.readUShort(bytes, offset);
             offset += Short.BYTES;
             final String name = new String(bytes, offset, nameLength, Charsets.UTF_8);
             offset += nameLength;
 
-            final int valueLength = Bytes.readUnsignedShort(bytes, offset);
+            final int valueLength = Bytes.readUShort(bytes, offset);
             offset += Short.BYTES;
             final String value = new String(bytes, offset, valueLength, Charsets.UTF_8);
             offset += valueLength;

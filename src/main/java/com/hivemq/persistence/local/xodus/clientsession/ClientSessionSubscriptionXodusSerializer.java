@@ -70,20 +70,20 @@ public class ClientSessionSubscriptionXodusSerializer {
 
         int cursor = 0;
 
-        Bytes.copyIntToByteArray(topicBytes.length, bytes, cursor);
+        Bytes.copyIntToBytes(topicBytes.length, bytes, cursor);
         cursor += 4;
 
         System.arraycopy(topicBytes, 0, bytes, cursor, topicBytes.length);
         cursor += topicBytes.length;
 
-        Bytes.copyLongToByteArray(timestamp, bytes, cursor);
+        Bytes.copyLongToBytes(timestamp, bytes, cursor);
         cursor += 8;
 
         final int qos = topic.getQoS().getQosNumber();
         bytes[cursor] = (byte) qos;
         cursor += 1;
 
-        Bytes.copyLongToByteArray(id, bytes, cursor);
+        Bytes.copyLongToBytes(id, bytes, cursor);
         cursor += 8;
 
         //flags
@@ -101,9 +101,9 @@ public class ClientSessionSubscriptionXodusSerializer {
         cursor += 1;
 
         if (topic.getSubscriptionIdentifier() != null) {
-            Bytes.copyIntToByteArray(topic.getSubscriptionIdentifier(), bytes, cursor);
+            Bytes.copyIntToBytes(topic.getSubscriptionIdentifier(), bytes, cursor);
         } else {
-            Bytes.copyIntToByteArray(Mqtt5SUBSCRIBE.DEFAULT_NO_SUBSCRIPTION_IDENTIFIER, bytes, cursor);
+            Bytes.copyIntToBytes(Mqtt5SUBSCRIBE.DEFAULT_NO_SUBSCRIPTION_IDENTIFIER, bytes, cursor);
         }
         cursor += 4;
 
@@ -125,7 +125,7 @@ public class ClientSessionSubscriptionXodusSerializer {
 
         final byte[] bytes = new byte[topicBytes.length + 4];
 
-        Bytes.copyIntToByteArray(topicBytes.length, bytes, 0);
+        Bytes.copyIntToBytes(topicBytes.length, bytes, 0);
         System.arraycopy(topicBytes, 0, bytes, 4, topicBytes.length);
 
         return bytes;

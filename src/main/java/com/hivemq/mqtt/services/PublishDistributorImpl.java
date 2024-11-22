@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.services;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.util.ImmutableIntArray;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;

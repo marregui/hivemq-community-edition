@@ -18,7 +18,7 @@ package com.hivemq.topics.tree;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.util.ImmutableIntArray;
 import com.google.common.util.concurrent.Striped;
 import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;

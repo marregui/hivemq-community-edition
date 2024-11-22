@@ -106,12 +106,12 @@ public class XodusUtils {
     }
 
     public static int serializeShort(final int s, @NotNull final byte[] serialized, final int offset) {
-        Bytes.copyUnsignedShortToByteArray(s, serialized, offset);
+        Bytes.copyUShortToBytes(s, serialized, offset);
         return offset + Short.BYTES;
     }
 
     public static int serializeLong(final long l, @NotNull final byte[] serialized, final int offset) {
-        Bytes.copyLongToByteArray(l, serialized, offset);
+        Bytes.copyLongToBytes(l, serialized, offset);
         return offset + Long.BYTES;
     }
 
@@ -137,7 +137,7 @@ public class XodusUtils {
             @NotNull final byte[] serialized,
             int offset) {
         final int length = (bytes == null) ? 0 : bytes.length;
-        Bytes.copyUnsignedShortToByteArray(length, serialized, offset);
+        Bytes.copyUShortToBytes(length, serialized, offset);
         offset += Short.BYTES;
         if (length == 0) {
             return offset;

@@ -15,7 +15,7 @@
  */
 package com.hivemq.topics;
 
-import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.util.ImmutableIntArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.util.Bytes;
@@ -103,15 +103,15 @@ public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
     }
 
     public boolean isSharedSubscription() {
-        return Bytes.isBitSet(flags, SubscriptionFlag.SHARED);
+        return Bytes.isSet(flags, SubscriptionFlag.SHARED);
     }
 
     public boolean isRetainAsPublished() {
-        return Bytes.isBitSet(flags, SubscriptionFlag.RETAIN);
+        return Bytes.isSet(flags, SubscriptionFlag.RETAIN);
     }
 
     public boolean isNoLocal() {
-        return Bytes.isBitSet(flags, SubscriptionFlag.NON_LOCAL);
+        return Bytes.isSet(flags, SubscriptionFlag.NON_LOCAL);
     }
 
     public @Nullable String getTopicFilter() {

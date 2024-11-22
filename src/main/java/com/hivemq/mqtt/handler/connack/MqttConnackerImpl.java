@@ -182,7 +182,7 @@ public class MqttConnackerImpl implements MqttConnacker {
                 final ByteBuffer authData = clientConnectionContext.getAuthData();
                 if (authData != null) {
                     clientConnectionContext.setAuthData(null);
-                    connackBuilder.withAuthData(Bytes.fromReadOnlyBuffer(authData));
+                    connackBuilder.withAuthData(Bytes.toBytes(authData));
                 }
             }
 

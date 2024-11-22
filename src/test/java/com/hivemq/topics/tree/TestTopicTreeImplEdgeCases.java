@@ -18,7 +18,7 @@ package com.hivemq.topics.tree;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.UnmodifiableIterator;
-import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.util.ImmutableIntArray;
 import com.hivemq.config.RandomId;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.metrics.MetricsHolder;

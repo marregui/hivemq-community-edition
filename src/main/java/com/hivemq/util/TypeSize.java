@@ -15,7 +15,7 @@
  */
 package com.hivemq.util;
 
-import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.util.ImmutableIntArray;
 import org.jetbrains.annotations.Nullable;
 
 public class TypeSize {

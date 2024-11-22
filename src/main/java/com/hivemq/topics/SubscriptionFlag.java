@@ -15,7 +15,9 @@
  */
 package com.hivemq.topics;
 
-import static com.hivemq.util.Bytes.setBit;
+import com.hivemq.util.Bytes;
+
+import static com.hivemq.util.Bytes.set;
 
 public final class SubscriptionFlag {
     public static final int SHARED = 1;
@@ -23,6 +25,6 @@ public final class SubscriptionFlag {
     public static final int NON_LOCAL = 3;
 
     public static byte buildFlag(final boolean shared, final boolean retain, final boolean nonLocal) {
-        return setBit(setBit(setBit((byte) 0, SHARED, shared), RETAIN, retain), NON_LOCAL, nonLocal);
+        return Bytes.set(Bytes.set(Bytes.set((byte) 0, SHARED, shared), RETAIN, retain), NON_LOCAL, nonLocal);
     }
 }

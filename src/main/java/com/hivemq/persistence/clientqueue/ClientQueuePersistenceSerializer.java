@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.clientqueue;
 
-import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.util.ImmutableIntArray;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -94,7 +94,7 @@ public class ClientQueuePersistenceSerializer {
 
         System.arraycopy(clientBytes, 0, result, 0, clientBytes.length);
         result[clientBytes.length] = (byte) (key.isShared() ? 1 : 0);
-        Bytes.copyLongToByteArray(number, result, clientBytes.length + 1);
+        Bytes.copyLongToBytes(number, result, clientBytes.length + 1);
 
         return XodusUtils.bytesToByteIterable(result);
     }
@@ -146,7 +146,7 @@ public class ClientQueuePersistenceSerializer {
 
     @NotNull ByteIterable serializeAndSetPacketId(final @NotNull ByteIterable serializedValue, final int packetId) {
         final byte[] bytes = XodusUtils.byteIterableToBytes(serializedValue);
-        Bytes.copyUnsignedShortToByteArray(packetId, bytes, 0);
+        Bytes.copyUShortToBytes(packetId, bytes, 0);
         return XodusUtils.bytesToByteIterable(bytes);
     }
 
@@ -158,14 +158,14 @@ public class ClientQueuePersistenceSerializer {
     }
 
     int deserializePacketId(final @NotNull ByteIterable serializedValue) {
-        return Bytes.readUnsignedShort(serializedValue.getBytesUnsafe(), 0);
+        return Bytes.readUShort(serializedValue.getBytesUnsafe(), 0);
     }
 
     @NotNull MessageWithID deserializeValue(final @NotNull ByteIterable serializedValue) {
         final byte[] bytes = serializedValue.getBytesUnsafe();
 
         if ((bytes[Short.BYTES] & PUBREL_BIT) == PUBREL_BIT) {
-            final int packetId = Bytes.readUnsignedShort(bytes, 0);
+            final int packetId = Bytes.readUShort(bytes, 0);
             final PUBREL pubrel = new PUBREL(packetId);
             if (serializedValue.getLength() >= Short.BYTES + 1 + Long.BYTES * 2) {
                 final long expiry = Bytes.readLong(bytes, Short.BYTES + 1);
@@ -309,12 +309,12 @@ public class ClientQueuePersistenceSerializer {
         }
 
         if (subscriptionIdentifiers != null) {
-            Bytes.copyIntToByteArray(subscriptionIdentifierLength, result, cursor);
+            Bytes.copyIntToBytes(subscriptionIdentifierLength, result, cursor);
             cursor += Integer.BYTES;
             if (subscriptionIdentifierLength > 0) {
 
                 for (int i = 0; i < subscriptionIdentifiers.length(); i++) {
-                    Bytes.copyIntToByteArray(subscriptionIdentifiers.get(i), result, cursor);
+                    Bytes.copyIntToBytes(subscriptionIdentifiers.get(i), result, cursor);
                     cursor += Integer.BYTES;
                 }
             }
@@ -333,7 +333,7 @@ public class ClientQueuePersistenceSerializer {
 
         int cursor = 0;
 
-        builder.withPacketIdentifier(Bytes.readUnsignedShort(serialized, cursor));
+        builder.withPacketIdentifier(Bytes.readUShort(serialized, cursor));
         cursor += Short.BYTES;
 
         builder.withQoS(QoS.valueOf(serialized[cursor] & QOS_BITS));
@@ -353,7 +353,7 @@ public class ClientQueuePersistenceSerializer {
                 (serialized[cursor] & USER_PROPERTIES_PRESENT_BIT) == USER_PROPERTIES_PRESENT_BIT;
         cursor += 1;
 
-        final int topicLength = Bytes.readUnsignedShort(serialized, cursor);
+        final int topicLength = Bytes.readUShort(serialized, cursor);
         cursor += Short.BYTES;
         builder.withTopic(new String(serialized, cursor, topicLength, UTF_8));
         cursor += topicLength;
@@ -364,7 +364,7 @@ public class ClientQueuePersistenceSerializer {
         builder.withPublishId(Bytes.readLong(serialized, cursor));
         cursor += Long.BYTES;
 
-        final int hivemqIdLength = Bytes.readUnsignedShort(serialized, cursor);
+        final int hivemqIdLength = Bytes.readUShort(serialized, cursor);
         cursor += Short.BYTES;
         builder.withHivemqId(new String(serialized, cursor, hivemqIdLength, UTF_8));
         cursor += hivemqIdLength;
@@ -373,7 +373,7 @@ public class ClientQueuePersistenceSerializer {
         cursor += Long.BYTES;
 
         if (responseTopicPresent) {
-            final int responseTopicLength = Bytes.readUnsignedShort(serialized, cursor);
+            final int responseTopicLength = Bytes.readUShort(serialized, cursor);
             cursor += Short.BYTES;
             if (responseTopicLength != 0) {
                 builder.withResponseTopic(new String(serialized, cursor, responseTopicLength, UTF_8));
@@ -382,7 +382,7 @@ public class ClientQueuePersistenceSerializer {
         }
 
         if (contentTypePresent) {
-            final int contentTypeLength = Bytes.readUnsignedShort(serialized, cursor);
+            final int contentTypeLength = Bytes.readUShort(serialized, cursor);
             cursor += Short.BYTES;
             if (contentTypeLength != 0) {
                 builder.withContentType(new String(serialized, cursor, contentTypeLength, UTF_8));
@@ -391,7 +391,7 @@ public class ClientQueuePersistenceSerializer {
         }
 
         if (correlationDataPresent) {
-            final int correlationDataLength = Bytes.readUnsignedShort(serialized, cursor);
+            final int correlationDataLength = Bytes.readUShort(serialized, cursor);
             cursor += Short.BYTES;
             if (correlationDataLength != 0) {
                 final byte[] correlationData = new byte[correlationDataLength];

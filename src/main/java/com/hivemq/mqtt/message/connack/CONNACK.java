@@ -52,7 +52,7 @@ public class CONNACK extends MqttMessageWithReasonCode<Mqtt5ConnAckReasonCode> i
                 .withServerKeepAlive(packet.getServerKeepAlive().orElse(KEEP_ALIVE_NOT_SET))
                 .withAssignedClientIdentifier(packet.getAssignedClientIdentifier().orElse(null))
                 .withAuthMethod(packet.getAuthenticationMethod().orElse(null))
-                .withAuthData(Bytes.getBytesFromReadOnlyBuffer(packet.getAuthenticationData()))
+                .withAuthData(Bytes.toBytes(packet.getAuthenticationData()))
                 .withReceiveMaximum(packet.getReceiveMaximum())
                 .withMaximumPacketSize(packet.getMaximumPacketSize())
                 .withTopicAliasMaximum(packet.getTopicAliasMaximum())

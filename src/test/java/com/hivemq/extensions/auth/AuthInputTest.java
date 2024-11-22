@@ -68,7 +68,7 @@ public class AuthInputTest {
     public void test_connect_packet_contains_auth_information() {
         final AuthPacket authPacket = authInput.getAuthPacket();
         assertEquals(method, authPacket.getAuthenticationMethod());
-        assertArrayEquals(authData, Bytes.getBytesFromReadOnlyBuffer(authPacket.getAuthenticationData()));
+        assertArrayEquals(authData, Bytes.toBytes(authPacket.getAuthenticationData()));
         assertEquals(AuthReasonCode.CONTINUE_AUTHENTICATION, authPacket.getReasonCode());
         assertEquals(reasonString, authPacket.getReasonString().get());
         assertEquals("1", authPacket.getUserProperties().getFirst("test").get());

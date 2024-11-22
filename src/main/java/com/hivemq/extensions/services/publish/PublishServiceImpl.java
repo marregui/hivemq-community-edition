@@ -158,9 +158,9 @@ public class PublishServiceImpl implements PublishService {
 
     @NotNull
     private PUBLISH publishToPUBLISH(@NotNull final PublishImpl publish) {
-        final byte[] payload = Bytes.getBytesFromReadOnlyBuffer(publish.getPayload());
+        final byte[] payload = Bytes.toBytes(publish.getPayload());
 
-        final byte[] correlationData = Bytes.getBytesFromReadOnlyBuffer(publish.getCorrelationData());
+        final byte[] correlationData = Bytes.toBytes(publish.getCorrelationData());
 
         final Mqtt5PayloadFormatIndicator payloadFormatIndicator = publish.getPayloadFormatIndicator().isPresent() ?
                 Mqtt5PayloadFormatIndicator.from(publish.getPayloadFormatIndicator().get()) :

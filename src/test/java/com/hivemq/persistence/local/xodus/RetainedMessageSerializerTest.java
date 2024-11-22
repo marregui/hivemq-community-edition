@@ -59,12 +59,12 @@ public class RetainedMessageSerializerTest {
         final byte[] expected =
                 new byte[38 + PropertiesSerializationUtil.encodedSize(Mqtt5UserProperties.NO_USER_PROPERTIES)];
         expected[0] = 0b0000_0000;
-        Bytes.copyLongToByteArray(1231321231320L, expected, 1);
-        Bytes.copyLongToByteArray(10L, expected, 9);
-        Bytes.copyLongToByteArray(10, expected, 17);
-        Bytes.copyIntToByteArray(0, expected, 25);
-        Bytes.copyIntToByteArray(0, expected, 29);
-        Bytes.copyIntToByteArray(0, expected, 33);
+        Bytes.copyLongToBytes(1231321231320L, expected, 1);
+        Bytes.copyLongToBytes(10L, expected, 9);
+        Bytes.copyLongToBytes(10, expected, 17);
+        Bytes.copyIntToBytes(0, expected, 25);
+        Bytes.copyIntToBytes(0, expected, 29);
+        Bytes.copyIntToBytes(0, expected, 33);
         expected[37] = -1;
 
         assertArrayEquals(expected, value);
@@ -76,12 +76,12 @@ public class RetainedMessageSerializerTest {
         final byte[] serialized =
                 new byte[38 + PropertiesSerializationUtil.encodedSize(Mqtt5UserProperties.NO_USER_PROPERTIES)];
         serialized[0] = 0b0000_0000;
-        Bytes.copyLongToByteArray(1231321231320L, serialized, 1);
-        Bytes.copyLongToByteArray(10L, serialized, 9);
-        Bytes.copyLongToByteArray(10, serialized, 17);
-        Bytes.copyIntToByteArray(0, serialized, 25);
-        Bytes.copyIntToByteArray(0, serialized, 29);
-        Bytes.copyIntToByteArray(0, serialized, 33);
+        Bytes.copyLongToBytes(1231321231320L, serialized, 1);
+        Bytes.copyLongToBytes(10L, serialized, 9);
+        Bytes.copyLongToBytes(10, serialized, 17);
+        Bytes.copyIntToBytes(0, serialized, 25);
+        Bytes.copyIntToBytes(0, serialized, 29);
+        Bytes.copyIntToBytes(0, serialized, 33);
         serialized[37] = -1;
 
         final RetainedMessage message = RetainedMessageSerializer.deserializeValue(serialized);
@@ -109,12 +109,12 @@ public class RetainedMessageSerializerTest {
         final byte[] expected =
                 new byte[38 + PropertiesSerializationUtil.encodedSize(Mqtt5UserProperties.NO_USER_PROPERTIES)];
         expected[0] = 0b0000_0001;
-        Bytes.copyLongToByteArray(1231321231321L, expected, 1);
-        Bytes.copyLongToByteArray(10L, expected, 9);
-        Bytes.copyLongToByteArray(10, expected, 17);
-        Bytes.copyIntToByteArray(0, expected, 25);
-        Bytes.copyIntToByteArray(0, expected, 29);
-        Bytes.copyIntToByteArray(0, expected, 33);
+        Bytes.copyLongToBytes(1231321231321L, expected, 1);
+        Bytes.copyLongToBytes(10L, expected, 9);
+        Bytes.copyLongToBytes(10, expected, 17);
+        Bytes.copyIntToBytes(0, expected, 25);
+        Bytes.copyIntToBytes(0, expected, 29);
+        Bytes.copyIntToBytes(0, expected, 33);
         expected[37] = -1;
 
         assertArrayEquals(expected, value);
@@ -127,12 +127,12 @@ public class RetainedMessageSerializerTest {
                 new byte[38 + PropertiesSerializationUtil.encodedSize(Mqtt5UserProperties.NO_USER_PROPERTIES)];
         serialized[0] = 0b0000_0001;
 
-        Bytes.copyLongToByteArray(1231321231321L, serialized, 1);
-        Bytes.copyLongToByteArray(10L, serialized, 9);
-        Bytes.copyLongToByteArray(10, serialized, 17);
-        Bytes.copyIntToByteArray(0, serialized, 25);
-        Bytes.copyIntToByteArray(0, serialized, 29);
-        Bytes.copyIntToByteArray(0, serialized, 33);
+        Bytes.copyLongToBytes(1231321231321L, serialized, 1);
+        Bytes.copyLongToBytes(10L, serialized, 9);
+        Bytes.copyLongToBytes(10, serialized, 17);
+        Bytes.copyIntToBytes(0, serialized, 25);
+        Bytes.copyIntToBytes(0, serialized, 29);
+        Bytes.copyIntToBytes(0, serialized, 33);
         serialized[37] = -1;
 
         final RetainedMessage message = RetainedMessageSerializer.deserializeValue(serialized);
@@ -160,12 +160,12 @@ public class RetainedMessageSerializerTest {
         final byte[] expected =
                 new byte[38 + PropertiesSerializationUtil.encodedSize(Mqtt5UserProperties.NO_USER_PROPERTIES)];
         expected[0] = 0b0000_0010;
-        Bytes.copyLongToByteArray(1231321231302L, expected, 1);
-        Bytes.copyLongToByteArray(10L, expected, 9);
-        Bytes.copyLongToByteArray(10, expected, 17);
-        Bytes.copyIntToByteArray(0, expected, 25);
-        Bytes.copyIntToByteArray(0, expected, 29);
-        Bytes.copyIntToByteArray(0, expected, 33);
+        Bytes.copyLongToBytes(1231321231302L, expected, 1);
+        Bytes.copyLongToBytes(10L, expected, 9);
+        Bytes.copyLongToBytes(10, expected, 17);
+        Bytes.copyIntToBytes(0, expected, 25);
+        Bytes.copyIntToBytes(0, expected, 29);
+        Bytes.copyIntToBytes(0, expected, 33);
         expected[37] = -1;
 
         assertArrayEquals(expected, value);
@@ -177,12 +177,12 @@ public class RetainedMessageSerializerTest {
         final byte[] serialized =
                 new byte[38 + PropertiesSerializationUtil.encodedSize(Mqtt5UserProperties.NO_USER_PROPERTIES)];
         serialized[0] = 0b0000_0010;
-        Bytes.copyLongToByteArray(1231321231302L, serialized, 1);
-        Bytes.copyLongToByteArray(10L, serialized, 9);
-        Bytes.copyLongToByteArray(10, serialized, 17);
-        Bytes.copyIntToByteArray(0, serialized, 25);
-        Bytes.copyIntToByteArray(0, serialized, 29);
-        Bytes.copyIntToByteArray(0, serialized, 33);
+        Bytes.copyLongToBytes(1231321231302L, serialized, 1);
+        Bytes.copyLongToBytes(10L, serialized, 9);
+        Bytes.copyLongToBytes(10, serialized, 17);
+        Bytes.copyIntToBytes(0, serialized, 25);
+        Bytes.copyIntToBytes(0, serialized, 29);
+        Bytes.copyIntToBytes(0, serialized, 33);
         serialized[37] = -1;
 
         final RetainedMessage message = RetainedMessageSerializer.deserializeValue(serialized);

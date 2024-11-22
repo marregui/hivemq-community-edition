@@ -116,14 +116,14 @@ public class ReAuthOutputTest {
     public void test_success_bytes_data() {
         authTaskOutput.authenticateSuccessfully("data".getBytes());
         assertEquals(SUCCESS, authTaskOutput.getAuthenticationState());
-        assertArrayEquals("data".getBytes(), Bytes.fromReadOnlyBuffer(authTaskOutput.getAuthenticationData()));
+        assertArrayEquals("data".getBytes(), Bytes.toBytes(authTaskOutput.getAuthenticationData()));
     }
 
     @Test(timeout = 5000)
     public void test_success_buffer_data() {
         authTaskOutput.authenticateSuccessfully(ByteBuffer.wrap("data".getBytes()));
         assertEquals(SUCCESS, authTaskOutput.getAuthenticationState());
-        assertArrayEquals("data".getBytes(), Bytes.fromReadOnlyBuffer(authTaskOutput.getAuthenticationData()));
+        assertArrayEquals("data".getBytes(), Bytes.toBytes(authTaskOutput.getAuthenticationData()));
     }
 
     @Test(timeout = 5000)
@@ -136,14 +136,14 @@ public class ReAuthOutputTest {
     public void test_continue_bytes_data() {
         authTaskOutput.continueAuthentication("data".getBytes());
         assertEquals(CONTINUE, authTaskOutput.getAuthenticationState());
-        assertArrayEquals("data".getBytes(), Bytes.fromReadOnlyBuffer(authTaskOutput.getAuthenticationData()));
+        assertArrayEquals("data".getBytes(), Bytes.toBytes(authTaskOutput.getAuthenticationData()));
     }
 
     @Test(timeout = 5000)
     public void test_continue_buffer_data() {
         authTaskOutput.continueAuthentication(ByteBuffer.wrap("data".getBytes()));
         assertEquals(CONTINUE, authTaskOutput.getAuthenticationState());
-        assertArrayEquals("data".getBytes(), Bytes.fromReadOnlyBuffer(authTaskOutput.getAuthenticationData()));
+        assertArrayEquals("data".getBytes(), Bytes.toBytes(authTaskOutput.getAuthenticationData()));
     }
 
     @Test(timeout = 5000)

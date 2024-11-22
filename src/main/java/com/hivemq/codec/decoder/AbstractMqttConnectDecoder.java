@@ -28,7 +28,7 @@ import com.hivemq.util.ReasonStrings;
 import com.hivemq.util.Strings;
 import io.netty.buffer.ByteBuf;
 
-import static com.hivemq.util.Bytes.isBitSet;
+import static com.hivemq.util.Bytes.isSet;
 
 /**
  * An Abstract Class for all Mqtt CONNECT Decoders
@@ -122,7 +122,7 @@ public abstract class AbstractMqttConnectDecoder extends MqttDecoder<CONNECT> {
     protected boolean validateConnectFlagByte(
             final byte connectFlagsByte, final @NotNull Connection clientConnectionContext) {
 
-        if (isBitSet(connectFlagsByte, 0)) {
+        if (isSet(connectFlagsByte, 0)) {
             mqttConnacker.connackError(clientConnectionContext.getChannel(),
                     "A client (IP: {}) connected with invalid CONNECT flags. Disconnecting client.",
                     "Invalid CONNECT flags",

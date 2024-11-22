@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.message.publish;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.util.ImmutableIntArray;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
 import com.hivemq.config.ConfigService;

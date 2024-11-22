@@ -26,7 +26,6 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.connect.MqttWillPublish;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.topics.NotCompliantTopicException;
 import com.hivemq.topics.PermissionTopicMatcherUtils;
 import com.hivemq.util.Topics;
 
@@ -242,7 +241,6 @@ public final class DefaultPermissionsEvaluator {
             final @NotNull TopicPermission topicPermission,
             final @NotNull String topic,
             final @NotNull String[] splitTopic) {
-
         try {
             if (topicPermission instanceof InternalTopicPermission) {
                 final InternalTopicPermission internalTopicPermission = (InternalTopicPermission) topicPermission;
@@ -254,10 +252,8 @@ public final class DefaultPermissionsEvaluator {
                         topic,
                         splitTopic);
             }
-
-            //fallback, should never be needed
             return false;
-        } catch (final NotCompliantTopicException e) {
+        } catch (final Throwable e) {
             return false;
         }
     }

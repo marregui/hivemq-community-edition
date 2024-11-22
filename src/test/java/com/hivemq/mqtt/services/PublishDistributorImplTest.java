@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.services;
 
-import com.google.common.primitives.ImmutableIntArray;
+import com.hivemq.util.ImmutableIntArray;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.hivemq.config.MqttConfigService;

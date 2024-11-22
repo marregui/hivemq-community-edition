@@ -79,7 +79,7 @@ public abstract class AbstractMqttPublishDecoder<T extends Message> extends Abst
     protected @Nullable Boolean decodeDup(
             final @NotNull Connection clientConnectionContext, final byte header, final int qos) {
 
-        final boolean dup = Bytes.isBitSet(header, 3);
+        final boolean dup = Bytes.isSet(header, 3);
 
         if (qos == 0 && dup) {
             disconnector.disconnect(clientConnectionContext.getChannel(),
@@ -105,7 +105,7 @@ public abstract class AbstractMqttPublishDecoder<T extends Message> extends Abst
      */
     protected @Nullable Boolean decodeRetain(
             final @NotNull Connection clientConnectionContext, final byte header) {
-        final boolean retained = Bytes.isBitSet(header, 0);
+        final boolean retained = Bytes.isSet(header, 0);
 
         if (retained && !configService.mqttConfiguration().retainedMessagesEnabled()) {
             disconnector.disconnect(clientConnectionContext.getChannel(),

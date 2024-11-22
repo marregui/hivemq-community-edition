@@ -31,7 +31,7 @@ import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 
-import static com.hivemq.util.Bytes.getBytesFromReadOnlyBuffer;
+import static com.hivemq.util.Bytes.toBytes;
 
 /**
  * @author Florian Limpöck
@@ -83,9 +83,9 @@ public class RetainedPublishImpl extends PublishImpl implements RetainedPublish 
     @NotNull
     public static RetainedMessage convert(@NotNull final RetainedPublishImpl retainedPublish) {
 
-        final byte[] payloadAsArray = getBytesFromReadOnlyBuffer(retainedPublish.getPayload());
+        final byte[] payloadAsArray = toBytes(retainedPublish.getPayload());
 
-        final byte[] correlationDataAsArray = getBytesFromReadOnlyBuffer(retainedPublish.getCorrelationData());
+        final byte[] correlationDataAsArray = toBytes(retainedPublish.getCorrelationData());
 
         final Mqtt5PayloadFormatIndicator payloadFormatIndicator =
                 retainedPublish.getPayloadFormatIndicator().isPresent() ?

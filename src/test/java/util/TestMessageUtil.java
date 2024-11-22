@@ -119,7 +119,7 @@ public class TestMessageUtil {
 
         final ImmutableIntArray subscriptionIdentifierArray;
         if (subscriptionIdentifiers == null) {
-            subscriptionIdentifierArray = ImmutableIntArray.of();
+            subscriptionIdentifierArray = ImmutableIntArray.EMPTY;
         } else {
             subscriptionIdentifierArray = ImmutableIntArray.copyOf(subscriptionIdentifiers);
         }

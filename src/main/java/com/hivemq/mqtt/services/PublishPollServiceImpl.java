@@ -341,7 +341,7 @@ public class PublishPollServiceImpl implements PublishPollService {
                     // There can only be one subscription ID for this message, because there are no overlapping shared subscriptions
                     final ImmutableIntArray subscriptionIdentifiers = subscriptionIdentifier != null ?
                             ImmutableIntArray.of(subscriptionIdentifier) :
-                            ImmutableIntArray.of();
+                            ImmutableIntArray.EMPTY;
                     int packetId = 0;
                     try {
                         if (Objects.requireNonNull(minQos).getQosNumber() > 0) {

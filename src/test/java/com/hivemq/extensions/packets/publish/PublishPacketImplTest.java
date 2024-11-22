@@ -33,7 +33,7 @@ public class PublishPacketImplTest {
                 .withIgnoredAnnotations(NotNull.class) // EqualsVerifier thinks @NotNull Optional is @NotNull
                 .withNonnullFields("topic", "qos", "subscriptionIdentifiers", "userProperties")
                 .suppress(Warning.STRICT_INHERITANCE)
-                .withPrefabValues(ImmutableIntArray.class, ImmutableIntArray.of(), ImmutableIntArray.of(123))
+                .withPrefabValues(ImmutableIntArray.class, ImmutableIntArray.EMPTY, ImmutableIntArray.of(123))
                 .verify();
     }
 }

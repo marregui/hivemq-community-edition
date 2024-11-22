@@ -63,7 +63,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -91,7 +91,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -119,7 +119,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -142,7 +142,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -165,7 +165,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -189,7 +189,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -212,7 +212,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -235,7 +235,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -264,7 +264,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -292,7 +292,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -320,7 +320,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -343,7 +343,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -371,7 +371,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -399,7 +399,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -427,7 +427,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -455,7 +455,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -479,7 +479,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -507,7 +507,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -535,7 +535,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -563,7 +563,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -591,7 +591,7 @@ public class ModifiableOutboundPublishImplTest {
                 "contentType",
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -619,7 +619,7 @@ public class ModifiableOutboundPublishImplTest {
                 "contentType",
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -647,7 +647,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -670,7 +670,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -693,7 +693,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -722,7 +722,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -751,7 +751,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 "responseTopic",
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -779,7 +779,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 "responseTopic",
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -807,7 +807,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -830,7 +830,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -853,7 +853,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -882,7 +882,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -910,7 +910,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 ByteBuffer.wrap("correlationData".getBytes()),
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -938,7 +938,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 ByteBuffer.wrap("correlationData".getBytes()),
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -966,7 +966,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -1022,7 +1022,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -1045,7 +1045,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -1068,7 +1068,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -1096,7 +1096,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiableOutboundPublishImpl modifiablePacket =
@@ -1121,7 +1121,7 @@ public class ModifiableOutboundPublishImplTest {
                 null,
                 null,
                 null,
-                ImmutableIntArray.of(),
+                ImmutableIntArray.EMPTY,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 12345L);
         final ModifiableOutboundPublishImpl modifiablePacket =

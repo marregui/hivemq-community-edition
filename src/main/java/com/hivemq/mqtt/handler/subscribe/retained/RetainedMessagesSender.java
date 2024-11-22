@@ -168,7 +168,7 @@ public class RetainedMessagesSender {
                 if (subscribedTopic.getSubscriptionIdentifier() != null) {
                     subscriptionIdentifiers = ImmutableIntArray.of(subscribedTopic.getSubscriptionIdentifier());
                 } else {
-                    subscriptionIdentifiers = ImmutableIntArray.of();
+                    subscriptionIdentifiers = ImmutableIntArray.EMPTY;
                 }
 
                 final PUBLISHFactory.Mqtt5Builder publishBuilder =

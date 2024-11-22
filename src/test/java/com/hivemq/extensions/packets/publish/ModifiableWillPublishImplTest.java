@@ -165,7 +165,7 @@ public class ModifiableWillPublishImplTest {
                 .withIgnoredFields("configService", "modified")
                 .withRedefinedSuperclass()
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
-                .withPrefabValues(ImmutableIntArray.class, ImmutableIntArray.of(), ImmutableIntArray.of(123))
+                .withPrefabValues(ImmutableIntArray.class, ImmutableIntArray.EMPTY, ImmutableIntArray.of(123))
                 .verify();
     }
 }

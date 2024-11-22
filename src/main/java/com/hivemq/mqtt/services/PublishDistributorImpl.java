@@ -214,7 +214,7 @@ public class PublishDistributorImpl implements PublishDistributor {
             final @Nullable ImmutableIntArray subscriptionIdentifier) {
         final ImmutableIntArray identifiers;
         if (subscriptionIdentifier == null) {
-            identifiers = ImmutableIntArray.of();
+            identifiers = ImmutableIntArray.EMPTY;
         } else {
             identifiers = subscriptionIdentifier;
         }

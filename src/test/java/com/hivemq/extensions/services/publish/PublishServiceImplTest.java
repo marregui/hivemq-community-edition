@@ -166,7 +166,7 @@ public class PublishServiceImplTest {
         when(topicTree.findSubscriber("client", "topic")).thenReturn(new SubscriberWithIds("client",
                 1,
                 subscriptionFlags,
-                null, null, ImmutableIntArray.of()));
+                null, null, ImmutableIntArray.EMPTY));
         when(publishDistributor.sendMessageToSubscriber(any(PUBLISH.class),
                 anyString(),
                 anyInt(),

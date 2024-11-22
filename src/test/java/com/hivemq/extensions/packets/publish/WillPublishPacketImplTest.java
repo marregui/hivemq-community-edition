@@ -31,7 +31,7 @@ public class WillPublishPacketImplTest {
                 .withNonnullFields("topic", "qos", "subscriptionIdentifiers", "userProperties")
                 .withRedefinedSuperclass()
                 .suppress(Warning.STRICT_INHERITANCE)
-                .withPrefabValues(ImmutableIntArray.class, ImmutableIntArray.of(), ImmutableIntArray.of(123))
+                .withPrefabValues(ImmutableIntArray.class, ImmutableIntArray.EMPTY, ImmutableIntArray.of(123))
                 .verify();
     }
 }

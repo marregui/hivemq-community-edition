@@ -104,7 +104,7 @@ public class PublishPacketImpl implements PublishPacket {
                 publish.getResponseTopic(),
                 publish.getCorrelationData() == null ? null : ByteBuffer.wrap(publish.getCorrelationData()),
                 (publish.getSubscriptionIdentifiers() == null) ?
-                        ImmutableIntArray.of() :
+                        ImmutableIntArray.EMPTY :
                         publish.getSubscriptionIdentifiers(),
                 UserPropertiesImpl.of(publish.getUserProperties().asList()),
                 publish.getTimestamp());

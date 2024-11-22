@@ -33,7 +33,7 @@ public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
     private @NotNull ImmutableIntArray subscriptionIds;
 
     public SubscriberWithIds(final @NotNull String subscriber, final int qos, final byte flags) {
-        this(subscriber, qos, flags, null, null, ImmutableIntArray.of());
+        this(subscriber, qos, flags, null, null, ImmutableIntArray.EMPTY);
 
     }
 
@@ -62,7 +62,7 @@ public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
                 subscriber.getTopicFilter(),
                 subscriber.getSubscriptionId() != null ?
                         ImmutableIntArray.of(subscriber.getSubscriptionId()) :
-                        ImmutableIntArray.of());
+                        ImmutableIntArray.EMPTY);
     }
 
     @Override

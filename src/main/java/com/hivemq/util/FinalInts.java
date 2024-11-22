@@ -386,20 +386,20 @@ public final class FinalInts implements Serializable {
     }
 
     private static class ListView extends AbstractList<Integer> implements RandomAccess, Serializable {
-        private final @NotNull FinalInts fints;
+        private final @NotNull FinalInts fInts;
 
         private ListView(final @NotNull FinalInts fInts) {
-            this.fints = fInts;
+            this.fInts = fInts;
         }
 
         @Override
         public int size() {
-            return fints.size();
+            return fInts.size();
         }
 
         @Override
         public @Nullable Integer get(final int index) {
-            return fints.get(index);
+            return fInts.get(index);
         }
 
         @Override
@@ -409,42 +409,40 @@ public final class FinalInts implements Serializable {
 
         @Override
         public int indexOf(Object target) {
-            return target instanceof Integer ? fints.indexOf((Integer) target) : -1;
+            return target instanceof Integer ? fInts.indexOf((Integer) target) : -1;
         }
 
         @Override
         public int lastIndexOf(Object target) {
-            return target instanceof Integer ? fints.lastIndexOf((Integer) target) : -1;
+            return target instanceof Integer ? fInts.lastIndexOf((Integer) target) : -1;
         }
 
         @Override
         public List<Integer> subList(int fromIndex, int toIndex) {
-            return fints.subArray(fromIndex, toIndex).asList();
+            return fInts.subArray(fromIndex, toIndex).asList();
         }
 
         @Override
         public Spliterator<Integer> spliterator() {
-            return fints.spliterator();
+            return fInts.spliterator();
         }
 
         @Override
-        public boolean equals(@Nullable Object object) {
-            if (object instanceof ListView) {
-                ListView that = (ListView) object;
-                return this.fints.equals(that.fints);
+        public boolean equals(final @Nullable Object o) {
+            if (o instanceof ListView) {
+                return fInts.equals(((ListView) o).fInts);
             }
-            // We could delegate to super now but it would still box too much
-            if (!(object instanceof List)) {
+            if (!(o instanceof List)) {
                 return false;
             }
-            List<?> that = (List<?>) object;
-            if (this.size() != that.size()) {
+            final List<?> that = (List<?>) o;
+            final int size = fInts.size();
+            if (size != that.size()) {
                 return false;
             }
-            int i = fints.start;
-            // Since `that` is very likely RandomAccess we could avoid allocating this iterator...
-            for (Object element : that) {
-                if (!(element instanceof Integer) || fints.ints[i++] != (Integer) element) {
+            for (int i = fInts.start; i<size; i++) {
+                final Object element = that.get(i);
+                if (!(element instanceof Integer) || fInts.ints[i] != (Integer) element) {
                     return false;
                 }
             }
@@ -453,12 +451,12 @@ public final class FinalInts implements Serializable {
 
         @Override
         public int hashCode() {
-            return fints.hashCode();
+            return fInts.hashCode();
         }
 
         @Override
         public String toString() {
-            return fints.toString();
+            return fInts.toString();
         }
     }
 }

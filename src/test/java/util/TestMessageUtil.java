@@ -16,7 +16,7 @@
 package util;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -112,11 +112,11 @@ public class TestMessageUtil {
             final int packetIdentifier,
             final boolean isDup,
             final boolean isNewTopicAlias,
-            final @Nullable FinalInts subscriptionIdentifiers) {
+            final @Nullable Ints subscriptionIdentifiers) {
 
-        final FinalInts subscriptionIdentifierArray;
+        final Ints subscriptionIdentifierArray;
         if (subscriptionIdentifiers == null) {
-            subscriptionIdentifierArray = FinalInts.NONE;
+            subscriptionIdentifierArray = Ints.NONE;
         } else {
             subscriptionIdentifierArray = subscriptionIdentifiers;
         }
@@ -157,7 +157,7 @@ public class TestMessageUtil {
                 1,
                 true,
                 true,
-                FinalInts.of(1, 2, 3));
+                Ints.of(1, 2, 3));
     }
 
     public static CONNECT createFullMqtt5Connect() {

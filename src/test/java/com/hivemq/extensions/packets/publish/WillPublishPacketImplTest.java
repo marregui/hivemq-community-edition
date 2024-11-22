@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.packets.publish;
 
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import org.jetbrains.annotations.NotNull;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -31,7 +31,7 @@ public class WillPublishPacketImplTest {
                 .withNonnullFields("topic", "qos", "subscriptionIdentifiers", "userProperties")
                 .withRedefinedSuperclass()
                 .suppress(Warning.STRICT_INHERITANCE)
-                .withPrefabValues(FinalInts.class, FinalInts.NONE, FinalInts.of(123))
+                .withPrefabValues(Ints.class, Ints.NONE, Ints.of(123))
                 .verify();
     }
 }

@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.publish;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.config.InternalConfig;
@@ -53,11 +53,8 @@ public class OrderedTopicService {
         CLOSED_CHANNEL_EXCEPTION.setStackTrace(new StackTraceElement[0]);
     }
 
-    private final @NotNull Map<Integer, SettableFuture<PublishStatus>> messageIdToFutureMap = new ConcurrentHashMap<>();
-
-    @VisibleForTesting
     final @NotNull Queue<QueuedMessage> queue = new ArrayDeque<>();
-
+    private final @NotNull Map<Integer, SettableFuture<PublishStatus>> messageIdToFutureMap = new ConcurrentHashMap<>();
     private final @NotNull AtomicBoolean closedAlready = new AtomicBoolean(false);
     private final @NotNull Set<Integer> unacknowledgedMessages = ConcurrentHashMap.newKeySet();
 
@@ -94,7 +91,9 @@ public class OrderedTopicService {
     }
 
     public boolean handlePublish(
-            final @NotNull Channel channel, final @NotNull Object msg, final @NotNull ChannelPromise promise) {
+            final @NotNull Channel channel,
+            final @NotNull Object msg,
+            final @NotNull ChannelPromise promise) {
 
         if (msg instanceof PubrelWithFuture) {
             final PubrelWithFuture pubrelWithFuture = (PubrelWithFuture) msg;
@@ -180,7 +179,9 @@ public class OrderedTopicService {
     }
 
     private void queueMessage(
-            final @NotNull ChannelPromise promise, final @NotNull PUBLISH publish, final @NotNull String clientId) {
+            final @NotNull ChannelPromise promise,
+            final @NotNull PUBLISH publish,
+            final @NotNull String clientId) {
 
         if (log.isTraceEnabled()) {
             final String topic = publish.getTopic();
@@ -201,8 +202,7 @@ public class OrderedTopicService {
         return unacknowledgedMessages;
     }
 
-    
-    @VisibleForTesting
+
     static class QueuedMessage {
 
         @NotNull
@@ -211,7 +211,6 @@ public class OrderedTopicService {
         private final ChannelPromise promise;
 
         QueuedMessage(final @NotNull PUBLISH publish, final @NotNull ChannelPromise promise) {
-
             this.publish = publish;
             this.promise = promise;
         }

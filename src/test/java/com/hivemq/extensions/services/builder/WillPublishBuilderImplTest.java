@@ -18,7 +18,7 @@ package com.hivemq.extensions.services.builder;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.config.ConfigService;
 import com.hivemq.config.RandomId;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.connect.WillPublishPacket;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -381,7 +381,7 @@ public class WillPublishBuilderImplTest {
         }
 
         @Override
-        public FinalInts getSubscriptionIds() {
+        public Ints getSubscriptionIds() {
             return null;
         }
 
@@ -464,7 +464,7 @@ public class WillPublishBuilderImplTest {
         }
 
         @Override
-        public FinalInts getSubscriptionIds() {
+        public Ints getSubscriptionIds() {
             return null;
         }
 

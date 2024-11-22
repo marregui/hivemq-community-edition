@@ -18,7 +18,7 @@ package com.hivemq.metrics.jmx;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.jmx.JmxReporter;
-import com.google.common.annotations.VisibleForTesting;
+
 import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,7 +38,7 @@ public class JmxReporterBootstrap {
 
     private final @NotNull MetricRegistry metricRegistry;
 
-    @VisibleForTesting
+    
     @Nullable JmxReporter jmxReporter;
 
     @Inject

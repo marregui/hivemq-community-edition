@@ -18,13 +18,12 @@ package com.hivemq.extension.sdk.api.packets.publish;
 
 
 
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -130,7 +129,7 @@ public interface PublishPacket {
      * @return The subscription identifiers.
      * @since 4.0.0, CE 2019.1
      */
-     @NotNull FinalInts getSubscriptionIds();
+     @NotNull Ints getSubscriptionIds();
 
     /**
      * If this property is present, this is the content type.

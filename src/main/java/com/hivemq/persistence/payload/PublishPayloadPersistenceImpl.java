@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.payload;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.google.inject.Inject;
@@ -137,12 +137,12 @@ public class PublishPayloadPersistenceImpl implements PublishPayloadPersistence 
         localPersistence.closeDB();
     }
 
-    @VisibleForTesting
+    
     public @NotNull ImmutableMap<Long, Integer> getReferenceCountersAsMap() {
         return ImmutableMap.copyOf(payloadReferenceCounterRegistry.getAll());
     }
 
-    @VisibleForTesting
+    
     static @NotNull RemovablePayloads @NotNull [] @NotNull [] partitionBucketResponsibilities(
             final @NotNull RemovablePayloads[] removablePayloads, final int threads) {
 

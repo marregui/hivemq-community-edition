@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.connect;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.hivemq.config.RestrictionsConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.gauges.OpenConnectionsGauge;
@@ -105,12 +105,12 @@ public class ConnectionLimiterHandler extends ChannelInboundHandlerAdapter {
         super.channelRead(ctx, msg);
     }
 
-    @VisibleForTesting
+    
     long getWarnThreshold() {
         return warnThreshold;
     }
 
-    @VisibleForTesting
+    
     long getMaxConnections() {
         return maxConnections;
     }

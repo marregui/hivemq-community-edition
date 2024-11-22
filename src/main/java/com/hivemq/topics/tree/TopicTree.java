@@ -15,10 +15,9 @@
  */
 package com.hivemq.topics.tree;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.google.common.util.concurrent.Striped;
 import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -49,26 +48,21 @@ import java.util.stream.Stream;
 
 import static com.hivemq.config.InternalConfig.TOPIC_TREE_MAP_CREATION_THRESHOLD;
 
-
 @Singleton
-public class LocalTopicTree {
+public class TopicTree {
 
-    private static final Logger log = LoggerFactory.getLogger(LocalTopicTree.class);
+    private static final @NotNull Logger log = LoggerFactory.getLogger(TopicTree.class);
 
     final CopyOnWriteArrayList<SubscriberWithQoS> rootWildcardSubscribers = new CopyOnWriteArrayList<>();
-    @VisibleForTesting
     final @NotNull SubscriptionCounters counters;
-    @VisibleForTesting
     final ConcurrentHashMap<String, TopicTreeNode> segments = new ConcurrentHashMap<>();
     private final @NotNull Striped<ReadWriteLock> segmentLocks;
     private final int mapCreationThreshold;
 
     @Inject
-    public LocalTopicTree(final @NotNull MetricsHolder metricsHolder) {
-
+    public TopicTree(final @NotNull MetricsHolder metricsHolder) {
         counters = new SubscriptionCounters(metricsHolder.getSubscriptionCounter());
         mapCreationThreshold = TOPIC_TREE_MAP_CREATION_THRESHOLD.get();
-
         segmentLocks = Striped.readWriteLock(64);
     }
 
@@ -104,9 +98,9 @@ public class LocalTopicTree {
                 } else {
                     last.setQos(current.getQos());
                     if (current.getSubscriptionId() != null) {
-                        final FinalInts subscriptionIds = last.getSubscriptionIds();
+                        final Ints subscriptionIds = last.getSubscriptionIds();
                         final Integer subscriptionId = current.getSubscriptionId();
-                        final FinalInts mergedSubscriptionIds = FinalInts.builder(subscriptionIds.size() + 1)
+                        final Ints mergedSubscriptionIds = Ints.builder(subscriptionIds.size() + 1)
                                 .addAll(subscriptionIds)
                                 .add(subscriptionId)
                                 .build();
@@ -128,40 +122,27 @@ public class LocalTopicTree {
     private static boolean equalSubscription(
             final @NotNull SubscriberWithQoS first,
             final @NotNull SubscriberWithIds second) {
-
-        return equalSubscription(first, second.getSubscriber(), second.getTopicFilter(), second.getSharedName());
-    }
-
-    private static boolean equalSubscription(
-            final @NotNull SubscriberWithQoS first,
-            final @NotNull String secondClient,
-            final @Nullable String secondTopicFilter,
-            final @Nullable String secondSharedName) {
-
-        if (!first.getSubscriber().equals(secondClient)) {
+        if (!first.getSubscriber().equals(second.getSubscriber())) {
             return false;
         }
-        if (!Objects.equals(first.getTopicFilter(), secondTopicFilter)) {
+        if (!Objects.equals(first.getTopicFilter(), second.getTopicFilter())) {
             return false;
         }
-        return Objects.equals(first.getSharedName(), secondSharedName);
+        return Objects.equals(first.getSharedName(), second.getSharedName());
     }
 
-    private static void traverseTree(
+    private static void traverse(
             final @NotNull TopicTreeNode node,
-            final @NotNull SubscriptionsConsumer subscriberAndTopicConsumer,
+            final @NotNull SubscriptionsConsumer consumer,
             final String[] topicPart,
             final int depth) {
-
         if (!topicPart[depth].equals(node.getTopicPart()) && !"+".equals(node.getTopicPart())) {
             return;
         }
-
-        subscriberAndTopicConsumer.acceptNonRootState(node.wildcardSubscriptions);
-
+        consumer.acceptNonRootState(node.wildcardSubscriptions);
         final boolean end = topicPart.length - 1 == depth;
         if (end) {
-            subscriberAndTopicConsumer.acceptNonRootState(node.exactSubscriptions);
+            consumer.acceptNonRootState(node.exactSubscriptions);
         } else {
             if (getChildrenCount(node) == 0) {
                 return;
@@ -171,17 +152,15 @@ public class LocalTopicTree {
 
             //if the node has an index, we can just use the index instead of traversing the whole node set
             if (node.getChildrenMap() != null) {
-
                 //Get the exact node by the index
                 final TopicTreeNode matchingChildNode = getIndexForChildNode(topicPart[nextDepth], node);
                 if (matchingChildNode != null) {
-                    traverseTree(matchingChildNode, subscriberAndTopicConsumer, topicPart, depth + 1);
+                    traverse(matchingChildNode, consumer, topicPart, depth + 1);
                 }
-
                 //We also need to check if there is a wildcard node
                 final TopicTreeNode matchingWildcardNode = getIndexForChildNode("+", node);
                 if (matchingWildcardNode != null) {
-                    traverseTree(matchingWildcardNode, subscriberAndTopicConsumer, topicPart, nextDepth);
+                    traverse(matchingWildcardNode, consumer, topicPart, nextDepth);
                 }
                 //We can return without any further recursion because we found all matching nodes
                 return;
@@ -195,7 +174,7 @@ public class LocalTopicTree {
 
             for (final TopicTreeNode childNode : children) {
                 if (childNode != null) {
-                    traverseTree(childNode, subscriberAndTopicConsumer, topicPart, nextDepth);
+                    traverse(childNode, consumer, topicPart, nextDepth);
                 }
             }
         }
@@ -335,7 +314,6 @@ public class LocalTopicTree {
 
     private static @NotNull ImmutableSet<String> createDistinctSubscriberIds(
             final ImmutableSet<SubscriberWithQoS> subscriptionsByFilters) {
-
         final ImmutableSet.Builder<String> builder =
                 ImmutableSet.builderWithExpectedSize(subscriptionsByFilters.size());
         for (final SubscriberWithQoS subscription : subscriptionsByFilters) {
@@ -518,7 +496,7 @@ public class LocalTopicTree {
         try {
             final TopicTreeNode firstSegmentNode = segments.get(segmentKey);
             if (firstSegmentNode != null) {
-                traverseTree(firstSegmentNode, subscriberAndTopicConsumer, topicPart, 0);
+                traverse(firstSegmentNode, subscriberAndTopicConsumer, topicPart, 0);
             }
         } finally {
             lock.unlock();
@@ -533,7 +511,7 @@ public class LocalTopicTree {
             try {
                 final TopicTreeNode firstSegmentNode = segments.get("+");
                 if (firstSegmentNode != null) {
-                    traverseTree(firstSegmentNode, subscriberAndTopicConsumer, topicPart, 0);
+                    traverse(firstSegmentNode, subscriberAndTopicConsumer, topicPart, 0);
                 }
             } finally {
                 wildcardLock.unlock();
@@ -835,30 +813,13 @@ public class LocalTopicTree {
         return subscriberConsumer.getMatchingSubscriber();
     }
 
-    interface SubscriptionsConsumer {
+    private interface SubscriptionsConsumer {
+        void acceptNonRootState(final @NotNull MatchingNodeSubscriptions matchingNodeSubscriptions);
 
-        /**
-         * Processes the subscription information in the nodes of the topic tree.
-         *
-         * @param matchingNodeSubscriptions subscriptions that are stored within the topic tree node.
-         */
-        void acceptNonRootState(@NotNull MatchingNodeSubscriptions matchingNodeSubscriptions);
-
-        /**
-         * Processes the subscription information of the root wildcard subscriptions, i.e. subscriptions to the # topic
-         * filter.
-         *
-         * @param rootWildcardSubscriptions root wildcard subscriptions of the topic tree.
-         */
-        void acceptRootState(@NotNull List<SubscriberWithQoS> rootWildcardSubscriptions);
+        void acceptRootState(final @NotNull List<SubscriberWithQoS> rootWildcardSubscriptions);
     }
 
-    /**
-     * Filters subscription information for the purpose of dispatching the incoming PUBLISH control packet to the client
-     * queues.
-     * Inbound flow.
-     */
-    static class ClientQueueDispatchingSubscriptionInfoFinder implements SubscriptionsConsumer {
+    private static class ClientQueueDispatchingSubscriptionInfoFinder implements SubscriptionsConsumer {
 
         private final @NotNull ImmutableList.Builder<SubscriberWithQoS> subscribersBuilder;
         private final @NotNull ImmutableSet.Builder<String> sharedSubscriptionsBuilder;
@@ -873,10 +834,10 @@ public class LocalTopicTree {
         @Override
         public void acceptNonRootState(final @NotNull MatchingNodeSubscriptions matchingNodeSubscriptions) {
 
-            sharedSubscriptionsBuilder.addAll(matchingNodeSubscriptions.sharedSubscribersMap.keySet());
+            sharedSubscriptionsBuilder.addAll(matchingNodeSubscriptions.sharedSubscribers.keySet());
 
-            if (matchingNodeSubscriptions.nonSharedSubscribersMap != null) {
-                subscribersBuilder.addAll(matchingNodeSubscriptions.nonSharedSubscribersMap.values());
+            if (matchingNodeSubscriptions.nonSharedSubscribers != null) {
+                subscribersBuilder.addAll(matchingNodeSubscriptions.nonSharedSubscribers.values());
             } else if (matchingNodeSubscriptions.nonSharedSubscribersArray != null) {
                 for (final SubscriberWithQoS exactSubscriber : matchingNodeSubscriptions.nonSharedSubscribersArray) {
                     if (exactSubscriber != null) {

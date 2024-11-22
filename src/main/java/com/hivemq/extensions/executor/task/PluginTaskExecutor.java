@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.executor.task;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -86,7 +86,7 @@ public class PluginTaskExecutor {
                 COUNTER.getAndIncrement()));
     }
 
-    @VisibleForTesting
+    
     @PostConstruct
     public void postConstruct() {
         executorService.submit(new PluginTaskExecutorRunnable());

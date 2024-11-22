@@ -18,7 +18,7 @@ package com.hivemq.topics.tree;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.UnmodifiableIterator;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.hivemq.config.RandomId;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.metrics.MetricsHolder;
@@ -38,12 +38,12 @@ import static org.junit.Assert.assertTrue;
 
 public class TestTopicTreeImplEdgeCases {
 
-    private LocalTopicTree topicTree;
+    private TopicTree topicTree;
 
     @Before
     public void setUp() {
         InternalConfig.TOPIC_TREE_MAP_CREATION_THRESHOLD.set(1);
-        topicTree = new LocalTopicTree(new MetricsHolder(new MetricRegistry()));
+        topicTree = new TopicTree(new MetricsHolder(new MetricRegistry()));
     }
 
     @Test
@@ -125,7 +125,7 @@ public class TestTopicTreeImplEdgeCases {
         final Set<SubscriberWithIds> subscribers = topicTree.findTopicSubscribers("/").getSubscribers();
         assertFalse(subscribers.isEmpty());
         assertThat(subscribers,
-                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, FinalInts.NONE)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, Ints.NONE)));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class TestTopicTreeImplEdgeCases {
 
         assertFalse(subscribers2.isEmpty());
         assertThat(subscribers2,
-                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, FinalInts.NONE)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, Ints.NONE)));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class TestTopicTreeImplEdgeCases {
         final Set<SubscriberWithIds> subscribers = topicTree.findTopicSubscribers("/////").getSubscribers();
         assertFalse(subscribers.isEmpty());
         assertThat(subscribers,
-                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, FinalInts.NONE)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, Ints.NONE)));
 
         final Set<SubscriberWithIds> subscribers2 = topicTree.findTopicSubscribers("////").getSubscribers();
         assertTrue(subscribers2.isEmpty());
@@ -160,21 +160,21 @@ public class TestTopicTreeImplEdgeCases {
         final Set<SubscriberWithIds> subscribers = topicTree.findTopicSubscribers("/////").getSubscribers();
         assertFalse(subscribers.isEmpty());
         assertThat(subscribers,
-                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, FinalInts.NONE)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, Ints.NONE)));
 
         topicTree.addTopic("subscriber2", new Topic("+/+/+/+/+/", QoS.AT_MOST_ONCE), (byte) 0, null);
 
         final Set<SubscriberWithIds> subscribers2 = topicTree.findTopicSubscribers("/////").getSubscribers();
         assertFalse(subscribers2.isEmpty());
         assertThat(subscribers2,
-                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, FinalInts.NONE)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, Ints.NONE)));
 
         topicTree.addTopic("subscriber3", new Topic("/+/+/+/+/", QoS.AT_MOST_ONCE), (byte) 0, null);
 
         final Set<SubscriberWithIds> subscribers3 = topicTree.findTopicSubscribers("/////").getSubscribers();
         assertFalse(subscribers3.isEmpty());
         assertThat(subscribers3,
-                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, FinalInts.NONE)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, Ints.NONE)));
 
         assertEquals(3, topicTree.counters.getSubscriptionCounter().getCount());
     }
@@ -188,13 +188,13 @@ public class TestTopicTreeImplEdgeCases {
         final Set<SubscriberWithIds> subscribers = topicTree.findTopicSubscribers("a//b").getSubscribers();
         assertFalse(subscribers.isEmpty());
         assertThat(subscribers,
-                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, FinalInts.NONE)));
+                hasItem(new SubscriberWithIds("subscriber", 0, (byte) 0, null, null, Ints.NONE)));
 
         topicTree.addTopic("subscriber2", new Topic("a/b/+", QoS.AT_MOST_ONCE), (byte) 0, null);
         final Set<SubscriberWithIds> subscribers2 = topicTree.findTopicSubscribers("a/b/").getSubscribers();
         assertFalse(subscribers2.isEmpty());
         assertThat(subscribers2,
-                hasItem(new SubscriberWithIds("subscriber2", 0, (byte) 0, null, null, FinalInts.NONE)));
+                hasItem(new SubscriberWithIds("subscriber2", 0, (byte) 0, null, null, Ints.NONE)));
     }
 
     @Test

@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.local;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.iteration.BucketChunkResult;
@@ -142,7 +142,7 @@ public interface ClientSessionLocalPersistence extends LocalPersistence {
      * @param bucketIndex The index of the bucket in which the client sessions are stored.
      * @return A set of strings containing all client identifiers of the found disconnected client sessions.
      */
-    @VisibleForTesting
+    
     @NotNull Set<@NotNull String> getDisconnectedClients(int bucketIndex);
 
     /**

@@ -16,7 +16,7 @@
 
 package com.hivemq.persistence;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
@@ -48,9 +48,9 @@ public class SingleWriterService {
     private static final int SUBSCRIPTION_QUEUE_INDEX = 2;
     private static final int QUEUED_MESSAGES_QUEUE_INDEX = 3;
     private static final int ATTRIBUTE_STORE_QUEUE_INDEX = 4;
-    @VisibleForTesting
+    
     public final @NotNull ExecutorService @NotNull [] callbackExecutors;
-    @VisibleForTesting
+    
     final @NotNull ScheduledExecutorService checkScheduler;
     private final int persistenceBucketCount;
     private final int threadPoolSize;
@@ -61,7 +61,7 @@ public class SingleWriterService {
     private final @NotNull AtomicLong globalTaskCount = new AtomicLong(0);
     private final @NotNull ProducerQueues @NotNull [] producers = new ProducerQueues[AMOUNT_OF_PRODUCERS];
     private final int amountOfQueues;
-    @VisibleForTesting
+    
     @NotNull ExecutorService singleWriterExecutor;
 
     @Inject
@@ -111,7 +111,7 @@ public class SingleWriterService {
                 TimeUnit.MILLISECONDS);
     }
 
-    @VisibleForTesting
+    
     int validAmountOfQueues(final int processorCount, final int bucketCount) {
         for (int i = processorCount; i < bucketCount; i++) {
             if (bucketCount % i == 0) {

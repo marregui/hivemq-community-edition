@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.local.xodus.clientsession;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.inject.Singleton;
@@ -480,7 +480,7 @@ public class ClientSessionXodusLocalPersistence extends XodusLocalPersistence im
         });
     }
 
-    @VisibleForTesting
+    
     void removeWithTimestamp(final @NotNull String client, final int bucketIndex) {
         final Bucket bucket = buckets[bucketIndex];
         bucket.getEnv().executeInExclusiveTransaction(txn -> {

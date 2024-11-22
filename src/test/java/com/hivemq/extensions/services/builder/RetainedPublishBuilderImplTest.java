@@ -18,7 +18,7 @@ package com.hivemq.extensions.services.builder;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.config.ConfigService;
 import com.hivemq.config.RandomId;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
@@ -38,7 +38,6 @@ import org.junit.Test;
 import util.TestMessageUtil;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -347,7 +346,7 @@ public class RetainedPublishBuilderImplTest {
         }
 
         @Override
-        public FinalInts getSubscriptionIds() {
+        public Ints getSubscriptionIds() {
             return null;
         }
 

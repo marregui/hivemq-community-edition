@@ -43,7 +43,7 @@ import com.hivemq.extensions.services.executor.GlobalManagedExtensionExecutorSer
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.topics.tree.LocalTopicTree;
+import com.hivemq.topics.tree.TopicTree;
 import com.hivemq.persistence.clientsession.ClientSessionSubscriptionPersistence;
 import com.hivemq.persistence.clientsession.callback.SubscriptionResult;
 import org.junit.Before;
@@ -93,7 +93,7 @@ public class SubscriptionStoreImplTest {
     private PluginServiceRateLimitService rateLimitService;
 
     @Mock
-    private LocalTopicTree topicTree;
+    private TopicTree topicTree;
 
     @Mock
     private AsyncIteratorFactory asyncIteratorFactory;

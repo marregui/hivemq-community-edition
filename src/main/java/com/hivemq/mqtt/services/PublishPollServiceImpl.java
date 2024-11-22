@@ -17,7 +17,7 @@ package com.hivemq.mqtt.services;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -142,7 +142,7 @@ public class PublishPollServiceImpl implements PublishPollService {
     @Override
     public void pollNewMessages(final @NotNull String client, final @NotNull Channel channel) {
         final Ids ids = ClientConnection.of(channel).getFreePacketIdRanges();
-        final FinalInts messageIds;
+        final Ints messageIds;
         try {
             messageIds = createMessageIds(ids, pollMessageLimit(channel));
         } catch (final UnavailableIdException e) {
@@ -339,9 +339,9 @@ public class PublishPollServiceImpl implements PublishPollService {
                     // We can't send the qos when the message is queue, because we don't know the which client is will be sent
                     final QoS minQos = QoS.valueOf(Math.min(qos, publish.getOnwardQoS().getQosNumber()));
                     // There can only be one subscription ID for this message, because there are no overlapping shared subscriptions
-                    final FinalInts subscriptionIdentifiers = subscriptionIdentifier != null ?
-                            FinalInts.of(subscriptionIdentifier) :
-                            FinalInts.NONE;
+                    final Ints subscriptionIdentifiers = subscriptionIdentifier != null ?
+                            Ints.of(subscriptionIdentifier) :
+                            Ints.NONE;
                     int packetId = 0;
                     try {
                         if (Objects.requireNonNull(minQos).getQosNumber() > 0) {
@@ -416,9 +416,9 @@ public class PublishPollServiceImpl implements PublishPollService {
         return clientQueuePersistence.removeInFlightMarker(sharedSubscription, uniqueId);
     }
 
-    private @NotNull FinalInts createMessageIds(
+    private @NotNull Ints createMessageIds(
             final @NotNull Ids messageIDPool, final int pollMessageLimit) throws UnavailableIdException {
-        final FinalInts.Builder builder = FinalInts.builder(pollMessageLimit);
+        final Ints.Builder builder = Ints.builder(pollMessageLimit);
         for (int i = 0; i < pollMessageLimit; i++) {
             final int nextId = messageIDPool.lockId();
             builder.add(nextId);

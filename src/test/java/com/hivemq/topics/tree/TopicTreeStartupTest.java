@@ -18,7 +18,7 @@ package com.hivemq.topics.tree;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.metrics.MetricsHolder;
@@ -60,14 +60,14 @@ public class TopicTreeStartupTest {
     SharedSubscriptionService sharedSubscriptionService;
 
 
-    private LocalTopicTree topicTree;
+    private TopicTree topicTree;
     private TopicTreeStartup topicTreeStartup;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        topicTree = new LocalTopicTree(new MetricsHolder(new MetricRegistry()));
+        topicTree = new TopicTree(new MetricsHolder(new MetricRegistry()));
 
         topicTreeStartup = new TopicTreeStartup(topicTree,
                 clientSessionPersistence,
@@ -105,22 +105,22 @@ public class TopicTreeStartupTest {
         final Set<SubscriberWithIds> subscribersForTopic3 = topicTree.findTopicSubscribers("topic3").getSubscribers();
 
         assertThat(subscribersForTopic1,
-                hasItems(new SubscriberWithIds("client1", 1, (byte) 0, null, null, FinalInts.NONE),
-                        new SubscriberWithIds("client2", 1, (byte) 0, null, null, FinalInts.NONE)));
+                hasItems(new SubscriberWithIds("client1", 1, (byte) 0, null, null, Ints.NONE),
+                        new SubscriberWithIds("client2", 1, (byte) 0, null, null, Ints.NONE)));
         assertThat(subscribersForTopic2,
                 hasItems(new SubscriberWithIds("client2",
                         2,
                         SubscriptionFlag.buildFlag(false, false, false),
                         null,
                         null,
-                        FinalInts.NONE)));
+                        Ints.NONE)));
         assertThat(subscribersForTopic3,
                 hasItems(new SubscriberWithIds("client3",
                         0,
                         SubscriptionFlag.buildFlag(false, true, true),
                         null,
                         null,
-                        FinalInts.NONE)));
+                        Ints.NONE)));
     }
 
     @Test

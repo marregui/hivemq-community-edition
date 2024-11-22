@@ -15,7 +15,7 @@
  */
 package com.hivemq.codec.encoder.mqtt5;
 
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.MessageType;
@@ -92,7 +92,7 @@ public class Mqtt5PublishEncoder extends Mqtt5MessageWithUserPropertiesEncoder<P
 
         propertyLength += publish.getUserProperties().encodedLength();
 
-        final FinalInts subscriptionIdentifiers = publish.getSubscriptionIdentifiers();
+        final Ints subscriptionIdentifiers = publish.getSubscriptionIdentifiers();
         if (subscriptionIdentifiers != null) {
             for (int i = 0; i < subscriptionIdentifiers.size(); i++) {
                 propertyLength += variableByteIntegerPropertyEncodedLength(subscriptionIdentifiers.get(i));
@@ -151,7 +151,7 @@ public class Mqtt5PublishEncoder extends Mqtt5MessageWithUserPropertiesEncoder<P
         encodeFixedProperties(publish, out);
         encodeOmissibleProperties(publish, out);
 
-        final FinalInts subscriptionIdentifiers = publish.getSubscriptionIdentifiers();
+        final Ints subscriptionIdentifiers = publish.getSubscriptionIdentifiers();
         if (subscriptionIdentifiers != null) {
             for (int i = 0; i < subscriptionIdentifiers.size(); i++) {
                 encodeVariableByteIntegerProperty(SUBSCRIPTION_IDENTIFIER, subscriptionIdentifiers.get(i), out);

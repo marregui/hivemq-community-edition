@@ -15,7 +15,7 @@
  */
 package com.hivemq.bootstrap;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -248,7 +248,7 @@ public class HiveMQNettyBootstrap {
                 new WriteBufferWaterMark(properties.getLowThresholdBytes(), properties.getHighThresholdBytes()));
     }
 
-    @VisibleForTesting
+    
     public static @NotNull ClientWriteBufferProperties validateWriteBufferProperties(
             @NotNull final ClientWriteBufferProperties writeBufferProperties) {
 

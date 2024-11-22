@@ -16,7 +16,7 @@
 
 package com.hivemq.extensions.classloader;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.collect.ImmutableSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,7 +45,7 @@ public class IsolatedExtensionClassloader extends URLClassLoader {
 
     private static final Logger log = LoggerFactory.getLogger(IsolatedExtensionClassloader.class);
 
-    @VisibleForTesting
+    
     private static final ImmutableSet<String> restrictedPackages = new ImmutableSet.Builder<String>().add(
             // JDK
             "java.", "javax.annotation", "jdk.",

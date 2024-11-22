@@ -54,7 +54,7 @@ public class ShutdownHooks {
         return hooksHaveRun.get();
     }
 
-    @VisibleForTesting
+    
     public @NotNull PriorityQueue<Hook> getShutdownHooks() {
         synchronized (hooks) {
             return hooks;

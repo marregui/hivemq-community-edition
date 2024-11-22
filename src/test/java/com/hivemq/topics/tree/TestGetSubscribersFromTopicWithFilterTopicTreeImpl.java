@@ -16,7 +16,6 @@
 package com.hivemq.topics.tree;
 
 import com.codahale.metrics.MetricRegistry;
-import com.hivemq.topics.tree.LocalTopicTree;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
@@ -38,11 +37,11 @@ import static org.junit.Assert.assertTrue;
 
 public class TestGetSubscribersFromTopicWithFilterTopicTreeImpl {
 
-    private LocalTopicTree topicTree;
+    private TopicTree topicTree;
 
     @Before
     public void setUp() {
-        topicTree = new LocalTopicTree(new MetricsHolder(new MetricRegistry()));
+        topicTree = new TopicTree(new MetricsHolder(new MetricRegistry()));
     }
 
     @Test
@@ -237,7 +236,7 @@ public class TestGetSubscribersFromTopicWithFilterTopicTreeImpl {
     @Test
     public void test_same_subscriber_for_same_topic_with_subscriber_map() throws Exception {
 
-        topicTree = new LocalTopicTree(new MetricsHolder(new MetricRegistry()));
+        topicTree = new TopicTree(new MetricsHolder(new MetricRegistry()));
 
         topicTree.addTopic("subscriber", new Topic("topic", QoS.AT_MOST_ONCE), (byte) 0, null);
         topicTree.addTopic("subscriber", new Topic("topic", QoS.AT_LEAST_ONCE), (byte) 0, null);
@@ -251,7 +250,7 @@ public class TestGetSubscribersFromTopicWithFilterTopicTreeImpl {
     @Test
     public void test_root_level_wildcard_multiple_subscribers_with_wildcard_with_subscriber_map() throws Exception {
 
-        topicTree = new LocalTopicTree(new MetricsHolder(new MetricRegistry()));
+        topicTree = new TopicTree(new MetricsHolder(new MetricRegistry()));
 
         topicTree.addTopic("subscriber", new Topic("#", QoS.AT_MOST_ONCE), (byte) 0, null);
         topicTree.addTopic("subscriber2", new Topic("#", QoS.AT_MOST_ONCE), (byte) 0, null);

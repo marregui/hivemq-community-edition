@@ -16,7 +16,7 @@
 
 package com.hivemq.extensions.loader;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ public class ExtensionLifecycleHandlerImpl implements ExtensionLifecycleHandler 
     private final @NotNull ExecutorService pluginStartStopExecutor;
 
     @Inject
-    @VisibleForTesting
+    
     public ExtensionLifecycleHandlerImpl(
             final @NotNull HiveMQExtensions hiveMQExtensions,
             final @NotNull @PluginStartStop ExecutorService pluginStartStopExecutor) {

@@ -41,13 +41,13 @@ public class TopicTreeStartup {
 
     private static final @NotNull Logger log = LoggerFactory.getLogger(TopicTreeStartup.class);
 
-    private final @NotNull LocalTopicTree topicTree;
+    private final @NotNull TopicTree topicTree;
     private final @NotNull ClientSessionPersistence session;
     private final @NotNull ClientSessionSubscriptionPersistence subscriptions;
 
     @Inject
     TopicTreeStartup(
-            final @NotNull LocalTopicTree topicTree,
+            final @NotNull TopicTree topicTree,
             final @NotNull ClientSessionPersistence session,
             final @NotNull ClientSessionSubscriptionPersistence subscriptions) {
         this.topicTree = topicTree;

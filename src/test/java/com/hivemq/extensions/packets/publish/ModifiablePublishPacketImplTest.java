@@ -17,7 +17,7 @@
 package com.hivemq.extensions.packets.publish;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -64,7 +64,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 1234L);
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -92,7 +92,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -120,7 +120,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -143,7 +143,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -166,7 +166,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -190,7 +190,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -213,7 +213,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -236,7 +236,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -265,7 +265,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -293,7 +293,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -321,7 +321,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -344,7 +344,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -368,7 +368,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -396,7 +396,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -424,7 +424,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -447,7 +447,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -475,7 +475,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -503,7 +503,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -527,7 +527,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -555,7 +555,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -583,7 +583,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -607,7 +607,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -635,7 +635,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -663,7 +663,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -691,7 +691,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -719,7 +719,7 @@ public class ModifiablePublishPacketImplTest {
                 "contentType",
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -747,7 +747,7 @@ public class ModifiablePublishPacketImplTest {
                 "contentType",
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -775,7 +775,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -798,7 +798,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -821,7 +821,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -850,7 +850,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -878,7 +878,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 "responseTopic",
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -906,7 +906,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 "responseTopic",
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -934,7 +934,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -957,7 +957,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -980,7 +980,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -1009,7 +1009,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -1037,7 +1037,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 ByteBuffer.wrap("correlationData".getBytes()),
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -1065,7 +1065,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 ByteBuffer.wrap("correlationData".getBytes()),
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -1093,7 +1093,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -1121,7 +1121,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 System.currentTimeMillis());
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -1146,7 +1146,7 @@ public class ModifiablePublishPacketImplTest {
                 null,
                 null,
                 null,
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of()),
                 1234L);
         final ModifiablePublishPacketImpl modifiablePacket =
@@ -1176,7 +1176,7 @@ public class ModifiablePublishPacketImplTest {
                 "contentType",
                 "responseTopic",
                 ByteBuffer.wrap("correlationData".getBytes()),
-                FinalInts.NONE,
+                Ints.NONE,
                 UserPropertiesImpl.of(ImmutableList.of(new MqttUserProperty("testName", "testValue"))),
                 1234L);
         assertEquals(expectedPacket, copy);
@@ -1189,7 +1189,7 @@ public class ModifiablePublishPacketImplTest {
                 .withNonnullFields("topic", "qos", "subscriptionIdentifiers", "userProperties")
                 .withIgnoredFields("configService", "modified")
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
-                .withPrefabValues(FinalInts.class, FinalInts.NONE, FinalInts.of(123))
+                .withPrefabValues(Ints.class, Ints.NONE, Ints.of(123))
                 .verify();
     }
 }

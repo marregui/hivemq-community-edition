@@ -15,7 +15,7 @@
  */
 package com.hivemq.topics;
 
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.util.Bytes;
@@ -30,10 +30,10 @@ public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
     private final @Nullable String sharedName;
     private final @Nullable String topicFilter; // only present for shared subscription
     private int qos;
-    private @NotNull FinalInts subscriptionIds;
+    private @NotNull Ints subscriptionIds;
 
     public SubscriberWithIds(final @NotNull String subscriber, final int qos, final byte flags) {
-        this(subscriber, qos, flags, null, null, FinalInts.NONE);
+        this(subscriber, qos, flags, null, null, Ints.NONE);
 
     }
 
@@ -43,7 +43,7 @@ public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
             final byte flags,
             final @Nullable String sharedName,
             final @Nullable String topicFilter,
-            final @NotNull FinalInts subscriptionIds) {
+            final @NotNull Ints subscriptionIds) {
         Objects.requireNonNull(subscriber, "Subscriber must not be null");
         this.subscriber = subscriber;
         this.qos = qos;
@@ -61,8 +61,8 @@ public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
                 subscriber.getSharedName(),
                 subscriber.getTopicFilter(),
                 subscriber.getSubscriptionId() != null ?
-                        FinalInts.of(subscriber.getSubscriptionId()) :
-                        FinalInts.NONE);
+                        Ints.of(subscriber.getSubscriptionId()) :
+                        Ints.NONE);
     }
 
     @Override
@@ -86,19 +86,15 @@ public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
         this.qos = qos;
     }
 
-    public byte getFlags() {
-        return flags;
-    }
-
     public @Nullable String getSharedName() {
         return sharedName;
     }
 
-    public @NotNull FinalInts getSubscriptionIds() {
+    public @NotNull Ints getSubscriptionIds() {
         return subscriptionIds;
     }
 
-    public void setSubscriptionIds(final @NotNull FinalInts subscriptionIds) {
+    public void setSubscriptionIds(final @NotNull Ints subscriptionIds) {
         this.subscriptionIds = subscriptionIds;
     }
 

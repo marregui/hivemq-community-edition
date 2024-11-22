@@ -21,7 +21,7 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
 import com.hivemq.mqtt.message.subscribe.Topic;
 import com.hivemq.topics.SubscriberWithQoS;
-import com.hivemq.topics.tree.LocalTopicTree;
+import com.hivemq.topics.tree.TopicTree;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -47,7 +47,7 @@ import static org.mockito.Mockito.when;
 public class SharedSubscriptionServiceTest {
 
     @Mock
-    LocalTopicTree topicTree;
+    TopicTree topicTree;
 
     @Mock
     ClientSessionSubscriptionPersistence subscriptionPersistence;

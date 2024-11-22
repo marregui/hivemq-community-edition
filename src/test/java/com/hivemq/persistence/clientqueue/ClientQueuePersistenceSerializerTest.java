@@ -16,7 +16,7 @@
 package com.hivemq.persistence.clientqueue;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.mqtt.message.Message;
 import com.hivemq.mqtt.message.QoS;
@@ -159,7 +159,7 @@ public class ClientQueuePersistenceSerializerTest {
                 .withContentType("contentType")
                 .withCorrelationData(new byte[]{1, 2, 3})
                 .withPayloadFormatIndicator(Mqtt5PayloadFormatIndicator.UTF_8)
-                .withSubscriptionIdentifiers(FinalInts.of(1, 2, 3))
+                .withSubscriptionIdentifiers(Ints.of(1, 2, 3))
                 .build();
 
         ByteIterable serializedValue = serializer.serializePublishWithoutPacketId(publish, true);

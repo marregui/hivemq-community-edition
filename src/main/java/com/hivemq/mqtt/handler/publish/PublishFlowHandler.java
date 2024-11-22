@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.publish;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
@@ -72,7 +72,7 @@ public class PublishFlowHandler extends ChannelDuplexHandler {
 
     private final @NotNull Map<Integer, Boolean> qos1AlreadySentMap;
 
-    @VisibleForTesting
+    
     @Inject
     public PublishFlowHandler(
             final @NotNull PublishPollService publishPollService,

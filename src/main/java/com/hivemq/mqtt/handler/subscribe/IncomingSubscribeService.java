@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.subscribe;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -121,7 +121,7 @@ public class IncomingSubscribeService {
         this.mqttServerDisconnector = mqttServerDisconnector;
     }
 
-    @VisibleForTesting
+    
     static boolean batch(@NotNull final Set<Topic> topics) {
         return topics.size() >= 2;
     }

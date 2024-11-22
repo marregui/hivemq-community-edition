@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.executor;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.util.concurrent.SettableFuture;
 import com.hivemq.ShutdownHooks;
 import org.jetbrains.annotations.NotNull;
@@ -76,7 +76,7 @@ public class PluginOutputAsyncerImpl implements PluginOutPutAsyncer {
 
         private final @NotNull ScheduledExecutorService scheduledExecutor;
 
-        @VisibleForTesting
+        
         PluginOutputAsyncerShutdownHook(final @NotNull ScheduledExecutorService scheduledExecutor) {
             this.scheduledExecutor = scheduledExecutor;
         }

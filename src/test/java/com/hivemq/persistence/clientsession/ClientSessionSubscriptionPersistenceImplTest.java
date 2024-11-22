@@ -24,7 +24,7 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5RetainHandling;
 import com.hivemq.mqtt.message.subscribe.Topic;
 import com.hivemq.mqtt.services.PublishPollService;
-import com.hivemq.topics.tree.LocalTopicTree;
+import com.hivemq.topics.tree.TopicTree;
 import com.hivemq.persistence.SingleWriterService;
 import com.hivemq.persistence.clientsession.callback.SubscriptionResult;
 import com.hivemq.persistence.connection.ConnectionPersistence;
@@ -66,7 +66,7 @@ public class ClientSessionSubscriptionPersistenceImplTest {
     private ClientSessionSubscriptionLocalPersistence localPersistence;
 
     @Mock
-    private LocalTopicTree topicTree;
+    private TopicTree topicTree;
 
     @Mock
     private SharedSubscriptionService sharedSubscriptionService;

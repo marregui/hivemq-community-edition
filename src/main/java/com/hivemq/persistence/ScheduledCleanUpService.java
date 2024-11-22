@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -120,7 +120,7 @@ public class ScheduledCleanUpService {
         }
     }
 
-    @VisibleForTesting
+    
     synchronized void scheduleCleanUpTask() {
         if (scheduledExecutorService.isShutdown()) {
             return;
@@ -154,7 +154,7 @@ public class ScheduledCleanUpService {
         }
     }
 
-    @VisibleForTesting
+    
     static final class CleanUpTask implements Callable<Void> {
 
         private final @NotNull ScheduledCleanUpService scheduledCleanUpService;
@@ -163,7 +163,7 @@ public class ScheduledCleanUpService {
         private final int bucketIndex;
         private final int persistenceIndex;
 
-        @VisibleForTesting
+        
         CleanUpTask(
                 @NotNull final ScheduledCleanUpService scheduledCleanUpService,
                 final @NotNull ListeningScheduledExecutorService scheduledExecutorService,

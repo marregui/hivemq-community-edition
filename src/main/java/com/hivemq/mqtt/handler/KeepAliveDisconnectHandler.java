@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import io.netty.channel.Channel;
@@ -109,7 +109,7 @@ public class KeepAliveDisconnectHandler extends ChannelInboundHandlerAdapter {
         ctx.fireChannelReadComplete();
     }
 
-    @VisibleForTesting
+    
     void initialize(final @NotNull Channel channel) {
         //only initialize of it's not initialized
         if (state > NOT_INITIATED) {
@@ -123,7 +123,7 @@ public class KeepAliveDisconnectHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
-    @VisibleForTesting
+    
     long ticksInNanos() {
         return System.nanoTime();
     }
@@ -137,7 +137,7 @@ public class KeepAliveDisconnectHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
-    @VisibleForTesting
+    
     public long getReaderIdleTimeNanos() {
         return readerIdleTimeNanos;
     }

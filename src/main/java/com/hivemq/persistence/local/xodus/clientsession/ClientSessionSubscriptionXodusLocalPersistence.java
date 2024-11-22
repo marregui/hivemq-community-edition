@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.local.xodus.clientsession;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Singleton;
@@ -64,7 +64,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
     private static final String PERSISTENCE_NAME = "client_session_subscriptions";
     public static final String PERSISTENCE_VERSION = "040000";
 
-    @VisibleForTesting
+    
     final @NotNull ClientSessionSubscriptionXodusSerializer serializer;
 
     private final AtomicLong nextId = new AtomicLong();
@@ -358,7 +358,7 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
         cleanDuplicateEntries(bucket);
     }
 
-    @VisibleForTesting
+    
     void cleanDuplicateEntries(final int bucketIndex) {
 
         final Bucket bucket = buckets[bucketIndex];

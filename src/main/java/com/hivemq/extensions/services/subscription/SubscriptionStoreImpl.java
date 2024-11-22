@@ -48,7 +48,7 @@ import com.hivemq.extensions.services.PluginServiceRateLimitService;
 import com.hivemq.extensions.services.executor.GlobalManagedExtensionExecutorService;
 import com.hivemq.extensions.services.general.IterationContextImpl;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.topics.tree.LocalTopicTree;
+import com.hivemq.topics.tree.TopicTree;
 import com.hivemq.persistence.clientsession.ClientSessionSubscriptionPersistence;
 import com.hivemq.persistence.clientsession.callback.SubscriptionResult;
 import com.hivemq.util.Topics;
@@ -75,7 +75,7 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
 
     private final @NotNull ClientSessionSubscriptionPersistence subscriptionPersistence;
     private final @NotNull PluginServiceRateLimitService rateLimitService;
-    private final @NotNull LocalTopicTree topicTree;
+    private final @NotNull TopicTree topicTree;
     private final @NotNull GlobalManagedExtensionExecutorService managedExtensionExecutorService;
     private final @NotNull AsyncIteratorFactory asyncIteratorFactory;
 
@@ -83,7 +83,7 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
     public SubscriptionStoreImpl(
             final @NotNull ClientSessionSubscriptionPersistence subscriptionPersistence,
             final @NotNull PluginServiceRateLimitService rateLimitService,
-            final @NotNull LocalTopicTree topicTree,
+            final @NotNull TopicTree topicTree,
             final @NotNull GlobalManagedExtensionExecutorService managedExtensionExecutorService,
             final @NotNull AsyncIteratorFactory asyncIteratorFactory) {
         this.subscriptionPersistence = subscriptionPersistence;

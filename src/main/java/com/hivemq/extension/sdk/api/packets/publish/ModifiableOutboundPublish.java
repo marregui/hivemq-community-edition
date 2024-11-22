@@ -17,7 +17,7 @@
 package com.hivemq.extension.sdk.api.packets.publish;
 
 
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.interceptor.publish.PublishInboundInterceptor;
@@ -131,7 +131,7 @@ public interface ModifiableOutboundPublish extends PublishPacket {
      * @throws NullPointerException If one ore more of the entries are null.
      * @since 4.2.0, CE 2020.1
      */
-    void setSubscriptionIds(@NotNull FinalInts subscriptionIds);
+    void setSubscriptionIds(@NotNull Ints subscriptionIds);
 
     /**
      * Get the modifiable {@link UserProperties} of the PUBLISH packet.

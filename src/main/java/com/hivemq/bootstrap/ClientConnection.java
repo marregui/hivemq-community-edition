@@ -37,7 +37,7 @@ public class ClientConnection extends Connection {
     private boolean incomingPublishesDefaultFailedSkipRest;
     private boolean inFlightMessagesSent;
 
-    @VisibleForTesting
+    
     protected ClientConnection(
             final @NotNull Channel channel,
             final @NotNull PublishFlushHandler publishFlushHandler,

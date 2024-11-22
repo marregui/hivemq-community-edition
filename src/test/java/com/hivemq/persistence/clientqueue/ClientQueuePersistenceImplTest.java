@@ -17,7 +17,7 @@ package com.hivemq.persistence.clientqueue;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.config.MqttConfigService;
@@ -26,7 +26,7 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.message.publish.PUBLISHFactory;
 import com.hivemq.mqtt.services.PublishPollService;
-import com.hivemq.topics.tree.LocalTopicTree;
+import com.hivemq.topics.tree.TopicTree;
 import com.hivemq.persistence.SingleWriterService;
 import com.hivemq.persistence.clientsession.ClientSession;
 import com.hivemq.persistence.connection.ConnectionPersistence;
@@ -77,7 +77,7 @@ public class ClientQueuePersistenceImplTest {
     ClientSessionLocalPersistence clientSessionLocalPersistence;
 
     @Mock
-    LocalTopicTree topicTree;
+    TopicTree topicTree;
 
     @Mock
     private ConnectionPersistence connectionPersistence;
@@ -225,13 +225,13 @@ public class ClientQueuePersistenceImplTest {
 
         when(localPersistence.readNew(anyString(),
                 anyBoolean(),
-                any(FinalInts.class),
+                any(Ints.class),
                 anyLong(),
                 anyInt())).thenReturn(ImmutableList.of(createPublish(1, QoS.AT_MOST_ONCE, "topic"),
                 createPublish(2, QoS.AT_LEAST_ONCE, "topic")));
 
         final ImmutableList<PUBLISH> publishes =
-                clientQueuePersistence.readNew("client", false, FinalInts.of(1, 2), 1000).get();
+                clientQueuePersistence.readNew("client", false, Ints.of(1, 2), 1000).get();
 
         assertEquals(2, publishes.size());
 

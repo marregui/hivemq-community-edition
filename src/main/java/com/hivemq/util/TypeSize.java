@@ -51,7 +51,7 @@ public class TypeSize {
         return size;
     }
 
-    public static int immutableIntArraySize(final @Nullable FinalInts array) {
+    public static int immutableIntArraySize(final @Nullable Ints array) {
         if (array == null) {
             return 0;
         }

@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.message.publish;
 
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -85,7 +85,7 @@ public class PUBLISHFactory {
         private @Nullable String responseTopic;
         private @Nullable byte[] correlationData;
         private boolean isNewTopicAlias;
-        private @Nullable FinalInts subscriptionIdentifiers;
+        private @Nullable Ints subscriptionIdentifiers;
         private @NotNull Mqtt5UserProperties userProperties = Mqtt5UserProperties.NO_USER_PROPERTIES;
         private int packetIdentifier;
         private long publishId = PUBLISH.NO_PUBLISH_ID_SET;
@@ -207,7 +207,7 @@ public class PUBLISHFactory {
             return this;
         }
 
-        public @NotNull Mqtt5Builder withSubscriptionIdentifiers(final @Nullable FinalInts subscriptionIdentifiers) {
+        public @NotNull Mqtt5Builder withSubscriptionIdentifiers(final @Nullable Ints subscriptionIdentifiers) {
             this.subscriptionIdentifiers = subscriptionIdentifiers;
             return this;
         }

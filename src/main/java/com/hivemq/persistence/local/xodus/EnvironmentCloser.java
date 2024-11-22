@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.local.xodus;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import org.jetbrains.annotations.NotNull;
 import jetbrains.exodus.ExodusException;
 import jetbrains.exodus.env.Environment;
@@ -125,7 +125,7 @@ public class EnvironmentCloser {
         }
     }
 
-    @VisibleForTesting
+    
     int getTryNo() {
         return tryNo;
     }

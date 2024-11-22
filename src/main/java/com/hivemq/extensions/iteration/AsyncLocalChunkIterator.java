@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.iteration;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -108,7 +108,7 @@ public class AsyncLocalChunkIterator<V> implements AsyncIterator<V> {
     }
 
     @NotNull
-    @VisibleForTesting
+    
     CompletableFuture<Void> getFetchFuture() {
         return fetchFuture;
     }

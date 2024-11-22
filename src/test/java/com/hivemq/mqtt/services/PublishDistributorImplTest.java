@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.services;
 
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.hivemq.config.MqttConfigService;
@@ -88,7 +88,7 @@ public class PublishDistributorImplTest {
                 0,
                 false,
                 false,
-                FinalInts.of(1)).get();
+                Ints.of(1)).get();
 
         assertEquals(PublishStatus.NOT_CONNECTED, status);
 
@@ -103,7 +103,7 @@ public class PublishDistributorImplTest {
                 0,
                 false,
                 false,
-                FinalInts.of(1)).get();
+                Ints.of(1)).get();
 
         assertEquals(PublishStatus.NOT_CONNECTED, status);
     }
@@ -123,7 +123,7 @@ public class PublishDistributorImplTest {
                 0,
                 false,
                 false,
-                FinalInts.of(1)).get();
+                Ints.of(1)).get();
 
         verify(clientQueuePersistence).add(eq("client"), eq(false), any(PUBLISH.class), anyBoolean(), anyLong());
         assertEquals(PublishStatus.DELIVERED, status);
@@ -144,7 +144,7 @@ public class PublishDistributorImplTest {
                 0,
                 false,
                 false,
-                FinalInts.of(1)).get();
+                Ints.of(1)).get();
 
         verify(clientQueuePersistence).add(eq("client"), eq(false), any(PUBLISH.class), anyBoolean(), anyLong());
         assertEquals(PublishStatus.FAILED, status);
@@ -164,7 +164,7 @@ public class PublishDistributorImplTest {
                 0,
                 true,
                 false,
-                FinalInts.of(1)).get();
+                Ints.of(1)).get();
 
         verify(clientQueuePersistence).add(eq("group/topic"), eq(true), any(PUBLISH.class), anyBoolean(), anyLong());
         assertEquals(PublishStatus.DELIVERED, status);

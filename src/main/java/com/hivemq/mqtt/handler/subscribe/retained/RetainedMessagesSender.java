@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.handler.subscribe.retained;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -163,12 +163,12 @@ public class RetainedMessagesSender {
 
                 final QoS qos = QoS.getMinQoS(subscribedTopic.getQoS(), retainedMessage.getQos());
 
-                final FinalInts subscriptionIdentifiers;
+                final Ints subscriptionIdentifiers;
 
                 if (subscribedTopic.getSubscriptionIdentifier() != null) {
-                    subscriptionIdentifiers = FinalInts.of(subscribedTopic.getSubscriptionIdentifier());
+                    subscriptionIdentifiers = Ints.of(subscribedTopic.getSubscriptionIdentifier());
                 } else {
-                    subscriptionIdentifiers = FinalInts.NONE;
+                    subscriptionIdentifiers = Ints.NONE;
                 }
 
                 final PUBLISHFactory.Mqtt5Builder publishBuilder =

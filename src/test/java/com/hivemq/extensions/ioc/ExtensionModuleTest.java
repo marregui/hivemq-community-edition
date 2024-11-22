@@ -51,7 +51,7 @@ import com.hivemq.mqtt.message.dropping.MessageDroppedService;
 import com.hivemq.mqtt.services.InternalPublishService;
 import com.hivemq.mqtt.services.PublishDistributor;
 import com.hivemq.mqtt.services.PublishPollService;
-import com.hivemq.topics.tree.LocalTopicTree;
+import com.hivemq.topics.tree.TopicTree;
 import com.hivemq.persistence.clientqueue.ClientQueuePersistence;
 import com.hivemq.persistence.clientsession.ClientSessionPersistence;
 import com.hivemq.persistence.clientsession.ClientSessionSubscriptionPersistence;
@@ -106,7 +106,7 @@ public class ExtensionModuleTest {
                 bind(PublishPayloadPersistence.class).toInstance(mock(PublishPayloadPersistence.class));
                 bind(ClientSessionPersistence.class).toInstance(mock(ClientSessionPersistence.class));
                 bind(PublishDistributor.class).toInstance(mock(PublishDistributor.class));
-                bind(LocalTopicTree.class).toInstance(mock(LocalTopicTree.class));
+                bind(TopicTree.class).toInstance(mock(TopicTree.class));
                 bind(IncomingPublishService.class).toInstance(mock(IncomingPublishService.class));
                 bind(RetainedMessagePersistence.class).toInstance(mock(RetainedMessagePersistence.class));
                 bind(ListeningExecutorService.class).annotatedWith(Persistence.class)

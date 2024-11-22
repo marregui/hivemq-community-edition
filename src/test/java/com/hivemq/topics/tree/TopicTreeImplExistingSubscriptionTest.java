@@ -20,7 +20,6 @@ import com.hivemq.config.InternalConfig;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.topics.tree.LocalTopicTree;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
@@ -31,13 +30,13 @@ import static org.junit.Assert.assertTrue;
 
 public class TopicTreeImplExistingSubscriptionTest {
 
-    private LocalTopicTree topicTree;
+    private TopicTree topicTree;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         InternalConfig.TOPIC_TREE_MAP_CREATION_THRESHOLD.set(1);
-        topicTree = new LocalTopicTree(new MetricsHolder(new MetricRegistry()));
+        topicTree = new TopicTree(new MetricsHolder(new MetricRegistry()));
 
     }
 

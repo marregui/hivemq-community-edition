@@ -36,7 +36,7 @@ import com.hivemq.mqtt.message.subscribe.Topic;
 import com.hivemq.mqtt.services.PublishPollService;
 import com.hivemq.topics.SubscriptionFlag;
 import com.hivemq.topics.TopicFilter;
-import com.hivemq.topics.tree.LocalTopicTree;
+import com.hivemq.topics.tree.TopicTree;
 import com.hivemq.persistence.AbstractPersistence;
 import com.hivemq.persistence.clientsession.callback.SubscriptionResult;
 import com.hivemq.persistence.connection.ConnectionPersistence;
@@ -61,7 +61,7 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
     private static final Logger log = LoggerFactory.getLogger(ClientSessionSubscriptionPersistenceImpl.class);
 
     private final @NotNull ClientSessionSubscriptionLocalPersistence localPersistence;
-    private final @NotNull LocalTopicTree topicTree;
+    private final @NotNull TopicTree topicTree;
     private final @NotNull SharedSubscriptionService sharedSubscriptionService;
     private final @NotNull ConnectionPersistence connectionPersistence;
     private final @NotNull ProducerQueues singleWriter;
@@ -73,7 +73,7 @@ public class ClientSessionSubscriptionPersistenceImpl extends AbstractPersistenc
     @Inject
     ClientSessionSubscriptionPersistenceImpl(
             final @NotNull ClientSessionSubscriptionLocalPersistence localPersistence,
-            final @NotNull LocalTopicTree topicTree,
+            final @NotNull TopicTree topicTree,
             final @NotNull SharedSubscriptionService sharedSubscriptionService,
             final @NotNull SingleWriterService singleWriterService,
             final @NotNull ConnectionPersistence connectionPersistence,

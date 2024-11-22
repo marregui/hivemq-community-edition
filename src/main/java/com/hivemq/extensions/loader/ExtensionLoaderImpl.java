@@ -16,7 +16,7 @@
 
 package com.hivemq.extensions.loader;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
@@ -61,7 +61,7 @@ public class ExtensionLoaderImpl implements ExtensionLoader {
     private final @NotNull ExtensionStaticInitializer staticInitializer;
 
     @Inject
-    @VisibleForTesting
+    
     public ExtensionLoaderImpl(
             final @NotNull ClassServiceLoader serviceLoader,
             final @NotNull HiveMQExtensions hiveMQExtensions,
@@ -107,7 +107,7 @@ public class ExtensionLoaderImpl implements ExtensionLoader {
         return extensions.build();
     }
 
-    @VisibleForTesting
+    
     @Override
     public @Nullable HiveMQExtensionEvent processSingleExtensionFolder(final @NotNull Path extensionFolder) {
         final Optional<HiveMQExtensionEntity> xmlEntityOptional =
@@ -177,7 +177,7 @@ public class ExtensionLoaderImpl implements ExtensionLoader {
                 false);
     }
 
-    @VisibleForTesting
+    
     @Nullable HiveMQExtension loadSingleExtension(
             final @NotNull Path extensionFolder, final @NotNull HiveMQExtensionEntity xmlEntity) {
         final ImmutableList.Builder<Path> jarPaths = ImmutableList.builder();
@@ -242,7 +242,7 @@ public class ExtensionLoaderImpl implements ExtensionLoader {
         return null;
     }
 
-    @VisibleForTesting
+    
     @NotNull Optional<Class<? extends ExtensionMain>> loadFromUrls(
             final @NotNull Collection<URL> urls, final @NotNull String extensionId) {
         Objects.requireNonNull(urls, "urls must not be null");

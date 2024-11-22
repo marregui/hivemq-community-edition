@@ -20,8 +20,6 @@ import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.subscribe.Topic;
 import com.hivemq.topics.SubscriberWithQoS;
-import com.hivemq.topics.tree.LocalTopicTree;
-import com.hivemq.topics.tree.TopicTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
@@ -35,13 +33,13 @@ import static org.junit.Assert.assertThat;
 @SuppressWarnings("Duplicates")
 public class TestRemoveSubscriberFromTopicInTopicTreeImpl {
 
-    private LocalTopicTree topicTree;
+    private TopicTree topicTree;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         TOPIC_TREE_MAP_CREATION_THRESHOLD.set(1);
-        topicTree = new LocalTopicTree(new MetricsHolder(new MetricRegistry()));
+        topicTree = new TopicTree(new MetricsHolder(new MetricRegistry()));
 
     }
 
@@ -126,8 +124,8 @@ public class TestRemoveSubscriberFromTopicInTopicTreeImpl {
         topicTree.addTopic("subscriber", new Topic("my/topic/subscription", QoS.AT_MOST_ONCE), (byte) 0, null);
 
         assertEquals(1, topicTree.segments.size());
-        assertEquals(1, LocalTopicTree.getChildrenCount(topicTree.segments.get("my")));
-        assertEquals(1, LocalTopicTree.getChildrenCount(topicTree.segments.get("my").getChildren()[0]));
+        assertEquals(1, TopicTree.getChildrenCount(topicTree.segments.get("my")));
+        assertEquals(1, TopicTree.getChildrenCount(topicTree.segments.get("my").getChildren()[0]));
         assertEquals(1,
                 topicTree.segments.get("my").getChildren()[0].getChildren()[0].exactSubscriptions.getSubscriberCount());
 
@@ -142,8 +140,8 @@ public class TestRemoveSubscriberFromTopicInTopicTreeImpl {
         topicTree.addTopic("subscriber", new Topic("my/topic/subscription", QoS.AT_MOST_ONCE), (byte) 0, null);
 
         assertEquals(1, topicTree.segments.size());
-        assertEquals(1, LocalTopicTree.getChildrenCount(topicTree.segments.get("my").getChildren()[0]));
-        assertEquals(1, LocalTopicTree.getChildrenCount(topicTree.segments.get("my").getChildren()[0]));
+        assertEquals(1, TopicTree.getChildrenCount(topicTree.segments.get("my").getChildren()[0]));
+        assertEquals(1, TopicTree.getChildrenCount(topicTree.segments.get("my").getChildren()[0]));
         assertEquals(1,
                 topicTree.segments.get("my").getChildren()[0].getChildren()[0].exactSubscriptions.getSubscriberCount());
 
@@ -151,8 +149,8 @@ public class TestRemoveSubscriberFromTopicInTopicTreeImpl {
 
         //Nothing should happen
         assertEquals(1, topicTree.segments.size());
-        assertEquals(1, LocalTopicTree.getChildrenCount(topicTree.segments.get("my")));
-        assertEquals(1, LocalTopicTree.getChildrenCount(topicTree.segments.get("my").getChildren()[0]));
+        assertEquals(1, TopicTree.getChildrenCount(topicTree.segments.get("my")));
+        assertEquals(1, TopicTree.getChildrenCount(topicTree.segments.get("my").getChildren()[0]));
         assertEquals(1,
                 topicTree.segments.get("my").getChildren()[0].getChildren()[0].exactSubscriptions.getSubscriberCount());
     }
@@ -163,7 +161,7 @@ public class TestRemoveSubscriberFromTopicInTopicTreeImpl {
         topicTree.addTopic("subscriber2", new Topic("my/second", QoS.AT_MOST_ONCE), (byte) 0, null);
 
         assertEquals(1, topicTree.segments.size());
-        assertEquals(2, LocalTopicTree.getChildrenCount(topicTree.segments.get("my")));
+        assertEquals(2, TopicTree.getChildrenCount(topicTree.segments.get("my")));
         assertEquals(1, topicTree.segments.get("my").getChildren()[0].exactSubscriptions.getSubscriberCount());
 
         topicTree.removeSubscriber("subscriber", "my/topic", null);
@@ -182,14 +180,14 @@ public class TestRemoveSubscriberFromTopicInTopicTreeImpl {
         topicTree.addTopic("subscriber", new Topic("my/topic", QoS.AT_MOST_ONCE), (byte) 0, null);
 
         assertEquals(1, topicTree.segments.size());
-        assertEquals(1, LocalTopicTree.getChildrenCount(topicTree.segments.get("my")));
+        assertEquals(1, TopicTree.getChildrenCount(topicTree.segments.get("my")));
         assertEquals(1, topicTree.segments.get("my").getChildren()[0].exactSubscriptions.getSubscriberCount());
 
         topicTree.removeSubscriber("subscriber2", "my/topic", null);
 
         //Nothing changed
         assertEquals(1, topicTree.segments.size());
-        assertEquals(1, LocalTopicTree.getChildrenCount(topicTree.segments.get("my")));
+        assertEquals(1, TopicTree.getChildrenCount(topicTree.segments.get("my")));
         assertEquals(1, topicTree.segments.get("my").getChildren()[0].exactSubscriptions.getSubscriberCount());
     }
 
@@ -226,7 +224,7 @@ public class TestRemoveSubscriberFromTopicInTopicTreeImpl {
         topicTree.addTopic("subscriber2", new Topic("my/second/#", QoS.AT_MOST_ONCE), (byte) 0, null);
 
         assertEquals(1, topicTree.segments.size());
-        assertEquals(2, LocalTopicTree.getChildrenCount(topicTree.segments.get("my")));
+        assertEquals(2, TopicTree.getChildrenCount(topicTree.segments.get("my")));
         assertEquals(1, topicTree.segments.get("my").getChildren()[0].wildcardSubscriptions.getSubscriberCount());
 
         topicTree.removeSubscriber("subscriber", "my/topic/#", null);
@@ -234,7 +232,7 @@ public class TestRemoveSubscriberFromTopicInTopicTreeImpl {
         //The root node children are not deleted because there are subscribers left
         assertEquals(1, topicTree.segments.size());
         //The reference for the first subnode was deleted because there are no subscribers left on this path
-        assertEquals(1, LocalTopicTree.getChildrenCount(topicTree.segments.get("my")));
+        assertEquals(1, TopicTree.getChildrenCount(topicTree.segments.get("my")));
         //The second node still has a subscriber
         assertThat(topicTree.segments.get("my").getChildren()[1].wildcardSubscriptions.getSubscribers(),
                 hasItem(new SubscriberWithQoS("subscriber2", 0, (byte) 0, null, null, null)));
@@ -245,14 +243,14 @@ public class TestRemoveSubscriberFromTopicInTopicTreeImpl {
         topicTree.addTopic("subscriber", new Topic("my/topic/#", QoS.AT_MOST_ONCE), (byte) 0, null);
 
         assertEquals(1, topicTree.segments.size());
-        assertEquals(1, LocalTopicTree.getChildrenCount(topicTree.segments.get("my")));
+        assertEquals(1, TopicTree.getChildrenCount(topicTree.segments.get("my")));
         assertEquals(1, topicTree.segments.get("my").getChildren()[0].wildcardSubscriptions.getSubscriberCount());
 
         topicTree.removeSubscriber("subscriber2", "my/topic/#", null);
 
         //Nothing changed
         assertEquals(1, topicTree.segments.size());
-        assertEquals(1, LocalTopicTree.getChildrenCount(topicTree.segments.get("my")));
+        assertEquals(1, TopicTree.getChildrenCount(topicTree.segments.get("my")));
         assertEquals(1, topicTree.segments.get("my").getChildren()[0].wildcardSubscriptions.getSubscriberCount());
     }
 

@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.auth;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;
@@ -42,7 +42,7 @@ public class AuthInProgressMessageHandler extends ChannelInboundHandlerAdapter {
 
     private final @NotNull MqttConnacker connacker;
 
-    @VisibleForTesting
+    
     @Inject
     public AuthInProgressMessageHandler(final @NotNull MqttConnacker connacker) {
         this.connacker = connacker;

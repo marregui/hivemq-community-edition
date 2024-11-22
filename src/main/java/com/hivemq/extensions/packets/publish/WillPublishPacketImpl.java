@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.packets.publish;
 
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,7 +64,7 @@ public class WillPublishPacketImpl extends PublishPacketImpl implements WillPubl
                 contentType,
                 responseTopic,
                 correlationData,
-                FinalInts.NONE,
+                Ints.NONE,
                 userProperties,
                 timestamp);
         this.willDelay = willDelay;

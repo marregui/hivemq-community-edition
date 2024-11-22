@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.packets.publish;
 
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,7 +49,7 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
     @Nullable String contentType;
     @Nullable String responseTopic;
     @Nullable ByteBuffer correlationData;
-    final @NotNull FinalInts subscriptionIdentifiers;
+    final @NotNull Ints subscriptionIdentifiers;
     final @NotNull ModifiableUserPropertiesImpl userProperties;
     final long timestamp;
 
@@ -250,7 +250,7 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
     }
 
     @Override
-    public @NotNull FinalInts getSubscriptionIds() {
+    public @NotNull Ints getSubscriptionIds() {
         return subscriptionIdentifiers;
     }
 

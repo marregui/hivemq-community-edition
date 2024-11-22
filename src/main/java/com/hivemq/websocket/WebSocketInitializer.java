@@ -15,7 +15,7 @@
  */
 package com.hivemq.websocket;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.base.Joiner;
 import com.hivemq.config.entity.WebsocketListener;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +64,7 @@ public class WebSocketInitializer {
                 .addAfter(WEBSOCKET_TEXT_FRAME_HANDLER, MQTT_WEBSOCKET_ENCODER, new MQTTWebsocketEncoder());
     }
 
-    @VisibleForTesting
+    
     @NotNull String getSubprotocolString() {
         return Joiner.on(",").join(websocketListener.getSubprotocols());
     }

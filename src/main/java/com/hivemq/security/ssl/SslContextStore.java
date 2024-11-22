@@ -15,7 +15,7 @@
  */
 package com.hivemq.security.ssl;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.hash.Funnel;
 import com.google.common.hash.Funnels;
 import com.google.common.hash.HashCode;
@@ -87,7 +87,7 @@ public class SslContextStore {
         });
     }
 
-    @VisibleForTesting
+    
     static @NotNull HashCode hashKeystoreAndTruststore(final @NotNull Tls tls) throws IOException {
         try {
             //noinspection UnstableApiUsage,deprecation
@@ -97,7 +97,7 @@ public class SslContextStore {
         }
     }
 
-    @VisibleForTesting
+    
     final class SslContextFirstTimeRunnable implements Runnable {
 
         private final @NotNull Tls tls;
@@ -126,7 +126,7 @@ public class SslContextStore {
         }
     }
 
-    @VisibleForTesting
+    
     final class SslContextScheduledRunnable implements Runnable {
 
         private final @NotNull Tls tls;

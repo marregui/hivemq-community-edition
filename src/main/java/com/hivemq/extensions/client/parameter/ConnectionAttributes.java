@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.client.parameter;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.config.InternalConfig;
@@ -78,7 +78,7 @@ public class ConnectionAttributes {
         return clientConnectionContext.setConnectionAttributesIfAbsent(new ConnectionAttributes(maxValueSizeBytes));
     }
 
-    @VisibleForTesting
+    
     ConnectionAttributes(final int maxValueSizeBytes) {
         this.maxValueSizeBytes = maxValueSizeBytes;
     }

@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.handler;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -84,7 +84,7 @@ public class ClientLifecycleEventHandler extends SimpleChannelInboundHandler<CON
     private final @NotNull PluginTaskExecutorService pluginTaskExecutorService;
     private final @NotNull HiveMQExtensions hiveMQExtensions;
 
-    @VisibleForTesting
+    
     @Nullable ClientLifecycleEventListenerProviderInput providerInput;
 
     @Inject

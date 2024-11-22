@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.handler;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.inject.Inject;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
@@ -75,11 +75,11 @@ import static com.hivemq.bootstrap.netty.ChannelHandlerNames.MQTT_MESSAGE_DECODE
 @Singleton
 public class PluginAuthenticatorServiceImpl implements PluginAuthenticatorService {
 
-    @VisibleForTesting
+    
     static final String CONNACK_BAD_AUTHENTICATION_METHOD_LOG_STATEMENT = "Client with IP {} sent AUTH packet " +
             "with a different authentication method than in the CONNECT packet. Disconnecting client.";
 
-    @VisibleForTesting
+    
     static final String DISCONNECT_BAD_AUTHENTICATION_METHOD_LOG_STATEMENT = "Client with IP {} sent AUTH packet " +
             "with a different authentication method than in the CONNECT packet. Disconnecting client.";
 

@@ -15,12 +15,12 @@
  */
 package com.hivemq.persistence.clientqueue;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.config.MqttConfigService;
@@ -93,7 +93,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
     // this caches the lower bound for a publish without packet-id,
     // the cached index is guaranteed to be lower or equal to the index
     //so it is safe to seek to this index without missing a publish without packet-id
-    @VisibleForTesting
+    
     final @NotNull Cache<String, Long> sharedSubLastPacketWithoutIdCache;
 
     @Inject
@@ -484,7 +484,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
     /**
      * @param size the amount of bytes the currently used qos 0 memory will be increased by. May be negative.
      */
-    @VisibleForTesting
+    
     void increaseClientQos0MessagesMemory(final @NotNull Key key, final int size) {
         if (key.isShared()) {
             return;
@@ -596,7 +596,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
     public @NotNull ImmutableList<PUBLISH> readNew(
             final @NotNull String queueId,
             final boolean shared,
-            final @NotNull FinalInts packetIds,
+            final @NotNull Ints packetIds,
             final long bytesLimit,
             final int bucketIndex) {
         Objects.requireNonNull(queueId, "Queue ID must not be null");
@@ -1151,7 +1151,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
         boolean nextEntry();
     }
 
-    @VisibleForTesting
+    
     public @NotNull ImmutableList<ClientQueueEntry> getAll(
             final @NotNull String queueId, final boolean shared, final int bucketIndex) {
         Objects.requireNonNull(queueId, "Queue id must not be null");

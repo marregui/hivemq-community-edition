@@ -17,7 +17,7 @@ package com.hivemq.persistence.clientqueue;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.bootstrap.ClientConnection;
@@ -32,7 +32,7 @@ import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.message.pubrel.PUBREL;
 import com.hivemq.mqtt.services.PublishPollService;
 import com.hivemq.topics.SubscriberWithQoS;
-import com.hivemq.topics.tree.LocalTopicTree;
+import com.hivemq.topics.tree.TopicTree;
 import com.hivemq.persistence.AbstractPersistence;
 import com.hivemq.persistence.clientsession.ClientSession;
 import com.hivemq.persistence.clientsession.SharedSubscriptionService;
@@ -53,7 +53,7 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
     private final @NotNull ProducerQueues singleWriter;
     private final @NotNull MqttConfigService mqttConfigService;
     private final @NotNull ClientSessionLocalPersistence clientSessionLocalPersistence;
-    private final @NotNull LocalTopicTree topicTree;
+    private final @NotNull TopicTree topicTree;
     private final @NotNull ConnectionPersistence connectionPersistence;
     private final @NotNull PublishPollService publishPollService;
 
@@ -63,7 +63,7 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
             final @NotNull SingleWriterService singleWriterService,
             final @NotNull MqttConfigService mqttConfigService,
             final @NotNull ClientSessionLocalPersistence clientSessionLocalPersistence,
-            final @NotNull LocalTopicTree topicTree,
+            final @NotNull TopicTree topicTree,
             final @NotNull ConnectionPersistence connectionPersistence,
             final @NotNull PublishPollService publishPollService) {
         this.localPersistence = localPersistence;
@@ -172,7 +172,7 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
     public @NotNull ListenableFuture<ImmutableList<PUBLISH>> readNew(
             final @NotNull String queueId,
             final boolean shared,
-            final @NotNull FinalInts packetIds,
+            final @NotNull Ints packetIds,
             final long byteLimit) {
         try {
             Objects.requireNonNull(queueId, "Queue ID must not be null");
@@ -191,7 +191,7 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
             final long byteLimit) {
         return readNew(Objects.requireNonNull(sharedSubscription),
                 true,
-                FinalInts.repeat(SHARED_IN_FLIGHT_MARKER, messageLimit),
+                Ints.repeat(SHARED_IN_FLIGHT_MARKER, messageLimit),
                 byteLimit);
     }
 

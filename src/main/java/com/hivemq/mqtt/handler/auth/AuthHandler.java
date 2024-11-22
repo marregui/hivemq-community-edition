@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.auth;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import org.jetbrains.annotations.NotNull;
@@ -42,13 +42,13 @@ import com.google.inject.Singleton;
 @ChannelHandler.Sharable
 public class AuthHandler extends SimpleChannelInboundHandler<AUTH> {
 
-    @VisibleForTesting
+    
     static final String SUCCESS_AUTH_RECEIVED_FROM_CLIENT =
             "MQTT AUTH packet from client with IP {} " + "provided SUCCESS reason code. Disconnecting client.";
-    @VisibleForTesting
+    
     static final String REAUTHENTICATE_DURING_AUTH = "MQTT AUTH packet from client with IP {} " +
             "provided REAUTHENTICATE reason code during ongoing auth. Disconnecting client.";
-    @VisibleForTesting
+    
     static final String REAUTHENTICATE_DURING_RE_AUTH = "MQTT AUTH packet from client with IP {} " +
             "provided REAUTHENTICATE reason code during ongoing re-auth. Disconnecting client.";
 

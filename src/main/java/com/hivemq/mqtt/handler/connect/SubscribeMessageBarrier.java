@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.connect;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.hivemq.bootstrap.netty.ChannelHandlerNames;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.Message;
@@ -105,7 +105,7 @@ public class SubscribeMessageBarrier extends ChannelDuplexHandler {
         super.write(ctx, msg, promise);
     }
 
-    @VisibleForTesting
+    
     @NotNull Collection<Message> getQueue() {
         return Collections.unmodifiableCollection(messageQueue);
     }

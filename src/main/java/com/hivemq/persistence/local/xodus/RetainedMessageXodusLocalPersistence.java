@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.local.xodus;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
@@ -69,7 +69,7 @@ public class RetainedMessageXodusLocalPersistence extends XodusLocalPersistence
     private final @NotNull PublishPayloadPersistence payloadPersistence;
     private final @NotNull AtomicLong retainMessageCounter = new AtomicLong(0);
 
-    @VisibleForTesting
+    
     final @NotNull ConcurrentHashMap<Integer, PublishTopicTree> topicTrees = new ConcurrentHashMap<>();
 
     @Inject

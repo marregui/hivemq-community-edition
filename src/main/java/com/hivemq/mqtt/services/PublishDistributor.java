@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.services;
 
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.google.common.util.concurrent.ListenableFuture;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -71,6 +71,6 @@ public interface PublishDistributor {
             final int subscriptionQos,
             boolean sharedSubscription,
             boolean retainAsPublished,
-            @Nullable FinalInts subscriptionIdentifier);
+            @Nullable Ints subscriptionIdentifier);
 
 }

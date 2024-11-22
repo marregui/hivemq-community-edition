@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.subscribe.Topic;
 import com.hivemq.topics.SubscriberWithQoS;
 import com.hivemq.topics.SubscriptionFlag;
-import com.hivemq.topics.tree.LocalTopicTree;
+import com.hivemq.topics.tree.TopicTree;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -51,14 +51,14 @@ public class SharedSubscriptionService {
     private static final int GROUP_INDEX = 2;
     private static final int TOPIC_INDEX = 3;
 
-    private final @NotNull LocalTopicTree topicTree;
+    private final @NotNull TopicTree topicTree;
 
     private @Nullable Cache<String, ImmutableSet<SubscriberWithQoS>> sharedSubscriberCache;
     private @Nullable Cache<String, ImmutableSet<Topic>> sharedSubscriptionCache;
 
     @Inject
     public SharedSubscriptionService(
-            final @NotNull LocalTopicTree topicTree) {
+            final @NotNull TopicTree topicTree) {
 
         this.topicTree = topicTree;
     }

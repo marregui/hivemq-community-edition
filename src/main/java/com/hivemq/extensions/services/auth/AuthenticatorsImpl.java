@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.auth;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.collect.ImmutableMap;
 import com.hivemq.extension.sdk.api.auth.SimpleAuthenticator;
 import com.hivemq.extension.sdk.api.services.auth.provider.AuthenticatorProvider;
@@ -35,7 +35,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Singleton
-@VisibleForTesting
+
 public class AuthenticatorsImpl implements Authenticators {
 
     private static final Logger log = LoggerFactory.getLogger(AuthenticatorsImpl.class);

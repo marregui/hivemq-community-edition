@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.publish;
 
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.ShutdownHooks;
 import com.hivemq.config.RandomId;
@@ -37,7 +37,7 @@ import com.hivemq.mqtt.services.InternalPublishService;
 import com.hivemq.mqtt.services.PublishDistributor;
 import com.hivemq.topics.SubscriberWithIds;
 import com.hivemq.topics.SubscriptionFlag;
-import com.hivemq.topics.tree.LocalTopicTree;
+import com.hivemq.topics.tree.TopicTree;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -75,7 +75,7 @@ public class PublishServiceImplTest {
     PublishDistributor publishDistributor;
 
     @Mock
-    LocalTopicTree topicTree;
+    TopicTree topicTree;
 
     private GlobalManagedExtensionExecutorService managedPluginExecutorService;
 
@@ -166,13 +166,13 @@ public class PublishServiceImplTest {
         when(topicTree.findSubscriber("client", "topic")).thenReturn(new SubscriberWithIds("client",
                 1,
                 subscriptionFlags,
-                null, null, FinalInts.NONE));
+                null, null, Ints.NONE));
         when(publishDistributor.sendMessageToSubscriber(any(PUBLISH.class),
                 anyString(),
                 anyInt(),
                 anyBoolean(),
                 anyBoolean(),
-                any(FinalInts.class))).thenReturn(Futures.immediateFuture(PublishStatus.DELIVERED));
+                any(Ints.class))).thenReturn(Futures.immediateFuture(PublishStatus.DELIVERED));
         final PublishToClientResult result = publishService.publishToClient(publish, "client").get();
         assertEquals(PublishToClientResult.SUCCESSFUL, result);
     }

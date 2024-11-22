@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.connect;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -534,7 +534,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<CONNECT> {
                 true);
     }
 
-    @VisibleForTesting
+    
     void afterTakeover(
             final @NotNull ChannelHandlerContext ctx,
             final @NotNull ClientConnection clientConnection,

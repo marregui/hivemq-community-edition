@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.connection;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -188,7 +188,7 @@ public class ConnectionPersistenceImpl implements ConnectionPersistence {
         }, MoreExecutors.directExecutor());
     }
 
-    @VisibleForTesting
+    
     public @NotNull Set<Map.Entry<String, ClientConnection>> entries() {
         return clientConnectionMap.entrySet();
     }

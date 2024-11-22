@@ -17,7 +17,7 @@ package com.hivemq.persistence.clientqueue;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.message.MessageWithID;
@@ -98,7 +98,7 @@ public interface ClientQueueLocalPersistence extends LocalPersistence {
     @NotNull ImmutableList<PUBLISH> readNew(
             @NotNull String queueId,
             boolean shared,
-            @NotNull FinalInts packetIds,
+            @NotNull Ints packetIds,
             long bytesLimit,
             int bucketIndex);
 

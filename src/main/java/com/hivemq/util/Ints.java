@@ -19,37 +19,37 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public final class FinalInts {
-    public static final @NotNull FinalInts NONE = new FinalInts(new int[0], 0, 0);
+public final class Ints {
+    public static final @NotNull Ints NONE = new Ints(new int[0], 0, 0);
 
     private final int @NotNull [] ints;
     private final transient int start;
     private final int end;
 
-    private FinalInts(final int @NotNull [] ints, final int start, final int end) {
+    private Ints(final int @NotNull [] ints, final int start, final int end) {
         this.ints = ints;
         this.start = start;
         this.end = end;
     }
 
-    public static @NotNull FinalInts of(final int value) {
-        return new FinalInts(new int[]{value}, 0, 1);
+    public static @NotNull Ints of(final int value) {
+        return new Ints(new int[]{value}, 0, 1);
     }
 
-    public static @NotNull FinalInts of(final int first, final int @NotNull ... rest) {
+    public static @NotNull Ints of(final int first, final int @NotNull ... rest) {
         final int[] array = new int[rest.length + 1];
         array[0] = first;
         System.arraycopy(rest, 0, array, 1, rest.length);
-        return new FinalInts(array, 0, array.length);
+        return new Ints(array, 0, array.length);
     }
 
-    public static FinalInts repeat(final int value, final int size) {
+    public static Ints repeat(final int value, final int size) {
         if (size < 0) {
             throw new IllegalArgumentException();
         }
         final int[] array = new int[size];
         Arrays.fill(array, value);
-        return new FinalInts(array, 0, array.length);
+        return new Ints(array, 0, array.length);
     }
 
     public static Builder builder(final int initialCapacity) {
@@ -93,8 +93,8 @@ public final class FinalInts {
             return true;
         }
         final int size = end - start;
-        if (o instanceof FinalInts) {
-            final FinalInts that = (FinalInts) o;
+        if (o instanceof Ints) {
+            final Ints that = (Ints) o;
             if (size != that.size()) {
                 return false;
             }
@@ -158,7 +158,7 @@ public final class FinalInts {
             return this;
         }
 
-        public @NotNull Builder addAll(final @NotNull FinalInts values) {
+        public @NotNull Builder addAll(final @NotNull Ints values) {
             final int additional = values.size();
             ensureSize(additional);
             System.arraycopy(values.ints, values.start, array, size, additional);
@@ -187,8 +187,8 @@ public final class FinalInts {
             }
         }
 
-        public @NotNull FinalInts build() {
-            return size == 0 ? NONE : new FinalInts(array, 0, size);
+        public @NotNull Ints build() {
+            return size == 0 ? NONE : new Ints(array, 0, size);
         }
     }
 }

@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.publish.PublishReturnCode;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.topics.SubscriberWithIds;
-import com.hivemq.topics.tree.LocalTopicTree;
+import com.hivemq.topics.tree.TopicTree;
 import com.hivemq.topics.tree.TopicSubscribers;
 import com.hivemq.persistence.RetainedMessage;
 import com.hivemq.persistence.retained.RetainedMessagePersistence;
@@ -54,7 +54,7 @@ public class InternalPublishServiceImpl implements InternalPublishService {
     private static final Logger log = LoggerFactory.getLogger(InternalPublishServiceImpl.class);
 
     private final RetainedMessagePersistence retainedMessagePersistence;
-    private final LocalTopicTree topicTree;
+    private final TopicTree topicTree;
     private final PublishDistributor publishDistributor;
 
     private final boolean acknowledgeAfterPersist;
@@ -62,7 +62,7 @@ public class InternalPublishServiceImpl implements InternalPublishService {
     @Inject
     public InternalPublishServiceImpl(
             final RetainedMessagePersistence retainedMessagePersistence,
-            final LocalTopicTree topicTree,
+            final TopicTree topicTree,
             final PublishDistributor publishDistributor) {
 
         this.retainedMessagePersistence = retainedMessagePersistence;

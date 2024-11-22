@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.handler.connect;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
@@ -134,12 +134,12 @@ public class MessageBarrier extends ChannelDuplexHandler {
         channel.config().setAutoRead(true);
     }
 
-    @VisibleForTesting
+    
     boolean getConnectReceived() {
         return connectReceived;
     }
 
-    @VisibleForTesting
+    
     @NotNull Collection<Message> getQueue() {
         return Collections.unmodifiableCollection(messageQueue);
     }

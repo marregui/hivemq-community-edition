@@ -22,7 +22,7 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
 import com.hivemq.mqtt.message.publish.PUBLISH;
-import com.hivemq.util.FinalInts;
+import com.hivemq.util.Ints;
 import org.junit.Before;
 import org.junit.Test;
 import util.TestMessageUtil;
@@ -101,7 +101,7 @@ public class Mqtt5PublishEncoderTest extends AbstractMqtt5EncoderTest {
                 -1,
                 false,
                 true,
-                FinalInts.of(10,20,30));
+                Ints.of(10,20,30));
 
         encodeTestBufferSize(expected, publish);
     }
@@ -797,7 +797,7 @@ public class Mqtt5PublishEncoderTest extends AbstractMqtt5EncoderTest {
                 15,
                 false,
                 true,
-                FinalInts.of(3));
+                Ints.of(3));
         encodeTestBufferSize(expected, publish);
     }
 
@@ -836,7 +836,7 @@ public class Mqtt5PublishEncoderTest extends AbstractMqtt5EncoderTest {
                 15,
                 false,
                 true,
-                FinalInts.of(3, 4));
+                Ints.of(3, 4));
         encodeTestBufferSize(expected, publish);
     }
 

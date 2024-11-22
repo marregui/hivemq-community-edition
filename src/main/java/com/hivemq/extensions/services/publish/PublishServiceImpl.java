@@ -41,7 +41,7 @@ import com.hivemq.mqtt.message.publish.PUBLISHFactory;
 import com.hivemq.mqtt.services.InternalPublishService;
 import com.hivemq.mqtt.services.PublishDistributor;
 import com.hivemq.topics.SubscriberWithIds;
-import com.hivemq.topics.tree.LocalTopicTree;
+import com.hivemq.topics.tree.TopicTree;
 import com.hivemq.util.Bytes;
 
 import javax.inject.Inject;
@@ -75,7 +75,7 @@ public class PublishServiceImpl implements PublishService {
     private final RandomId hiveMQId;
 
     @NotNull
-    private final LocalTopicTree topicTree;
+    private final TopicTree topicTree;
 
     @Inject
     public PublishServiceImpl(
@@ -84,7 +84,7 @@ public class PublishServiceImpl implements PublishService {
             @NotNull final InternalPublishService internalPublishService,
             @NotNull final PublishDistributor publishDistributor,
             @NotNull final RandomId hiveMQId,
-            @NotNull final LocalTopicTree topicTree) {
+            @NotNull final TopicTree topicTree) {
         this.rateLimitService = rateLimitService;
         this.globalManagedExtensionExecutorService = globalManagedExtensionExecutorService;
         this.internalPublishService = internalPublishService;

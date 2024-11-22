@@ -29,7 +29,6 @@ import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.util.Topics;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -251,8 +250,8 @@ public class ModifiablePublishPacketImpl implements ModifiablePublishPacket {
     }
 
     @Override
-    public @NotNull List<Integer> getSubscriptionIdentifiers() {
-        return subscriptionIdentifiers.asList();
+    public @NotNull FinalInts getSubscriptionIds() {
+        return subscriptionIdentifiers;
     }
 
     @Override

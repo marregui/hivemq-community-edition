@@ -18,6 +18,7 @@ package com.hivemq.extension.sdk.api.packets.publish;
 
 
 
+import com.hivemq.util.FinalInts;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
@@ -35,8 +36,6 @@ import java.util.Optional;
  * @author Florian Limpöck
  * @since 4.0.0, CE 2019.1
  */
-
-
 public interface PublishPacket {
 
     /**
@@ -131,7 +130,7 @@ public interface PublishPacket {
      * @return The subscription identifiers.
      * @since 4.0.0, CE 2019.1
      */
-     @NotNull List<@NotNull Integer> getSubscriptionIdentifiers();
+     @NotNull FinalInts getSubscriptionIds();
 
     /**
      * If this property is present, this is the content type.

@@ -18,6 +18,7 @@ package com.hivemq.extensions.services.builder;
 import com.google.common.collect.ImmutableList;
 import com.hivemq.config.ConfigService;
 import com.hivemq.config.RandomId;
+import com.hivemq.util.FinalInts;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.connect.WillPublishPacket;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -39,7 +40,6 @@ import util.TestMessageUtil;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -72,7 +72,7 @@ public class WillPublishBuilderImplTest {
         assertEquals(testPublishPacket.getMessageExpiryInterval(), willPublishPacket.getMessageExpiryInterval());
         assertEquals(testPublishPacket.getResponseTopic(), willPublishPacket.getResponseTopic());
         assertEquals(testPublishPacket.getCorrelationData(), willPublishPacket.getCorrelationData());
-        assertEquals(0, willPublishPacket.getSubscriptionIdentifiers().size());
+        assertEquals(0, willPublishPacket.getSubscriptionIds().size());
         assertEquals(testPublishPacket.getContentType(), willPublishPacket.getContentType());
         assertEquals(testPublishPacket.getPayload(), willPublishPacket.getPayload());
         assertEquals(testPublishPacket.getUserProperties().asList().size(),
@@ -126,7 +126,7 @@ public class WillPublishBuilderImplTest {
         assertEquals(publish.getMessageExpiryInterval(), willPublishPacket.getMessageExpiryInterval());
         assertEquals(publish.getResponseTopic(), willPublishPacket.getResponseTopic());
         assertEquals(publish.getCorrelationData(), willPublishPacket.getCorrelationData());
-        assertEquals(0, willPublishPacket.getSubscriptionIdentifiers().size());
+        assertEquals(0, willPublishPacket.getSubscriptionIds().size());
         assertEquals(publish.getContentType(), willPublishPacket.getContentType());
         assertEquals(publish.getPayload(), willPublishPacket.getPayload());
         assertEquals(publish.getUserProperties().asList().size(),
@@ -155,8 +155,8 @@ public class WillPublishBuilderImplTest {
         assertEquals(willPublishPacket1.getMessageExpiryInterval(), willPublishPacket2.getMessageExpiryInterval());
         assertEquals(willPublishPacket1.getResponseTopic(), willPublishPacket2.getResponseTopic());
         assertEquals(willPublishPacket1.getCorrelationData(), willPublishPacket2.getCorrelationData());
-        assertEquals(willPublishPacket1.getSubscriptionIdentifiers().size(),
-                willPublishPacket2.getSubscriptionIdentifiers().size());
+        assertEquals(willPublishPacket1.getSubscriptionIds().size(),
+                willPublishPacket2.getSubscriptionIds().size());
         assertEquals(willPublishPacket1.getContentType(), willPublishPacket2.getContentType());
         assertEquals(willPublishPacket1.getPayload(), willPublishPacket2.getPayload());
         assertEquals(willPublishPacket1.getUserProperties().asList().size(),
@@ -185,8 +185,7 @@ public class WillPublishBuilderImplTest {
         assertEquals(2, willPublishPacket.getQos().getQosNumber());
         assertTrue(willPublishPacket.getRetain());
         assertEquals("TYPE", willPublishPacket.getContentType().get());
-        assertArrayEquals(new byte[]{1, 2, 3, 4},
-                Bytes.toBytes(willPublishPacket.getCorrelationData()));
+        assertArrayEquals(new byte[]{1, 2, 3, 4}, Bytes.toBytes(willPublishPacket.getCorrelationData()));
         assertEquals("responseTopic", willPublishPacket.getResponseTopic().get());
         assertEquals(10L, willPublishPacket.getMessageExpiryInterval().get().longValue());
         assertEquals(PayloadFormatIndicator.UTF_8, willPublishPacket.getPayloadFormatIndicator().get());
@@ -382,7 +381,7 @@ public class WillPublishBuilderImplTest {
         }
 
         @Override
-        public List<Integer> getSubscriptionIdentifiers() {
+        public FinalInts getSubscriptionIds() {
             return null;
         }
 
@@ -465,7 +464,7 @@ public class WillPublishBuilderImplTest {
         }
 
         @Override
-        public List<Integer> getSubscriptionIdentifiers() {
+        public FinalInts getSubscriptionIds() {
             return null;
         }
 

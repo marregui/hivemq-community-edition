@@ -28,17 +28,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Lukas Brandl
- * @author Silvio Giebl
- */
+
 public class ModifiableOutboundPublishImplTest {
 
     private @NotNull ConfigService configService;
@@ -973,10 +969,10 @@ public class ModifiableOutboundPublishImplTest {
 
         assertFalse(modifiablePacket.isModified());
 
-        modifiablePacket.setSubscriptionIdentifiers(ImmutableList.of(1, 2));
+        modifiablePacket.setSubscriptionIds(FinalInts.of(1, 2));
 
         assertTrue(modifiablePacket.isModified());
-        assertEquals(ImmutableList.of(1, 2), modifiablePacket.getSubscriptionIdentifiers());
+        assertEquals(FinalInts.of(1, 2), modifiablePacket.getSubscriptionIds());
     }
 
     @Test
@@ -1001,10 +997,10 @@ public class ModifiableOutboundPublishImplTest {
 
         assertFalse(modifiablePacket.isModified());
 
-        modifiablePacket.setSubscriptionIdentifiers(ImmutableList.of(1, 2));
+        modifiablePacket.setSubscriptionIds(FinalInts.of(1, 2));
 
         assertFalse(modifiablePacket.isModified());
-        assertEquals(ImmutableList.of(1, 2), modifiablePacket.getSubscriptionIdentifiers());
+        assertEquals(FinalInts.of(1, 2), modifiablePacket.getSubscriptionIds());
     }
 
     @Test(expected = NullPointerException.class)
@@ -1027,30 +1023,7 @@ public class ModifiableOutboundPublishImplTest {
         final ModifiableOutboundPublishImpl modifiablePacket =
                 new ModifiableOutboundPublishImpl(packet, configService);
 
-        modifiablePacket.setSubscriptionIdentifiers(null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void setSubscriptionIdentifiers_nullElement() {
-        final PublishPacketImpl packet = new PublishPacketImpl("topic",
-                Qos.AT_LEAST_ONCE,
-                Qos.AT_LEAST_ONCE,
-                1,
-                false,
-                ByteBuffer.wrap("payload".getBytes()),
-                false,
-                60,
-                null,
-                null,
-                null,
-                null,
-                FinalInts.NONE,
-                UserPropertiesImpl.of(ImmutableList.of()),
-                System.currentTimeMillis());
-        final ModifiableOutboundPublishImpl modifiablePacket =
-                new ModifiableOutboundPublishImpl(packet, configService);
-
-        modifiablePacket.setSubscriptionIdentifiers(Arrays.asList(1, null));
+        modifiablePacket.setSubscriptionIds(null);
     }
 
     @Test
@@ -1134,7 +1107,7 @@ public class ModifiableOutboundPublishImplTest {
         modifiablePacket.setContentType("contentType");
         modifiablePacket.setResponseTopic("responseTopic");
         modifiablePacket.setCorrelationData(ByteBuffer.wrap("correlationData".getBytes()));
-        modifiablePacket.setSubscriptionIdentifiers(ImmutableList.of(1, 2));
+        modifiablePacket.setSubscriptionIds(FinalInts.of(1, 2));
         modifiablePacket.getUserProperties().addUserProperty("testName", "testValue");
         final PublishPacketImpl copy = modifiablePacket.copy();
 

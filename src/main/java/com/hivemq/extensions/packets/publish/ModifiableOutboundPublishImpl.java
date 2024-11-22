@@ -28,18 +28,11 @@ import com.hivemq.extensions.services.builder.PluginBuilderUtil;
 import com.hivemq.util.Topics;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-
-/**
- * @author Lukas Brandl
- * @author Silvio Giebl
- * @since 4.2.0
- */
 
 public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish {
 
@@ -55,7 +48,7 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
     private @Nullable String contentType;
     private @Nullable String responseTopic;
     private @Nullable ByteBuffer correlationData;
-    private @NotNull FinalInts subscriptionIdentifiers;
+    private @NotNull FinalInts subscriptionIds;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
     private final long timestamp;
 
@@ -77,7 +70,7 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
         contentType = packet.contentType;
         responseTopic = packet.responseTopic;
         correlationData = packet.correlationData;
-        subscriptionIdentifiers = packet.subscriptionIdentifiers;
+        subscriptionIds = packet.subscriptionIdentifiers;
         userProperties = new ModifiableUserPropertiesImpl(packet.userProperties.asInternalList(),
                 configService.securityConfiguration().validateUTF8());
         timestamp = packet.timestamp;
@@ -235,21 +228,17 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
     }
 
     @Override
-    public @NotNull List<Integer> getSubscriptionIdentifiers() {
-        return subscriptionIdentifiers.asList();
+    public @NotNull FinalInts getSubscriptionIds() {
+        return subscriptionIds;
     }
 
     @Override
-    public void setSubscriptionIdentifiers(final @NotNull List<@NotNull Integer> subscriptionIdentifiers) {
-        Objects.requireNonNull(subscriptionIdentifiers, "Subscription identifiers must not be null null");
-        for (final Integer subscriptionIdentifier : subscriptionIdentifiers) {
-            Objects.requireNonNull(subscriptionIdentifier, "At least one element of the subscription identifiers was null");
-        }
-        final FinalInts finalInts = FinalInts.copyOf(subscriptionIdentifiers);
-        if (this.subscriptionIdentifiers.equals(finalInts)) {
+    public void setSubscriptionIds(final @NotNull FinalInts subscriptionIds) {
+        Objects.requireNonNull(subscriptionIds);
+        if (this.subscriptionIds.equals(subscriptionIds)) {
             return;
         }
-        this.subscriptionIdentifiers = finalInts;
+        this.subscriptionIds = subscriptionIds;
         modified = true;
     }
 
@@ -279,8 +268,7 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
                 payloadFormatIndicator,
                 contentType,
                 responseTopic,
-                correlationData,
-                subscriptionIdentifiers,
+                correlationData, subscriptionIds,
                 userProperties.copy(),
                 timestamp);
     }

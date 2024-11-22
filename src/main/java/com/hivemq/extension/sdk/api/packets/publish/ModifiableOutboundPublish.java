@@ -17,6 +17,7 @@
 package com.hivemq.extension.sdk.api.packets.publish;
 
 
+import com.hivemq.util.FinalInts;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.interceptor.publish.PublishInboundInterceptor;
@@ -24,7 +25,6 @@ import com.hivemq.extension.sdk.api.packets.general.ModifiableUserProperties;
 import com.hivemq.extension.sdk.api.packets.general.UserProperties;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 
 /**
  * A {@link PublishPacket} that can be modified for onward delivery. Most changes to the parameters will only alter the
@@ -126,12 +126,12 @@ public interface ModifiableOutboundPublish extends PublishPacket {
      * alters the outgoing publish. This setting is only respected for MQTT 5 clients. For MQTT 3.x clients this setting
      * is ignored.
      *
-     * @param subscriptionIdentifiers The new subscription identifiers for the publish.
+     * @param subscriptionIds The new subscription identifiers for the publish.
      * @throws NullPointerException If the subscription identifiers list is null.
      * @throws NullPointerException If one ore more of the entries are null.
      * @since 4.2.0, CE 2020.1
      */
-    void setSubscriptionIdentifiers(@NotNull List<@NotNull Integer> subscriptionIdentifiers);
+    void setSubscriptionIds(@NotNull FinalInts subscriptionIds);
 
     /**
      * Get the modifiable {@link UserProperties} of the PUBLISH packet.

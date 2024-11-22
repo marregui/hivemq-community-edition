@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.*;
 
 
-public final class FinalInts implements Serializable {
+public final class FinalInts {
     public static final @NotNull FinalInts NONE = new FinalInts(new int[0], 0, 0);
 
     private final int[] ints;
@@ -32,6 +32,10 @@ public final class FinalInts implements Serializable {
         this.ints = ints;
         this.start = start;
         this.end = end;
+    }
+
+    public static @NotNull FinalInts of(final int value) {
+        return new FinalInts(new int[]{value}, 0, 1);
     }
 
     public static @NotNull FinalInts of(final int first, final int... rest) {
@@ -105,52 +109,43 @@ public final class FinalInts implements Serializable {
         return -1;
     }
 
-    public int lastIndexOf(int target) {
-        for (int i = end - 1; i >= start; i--) {
-            if (ints[i] == target) {
-                return i - start;
-            }
-        }
-        return -1;
-    }
-
     public boolean contains(int target) {
         return indexOf(target) >= 0;
     }
 
-    public FinalInts subArray(int startIndex, int endIndex) {
-        if (startIndex < 0 || endIndex < startIndex || endIndex > end - start) {
-            throw new IndexOutOfBoundsException();
-        }
-        return startIndex == endIndex ? NONE : new FinalInts(ints, start + startIndex, start + endIndex);
-    }
-
-    private Spliterator.OfInt spliterator() {
-        return Spliterators.spliterator(ints, start, end, Spliterator.IMMUTABLE | Spliterator.ORDERED);
-    }
-
-    public List<Integer> asList() {
-        return new ListView(this);
-    }
-
     @Override
-    public boolean equals(@Nullable Object object) {
-        if (object == this) {
+    public boolean equals(final @Nullable Object o) {
+        if (o == this) {
             return true;
         }
-        if (!(object instanceof FinalInts)) {
-            return false;
-        }
-        FinalInts that = (FinalInts) object;
-        if (this.size() != that.size()) {
-            return false;
-        }
-        for (int i = 0; i < size(); i++) {
-            if (this.get(i) != that.get(i)) {
+        final int size = end - start;
+
+        if (o instanceof FinalInts) {
+            FinalInts that = (FinalInts) o;
+            if (size != that.size()) {
                 return false;
             }
+            for (int i = 0; i < size; i++) {
+                if (ints[start + i] != that.ints[that.start + i]) {
+                    return false;
+                }
+            }
+            return true;
         }
-        return true;
+        if (o instanceof List<?>) {
+            List<?> that = (List<?>) o;
+            if (size != that.size()) {
+                return false;
+            }
+            for (int i = 0; i < size; i++) {
+                final Object v = that.get(i);
+                if (!(v instanceof Number) || ((Number) v).intValue() != ints[start + i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -233,7 +228,6 @@ public final class FinalInts implements Serializable {
 
         @Override
         public boolean contains(Object target) {
-            // Overridden to prevent a ton of boxing
             return (target instanceof Integer) && indexOf(array, (Integer) target, start, end) != -1;
         }
 
@@ -343,14 +337,6 @@ public final class FinalInts implements Serializable {
             return this;
         }
 
-        public Builder addAll(final @NotNull Collection<Integer> values) {
-            ensureSize(values.size());
-            for (final Integer value : values) {
-                array[size++] = value;
-            }
-            return this;
-        }
-
         public Builder addAll(final @NotNull FinalInts values) {
             final int additional = values.size();
             ensureSize(additional);
@@ -382,81 +368,6 @@ public final class FinalInts implements Serializable {
 
         public FinalInts build() {
             return size == 0 ? NONE : new FinalInts(array, 0, size);
-        }
-    }
-
-    private static class ListView extends AbstractList<Integer> implements RandomAccess, Serializable {
-        private final @NotNull FinalInts fInts;
-
-        private ListView(final @NotNull FinalInts fInts) {
-            this.fInts = fInts;
-        }
-
-        @Override
-        public int size() {
-            return fInts.size();
-        }
-
-        @Override
-        public @Nullable Integer get(final int index) {
-            return fInts.get(index);
-        }
-
-        @Override
-        public boolean contains(Object target) {
-            return indexOf(target) >= 0;
-        }
-
-        @Override
-        public int indexOf(Object target) {
-            return target instanceof Integer ? fInts.indexOf((Integer) target) : -1;
-        }
-
-        @Override
-        public int lastIndexOf(Object target) {
-            return target instanceof Integer ? fInts.lastIndexOf((Integer) target) : -1;
-        }
-
-        @Override
-        public List<Integer> subList(int fromIndex, int toIndex) {
-            return fInts.subArray(fromIndex, toIndex).asList();
-        }
-
-        @Override
-        public Spliterator<Integer> spliterator() {
-            return fInts.spliterator();
-        }
-
-        @Override
-        public boolean equals(final @Nullable Object o) {
-            if (o instanceof ListView) {
-                return fInts.equals(((ListView) o).fInts);
-            }
-            if (!(o instanceof List)) {
-                return false;
-            }
-            final List<?> that = (List<?>) o;
-            final int size = fInts.size();
-            if (size != that.size()) {
-                return false;
-            }
-            for (int i = fInts.start; i<size; i++) {
-                final Object element = that.get(i);
-                if (!(element instanceof Integer) || fInts.ints[i] != (Integer) element) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            return fInts.hashCode();
-        }
-
-        @Override
-        public String toString() {
-            return fInts.toString();
         }
     }
 }

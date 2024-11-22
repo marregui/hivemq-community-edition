@@ -26,15 +26,8 @@ import com.hivemq.extensions.packets.general.UserPropertiesImpl;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-/**
- * @author Florian Limpöck
- * @author Silvio Giebl
- * @since 4.0.0
- */
 
 public class PublishPacketImpl implements PublishPacket {
 
@@ -174,8 +167,8 @@ public class PublishPacketImpl implements PublishPacket {
     }
 
     @Override
-    public @NotNull List<Integer> getSubscriptionIdentifiers() {
-        return subscriptionIdentifiers.asList();
+    public @NotNull FinalInts getSubscriptionIds() {
+        return subscriptionIdentifiers;
     }
 
     @Override

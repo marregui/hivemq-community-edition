@@ -94,7 +94,7 @@ public class Mqtt5PublishEncoder extends Mqtt5MessageWithUserPropertiesEncoder<P
 
         final FinalInts subscriptionIdentifiers = publish.getSubscriptionIdentifiers();
         if (subscriptionIdentifiers != null) {
-            for (int i = 0; i < subscriptionIdentifiers.length(); i++) {
+            for (int i = 0; i < subscriptionIdentifiers.size(); i++) {
                 propertyLength += variableByteIntegerPropertyEncodedLength(subscriptionIdentifiers.get(i));
             }
         }
@@ -153,7 +153,7 @@ public class Mqtt5PublishEncoder extends Mqtt5MessageWithUserPropertiesEncoder<P
 
         final FinalInts subscriptionIdentifiers = publish.getSubscriptionIdentifiers();
         if (subscriptionIdentifiers != null) {
-            for (int i = 0; i < subscriptionIdentifiers.length(); i++) {
+            for (int i = 0; i < subscriptionIdentifiers.size(); i++) {
                 encodeVariableByteIntegerProperty(SUBSCRIPTION_IDENTIFIER, subscriptionIdentifiers.get(i), out);
             }
         }

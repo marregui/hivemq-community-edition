@@ -59,7 +59,7 @@ public class TypeSize {
         int size = ARRAY_OVERHEAD;
         size += INT_SIZE; // start;
         size += INT_SIZE; // end;
-        size += array.length() * INT_SIZE;
+        size += array.size() * INT_SIZE;
         return size;
     }
 }

@@ -188,7 +188,7 @@ public class ClientQueuePersistenceSerializerTest {
         assertEquals("contentType", readPublish.getContentType());
         assertArrayEquals(new byte[]{1, 2, 3}, readPublish.getCorrelationData());
         assertEquals(Mqtt5PayloadFormatIndicator.UTF_8, readPublish.getPayloadFormatIndicator());
-        assertEquals(3, readPublish.getSubscriptionIdentifiers().length());
+        assertEquals(3, readPublish.getSubscriptionIdentifiers().size());
     }
 
     @Test

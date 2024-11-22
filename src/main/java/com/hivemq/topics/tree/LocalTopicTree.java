@@ -108,7 +108,7 @@ public class LocalTopicTree {
                         final FinalInts subscriptionIds = last.getSubscriptionIds();
                         final Integer subscriptionId = current.getSubscriptionId();
                         final FinalInts mergedSubscriptionIds =
-                                FinalInts.builder(subscriptionIds.length() + 1)
+                                FinalInts.builder(subscriptionIds.size() + 1)
                                         .addAll(subscriptionIds)
                                         .add(subscriptionId)
                                         .build();

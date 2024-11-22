@@ -616,7 +616,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
             final ImmutableList.Builder<PUBLISH> publishes = ImmutableList.builder();
             int qos0MessagesFound = 0;
             int qos0Bytes = 0;
-            while (qos0MessagesFound < packetIds.length() && bytesLimit > qos0Bytes) {
+            while (qos0MessagesFound < packetIds.size() && bytesLimit > qos0Bytes) {
                 final PUBLISH qos0Publish = pollQos0Message(key, bucketIndex);
                 if (qos0Publish.isExpired()) {
                     payloadPersistence.decrementReferenceCounter(qos0Publish.getPublishId());
@@ -637,7 +637,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
         return bucket.getEnv().computeInExclusiveTransaction(txn -> {
             try (final Cursor cursor = bucket.getStore().openCursor(txn)) {
 
-                final int countLimit = packetIds.length();
+                final int countLimit = packetIds.size();
                 final int[] messageCount = {0};
                 final int[] packetIdIndex = {0};
                 final int[] bytes = {0};

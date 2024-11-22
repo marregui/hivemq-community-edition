@@ -221,7 +221,7 @@ public class ClientQueuePersistenceSerializer {
         final byte[] contentType = message.getContentType() == null ? null : message.getContentType().getBytes(UTF_8);
         final byte[] correlationData = message.getCorrelationData();
         final FinalInts subscriptionIdentifiers = message.getSubscriptionIdentifiers();
-        final int subscriptionIdentifierLength = subscriptionIdentifiers == null ? 0 : subscriptionIdentifiers.length();
+        final int subscriptionIdentifierLength = subscriptionIdentifiers == null ? 0 : subscriptionIdentifiers.size();
         final int payloadFormatIndicator =
                 message.getPayloadFormatIndicator() != null ? message.getPayloadFormatIndicator().getCode() : -1;
         final Mqtt5UserProperties userProperties = message.getUserProperties();
@@ -313,7 +313,7 @@ public class ClientQueuePersistenceSerializer {
             cursor += Integer.BYTES;
             if (subscriptionIdentifierLength > 0) {
 
-                for (int i = 0; i < subscriptionIdentifiers.length(); i++) {
+                for (int i = 0; i < subscriptionIdentifiers.size(); i++) {
                     Bytes.copyIntToBytes(subscriptionIdentifiers.get(i), result, cursor);
                     cursor += Integer.BYTES;
                 }

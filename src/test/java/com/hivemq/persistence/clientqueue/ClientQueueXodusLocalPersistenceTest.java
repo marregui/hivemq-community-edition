@@ -178,7 +178,7 @@ public class ClientQueueXodusLocalPersistenceTest {
         final ImmutableList<PUBLISH> readPublishes = persistence.readNew("client1", false, packetIds, 256000, 0);
 
         assertEquals(3, readPublishes.size());
-        for (int i = 0; i < packetIds.length(); i++) {
+        for (int i = 0; i < packetIds.size(); i++) {
             assertEquals(packetIds.get(i), readPublishes.get(i).getPacketIdentifier());
             assertEquals(publishes[i].getQoS(), readPublishes.get(i).getQoS());
             assertEquals(publishes[i].getTopic(), readPublishes.get(i).getTopic());
@@ -212,7 +212,7 @@ public class ClientQueueXodusLocalPersistenceTest {
         verify(payloadPersistence, never()).decrementReferenceCounter(anyLong());
 
         assertEquals(3, messages2.size());
-        for (int i = 0; i < packetIds.length(); i++) {
+        for (int i = 0; i < packetIds.size(); i++) {
             assertEquals(packetIds.get(i), messages2.get(i).getPacketIdentifier());
             assertEquals(publishes[1 + i].getTopic(), messages2.get(i).getTopic());
         }

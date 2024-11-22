@@ -164,7 +164,7 @@ public class PublishPollServiceImpl implements PublishPollService {
                         usedIds++;
                     }
                 }
-                for (int i = usedIds; i < messageIds.length(); i++) {
+                for (int i = usedIds; i < messageIds.size(); i++) {
                     ids.unlockId(messageIds.get(i));
                 }
                 final List<PublishWithFuture> publishesToSend = new ArrayList<>(publishes.size());

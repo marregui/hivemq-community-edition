@@ -17,8 +17,6 @@ package com.hivemq.topics.tree;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.topics.tree.LocalTopicTree;
-import com.hivemq.topics.tree.TopicSubscribers;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
@@ -409,7 +407,7 @@ public class TestGetSubscribersWithFilterFromTopicTreeImpl {
 
         final SubscriberWithIds subscribers = topicTree.findSubscriber("client1", "topic/a");
         assertNotNull(subscribers);
-        assertEquals(1, subscribers.getSubscriptionIds().length());
+        assertEquals(1, subscribers.getSubscriptionIds().size());
         assertTrue(subscribers.getSubscriptionIds()
                 .contains(1));//shared subscription is hidden by the non-shared
     }
@@ -427,7 +425,7 @@ public class TestGetSubscribersWithFilterFromTopicTreeImpl {
 
         final SubscriberWithIds subscribers = topicTree.findSubscriber("client1", "topic/a");
 
-        assertEquals(2, subscribers.getSubscriptionIds().length());
+        assertEquals(2, subscribers.getSubscriptionIds().size());
         assertTrue(subscribers.getSubscriptionIds().contains(1));
         assertTrue(subscribers.getSubscriptionIds().contains(2));
     }
@@ -446,7 +444,7 @@ public class TestGetSubscribersWithFilterFromTopicTreeImpl {
 
         final SubscriberWithIds subscribers = topicTree.findSubscriber("client1", "topic/a");
 
-        assertEquals(1, subscribers.getSubscriptionIds().length());
+        assertEquals(1, subscribers.getSubscriptionIds().size());
         assertEquals(1, subscribers.getSubscriptionIds().get(0));
     }
 

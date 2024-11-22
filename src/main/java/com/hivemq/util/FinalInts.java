@@ -81,7 +81,7 @@ public final class FinalInts implements Serializable {
         return new Builder(10);
     }
 
-    public int length() {
+    public int size() {
         return end - start;
     }
 
@@ -142,10 +142,10 @@ public final class FinalInts implements Serializable {
             return false;
         }
         FinalInts that = (FinalInts) object;
-        if (this.length() != that.length()) {
+        if (this.size() != that.size()) {
             return false;
         }
-        for (int i = 0; i < length(); i++) {
+        for (int i = 0; i < size(); i++) {
             if (this.get(i) != that.get(i)) {
                 return false;
             }
@@ -168,7 +168,7 @@ public final class FinalInts implements Serializable {
         if (isEmpty()) {
             return "[]";
         }
-        StringBuilder builder = new StringBuilder(length() * 5); // rough estimate is fine
+        StringBuilder builder = new StringBuilder(size() * 5); // rough estimate is fine
         builder.append('[').append(ints[start]);
 
         for (int i = start + 1; i < end; i++) {
@@ -329,57 +329,59 @@ public final class FinalInts implements Serializable {
 
     public static final class Builder {
         private int[] array;
-        private int count = 0; // <= array.length
+        private int size;
 
-        Builder(int initialCapacity) {
+        private Builder(int initialCapacity) {
             array = new int[initialCapacity];
         }
 
-        private static int expandedCapacity(int oldCapacity, int minCapacity) {
-            if (minCapacity < 0) {
-                throw new AssertionError("cannot store more than MAX_VALUE elements");
-            }
-            int newCapacity = oldCapacity + (oldCapacity >> 1) + 1;
-            if (newCapacity < minCapacity) {
-                newCapacity = Integer.highestOneBit(minCapacity - 1) << 1;
-            }
-            if (newCapacity < 0) {
-                newCapacity = Integer.MAX_VALUE; // guaranteed to be >= newCapacity
-            }
-            return newCapacity;
-        }
 
         public Builder add(int value) {
-            ensureRoomFor(1);
-            array[count] = value;
-            count += 1;
+            ensureSize(1);
+            array[size] = value;
+            size += 1;
             return this;
         }
 
-        public Builder addAll(Collection<Integer> values) {
-            ensureRoomFor(values.size());
-            for (Integer value : values) {
-                array[count++] = value;
+        public Builder addAll(final @NotNull Collection<Integer> values) {
+            ensureSize(values.size());
+            for (final Integer value : values) {
+                array[size++] = value;
             }
             return this;
         }
 
-        public Builder addAll(FinalInts values) {
-            ensureRoomFor(values.length());
-            System.arraycopy(values.ints, values.start, array, count, values.length());
-            count += values.length();
+        public Builder addAll(final @NotNull FinalInts values) {
+            final int additional = values.size();
+            ensureSize(additional);
+            System.arraycopy(values.ints, values.start, array, size, additional);
+            size += additional;
             return this;
         }
 
-        private void ensureRoomFor(int numberToAdd) {
-            int newCount = count + numberToAdd; // TODO(kevinb): check overflow now?
-            if (newCount > array.length) {
-                array = Arrays.copyOf(array, expandedCapacity(array.length, newCount));
+        private void ensureSize(final int additional) {
+            final int required = size + additional;
+            if (required < 0) {
+                throw new IllegalArgumentException();
+            }
+            if (required > array.length) {
+                int newSize = array.length + (array.length >> 1) + 1;
+                if (newSize < required) {
+                    newSize = Integer.highestOneBit(required - 1) << 1;
+                }
+                if (newSize < 0) {
+                    newSize = Integer.MAX_VALUE;
+                }
+                if (newSize != array.length) {
+                    final int[] newArray = new int[newSize];
+                    System.arraycopy(array, 0, newArray, 0, Math.min(array.length, newSize));
+                    array = newArray;
+                }
             }
         }
 
         public FinalInts build() {
-            return count == 0 ? NONE : new FinalInts(array, 0, count);
+            return size == 0 ? NONE : new FinalInts(array, 0, size);
         }
     }
 
@@ -392,7 +394,7 @@ public final class FinalInts implements Serializable {
 
         @Override
         public int size() {
-            return fints.length();
+            return fints.size();
         }
 
         @Override

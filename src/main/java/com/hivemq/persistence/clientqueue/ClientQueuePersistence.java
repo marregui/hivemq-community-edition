@@ -16,7 +16,7 @@
 package com.hivemq.persistence.clientqueue;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.google.common.util.concurrent.ListenableFuture;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.mqtt.message.MessageWithID;
@@ -70,7 +70,7 @@ public interface ClientQueuePersistence {
      * @return The read publishes
      */
     @NotNull ListenableFuture<ImmutableList<PUBLISH>> readNew(
-            @NotNull String queueId, boolean shared, @NotNull ImmutableIntArray packetIds, long byteLimit);
+            @NotNull String queueId, boolean shared, @NotNull FinalInts packetIds, long byteLimit);
 
     /**
      * Read publishes and pubrels that are in-flight.
@@ -154,7 +154,7 @@ public interface ClientQueuePersistence {
     /**
      * Remove the in-flight marker of a PUBLISH which has the same unique ID as the one that is provided.
      * This way the PUBLISH will be return by future calls of {@link ClientQueuePersistence#readNew(String, boolean,
-     * ImmutableIntArray, long)}.
+     * FinalInts, long)}.
      * <p>
      * This method is only used for shared subscription queues.
      *

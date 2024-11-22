@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.packets.publish;
 
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,7 +50,7 @@ public class PublishPacketImpl implements PublishPacket {
     final @Nullable String contentType;
     final @Nullable String responseTopic;
     final @Nullable ByteBuffer correlationData;
-    final @NotNull ImmutableIntArray subscriptionIdentifiers;
+    final @NotNull FinalInts subscriptionIdentifiers;
     final @NotNull UserPropertiesImpl userProperties;
     final long timestamp;
 
@@ -67,7 +67,7 @@ public class PublishPacketImpl implements PublishPacket {
             final @Nullable String contentType,
             final @Nullable String responseTopic,
             final @Nullable ByteBuffer correlationData,
-            final @NotNull ImmutableIntArray subscriptionIdentifiers,
+            final @NotNull FinalInts subscriptionIdentifiers,
             final @NotNull UserPropertiesImpl userProperties,
             final long timestamp) {
 
@@ -104,7 +104,7 @@ public class PublishPacketImpl implements PublishPacket {
                 publish.getResponseTopic(),
                 publish.getCorrelationData() == null ? null : ByteBuffer.wrap(publish.getCorrelationData()),
                 (publish.getSubscriptionIdentifiers() == null) ?
-                        ImmutableIntArray.EMPTY :
+                        FinalInts.NONE :
                         publish.getSubscriptionIdentifiers(),
                 UserPropertiesImpl.of(publish.getUserProperties().asList()),
                 publish.getTimestamp());

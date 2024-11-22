@@ -16,7 +16,7 @@
 package com.hivemq.extensions.packets.publish;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extension.sdk.api.packets.general.Qos;
@@ -27,7 +27,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Before;
 import org.junit.Test;
-import util.TestConfigurationBootstrap;
 
 import java.nio.ByteBuffer;
 
@@ -165,7 +164,7 @@ public class ModifiableWillPublishImplTest {
                 .withIgnoredFields("configService", "modified")
                 .withRedefinedSuperclass()
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
-                .withPrefabValues(ImmutableIntArray.class, ImmutableIntArray.EMPTY, ImmutableIntArray.of(123))
+                .withPrefabValues(FinalInts.class, FinalInts.NONE, FinalInts.of(123))
                 .verify();
     }
 }

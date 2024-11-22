@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.packets.publish;
 
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,7 +55,7 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
     private @Nullable String contentType;
     private @Nullable String responseTopic;
     private @Nullable ByteBuffer correlationData;
-    private @NotNull ImmutableIntArray subscriptionIdentifiers;
+    private @NotNull FinalInts subscriptionIdentifiers;
     private final @NotNull ModifiableUserPropertiesImpl userProperties;
     private final long timestamp;
 
@@ -245,11 +245,11 @@ public class ModifiableOutboundPublishImpl implements ModifiableOutboundPublish 
         for (final Integer subscriptionIdentifier : subscriptionIdentifiers) {
             Objects.requireNonNull(subscriptionIdentifier, "At least one element of the subscription identifiers was null");
         }
-        final ImmutableIntArray immutableIntArray = ImmutableIntArray.copyOf(subscriptionIdentifiers);
-        if (this.subscriptionIdentifiers.equals(immutableIntArray)) {
+        final FinalInts finalInts = FinalInts.copyOf(subscriptionIdentifiers);
+        if (this.subscriptionIdentifiers.equals(finalInts)) {
             return;
         }
-        this.subscriptionIdentifiers = immutableIntArray;
+        this.subscriptionIdentifiers = finalInts;
         modified = true;
     }
 

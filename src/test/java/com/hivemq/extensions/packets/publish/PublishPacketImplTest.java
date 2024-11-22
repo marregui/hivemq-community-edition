@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.packets.publish;
 
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import org.jetbrains.annotations.NotNull;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -33,7 +33,7 @@ public class PublishPacketImplTest {
                 .withIgnoredAnnotations(NotNull.class) // EqualsVerifier thinks @NotNull Optional is @NotNull
                 .withNonnullFields("topic", "qos", "subscriptionIdentifiers", "userProperties")
                 .suppress(Warning.STRICT_INHERITANCE)
-                .withPrefabValues(ImmutableIntArray.class, ImmutableIntArray.EMPTY, ImmutableIntArray.of(123))
+                .withPrefabValues(FinalInts.class, FinalInts.NONE, FinalInts.of(123))
                 .verify();
     }
 }

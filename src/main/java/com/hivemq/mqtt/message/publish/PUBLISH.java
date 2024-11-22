@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.message.publish;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.codec.encoder.mqtt5.UnsignedDataTypes;
 import com.hivemq.config.ConfigService;
@@ -67,7 +67,7 @@ public class PUBLISH extends MqttMessageWithUserProperties implements Mqtt5PUBLI
     private final @Nullable String responseTopic;
     private final byte @Nullable [] correlationData;
     private final boolean isNewTopicAlias;
-    private final @Nullable ImmutableIntArray subscriptionIdentifiers;
+    private final @Nullable FinalInts subscriptionIdentifiers;
 
     private int sizeInMemory = SIZE_NOT_CALCULATED;
 
@@ -88,7 +88,7 @@ public class PUBLISH extends MqttMessageWithUserProperties implements Mqtt5PUBLI
             final int packetIdentifier,
             final boolean duplicateDelivery,
             final boolean isNewTopicAlias,
-            final @Nullable ImmutableIntArray subscriptionIdentifiers,
+            final @Nullable FinalInts subscriptionIdentifiers,
             final long timestamp,
             final long publishId) {
 
@@ -291,7 +291,7 @@ public class PUBLISH extends MqttMessageWithUserProperties implements Mqtt5PUBLI
     }
 
     @Override
-    public @Nullable ImmutableIntArray getSubscriptionIdentifiers() {
+    public @Nullable FinalInts getSubscriptionIdentifiers() {
         return subscriptionIdentifiers;
     }
 

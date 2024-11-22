@@ -15,7 +15,7 @@
  */
 package com.hivemq.extensions.services.publish;
 
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.ShutdownHooks;
 import com.hivemq.config.RandomId;
@@ -166,13 +166,13 @@ public class PublishServiceImplTest {
         when(topicTree.findSubscriber("client", "topic")).thenReturn(new SubscriberWithIds("client",
                 1,
                 subscriptionFlags,
-                null, null, ImmutableIntArray.EMPTY));
+                null, null, FinalInts.NONE));
         when(publishDistributor.sendMessageToSubscriber(any(PUBLISH.class),
                 anyString(),
                 anyInt(),
                 anyBoolean(),
                 anyBoolean(),
-                any(ImmutableIntArray.class))).thenReturn(Futures.immediateFuture(PublishStatus.DELIVERED));
+                any(FinalInts.class))).thenReturn(Futures.immediateFuture(PublishStatus.DELIVERED));
         final PublishToClientResult result = publishService.publishToClient(publish, "client").get();
         assertEquals(PublishToClientResult.SUCCESSFUL, result);
     }

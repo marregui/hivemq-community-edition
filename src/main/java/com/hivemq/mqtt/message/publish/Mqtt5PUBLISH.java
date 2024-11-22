@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.message.publish;
 
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import com.hivemq.mqtt.message.Message;
 import com.hivemq.mqtt.message.QoS;
@@ -114,7 +114,7 @@ public interface Mqtt5PUBLISH extends Message {
     /**
      * @return the subscription identifiers of the publish message
      */
-    ImmutableIntArray getSubscriptionIdentifiers();
+    FinalInts getSubscriptionIdentifiers();
 
     /**
      * @return the content type of the publish message

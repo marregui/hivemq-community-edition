@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.message.publish;
 
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,7 +58,7 @@ public class PUBLISHFactory {
         private @Nullable String responseTopic;
         private @Nullable byte[] correlationData;
         private boolean isNewTopicAlias;
-        private @Nullable ImmutableIntArray subscriptionIdentifiers;
+        private @Nullable FinalInts subscriptionIdentifiers;
         private @NotNull Mqtt5UserProperties userProperties = Mqtt5UserProperties.NO_USER_PROPERTIES;
         private int packetIdentifier;
         private long publishId = PUBLISH.NO_PUBLISH_ID_SET;
@@ -180,7 +180,7 @@ public class PUBLISHFactory {
             return this;
         }
 
-        public @NotNull Mqtt5Builder withSubscriptionIdentifiers(final @Nullable ImmutableIntArray subscriptionIdentifiers) {
+        public @NotNull Mqtt5Builder withSubscriptionIdentifiers(final @Nullable FinalInts subscriptionIdentifiers) {
             this.subscriptionIdentifiers = subscriptionIdentifiers;
             return this;
         }
@@ -223,7 +223,7 @@ public class PUBLISHFactory {
                 .withResponseTopic(packet.getResponseTopic().orElse(null))
                 .withCorrelationData(Bytes.toBytes(packet.getCorrelationData()))
                 .withNewTopicAlias(origin.isNewTopicAlias())
-                .withSubscriptionIdentifiers(ImmutableIntArray.copyOf(packet.getSubscriptionIdentifiers()))
+                .withSubscriptionIdentifiers(FinalInts.copyOf(packet.getSubscriptionIdentifiers()))
                 .withUserProperties(Mqtt5UserProperties.of(packet.getUserProperties().asInternalList()))
                 .build();
     }

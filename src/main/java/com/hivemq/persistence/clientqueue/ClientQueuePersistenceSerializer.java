@@ -15,7 +15,7 @@
  */
 package com.hivemq.persistence.clientqueue;
 
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -220,7 +220,7 @@ public class ClientQueuePersistenceSerializer {
                 message.getResponseTopic() == null ? null : message.getResponseTopic().getBytes(UTF_8);
         final byte[] contentType = message.getContentType() == null ? null : message.getContentType().getBytes(UTF_8);
         final byte[] correlationData = message.getCorrelationData();
-        final ImmutableIntArray subscriptionIdentifiers = message.getSubscriptionIdentifiers();
+        final FinalInts subscriptionIdentifiers = message.getSubscriptionIdentifiers();
         final int subscriptionIdentifierLength = subscriptionIdentifiers == null ? 0 : subscriptionIdentifiers.length();
         final int payloadFormatIndicator =
                 message.getPayloadFormatIndicator() != null ? message.getPayloadFormatIndicator().getCode() : -1;
@@ -405,7 +405,7 @@ public class ClientQueuePersistenceSerializer {
             final int subscriptionIdentifiersLength = Bytes.readInt(serialized, cursor);
             cursor += Integer.BYTES;
 
-            final ImmutableIntArray.Builder subscriptionIdentifiers = ImmutableIntArray.builder();
+            final FinalInts.Builder subscriptionIdentifiers = FinalInts.builder();
             for (int i = 0; i < subscriptionIdentifiersLength; i++) {
                 subscriptionIdentifiers.add(Bytes.readInt(serialized, cursor));
                 cursor += Integer.BYTES;

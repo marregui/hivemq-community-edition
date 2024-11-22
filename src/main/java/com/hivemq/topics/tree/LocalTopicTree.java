@@ -18,7 +18,7 @@ package com.hivemq.topics.tree;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.google.common.util.concurrent.Striped;
 import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -105,10 +105,10 @@ public class LocalTopicTree {
                 } else {
                     last.setQos(current.getQos());
                     if (current.getSubscriptionId() != null) {
-                        final ImmutableIntArray subscriptionIds = last.getSubscriptionIds();
+                        final FinalInts subscriptionIds = last.getSubscriptionIds();
                         final Integer subscriptionId = current.getSubscriptionId();
-                        final ImmutableIntArray mergedSubscriptionIds =
-                                ImmutableIntArray.builder(subscriptionIds.length() + 1)
+                        final FinalInts mergedSubscriptionIds =
+                                FinalInts.builder(subscriptionIds.length() + 1)
                                         .addAll(subscriptionIds)
                                         .add(subscriptionId)
                                         .build();

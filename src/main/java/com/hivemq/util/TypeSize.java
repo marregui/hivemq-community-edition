@@ -15,7 +15,6 @@
  */
 package com.hivemq.util;
 
-import com.hivemq.util.ImmutableIntArray;
 import org.jetbrains.annotations.Nullable;
 
 public class TypeSize {
@@ -52,7 +51,7 @@ public class TypeSize {
         return size;
     }
 
-    public static int immutableIntArraySize(final @Nullable ImmutableIntArray array) {
+    public static int immutableIntArraySize(final @Nullable FinalInts array) {
         if (array == null) {
             return 0;
         }

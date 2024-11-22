@@ -18,7 +18,7 @@ package com.hivemq.topics.tree;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.metrics.MetricsHolder;
@@ -31,8 +31,6 @@ import com.hivemq.persistence.clientsession.ClientSession;
 import com.hivemq.persistence.clientsession.ClientSessionPersistence;
 import com.hivemq.persistence.clientsession.ClientSessionSubscriptionPersistence;
 import com.hivemq.persistence.clientsession.SharedSubscriptionService;
-import com.hivemq.topics.tree.LocalTopicTree;
-import com.hivemq.topics.tree.TopicTreeStartup;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -107,22 +105,22 @@ public class TopicTreeStartupTest {
         final Set<SubscriberWithIds> subscribersForTopic3 = topicTree.findTopicSubscribers("topic3").getSubscribers();
 
         assertThat(subscribersForTopic1,
-                hasItems(new SubscriberWithIds("client1", 1, (byte) 0, null, null, ImmutableIntArray.EMPTY),
-                        new SubscriberWithIds("client2", 1, (byte) 0, null, null, ImmutableIntArray.EMPTY)));
+                hasItems(new SubscriberWithIds("client1", 1, (byte) 0, null, null, FinalInts.NONE),
+                        new SubscriberWithIds("client2", 1, (byte) 0, null, null, FinalInts.NONE)));
         assertThat(subscribersForTopic2,
                 hasItems(new SubscriberWithIds("client2",
                         2,
                         SubscriptionFlag.buildFlag(false, false, false),
                         null,
                         null,
-                        ImmutableIntArray.EMPTY)));
+                        FinalInts.NONE)));
         assertThat(subscribersForTopic3,
                 hasItems(new SubscriberWithIds("client3",
                         0,
                         SubscriptionFlag.buildFlag(false, true, true),
                         null,
                         null,
-                        ImmutableIntArray.EMPTY)));
+                        FinalInts.NONE)));
     }
 
     @Test

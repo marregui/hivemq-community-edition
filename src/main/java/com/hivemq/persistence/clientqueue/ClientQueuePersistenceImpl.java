@@ -17,7 +17,7 @@ package com.hivemq.persistence.clientqueue;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.bootstrap.ClientConnection;
@@ -173,7 +173,7 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
     public @NotNull ListenableFuture<ImmutableList<PUBLISH>> readNew(
             final @NotNull String queueId,
             final boolean shared,
-            final @NotNull ImmutableIntArray packetIds,
+            final @NotNull FinalInts packetIds,
             final long byteLimit) {
         try {
             Objects.requireNonNull(queueId, "Queue ID must not be null");
@@ -190,7 +190,7 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
             final @NotNull String sharedSubscription, final int messageLimit, final long byteLimit) {
         Objects.requireNonNull(sharedSubscription, "Shared subscription must not be null");
         // We reuse the non shared read new logic but without providing real message ID's.
-        final ImmutableIntArray.Builder builder = ImmutableIntArray.builder(messageLimit);
+        final FinalInts.Builder builder = FinalInts.builder(messageLimit);
         for (int i = 0; i < messageLimit; i++) {
             builder.add(SHARED_IN_FLIGHT_MARKER); // We don't need a real message id here, messages are just marked as in-flight
         }

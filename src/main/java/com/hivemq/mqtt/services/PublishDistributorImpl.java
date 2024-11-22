@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.services;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -126,7 +126,7 @@ public class PublishDistributorImpl implements PublishDistributor {
             final int subscriptionQos,
             final boolean sharedSubscription,
             final boolean retainAsPublished,
-            final @Nullable ImmutableIntArray subscriptionIdentifier) {
+            final @Nullable FinalInts subscriptionIdentifier) {
 
         return handlePublish(publish,
                 clientId,
@@ -142,7 +142,7 @@ public class PublishDistributorImpl implements PublishDistributor {
             final int subscriptionQos,
             final boolean sharedSubscription,
             final boolean retainAsPublished,
-            final @Nullable ImmutableIntArray subscriptionIdentifier) {
+            final @Nullable FinalInts subscriptionIdentifier) {
 
         if (sharedSubscription) {
             return queuePublish(client,
@@ -182,7 +182,7 @@ public class PublishDistributorImpl implements PublishDistributor {
             final int subscriptionQos,
             final boolean shared,
             final boolean retainAsPublished,
-            final @Nullable ImmutableIntArray subscriptionIdentifier,
+            final @Nullable FinalInts subscriptionIdentifier,
             final @Nullable Long queueLimit) {
 
         final ListenableFuture<Void> future = clientQueuePersistence.add(client,
@@ -211,10 +211,10 @@ public class PublishDistributorImpl implements PublishDistributor {
             final @NotNull PUBLISH publish,
             final int subscriptionQos,
             final boolean retainAsPublished,
-            final @Nullable ImmutableIntArray subscriptionIdentifier) {
-        final ImmutableIntArray identifiers;
+            final @Nullable FinalInts subscriptionIdentifier) {
+        final FinalInts identifiers;
         if (subscriptionIdentifier == null) {
-            identifiers = ImmutableIntArray.EMPTY;
+            identifiers = FinalInts.NONE;
         } else {
             identifiers = subscriptionIdentifier;
         }

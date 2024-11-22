@@ -17,7 +17,7 @@ package com.hivemq.persistence.clientqueue;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.config.MqttConfigService;
@@ -225,13 +225,13 @@ public class ClientQueuePersistenceImplTest {
 
         when(localPersistence.readNew(anyString(),
                 anyBoolean(),
-                any(ImmutableIntArray.class),
+                any(FinalInts.class),
                 anyLong(),
                 anyInt())).thenReturn(ImmutableList.of(createPublish(1, QoS.AT_MOST_ONCE, "topic"),
                 createPublish(2, QoS.AT_LEAST_ONCE, "topic")));
 
         final ImmutableList<PUBLISH> publishes =
-                clientQueuePersistence.readNew("client", false, ImmutableIntArray.of(1, 2), 1000).get();
+                clientQueuePersistence.readNew("client", false, FinalInts.of(1, 2), 1000).get();
 
         assertEquals(2, publishes.size());
 

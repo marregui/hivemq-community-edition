@@ -16,7 +16,7 @@
 package util;
 
 import com.google.common.collect.ImmutableList;
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.hivemq.codec.encoder.mqtt5.Mqtt5PayloadFormatIndicator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -117,11 +117,11 @@ public class TestMessageUtil {
             final boolean isNewTopicAlias,
             final @Nullable ImmutableList<Integer> subscriptionIdentifiers) {
 
-        final ImmutableIntArray subscriptionIdentifierArray;
+        final FinalInts subscriptionIdentifierArray;
         if (subscriptionIdentifiers == null) {
-            subscriptionIdentifierArray = ImmutableIntArray.EMPTY;
+            subscriptionIdentifierArray = FinalInts.NONE;
         } else {
-            subscriptionIdentifierArray = ImmutableIntArray.copyOf(subscriptionIdentifiers);
+            subscriptionIdentifierArray = FinalInts.copyOf(subscriptionIdentifiers);
         }
 
         return new PUBLISHFactory.Mqtt5Builder().withHivemqId(hivemqId)

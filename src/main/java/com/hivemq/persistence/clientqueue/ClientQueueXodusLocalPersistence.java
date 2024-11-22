@@ -20,7 +20,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.google.inject.Singleton;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.config.MqttConfigService;
@@ -596,7 +596,7 @@ public class ClientQueueXodusLocalPersistence extends XodusLocalPersistence impl
     public @NotNull ImmutableList<PUBLISH> readNew(
             final @NotNull String queueId,
             final boolean shared,
-            final @NotNull ImmutableIntArray packetIds,
+            final @NotNull FinalInts packetIds,
             final long bytesLimit,
             final int bucketIndex) {
         Objects.requireNonNull(queueId, "Queue ID must not be null");

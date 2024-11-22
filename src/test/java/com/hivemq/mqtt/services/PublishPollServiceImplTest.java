@@ -17,7 +17,7 @@ package com.hivemq.mqtt.services;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.google.common.util.concurrent.Futures;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
@@ -136,7 +136,7 @@ public class PublishPollServiceImplTest {
         when(ids.lockId()).thenReturn(1);
         when(clientQueuePersistence.readNew(eq("client"),
                 eq(false),
-                any(ImmutableIntArray.class),
+                any(FinalInts.class),
                 anyLong())).thenReturn(Futures.immediateFuture(ImmutableList.of(createPublish(), createPublish())));
         when(channel.isActive()).thenReturn(true);
         clientConnection.setInFlightMessageCount(new AtomicInteger(0));
@@ -158,7 +158,7 @@ public class PublishPollServiceImplTest {
         when(ids.lockId()).thenReturn(1);
         when(clientQueuePersistence.readNew(eq("client"),
                 eq(false),
-                any(ImmutableIntArray.class),
+                any(FinalInts.class),
                 anyLong())).thenReturn(Futures.immediateFuture(ImmutableList.of(createPublish())));
         when(channel.isActive()).thenReturn(true);
         clientConnection.setInFlightMessageCount(new AtomicInteger(0));
@@ -178,7 +178,7 @@ public class PublishPollServiceImplTest {
         when(ids.lockId()).thenReturn(1);
         when(clientQueuePersistence.readNew(eq("client"),
                 eq(false),
-                any(ImmutableIntArray.class),
+                any(FinalInts.class),
                 anyLong())).thenReturn(Futures.immediateFuture(ImmutableList.of(createPublish())));
         when(channel.isActive()).thenReturn(false);
         clientConnection.setInFlightMessageCount(new AtomicInteger(0));

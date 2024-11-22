@@ -17,7 +17,7 @@ package com.hivemq.mqtt.services;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.hivemq.util.ImmutableIntArray;
+import com.hivemq.util.FinalInts;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -142,7 +142,7 @@ public class PublishPollServiceImpl implements PublishPollService {
     @Override
     public void pollNewMessages(final @NotNull String client, final @NotNull Channel channel) {
         final Ids ids = ClientConnection.of(channel).getFreePacketIdRanges();
-        final ImmutableIntArray messageIds;
+        final FinalInts messageIds;
         try {
             messageIds = createMessageIds(ids, pollMessageLimit(channel));
         } catch (final UnavailableIdException e) {
@@ -339,9 +339,9 @@ public class PublishPollServiceImpl implements PublishPollService {
                     // We can't send the qos when the message is queue, because we don't know the which client is will be sent
                     final QoS minQos = QoS.valueOf(Math.min(qos, publish.getOnwardQoS().getQosNumber()));
                     // There can only be one subscription ID for this message, because there are no overlapping shared subscriptions
-                    final ImmutableIntArray subscriptionIdentifiers = subscriptionIdentifier != null ?
-                            ImmutableIntArray.of(subscriptionIdentifier) :
-                            ImmutableIntArray.EMPTY;
+                    final FinalInts subscriptionIdentifiers = subscriptionIdentifier != null ?
+                            FinalInts.of(subscriptionIdentifier) :
+                            FinalInts.NONE;
                     int packetId = 0;
                     try {
                         if (Objects.requireNonNull(minQos).getQosNumber() > 0) {
@@ -416,9 +416,9 @@ public class PublishPollServiceImpl implements PublishPollService {
         return clientQueuePersistence.removeInFlightMarker(sharedSubscription, uniqueId);
     }
 
-    private @NotNull ImmutableIntArray createMessageIds(
+    private @NotNull FinalInts createMessageIds(
             final @NotNull Ids messageIDPool, final int pollMessageLimit) throws UnavailableIdException {
-        final ImmutableIntArray.Builder builder = ImmutableIntArray.builder(pollMessageLimit);
+        final FinalInts.Builder builder = FinalInts.builder(pollMessageLimit);
         for (int i = 0; i < pollMessageLimit; i++) {
             final int nextId = messageIDPool.lockId();
             builder.add(nextId);

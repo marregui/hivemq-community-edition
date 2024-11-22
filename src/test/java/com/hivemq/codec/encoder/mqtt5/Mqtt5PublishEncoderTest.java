@@ -15,7 +15,6 @@
  */
 package com.hivemq.codec.encoder.mqtt5;
 
-import com.google.common.collect.ImmutableList;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.config.ConfigService;
 import com.hivemq.config.RandomId;
@@ -23,18 +22,13 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.mqtt5.MqttUserProperty;
 import com.hivemq.mqtt.message.publish.PUBLISH;
+import com.hivemq.util.FinalInts;
 import org.junit.Before;
 import org.junit.Test;
 import util.TestMessageUtil;
 
-import java.util.Collections;
-import java.util.TreeSet;
-
 import static com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties.NO_USER_PROPERTIES;
 
-/**
- * @author Florian Limpöck
- */
 public class Mqtt5PublishEncoderTest extends AbstractMqtt5EncoderTest {
 
     private RandomId hiveMQId;
@@ -92,10 +86,6 @@ public class Mqtt5PublishEncoderTest extends AbstractMqtt5EncoderTest {
                 userProperty,
                 userProperty);
 
-        final TreeSet<Integer> identifiers = new TreeSet<>();
-        identifiers.add(10);
-        identifiers.add(20);
-        identifiers.add(30);
         final PUBLISH publish = TestMessageUtil.createMqtt5Publish(hiveMQId.get(),
                 "topic",
                 new byte[]{1, 2, 3, 4, 5},
@@ -111,7 +101,7 @@ public class Mqtt5PublishEncoderTest extends AbstractMqtt5EncoderTest {
                 -1,
                 false,
                 true,
-                ImmutableList.copyOf(identifiers));
+                FinalInts.of(10,20,30));
 
         encodeTestBufferSize(expected, publish);
     }
@@ -807,7 +797,7 @@ public class Mqtt5PublishEncoderTest extends AbstractMqtt5EncoderTest {
                 15,
                 false,
                 true,
-                ImmutableList.copyOf(Collections.singleton(3)));
+                FinalInts.of(3));
         encodeTestBufferSize(expected, publish);
     }
 
@@ -831,11 +821,6 @@ public class Mqtt5PublishEncoderTest extends AbstractMqtt5EncoderTest {
                 // subscription identifier
                 0x0b, 4};
 
-        final TreeSet<Integer> identifiers = new TreeSet<>();
-        identifiers.add(3);
-        identifiers.add(4);
-
-
         final PUBLISH publish = TestMessageUtil.createMqtt5Publish(hiveMQId.get(),
                 "topic",
                 new byte[0],
@@ -851,7 +836,7 @@ public class Mqtt5PublishEncoderTest extends AbstractMqtt5EncoderTest {
                 15,
                 false,
                 true,
-                ImmutableList.copyOf(identifiers));
+                FinalInts.of(3, 4));
         encodeTestBufferSize(expected, publish);
     }
 

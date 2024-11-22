@@ -50,9 +50,6 @@ import com.hivemq.mqtt.message.unsubscribe.UNSUBSCRIBE;
 
 import java.util.List;
 
-/**
- * @since 4.0.0
- */
 public class TestMessageUtil {
 
     public static final Mqtt5UserProperties TEST_USER_PROPERTIES =
@@ -115,13 +112,13 @@ public class TestMessageUtil {
             final int packetIdentifier,
             final boolean isDup,
             final boolean isNewTopicAlias,
-            final @Nullable ImmutableList<Integer> subscriptionIdentifiers) {
+            final @Nullable FinalInts subscriptionIdentifiers) {
 
         final FinalInts subscriptionIdentifierArray;
         if (subscriptionIdentifiers == null) {
             subscriptionIdentifierArray = FinalInts.NONE;
         } else {
-            subscriptionIdentifierArray = FinalInts.copyOf(subscriptionIdentifiers);
+            subscriptionIdentifierArray = subscriptionIdentifiers;
         }
 
         return new PUBLISHFactory.Mqtt5Builder().withHivemqId(hivemqId)
@@ -160,7 +157,7 @@ public class TestMessageUtil {
                 1,
                 true,
                 true,
-                ImmutableList.of(1, 2, 3));
+                FinalInts.of(1, 2, 3));
     }
 
     public static CONNECT createFullMqtt5Connect() {

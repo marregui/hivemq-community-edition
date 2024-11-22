@@ -17,18 +17,16 @@ package com.hivemq.util;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.Serializable;
 import java.util.*;
-
 
 public final class FinalInts {
     public static final @NotNull FinalInts NONE = new FinalInts(new int[0], 0, 0);
 
-    private final int[] ints;
+    private final int @NotNull [] ints;
     private final transient int start;
     private final int end;
 
-    private FinalInts(int[] ints, int start, int end) {
+    private FinalInts(final int @NotNull [] ints, final int start, final int end) {
         this.ints = ints;
         this.start = start;
         this.end = end;
@@ -38,29 +36,11 @@ public final class FinalInts {
         return new FinalInts(new int[]{value}, 0, 1);
     }
 
-    public static @NotNull FinalInts of(final int first, final int... rest) {
+    public static @NotNull FinalInts of(final int first, final int @NotNull ... rest) {
         final int[] array = new int[rest.length + 1];
         array[0] = first;
         System.arraycopy(rest, 0, array, 1, rest.length);
         return new FinalInts(array, 0, array.length);
-    }
-
-    public static FinalInts copyOf(final @Nullable Collection<Integer> values) {
-        return values == null || values.isEmpty() ? NONE : new FinalInts(toArray(values), 0, values.size());
-    }
-
-    public static int[] toArray(Collection<? extends Number> collection) {
-        if (collection instanceof IntArrayAsList) {
-            return ((IntArrayAsList) collection).toIntArray();
-        }
-
-        Object[] boxedArray = collection.toArray();
-        int len = boxedArray.length;
-        int[] array = new int[len];
-        for (int i = 0; i < len; i++) {
-            array[i] = ((Number) Objects.requireNonNull(boxedArray[i])).intValue();
-        }
-        return array;
     }
 
     public static FinalInts repeat(final int value, final int size) {
@@ -68,13 +48,11 @@ public final class FinalInts {
             throw new IllegalArgumentException();
         }
         final int[] array = new int[size];
-        for (int i = 0; i < size; i++) {
-            array[i] = value;
-        }
+        Arrays.fill(array, value);
         return new FinalInts(array, 0, array.length);
     }
 
-    public static Builder builder(int initialCapacity) {
+    public static Builder builder(final int initialCapacity) {
         if (initialCapacity < 0) {
             throw new IllegalArgumentException();
         }
@@ -93,24 +71,20 @@ public final class FinalInts {
         return end == start;
     }
 
-    public int get(int index) {
+    public int get(final int index) {
         if (index < 0 || index >= end - start) {
             throw new IndexOutOfBoundsException();
         }
         return ints[start + index];
     }
 
-    public int indexOf(int target) {
+    public boolean contains(final int target) {
         for (int i = start; i < end; i++) {
             if (ints[i] == target) {
-                return i - start;
+                return true;
             }
         }
-        return -1;
-    }
-
-    public boolean contains(int target) {
-        return indexOf(target) >= 0;
+        return false;
     }
 
     @Override
@@ -119,9 +93,8 @@ public final class FinalInts {
             return true;
         }
         final int size = end - start;
-
         if (o instanceof FinalInts) {
-            FinalInts that = (FinalInts) o;
+            final FinalInts that = (FinalInts) o;
             if (size != that.size()) {
                 return false;
             }
@@ -131,9 +104,8 @@ public final class FinalInts {
                 }
             }
             return true;
-        }
-        if (o instanceof List<?>) {
-            List<?> that = (List<?>) o;
+        } else if (o instanceof List<?>) {
+            final List<?> that = (List<?>) o;
             if (size != that.size()) {
                 return false;
             }
@@ -160,184 +132,33 @@ public final class FinalInts {
 
     @Override
     public String toString() {
-        if (isEmpty()) {
+        if (end == start) {
             return "[]";
         }
-        StringBuilder builder = new StringBuilder(size() * 5); // rough estimate is fine
-        builder.append('[').append(ints[start]);
-
+        final StringBuilder sb = new StringBuilder((end - start) * 5);
+        sb.append('[').append(ints[start]);
         for (int i = start + 1; i < end; i++) {
-            builder.append(", ").append(ints[i]);
+            sb.append(',').append(ints[i]);
         }
-        builder.append(']');
-        return builder.toString();
-    }
-
-    private static class IntArrayAsList extends AbstractList<Integer> implements RandomAccess, Serializable {
-        private static final long serialVersionUID = 0;
-        final int[] array;
-        final int start;
-        final int end;
-
-        IntArrayAsList(int[] array, int start, int end) {
-            this.array = array;
-            this.start = start;
-            this.end = end;
-        }
-
-        private static int indexOf(int[] array, int target, int start, int end) {
-            for (int i = start; i < end; i++) {
-                if (array[i] == target) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        private static int lastIndexOf(int[] array, int target, int start, int end) {
-            for (int i = end - 1; i >= start; i--) {
-                if (array[i] == target) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        @Override
-        public int size() {
-            return end - start;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return false;
-        }
-
-        @Override
-        public Integer get(int index) {
-            if (index < 0 || index >= end - start) {
-                throw new IndexOutOfBoundsException();
-            }
-            return array[start + index];
-        }
-
-        @Override
-        public Spliterator.OfInt spliterator() {
-            return Spliterators.spliterator(array, start, end, 0);
-        }
-
-        @Override
-        public boolean contains(Object target) {
-            return (target instanceof Integer) && indexOf(array, (Integer) target, start, end) != -1;
-        }
-
-        @Override
-        public int indexOf(Object target) {
-            // Overridden to prevent a ton of boxing
-            if (target instanceof Integer) {
-                int i = indexOf(array, (Integer) target, start, end);
-                if (i >= 0) {
-                    return i - start;
-                }
-            }
-            return -1;
-        }
-
-        @Override
-        public int lastIndexOf(Object target) {
-            // Overridden to prevent a ton of boxing
-            if (target instanceof Integer) {
-                int i = lastIndexOf(array, (Integer) target, start, end);
-                if (i >= 0) {
-                    return i - start;
-                }
-            }
-            return -1;
-        }
-
-        @Override
-        public Integer set(int index, Integer element) {
-            if (index < 0 || index >= end - start) {
-                throw new IndexOutOfBoundsException();
-            }
-            int oldValue = array[start + index];
-            array[start + index] = Objects.requireNonNull(element);
-            return oldValue;
-        }
-
-        @Override
-        public List<Integer> subList(int fromIndex, int toIndex) {
-            if (fromIndex < 0 || toIndex < fromIndex || toIndex > end - start) {
-                throw new IndexOutOfBoundsException();
-            }
-            if (fromIndex == toIndex) {
-                return Collections.emptyList();
-            }
-            return new IntArrayAsList(array, start + fromIndex, start + toIndex);
-        }
-
-        @Override
-        public boolean equals(@org.checkerframework.checker.nullness.qual.Nullable Object object) {
-            if (object == this) {
-                return true;
-            }
-            if (object instanceof IntArrayAsList) {
-                IntArrayAsList that = (IntArrayAsList) object;
-                int size = size();
-                if (that.size() != size) {
-                    return false;
-                }
-                for (int i = 0; i < size; i++) {
-                    if (array[start + i] != that.array[that.start + i]) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            return super.equals(object);
-        }
-
-        @Override
-        public int hashCode() {
-            int result = 1;
-            for (int i = start; i < end; i++) {
-                result = 31 * result + array[i];
-            }
-            return result;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder(size() * 5);
-            builder.append('[').append(array[start]);
-            for (int i = start + 1; i < end; i++) {
-                builder.append(", ").append(array[i]);
-            }
-            return builder.append(']').toString();
-        }
-
-        int[] toIntArray() {
-            return Arrays.copyOfRange(array, start, end);
-        }
+        return sb.append(']').toString();
     }
 
     public static final class Builder {
-        private int[] array;
+        private int @NotNull [] array;
         private int size;
 
-        private Builder(int initialCapacity) {
+        private Builder(final int initialCapacity) {
             array = new int[initialCapacity];
         }
 
-
-        public Builder add(int value) {
+        public @NotNull Builder add(final int value) {
             ensureSize(1);
             array[size] = value;
             size += 1;
             return this;
         }
 
-        public Builder addAll(final @NotNull FinalInts values) {
+        public @NotNull Builder addAll(final @NotNull FinalInts values) {
             final int additional = values.size();
             ensureSize(additional);
             System.arraycopy(values.ints, values.start, array, size, additional);
@@ -366,7 +187,7 @@ public final class FinalInts {
             }
         }
 
-        public FinalInts build() {
+        public @NotNull FinalInts build() {
             return size == 0 ? NONE : new FinalInts(array, 0, size);
         }
     }

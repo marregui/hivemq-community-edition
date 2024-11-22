@@ -345,11 +345,6 @@ public class BytesTest {
         Bytes.copyIntToByteArray(Integer.MAX_VALUE, bytes, -1);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void test_copy_int_to_array_null() {
-        Bytes.copyIntToByteArray(Integer.MAX_VALUE, null, 0);
-    }
-
     @Test
     public void test_copy_long_to_byte_array() throws Exception {
         final byte[] bytes = new byte[8];

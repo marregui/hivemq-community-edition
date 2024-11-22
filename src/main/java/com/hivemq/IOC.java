@@ -56,7 +56,6 @@ import com.hivemq.mqtt.services.PublishDistributor;
 import com.hivemq.mqtt.services.PublishDistributorImpl;
 import com.hivemq.mqtt.services.PublishPollService;
 import com.hivemq.mqtt.services.PublishPollServiceImpl;
-import com.hivemq.topics.TopicMatcher;
 import com.hivemq.topics.tree.TopicTreeStartup;
 import com.hivemq.persistence.PersistenceShutdownHookInstaller;
 import com.hivemq.persistence.PersistenceStartup;

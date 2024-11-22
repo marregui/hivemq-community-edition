@@ -28,10 +28,9 @@ public enum SubscriptionFlag {
         this.offset = offset;
     }
 
-    public static byte buildFlag(
-            final boolean isSharedSubscription, final boolean retainAsPublished, final boolean noLocal) {
-        byte flags = Bytes.setBit((byte) 0, SHARED_SUBSCRIPTION.getOffset(), isSharedSubscription);
-        flags = Bytes.setBit(flags, RETAIN_AS_PUBLISHED.getOffset(), retainAsPublished);
+    public static byte buildFlag(final boolean isShared, final boolean retain, final boolean noLocal) {
+        byte flags = Bytes.setBit((byte) 0, SHARED_SUBSCRIPTION.getOffset(), isShared);
+        flags = Bytes.setBit(flags, RETAIN_AS_PUBLISHED.getOffset(), retain);
         return Bytes.setBit(flags, NO_LOCAL.getOffset(), noLocal);
     }
 

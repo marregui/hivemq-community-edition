@@ -26,6 +26,7 @@ public class TopicFilter {
     private final @Nullable String sharedName;
 
     public TopicFilter(final @NotNull String topic, final @Nullable String sharedName) {
+        Objects.requireNonNull(topic, "topic must not be null");
         this.topic = topic;
         this.sharedName = sharedName;
     }
@@ -43,15 +44,15 @@ public class TopicFilter {
         if (this == o) {
             return true;
         }
-        if (! (o instanceof TopicFilter)) {
-            return false;
+        if (o instanceof TopicFilter) {
+            final TopicFilter that = (TopicFilter) o;
+            return topic.equals(that.topic) && Objects.equals(sharedName, that.sharedName);
         }
-        final TopicFilter that = (TopicFilter) o;
-        return topic.equals(that.topic) && Objects.equals(sharedName, that.sharedName);
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(topic, sharedName);
+        return 31 * (31 + topic.hashCode()) + (sharedName != null ? sharedName.hashCode() : 0);
     }
 }

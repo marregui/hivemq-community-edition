@@ -15,8 +15,6 @@
  */
 package com.hivemq.topics;
 
-import com.hivemq.topics.InvalidTopicException;
-import com.hivemq.topics.PermissionTopicMatcherUtils;
 import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -30,7 +28,7 @@ public class PermissionTopicMatcherUtilsTest {
     private final @NotNull String actual = "my/test/topic/for/the/unit/test";
 
     private static boolean matches(final @NotNull String permissionTopic, final @NotNull String actualTopic)
-            throws InvalidTopicException {
+            throws NotCompliantTopicException {
 
         final String stripedPermissionTopic = Strings.stripSlash(permissionTopic);
         final String[] splitPermissionTopic = Strings.splitOnFwdSlash(stripedPermissionTopic);

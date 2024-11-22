@@ -43,7 +43,6 @@ import static com.hivemq.config.InternalConfig.SHARED_SUBSCRIPTION_CACHE_MAX_SIZ
 import static com.hivemq.config.InternalConfig.SHARED_SUBSCRIPTION_CACHE_TIME_TO_LIVE_MSEC;
 
 @Singleton
-
 public class SharedSubscriptionService {
 
     private static final String SHARED_SUBSCRIPTION_PREFIX = "$share/";

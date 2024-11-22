@@ -73,8 +73,7 @@ public class TopicTreeStartupTest {
 
         topicTreeStartup = new TopicTreeStartup(topicTree,
                 clientSessionPersistence,
-                clientSessionSubscriptionPersistence,
-                sharedSubscriptionService);
+                clientSessionSubscriptionPersistence);
     }
 
     @Test

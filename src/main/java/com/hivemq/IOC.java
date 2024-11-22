@@ -56,7 +56,6 @@ import com.hivemq.mqtt.services.PublishDistributor;
 import com.hivemq.mqtt.services.PublishDistributorImpl;
 import com.hivemq.mqtt.services.PublishPollService;
 import com.hivemq.mqtt.services.PublishPollServiceImpl;
-import com.hivemq.topics.TokenizedTopicMatcher;
 import com.hivemq.topics.TopicMatcher;
 import com.hivemq.topics.tree.TopicTreeStartup;
 import com.hivemq.persistence.PersistenceShutdownHookInstaller;
@@ -141,9 +140,6 @@ public class IOC extends SingletonModule<IOC> {
         bind(ChannelGroup.class).toInstance(new DefaultChannelGroup(GlobalEventExecutor.INSTANCE));
         bind(NettyConfiguration.class).toProvider(NettyConfigurationProvider.class).in(Singleton.class);
         bind(ChannelInitializerFactory.class).to(ChannelInitializerFactoryImpl.class);
-
-        // topics
-        bind(TopicMatcher.class).to(TokenizedTopicMatcher.class);
 
         // mqtt handling
         final DefaultEventExecutorGroup mqttHandlerWorker = new DefaultEventExecutorGroup(

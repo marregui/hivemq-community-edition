@@ -17,17 +17,9 @@ package com.hivemq.topics;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Indicates that a provided topic is not compliant with the definition of a topic in the mqtt specification.
- * <p>
- * Please note that since HiveMQ 3.0 this is a {@link RuntimeException}. Prior to HiveMQ 3.0
- * this was a checked Exception.
- *
- * @since 1.4
- */
-public class InvalidTopicException extends RuntimeException {
+public class NotCompliantTopicException extends RuntimeException {
 
-    public InvalidTopicException(final @NotNull String message) {
+    public NotCompliantTopicException(final @NotNull String message) {
         super(message);
     }
 }

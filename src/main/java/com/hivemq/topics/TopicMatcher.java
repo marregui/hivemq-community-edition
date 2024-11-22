@@ -13,22 +13,71 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hivemq.topics;
 
+import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A topic matcher which is useful if you want to match topics manually if they match to specific wildcard topics
- */
-public interface TopicMatcher {
-    /**
-     * Evaluates if a topic matches a specific topic which also can contain wildcards. All MQTT topic matching rules
-     * apply
-     *
-     * @param topicSubscription the subscription. May contain wildcards
-     * @param actualTopic       the actual topic. <b>Must not contain wildcards</b>
-     * @return {@code true} if a topic matches a specific subscription, {@code false} otherwise
-     * @throws InvalidTopicException if the topic was invalid
-     */
-    boolean matches(@NotNull String topicSubscription, @NotNull String actualTopic) throws InvalidTopicException;
+import static java.lang.Math.min;
+
+public class TopicMatcher {
+
+    private static boolean matchesWildcards(final String topicSubscription, final String actualTopic) {
+
+        if (topicSubscription.contains("#")) {
+            if (!Strings.endsWithSharp(topicSubscription) && topicSubscription.length() > 1) {
+                return false;
+            }
+        }
+
+        final String[] subscription = Strings.splitOnFwdSlash(topicSubscription);
+        final String[] topic = Strings.splitOnFwdSlash(actualTopic);
+
+        final int smallest = min(subscription.length, topic.length);
+
+        for (int i = 0; i < smallest; i++) {
+            final String sub = subscription[i];
+            final String t = topic[i];
+
+            if (!sub.equals(t)) {
+                if ("#".equals(sub)) {
+                    return true;
+                } else if ("+".equals(sub)) {
+                    //Matches Topic Level wildcard, so we can just ignore
+
+                } else {
+                    //Does not match a wildcard and is not equal to the topic token
+                    return false;
+                }
+            }
+        }
+        //If the length is equal or the subscription token with the number x+1 (where x is the topic length) is a wildcard,
+        //everything is alright.
+        return subscription.length == topic.length ||
+                (subscription.length - topic.length == 1 && ("#".equals(subscription[subscription.length - 1])));
+    }
+
+    public boolean matches(@NotNull final String topicSubscription, @NotNull final String actualTopic)
+            throws NotCompliantTopicException {
+
+        if (!Strings.hasNoWildcards(actualTopic)) {
+            throw new NotCompliantTopicException("The actual topic must not contain a wildcard character (# or +)");
+        }
+        final String subscription = Strings.stripSlash(topicSubscription);
+
+        String topic = actualTopic;
+
+        if (topic.length() > 1) {
+            topic = Strings.stripSlash(topic);
+        }
+
+        if (Strings.hasNoWildcards(topicSubscription)) {
+            return subscription.equals(topic);
+        }
+        if (actualTopic.startsWith("$") && !topicSubscription.startsWith("$")) {
+            return false;
+        }
+        return matchesWildcards(subscription, topic);
+    }
 }

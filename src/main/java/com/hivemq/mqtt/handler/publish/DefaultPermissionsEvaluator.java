@@ -26,7 +26,7 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.connect.MqttWillPublish;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.topics.InvalidTopicException;
+import com.hivemq.topics.NotCompliantTopicException;
 import com.hivemq.topics.PermissionTopicMatcherUtils;
 import com.hivemq.util.Topics;
 
@@ -257,7 +257,7 @@ public final class DefaultPermissionsEvaluator {
 
             //fallback, should never be needed
             return false;
-        } catch (final InvalidTopicException e) {
+        } catch (final NotCompliantTopicException e) {
             return false;
         }
     }

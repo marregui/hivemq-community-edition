@@ -31,7 +31,7 @@ public final class PermissionTopicMatcherUtils {
             final boolean endsWithWildCard,
             final boolean rootWildCard,
             final @NotNull String actualTopic,
-            final @NotNull String[] splitActualTopic) throws InvalidTopicException {
+            final @NotNull String[] splitActualTopic) throws NotCompliantTopicException {
 
         if (nonWildCard) {
             return permissionTopic.equals(actualTopic);

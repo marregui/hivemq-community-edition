@@ -23,9 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.mqtt.topic.SubscriberWithQoS;
-import com.hivemq.mqtt.topic.SubscriptionFlag;
-import com.hivemq.mqtt.topic.tree.LocalTopicTree;
+import com.hivemq.topics.SubscriberWithQoS;
+import com.hivemq.topics.SubscriptionFlag;
+import com.hivemq.topics.tree.LocalTopicTree;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

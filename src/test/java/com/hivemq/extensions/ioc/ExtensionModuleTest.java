@@ -51,7 +51,7 @@ import com.hivemq.mqtt.message.dropping.MessageDroppedService;
 import com.hivemq.mqtt.services.InternalPublishService;
 import com.hivemq.mqtt.services.PublishDistributor;
 import com.hivemq.mqtt.services.PublishPollService;
-import com.hivemq.mqtt.topic.tree.LocalTopicTree;
+import com.hivemq.topics.tree.LocalTopicTree;
 import com.hivemq.persistence.clientqueue.ClientQueuePersistence;
 import com.hivemq.persistence.clientsession.ClientSessionPersistence;
 import com.hivemq.persistence.clientsession.ClientSessionSubscriptionPersistence;
@@ -65,7 +65,6 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.traffic.GlobalTrafficShapingHandler;
 import org.junit.Before;
 import org.junit.Test;
-import util.TestConfigurationBootstrap;
 
 import java.util.concurrent.ExecutorService;
 

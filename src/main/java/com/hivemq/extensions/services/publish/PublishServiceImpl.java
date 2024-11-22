@@ -40,8 +40,8 @@ import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.message.publish.PUBLISHFactory;
 import com.hivemq.mqtt.services.InternalPublishService;
 import com.hivemq.mqtt.services.PublishDistributor;
-import com.hivemq.mqtt.topic.SubscriberWithIds;
-import com.hivemq.mqtt.topic.tree.LocalTopicTree;
+import com.hivemq.topics.SubscriberWithIds;
+import com.hivemq.topics.tree.LocalTopicTree;
 import com.hivemq.util.Bytes;
 
 import javax.inject.Inject;

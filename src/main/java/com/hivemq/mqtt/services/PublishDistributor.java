@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.mqtt.handler.publish.PublishStatus;
 import com.hivemq.mqtt.message.publish.PUBLISH;
-import com.hivemq.mqtt.topic.SubscriberWithIds;
+import com.hivemq.topics.SubscriberWithIds;
 
 import java.util.Map;
 import java.util.Set;

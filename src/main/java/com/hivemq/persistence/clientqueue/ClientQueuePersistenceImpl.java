@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.Objects;
 
 
-
 @Singleton
 public class ClientQueuePersistenceImpl extends AbstractPersistence implements ClientQueuePersistence {
 
@@ -187,19 +186,20 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
 
     @Override
     public @NotNull ListenableFuture<ImmutableList<PUBLISH>> readShared(
-            final @NotNull String sharedSubscription, final int messageLimit, final long byteLimit) {
-        Objects.requireNonNull(sharedSubscription, "Shared subscription must not be null");
-        // We reuse the non shared read new logic but without providing real message ID's.
-        final FinalInts.Builder builder = FinalInts.builder(messageLimit);
-        for (int i = 0; i < messageLimit; i++) {
-            builder.add(SHARED_IN_FLIGHT_MARKER); // We don't need a real message id here, messages are just marked as in-flight
-        }
-        return readNew(sharedSubscription, true, builder.build(), byteLimit);
+            final @NotNull String sharedSubscription,
+            final int messageLimit,
+            final long byteLimit) {
+        return readNew(Objects.requireNonNull(sharedSubscription),
+                true,
+                FinalInts.repeat(SHARED_IN_FLIGHT_MARKER, messageLimit),
+                byteLimit);
     }
 
     @Override
     public @NotNull ListenableFuture<ImmutableList<MessageWithID>> readInflight(
-            final @NotNull String client, final long byteLimit, final int messageLimit) {
+            final @NotNull String client,
+            final long byteLimit,
+            final int messageLimit) {
         Objects.requireNonNull(client, "Client ID must not be null");
         return singleWriter.submit(client,
                 bucketIndex -> localPersistence.readInflight(client, false, messageLimit, byteLimit, bucketIndex));
@@ -262,7 +262,8 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
 
     @Override
     public @NotNull ListenableFuture<Void> removeShared(
-            final @NotNull String sharedSubscription, final @NotNull String uniqueId) {
+            final @NotNull String sharedSubscription,
+            final @NotNull String uniqueId) {
         return singleWriter.submit(sharedSubscription, (bucketIndex) -> {
             localPersistence.removeShared(sharedSubscription, uniqueId, bucketIndex);
             return null;
@@ -271,7 +272,8 @@ public class ClientQueuePersistenceImpl extends AbstractPersistence implements C
 
     @Override
     public @NotNull ListenableFuture<Void> removeInFlightMarker(
-            final @NotNull String sharedSubscription, final @NotNull String uniqueId) {
+            final @NotNull String sharedSubscription,
+            final @NotNull String uniqueId) {
         return singleWriter.submit(sharedSubscription, (bucketIndex) -> {
             localPersistence.removeInFlightMarker(sharedSubscription, uniqueId, bucketIndex);
             // We notify the clients that there are new messages to poll.

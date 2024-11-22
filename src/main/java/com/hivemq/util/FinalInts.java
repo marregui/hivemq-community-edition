@@ -59,6 +59,17 @@ public final class FinalInts implements Serializable {
         return array;
     }
 
+    public static FinalInts repeat(final int value, final int size) {
+        if (size < 0) {
+            throw new IllegalArgumentException();
+        }
+        final int[] array = new int[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = value;
+        }
+        return new FinalInts(array, 0, array.length);
+    }
+
     public static Builder builder(int initialCapacity) {
         if (initialCapacity < 0) {
             throw new IllegalArgumentException();
@@ -105,10 +116,6 @@ public final class FinalInts implements Serializable {
 
     public boolean contains(int target) {
         return indexOf(target) >= 0;
-    }
-
-    public int[] toArray() {
-        return Arrays.copyOfRange(ints, start, end);
     }
 
     public FinalInts subArray(int startIndex, int endIndex) {
@@ -176,10 +183,6 @@ public final class FinalInts implements Serializable {
         final int[] array;
         final int start;
         final int end;
-
-        IntArrayAsList(int[] array) {
-            this(array, 0, array.length);
-        }
 
         IntArrayAsList(int[] array, int start, int end) {
             this.array = array;
@@ -350,16 +353,6 @@ public final class FinalInts implements Serializable {
             ensureRoomFor(1);
             array[count] = value;
             count += 1;
-            return this;
-        }
-
-        public Builder addAll(Iterable<Integer> values) {
-            if (values instanceof Collection) {
-                return addAll((Collection<Integer>) values);
-            }
-            for (Integer value : values) {
-                add(value);
-            }
             return this;
         }
 

@@ -15,26 +15,14 @@
  */
 package com.hivemq.topics;
 
-import com.hivemq.util.Bytes;
+import static com.hivemq.util.Bytes.setBit;
 
-public enum SubscriptionFlag {
-    SHARED_SUBSCRIPTION(1),
-    RETAIN_AS_PUBLISHED(2),
-    NO_LOCAL(3);
+public final class SubscriptionFlag {
+    public static final int SHARED = 1;
+    public static final int RETAIN = 2;
+    public static final int NON_LOCAL = 3;
 
-    private final int offset;
-
-    SubscriptionFlag(final int offset) {
-        this.offset = offset;
-    }
-
-    public static byte buildFlag(final boolean isShared, final boolean retain, final boolean noLocal) {
-        byte flags = Bytes.setBit((byte) 0, SHARED_SUBSCRIPTION.getOffset(), isShared);
-        flags = Bytes.setBit(flags, RETAIN_AS_PUBLISHED.getOffset(), retain);
-        return Bytes.setBit(flags, NO_LOCAL.getOffset(), noLocal);
-    }
-
-    public int getOffset() {
-        return offset;
+    public static byte buildFlag(final boolean shared, final boolean retain, final boolean nonLocal) {
+        return setBit(setBit(setBit((byte) 0, SHARED, shared), RETAIN, retain), NON_LOCAL, nonLocal);
     }
 }

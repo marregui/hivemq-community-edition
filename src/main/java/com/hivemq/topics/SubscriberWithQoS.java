@@ -15,7 +15,6 @@
  */
 package com.hivemq.topics;
 
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.util.Bytes;
@@ -25,9 +24,6 @@ import java.util.Objects;
 import static com.google.common.base.Preconditions.checkArgument;
 
 
-/**
- * This represents a subscriber (client ID) with a Quality of Service Level
- */
 public class SubscriberWithQoS implements Comparable<SubscriberWithQoS> {
 
     private final @NotNull String subscriber;
@@ -38,7 +34,10 @@ public class SubscriberWithQoS implements Comparable<SubscriberWithQoS> {
     private final byte flags;
 
     public SubscriberWithQoS(
-            final @NotNull String subscriber, final int qos, final byte flags, final @Nullable Integer subscriptionId) {
+            final @NotNull String subscriber,
+            final int qos,
+            final byte flags,
+            final @Nullable Integer subscriptionId) {
         this(subscriber, qos, flags, null, subscriptionId, null);
     }
 
@@ -73,15 +72,15 @@ public class SubscriberWithQoS implements Comparable<SubscriberWithQoS> {
     }
 
     public boolean isSharedSubscription() {
-        return Bytes.isBitSet(flags, SubscriptionFlag.SHARED_SUBSCRIPTION.getOffset());
+        return Bytes.isBitSet(flags, SubscriptionFlag.SHARED);
     }
 
     public boolean isRetainAsPublished() {
-        return Bytes.isBitSet(flags, SubscriptionFlag.RETAIN_AS_PUBLISHED.getOffset());
+        return Bytes.isBitSet(flags, SubscriptionFlag.RETAIN);
     }
 
     public boolean isNoLocal() {
-        return Bytes.isBitSet(flags, SubscriptionFlag.NO_LOCAL.getOffset());
+        return Bytes.isBitSet(flags, SubscriptionFlag.NON_LOCAL);
     }
 
     @Nullable

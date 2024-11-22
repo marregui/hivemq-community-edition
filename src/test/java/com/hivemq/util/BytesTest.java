@@ -15,8 +15,6 @@
  */
 package com.hivemq.util;
 
-import com.google.common.primitives.Ints;
-import com.google.common.primitives.Longs;
 import com.hivemq.config.RandomId;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -292,7 +290,7 @@ public class BytesTest {
 
     @Test
     public void test_read_long() throws Exception {
-        assertEquals(10, Bytes.readLong(Longs.toByteArray(10L), 0));
+        assertEquals(10, Bytes.readLong(Bytes.toByteArray(10L), 0));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -302,7 +300,7 @@ public class BytesTest {
 
     @Test
     public void test_read_int() throws Exception {
-        assertEquals(10, Bytes.readInt(Ints.toByteArray(10), 0));
+        assertEquals(10, Bytes.readInt(Bytes.toByteArray(10), 0));
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -31,6 +31,20 @@ public final class Bytes {
         return (number & (1 << off)) != 0;
     }
 
+    public static byte @NotNull [] toByteArray(final int value) {
+        return new byte[]{
+                (byte) (value >> 24), (byte) (value >> 16), (byte) (value >> 8), (byte) value};
+    }
+
+    public static byte@NotNull[] toByteArray(long value) {
+        final byte[] result = new byte[8];
+        for (int i = 7; i >= 0; i--) {
+            result[i] = (byte) (value & 0xffL);
+            value >>= 8;
+        }
+        return result;
+    }
+
     private static void check(final boolean expression) {
         if (!expression) {
             throw new IllegalArgumentException();

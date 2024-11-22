@@ -23,7 +23,6 @@ import com.hivemq.util.Bytes;
 import java.util.Objects;
 
 
-
 public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
 
     private final @NotNull String subscriber;
@@ -33,8 +32,7 @@ public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
     private int qos;
     private @NotNull ImmutableIntArray subscriptionIds;
 
-    public SubscriberWithIds(
-            final @NotNull String subscriber, final int qos, final byte flags) {
+    public SubscriberWithIds(final @NotNull String subscriber, final int qos, final byte flags) {
         this(subscriber, qos, flags, null, null, ImmutableIntArray.of());
 
     }
@@ -105,15 +103,15 @@ public class SubscriberWithIds implements Comparable<SubscriberWithIds> {
     }
 
     public boolean isSharedSubscription() {
-        return Bytes.isBitSet(flags, SubscriptionFlag.SHARED_SUBSCRIPTION.getOffset());
+        return Bytes.isBitSet(flags, SubscriptionFlag.SHARED);
     }
 
     public boolean isRetainAsPublished() {
-        return Bytes.isBitSet(flags, SubscriptionFlag.RETAIN_AS_PUBLISHED.getOffset());
+        return Bytes.isBitSet(flags, SubscriptionFlag.RETAIN);
     }
 
     public boolean isNoLocal() {
-        return Bytes.isBitSet(flags, SubscriptionFlag.NO_LOCAL.getOffset());
+        return Bytes.isBitSet(flags, SubscriptionFlag.NON_LOCAL);
     }
 
     public @Nullable String getTopicFilter() {

@@ -31,7 +31,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+
 import com.google.inject.Singleton;
+
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -47,10 +49,7 @@ import java.util.stream.Stream;
 
 import static com.hivemq.config.InternalConfig.TOPIC_TREE_MAP_CREATION_THRESHOLD;
 
-/**
- * A topic tree implementation which works with a standard read write lock with fairness guarantees. Either the whole
- * tree is locked or unlocked.
- */
+
 @Singleton
 public class LocalTopicTree {
 
@@ -107,11 +106,10 @@ public class LocalTopicTree {
                     if (current.getSubscriptionId() != null) {
                         final FinalInts subscriptionIds = last.getSubscriptionIds();
                         final Integer subscriptionId = current.getSubscriptionId();
-                        final FinalInts mergedSubscriptionIds =
-                                FinalInts.builder(subscriptionIds.size() + 1)
-                                        .addAll(subscriptionIds)
-                                        .add(subscriptionId)
-                                        .build();
+                        final FinalInts mergedSubscriptionIds = FinalInts.builder(subscriptionIds.size() + 1)
+                                .addAll(subscriptionIds)
+                                .add(subscriptionId)
+                                .build();
                         last.setSubscriptionIds(mergedSubscriptionIds);
                     }
                 }
@@ -128,7 +126,8 @@ public class LocalTopicTree {
     }
 
     private static boolean equalSubscription(
-            final @NotNull SubscriberWithQoS first, final @NotNull SubscriberWithIds second) {
+            final @NotNull SubscriberWithQoS first,
+            final @NotNull SubscriberWithIds second) {
 
         return equalSubscription(first, second.getSubscriber(), second.getTopicFilter(), second.getSharedName());
     }
@@ -203,7 +202,8 @@ public class LocalTopicTree {
     }
 
     private static @Nullable TopicTreeNode getIndexForChildNode(
-            final @NotNull String key, final @NotNull TopicTreeNode node) {
+            final @NotNull String key,
+            final @NotNull TopicTreeNode node) {
 
         final Map<String, TopicTreeNode> childrenMap = node.getChildrenMap();
         if (childrenMap == null) {
@@ -212,7 +212,7 @@ public class LocalTopicTree {
         return childrenMap.get(key);
     }
 
-    private static @Nullable TopicTreeNode getLastNode(final @Nullable TopicTreeNode @NotNull[] nodes) {
+    private static @Nullable TopicTreeNode getLastNode(final @Nullable TopicTreeNode @NotNull [] nodes) {
         //Search for the last node which is not null
         for (int i = nodes.length - 1; i >= 0; i--) {
             final TopicTreeNode node = nodes[i];
@@ -236,8 +236,8 @@ public class LocalTopicTree {
      */
     private static void iterateChildNodesForSubscriberRemoval(
             final @NotNull TopicTreeNode node,
-            final @NotNull String @NotNull[] topicParts,
-            final @NotNull TopicTreeNode @NotNull[] results,
+            final @NotNull String @NotNull [] topicParts,
+            final @NotNull TopicTreeNode @NotNull [] results,
             final int depth) {
 
         //Note dobermai: We don't need to check for "+" subscribers explicitly, because unsubscribes are always absolute
@@ -446,7 +446,7 @@ public class LocalTopicTree {
     private boolean addNode(
             final @NotNull SubscriberWithQoS subscriber,
             final @NotNull String topicFilter,
-            final @NotNull String @NotNull[] contents,
+            final @NotNull String @NotNull [] contents,
             final @NotNull TopicTreeNode node,
             final int i) {
 
@@ -476,7 +476,8 @@ public class LocalTopicTree {
     }
 
     public @NotNull TopicSubscribers findTopicSubscribers(
-            final @NotNull String topic, final boolean excludeRootLevelWildcard) {
+            final @NotNull String topic,
+            final boolean excludeRootLevelWildcard) {
 
         final ImmutableList.Builder<SubscriberWithQoS> subscribers = ImmutableList.builder();
         final ImmutableSet.Builder<String> sharedSubscriptions = ImmutableSet.builder();
@@ -486,8 +487,7 @@ public class LocalTopicTree {
 
         findSubscribers(topic, excludeRootLevelWildcard, subscriberConsumer);
 
-        final ImmutableSet<SubscriberWithIds> distinctSubscribers =
-                createDistinctSubscribers(subscribers.build());
+        final ImmutableSet<SubscriberWithIds> distinctSubscribers = createDistinctSubscribers(subscribers.build());
 
         return new TopicSubscribers(distinctSubscribers, sharedSubscriptions.build());
     }
@@ -564,7 +564,9 @@ public class LocalTopicTree {
     }
 
     public void removeSubscriber(
-            final @NotNull String subscriber, final @NotNull String topic, final @Nullable String sharedName) {
+            final @NotNull String subscriber,
+            final @NotNull String topic,
+            final @Nullable String sharedName) {
 
         Objects.requireNonNull(subscriber);
         Objects.requireNonNull(topic);
@@ -658,7 +660,8 @@ public class LocalTopicTree {
     }
 
     public @NotNull ImmutableSet<SubscriberWithQoS> getSharedSubscriber(
-            final @NotNull String group, final @NotNull String topicFilter) {
+            final @NotNull String group,
+            final @NotNull String topicFilter) {
 
         return getSubscriptionsByTopicFilter(topicFilter,
                 subscriber -> subscriber.isSharedSubscription() &&
@@ -667,7 +670,8 @@ public class LocalTopicTree {
     }
 
     public @NotNull ImmutableSet<String> getSubscribersWithFilter(
-            final @NotNull String topicFilter, final @NotNull Predicate<SubscriberWithQoS> itemFilter) {
+            final @NotNull String topicFilter,
+            final @NotNull Predicate<SubscriberWithQoS> itemFilter) {
 
         return createDistinctSubscriberIds(getSubscriptionsByTopicFilter(topicFilter, itemFilter));
     }
@@ -728,7 +732,8 @@ public class LocalTopicTree {
     }
 
     private @NotNull ImmutableSet<SubscriberWithQoS> getSubscriptionsByTopicFilter(
-            final @NotNull String topicFilter, final @NotNull Predicate<SubscriberWithQoS> itemFilter) {
+            final @NotNull String topicFilter,
+            final @NotNull Predicate<SubscriberWithQoS> itemFilter) {
 
         final ImmutableSet.Builder<SubscriberWithQoS> subscribers = ImmutableSet.builder();
         if ("#".equals(topicFilter)) {
@@ -820,8 +825,7 @@ public class LocalTopicTree {
         Utilities
      **************/
 
-    public @Nullable SubscriberWithIds findSubscriber(
-            final @NotNull String client, final @NotNull String topic) {
+    public @Nullable SubscriberWithIds findSubscriber(final @NotNull String client, final @NotNull String topic) {
 
         final ClientPublishDeliverySubscriptionInfoFinder subscriberConsumer =
                 new ClientPublishDeliverySubscriptionInfoFinder(client);
@@ -956,8 +960,7 @@ public class LocalTopicTree {
             if (subscribers.isEmpty()) {
                 return sharedSubscriber;
             } else {
-                final ImmutableSet<SubscriberWithIds> distinctSubscribers =
-                        createDistinctSubscribers(subscribers);
+                final ImmutableSet<SubscriberWithIds> distinctSubscribers = createDistinctSubscribers(subscribers);
                 return distinctSubscribers.asList().get(0);
             }
         }

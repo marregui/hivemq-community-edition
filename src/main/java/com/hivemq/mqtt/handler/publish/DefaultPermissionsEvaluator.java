@@ -26,12 +26,12 @@ import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.connect.MqttWillPublish;
 import com.hivemq.mqtt.message.publish.PUBLISH;
 import com.hivemq.mqtt.message.subscribe.Topic;
-import com.hivemq.topics.PermissionTopicMatcherUtils;
 import com.hivemq.util.Topics;
 
 import java.util.List;
 
 import static com.hivemq.persistence.clientsession.SharedSubscriptionService.SharedSubscription;
+import static java.lang.Math.min;
 
 public final class DefaultPermissionsEvaluator {
 
@@ -244,7 +244,7 @@ public final class DefaultPermissionsEvaluator {
         try {
             if (topicPermission instanceof InternalTopicPermission) {
                 final InternalTopicPermission internalTopicPermission = (InternalTopicPermission) topicPermission;
-                return PermissionTopicMatcherUtils.matches(Strings.stripSlash(topicPermission.getTopicFilter()),
+                return matches(Strings.stripSlash(topicPermission.getTopicFilter()),
                         ((InternalTopicPermission) topicPermission).getSplitTopic(),
                         !internalTopicPermission.containsWildcardCharacter(),
                         internalTopicPermission.endsWithWildcard(),
@@ -256,5 +256,50 @@ public final class DefaultPermissionsEvaluator {
         } catch (final Throwable e) {
             return false;
         }
+    }
+
+    public static boolean matches(
+            final @NotNull String permissionTopic,
+            final @NotNull String[] splitPermissionTopic,
+            final boolean nonWildCard,
+            final boolean endsWithWildCard,
+            final boolean rootWildCard,
+            final @NotNull String actualTopic,
+            final @NotNull String[] splitActualTopic) {
+
+        if (nonWildCard) {
+            return permissionTopic.equals(actualTopic);
+        }
+
+        if (rootWildCard) {
+            if (!endsWithWildCard && permissionTopic.length() > 1) {
+                return false;
+            }
+        }
+
+        final int smallest = min(splitPermissionTopic.length, splitActualTopic.length);
+
+        for (int i = 0; i < smallest; i++) {
+            final String sub = splitPermissionTopic[i];
+            final String t = splitActualTopic[i];
+
+            if (!sub.equals(t)) {
+                switch (sub) {
+                    case "#":
+                        return true;
+                    case "+":
+                        //Matches Topic Level wildcard, so we can just ignore
+                        break;
+                    default:
+                        //Does not match a wildcard and is not equal to the topic token
+                        return false;
+                }
+            }
+        }
+        //If the length is equal or the subscription token with the number x+1 (where x is the topic length) is a wildcard,
+        //everything is alright.
+        return splitPermissionTopic.length == splitActualTopic.length ||
+                (splitPermissionTopic.length - splitActualTopic.length == 1 &&
+                        ("#".equals(splitPermissionTopic[splitPermissionTopic.length - 1])));
     }
 }

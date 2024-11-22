@@ -15,6 +15,7 @@
  */
 package com.hivemq.topics;
 
+import com.hivemq.mqtt.handler.publish.DefaultPermissionsEvaluator;
 import com.hivemq.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class PermissionTopicMatcherUtilsTest {
         final boolean endsWithWildCard = Strings.endsWithSharp(stripedPermissionTopic);
         final String stripedActualTopic = Strings.stripSlash(actualTopic);
         final String[] splitActualTopic = Strings.splitOnFwdSlash(stripedActualTopic);
-        return PermissionTopicMatcherUtils.matches(stripedPermissionTopic,
+        return DefaultPermissionsEvaluator.matches(stripedPermissionTopic,
                 splitPermissionTopic,
                 nonWildCard,
                 endsWithWildCard,

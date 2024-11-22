@@ -16,9 +16,9 @@
 package com.hivemq.topics.tree;
 
 import com.hivemq.extension.sdk.api.services.subscription.SubscriptionType;
+import com.hivemq.extensions.services.subscription.SubscriptionStoreImpl;
 import com.hivemq.topics.SubscriberWithQoS;
 import com.hivemq.topics.SubscriptionFlag;
-import com.hivemq.topics.tree.SubscriptionTypeItemFilter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -32,7 +32,8 @@ public class SubscriptionTypeItemFilterTest {
         final byte sharedFlag = SubscriptionFlag.buildFlag(true, false, false);
         final byte individualFlag = SubscriptionFlag.buildFlag(false, false, false);
 
-        final SubscriptionTypeItemFilter itemFilter = new SubscriptionTypeItemFilter(SubscriptionType.ALL);
+        final SubscriptionStoreImpl.SubscriptionTypeItemFilter
+                itemFilter = new SubscriptionStoreImpl.SubscriptionTypeItemFilter(SubscriptionType.ALL);
 
         assertTrue(itemFilter.test(new SubscriberWithQoS("client", 0, individualFlag, 0)));
         assertTrue(itemFilter.test(new SubscriberWithQoS("client", 0, sharedFlag, 0)));
@@ -44,7 +45,8 @@ public class SubscriptionTypeItemFilterTest {
         final byte sharedFlag = SubscriptionFlag.buildFlag(true, false, false);
         final byte individualFlag = SubscriptionFlag.buildFlag(false, false, false);
 
-        final SubscriptionTypeItemFilter itemFilter = new SubscriptionTypeItemFilter(SubscriptionType.INDIVIDUAL);
+        final SubscriptionStoreImpl.SubscriptionTypeItemFilter
+                itemFilter = new SubscriptionStoreImpl.SubscriptionTypeItemFilter(SubscriptionType.INDIVIDUAL);
 
         assertTrue(itemFilter.test(new SubscriberWithQoS("client", 0, individualFlag, 0)));
         assertFalse(itemFilter.test(new SubscriberWithQoS("client", 0, sharedFlag, 0)));
@@ -56,7 +58,8 @@ public class SubscriptionTypeItemFilterTest {
         final byte sharedFlag = SubscriptionFlag.buildFlag(true, false, false);
         final byte individualFlag = SubscriptionFlag.buildFlag(false, false, false);
 
-        final SubscriptionTypeItemFilter itemFilter = new SubscriptionTypeItemFilter(SubscriptionType.SHARED);
+        final SubscriptionStoreImpl.SubscriptionTypeItemFilter
+                itemFilter = new SubscriptionStoreImpl.SubscriptionTypeItemFilter(SubscriptionType.SHARED);
 
         assertFalse(itemFilter.test(new SubscriberWithQoS("client", 0, individualFlag, 0)));
         assertTrue(itemFilter.test(new SubscriberWithQoS("client", 0, sharedFlag, 0)));

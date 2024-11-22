@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TopicTreeNode {
+class TopicTreeNode {
 
     private final @NotNull String topicPart;
     final @NotNull MatchingNodeSubscriptions wildcardSubscriptions;

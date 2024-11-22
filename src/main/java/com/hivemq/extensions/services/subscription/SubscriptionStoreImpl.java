@@ -23,6 +23,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Singleton;
+import com.hivemq.topics.SubscriberWithQoS;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.services.exception.DoNotImplementException;
@@ -48,7 +49,6 @@ import com.hivemq.extensions.services.executor.GlobalManagedExtensionExecutorSer
 import com.hivemq.extensions.services.general.IterationContextImpl;
 import com.hivemq.mqtt.message.subscribe.Topic;
 import com.hivemq.topics.tree.LocalTopicTree;
-import com.hivemq.topics.tree.SubscriptionTypeItemFilter;
 import com.hivemq.persistence.clientsession.ClientSessionSubscriptionPersistence;
 import com.hivemq.persistence.clientsession.callback.SubscriptionResult;
 import com.hivemq.util.Topics;
@@ -63,6 +63,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -465,6 +466,28 @@ public class SubscriptionStoreImpl implements SubscriptionStore {
                     .map(entry -> new SubscriptionsForClientResultImpl(entry.getKey(),
                             entry.getValue().stream().map(TopicSubscriptionImpl::new).collect(Collectors.toSet())))
                     .collect(Collectors.toUnmodifiableList());
+        }
+    }
+
+    public static class SubscriptionTypeItemFilter implements Predicate<SubscriberWithQoS> {
+
+        private final @NotNull SubscriptionType type;
+
+        public SubscriptionTypeItemFilter(@NotNull final SubscriptionType type) {
+            this.type = type;
+        }
+
+        @Override
+        public boolean test(final @NotNull SubscriberWithQoS subscriber) {
+            switch (type) {
+                case ALL:
+                    return true;
+                case INDIVIDUAL:
+                    return !subscriber.isSharedSubscription();
+                case SHARED:
+                    return subscriber.isSharedSubscription();
+            }
+            return false;
         }
     }
 }

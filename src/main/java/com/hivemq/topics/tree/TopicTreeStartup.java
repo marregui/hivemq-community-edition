@@ -42,30 +42,30 @@ public class TopicTreeStartup {
     private static final @NotNull Logger log = LoggerFactory.getLogger(TopicTreeStartup.class);
 
     private final @NotNull LocalTopicTree topicTree;
-    private final @NotNull ClientSessionPersistence clientSessionPersistence;
-    private final @NotNull ClientSessionSubscriptionPersistence clientSessionSubscriptionPersistence;
+    private final @NotNull ClientSessionPersistence session;
+    private final @NotNull ClientSessionSubscriptionPersistence subscriptions;
 
     @Inject
     TopicTreeStartup(
             final @NotNull LocalTopicTree topicTree,
-            final @NotNull ClientSessionPersistence clientSessionPersistence,
-            final @NotNull ClientSessionSubscriptionPersistence clientSessionSubscriptionPersistence) {
+            final @NotNull ClientSessionPersistence session,
+            final @NotNull ClientSessionSubscriptionPersistence subscriptions) {
         this.topicTree = topicTree;
-        this.clientSessionPersistence = clientSessionPersistence;
-        this.clientSessionSubscriptionPersistence = clientSessionSubscriptionPersistence;
+        this.session = session;
+        this.subscriptions = subscriptions;
     }
 
     @PostConstruct
     void postConstruct() {
-        final ListenableFuture<Set<String>> clientsFuture = clientSessionPersistence.getAllClients();
+        final ListenableFuture<Set<String>> clientsFuture = session.getAllClients();
         try {
             for (final String client : clientsFuture.get()) {
-                final ClientSession session = clientSessionPersistence.getSession(client, false);
+                final ClientSession session = this.session.getSession(client, false);
                 if (session == null || session.getSessionExpiryIntervalSec() == SESSION_EXPIRE_ON_DISCONNECT) {
-                    clientSessionSubscriptionPersistence.removeAllLocally(client);
+                    subscriptions.removeAllLocally(client);
                     continue;
                 }
-                for (final Topic topic : clientSessionSubscriptionPersistence.getSubscriptions(client)) {
+                for (final Topic topic : subscriptions.getSubscriptions(client)) {
                     final SharedSubscription shared =
                             SharedSubscriptionService.checkForSharedSubscription(topic.getTopic());
                     if (shared == null) {

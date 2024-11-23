@@ -22,10 +22,11 @@ import com.google.inject.ProvisionException;
 import com.google.inject.spi.Message;
 import com.hivemq.bootstrap.HiveMQNettyBootstrap;
 import com.hivemq.bootstrap.ListenerStartupInformation;
-import com.hivemq.config.SysInfo;
 import com.hivemq.config.ConfigService;
 import com.hivemq.config.entity.Listener;
 import com.hivemq.extensions.ExtensionBootstrap;
+//import com.hivemq.logging.Log;
+//import com.hivemq.logging.LogFactory;
 import com.hivemq.persistence.payload.PublishPayloadPersistence;
 import com.hivemq.util.Checkpoints;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 public final class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
+//    private static final Log log = LogFactory.getLog(Main.class);
 
     static {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
@@ -54,6 +56,7 @@ public final class Main {
                 }
             }
             log.error("Problem: %s%n", Throwables.getRootCause(e));
+//            log.error().$("Problem: ").$(Throwables.getRootCause(e)).$('\n').$();
         });
         System.setProperty("guice_include_stack_traces", "OFF");
     }
@@ -66,7 +69,6 @@ public final class Main {
     }
 
     public static void main(final String @NotNull [] args) throws Exception {
-        Logging.initLogging(SysInfo.INSTANCE.getConfigFolder());
         final IOC ioc = new IOC(new ConfigService());
         final Injector injector = ioc.init();
 

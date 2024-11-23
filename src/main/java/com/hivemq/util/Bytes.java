@@ -111,4 +111,9 @@ public final class Bytes {
             throw new IllegalArgumentException();
         }
     }
+
+    // most significant bit
+    public static int msb(int value) {
+        return 31 - Integer.numberOfLeadingZeros(value);
+    }
 }

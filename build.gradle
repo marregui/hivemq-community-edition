@@ -19,9 +19,10 @@ dependencies {
     implementation(libs.netty.transport)
 
     // logging
-    implementation(libs.slf4j.api)
-    implementation(libs.julToSlf4j)
-    implementation(libs.logback.classic)
+//    implementation(libs.questdb)
+//    implementation(libs.slf4j.api)
+//    implementation(libs.julToSlf4j)
+//    implementation(libs.logback.classic)
 
     // security
     implementation(libs.bouncycastle.prov)

@@ -15,7 +15,6 @@
  */
 package com.hivemq.security.ssl;
 
-import ch.qos.logback.classic.Logger;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListeningScheduledExecutorService;
@@ -33,8 +32,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.LoggerFactory;
-import util.LogbackCapturingAppender;
 import util.TestKeyStoreGenerator;
 
 import javax.net.ssl.SSLContext;
@@ -68,16 +65,12 @@ public class SslFactoryTest {
 
     private @NotNull TestKeyStoreGenerator testKeyStoreGenerator;
 
-    private @NotNull LogbackCapturingAppender logCapture;
 
     private @NotNull AutoCloseable openMocks;
 
     @Before
     public void before() {
         openMocks = MockitoAnnotations.openMocks(this);
-
-        final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        logCapture = LogbackCapturingAppender.Factory.weaveInto(logger);
 
         final SslContextStore sslContextStore = new SslContextStore(executorService, new SslContextFactory());
         sslFactory = new SslFactory(sslContextStore);
@@ -90,7 +83,6 @@ public class SslFactoryTest {
     @After
     public void tearDown() throws Exception {
         openMocks.close();
-        LogbackCapturingAppender.Factory.cleanUp();
         testKeyStoreGenerator.release();
     }
 
@@ -443,13 +435,6 @@ public class SslFactoryTest {
         final TlsTcpListener tlsTcpListener = new TlsTcpListener(0, "0", tls);
 
         sslFactory.verifySslAtBootstrap(tlsTcpListener, tls);
-
-        final String message = logCapture.getLastCapturedLog().getFormattedMessage();
-
-        assertEquals(
-                "Enabled cipher suites for TCP Listener with TLS at address 0 and port 0: [TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256]",
-                message);
-
     }
 
     @Test
@@ -476,12 +461,6 @@ public class SslFactoryTest {
         final TlsTcpListener tlsTcpListener = new TlsTcpListener(0, "0", tls);
 
         sslFactory.verifySslAtBootstrap(tlsTcpListener, tls);
-
-        final String message = logCapture.getLastCapturedLog().getFormattedMessage();
-
-        assertEquals("Unknown cipher suites for TCP Listener with TLS at address 0 and port 0: [UNKNOWN_CIPHER]",
-                message);
-
     }
 
     /**

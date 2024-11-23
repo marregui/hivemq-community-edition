@@ -114,7 +114,6 @@ public class IOC extends SingletonModule<IOC> {
                 ShutdownHooks.INSTANCE.shutdown();
             } finally {
                 dataLock.unlock();
-                Logging.resetLogging();
             }
         }, "shutdown-" + configuration.getHiveMQId()));
         injector = Guice.createInjector(Stage.PRODUCTION,

@@ -37,7 +37,6 @@ import org.junit.Test;
 import org.slf4j.LoggerFactory;
 import util.DummyClientConnection;
 import util.DummyHandler;
-import util.LogbackCapturingAppender;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
@@ -59,7 +58,6 @@ public class MqttConnackerTest {
     private EventLog eventLog;
     private MqttConnacker mqttConnacker;
     private EmbeddedChannel channel;
-    private LogbackCapturingAppender logbackCapturingAppender;
     private ClientConnection clientConnection;
 
     @Before
@@ -69,13 +67,10 @@ public class MqttConnackerTest {
         channel = new EmbeddedChannel(new DummyHandler());
         clientConnection = new DummyClientConnection(channel, null);
         channel.attr(Connection.CHANNEL_ATTRIBUTE_NAME).set(clientConnection);
-        logbackCapturingAppender =
-                LogbackCapturingAppender.Factory.weaveInto(LoggerFactory.getLogger(MqttConnackerImpl.class));
     }
 
     @After
     public void tearDown() throws Exception {
-        LogbackCapturingAppender.Factory.cleanUp();
         InternalConfig.CONNACK_WITH_REASON_CODE_ENABLED.set(true);
         InternalConfig.CONNACK_WITH_REASON_STRING_ENABLED.set(true);
     }

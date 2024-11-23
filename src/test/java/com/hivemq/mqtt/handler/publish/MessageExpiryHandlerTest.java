@@ -34,7 +34,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import util.DummyClientConnection;
-import util.LogbackCapturingAppender;
 import util.TestMessageUtil;
 
 import java.util.concurrent.CountDownLatch;
@@ -56,7 +55,6 @@ public class MessageExpiryHandlerTest {
 
     private EmbeddedChannel channel;
 
-    LogbackCapturingAppender logCapture;
 
     @Before
     public void setUp() throws Exception {
@@ -69,12 +67,6 @@ public class MessageExpiryHandlerTest {
         ClientConnection.of(channel).setClientId("ClientId");
         channel.pipeline().addLast(messageExpiryHandler);
         when(ctx.channel()).thenReturn(channel);
-        logCapture = LogbackCapturingAppender.Factory.weaveInto(MessageExpiryHandler.log);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        LogbackCapturingAppender.Factory.cleanUp();
     }
 
     @Test

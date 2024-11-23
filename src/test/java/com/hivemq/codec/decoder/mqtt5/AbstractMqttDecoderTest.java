@@ -18,14 +18,11 @@ package com.hivemq.codec.decoder.mqtt5;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import io.netty.channel.embedded.EmbeddedChannel;
 import org.junit.After;
 import org.junit.Before;
-import org.slf4j.LoggerFactory;
 import util.DummyClientConnection;
-import util.LogbackCapturingAppender;
 import util.TestMqttDecoder;
 
 import javax.xml.bind.JAXBException;
@@ -36,12 +33,9 @@ public class AbstractMqttDecoderTest {
     protected @NotNull ProtocolVersion protocolVersion;
     protected @NotNull EmbeddedChannel channel;
     protected @NotNull ClientConnection clientConnection;
-    protected @NotNull LogbackCapturingAppender logCapture;
 
     @Before
     public void setUp() throws JAXBException, IOException {
-        logCapture =
-                LogbackCapturingAppender.Factory.weaveInto(LoggerFactory.getLogger(MqttServerDisconnectorImpl.class));
         channel = new EmbeddedChannel(TestMqttDecoder.create());
         clientConnection = new DummyClientConnection(channel, null);
         clientConnection.setProtocolVersion(protocolVersion);
@@ -50,7 +44,6 @@ public class AbstractMqttDecoderTest {
 
     @After
     public void tearDown() {
-        LogbackCapturingAppender.Factory.cleanUp();
         channel.close();
     }
 

@@ -24,8 +24,9 @@ import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.message.reason.Mqtt5DisconnectReasonCode;
 import com.hivemq.util.ReasonStrings;
 import io.netty.channel.Channel;
-import org.jctools.queues.MpscLinkedQueue;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
@@ -36,7 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class KeepAliveDisconnectService {
 
     private final @NotNull MqttServerDisconnector mqttServerDisconnector;
-    private final @NotNull MpscLinkedQueue<Channel> disconnectQueue = new MpscLinkedQueue<>();
+    private final @NotNull Queue<Channel> disconnectQueue = new LinkedList<>();
     private final @NotNull ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     private final long disconnectBatch;
     private final AtomicInteger submittedTasks = new AtomicInteger();
@@ -81,7 +82,7 @@ public class KeepAliveDisconnectService {
             int i = 0;
             try {
                 while (i < disconnectBatch) {
-                    final Channel channel = disconnectQueue.relaxedPoll();
+                    final Channel channel = disconnectQueue.poll();
                     if (channel == null) {
                         break;
                     }

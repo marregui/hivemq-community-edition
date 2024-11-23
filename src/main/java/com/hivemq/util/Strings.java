@@ -26,6 +26,7 @@ import java.util.Objects;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public final class Strings {
+
     private static final @NotNull String @NotNull [] EMPTY_STR = {};
     private static final long kb = 1024L;
     private static final long mb = kb * kb;

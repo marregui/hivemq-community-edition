@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 
-/**
- * UTF-8 sink backed by on-heap memory.
- */
 public class Utf8StringSink implements MutableUtf8Sink {
     private final AsciiCharSequence asciiCharSequence = new AsciiCharSequence();
     private final int initialCapacity;
@@ -101,25 +98,6 @@ public class Utf8StringSink implements MutableUtf8Sink {
             buffer[pos++] = Unsafe.UNSAFE.getByte(p);
         }
         return this;
-    }
-
-    public Utf8StringSink repeat(@NotNull CharSequence value, int n) {
-        for (int i = 0; i < n; i++) {
-            put(value);
-        }
-        return this;
-    }
-
-    public Utf8StringSink repeat(char value, int n) {
-        for (int i = 0; i < n; i++) {
-            put(value);
-        }
-        return this;
-    }
-
-    public void resetCapacity() {
-        this.buffer = new byte[initialCapacity];
-        clear();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.hivemq.tk;
+package com.hivemq.tk.ds;
 
 /*
  * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
@@ -35,6 +35,9 @@ package com.hivemq.tk;
  * http://creativecommons.org/publicdomain/zero/1.0/
  */
 
+import com.hivemq.tk.Chars;
+import com.hivemq.tk.CloneableMutable;
+import com.hivemq.tk.Unsafe;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ObjectStreamField;

@@ -24,19 +24,6 @@ public final class Utf8s {
         return i;
     }
 
-    public static boolean equalsIgnoreCaseAscii(@NotNull CharSequence asciiSeq, final @NotNull Utf8Sequence seq) {
-        int len = asciiSeq.length();
-        if (len != seq.size()) {
-            return false;
-        }
-        for (int index = 0; index < len; index++) {
-            if (Chars.toLowerCaseAscii(asciiSeq.charAt(index)) != toLowerCaseAscii(seq.byteAt(index))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public static int getUtf8Codepoint(int b1, int b2, int b3, int b4) {
         return b1 << 18 ^ b2 << 12 ^ b3 << 6 ^ b4 ^ 3678080;
     }

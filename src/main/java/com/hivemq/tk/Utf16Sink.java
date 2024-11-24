@@ -5,14 +5,6 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.hivemq.tk.Numbers.hexDigits;
 
-/**
- * Family of sinks that write out <b>character</b> value as UTF16 encoded bytes. This interface
- * is separate from {@link CharSink} to achieve two goals:
- * <ul>
- *     <li>Avoid using these sinks as the target of UTF16-to-UTF8 conversions</li>
- *     <li>Group implementations in easy to understand hierarchy</li>
- * </ul>
- */
 public interface Utf16Sink extends CharSink<Utf16Sink> {
     @Override
     default int getEncoding() {
@@ -94,13 +86,6 @@ public interface Utf16Sink extends CharSink<Utf16Sink> {
 
     default Utf16Sink putNonAscii(long lo, long hi) {
         Utf8s.utf8ToUtf16(lo, hi, this);
-        return this;
-    }
-
-    default Utf16Sink repeat(@NotNull CharSequence value, int n) {
-        for (int i = 0; i < n; i++) {
-            put(value);
-        }
         return this;
     }
 }

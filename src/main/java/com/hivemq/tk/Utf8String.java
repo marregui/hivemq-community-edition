@@ -79,9 +79,4 @@ public class Utf8String implements Utf8Sequence {
     public @NotNull String toString() {
         return Utf8s.stringFromUtf8Bytes(this);
     }
-
-    @Override
-    public long zeroPaddedSixPrefix() {
-        return zeroPaddedSixPrefix;
-    }
 }

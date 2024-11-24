@@ -1,8 +1,5 @@
 package com.hivemq.tk;
 
-/**
- * A sequence of UTF-8 bytes stored in native memory.
- */
 public interface DirectUtf8Sequence extends Utf8Sequence, DirectByteSequence {
 
     @Override

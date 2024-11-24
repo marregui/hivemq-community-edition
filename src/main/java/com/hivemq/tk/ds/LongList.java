@@ -3,7 +3,7 @@ package com.hivemq.tk.ds;
 import com.hivemq.tk.*;
 import org.jetbrains.annotations.NotNull;
 
-public class LongList implements Mutable, LongVec, Sinkable {
+public class LongList implements Mutable, Sinkable {
     private static final int DEFAULT_ARRAY_SIZE = 16;
     private static final long DEFAULT_NO_ENTRY_VALUE = -1L;
     private final long noEntryValue;
@@ -128,8 +128,7 @@ public class LongList implements Mutable, LongVec, Sinkable {
         return (int) hashCode;
     }
 
-    @Override
-    public LongVec newInstance() {
+    public LongList newInstance() {
         LongList newList = new LongList(size());
         newList.setPos(pos);
         return newList;

@@ -1,6 +1,6 @@
 package com.hivemq.tk.time;
 
-import com.hivemq.tk.ConcurrentHashMap;
+import com.hivemq.tk.ds.ConcurrentHashMap;
 
 import java.text.DateFormatSymbols;
 import java.util.Locale;

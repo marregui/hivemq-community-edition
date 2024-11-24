@@ -2,14 +2,13 @@ package com.hivemq.tk.ds;
 
 import com.hivemq.tk.CharSink;
 import com.hivemq.tk.Mutable;
-import com.hivemq.tk.ReadOnlyObjList;
 import com.hivemq.tk.Sinkable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class ObjList<T> implements Mutable, Sinkable, ReadOnlyObjList<T> {
+public class ObjList<T> implements Mutable, Sinkable {
     private static final int DEFAULT_ARRAY_SIZE = 16;
     private T[] buffer;
     private int pos = 0;
@@ -29,7 +28,7 @@ public class ObjList<T> implements Mutable, Sinkable, ReadOnlyObjList<T> {
         buffer[pos++] = value;
     }
 
-    public void addAll(ReadOnlyObjList<? extends T> that) {
+    public void addAll(ObjList<? extends T> that) {
         int n = that.size();
         checkCapacity(pos + n);
         for (int i = 0; i < n; i++) {
@@ -72,7 +71,6 @@ public class ObjList<T> implements Mutable, Sinkable, ReadOnlyObjList<T> {
         buffer[index] = value;
     }
 
-    @Override
     public T get(int index) {
         if (index < pos) {
             return buffer[index];
@@ -85,7 +83,6 @@ public class ObjList<T> implements Mutable, Sinkable, ReadOnlyObjList<T> {
      *
      * @return last element of the list
      */
-    @Override
     public T getLast() {
         if (pos > 0) {
             return buffer[pos - 1];
@@ -102,7 +99,6 @@ public class ObjList<T> implements Mutable, Sinkable, ReadOnlyObjList<T> {
      * @param index of the element
      * @return element at the specified position.
      */
-    @Override
     public T getQuick(int index) {
         assert index < pos : "index out of bounds, " + index + " >= " + pos;
         return buffer[index];
@@ -116,7 +112,6 @@ public class ObjList<T> implements Mutable, Sinkable, ReadOnlyObjList<T> {
      * @param index position of element
      * @return element at the specified position.
      */
-    @Override
     public T getQuiet(int index) {
         if (index < pos) {
             return buffer[index];
@@ -137,7 +132,6 @@ public class ObjList<T> implements Mutable, Sinkable, ReadOnlyObjList<T> {
         return hashCode;
     }
 
-    @Override
     public int indexOf(Object o) {
         if (o == null) {
             return indexOfNull();
@@ -186,7 +180,6 @@ public class ObjList<T> implements Mutable, Sinkable, ReadOnlyObjList<T> {
     /**
      * {@inheritDoc}
      */
-    @Override
     public int size() {
         return pos;
     }

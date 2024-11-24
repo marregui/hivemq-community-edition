@@ -1,19 +1,8 @@
 package com.hivemq.tk;
 
-import java.util.Collections;
-import java.util.List;
-
 public class Rnd {
-    private static final double DOUBLE_UNIT = 0x1.0p-53; // 1.0 / (1L << 53)
-    private static final float FLOAT_UNIT = 1 / ((float) (1 << 24));
-    private static final long mask = (1L << 48) - 1;
-    private final StringSink sink = new StringSink();
     private long s0;
     private long s1;
-
-    public Rnd(long s0, long s1) {
-        reset(s0, s1);
-    }
 
     public Rnd() {
         reset();
@@ -31,81 +20,12 @@ public class Rnd {
         System.out.println(utf16sink);
     }
 
-    public long getSeed0() {
-        return s0;
-    }
-
-    public long getSeed1() {
-        return s1;
-    }
-
-    public boolean nextBoolean() {
-        return nextLong() >>> (64 - 1) != 0;
-    }
-
-    public byte nextByte() {
-        return (byte) nextLong();
-    }
-
-    //returns random bytes between 'B' and 'Z' for legacy reasons
-    public byte[] nextBytes(int len) {
-        byte[] bytes = new byte[len];
-        for (int i = 0; i < len; i++) {
-            bytes[i] = (byte) (nextPositiveInt() % 25 + 'B');
-        }
-        return bytes;
-    }
-
-    // returns random bytes between 'B' and 'Z' for legacy reasons
-    public void nextBytes(byte[] bytes) {
-        int len = bytes.length;
-        for (int i = 0; i < len; i++) {
-            bytes[i] = (byte) (nextPositiveInt() % 25 + 'B');
-        }
-    }
-
-    // returns random bytes between 'B' and 'Z' for legacy reasons
-    public char nextChar() {
-        return (char) (nextPositiveInt() % 25 + 'B');
-    }
-
-    public void nextChars(final long address, int len) {
-        for (int i = 0; i < len; i++) {
-            Unsafe.UNSAFE.putChar(address + i * 2L, nextChar());
-        }
-    }
-
-    public CharSequence nextChars(int len) {
-        sink.clear();
-        nextChars(sink, len);
-        return sink;
-    }
-
-    // returns random bytes between 'B' and 'Z' for legacy reasons
-    public void nextChars(Utf16Sink sink, int len) {
-        for (int i = 0; i < len; i++) {
-            sink.put((char) (nextPositiveInt() % 25 + 66));
-        }
-    }
-
-    public double nextDouble() {
-        return (((long) (nextIntForDouble(26)) << 27) + nextIntForDouble(27)) * DOUBLE_UNIT;
-    }
-
-    public float nextFloat() {
-        return nextIntForDouble(24) * FLOAT_UNIT;
-    }
-
     public int nextInt() {
         return (int) nextLong();
     }
 
     public int nextInt(int boundary) {
         return nextPositiveInt() % boundary;
-    }
-
-    public long nextLong(long boundary) {
-        return nextPositiveLong() % boundary;
     }
 
     public long nextLong() {
@@ -119,37 +39,6 @@ public class Rnd {
     public int nextPositiveInt() {
         int n = (int) nextLong();
         return n > 0 ? n : (n == Integer.MIN_VALUE ? Integer.MAX_VALUE : -n);
-    }
-
-    public long nextPositiveLong() {
-        long l = nextLong();
-        return l > 0 ? l : (l == Long.MIN_VALUE ? Long.MAX_VALUE : -l);
-    }
-
-    public short nextShort() {
-        return (short) nextLong();
-    }
-
-    // returns random bytes between 'B' and 'Z' for legacy reasons
-    public String nextString(int len) {
-        char[] chars = new char[len];
-        for (int i = 0; i < len; i++) {
-            chars[i] = (char) (nextPositiveInt() % 25 + 66);
-        }
-        return new String(chars);
-    }
-
-    public void nextUtf8AsciiStr(int len, Utf8Sink sink) {
-        for (int i = 0; i < len; i++) {
-            sink.putAscii((char) (32 + nextPositiveInt() % (127 - 32)));
-        }
-    }
-
-    public void shuffle(List<?> list) {
-        for (int i = 1, n = list.size(); i < n; i++) {
-            int swapTarget = nextInt(i + 1);
-            Collections.swap(list, i, swapTarget);
-        }
     }
 
     // https://stackoverflow.com/questions/1319022/really-good-bad-utf-8-example-test-data
@@ -225,10 +114,6 @@ public class Rnd {
     public void syncWith(Rnd other) {
         this.s0 = other.s0;
         this.s1 = other.s1;
-    }
-
-    private int nextIntForDouble(int bits) {
-        return (int) ((nextLong() & mask) >>> (48 - bits));
     }
 
     private byte nextUtf8Byte(int wipe, int set) {

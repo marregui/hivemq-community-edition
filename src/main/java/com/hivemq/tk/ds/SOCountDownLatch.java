@@ -1,21 +1,16 @@
-package com.hivemq.tk;
+package com.hivemq.tk.ds;
+
+import com.hivemq.tk.Unsafe;
 
 import java.util.concurrent.locks.LockSupport;
 
-/**
- * Single owner count down latch. This latch is mutable and it does not actively
- */
-public class SOCountDownLatch implements CountDownLatchSPI {
+public class SOCountDownLatch {
     private static final long VALUE_OFFSET;
     private volatile int count;
     private volatile Thread waiter;
 
     public SOCountDownLatch(int count) {
         this.count = count;
-    }
-
-    public SOCountDownLatch() {
-        // no-op
     }
 
     public void await() {
@@ -48,7 +43,6 @@ public class SOCountDownLatch implements CountDownLatchSPI {
         }
     }
 
-    @Override
     public void countDown() {
         do {
             int current = getCount();

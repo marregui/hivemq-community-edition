@@ -322,7 +322,6 @@ public class LogFactory implements Closeable {
 
         for (int i = 0, n = jobs.size(); i < n; i++) {
             LogWriter job = jobs.get(i);
-            job.bindProperties(this);
             workerPool.assign(job);
         }
     }
@@ -547,7 +546,7 @@ public class LogFactory implements Closeable {
         if (isForcedDebug()) {
             level = level | LogLevel.DEBUG;
         }
-        add(new LogWriterConfig(level, LogConsoleWriter::new));
+        add(new LogWriterConfig(level, LogWriter::new));
         bind();
     }
 

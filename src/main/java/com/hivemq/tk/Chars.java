@@ -1,6 +1,5 @@
 package com.hivemq.tk;
 
-import com.hivemq.tk.ds.ObjList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -1222,5 +1221,11 @@ public final class Chars {
         for (char c = 0; c < 128; c++) {
             CHAR_STRINGS[c] = Character.toString(c);
         }
+    }
+
+    public enum TrimType {
+        TRIM,
+        LTRIM,
+        RTRIM
     }
 }

@@ -2,9 +2,6 @@ package com.hivemq.tk;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A sequence of UTF-8 bytes.
- */
 public interface Utf8Sequence extends ByteSequence {
 
     /**
@@ -30,16 +27,6 @@ public interface Utf8Sequence extends ByteSequence {
      * all ASCII characters. Returning `false` does not guarantee anything.
      */
     default boolean isAscii() {
-        return false;
-    }
-
-    /**
-     * Returns true if the pointer returned by {@link #ptr()} method is stable during a query execution.
-     * Stable is defined as:
-     * - the pointer remains valid for the duration of the query execution
-     * - the sequence of bytes pointed to by the pointer does not change during the query execution
-     */
-    default boolean isStable() {
         return false;
     }
 
@@ -75,35 +62,4 @@ public interface Utf8Sequence extends ByteSequence {
      * This is named `size` instead of `length` to avoid collision withs the `CharSequence` interface.
      */
     int size();
-
-    /**
-     * Number of bytes contiguously addressable bytes at the end of the sequence.
-     * This is useful if we need to access the data zero-copy via simd instructions.
-     * <p>
-     * The returned value, is the number of addressable bytes past `hi()`.
-     */
-    default long tailPadding() {
-        return 0;
-    }
-
-    default void writeTo(long addr, int lo, int hi) {
-        int i = lo;
-        for (int n = hi - 7; i < n; i += 8, addr += 8) {
-            Unsafe.UNSAFE.putLong(addr, longAt(i));
-        }
-        for (; i < hi; i++, addr++) {
-            Unsafe.UNSAFE.putByte(addr, byteAt(i));
-        }
-    }
-
-    /**
-     * Returns up to 6 initial bytes of this UTF-8 sequence (less if it's shorter)
-     * packed into a zero-padded long value, in little-endian order. This prefix is
-     * stored inline in the auxiliary vector of a VARCHAR column, so asking for it is a
-     * matter of optimized data access. This is not a general access method, it
-     * shouldn't be called unless looking to optimize the access of the VARCHAR column.
-     */
-    default long zeroPaddedSixPrefix() {
-        return Utf8s.zeroPaddedSixPrefix(this);
-    }
 }

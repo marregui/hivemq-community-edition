@@ -11,20 +11,23 @@ public class DateFormatUtils {
     public static final int HOUR_24 = 2;
     public static final int HOUR_AM = 0;
     public static final int HOUR_PM = 1;
-    public static final DateFormat PG_DATE_FORMAT;
-    public static final DateFormat PG_DATE_MILLI_TIME_Z_FORMAT;
-    public static final DateFormat PG_DATE_MILLI_TIME_Z_PRINT_FORMAT;
-    public static final DateFormat PG_DATE_Z_FORMAT;
     public static final DateFormat UTC_FORMAT;
     public static final String UTC_PATTERN = "yyyy-MM-ddTHH:mm:ss.SSSz";
     private static final DateFormat[] DATE_FORMATS;
     private static final int DATE_FORMATS_SIZE;
-    private static final DateFormat HTTP_FORMAT;
     static long referenceYear;
     static int thisCenturyLimit;
     static int thisCenturyLow;
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private static long newYear;
+
+    static {
+        updateReferenceYear(System.currentTimeMillis());
+        final DateFormatCompiler compiler = new DateFormatCompiler();
+        UTC_FORMAT = compiler.compile(UTC_PATTERN);
+        DATE_FORMATS = new DateFormat[]{UTC_FORMAT};
+        DATE_FORMATS_SIZE = DATE_FORMATS.length;
+    }
 
     public static int adjustYear(int year) {
         return thisCenturyLow + year;
@@ -123,7 +126,8 @@ public class DateFormatUtils {
         throw NumericException.INSTANCE;
     }
 
-    public static int assertString(@NotNull CharSequence delimiter, int len, @NotNull CharSequence in, int pos, int hi) throws NumericException {
+    public static int assertString(@NotNull CharSequence delimiter, int len, @NotNull CharSequence in, int pos, int hi)
+            throws NumericException {
         if (delimiter.charAt(0) == '\'' && delimiter.charAt(len - 1) == '\'') {
             assertRemaining(pos + len - 3, hi);
             if (!Chars.equals(delimiter, 1, len - 1, in, pos, pos + len - 2)) {
@@ -151,8 +155,7 @@ public class DateFormatUtils {
             int millis,
             int timezone,
             long offset,
-            int hourType
-    ) throws NumericException {
+            int hourType) throws NumericException {
         if (era == 0) {
             year = -(year - 1);
         }
@@ -194,13 +197,13 @@ public class DateFormatUtils {
             throw NumericException.INSTANCE;
         }
 
-        long datetime = Dates.yearMillis(year, leap)
-                + Dates.monthOfYearMillis(month, leap)
-                + (day - 1) * Dates.DAY_MILLIS
-                + hour * Dates.HOUR_MILLIS
-                + minute * Dates.MINUTE_MILLIS
-                + second * Dates.SECOND_MILLIS
-                + millis;
+        long datetime = Dates.yearMillis(year, leap) +
+                Dates.monthOfYearMillis(month, leap) +
+                (day - 1) * Dates.DAY_MILLIS +
+                hour * Dates.HOUR_MILLIS +
+                minute * Dates.MINUTE_MILLIS +
+                second * Dates.SECOND_MILLIS +
+                millis;
 
         if (timezone > -1) {
             datetime -= locale.getZoneRules(timezone, 0).getOffset(datetime, year, leap); // millis
@@ -262,26 +265,5 @@ public class DateFormatUtils {
             thisCenturyLow = referenceYear - centuryOffset;
         }
         newYear = Dates.endOfYear(referenceYear);
-    }
-
-    static {
-        updateReferenceYear(System.currentTimeMillis());
-        final DateFormatCompiler compiler = new DateFormatCompiler();
-        UTC_FORMAT = compiler.compile(UTC_PATTERN);
-        HTTP_FORMAT = compiler.compile("E, d MMM yyyy HH:mm:ss Z");
-        PG_DATE_FORMAT = compiler.compile("y-MM-dd");
-        PG_DATE_Z_FORMAT = compiler.compile("y-MM-dd z");
-        PG_DATE_MILLI_TIME_Z_FORMAT = compiler.compile("y-MM-dd HH:mm:ss.Sz");
-        PG_DATE_MILLI_TIME_Z_PRINT_FORMAT = compiler.compile("y-MM-dd HH:mm:ss.SSSz");
-
-        final DateFormat pgDateTimeFormat = compiler.compile("y-MM-dd HH:mm:ssz");
-        DATE_FORMATS = new DateFormat[]{
-                pgDateTimeFormat,
-                PG_DATE_FORMAT,
-                PG_DATE_Z_FORMAT,
-                PG_DATE_MILLI_TIME_Z_FORMAT,
-                UTC_FORMAT
-        };
-        DATE_FORMATS_SIZE = DATE_FORMATS.length;
     }
 }

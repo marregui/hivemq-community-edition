@@ -1,6 +1,5 @@
 package com.hivemq.tk;
 
-import com.hivemq.tk.time.DateFormatUtils;
 import com.hivemq.tk.time.TimestampFormatUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -149,22 +148,12 @@ public interface CharSink<T extends CharSink<?>> {
         return (T) this;
     }
 
-    default T putAsciiQuoted(@NotNull CharSequence cs) {
-        putAscii('\"').putAscii(cs).putAscii('\"');
-        return (T) this;
-    }
-
     default T putEOL() {
         return putAscii(Misc.EOL);
     }
 
     default T putISODate(long value) {
         TimestampFormatUtils.appendDateTimeUSec(this, value);
-        return (T) this;
-    }
-
-    default T putISODateMillis(long value) {
-        DateFormatUtils.appendDateTime(this, value);
         return (T) this;
     }
 
@@ -176,16 +165,6 @@ public interface CharSink<T extends CharSink<?>> {
      * Drops the `isAscii` status of this sink.
      */
     T putNonAscii(long lo, long hi);
-
-    default T putQuoted(@NotNull CharSequence cs) {
-        putAscii('\"').put(cs).putAscii('\"');
-        return (T) this;
-    }
-
-    default T putQuoted(@NotNull Utf8Sequence cs) {
-        putAscii('\"').put(cs).putAscii('\"');
-        return (T) this;
-    }
 
     default CharSink putSize(long bytes) {
         long b = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);

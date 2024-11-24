@@ -1,7 +1,6 @@
 package com.hivemq.tk.time;
 
 import com.hivemq.tk.CharSequenceIntHashMap;
-import com.hivemq.tk.FixedTimeZoneRule;
 import com.hivemq.tk.Numbers;
 import com.hivemq.tk.ds.ObjList;
 

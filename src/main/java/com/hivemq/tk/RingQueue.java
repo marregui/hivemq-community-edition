@@ -1,6 +1,7 @@
 package com.hivemq.tk;
 
 import java.io.Closeable;
+import java.util.function.Supplier;
 
 public class RingQueue<T> implements Closeable {
     private final T[] buf;
@@ -10,7 +11,7 @@ public class RingQueue<T> implements Closeable {
     private long memorySize;
 
     @SuppressWarnings("unchecked")
-    public RingQueue(ObjectFactory<T> factory, int cycle) {
+    public RingQueue(Supplier<T> factory, int cycle) {
         // zero queue is allowed for testing
         assert cycle == 0 || Numbers.isPow2(cycle);
         try {
@@ -18,7 +19,7 @@ public class RingQueue<T> implements Closeable {
             this.buf = (T[]) new Object[cycle];
 
             for (int i = 0; i < cycle; i++) {
-                buf[i] = factory.newInstance();
+                buf[i] = factory.get();
             }
 
             // heap based queue

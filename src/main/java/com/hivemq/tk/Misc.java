@@ -26,7 +26,7 @@ public final class Misc {
             try {
                 object.close();
             } catch (IOException e) {
-                throw new FatalError(e);
+                throw new Error(e);
             }
         }
         return null;
@@ -46,7 +46,7 @@ public final class Misc {
             try {
                 ((Closeable) object).close();
             } catch (IOException e) {
-                throw new FatalError(e);
+                throw new Error(e);
             }
         }
         return null;

@@ -3,7 +3,7 @@ package com.hivemq.tk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SqlException extends Exception implements Sinkable, FlyweightMessageContainer {
+public class SqlException extends Exception implements Sinkable {
 
     private static final StackTraceElement[] EMPTY_STACK_TRACE = {};
 
@@ -83,7 +83,6 @@ public class SqlException extends Exception implements Sinkable, FlyweightMessag
         return position(position).put("unexpected token [").put(token).put(']');
     }
 
-    @Override
     public CharSequence getFlyweightMessage() {
         return message;
     }

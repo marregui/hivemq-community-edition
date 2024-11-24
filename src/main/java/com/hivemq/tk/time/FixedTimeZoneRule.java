@@ -1,6 +1,4 @@
-package com.hivemq.tk;
-
-import com.hivemq.tk.time.TimeZoneRules;
+package com.hivemq.tk.time;
 
 public class FixedTimeZoneRule implements TimeZoneRules {
     private final long offset;

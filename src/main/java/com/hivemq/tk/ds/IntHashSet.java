@@ -1,6 +1,5 @@
 package com.hivemq.tk.ds;
 
-import com.hivemq.tk.AbstractIntHashSet;
 import com.hivemq.tk.CharSink;
 import com.hivemq.tk.Numbers;
 import com.hivemq.tk.Sinkable;
@@ -15,11 +14,6 @@ public class IntHashSet extends AbstractIntHashSet implements Sinkable {
 
     public IntHashSet() {
         this(MIN_INITIAL_CAPACITY);
-    }
-
-    public IntHashSet(IntHashSet that) {
-        this(that.capacity, that.loadFactor, noEntryKey);
-        addAll(that);
     }
 
     public IntHashSet(int initialCapacity) {
@@ -48,12 +42,6 @@ public class IntHashSet extends AbstractIntHashSet implements Sinkable {
         return true;
     }
 
-    public final void addAll(IntHashSet that) {
-        for (int i = 0, k = that.size(); i < k; i++) {
-            add(that.get(i));
-        }
-    }
-
     public void addAt(int index, int key) {
         keys[index] = key;
         list.add(key);
@@ -66,10 +54,6 @@ public class IntHashSet extends AbstractIntHashSet implements Sinkable {
         free = capacity;
         Arrays.fill(keys, noEntryKeyValue);
         list.clear();
-    }
-
-    public boolean contains(int key) {
-        return keyIndex(key) < 0;
     }
 
     @Override
@@ -89,14 +73,6 @@ public class IntHashSet extends AbstractIntHashSet implements Sinkable {
         return true;
     }
 
-    public int get(int index) {
-        return list.getQuick(index);
-    }
-
-    public int getLast() {
-        return list.getLast();
-    }
-
     @Override
     public int hashCode() {
         int hashCode = 0;
@@ -106,26 +82,6 @@ public class IntHashSet extends AbstractIntHashSet implements Sinkable {
             }
         }
         return hashCode;
-    }
-
-    @Override
-    public int remove(int key) {
-        int keyIndex = keyIndex(key);
-        if (keyIndex < 0) {
-            removeAt(keyIndex);
-            return -keyIndex - 1;
-        }
-        return -1;
-    }
-
-    @Override
-    public void removeAt(int index) {
-        if (index < 0) {
-            int index1 = -index - 1;
-            int key = keys[index1];
-            super.removeAt(index);
-            list.remove(key);
-        }
     }
 
     @Override
@@ -153,14 +109,4 @@ public class IntHashSet extends AbstractIntHashSet implements Sinkable {
         }
     }
 
-    @Override
-    protected void erase(int index) {
-        keys[index] = noEntryKeyValue;
-    }
-
-    @Override
-    protected void move(int from, int to) {
-        keys[to] = keys[from];
-        erase(from);
-    }
 }

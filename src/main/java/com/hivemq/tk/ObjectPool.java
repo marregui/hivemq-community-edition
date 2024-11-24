@@ -3,6 +3,8 @@ package com.hivemq.tk;
 import com.hivemq.tk.ds.ObjList;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Supplier;
+
 /**
  * Single-threaded object pool based on ObjList. The goal is to optimise intermediate allocation of intermediate objects.
  * <p>
@@ -17,13 +19,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ObjectPool<T extends Mutable> implements Mutable {
     private static final Log LOG = LogFactory.getLog(ObjectPool.class);
-    private final ObjectFactory<T> factory;
+    private final Supplier<T> factory;
     private final int initialSize;
     private ObjList<T> list;
     private int pos = 0;
     private int size;
 
-    public ObjectPool(@NotNull ObjectFactory<T> factory, int size) {
+    public ObjectPool(@NotNull Supplier<T> factory, int size) {
         this.list = new ObjList<>(size);
         this.factory = factory;
         this.size = size;
@@ -90,7 +92,7 @@ public class ObjectPool<T extends Mutable> implements Mutable {
 
     private void fill() {
         for (int i = 0; i < size; i++) {
-            list.add(factory.newInstance());
+            list.add(factory.get());
         }
     }
 }

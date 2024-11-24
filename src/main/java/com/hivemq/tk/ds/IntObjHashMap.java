@@ -1,6 +1,5 @@
 package com.hivemq.tk.ds;
 
-import com.hivemq.tk.AbstractIntHashSet;
 import com.hivemq.tk.Numbers;
 
 import java.util.Arrays;
@@ -32,20 +31,8 @@ public class IntObjHashMap<V> extends AbstractIntHashSet {
         return valueAt(keyIndex(key));
     }
 
-    public int[] getKeys() {
-        return keys;
-    }
-
-    public int getNoEntryKey() {
-        return noEntryKey;
-    }
-
     public V[] getValues() {
         return values;
-    }
-
-    public void put(int key, V value) {
-        putAt(keyIndex(key), key, value);
     }
 
     public void putAt(int index, int key, V value) {
@@ -93,16 +80,4 @@ public class IntObjHashMap<V> extends AbstractIntHashSet {
         }
     }
 
-    @Override
-    protected void erase(int index) {
-        keys[index] = noEntryKeyValue;
-        ((Object[]) values)[index] = null;
-    }
-
-    @Override
-    protected void move(int from, int to) {
-        keys[to] = keys[from];
-        values[to] = values[from];
-        erase(from);
-    }
 }

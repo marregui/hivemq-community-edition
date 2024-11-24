@@ -40,13 +40,6 @@ public class IntList implements Mutable, Sinkable {
         return getQuick(index);
     }
 
-    public int getLast() {
-        if (pos > 0) {
-            return data[pos - 1];
-        }
-        return NO_ENTRY_VALUE;
-    }
-
     /**
      * Returns element at the specified position. This method does not do
      * bounds check and may cause memory corruption if index is out of bounds.
@@ -72,44 +65,6 @@ public class IntList implements Mutable, Sinkable {
             hashCode = 31 * hashCode + (v == NO_ENTRY_VALUE ? 0 : v);
         }
         return hashCode;
-    }
-
-    public int indexOf(int v, int low, int high) {
-        assert high <= pos;
-
-        for (int i = low; i < high; i++) {
-            int f = data[i];
-            if (f == v) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public void remove(int key) {
-        for (int i = 0, n = size(); i < n; i++) {
-            if (key == getQuick(i)) {
-                removeIndex(i);
-                return;
-            }
-        }
-    }
-
-    public void removeIndex(int index) {
-        if (pos < 1 || index >= pos) {
-            return;
-        }
-        int move = pos - index - 1;
-        if (move > 0) {
-            System.arraycopy(data, index + 1, data, index, move);
-        }
-        int index1 = --pos;
-        data[index1] = NO_ENTRY_VALUE;
-    }
-
-    public void setPos(int position) {
-        checkCapacity(position);
-        pos = position;
     }
 
     public void setQuick(int index, int value) {
@@ -180,16 +135,4 @@ public class IntList implements Mutable, Sinkable {
         return true;
     }
 
-    private int scanSearch(int v, int low, int high) {
-        for (int i = low; i < high; i++) {
-            int f = data[i];
-            if (f == v) {
-                return i;
-            }
-            if (f > v) {
-                return -(i + 1);
-            }
-        }
-        return -(high + 1);
-    }
 }

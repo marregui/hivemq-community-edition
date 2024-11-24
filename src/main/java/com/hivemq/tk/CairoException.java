@@ -4,7 +4,7 @@ import com.hivemq.tk.time.TimestampFormatUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CairoException extends RuntimeException implements Sinkable, FlyweightMessageContainer {
+public class CairoException extends RuntimeException implements Sinkable {
 
     public static final int ERRNO_ACCESS_DENIED_WIN = 5;
     public static final int ERRNO_FILE_DOES_NOT_EXIST = 2;
@@ -127,7 +127,6 @@ public class CairoException extends RuntimeException implements Sinkable, Flywei
         return errno;
     }
 
-    @Override
     public CharSequence getFlyweightMessage() {
         return message;
     }
@@ -137,7 +136,6 @@ public class CairoException extends RuntimeException implements Sinkable, Flywei
         return "[" + errno + "] " + message;
     }
 
-    @Override
     public int getPosition() {
         return messagePosition;
     }

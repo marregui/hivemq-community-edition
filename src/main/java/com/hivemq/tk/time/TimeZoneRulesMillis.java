@@ -11,11 +11,6 @@ public class TimeZoneRulesMillis extends AbstractTimeZoneRules {
     }
 
     @Override
-    public long getNextDST(long utcEpoch) {
-        return 0;
-    }
-
-    @Override
     protected long addDays(long epoch, int days) {
         return Dates.addDays(epoch, days);
     }

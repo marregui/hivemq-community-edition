@@ -211,32 +211,6 @@ public class DateFormatUtils {
         return datetime;
     }
 
-    // YYYY-MM-DD
-    public static void formatDashYYYYMMDD(@NotNull CharSink<?> sink, long millis) {
-        int y = Dates.getYear(millis);
-        boolean l = Dates.isLeapYear(y);
-        int m = Dates.getMonthOfYear(millis, y, l);
-        Numbers.append(sink, y);
-        append0(sink.putAscii('-'), m);
-        append0(sink.putAscii('-'), Dates.getDayOfMonth(millis, y, m, l));
-    }
-
-    public static void formatHTTP(@NotNull CharSink<?> sink, long millis) {
-        HTTP_FORMAT.format(millis, EN_LOCALE, "GMT", sink);
-    }
-
-    // YYYY-MM
-    public static void formatYYYYMM(@NotNull CharSink<?> sink, long millis) {
-        int y = Dates.getYear(millis);
-        int m = Dates.getMonthOfYear(millis, y, Dates.isLeapYear(y));
-        Numbers.append(sink, y);
-        append0(sink.putAscii('-'), m);
-    }
-
-    public static long getReferenceYear() {
-        return referenceYear;
-    }
-
     /**
      * Parse date and return number of <b>milliseconds</b> since epoch.
      * <p>
@@ -260,11 +234,6 @@ public class DateFormatUtils {
             }
         }
         return Numbers.parseLong(value, 0, hi);
-    }
-
-    // YYYY-MM-DDThh:mm:ss.mmm
-    public static long parseUTCDate(@NotNull CharSequence value) throws NumericException {
-        return UTC_FORMAT.parse(value, 0, value.length(), EN_LOCALE);
     }
 
     public static long parseYearGreedy(@NotNull CharSequence in, int pos, int hi) throws NumericException {

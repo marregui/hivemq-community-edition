@@ -1,13 +1,10 @@
-package com.hivemq.tk;
+package com.hivemq.tk.time;
 
-import com.hivemq.tk.time.DateLocale;
-import com.hivemq.tk.time.TimestampFormatCompiler;
-import com.hivemq.tk.time.TimestampFormatUtils;
-import com.hivemq.tk.time.Timestamps;
+import com.hivemq.tk.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GenericTimestampFormat extends AbstractDateFormat {
+public class GenericTimestampFormat extends DateFormat {
     private final IntList compiledOps;
     private final ObjList<String> delimiters;
 

@@ -98,12 +98,6 @@ public abstract class AbstractTimeZoneRules implements TimeZoneRules {
     }
 
     @Override
-    public long getNextDST(long utcEpoch) {
-        final int y = getYear(utcEpoch);
-        return getNextDST(utcEpoch, y, isLeapYear(y));
-    }
-
-    @Override
     public long getOffset(long utcEpoch, int year, boolean leap) {
         if (standardOffset != Long.MIN_VALUE) {
             return standardOffset;

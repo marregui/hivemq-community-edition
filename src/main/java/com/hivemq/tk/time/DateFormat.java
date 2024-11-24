@@ -5,15 +5,18 @@ import com.hivemq.tk.NumericException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface DateFormat {
+public abstract class DateFormat {
 
-    void format(
+    public long parse(final @NotNull CharSequence in, final @NotNull DateLocale locale) throws NumericException {
+        return parse(in, 0, in.length(), locale);
+    }
+
+    protected abstract void format(
             long datetime,
             @NotNull DateLocale locale,
             @Nullable CharSequence timeZoneName,
             @NotNull CharSink<?> sink);
 
-    long parse(@NotNull CharSequence in, @NotNull DateLocale locale) throws NumericException;
-
-    long parse(@NotNull CharSequence in, int lo, int hi, @NotNull DateLocale locale) throws NumericException;
+    protected abstract long parse(@NotNull CharSequence in, int lo, int hi, @NotNull DateLocale locale)
+            throws NumericException;
 }

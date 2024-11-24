@@ -1,7 +1,6 @@
 package com.hivemq.tk;
 
-import com.hivemq.tk.time.MicrosecondClock;
-import com.hivemq.tk.time.MicrosecondClockImpl;
+import com.hivemq.tk.time.MicrosClock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
@@ -41,7 +40,7 @@ public class LogFactory implements Closeable {
         reserved.add("level");
     }
 
-    private final MicrosecondClock clock;
+    private final MicrosClock clock;
     private final AtomicBoolean closed = new AtomicBoolean();
     private final ObjList<DeferredLogger> deferredLoggers = new ObjList<>();
     private final ObjHashSet<LogWriter> jobs = new ObjHashSet<>();
@@ -55,10 +54,10 @@ public class LogFactory implements Closeable {
     private int recordLength = DEFAULT_MSG_SIZE;
 
     public LogFactory() {
-        this(MicrosecondClockImpl.INSTANCE);
+        this(MicrosClock.INSTANCE);
     }
 
-    private LogFactory(MicrosecondClock clock) {
+    private LogFactory(MicrosClock clock) {
         this.clock = clock;
         workerPool = new WorkerPool("logging", 1);
     }

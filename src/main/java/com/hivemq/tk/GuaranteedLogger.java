@@ -1,6 +1,6 @@
 package com.hivemq.tk;
 
-import com.hivemq.tk.time.MicrosecondClock;
+import com.hivemq.tk.time.MicrosClock;
 
 /**
  * Same as #Logger but does not lose messages.
@@ -8,7 +8,7 @@ import com.hivemq.tk.time.MicrosecondClock;
 public final class GuaranteedLogger extends AbstractLogRecord {
 
     GuaranteedLogger(
-            MicrosecondClock clock,
+            MicrosClock clock,
             CharSequence name,
             RingQueue<LogRecordUtf8Sink> debugRing,
             Sequence debugSeq,

@@ -1,14 +1,13 @@
 package com.hivemq.tk;
 
-import com.hivemq.tk.time.MicrosecondClock;
-import com.hivemq.tk.time.MicrosecondClockImpl;
+import com.hivemq.tk.time.MicrosClock;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Worker extends Thread {
-    public static final MicrosecondClock CLOCK_MICROS = MicrosecondClockImpl.INSTANCE;
+    public static final MicrosClock CLOCK_MICROS = MicrosClock.INSTANCE;
     private final String criticalErrorLine;
     private final SOCountDownLatch haltLatch;
     private final boolean haltOnError;

@@ -1,6 +1,6 @@
 package com.hivemq.tk;
 
-import com.hivemq.tk.time.MicrosecondClock;
+import com.hivemq.tk.time.MicrosClock;
 import com.hivemq.tk.time.TimestampFormatUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,11 +21,11 @@ abstract class AbstractLogRecord implements LogRecord, Log {
     protected final RingQueue<LogRecordUtf8Sink> infoRing;
     protected final Sequence infoSeq;
     protected final ThreadLocalCursor tl = new ThreadLocalCursor();
-    private final MicrosecondClock clock;
+    private final MicrosClock clock;
     private final CharSequence name;
 
     AbstractLogRecord(
-            MicrosecondClock clock,
+            MicrosClock clock,
             CharSequence name,
             RingQueue<LogRecordUtf8Sink> debugRing,
             Sequence debugSeq,

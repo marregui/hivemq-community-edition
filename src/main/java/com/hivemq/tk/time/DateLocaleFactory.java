@@ -1,7 +1,6 @@
 package com.hivemq.tk.time;
 
 import com.hivemq.tk.ConcurrentHashMap;
-import org.jetbrains.annotations.TestOnly;
 
 import java.text.DateFormatSymbols;
 import java.util.Locale;
@@ -24,10 +23,6 @@ public class DateLocaleFactory {
             }
             dateLocales.put(tag, dummyLocale);
         }
-    }
-
-    @TestOnly
-    public static void load() {
     }
 
     public DateLocale getLocale(CharSequence id) {

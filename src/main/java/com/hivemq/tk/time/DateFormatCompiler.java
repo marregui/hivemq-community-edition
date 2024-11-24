@@ -103,18 +103,6 @@ public class DateFormatCompiler {
         }
     }
 
-    public static int getOpCode(String opName) {
-        return opMap.get(opName);
-    }
-
-    public static int getOpCount() {
-        return opList.size();
-    }
-
-    public static String getOpName(int index) {
-        return opList.getQuick(index);
-    }
-
     public DateFormat compile(CharSequence pattern) {
         return compile(pattern, false);
     }
@@ -1189,7 +1177,7 @@ public class DateFormatCompiler {
         asm.setupPool();
         int thisClassIndex = asm.poolClass(asm.poolUtf8("io/questdb/std/datetime/DateFormatAsm"));
         int stackMapTableIndex = asm.poolUtf8("StackMapTable");
-        int superclassIndex = asm.poolClass(AbstractDateFormat.class);
+        int superclassIndex = asm.poolClass(DateFormat.class);
         int dateLocaleClassIndex = asm.poolClass(DateLocale.class);
         int charSequenceClassIndex = asm.poolClass(CharSequence.class);
         int minLongIndex = asm.poolLongConst(Long.MIN_VALUE);

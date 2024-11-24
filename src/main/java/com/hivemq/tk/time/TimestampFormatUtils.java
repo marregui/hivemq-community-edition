@@ -339,20 +339,6 @@ public class TimestampFormatUtils {
     public static void init() {
     }
 
-    @TestOnly
-    public static long parseDateTime(@NotNull CharSequence seq) throws NumericException {
-        return NANOS_UTC_FORMAT.parse(seq, 0, seq.length(), EN_LOCALE);
-    }
-
-    public static long parseHTTP(@NotNull CharSequence in) throws NumericException {
-        return HTTP_FORMAT.parse(in, EN_LOCALE);
-    }
-
-    // YYYY-MM-DDThh:mm:ss.mmmZ
-    public static long parseTimestamp(@NotNull CharSequence seq) throws NumericException {
-        return parseTimestamp(seq, 0, seq.length());
-    }
-
     public static long parseTimestamp(@NotNull CharSequence value, int lo, int hi) throws NumericException {
         for (int i = 0, n = FORMATS.length; i < n; i++) {
             try {
@@ -362,11 +348,6 @@ public class TimestampFormatUtils {
             }
         }
         throw NumericException.INSTANCE;
-    }
-
-    // YYYY-MM-DDThh:mm:ss.mmmnnn
-    public static long parseUTCTimestamp(@NotNull CharSequence seq) throws NumericException {
-        return USEC_UTC_FORMAT.parse(seq, 0, seq.length(), EN_LOCALE);
     }
 
     public static long parseYearGreedy(@NotNull CharSequence in, int pos, int hi) throws NumericException {
@@ -379,10 +360,6 @@ public class TimestampFormatUtils {
             year = Numbers.decodeLowInt(l);
         }
         return Numbers.encodeLowHighInts(year, len);
-    }
-
-    public static long tryParse(@NotNull CharSequence s, int lo, int lim) throws NumericException {
-        return parseTimestamp(s, lo, lim);
     }
 
     public static void updateReferenceYear(long micros) {

@@ -306,7 +306,6 @@ public class ClientSessionSubscriptionXodusLocalPersistence extends XodusLocalPe
                     }
 
 
-                    //compare the serialized ByteIterable not the clientId String, because the key is prefixed with the clientId length
                     if (lastClientIdKey != null && lastClientIdKey.compareTo(key) >= 0) {
                         continue;
                     }

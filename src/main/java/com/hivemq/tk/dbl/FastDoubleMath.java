@@ -1,4 +1,4 @@
-package com.hivemq.tk;
+package com.hivemq.tk.dbl;
 
 /**
  * This class provides the mathematical functions needed by {@link FastDoubleParser}.

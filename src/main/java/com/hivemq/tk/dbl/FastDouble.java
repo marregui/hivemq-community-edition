@@ -1,21 +1,62 @@
-package com.hivemq.tk;
+package com.hivemq.tk.dbl;
 
+import com.hivemq.tk.NumericException;
 
-/**
- * Parses a {@code FloatingPointLiteral} from a {@code char} array.
- * <p>
- * {@code FloatingPointLiteral}.
- */
-final class FastDoubleCharArray {
+class FastDouble {
 
-    private static double fallbackToJavaParser(char[] str, int startIndex, int endIndex, boolean rejectOverflow) throws NumericException {
+    /**
+     * The decimal exponent of a double has a range of -324 to +308.
+     * The hexadecimal exponent of a double has a range of -1022 to +1023.
+     */
+    final static int MAX_EXPONENT_NUMBER = 1024;
+    /**
+     * Includes all non-negative values of a {@code byte}, so that we only have
+     * to check for byte values {@literal <} 0 before accessing this array.
+     */
+    static final byte[] CHAR_TO_HEX_MAP = new byte[128];
+    /**
+     * Special value in {@link #CHAR_TO_HEX_MAP} for
+     * the decimal point character.
+     */
+    static final byte DECIMAL_POINT_CLASS = -4;
+
+    final static long MINIMAL_NINETEEN_DIGIT_INTEGER = 1000_00000_00000_00000L;
+    /**
+     * Special value in {@link #CHAR_TO_HEX_MAP} for
+     * characters that are neither a hex digit nor
+     * a decimal point character.
+     */
+    static final byte OTHER_CLASS = -1;
+
+    static {
+        for (char ch = 0; ch < CHAR_TO_HEX_MAP.length; ch++) {
+            CHAR_TO_HEX_MAP[ch] = OTHER_CLASS;
+        }
+        for (char ch = '0'; ch <= '9'; ch++) {
+            CHAR_TO_HEX_MAP[ch] = (byte) (ch - '0');
+        }
+        for (char ch = 'A'; ch <= 'F'; ch++) {
+            CHAR_TO_HEX_MAP[ch] = (byte) (ch - 'A' + 10);
+        }
+        for (char ch = 'a'; ch <= 'f'; ch++) {
+            CHAR_TO_HEX_MAP[ch] = (byte) (ch - 'a' + 10);
+        }
+        CHAR_TO_HEX_MAP['.'] = DECIMAL_POINT_CLASS;
+    }
+
+    private static double fallbackToJavaParser(CharSequence str, int startIndex, int endIndex, boolean rejectOverflow) throws
+            NumericException {
         double d;
-        d = Double.parseDouble(new String(str, startIndex, endIndex - startIndex));
-        if (rejectOverflow && (
-                d == Double.NEGATIVE_INFINITY
-                        || d == Double.POSITIVE_INFINITY
-                        || d == 0.0
-        )
+        // we could not handle the truth!
+        // number falls between anything that can be represented by double
+        // including overflow cases
+        d = Double.parseDouble(str.subSequence(startIndex, endIndex).toString());
+        if (rejectOverflow &&
+                (
+                        d == Double.POSITIVE_INFINITY
+                                || d == Double.NEGATIVE_INFINITY
+                                || d == 0.0d
+                )
         ) {
             throw NumericException.INSTANCE;
         }
@@ -44,12 +85,11 @@ final class FastDoubleCharArray {
      * @param endIndex       end index (exclusive)
      * @param isNegative     true if the float value is negative
      * @param hasLeadingZero true if we have consumed the optional leading zero
-     * @param rejectOverflow reject parsed values that overflow double type
      * @return the parsed value, if the input is legal;
-     * @throws NumericException if the input is illegal
+     * @throws NumericException is the input is illegal.
      */
     private static double parseDecFloatLiteral(
-            char[] str,
+            final CharSequence str,
             int index,
             int startIndex,
             int endIndex,
@@ -61,13 +101,13 @@ final class FastDoubleCharArray {
         // -----------------
         // Note: a multiplication by a constant is cheaper than an
         //       arbitrary integer multiplication.
-        long significand = 0;// significand is treated as an unsigned long
+        long significand = 0; // significand is treated as an unsigned long
         final int significandStartIndex = index;
         int virtualIndexOfPoint = -1;
         boolean illegal = false;
         char ch = 0;
         for (; index < endIndex; index++) {
-            ch = str[index];
+            ch = str.charAt(index);
             if (isDigit(ch)) {
                 // This might overflow, we deal with it later.
                 significand = 10 * significand + ch - '0';
@@ -90,30 +130,30 @@ final class FastDoubleCharArray {
         final int significandEndIndex = index;
         int exponent;
         if (virtualIndexOfPoint < 0) {
-            digitCount = index - significandStartIndex;
-            virtualIndexOfPoint = index;
+            digitCount = significandEndIndex - significandStartIndex;
+            virtualIndexOfPoint = significandEndIndex;
             exponent = 0;
         } else {
-            digitCount = index - significandStartIndex - 1;
-            exponent = virtualIndexOfPoint - index + 1;
+            digitCount = significandEndIndex - significandStartIndex - 1;
+            exponent = virtualIndexOfPoint - significandEndIndex + 1;
         }
 
         // Parse exponent number
         // ---------------------
         int expNumber = 0;
         if (ch == 'e' || ch == 'E') {
-            ch = ++index < endIndex ? str[index] : 0;
+            ch = ++index < endIndex ? str.charAt(index) : 0;
             boolean neg_exp = ch == '-';
             if (neg_exp || ch == '+') {
-                ch = ++index < endIndex ? str[index] : 0;
+                ch = ++index < endIndex ? str.charAt(index) : 0;
             }
             illegal |= !isDigit(ch);
             do {
                 // Guard against overflow
-                if (expNumber < FastDoubleUtils.MAX_EXPONENT_NUMBER) {
+                if (expNumber < MAX_EXPONENT_NUMBER) {
                     expNumber = 10 * expNumber + ch - '0';
                 }
-                ch = ++index < endIndex ? str[index] : 0;
+                ch = ++index < endIndex ? str.charAt(index) : 0;
             } while (isDigit(ch));
             if (neg_exp) {
                 expNumber = -expNumber;
@@ -123,7 +163,7 @@ final class FastDoubleCharArray {
 
         // Skip optional FloatTypeSuffix
         // ------------------------
-        if (index < endIndex && (ch == 'd' || ch == 'D' || ch == 'f' || ch == 'F')) {
+        if (index < endIndex && (ch == 'd' || ch == 'D')) {
             index++;
         }
 
@@ -143,11 +183,11 @@ final class FastDoubleCharArray {
         if (digitCount > 19) {
             significand = 0;
             for (index = significandStartIndex; index < significandEndIndex; index++) {
-                ch = str[index];
+                ch = str.charAt(index);
                 if (ch == '.') {
                     skipCountInTruncatedDigits++;
                 } else {
-                    if (Long.compareUnsigned(significand, FastDoubleUtils.MINIMAL_NINETEEN_DIGIT_INTEGER) < 0) {
+                    if (Long.compareUnsigned(significand, MINIMAL_NINETEEN_DIGIT_INTEGER) < 0) {
                         significand = 10 * significand + ch - '0';
                     } else {
                         break;
@@ -175,7 +215,6 @@ final class FastDoubleCharArray {
 
     /**
      * Parses the following rules
-     * (more rules are defined in {@link FastDoubleUtils}):
      * <dl>
      * <dt><i>RestOfHexFloatingPointLiteral</i>:
      * <dd><i>RestOfHexSignificand BinaryExponent</i>
@@ -198,7 +237,7 @@ final class FastDoubleCharArray {
      * @throws NumericException if the input is illegal.
      */
     private static double parseHexFloatLiteral(
-            char[] str,
+            CharSequence str,
             int index,
             int startIndex,
             int endIndex,
@@ -216,16 +255,16 @@ final class FastDoubleCharArray {
         boolean illegal = false;
         char ch = 0;
         for (; index < endIndex; index++) {
-            ch = str[index];
+            ch = str.charAt(index);
             // Table look up is faster than a sequence of if-else-branches.
-            int hexValue = ch > 127 ? FastDoubleUtils.OTHER_CLASS : FastDoubleUtils.CHAR_TO_HEX_MAP[ch];
+            int hexValue = ch > 127 ? OTHER_CLASS : CHAR_TO_HEX_MAP[ch];
             if (hexValue >= 0) {
                 significand = (significand << 4) | hexValue;// This might overflow, we deal with it later.
-            } else if (hexValue == FastDoubleUtils.DECIMAL_POINT_CLASS) {
+            } else if (hexValue == DECIMAL_POINT_CLASS) {
                 illegal |= virtualIndexOfPoint >= 0;
                 virtualIndexOfPoint = index;
                 /*
-                for (;index < endIndex - 8; index += 8;) {
+                for (;index < endIndex - 8; index += 8) {
                     long parsed = tryToParseEightHexDigits(str, index + 1);
                     if (parsed >= 0) {
                         // This might overflow, we deal with it later.
@@ -245,7 +284,7 @@ final class FastDoubleCharArray {
             virtualIndexOfPoint = significandEndIndex;
         } else {
             digitCount = significandEndIndex - significandStartIndex - 1;
-            exponent = Math.min(virtualIndexOfPoint - index + 1, FastDoubleUtils.MAX_EXPONENT_NUMBER) * 4;
+            exponent = Math.min(virtualIndexOfPoint - index + 1, MAX_EXPONENT_NUMBER) * 4;
         }
 
         // Parse exponent
@@ -253,15 +292,16 @@ final class FastDoubleCharArray {
         int expNumber = 0;
         final boolean hasExponent = (ch == 'p') || (ch == 'P');
         if (hasExponent) {
-            ch = ++index < endIndex ? str[index] : 0;
+            ch = ++index < endIndex ? str.charAt(index) : 0;
             boolean neg_exp = ch == '-';
             if (neg_exp || ch == '+') {
-                ch = ++index < endIndex ? str[index] : 0;
+                ch = ++index < endIndex ? str.charAt(index) : 0;
             }
             illegal |= !isDigit(ch);
             do {
+                // exponent boundaries will be validated later
                 expNumber = 10 * expNumber + ch - '0';
-                ch = ++index < endIndex ? str[index] : 0;
+                ch = ++index < endIndex ? str.charAt(index) : 0;
             } while (isDigit(ch));
             if (neg_exp) {
                 expNumber = -expNumber;
@@ -291,11 +331,11 @@ final class FastDoubleCharArray {
         if (digitCount > 16) {
             significand = 0;
             for (index = significandStartIndex; index < significandEndIndex; index++) {
-                ch = str[index];
+                ch = str.charAt(index);
                 // Table look up is faster than a sequence of if-else-branches.
-                int hexValue = ch > 127 ? FastDoubleUtils.OTHER_CLASS : FastDoubleUtils.CHAR_TO_HEX_MAP[ch];
+                int hexValue = ch > 127 ? OTHER_CLASS : CHAR_TO_HEX_MAP[ch];
                 if (hexValue >= 0) {
-                    if (Long.compareUnsigned(significand, FastDoubleUtils.MINIMAL_NINETEEN_DIGIT_INTEGER) < 0) {
+                    if (Long.compareUnsigned(significand, MINIMAL_NINETEEN_DIGIT_INTEGER) < 0) {
                         significand = (significand << 4) | hexValue;
                     } else {
                         break;
@@ -323,41 +363,6 @@ final class FastDoubleCharArray {
     }
 
     /**
-     * Parses a {@code Infinity} production with optional trailing white space
-     * until the end of the text.
-     * <blockquote>
-     * <dl>
-     * <dt><i>InfinityWithWhiteSpace:</i></dt>
-     * <dd>{@code Infinity} <i>[WhiteSpace] EOT</i></dd>
-     * </dl>
-     * </blockquote>
-     *
-     * @param str      a string
-     * @param index    index of the "I" character
-     * @param endIndex end index (exclusive)
-     * @return a positive or negative infinity value
-     * @throws NumberFormatException on parsing failure
-     */
-    private static double parseInfinity(char[] str, int index, int endIndex, boolean negative) throws NumericException {
-        if (index + 7 < endIndex
-                && str[index] == 'I'
-                && str[index + 1] == 'n'
-                && str[index + 2] == 'f'
-                && str[index + 3] == 'i'
-                && str[index + 4] == 'n'
-                && str[index + 5] == 'i'
-                && str[index + 6] == 't'
-                && str[index + 7] == 'y'
-        ) {
-            index = skipWhitespace(str, index + 8, endIndex);
-            if (index == endIndex) {
-                return negative ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
-            }
-        }
-        throw NumericException.INSTANCE;
-    }
-
-    /**
      * Parses a {@code Nan} production with optional trailing white space
      * until the end of the text.
      * Given that the String contains a 'N' character at the current
@@ -375,11 +380,11 @@ final class FastDoubleCharArray {
      * @return a NaN value
      * @throws NumberFormatException on parsing failure
      */
-    private static double parseNaN(char[] str, int index, int endIndex) throws NumericException {
+    private static double parseNaN(CharSequence str, int index, int endIndex) throws NumericException {
         if (index + 2 < endIndex
-                // && str[index] == 'N'
-                && str[index + 1] == 'a'
-                && str[index + 2] == 'N') {
+                // && str.charAt(index) == 'N'
+                && str.charAt(index + 1) == 'a'
+                && str.charAt(index + 2) == 'N') {
 
             index = skipWhitespace(str, index + 3, endIndex);
             if (index == endIndex) {
@@ -389,73 +394,20 @@ final class FastDoubleCharArray {
         throw NumericException.INSTANCE;
     }
 
-    /**
-     * Skips optional white space in the provided string
-     *
-     * @param str      a string
-     * @param index    start index (inclusive) of the optional white space
-     * @param endIndex end index (exclusive) of the optional white space
-     * @return index after the optional white space
-     */
-    private static int skipWhitespace(char[] str, int index, int endIndex) {
-        for (; index < endIndex; index++) {
-            if ((str[index] & 0xff) > ' ') {
-                break;
-            }
-        }
-        return index;
-    }
+    private static int tryToParseEightDigits(CharSequence str, int offset) {
+        // Performance: We extract the chars in two steps so that we
+        //              can benefit from out of order execution in the CPU.
+        long first = str.charAt(offset)
+                | (long) str.charAt(offset + 1) << 16
+                | (long) str.charAt(offset + 2) << 32
+                | (long) str.charAt(offset + 3) << 48;
 
-    private static int tryToParseEightDigits(char[] str, int offset) {
-        return FastDoubleSwar.tryToParseEightDigitsUtf16(str, offset);
-    }
+        long second = str.charAt(offset + 4)
+                | (long) str.charAt(offset + 5) << 16
+                | (long) str.charAt(offset + 6) << 32
+                | (long) str.charAt(offset + 7) << 48;
 
-    private static double valueOfFloatLiteral(
-            char[] str,
-            int startIndex,
-            int endIndex,
-            boolean isNegative,
-            long significand,
-            int exponent,
-            boolean isSignificandTruncated,
-            int exponentOfTruncatedSignificand,
-            boolean rejectOverflow
-    ) throws NumericException {
-        double d = FastDoubleMath.tryDecFloatToDoubleTruncated(
-                isNegative,
-                significand,
-                exponent,
-                isSignificandTruncated,
-                exponentOfTruncatedSignificand
-        );
-        if (Double.isNaN(d)) {
-            d = fallbackToJavaParser(str, startIndex, endIndex, rejectOverflow);
-        }
-        return d;
-    }
-
-    private static double valueOfHexLiteral(
-            char[] str,
-            int startIndex,
-            int endIndex,
-            boolean isNegative,
-            long significand,
-            int exponent,
-            boolean isSignificandTruncated,
-            int exponentOfTruncatedSignificand,
-            boolean rejectOverflow
-    ) throws NumericException {
-        double d = FastDoubleMath.tryHexFloatToDoubleTruncated(
-                isNegative,
-                significand,
-                exponent,
-                isSignificandTruncated,
-                exponentOfTruncatedSignificand
-        );
-        if (Double.isNaN(d)) {
-            d = fallbackToJavaParser(str, startIndex, endIndex, rejectOverflow);
-        }
-        return d;
+        return FastDoubleSwar.tryToParseEightDigitsUtf16(first, second);
     }
 
     /**
@@ -473,12 +425,12 @@ final class FastDoubleCharArray {
      * @param offset         start offset of {@code FloatingPointLiteralWithWhiteSpace} in {@code str}
      * @param length         length of {@code FloatingPointLiteralWithWhiteSpace} in {@code str}
      * @param rejectOverflow reject parsed values that overflow double type
-     * @return if the input is legal;
-     * @throws NumericException is the input is illegal.
+     * @return the parsed value, if the input is legal;
+     * @throws NumericException when input is illegal
      */
-    static double parseFloatingPointLiteral(char[] str, int offset, int length, boolean rejectOverflow) throws NumericException {
+    static double parseFloatingPointLiteral(CharSequence str, int offset, int length, boolean rejectOverflow) throws NumericException {
         final int endIndex = offset + length;
-        if (offset < 0 || endIndex > str.length) {
+        if (offset < 0 || endIndex > str.length()) {
             throw NumericException.INSTANCE;
         }
 
@@ -488,13 +440,13 @@ final class FastDoubleCharArray {
         if (index == endIndex) {
             throw NumericException.INSTANCE;
         }
-        char ch = str[index];
+        char ch = str.charAt(index);
 
         // Parse optional sign
         // -------------------
         final boolean isNegative = ch == '-';
         if (isNegative || ch == '+') {
-            ch = ++index < endIndex ? str[index] : 0;
+            ch = ++index < endIndex ? str.charAt(index) : 0;
             if (ch == 0) {
                 throw NumericException.INSTANCE;
             }
@@ -512,12 +464,114 @@ final class FastDoubleCharArray {
         // ---------------------------
         final boolean hasLeadingZero = ch == '0';
         if (hasLeadingZero) {
-            ch = ++index < endIndex ? str[index] : 0;
+            ch = ++index < endIndex ? str.charAt(index) : 0;
             if (ch == 'x' || ch == 'X') {
                 return parseHexFloatLiteral(str, index + 1, offset, endIndex, isNegative, rejectOverflow);
             }
         }
 
         return parseDecFloatLiteral(str, index, offset, endIndex, isNegative, hasLeadingZero, rejectOverflow);
+    }
+
+    /**
+     * Parses a {@code Infinity} production with optional trailing white space
+     * until the end of the text.
+     * <blockquote>
+     * <dl>
+     * <dt><i>InfinityWithWhiteSpace:</i></dt>
+     * <dd>{@code Infinity} <i>[WhiteSpace] EOT</i></dd>
+     * </dl>
+     * </blockquote>
+     *
+     * @param str      a string
+     * @param index    index of the "I" character
+     * @param endIndex end index (exclusive)
+     * @return a positive or negative infinity value
+     * @throws NumberFormatException on parsing failure
+     */
+    static double parseInfinity(CharSequence str, int index, int endIndex, boolean negative) throws NumericException {
+        if (index + 7 < endIndex
+                && str.charAt(index) == 'I'
+                && str.charAt(index + 1) == 'n'
+                && str.charAt(index + 2) == 'f'
+                && str.charAt(index + 3) == 'i'
+                && str.charAt(index + 4) == 'n'
+                && str.charAt(index + 5) == 'i'
+                && str.charAt(index + 6) == 't'
+                && str.charAt(index + 7) == 'y'
+        ) {
+            index = skipWhitespace(str, index + 8, endIndex);
+            if (index == endIndex) {
+                return negative ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
+            }
+        }
+        throw NumericException.INSTANCE;
+    }
+
+    /**
+     * Skips optional white space in the provided string
+     *
+     * @param str      a string
+     * @param index    start index (inclusive) of the optional white space
+     * @param endIndex end index (exclusive) of the optional white space
+     * @return index after the optional white space
+     */
+    static int skipWhitespace(CharSequence str, int index, int endIndex) {
+        for (; index < endIndex; index++) {
+            if (str.charAt(index) > ' ') {
+                break;
+            }
+        }
+        return index;
+    }
+
+    static double valueOfFloatLiteral(
+            CharSequence str,
+            int startIndex,
+            int endIndex,
+            boolean isNegative,
+            long significand,
+            int exponent,
+            boolean isSignificandTruncated,
+            int exponentOfTruncatedSignificand,
+            boolean rejectOverflow
+    ) throws NumericException {
+        double d = FastDoubleMath.tryDecFloatToDoubleTruncated(
+                isNegative,
+                significand,
+                exponent,
+                isSignificandTruncated,
+                exponentOfTruncatedSignificand
+        );
+
+        if (Double.isNaN(d)) {
+            d = fallbackToJavaParser(str, startIndex, endIndex, rejectOverflow);
+        }
+        return d;
+    }
+
+    static double valueOfHexLiteral(
+            CharSequence str,
+            int startIndex,
+            int endIndex,
+            boolean isNegative,
+            long significand,
+            int exponent,
+            boolean isSignificandTruncated,
+            int exponentOfTruncatedSignificand,
+            boolean rejectOverflow
+    ) throws NumericException {
+        double d = FastDoubleMath.tryHexFloatToDoubleTruncated(
+                isNegative,
+                significand,
+                exponent,
+                isSignificandTruncated,
+                exponentOfTruncatedSignificand
+        );
+
+        if (Double.isNaN(d)) {
+            return fallbackToJavaParser(str, startIndex, endIndex, rejectOverflow);
+        }
+        return d;
     }
 }

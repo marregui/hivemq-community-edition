@@ -200,7 +200,6 @@ abstract class AbstractLogRecord implements LogRecord, Log {
 
     @Override
     public LogRecord $256(long a, long b, long c, long d) {
-        Numbers.appendLong256(a, b, c, d, sink());
         return this;
     }
 
@@ -259,7 +258,6 @@ abstract class AbstractLogRecord implements LogRecord, Log {
 
     @Override
     public LogRecord $uuid(long lo, long hi) {
-        Numbers.appendUuid(lo, hi, this);
         return this;
     }
 

@@ -17,7 +17,7 @@ public abstract class AbstractCharSequence implements CharSequence, CloneableMut
     @Override
     @SuppressWarnings("unchecked")
     public <T> T copy() {
-        return (T) AbstractCharSequence.getString(this);
+        return (T) getString(this);
     }
 
     @Override

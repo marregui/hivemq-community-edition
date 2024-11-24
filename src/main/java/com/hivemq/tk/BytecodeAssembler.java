@@ -1,5 +1,6 @@
 package com.hivemq.tk;
 
+import com.hivemq.tk.ds.CharSequenceIntHashMap;
 import com.hivemq.tk.ds.ObjIntHashMap;
 import com.hivemq.util.Bytes;
 import org.jetbrains.annotations.Nullable;

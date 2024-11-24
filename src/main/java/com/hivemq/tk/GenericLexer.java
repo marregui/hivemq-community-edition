@@ -1,5 +1,7 @@
 package com.hivemq.tk;
 
+import com.hivemq.tk.ds.AbstractCharSequence;
+import com.hivemq.tk.ds.CharSequenceHashSet;
 import com.hivemq.tk.ds.IntHashSet;
 import com.hivemq.tk.ds.IntObjHashMap;
 import com.hivemq.tk.ds.ObjList;
@@ -428,7 +430,7 @@ public class GenericLexer implements ImmutableIterator<CharSequence> {
         }
     }
 
-    private class FloatingSequence extends AbstractCharSequence implements Mutable, BufferWindowCharSequence {
+    private class FloatingSequence extends AbstractCharSequence implements Mutable {
         int hi;
         int lo;
 
@@ -453,13 +455,6 @@ public class GenericLexer implements ImmutableIterator<CharSequence> {
             that.hi = lo + end;
             assert that.lo <= that.hi;
             return that;
-        }
-
-        @Override
-        public void shiftLo(int positiveOffset) {
-            assert positiveOffset > -1;
-            this.lo += positiveOffset;
-            assert lo < hi;
         }
     }
 

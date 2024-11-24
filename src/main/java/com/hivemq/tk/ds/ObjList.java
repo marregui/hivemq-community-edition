@@ -183,11 +183,6 @@ public class ObjList<T> implements Mutable, Sinkable, ReadOnlyObjList<T> {
         return -1;
     }
 
-    public void setQuick(int index, T value) {
-        assert index < pos : "index out of bounds, " + index + " >= " + pos;
-        buffer[index] = value;
-    }
-
     /**
      * {@inheritDoc}
      */

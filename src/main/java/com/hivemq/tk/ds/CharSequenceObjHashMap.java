@@ -1,6 +1,6 @@
-package com.hivemq.tk;
+package com.hivemq.tk.ds;
 
-import com.hivemq.tk.ds.ObjList;
+import com.hivemq.tk.Numbers;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -35,26 +35,12 @@ public class CharSequenceObjHashMap<V> extends AbstractCharSequenceHashSet {
         return valueAt(keyIndex(key));
     }
 
-    public V getAt(int index) {
-        return get(list.getQuick(index));
-    }
-
     public ObjList<CharSequence> keys() {
         return list;
     }
 
     public boolean put(@NotNull CharSequence key, V value) {
         return putAt(keyIndex(key), key, value);
-    }
-
-    public void putAll(@NotNull CharSequenceObjHashMap<V> other) {
-        CharSequence[] otherKeys = other.keys;
-        V[] otherValues = other.values;
-        for (int i = 0, n = otherKeys.length; i < n; i++) {
-            if (otherKeys[i] != noEntryKey) {
-                put(otherKeys[i], otherValues[i]);
-            }
-        }
     }
 
     public boolean putAt(int index, @NotNull CharSequence key, V value) {
@@ -64,14 +50,6 @@ public class CharSequenceObjHashMap<V> extends AbstractCharSequenceHashSet {
             return true;
         }
         return false;
-    }
-
-    public void removeAt(int index) {
-        if (index < 0) {
-            CharSequence key = keys[-index - 1];
-            super.removeAt(index);
-            list.remove(key);
-        }
     }
 
     public void sortKeys(Comparator<CharSequence> comparator) {
@@ -84,10 +62,6 @@ public class CharSequenceObjHashMap<V> extends AbstractCharSequenceHashSet {
 
     public V valueAtQuick(int index) {
         return values[-index - 1];
-    }
-
-    public V valueQuick(int index) {
-        return get(list.getQuick(index));
     }
 
     private boolean putAt0(int index, CharSequence key, V value) {
@@ -129,16 +103,4 @@ public class CharSequenceObjHashMap<V> extends AbstractCharSequenceHashSet {
         }
     }
 
-    @Override
-    protected void erase(int index) {
-        keys[index] = noEntryKey;
-        values[index] = null;
-    }
-
-    @Override
-    protected void move(int from, int to) {
-        keys[to] = keys[from];
-        values[to] = values[from];
-        erase(from);
-    }
 }

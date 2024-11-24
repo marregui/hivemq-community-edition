@@ -1,6 +1,7 @@
 package com.hivemq.tk.time;
 
 import com.hivemq.tk.*;
+import com.hivemq.tk.ds.CharSequenceIntHashMap;
 import com.hivemq.tk.ds.IntList;
 import com.hivemq.tk.ds.LongList;
 import com.hivemq.tk.ds.ObjList;

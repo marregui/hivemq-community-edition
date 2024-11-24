@@ -1,6 +1,9 @@
-package com.hivemq.tk;
+package com.hivemq.tk.ds;
 
-import com.hivemq.tk.ds.ObjList;
+import com.hivemq.tk.CharSink;
+import com.hivemq.tk.Chars;
+import com.hivemq.tk.Numbers;
+import com.hivemq.tk.Sinkable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,12 +17,6 @@ public class CharSequenceHashSet extends AbstractCharSequenceHashSet implements 
 
     public CharSequenceHashSet() {
         this(MIN_INITIAL_CAPACITY);
-    }
-
-    @SuppressWarnings("CopyConstructorMissesField")
-    public CharSequenceHashSet(CharSequenceHashSet that) {
-        this(that.capacity, that.loadFactor);
-        addAll(that);
     }
 
     private CharSequenceHashSet(int initialCapacity) {
@@ -50,12 +47,6 @@ public class CharSequenceHashSet extends AbstractCharSequenceHashSet implements 
 
         addAt(index, key);
         return true;
-    }
-
-    public final void addAll(@NotNull CharSequenceHashSet that) {
-        for (int i = 0, k = that.size(); i < k; i++) {
-            add(that.get(i));
-        }
     }
 
     public void addAt(int index, @NotNull CharSequence key) {
@@ -99,63 +90,6 @@ public class CharSequenceHashSet extends AbstractCharSequenceHashSet implements 
         return list.getQuick(index);
     }
 
-    public CharSequence getLast() {
-        return list.getLast();
-    }
-
-    public ObjList<CharSequence> getList() {
-        return list;
-    }
-
-    public int getListIndexAt(int keyIndex) {
-        int index = -keyIndex - 1;
-        return list.indexOf(keys[index]);
-    }
-
-    public int getListIndexOf(@NotNull CharSequence cs) {
-        return getListIndexAt(keyIndex(cs));
-    }
-
-    @Override
-    public CharSequence keyAt(int index) {
-        int index1 = -index - 1;
-        return keys[index1];
-    }
-
-    @Override
-    public int remove(@Nullable CharSequence key) {
-        if (key == null) {
-            return removeNull();
-        }
-
-        int keyIndex = keyIndex(key);
-        if (keyIndex < 0) {
-            removeAt(keyIndex);
-            return -keyIndex - 1;
-        }
-        return -1;
-    }
-
-    @Override
-    public void removeAt(int index) {
-        if (index < 0) {
-            int index1 = -index - 1;
-            CharSequence key = keys[index1];
-            super.removeAt(index);
-            list.remove(key);
-        }
-    }
-
-    public int removeNull() {
-        if (hasNull) {
-            hasNull = false;
-            int index = list.remove(null);
-            free++;
-            return index;
-        }
-        return -1;
-    }
-
     @Override
     public void toSink(@NotNull CharSink<?> sink) {
         sink.put(list);
@@ -180,14 +114,4 @@ public class CharSequenceHashSet extends AbstractCharSequenceHashSet implements 
         }
     }
 
-    @Override
-    protected void erase(int index) {
-        keys[index] = noEntryKey;
-    }
-
-    @Override
-    protected void move(int from, int to) {
-        keys[to] = keys[from];
-        erase(from);
-    }
 }

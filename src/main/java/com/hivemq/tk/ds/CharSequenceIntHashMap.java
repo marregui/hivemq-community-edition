@@ -1,6 +1,7 @@
-package com.hivemq.tk;
+package com.hivemq.tk.ds;
 
-import com.hivemq.tk.ds.ObjList;
+import com.hivemq.tk.Chars;
+import com.hivemq.tk.Numbers;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -38,31 +39,8 @@ public class CharSequenceIntHashMap extends AbstractCharSequenceHashSet {
         return valueAt(keyIndex(key));
     }
 
-    public void increment(@NotNull CharSequence key) {
-        int index = keyIndex(key);
-        if (index < 0) {
-            values[-index - 1] = values[-index - 1] + 1;
-        } else {
-            putAt0(index, Chars.toString(key), 0);
-        }
-    }
-
-    public ObjList<CharSequence> keys() {
-        return list;
-    }
-
     public boolean put(@NotNull CharSequence key, int value) {
         return putAt(keyIndex(key), key, value);
-    }
-
-    public void putAll(@NotNull CharSequenceIntHashMap other) {
-        CharSequence[] otherKeys = other.keys;
-        int[] otherValues = other.values;
-        for (int i = 0, n = otherKeys.length; i < n; i++) {
-            if (otherKeys[i] != noEntryKey) {
-                put(otherKeys[i], otherValues[i]);
-            }
-        }
     }
 
     public boolean putAt(int index, @NotNull CharSequence key, int value) {
@@ -76,32 +54,9 @@ public class CharSequenceIntHashMap extends AbstractCharSequenceHashSet {
         return true;
     }
 
-    public void putIfAbsent(@NotNull CharSequence key, int value) {
-        int index = keyIndex(key);
-        if (index > -1) {
-            String keyString = Chars.toString(key);
-            putAt0(index, keyString, value);
-            list.add(keyString);
-        }
-    }
-
-    @Override
-    public void removeAt(int index) {
-        if (index < 0) {
-            int index1 = -index - 1;
-            CharSequence key = keys[index1];
-            super.removeAt(index);
-            list.remove(key);
-        }
-    }
-
     public int valueAt(int index) {
         int index1 = -index - 1;
         return index < 0 ? values[index1] : noEntryValue;
-    }
-
-    public int valueQuick(int index) {
-        return get(list.getQuick(index));
     }
 
     private void putAt0(int index, CharSequence key, int value) {
@@ -131,16 +86,4 @@ public class CharSequenceIntHashMap extends AbstractCharSequenceHashSet {
         }
     }
 
-    @Override
-    protected void erase(int index) {
-        keys[index] = noEntryKey;
-        values[index] = noEntryValue;
-    }
-
-    @Override
-    protected void move(int from, int to) {
-        keys[to] = keys[from];
-        values[to] = values[from];
-        erase(from);
-    }
 }

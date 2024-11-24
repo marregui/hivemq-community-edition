@@ -810,8 +810,7 @@ public class LogFactory implements Closeable {
         public Holder(int queueDepth, final int recordLength) {
             this.ring = new RingQueue<>(LogRecordUtf8Sink::new,
                     Numbers.ceilPow2(recordLength),
-                    queueDepth,
-                    MemoryTag.NATIVE_LOGGER);
+                    queueDepth);
             this.lSeq = new MPSequence(queueDepth);
         }
 

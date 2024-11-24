@@ -38,7 +38,7 @@ public class Unsafe {
 
     }
 
-    public static long realloc(long address, long oldSize, long newSize, int memoryTag) {
+    public static long realloc(long address, long oldSize, long newSize) {
             long ptr = UNSAFE.reallocateMemory(address, newSize);
             return ptr;
 
@@ -48,18 +48,18 @@ public class Unsafe {
         return 31 - Integer.numberOfLeadingZeros(value);
     }
 
-    public static long malloc(long size, int memoryTag) {
+    public static long malloc(long size) {
         long ptr = UNSAFE.allocateMemory(size);
         return ptr;
     }
 
-    public static long calloc(long size, int memoryTag) {
-        long ptr = malloc(size, memoryTag);
+    public static long calloc(long size) {
+        long ptr = malloc(size);
         //Vect.memset(ptr, size, 0);
         return ptr;
     }
 
-    public static long free(long ptr, long size, int memoryTag) {
+    public static long free(long ptr) {
         if (ptr != 0) {
             UNSAFE.freeMemory(ptr);
         }

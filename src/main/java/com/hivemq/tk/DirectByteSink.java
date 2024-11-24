@@ -263,10 +263,6 @@ public class DirectByteSink implements DirectByteSequence, BorrowableAsNativeByt
         Unsafe.UNSAFE.putLong(impl + BYTE_SINK_PTR_OFFSET, ptr);
     }
 
-    protected int memoryTag() {
-        return MemoryTag.NATIVE_DIRECT_BYTE_SINK;
-    }
-
     static {
         //Os.init();
     }

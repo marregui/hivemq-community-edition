@@ -6,7 +6,6 @@ import java.util.function.Supplier;
 public class RingQueue<T> implements Closeable {
     private final T[] buf;
     private final int mask;
-    private final int memoryTag;
     private long memory;
     private long memorySize;
 
@@ -25,7 +24,6 @@ public class RingQueue<T> implements Closeable {
             // heap based queue
             this.memory = 0;
             this.memorySize = 0;
-            this.memoryTag = 0;
         } catch (Throwable th) {
             close();
             throw th;
@@ -33,14 +31,13 @@ public class RingQueue<T> implements Closeable {
     }
 
     @SuppressWarnings("unchecked")
-    public RingQueue(DirectObjectFactory<T> factory, long slotSize, int cycle, int memoryTag) {
+    public RingQueue(DirectObjectFactory<T> factory, long slotSize, int cycle) {
         try {
             this.mask = cycle - 1;
             this.buf = (T[]) new Object[cycle];
 
             this.memorySize = slotSize * cycle;
-            this.memoryTag = memoryTag;
-            this.memory = Unsafe.calloc(memorySize, memoryTag);
+            this.memory = Unsafe.calloc(memorySize);
             long p = memory;
             for (int i = 0; i < cycle; i++) {
                 // intention is that whatever comes out of the factory it should work with the
@@ -60,7 +57,7 @@ public class RingQueue<T> implements Closeable {
             buf[i] = Misc.freeIfCloseable(buf[i]);
         }
         if (memory != 0) {
-            memory = Unsafe.free(memory, memorySize, memoryTag);
+            memory = Unsafe.free(memory);
             this.memorySize = 0;
         }
     }

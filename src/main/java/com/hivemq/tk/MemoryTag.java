@@ -1,5 +1,7 @@
 package com.hivemq.tk;
 
+import com.hivemq.tk.ds.ObjList;
+
 public final class MemoryTag {
     public static final int MMAP_DEFAULT = 0;
     public static final int MMAP_BLOCK_WRITER = MMAP_DEFAULT + 1;

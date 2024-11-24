@@ -1,6 +1,8 @@
-package com.hivemq.tk;
+package com.hivemq.tk.time;
 
-import com.hivemq.tk.time.TimeZoneRules;
+import com.hivemq.tk.*;
+import com.hivemq.tk.ds.LongList;
+import com.hivemq.tk.ds.ObjList;
 
 import java.time.ZoneOffset;
 import java.time.zone.ZoneOffsetTransitionRule;
@@ -120,7 +122,7 @@ public abstract class AbstractTimeZoneRules implements TimeZoneRules {
     }
 
     private long dstFromHistory(long epoch) {
-        int index = historicTransitions.binarySearch(epoch, BinarySearch.SCAN_UP);
+        int index = historicTransitions.binarySearch(epoch, -1);
         if (index == -1) {
             return Long.MAX_VALUE;
         }
@@ -198,7 +200,7 @@ public abstract class AbstractTimeZoneRules implements TimeZoneRules {
     }
 
     private long offsetFromHistory(long epoch) {
-        int index = historicTransitions.binarySearch(epoch, BinarySearch.SCAN_UP);
+        int index = historicTransitions.binarySearch(epoch, -1);
         if (index == -1) {
             return firstWall;
         }

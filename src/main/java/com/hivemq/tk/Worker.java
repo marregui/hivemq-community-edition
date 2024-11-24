@@ -1,5 +1,6 @@
 package com.hivemq.tk;
 
+import com.hivemq.tk.ds.ObjHashSet;
 import com.hivemq.tk.time.MicrosClock;
 import org.jetbrains.annotations.Nullable;
 

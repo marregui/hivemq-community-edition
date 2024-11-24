@@ -1,6 +1,9 @@
 package com.hivemq.tk.time;
 
 import com.hivemq.tk.*;
+import com.hivemq.tk.ds.IntList;
+import com.hivemq.tk.ds.LongList;
+import com.hivemq.tk.ds.ObjList;
 
 public class TimestampFormatCompiler {
     static final int OP_AM_PM = 14;

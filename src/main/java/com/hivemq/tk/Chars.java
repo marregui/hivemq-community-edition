@@ -1,5 +1,6 @@
 package com.hivemq.tk;
 
+import com.hivemq.tk.ds.ObjList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -822,55 +823,6 @@ public final class Chars {
                 throw new UnsupportedOperationException();
             }
         };
-    }
-
-    /**
-     * Split character sequence into a list of lpsz strings. This function
-     * uses space as a delimiter and it honours spaces in double quotes. Main
-     * use for this code is to produce list of C-compatible argument values from
-     * command line.
-     *
-     * @param args command line
-     * @return list of 0-terminated strings
-     */
-    public static ObjList<Path> splitLpsz(CharSequence args) {
-        final ObjList<Path> paths = new ObjList<>();
-        int n = args.length();
-        int lastLen = 0;
-        int lastIndex = 0;
-        boolean inQuote = false;
-        for (int i = 0; i < n; i++) {
-            char b = args.charAt(i);
-
-            switch (b) {
-                case ' ':
-                    // ab c
-                    if (lastLen > 0) {
-                        if (inQuote) {
-                            lastLen++;
-                        } else {
-                            paths.add(new Path().of(args, lastIndex, lastLen + lastIndex));
-                            lastLen = 0;
-                        }
-                    }
-                    break;
-                case '"':
-                    inQuote = !inQuote;
-                    break;
-                default:
-                    if (lastLen == 0) {
-                        lastIndex = i;
-                    }
-                    lastLen++;
-                    break;
-
-            }
-        }
-
-        if (lastLen > 0) {
-            paths.add(new Path().of(args, lastIndex, lastLen + lastIndex));
-        }
-        return paths;
     }
 
     public static boolean startsWith(@Nullable CharSequence cs, @Nullable CharSequence starts) {

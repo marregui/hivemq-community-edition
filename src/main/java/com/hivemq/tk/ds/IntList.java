@@ -1,8 +1,7 @@
-package com.hivemq.tk;
+package com.hivemq.tk.ds;
 
+import com.hivemq.tk.*;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
 
 public class IntList implements Mutable, Sinkable {
     private static final int DEFAULT_ARRAY_SIZE = 16;
@@ -25,51 +24,8 @@ public class IntList implements Mutable, Sinkable {
         data[pos++] = value;
     }
 
-    public void addAll(IntList that) {
-        int p = pos;
-        int s = that.size();
-        setPos(p + s);
-        System.arraycopy(that.data, 0, this.data, p, s);
-    }
-
-    public void arrayCopy(int srcPos, int dstPos, int length) {
-        System.arraycopy(data, srcPos, data, dstPos, length);
-    }
-
-    public int binarySearchUniqueList(int v) {
-        int low = 0;
-        int high = pos - 1;
-        while (high - low > 65) {
-            int mid = (low + high) >>> 1;
-            int midVal = data[mid];
-
-            if (midVal < v)
-                low = mid + 1;
-            else if (midVal > v)
-                high = mid - 1;
-            else {
-                return mid;
-            }
-        }
-        return scanSearch(v, low, high + 1);
-    }
-
-    public int capacity() {
-        return data.length;
-    }
-
     public void clear() {
         pos = 0;
-    }
-
-    public void clear(int capacity) {
-        checkCapacity(capacity);
-        pos = 0;
-        Arrays.fill(data, NO_ENTRY_VALUE);
-    }
-
-    public boolean contains(int value) {
-        return indexOf(value, 0, pos) > -1;
     }
 
     /**
@@ -78,14 +34,6 @@ public class IntList implements Mutable, Sinkable {
     @Override
     public boolean equals(Object that) {
         return this == that || that instanceof IntList && equals((IntList) that);
-    }
-
-    public void extendAndSet(int index, int value) {
-        checkCapacity(index + 1);
-        if (index >= pos) {
-            pos = index + 1;
-        }
-        data[index] = value;
     }
 
     public int get(int index) {
@@ -126,15 +74,6 @@ public class IntList implements Mutable, Sinkable {
         return hashCode;
     }
 
-    public void increment(int index) {
-        data[index] = data[index] + 1;
-    }
-
-    public void increment(int index, int delta) {
-        assert delta > -1;
-        data[index] = data[index] + delta;
-    }
-
     public int indexOf(int v, int low, int high) {
         assert high <= pos;
 
@@ -145,19 +84,6 @@ public class IntList implements Mutable, Sinkable {
             }
         }
         return -1;
-    }
-
-    public void insert(int index, int element) {
-        setPos(++pos);
-        System.arraycopy(data, index, data, index + 1, pos - index - 1);
-        data[index] = element;
-    }
-
-    // increment at index and return previous value
-    public int postIncrement(int index) {
-        final int prev = data[index];
-        data[index] = prev + 1;
-        return prev;
     }
 
     public void remove(int key) {
@@ -179,25 +105,6 @@ public class IntList implements Mutable, Sinkable {
         }
         int index1 = --pos;
         data[index1] = NO_ENTRY_VALUE;
-    }
-
-    public void restoreInitialCapacity() {
-        data = new int[initialCapacity];
-        pos = 0;
-    }
-
-    public void set(int index, int element) {
-        if (index < pos) {
-            data[index] = element;
-            return;
-        }
-        throw new ArrayIndexOutOfBoundsException(index);
-    }
-
-    public void setAll(int capacity, int value) {
-        checkCapacity(capacity);
-        pos = capacity;
-        Arrays.fill(data, 0, pos, value);
     }
 
     public void setPos(int position) {
@@ -243,18 +150,11 @@ public class IntList implements Mutable, Sinkable {
         sink.putAscii(']');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         Utf16Sink b = Misc.getThreadLocalSink();
         toSink(b);
         return b.toString();
-    }
-
-    public void zero(int value) {
-        Arrays.fill(data, 0, pos, value);
     }
 
     private void checkCapacity(int capacity) {

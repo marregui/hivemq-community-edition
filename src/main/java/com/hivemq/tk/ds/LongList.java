@@ -1,5 +1,6 @@
-package com.hivemq.tk;
+package com.hivemq.tk.ds;
 
+import com.hivemq.tk.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 
@@ -117,12 +118,12 @@ public class LongList implements Mutable, LongVec, Sinkable {
                 high = mid - 1;
             } else {
                 // In case of multiple equal values, find the first
-                return scanDir == BinarySearch.SCAN_UP ?
+                return scanDir == -1 ?
                         scrollUp(mid, midVal) :
                         scrollDown(mid, high, midVal);
             }
         }
-        return scanDir == BinarySearch.SCAN_UP ?
+        return scanDir == -1 ?
                 scanUp(value, low, high + 1) :
                 scanDown(value, low, high + 1);
     }
@@ -158,12 +159,12 @@ public class LongList implements Mutable, LongVec, Sinkable {
                 high = mid - 1;
             } else {
                 // In case of multiple equal values, find the first
-                return scanDir == BinarySearch.SCAN_UP ?
+                return scanDir == -1 ?
                         scrollUpBlock(shl, mid, midVal) :
                         scrollDownBlock(shl, mid, high, midVal);
             }
         }
-        return scanDir == BinarySearch.SCAN_UP ?
+        return scanDir == -1 ?
                 scanUpBlock(shl, value, low, high + 1) :
                 scanDownBlock(shl, value, low, high + 1);
     }

@@ -1,5 +1,6 @@
 package com.hivemq.tk;
 
+import com.hivemq.tk.ds.ObjList;
 
 public class FanOut implements Barrier {
     private static final long HOLDER = Unsafe.fieldOffset(FanOut.class, "holder");

@@ -1,5 +1,7 @@
 package com.hivemq.tk;
 
+import com.hivemq.tk.ds.ObjHashSet;
+import com.hivemq.tk.ds.ObjList;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 
@@ -100,12 +102,6 @@ public class WorkerPool implements Closeable {
 
     public void start(@Nullable Log log) {
         if (!closed.get() && running.compareAndSet(false, true)) {
-
-            // very common cleaner
-            // it is set up from start() to make sure it is called last
-            // some other thread local cleaners are liable to access thread local Path instances
-            setupPathCleaner();
-
             for (int i = 0; i < workerCount; i++) {
                 final int index = i;
                 Worker worker = new Worker(poolName,
@@ -128,12 +124,6 @@ public class WorkerPool implements Closeable {
                 log.info().$("worker pool started [pool=").$(poolName).I$();
             }
             started.countDown();
-        }
-    }
-
-    private void setupPathCleaner() {
-        for (int i = 0; i < workerCount; i++) {
-            threadLocalCleaners.getQuick(i).add(Path.THREAD_LOCAL_CLEANER);
         }
     }
 }

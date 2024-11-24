@@ -1,8 +1,6 @@
 package com.hivemq.tk.time;
 
 
-import com.hivemq.tk.AbstractTimeZoneRules;
-
 import java.time.zone.ZoneRules;
 
 public class TimeZoneRulesMillis extends AbstractTimeZoneRules {

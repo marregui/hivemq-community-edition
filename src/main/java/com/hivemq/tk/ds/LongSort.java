@@ -1,4 +1,6 @@
-package com.hivemq.tk;
+package com.hivemq.tk.ds;
+
+import com.hivemq.tk.LongVec;
 
 public class LongSort {
     /**

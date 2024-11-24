@@ -1,5 +1,6 @@
 package com.hivemq.tk;
 
+import com.hivemq.tk.ds.Hash;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

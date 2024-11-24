@@ -1,6 +1,8 @@
 package com.hivemq.tk.time;
 
 import com.hivemq.tk.*;
+import com.hivemq.tk.ds.IntList;
+import com.hivemq.tk.ds.ObjList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

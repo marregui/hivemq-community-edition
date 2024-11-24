@@ -1,5 +1,7 @@
-package com.hivemq.tk;
+package com.hivemq.tk.ds;
 
+import com.hivemq.tk.Mutable;
+import com.hivemq.tk.Numbers;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.AbstractSet;

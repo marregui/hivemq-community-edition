@@ -1,6 +1,8 @@
 package com.hivemq.tk.time;
 
 import com.hivemq.tk.*;
+import com.hivemq.tk.ds.IntObjHashMap;
+import com.hivemq.tk.ds.ObjList;
 
 import java.text.DateFormatSymbols;
 

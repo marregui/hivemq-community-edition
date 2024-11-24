@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.function.Supplier;
 
 public class GenericLexer implements ImmutableIterator<CharSequence> {
     public static final LenComparator COMPARATOR = new LenComparator();
@@ -47,6 +48,49 @@ public class GenericLexer implements ImmutableIterator<CharSequence> {
         for (int i = 0, n = WHITESPACE.size(); i < n; i++) {
             defineSymbol(Chars.toString(WHITESPACE.get(i)));
         }
+    }
+
+    public static CharSequence fetchNext(GenericLexer lexer) throws SqlException {
+        int blockCount = 0;
+        boolean lineComment = false;
+        while (lexer.hasNext()) {
+            CharSequence cs = lexer.next();
+
+            if (lineComment) {
+                if (Chars.equals(cs, '\n') || Chars.equals(cs, '\r')) {
+                    lineComment = false;
+                }
+                continue;
+            }
+
+            if (Chars.equals("--", cs)) {
+                lineComment = true;
+                continue;
+            }
+
+            if (Chars.equals("/*", cs)) {
+                blockCount++;
+                continue;
+            }
+
+            if (Chars.equals("*/", cs) && blockCount > 0) {
+                blockCount--;
+                continue;
+            }
+
+            if (blockCount == 0 && GenericLexer.WHITESPACE.excludes(cs)) {
+                // unclosed quote check
+                if (cs.length() == 1 && cs.charAt(0) == '"') {
+                    throw SqlException.$(lexer._lo, "unclosed quotation mark");
+                }
+                return cs;
+            }
+        }
+        return null;
+    }
+
+    public void of(CharSequence content) {
+        of(content, 0, content == null ? 0 : content.length());
     }
 
     private static CharSequence findToken0(
@@ -342,7 +386,49 @@ public class GenericLexer implements ImmutableIterator<CharSequence> {
         }
     }
 
-    public class FloatingSequence extends AbstractCharSequence implements Mutable, BufferWindowCharSequence {
+    private static class ObjectPool<T extends Mutable> implements Mutable {
+        private static final Log LOG = LogFactory.getLog(ObjectPool.class);
+        private final Supplier<T> factory;
+        private ObjList<T> list;
+        private int pos = 0;
+        private int size;
+
+        public ObjectPool(@NotNull Supplier<T> factory, int size) {
+            this.list = new ObjList<>(size);
+            this.factory = factory;
+            this.size = size;
+            fill();
+        }
+
+        @Override
+        public void clear() {
+            pos = 0;
+        }
+
+        public T next() {
+            if (pos == size) {
+                expand();
+            }
+
+            T o = list.getQuick(pos++);
+            o.clear();
+            return o;
+        }
+
+        private void expand() {
+            fill();
+            size <<= 1;
+            LOG.debug().$("pool resize [class=").$(factory.getClass().getName()).$(", size=").$(size).$(']').$();
+        }
+
+        private void fill() {
+            for (int i = 0; i < size; i++) {
+                list.add(factory.get());
+            }
+        }
+    }
+
+    private class FloatingSequence extends AbstractCharSequence implements Mutable, BufferWindowCharSequence {
         int hi;
         int lo;
 
@@ -377,7 +463,7 @@ public class GenericLexer implements ImmutableIterator<CharSequence> {
         }
     }
 
-    public class InternalFloatingSequence extends AbstractCharSequence {
+    private class InternalFloatingSequence extends AbstractCharSequence {
 
         @Override
         public char charAt(int index) {

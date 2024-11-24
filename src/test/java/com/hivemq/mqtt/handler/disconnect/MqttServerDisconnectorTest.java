@@ -21,7 +21,7 @@ import com.hivemq.bootstrap.ClientState;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.extensions.events.OnAuthFailedEvent;
 import com.hivemq.extensions.events.OnServerDisconnectEvent;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import com.hivemq.mqtt.message.connect.CONNECT;
 import com.hivemq.mqtt.message.disconnect.DISCONNECT;

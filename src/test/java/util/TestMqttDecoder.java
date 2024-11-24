@@ -33,7 +33,7 @@ import com.hivemq.config.RandomId;
 import com.hivemq.config.ConfigService;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.TopicAliasLimiter;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.metrics.handler.GlobalMQTTMessageCounter;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;

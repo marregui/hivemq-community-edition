@@ -1,0 +1,161 @@
+package com.hivemq.tk;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public class StringSink implements MutableUtf16Sink, CharSequence, CloneableMutable, Utf16Sink {
+
+    private char[] buffer;
+    private int pos;
+
+    public StringSink() {
+        this(16);
+    }
+
+    public StringSink(int initialCapacity) {
+        this.buffer = new char[initialCapacity];
+        this.pos = 0;
+    }
+
+    @Override
+    public char charAt(int index) {
+        return buffer[index];
+    }
+
+    public void clear(int pos) {
+        this.pos = pos;
+    }
+
+    @Override
+    public void clear() {
+        clear(0);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T copy() {
+        return (T) new String(buffer, 0, pos);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof CharSequence) {
+            CharSequence cs = (CharSequence) obj;
+            int len = cs.length();
+            if (len == pos) {
+                for (int i = 0; i < len; i++) {
+                    if (buffer[i] != cs.charAt(i)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Chars.hashCode(buffer, 0, pos);
+    }
+
+    public int indexOf(@NotNull String s) {
+        return Chars.indexOf(this, 0, pos, s);
+    }
+
+    public int indexOf(@NotNull String s, int fromIndex) {
+        return Chars.indexOf(this, Math.min(fromIndex, pos), pos, s);
+    }
+
+    public int lastIndexOf(@NotNull String s) {
+        return Chars.lastIndexOf(this, 0, pos, s);
+    }
+
+    public int lastIndexOf(@NotNull String s, int fromIndex) {
+        return Chars.lastIndexOf(this, 0, Math.min(fromIndex + s.length(), pos), s);
+    }
+
+    @Override
+    public int length() {
+        return pos;
+    }
+
+    @Override
+    public Utf16Sink put(@Nullable CharSequence cs) {
+        if (cs != null) {
+            int len = cs.length();
+            checkCapacity(len);
+            for (int i = 0; i < len; i++) {
+                buffer[pos + i] = cs.charAt(i);
+            }
+            pos += len;
+        }
+        return this;
+    }
+
+    @Override
+    public Utf16Sink put(@NotNull CharSequence cs, int lo, int hi) {
+        int len = hi - lo;
+        checkCapacity(len);
+        for (int i = lo; i < hi; i++) {
+            buffer[pos + i - lo] = cs.charAt(i);
+        }
+        pos += len;
+        return this;
+    }
+
+    @Override
+    public Utf16Sink put(char c) {
+        checkCapacity(1);
+        buffer[pos++] = c;
+        return this;
+    }
+
+    @Override
+    public Utf16Sink put(char @NotNull [] chars, int start, int len) {
+        checkCapacity(len);
+        System.arraycopy(chars, start, buffer, pos, len);
+        pos += len;
+        return this;
+    }
+
+    public Utf16Sink put(char c, int n) {
+        checkCapacity(n);
+        for (int i = 0; i < n; i++) {
+            buffer[pos + i] = c;
+        }
+        pos += n;
+        return this;
+    }
+
+    public void setCharAt(int index, char ch) {
+        buffer[index] = ch;
+    }
+
+    @Override
+    public @NotNull CharSequence subSequence(int lo, int hi) {
+        return new String(buffer, lo, hi - lo);
+    }
+
+    /* Either IDEA or FireBug complain, annotation galore */
+    @NotNull
+    @Override
+    public String toString() {
+        return new String(buffer, 0, pos);
+    }
+
+    public void trimTo(int pos) {
+        clear(pos);
+    }
+
+    private void checkCapacity(int extra) {
+        int len = pos + extra;
+        if (buffer.length >= len) {
+            return;
+        }
+        len = Math.max(pos * 2, len);
+        final char[] n = new char[len];
+        System.arraycopy(buffer, 0, n, 0, pos);
+        buffer = n;
+    }
+}

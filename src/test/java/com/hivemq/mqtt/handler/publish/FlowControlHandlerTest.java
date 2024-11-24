@@ -18,7 +18,7 @@ package com.hivemq.mqtt.handler.publish;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.config.MqttConfigService;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
 import com.hivemq.mqtt.message.QoS;

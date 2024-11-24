@@ -24,7 +24,7 @@ import com.hivemq.config.entity.TlsTcpListener;
 import com.hivemq.config.entity.TlsWebsocketListener;
 import com.hivemq.config.entity.WebsocketListener;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.security.ssl.NonSslHandler;
 import com.hivemq.security.ssl.SslFactory;
 import io.netty.channel.Channel;

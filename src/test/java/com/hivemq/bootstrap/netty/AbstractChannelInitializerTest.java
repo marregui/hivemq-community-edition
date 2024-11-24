@@ -22,7 +22,7 @@ import com.hivemq.config.MqttConfigService;
 import com.hivemq.config.RestrictionsConfigService;
 import com.hivemq.config.entity.Listener;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
 import com.hivemq.security.exception.SslException;

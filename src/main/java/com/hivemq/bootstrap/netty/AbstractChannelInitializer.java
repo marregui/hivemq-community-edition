@@ -37,7 +37,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.hivemq.bootstrap.netty.ChannelHandlerNames.*;
-import static com.hivemq.logging.LoggingUtils.appendListenerToMessage;
+import static com.hivemq.tk.LoggingUtils.appendListenerToMessage;
 
 
 public abstract class AbstractChannelInitializer extends ChannelInitializer<Channel> {

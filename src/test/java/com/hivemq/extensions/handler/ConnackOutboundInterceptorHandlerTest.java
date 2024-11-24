@@ -35,7 +35,7 @@ import com.hivemq.extensions.executor.PluginTaskExecutorService;
 import com.hivemq.extensions.executor.PluginTaskExecutorServiceImpl;
 import com.hivemq.extensions.executor.task.PluginTaskExecutor;
 import com.hivemq.extensions.services.interceptor.Interceptors;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import com.hivemq.mqtt.message.connack.CONNACK;
@@ -49,7 +49,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import util.DummyClientConnection;
 import util.IsolatedExtensionClassloaderUtil;
-import util.TestConfigurationBootstrap;
 import util.TestMessageUtil;
 
 import java.time.Duration;

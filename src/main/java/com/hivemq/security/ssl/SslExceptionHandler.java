@@ -31,7 +31,7 @@ import javax.net.ssl.SSLHandshakeException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hivemq.logging.LoggingUtils.appendListenerToMessage;
+import static com.hivemq.tk.LoggingUtils.appendListenerToMessage;
 
 /**
  * This Exception handler is responsible for handling SSLExceptions and all other

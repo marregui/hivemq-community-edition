@@ -19,7 +19,7 @@ import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.ClientState;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;
 import com.hivemq.mqtt.message.reason.Mqtt5AuthReasonCode;
 import io.netty.channel.ChannelFuture;

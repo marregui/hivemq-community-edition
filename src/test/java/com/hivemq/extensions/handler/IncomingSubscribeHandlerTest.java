@@ -37,7 +37,7 @@ import com.hivemq.extensions.executor.PluginTaskExecutorService;
 import com.hivemq.extensions.executor.PluginTaskExecutorServiceImpl;
 import com.hivemq.extensions.executor.task.PluginTaskExecutor;
 import com.hivemq.extensions.packets.general.ModifiableDefaultPermissionsImpl;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
 import com.hivemq.mqtt.handler.publish.PublishFlushHandler;
@@ -64,7 +64,6 @@ import org.junit.rules.TemporaryFolder;
 import util.DummyClientConnection;
 import util.DummyHandler;
 import util.IsolatedExtensionClassloaderUtil;
-import util.TestConfigurationBootstrap;
 import util.TestMessageUtil;
 
 import java.nio.channels.ClosedChannelException;

@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import com.hivemq.extensions.iteration.ChunkCursor;
 import com.hivemq.extensions.iteration.Chunker;
 import com.hivemq.extensions.iteration.MultipleChunkResult;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.message.connect.MqttWillPublish;
 import com.hivemq.mqtt.message.reason.Mqtt5DisconnectReasonCode;

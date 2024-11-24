@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import com.hivemq.extension.sdk.api.packets.general.DisconnectedReasonCode;
 import com.hivemq.extensions.events.OnAuthFailedEvent;
 import com.hivemq.extensions.events.OnServerDisconnectEvent;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import com.hivemq.mqtt.message.disconnect.DISCONNECT;
 import com.hivemq.mqtt.message.mqtt5.Mqtt5UserProperties;

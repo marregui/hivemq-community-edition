@@ -22,7 +22,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.extensions.iteration.Chunker;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import com.hivemq.mqtt.message.QoS;

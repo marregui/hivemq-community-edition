@@ -17,7 +17,7 @@ package com.hivemq.mqtt.handler.auth;
 
 import com.hivemq.bootstrap.ClientConnection;
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.handler.connack.MqttConnacker;
 import com.hivemq.mqtt.handler.connack.MqttConnackerImpl;
 import com.hivemq.mqtt.message.ProtocolVersion;

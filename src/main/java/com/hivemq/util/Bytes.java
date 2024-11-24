@@ -116,4 +116,16 @@ public final class Bytes {
     public static int msb(int value) {
         return 31 - Integer.numberOfLeadingZeros(value);
     }
+
+    public static int checkAddressingOverflow(final long srcStart, final long srcEnd, final int dstStart) {
+        final long additional = srcEnd - srcStart;
+        if (additional < 0) {
+            throw new IllegalArgumentException("lo > hi");
+        }
+        final long size = dstStart + additional;
+        if (size > (long) Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("size exceeds 2GiB limit");
+        }
+        return (int) additional;
+    }
 }

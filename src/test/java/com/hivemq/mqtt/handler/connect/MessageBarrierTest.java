@@ -16,7 +16,7 @@
 package com.hivemq.mqtt.handler.connect;
 
 import com.hivemq.bootstrap.Connection;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
 import io.netty.channel.embedded.EmbeddedChannel;

@@ -39,7 +39,7 @@ import com.hivemq.extensions.interceptor.connack.parameter.ConnackOutboundProvid
 import com.hivemq.extensions.packets.connack.ConnackPacketImpl;
 import com.hivemq.extensions.packets.connack.ModifiableConnackPacketImpl;
 import com.hivemq.extensions.services.interceptor.Interceptors;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.message.connack.CONNACK;
 import com.hivemq.util.Exceptions;
 import io.netty.channel.Channel;

@@ -19,7 +19,7 @@ import com.hivemq.bootstrap.Connection;
 import com.hivemq.bootstrap.UndefinedClientConnection;
 import com.hivemq.config.entity.Listener;
 import com.hivemq.config.entity.TcpListener;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
 import io.netty.channel.Channel;

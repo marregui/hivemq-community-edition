@@ -19,7 +19,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.hivemq.codec.encoder.MQTTMessageEncoder;
 import com.hivemq.config.SecurityConfigService;
 import org.jetbrains.annotations.NotNull;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.metrics.handler.GlobalMQTTMessageCounter;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;

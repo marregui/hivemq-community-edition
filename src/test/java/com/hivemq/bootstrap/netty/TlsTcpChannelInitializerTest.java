@@ -20,7 +20,7 @@ import com.hivemq.config.RestrictionsConfigService;
 import com.hivemq.config.entity.Listener;
 import com.hivemq.config.entity.Tls;
 import com.hivemq.config.entity.TlsTcpListener;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
 import com.hivemq.security.ssl.SslFactory;

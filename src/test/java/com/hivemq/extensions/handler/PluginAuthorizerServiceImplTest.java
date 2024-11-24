@@ -37,7 +37,7 @@ import com.hivemq.extensions.handler.testextensions.TestAuthorizerNextProvider;
 import com.hivemq.extensions.handler.testextensions.TestPubAuthorizerNextProvider;
 import com.hivemq.extensions.handler.testextensions.TestTimeoutAuthorizerProvider;
 import com.hivemq.extensions.services.auth.Authorizers;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnector;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
 import com.hivemq.mqtt.handler.publish.IncomingPublishService;

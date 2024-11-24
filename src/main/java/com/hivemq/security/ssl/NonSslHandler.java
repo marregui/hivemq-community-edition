@@ -26,7 +26,7 @@ import io.netty.handler.ssl.SslHandler;
 
 import java.util.List;
 
-import static com.hivemq.logging.LoggingUtils.appendListenerToMessage;
+import static com.hivemq.tk.LoggingUtils.appendListenerToMessage;
 
 
 

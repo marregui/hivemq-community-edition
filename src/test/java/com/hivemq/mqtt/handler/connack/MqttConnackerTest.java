@@ -22,7 +22,7 @@ import com.hivemq.bootstrap.ClientState;
 import com.hivemq.config.InternalConfig;
 import com.hivemq.extensions.events.OnAuthFailedEvent;
 import com.hivemq.extensions.events.OnServerDisconnectEvent;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.message.ProtocolVersion;
 import com.hivemq.mqtt.message.connack.CONNACK;
 import com.hivemq.mqtt.message.connect.CONNECT;
@@ -34,7 +34,6 @@ import io.netty.channel.embedded.EmbeddedChannel;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
 import util.DummyClientConnection;
 import util.DummyHandler;
 

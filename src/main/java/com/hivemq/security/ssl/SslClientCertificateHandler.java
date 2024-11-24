@@ -33,7 +33,7 @@ import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
 import java.security.cert.Certificate;
 
-import static com.hivemq.logging.LoggingUtils.appendListenerToMessage;
+import static com.hivemq.tk.LoggingUtils.appendListenerToMessage;
 
 
 public class SslClientCertificateHandler extends ChannelInboundHandlerAdapter {

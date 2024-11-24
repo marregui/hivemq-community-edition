@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.hivemq.extensions.iteration.BucketChunkResult;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.persistence.NoSessionException;
 import com.hivemq.persistence.PersistenceEntry;

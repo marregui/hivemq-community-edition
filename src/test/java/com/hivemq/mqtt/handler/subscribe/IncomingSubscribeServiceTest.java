@@ -29,7 +29,7 @@ import com.hivemq.extension.sdk.api.auth.parameter.TopicPermission;
 import com.hivemq.extension.sdk.api.packets.auth.DefaultAuthorizationBehaviour;
 import com.hivemq.extensions.packets.general.ModifiableDefaultPermissionsImpl;
 import com.hivemq.extensions.services.builder.TopicPermissionBuilderImpl;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.mqtt.handler.disconnect.MqttServerDisconnectorImpl;
 import com.hivemq.mqtt.handler.subscribe.retained.RetainedMessagesSender;
 import com.hivemq.mqtt.message.ProtocolVersion;

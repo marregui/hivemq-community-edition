@@ -26,7 +26,7 @@ import com.hivemq.extensions.handler.ClientLifecycleEventHandler;
 import com.hivemq.extensions.handler.IncomingPublishHandler;
 import com.hivemq.extensions.handler.IncomingSubscribeHandler;
 import com.hivemq.extensions.handler.PluginInitializerHandler;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.metrics.handler.GlobalMQTTMessageCounter;
 import com.hivemq.mqtt.handler.InterceptorHandler;

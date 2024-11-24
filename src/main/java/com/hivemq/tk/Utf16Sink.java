@@ -1,0 +1,106 @@
+package com.hivemq.tk;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import static com.hivemq.tk.Numbers.hexDigits;
+
+/**
+ * Family of sinks that write out <b>character</b> value as UTF16 encoded bytes. This interface
+ * is separate from {@link CharSink} to achieve two goals:
+ * <ul>
+ *     <li>Avoid using these sinks as the target of UTF16-to-UTF8 conversions</li>
+ *     <li>Group implementations in easy to understand hierarchy</li>
+ * </ul>
+ */
+public interface Utf16Sink extends CharSink<Utf16Sink> {
+    @Override
+    default int getEncoding() {
+        return CharSinkEncoding.UTF16;
+    }
+
+    default Utf16Sink put(@Nullable Utf8Sequence us) {
+        if (us != null) {
+            Utf8s.utf8ToUtf16(us, this);
+        }
+        return this;
+    }
+
+    default Utf16Sink put(@Nullable Utf8Sequence us, int lo, int hi) {
+        if (us != null) {
+            Utf8s.utf8ToUtf16(us, lo, hi, this);
+        }
+        return this;
+    }
+
+    default Utf16Sink put(long lo, long hi) {
+        for (long addr = lo; addr < hi; addr += Character.BYTES) {
+            put(Unsafe.UNSAFE.getChar(addr));
+        }
+        return this;
+    }
+
+    default Utf16Sink put(char @NotNull [] chars, int start, int len) {
+        for (int i = 0; i < len; i++) {
+            put(chars[i + start]);
+        }
+        return this;
+    }
+
+    default void putAsPrintable(CharSequence nonPrintable) {
+        for (int i = 0, n = nonPrintable.length(); i < n; i++) {
+            char c = nonPrintable.charAt(i);
+            putAsPrintable(c);
+        }
+    }
+
+    default void putAsPrintable(char c) {
+        if (c > 0x1F && c != 0x7F) {
+            put(c);
+        } else {
+            put('\\');
+            put('u');
+
+            final int s = (int) c & 0xFF;
+            put('0');
+            put('0');
+            put(hexDigits[s / 0x10]);
+            put(hexDigits[s % 0x10]);
+        }
+    }
+
+    /**
+     * UTF16 sink stores ASCII character just like any other, as 16bit representation.
+     *
+     * @param c ascii character to write out.
+     * @return this sink for daisy-chaining
+     */
+    @Override
+    default Utf16Sink putAscii(char c) {
+        return put(c);
+    }
+
+    /**
+     * UTF16 sink does not make any special provisions for ASCII string. It will be stored just like any
+     * other UTF16 encoded string.
+     *
+     * @param cs UTF16 encoded ASCII string
+     * @return this sink for daisy-chaining
+     */
+    @Override
+    default Utf16Sink putAscii(@Nullable CharSequence cs) {
+        return put(cs);
+    }
+
+    default Utf16Sink putNonAscii(long lo, long hi) {
+        Utf8s.utf8ToUtf16(lo, hi, this);
+        return this;
+    }
+
+    default Utf16Sink repeat(@NotNull CharSequence value, int n) {
+        for (int i = 0; i < n; i++) {
+            put(value);
+        }
+        return this;
+    }
+}

@@ -15,7 +15,7 @@
  */
 package com.hivemq.mqtt.message.dropping;
 
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.metrics.MetricsHolder;
 
 import javax.inject.Inject;

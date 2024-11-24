@@ -21,7 +21,7 @@ import com.hivemq.config.RandomId;
 import com.hivemq.config.InternalConfig;
 import org.jetbrains.annotations.NotNull;
 import com.hivemq.extensions.iteration.BucketChunkResult;
-import com.hivemq.logging.EventLog;
+import com.hivemq.tk.EventLog;
 import com.hivemq.metrics.MetricsHolder;
 import com.hivemq.mqtt.message.QoS;
 import com.hivemq.mqtt.message.connect.MqttWillPublish;

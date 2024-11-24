@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.tk;
+package com.hivemq.tk.log;
 
 import com.hivemq.bootstrap.Connection;
 import com.hivemq.config.entity.Listener;

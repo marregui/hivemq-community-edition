@@ -1,5 +1,6 @@
-package com.hivemq.tk;
+package com.hivemq.tk.log;
 
+import com.hivemq.tk.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

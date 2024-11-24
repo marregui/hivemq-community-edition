@@ -5,6 +5,8 @@ import com.hivemq.tk.ds.CharSequenceHashSet;
 import com.hivemq.tk.ds.IntHashSet;
 import com.hivemq.tk.ds.IntObjHashMap;
 import com.hivemq.tk.ds.ObjList;
+import com.hivemq.tk.log.Log;
+import com.hivemq.tk.log.LogFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

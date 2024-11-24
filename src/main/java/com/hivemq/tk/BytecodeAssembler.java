@@ -2,6 +2,8 @@ package com.hivemq.tk;
 
 import com.hivemq.tk.ds.CharSequenceIntHashMap;
 import com.hivemq.tk.ds.ObjIntHashMap;
+import com.hivemq.tk.log.Log;
+import com.hivemq.tk.log.LogFactory;
 import com.hivemq.util.Bytes;
 import org.jetbrains.annotations.Nullable;
 

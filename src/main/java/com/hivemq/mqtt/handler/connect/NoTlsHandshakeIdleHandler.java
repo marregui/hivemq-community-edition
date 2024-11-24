@@ -23,7 +23,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 
-import static com.hivemq.tk.LoggingUtils.appendListenerToMessage;
+import static com.hivemq.tk.log.LoggingUtils.appendListenerToMessage;
 
 
 public class NoTlsHandshakeIdleHandler extends ChannelInboundHandlerAdapter {

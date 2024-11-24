@@ -1,4 +1,4 @@
-package com.hivemq.tk;
+package com.hivemq.tk.log;
 
 public class LogError extends Error {
     public LogError(String message) {

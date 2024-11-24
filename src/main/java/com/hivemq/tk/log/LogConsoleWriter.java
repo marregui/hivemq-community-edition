@@ -1,4 +1,9 @@
-package com.hivemq.tk;
+package com.hivemq.tk.log;
+
+import com.hivemq.tk.QueueConsumer;
+import com.hivemq.tk.RingQueue;
+import com.hivemq.tk.SCSequence;
+import com.hivemq.tk.SynchronizedJob;
 
 import java.io.Closeable;
 

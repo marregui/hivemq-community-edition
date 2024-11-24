@@ -1,5 +1,9 @@
-package com.hivemq.tk;
+package com.hivemq.tk.log;
 
+import com.hivemq.tk.DirectUtf8Sequence;
+import com.hivemq.tk.Sinkable;
+import com.hivemq.tk.Utf8Sequence;
+import com.hivemq.tk.Utf8Sink;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

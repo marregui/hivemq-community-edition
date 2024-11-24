@@ -2,6 +2,7 @@ package com.hivemq.tk;
 
 import com.hivemq.tk.ds.ObjHashSet;
 import com.hivemq.tk.ds.ObjList;
+import com.hivemq.tk.log.Log;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 

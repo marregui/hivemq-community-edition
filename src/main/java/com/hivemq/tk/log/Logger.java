@@ -1,5 +1,7 @@
-package com.hivemq.tk;
+package com.hivemq.tk.log;
 
+import com.hivemq.tk.RingQueue;
+import com.hivemq.tk.Sequence;
 import com.hivemq.tk.time.MicrosClock;
 
 /**

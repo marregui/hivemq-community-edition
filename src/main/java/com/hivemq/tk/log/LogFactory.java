@@ -1,5 +1,6 @@
-package com.hivemq.tk;
+package com.hivemq.tk.log;
 
+import com.hivemq.tk.*;
 import com.hivemq.tk.ds.*;
 import com.hivemq.tk.time.MicrosClock;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package com.hivemq.tk;
+package com.hivemq.tk.log;
 
 import com.hivemq.util.Bytes;
 

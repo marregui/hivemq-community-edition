@@ -1,4 +1,7 @@
-package com.hivemq.tk;
+package com.hivemq.tk.log;
+
+import com.hivemq.tk.RingQueue;
+import com.hivemq.tk.SCSequence;
 
 @FunctionalInterface
 public interface LogWriterFactory {

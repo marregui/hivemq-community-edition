@@ -24,8 +24,41 @@ public class IntList implements Mutable, Sinkable {
         data[pos++] = value;
     }
 
+    public void addAll(IntList that) {
+        int p = pos;
+        int s = that.size();
+        setPos(p + s);
+        System.arraycopy(that.data, 0, this.data, p, s);
+    }
+
+    public int capacity() {
+        return data.length;
+    }
+
     public void clear() {
         pos = 0;
+    }
+
+    public int binarySearchUniqueList(int v) {
+        int low = 0;
+        int high = pos - 1;
+        while (high - low > 65) {
+            int mid = (low + high) >>> 1;
+            int midVal = data[mid];
+
+            if (midVal < v) {
+                low = mid + 1;
+            } else if (midVal > v) {
+                high = mid - 1;
+            } else {
+                return mid;
+            }
+        }
+        return scanSearch(v, low, high + 1);
+    }
+
+    public boolean contains(int value) {
+        return indexOf(value, 0, pos) > -1;
     }
 
     /**
@@ -65,6 +98,49 @@ public class IntList implements Mutable, Sinkable {
             hashCode = 31 * hashCode + (v == NO_ENTRY_VALUE ? 0 : v);
         }
         return hashCode;
+    }
+
+    public int indexOf(int v, int low, int high) {
+        assert high <= pos;
+
+        for (int i = low; i < high; i++) {
+            int f = data[i];
+            if (f == v) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void remove(int key) {
+        for (int i = 0, n = size(); i < n; i++) {
+            if (key == getQuick(i)) {
+                removeIndex(i);
+                return;
+            }
+        }
+    }
+
+    public void removeIndex(int index) {
+        if (pos < 1 || index >= pos) {
+            return;
+        }
+        int move = pos - index - 1;
+        if (move > 0) {
+            System.arraycopy(data, index + 1, data, index, move);
+        }
+        int index1 = --pos;
+        data[index1] = NO_ENTRY_VALUE;
+    }
+
+    public void restoreInitialCapacity() {
+        data = new int[initialCapacity];
+        pos = 0;
+    }
+
+    public void setPos(int position) {
+        checkCapacity(position);
+        pos = position;
     }
 
     public void setQuick(int index, int value) {
@@ -135,4 +211,16 @@ public class IntList implements Mutable, Sinkable {
         return true;
     }
 
+    private int scanSearch(int v, int low, int high) {
+        for (int i = low; i < high; i++) {
+            int f = data[i];
+            if (f == v) {
+                return i;
+            }
+            if (f > v) {
+                return -(i + 1);
+            }
+        }
+        return -(high + 1);
+    }
 }

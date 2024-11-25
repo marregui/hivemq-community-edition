@@ -27,6 +27,9 @@ package com.hivemq.tk;
 import com.hivemq.tk.ds.IntList;
 import com.hivemq.tk.ds.LongList;
 import com.hivemq.tk.ds.ObjList;
+import com.hivemq.tk.log.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 
 import java.util.Arrays;
@@ -39,6 +42,25 @@ public final class TestUtils {
     private static final ThreadLocal<StringSink> tlSink = ThreadLocal.withInitial(() -> new StringSink());
 
     private TestUtils() {
+    }
+
+
+    public static @NotNull Rnd generateRandom(final @Nullable Log log) {
+        return generateRandom(log, System.nanoTime(), System.currentTimeMillis());
+    }
+
+    @NotNull
+    public static Rnd generateRandom(final @Nullable Log log, final long s0, final long s1) {
+        if (log != null) {
+            log.info().$("random seeds: ").$(s0).$("L, ").$(s1).$('L').$();
+        }
+        System.out.printf("random seeds: %dL, %dL%n", s0, s1);
+        Rnd rnd = new Rnd(s0, s1);
+        // Random impl is biased on first few calls, always return same bool,
+        // so we need to make a few calls to get it going randomly
+        rnd.nextBoolean();
+        rnd.nextBoolean();
+        return rnd;
     }
 
     public static void assertEquals(CharSequence expected, Sinkable actual) {

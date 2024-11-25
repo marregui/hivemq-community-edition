@@ -8,12 +8,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-abstract class AbstractMultiSequence extends AbstractSingleSeq {
+abstract class AbstractMultiSeq extends AbstractSingleSeq {
     private final int @NotNull [] flags;
     private final int mask;
     private final int shift;
 
-    AbstractMultiSequence(final int cycle, final @Nullable WaitStrategy waitStrategy) {
+    AbstractMultiSeq(final int cycle, final @Nullable WaitStrategy waitStrategy) {
         super(waitStrategy);
         this.flags = new int[cycle];
         Arrays.fill(flags, -1);

@@ -1,11 +1,19 @@
 package com.hivemq.tk;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Rnd {
     private long s0;
     private long s1;
+    private final StringSink sink = new StringSink();
 
     public Rnd() {
         reset();
+    }
+
+    public Rnd(final long s0, final long s1) {
+        reset(s0, s1);
     }
 
     public static void main(String[] args) {
@@ -99,6 +107,57 @@ public class Rnd {
                     assert false;
                     break;
             }
+        }
+    }
+
+    public CharSequence nextChars(int len) {
+        sink.clear();
+        nextChars(sink, len);
+        return sink;
+    }
+
+    public void nextChars(Utf16Sink sink, int len) {
+        for (int i = 0; i < len; i++) {
+            sink.put((char) (nextPositiveInt() % 25 + 66));
+        }
+    }
+
+    public void nextChars(final long address, int len) {
+        for (int i = 0; i < len; i++) {
+            Unsafe.UNSAFE.putChar(address + i * 2L, nextChar());
+        }
+    }
+
+    public boolean nextBoolean() {
+        return nextLong() >>> (64 - 1) != 0;
+    }
+
+    public float nextFloat() {
+        return nextIntForDouble(24) * FLOAT_UNIT;
+    }
+
+    private int nextIntForDouble(int bits) {
+        return (int) ((nextLong() & mask) >>> (48 - bits));
+    }
+    private static final long mask = (1L << 48) - 1;
+    private static final float FLOAT_UNIT = 1 / ((float) (1 << 24));
+
+    public char nextChar() {
+        return (char) (nextPositiveInt() % 25 + 'A');
+    }
+
+    public String nextString(int len) {
+        char[] chars = new char[len];
+        for (int i = 0; i < len; i++) {
+            chars[i] = (char) (nextPositiveInt() % 25 + 66);
+        }
+        return new String(chars);
+    }
+
+    public void shuffle(List<?> list) {
+        for (int i = 1, n = list.size(); i < n; i++) {
+            int swapTarget = nextInt(i + 1);
+            Collections.swap(list, i, swapTarget);
         }
     }
 

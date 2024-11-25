@@ -3,7 +3,7 @@ package com.hivemq.tk.log;
 import com.hivemq.tk.*;
 import com.hivemq.tk.ds.*;
 import com.hivemq.tk.seq.FanOut;
-import com.hivemq.tk.seq.MultiProducerSequence;
+import com.hivemq.tk.seq.MultiProducerSeq;
 import com.hivemq.tk.seq.RingQueue;
 import com.hivemq.tk.seq.SingleConsumerSeq;
 import com.hivemq.tk.seq.Seq;
@@ -815,7 +815,7 @@ public class LogFactory implements Closeable {
             this.ring = new RingQueue<>(LogRecordUtf8Sink::new,
                     Numbers.ceilPow2(recordLength),
                     queueDepth);
-            this.lSeq = new MultiProducerSequence(queueDepth);
+            this.lSeq = new MultiProducerSeq(queueDepth);
         }
 
         @Override

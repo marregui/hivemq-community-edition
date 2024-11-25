@@ -47,6 +47,10 @@ public class ObjIntHashMap<K> implements Iterable<ObjIntHashMap.Entry<K>>, Mutab
         }
     }
 
+    public int get(K key) {
+        return valueAt(keyIndex(key));
+    }
+
     @Override
     @NotNull
     public Iterator<Entry<K>> iterator() {
@@ -130,6 +134,8 @@ public class ObjIntHashMap<K> implements Iterable<ObjIntHashMap.Entry<K>>, Mutab
     }
 
     public static class Entry<V> {
+        public V key;
+        public int value;
     }
 
     public class EntryIterator implements ImmutableIterator<Entry<K>> {

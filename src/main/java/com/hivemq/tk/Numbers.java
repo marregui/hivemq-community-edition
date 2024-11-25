@@ -566,6 +566,13 @@ public final class Numbers {
         return c < '0' || c > '9';
     }
 
+    public static int parseInt(Utf8Sequence sequence) throws NumericException {
+        if (sequence == null) {
+            throw NumericException.INSTANCE;
+        }
+        return parseInt0(sequence.asAsciiCharSequence(), 0, sequence.size());
+    }
+
     public static int parseInt(final CharSequence sequence) throws NumericException {
         if (sequence == null) {
             throw NumericException.INSTANCE;
@@ -663,6 +670,13 @@ public final class Numbers {
         }
 
         return encodeLowHighInts(negative ? val : -val, i - p);
+    }
+
+    public static long parseLong(CharSequence sequence) throws NumericException {
+        if (sequence == null) {
+            throw NumericException.INSTANCE;
+        }
+        return parseLong0(sequence, 0, sequence.length());
     }
 
     public static long parseLong(final CharSequence sequence, final int p, final int lim) throws NumericException {

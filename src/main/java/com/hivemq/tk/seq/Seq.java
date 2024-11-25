@@ -11,4 +11,6 @@ public interface Seq extends Barrier {
     long next();
 
     long nextBully();
+
+    long waitForNext();
 }

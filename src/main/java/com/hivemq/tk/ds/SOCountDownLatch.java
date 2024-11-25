@@ -13,6 +13,10 @@ public class SOCountDownLatch {
         this.count = count;
     }
 
+    public SOCountDownLatch() {
+        // no-op
+    }
+
     public void await() {
         this.waiter = Thread.currentThread();
         while (getCount() > 0) {

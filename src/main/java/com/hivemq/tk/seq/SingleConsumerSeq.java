@@ -2,10 +2,20 @@ package com.hivemq.tk.seq;
 
 import com.hivemq.tk.QueueConsumer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class SingleConsumerSeq extends AbstractSingleSeq {
 
     public SingleConsumerSeq() {
+    }
+
+    public SingleConsumerSeq(final @Nullable WaitStrategy waitStrategy) {
+        super(waitStrategy);
+    }
+
+    public SingleConsumerSeq(long value, WaitStrategy waitStrategy) {
+        super(waitStrategy);
+        setCurrent(value);
     }
 
     public long available() {

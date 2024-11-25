@@ -9,11 +9,11 @@ import java.util.Objects;
 
 public class FanOut implements Barrier {
     private static final long HOLDER = Unsafe.fieldOffset(FanOut.class, "holder");
-    private final @NotNull Holder holder;
+    private final @NotNull FanOutHolder holder;
     private @Nullable Barrier barrier;
 
     public FanOut(final @NotNull Barrier... barriers) {
-        final Holder h = new Holder();
+        final FanOutHolder h = new FanOutHolder();
         for (int i = 0; i < barriers.length; i++) {
             final Barrier sq = barriers[i];
             h.barriers.add(sq);
@@ -30,14 +30,14 @@ public class FanOut implements Barrier {
     }
 
     public @NotNull FanOut and(final @NotNull Barrier barrier) {
-        Holder _new;
+        FanOutHolder _new;
         Barrier root = null;
 
         final long current = this.barrier != null ? this.barrier.current() : -1;
         Unsafe.UNSAFE.loadFence();
 
         do {
-            final Holder h = this.holder;
+            final FanOutHolder h = this.holder;
             // read barrier to make sure "holder" read doesn't fall below this
 
             if (h.barriers.indexOf(barrier) > -1) {
@@ -50,7 +50,7 @@ public class FanOut implements Barrier {
                 root.setCurrent(current);
                 Unsafe.UNSAFE.storeFence();
             }
-            _new = new Holder();
+            _new = new FanOutHolder();
             _new.barriers.addAll(h.barriers);
             _new.barriers.add(barrier);
             _new.waitStrategies.addAll(h.waitStrategies);
@@ -97,15 +97,15 @@ public class FanOut implements Barrier {
 
     public void remove(final @NotNull SingleConsumerSeq barrier) {
         Unsafe.UNSAFE.storeFence();
-        Holder _new;
+        FanOutHolder _new;
         do {
-            final Holder h = this.holder;
+            final FanOutHolder h = this.holder;
             // read barrier to make sure "holder" read doesn't fall below this
 
             if (h.barriers.indexOf(barrier) == -1) {
                 break;
             }
-            _new = new Holder();
+            _new = new FanOutHolder();
             for (int i = 0, n = h.barriers.size(); i < n; i++) {
                 final Barrier sq = h.barriers.getQuick(i);
                 if (sq != barrier) {
@@ -158,52 +158,4 @@ public class FanOut implements Barrier {
         return barrier;
     }
 
-    private static class Holder {
-
-        private final ObjList<Barrier> barriers = new ObjList<>();
-        private final FanOutWaitStrategy fanOutWaitStrategy = new FanOutWaitStrategy();
-        private final ObjList<WaitStrategy> waitStrategies = new ObjList<>();
-        private @NotNull WaitStrategy waitStrategy = NullWaitStrategy.INSTANCE;
-
-        private void setupWaitStrategy() {
-            if (waitStrategies.size() > 0) {
-                waitStrategy = fanOutWaitStrategy;
-            } else {
-                waitStrategy = NullWaitStrategy.INSTANCE;
-            }
-        }
-
-        private class FanOutWaitStrategy implements WaitStrategy {
-            @Override
-            public boolean acceptSignal() {
-                for (int i = 0, n = waitStrategies.size(); i < n; i++) {
-                    if (waitStrategies.getQuick(i).acceptSignal()) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public void alert() {
-                for (int i = 0, n = waitStrategies.size(); i < n; i++) {
-                    waitStrategies.getQuick(i).alert();
-                }
-            }
-
-            @Override
-            public void await() {
-                for (int i = 0, n = waitStrategies.size(); i < n; i++) {
-                    waitStrategies.getQuick(i).await();
-                }
-            }
-
-            @Override
-            public void signal() {
-                for (int i = 0, n = waitStrategies.size(); i < n; i++) {
-                    waitStrategies.getQuick(i).signal();
-                }
-            }
-        }
-    }
 }

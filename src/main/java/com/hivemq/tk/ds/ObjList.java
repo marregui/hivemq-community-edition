@@ -55,6 +55,23 @@ public class ObjList<T> implements Mutable, Sinkable {
         pos = 0;
     }
 
+    public void setQuick(int index, T value) {
+        assert index < pos : "index out of bounds, " + index + " >= " + pos;
+        buffer[index] = value;
+    }
+
+    public boolean contains(T value) {
+        for (int i = 0, n = pos; i < n; i++) {
+            T o = getQuick(i);
+            if ((value == null && o == null) ||
+                    (value != null && value.equals(o))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -163,6 +180,16 @@ public class ObjList<T> implements Mutable, Sinkable {
             System.arraycopy(buffer, index + 1, buffer, index, move);
         }
         buffer[--pos] = null;
+    }
+
+    public void remove(int from, int to) {
+        assert from <= to : "start index is greater than end index, " + from + " > " + to;
+        int move = pos - from - (to - from) - 1;
+        if (move > 0) {
+            System.arraycopy(buffer, to + 1, buffer, from, move);
+        }
+        pos = Math.max(0, pos - (to - from + 1));
+        Arrays.fill(buffer, pos, buffer.length - 1, null);
     }
 
     public int remove(Object o) {

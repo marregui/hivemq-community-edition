@@ -2,14 +2,14 @@ package com.hivemq.tk.seq;
 
 import org.jetbrains.annotations.Nullable;
 
-public class MultiProducerSequence extends AbstractMultiSequence {
+public class MultiProducerSeq extends AbstractMultiSeq {
     private final int cycle;
 
-    public MultiProducerSequence(final int cycle) {
+    public MultiProducerSeq(final int cycle) {
         this(cycle, NullWaitStrategy.INSTANCE);
     }
 
-    private MultiProducerSequence(final int cycle, final @Nullable WaitStrategy waitStrategy) {
+    private MultiProducerSeq(final int cycle, final @Nullable WaitStrategy waitStrategy) {
         super(cycle, waitStrategy);
         this.cycle = cycle;
     }

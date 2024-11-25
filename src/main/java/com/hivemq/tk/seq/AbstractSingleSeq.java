@@ -38,6 +38,19 @@ abstract class AbstractSingleSeq extends AbstractSeq implements Seq {
         return barrier;
     }
 
+    @Override
+    public long waitForNext() {
+        long r;
+        WaitStrategy waitStrategy = getWaitStrategy();
+        while ((r = next()) < 0) {
+            if (r == -2) {
+                continue;
+            }
+            waitStrategy.await();
+        }
+        return r;
+    }
+
     private void bully() {
         barrier.getWaitStrategy().signal();
     }

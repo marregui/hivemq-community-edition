@@ -2,6 +2,8 @@ package com.hivemq.tk.log;
 
 import com.hivemq.tk.*;
 import com.hivemq.tk.ds.ObjHashSet;
+import com.hivemq.tk.seq.RingQueue;
+import com.hivemq.tk.seq.Seq;
 import com.hivemq.tk.time.MicrosClock;
 import com.hivemq.tk.time.TimestampFormatUtils;
 import org.jetbrains.annotations.NotNull;
@@ -13,15 +15,15 @@ import java.util.Set;
 abstract class AbstractLogRecord implements LogRecord, Log {
     private static final ThreadLocal<ObjHashSet<Throwable>> tlSet = ThreadLocal.withInitial(ObjHashSet::new);
     protected final RingQueue<LogRecordUtf8Sink> advisoryRing;
-    protected final Sequence advisorySeq;
+    protected final Seq advisorySeq;
     protected final RingQueue<LogRecordUtf8Sink> criticalRing;
-    protected final Sequence criticalSeq;
+    protected final Seq criticalSeq;
     protected final RingQueue<LogRecordUtf8Sink> debugRing;
-    protected final Sequence debugSeq;
+    protected final Seq debugSeq;
     protected final RingQueue<LogRecordUtf8Sink> errorRing;
-    protected final Sequence errorSeq;
+    protected final Seq errorSeq;
     protected final RingQueue<LogRecordUtf8Sink> infoRing;
-    protected final Sequence infoSeq;
+    protected final Seq infoSeq;
     protected final ThreadLocalCursor tl = new ThreadLocalCursor();
     private final MicrosClock clock;
     private final CharSequence name;
@@ -30,15 +32,15 @@ abstract class AbstractLogRecord implements LogRecord, Log {
             MicrosClock clock,
             CharSequence name,
             RingQueue<LogRecordUtf8Sink> debugRing,
-            Sequence debugSeq,
+            Seq debugSeq,
             RingQueue<LogRecordUtf8Sink> infoRing,
-            Sequence infoSeq,
+            Seq infoSeq,
             RingQueue<LogRecordUtf8Sink> errorRing,
-            Sequence errorSeq,
+            Seq errorSeq,
             RingQueue<LogRecordUtf8Sink> criticalRing,
-            Sequence criticalSeq,
+            Seq criticalSeq,
             RingQueue<LogRecordUtf8Sink> advisoryRing,
-            Sequence advisorySeq
+            Seq advisorySeq
     ) {
         this.name = name;
         this.clock = clock;
@@ -292,7 +294,7 @@ abstract class AbstractLogRecord implements LogRecord, Log {
         return addTimestamp(xErrorW(), LogLevel.ERROR_HEADER);
     }
 
-    public Sequence getCriticalSequence() {
+    public Seq getCriticalSequence() {
         return criticalSeq;
     }
 
@@ -455,7 +457,7 @@ abstract class AbstractLogRecord implements LogRecord, Log {
         return rec.ts().$(level).$(name);
     }
 
-    protected LogRecord nextWaiting(Sequence seq, RingQueue<LogRecordUtf8Sink> ring, int level) {
+    protected LogRecord nextWaiting(Seq seq, RingQueue<LogRecordUtf8Sink> ring, int level) {
         if (seq == null) {
             return NullLogRecord.INSTANCE;
         }
@@ -463,7 +465,7 @@ abstract class AbstractLogRecord implements LogRecord, Log {
     }
 
     @NotNull
-    protected LogRecord prepareLogRecord(Sequence seq, RingQueue<LogRecordUtf8Sink> ring, int level, long cursor) {
+    protected LogRecord prepareLogRecord(Seq seq, RingQueue<LogRecordUtf8Sink> ring, int level, long cursor) {
         Holder h = tl.get();
         h.cursor = cursor;
         h.seq = seq;
@@ -490,7 +492,7 @@ abstract class AbstractLogRecord implements LogRecord, Log {
     protected static class Holder {
         protected long cursor;
         protected RingQueue<LogRecordUtf8Sink> ring;
-        protected Sequence seq;
+        protected Seq seq;
     }
 
     protected static class ThreadLocalCursor extends ThreadLocal<Holder> {

@@ -1,4 +1,4 @@
-package com.hivemq.tk;
+package com.hivemq.tk.seq;
 
 public interface WaitStrategy {
     boolean acceptSignal();

@@ -1,9 +1,11 @@
-package com.hivemq.tk;
+package com.hivemq.tk.seq;
 
-//single consumer sequence 
-public class SCSequence extends AbstractSSequence {
+import com.hivemq.tk.QueueConsumer;
+import org.jetbrains.annotations.NotNull;
 
-    public SCSequence() {
+public class SingleConsumerSeq extends AbstractSingleSeq {
+
+    public SingleConsumerSeq() {
     }
 
     public long available() {
@@ -11,11 +13,11 @@ public class SCSequence extends AbstractSSequence {
     }
 
     @Override
-    public long availableIndex(long lo) {
+    public long availableIndex(final long lo) {
         return this.value;
     }
 
-    public <T> boolean consumeAll(RingQueue<T> queue, QueueConsumer<T> consumer) {
+    public <T> boolean consumeAll(final @NotNull RingQueue<T> queue, final @NotNull QueueConsumer<T> consumer) {
         long cursor = next();
         if (cursor < 0) {
             return false;
@@ -40,36 +42,35 @@ public class SCSequence extends AbstractSSequence {
     }
 
     @Override
-    public void done(long cursor) {
+    public void done(final long cursor) {
         this.value = cursor;
         barrier.getWaitStrategy().signal();
     }
 
     @Override
     public long next() {
-        long next = getValue();
+        final long next = getValue();
         if (next < cache) {
             return next + 1;
         }
-
         return next0(next + 1);
     }
 
     // The method is final is because we call it from
     // the constructor.
     @Override
-    public final void setCurrent(long value) {
+    public final void setCurrent(final long value) {
         this.value = value;
     }
 
-    private long next0(long next) {
+    private long next0(final long next) {
         cache = barrier.availableIndex(next);
         return next > cache ? -1 : next;
     }
 
     public void clear() {
         while (true) {
-            long n = next();
+            final long n = next();
             if (n == -1) {
                 break;
             }

@@ -1,4 +1,4 @@
-package com.hivemq.tk;
+package com.hivemq.tk.seq;
 
 public final class NullWaitStrategy implements WaitStrategy {
     public static final NullWaitStrategy INSTANCE = new NullWaitStrategy();

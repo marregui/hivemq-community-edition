@@ -4,6 +4,7 @@ import com.hivemq.tk.ds.ObjHashSet;
 import com.hivemq.tk.ds.ObjList;
 import com.hivemq.tk.ds.SOCountDownLatch;
 import com.hivemq.tk.log.Log;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 
@@ -11,38 +12,27 @@ import java.io.Closeable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WorkerPool implements Closeable {
-    private final AtomicBoolean closed = new AtomicBoolean();
-    private final boolean daemons = false;
-    private final ObjList<Closeable> freeOnExit = new ObjList<>();
-    private final boolean haltOnError = false;
-    private final SOCountDownLatch halted;
-    private final long napThreshold;
-    private final String poolName;
+    private final @NotNull AtomicBoolean closed = new AtomicBoolean();
+    private final @NotNull ObjList<Closeable> freeOnExit = new ObjList<>();
+    private final @NotNull SOCountDownLatch halted;
+    private final @NotNull String poolName;
     private final int priority;
-    private final AtomicBoolean running = new AtomicBoolean();
+    private final @NotNull AtomicBoolean running = new AtomicBoolean();
     private final long sleepMs;
     private final long sleepThreshold;
-    private final SOCountDownLatch started = new SOCountDownLatch(1);
-    private final ObjList<ObjList<Closeable>> threadLocalCleaners;
-    private final int[] workerAffinity;
+    private final @NotNull SOCountDownLatch started = new SOCountDownLatch(1);
+    private final @NotNull ObjList<ObjList<Closeable>> threadLocalCleaners;
     private final int workerCount;
-    private final ObjList<ObjHashSet<Job>> workerJobs;
-    private final ObjList<Worker> workers = new ObjList<>();
-    private final long yieldThreshold;
+    private final @NotNull ObjList<ObjHashSet<Job>> workerJobs;
+    private final @NotNull ObjList<Worker> workers = new ObjList<>();
 
-    public WorkerPool(String poolName, int workerCount) {
+    public WorkerPool(final @NotNull String poolName, final int workerCount) {
         this.workerCount = workerCount;
-        this.workerAffinity = Misc.getWorkerAffinity(workerCount);
         this.halted = new SOCountDownLatch(workerCount);
-        this.poolName = poolName == null?"worker": poolName;
-        this.yieldThreshold = 10;
-        this.napThreshold = 7000;
+        this.poolName = poolName;
         this.sleepThreshold = 10000;
         this.sleepMs = 10;
         this.priority = Thread.NORM_PRIORITY;
-
-        assert this.workerAffinity.length == workerCount;
-
         this.workerJobs = new ObjList<>(workerCount);
         this.threadLocalCleaners = new ObjList<>(workerCount);
         for (int i = 0; i < workerCount; i++) {
@@ -51,16 +41,17 @@ public class WorkerPool implements Closeable {
         }
     }
 
-    /**
-     * Assigns job instance to all workers. Job member variables
-     * could be accessed by multiple threads at the same time. Jobs cannot
-     * be added after pool is started.
-     *
-     * @param job instance of job
-     */
-    public void assign(Job job) {
-        assert !running.get() && !closed.get();
+    private static <T extends Closeable> void freeObjListAndClear(final @Nullable ObjList<T> list) {
+        if (list != null) {
+            for (int i = 0, n = list.size(); i < n; i++) {
+                Misc.free(list.getQuick(i));
+            }
+            list.clear();
+        }
+    }
 
+    public void assign(final @NotNull Job job) {
+        assert !running.get() && !closed.get();
         for (int i = 0; i < workerCount; i++) {
             workerJobs.getQuick(i).add(job);
         }
@@ -70,7 +61,6 @@ public class WorkerPool implements Closeable {
     public void close() {
         halt();
     }
-
 
     public void halt() {
         if (closed.compareAndSet(false, true)) {
@@ -82,7 +72,7 @@ public class WorkerPool implements Closeable {
                 halted.await();
             }
             workers.clear(); // Worker is not closable
-            Misc.freeObjListAndClear(freeOnExit);
+            freeObjListAndClear(freeOnExit);
         }
     }
 
@@ -102,23 +92,20 @@ public class WorkerPool implements Closeable {
         start(null);
     }
 
-    public void start(@Nullable Log log) {
+    public void start(final @Nullable Log log) {
         if (!closed.get() && running.compareAndSet(false, true)) {
             for (int i = 0; i < workerCount; i++) {
                 final int index = i;
-                Worker worker = new Worker(poolName,
+                final Worker worker = new Worker(poolName,
                         i,
                         workerJobs.getQuick(i),
                         halted,
-                        ex -> Misc.freeObjListAndClear(threadLocalCleaners.getQuick(index)),
-                        haltOnError,
-                        yieldThreshold,
-                        napThreshold,
+                        ex -> freeObjListAndClear(threadLocalCleaners.getQuick(index)),
                         sleepThreshold,
                         sleepMs,
                         log);
                 worker.setPriority(priority);
-                worker.setDaemon(daemons);
+                worker.setDaemon(false);
                 workers.add(worker);
                 worker.start();
             }

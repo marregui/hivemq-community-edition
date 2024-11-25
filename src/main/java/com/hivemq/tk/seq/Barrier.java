@@ -1,15 +1,18 @@
-package com.hivemq.tk;
+package com.hivemq.tk.seq;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface Barrier {
-    long availableIndex(long lo);
+    long availableIndex(final long lo);
 
     long current();
 
-    WaitStrategy getWaitStrategy();
+    @NotNull WaitStrategy getWaitStrategy();
 
-    Barrier root();
+    @NotNull Barrier root();
 
-    void setBarrier(Barrier barrier);
+    void setBarrier(final @NotNull Barrier barrier);
 
     /**
      * When barrier is added mid-flight, it should assume the current
@@ -22,7 +25,7 @@ public interface Barrier {
      *
      * @param value typically the sequence of the published
      */
-    void setCurrent(long value);
+    void setCurrent(final long value);
 
-    Barrier then(Barrier barrier);
+    @Nullable Barrier then(final @NotNull Barrier barrier);
 }

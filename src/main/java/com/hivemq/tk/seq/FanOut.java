@@ -1,16 +1,21 @@
-package com.hivemq.tk;
+package com.hivemq.tk.seq;
 
+import com.hivemq.tk.Unsafe;
 import com.hivemq.tk.ds.ObjList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class FanOut implements Barrier {
     private static final long HOLDER = Unsafe.fieldOffset(FanOut.class, "holder");
-    private final Holder holder;
-    private Barrier barrier;
+    private final @NotNull Holder holder;
+    private @Nullable Barrier barrier;
 
-    public FanOut(Barrier... barriers) {
-        Holder h = new Holder();
+    public FanOut(final @NotNull Barrier... barriers) {
+        final Holder h = new Holder();
         for (int i = 0; i < barriers.length; i++) {
-            Barrier sq = barriers[i];
+            final Barrier sq = barriers[i];
             h.barriers.add(sq);
             if (sq.getWaitStrategy().acceptSignal()) {
                 h.waitStrategies.add(sq.getWaitStrategy());
@@ -20,11 +25,11 @@ public class FanOut implements Barrier {
         holder = h;
     }
 
-    public static FanOut to(Barrier barrier) {
+    public static @NotNull FanOut to(final @NotNull Barrier barrier) {
         return new FanOut().and(barrier);
     }
 
-    public FanOut and(Barrier barrier) {
+    public @NotNull FanOut and(final @NotNull Barrier barrier) {
         Holder _new;
         Barrier root = null;
 
@@ -32,7 +37,7 @@ public class FanOut implements Barrier {
         Unsafe.UNSAFE.loadFence();
 
         do {
-            Holder h = this.holder;
+            final Holder h = this.holder;
             // read barrier to make sure "holder" read doesn't fall below this
 
             if (h.barriers.indexOf(barrier) > -1) {
@@ -72,8 +77,8 @@ public class FanOut implements Barrier {
     // loop is in flight
     @Override
     public long availableIndex(final long lo) {
-        long l = barrier.availableIndex(lo);
-        ObjList<Barrier> barriers = holder.barriers;
+        long l = Objects.requireNonNull(barrier).availableIndex(lo);
+        final ObjList<Barrier> barriers = holder.barriers;
         for (int i = 0, n = barriers.size(); i < n; i++) {
             l = Math.min(l, barriers.getQuick(i).availableIndex(lo));
         }
@@ -82,20 +87,19 @@ public class FanOut implements Barrier {
 
     @Override
     public long current() {
-        return barrier.current();
+        return Objects.requireNonNull(barrier).current();
     }
 
     @Override
-    public WaitStrategy getWaitStrategy() {
+    public @NotNull WaitStrategy getWaitStrategy() {
         return holder.waitStrategy;
     }
 
-    public void remove(SCSequence barrier) {
+    public void remove(final @NotNull SingleConsumerSeq barrier) {
         Unsafe.UNSAFE.storeFence();
-
         Holder _new;
         do {
-            Holder h = this.holder;
+            final Holder h = this.holder;
             // read barrier to make sure "holder" read doesn't fall below this
 
             if (h.barriers.indexOf(barrier) == -1) {
@@ -103,16 +107,15 @@ public class FanOut implements Barrier {
             }
             _new = new Holder();
             for (int i = 0, n = h.barriers.size(); i < n; i++) {
-                Barrier sq = h.barriers.getQuick(i);
+                final Barrier sq = h.barriers.getQuick(i);
                 if (sq != barrier) {
                     _new.barriers.add(sq);
                 }
             }
-
-            WaitStrategy that = barrier.getWaitStrategy();
+            final WaitStrategy that = barrier.getWaitStrategy();
             if (that.acceptSignal()) {
                 for (int i = 0, n = h.waitStrategies.size(); i < n; i++) {
-                    WaitStrategy ws = h.waitStrategies.getQuick(i);
+                    final WaitStrategy ws = h.waitStrategies.getQuick(i);
                     if (ws != that) {
                         _new.waitStrategies.add(ws);
                     }
@@ -129,28 +132,28 @@ public class FanOut implements Barrier {
     }
 
     @Override
-    public Barrier root() {
+    public @NotNull Barrier root() {
         return barrier != null ? barrier.root() : this;
     }
 
-    public void setBarrier(Barrier barrier) {
+    public void setBarrier(final @NotNull Barrier barrier) {
         this.barrier = barrier;
-        ObjList<Barrier> barriers = holder.barriers;
+        final ObjList<Barrier> barriers = holder.barriers;
         for (int i = 0, n = barriers.size(); i < n; i++) {
             barriers.getQuick(i).root().setBarrier(barrier);
         }
     }
 
     @Override
-    public void setCurrent(long value) {
-        ObjList<Barrier> barriers = holder.barriers;
+    public void setCurrent(final long value) {
+        final ObjList<Barrier> barriers = holder.barriers;
         for (int i = 0, n = barriers.size(); i < n; i++) {
             barriers.getQuick(i).setCurrent(value);
         }
     }
 
     @Override
-    public Barrier then(Barrier barrier) {
+    public @NotNull Barrier then(final @NotNull Barrier barrier) {
         barrier.setBarrier(this);
         return barrier;
     }
@@ -160,7 +163,7 @@ public class FanOut implements Barrier {
         private final ObjList<Barrier> barriers = new ObjList<>();
         private final FanOutWaitStrategy fanOutWaitStrategy = new FanOutWaitStrategy();
         private final ObjList<WaitStrategy> waitStrategies = new ObjList<>();
-        private WaitStrategy waitStrategy;
+        private @NotNull WaitStrategy waitStrategy = NullWaitStrategy.INSTANCE;
 
         private void setupWaitStrategy() {
             if (waitStrategies.size() > 0) {

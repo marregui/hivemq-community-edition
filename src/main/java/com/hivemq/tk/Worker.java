@@ -4,51 +4,44 @@ import com.hivemq.tk.ds.ObjHashSet;
 import com.hivemq.tk.ds.SOCountDownLatch;
 import com.hivemq.tk.log.Log;
 import com.hivemq.tk.time.MicrosClock;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Worker extends Thread {
-    public static final MicrosClock CLOCK_MICROS = MicrosClock.INSTANCE;
-    private final String criticalErrorLine;
-    private final SOCountDownLatch haltLatch;
-    private final boolean haltOnError;
-    private final AtomicLong jobStartMicros = new AtomicLong();
-    private final ObjHashSet<? extends Job> jobs;
-    private final AtomicReference<Lifecycle> lifecycle = new AtomicReference<>(Lifecycle.BORN);
-    private final Log log;
-    private final long napThreshold;
-    private final OnHaltAction onHaltAction;
-    private final String poolName;
-    private final Job.RunStatus runStatus = () -> lifecycle.get() == Lifecycle.HALTED;
+    private static final MicrosClock CLOCK_MICROS = MicrosClock.INSTANCE;
+    private final @NotNull String criticalErrorLine;
+    private final @NotNull SOCountDownLatch haltLatch;
+    private final @NotNull AtomicLong jobStartMicros = new AtomicLong();
+    private final @NotNull ObjHashSet<? extends Job> jobs;
+    private final @NotNull AtomicReference<Lifecycle> lifecycle = new AtomicReference<>(Lifecycle.BORN);
+    private final @Nullable Log log;
+    private final @Nullable OnHaltAction onHaltAction;
+    private final @NotNull String poolName;
+    private final @NotNull Job.RunStatus runStatus = () -> lifecycle.get() == Lifecycle.HALTED;
     private final long sleepMs;
     private final long sleepThreshold;
     private final int workerId;
-    private final long yieldThreshold;
 
     public Worker(
-            String poolName,
-            int workerId, ObjHashSet<? extends Job> jobs,
-            SOCountDownLatch haltLatch,
-            @Nullable OnHaltAction onHaltAction,
-            boolean haltOnError,
-            long yieldThreshold,
-            long napThreshold,
-            long sleepThreshold,
-            long sleepMs,
-            @Nullable Log log) {
-        assert yieldThreshold > 0L;
+            final @NotNull String poolName,
+            final int workerId,
+            final @NotNull ObjHashSet<? extends Job> jobs,
+            final @NotNull SOCountDownLatch haltLatch,
+            final @Nullable OnHaltAction onHaltAction,
+            final long sleepThreshold,
+            final long sleepMs,
+            final @Nullable Log log) {
         this.setName(poolName + '_' + workerId);
         this.poolName = poolName;
         this.workerId = workerId;
         this.jobs = jobs;
         this.haltLatch = haltLatch;
         this.onHaltAction = onHaltAction;
-        this.haltOnError = haltOnError;
         this.criticalErrorLine = "0000-00-00T00:00:00.000000Z C Unhandled exception in worker " + getName();
-        this.yieldThreshold = yieldThreshold;
-        this.napThreshold = napThreshold;
         this.sleepThreshold = sleepThreshold;
         this.sleepMs = sleepMs;
         this.log = log;
@@ -63,17 +56,15 @@ public class Worker extends Thread {
         Throwable ex = null;
         try {
             if (lifecycle.compareAndSet(Lifecycle.BORN, Lifecycle.RUNNING)) {
-
-                String workerName = getName();
+                final String workerName = getName();
                 if (log != null) {
                     log.info().$("os scheduled worker started [name=").$(workerName).I$();
                 }
-
                 // setup eager jobs
                 for (int i = 0, n = jobs.size(); i < n; i++) {
                     Unsafe.UNSAFE.loadFence();
                     try {
-                        Job job = jobs.get(i);
+                        final Job job = jobs.get(i);
                         if (job instanceof EagerThreadSetup) {
                             ((EagerThreadSetup) job).setup();
                         }
@@ -81,7 +72,6 @@ public class Worker extends Thread {
                         Unsafe.UNSAFE.storeFence();
                     }
                 }
-
                 // enter main loop
                 long ticker = 0L;
                 while (lifecycle.get() == Lifecycle.RUNNING) {
@@ -92,7 +82,7 @@ public class Worker extends Thread {
                         Unsafe.UNSAFE.loadFence();
                         try {
                             runAsap |= jobs.get(i).run(workerId, runStatus);
-                        } catch (Throwable e) {
+                        } catch (final @NotNull Throwable e) {
                             if (log != null) {
                                 log.critical()
                                         .$("unhandled error [job=")
@@ -102,9 +92,6 @@ public class Worker extends Thread {
                                         .I$();
                             } else {
                                 stdErrCritical(e); // log regardless
-                            }
-                            if (haltOnError) {
-                                throw e;
                             }
                         } finally {
                             Unsafe.UNSAFE.storeFence();
@@ -120,27 +107,22 @@ public class Worker extends Thread {
                     }
                     if (ticker > sleepThreshold) {
                         sleep(sleepMs);
-                    } else if (ticker > napThreshold) {
-                        sleep(1);
-                    } else if (ticker > yieldThreshold) {
-                        try {
-                            Thread.sleep(0);
-                        } catch (InterruptedException ignore) {
-                        }
+                    } else if (ticker > 10) {
+                        sleep();
                     }
                 }
             }
-        } catch (Throwable e) {
+        } catch (final @NotNull Throwable e) {
             ex = e;
             stdErrCritical(e);
         } finally {
             if (onHaltAction != null) {
                 try {
-                    onHaltAction.run(ex);
+                    onHaltAction.run(Objects.requireNonNull(ex));
                     if (log != null) {
                         log.info().$("cleaned worker [name=").$(poolName).$(", worker=").$(workerId).I$();
                     }
-                } catch (Throwable t) {
+                } catch (final @NotNull Throwable t) {
                     stdErrCritical(t);
                 }
             }
@@ -151,22 +133,29 @@ public class Worker extends Thread {
         }
     }
 
-    public static void sleep(long millis) {
+    private static void sleep() {
+        try {
+            Thread.sleep(0);
+        } catch (final @NotNull InterruptedException ignore) {
+        }
+    }
+
+    public static void sleep(final long millis) {
         long t = System.currentTimeMillis();
         long deadline = millis;
         while (deadline > 0) {
             try {
                 Thread.sleep(deadline);
                 break;
-            } catch (InterruptedException e) {
-                long t2 = System.currentTimeMillis();
+            } catch (final @NotNull InterruptedException e) {
+                final long t2 = System.currentTimeMillis();
                 deadline -= t2 - t;
                 t = t2;
             }
         }
     }
 
-    private void stdErrCritical(Throwable e) {
+    private void stdErrCritical(final @NotNull Throwable e) {
         System.err.println(criticalErrorLine);
         e.printStackTrace(System.err);
     }
@@ -179,6 +168,6 @@ public class Worker extends Thread {
 
     @FunctionalInterface
     public interface OnHaltAction {
-        void run(Throwable ex);
+        void run(final @NotNull Throwable ex);
     }
 }

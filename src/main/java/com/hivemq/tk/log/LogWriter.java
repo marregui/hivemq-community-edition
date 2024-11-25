@@ -2,8 +2,8 @@ package com.hivemq.tk.log;
 
 import com.hivemq.tk.Job;
 import com.hivemq.tk.QueueConsumer;
-import com.hivemq.tk.RingQueue;
-import com.hivemq.tk.SCSequence;
+import com.hivemq.tk.seq.RingQueue;
+import com.hivemq.tk.seq.SingleConsumerSeq;
 import com.hivemq.tk.Unsafe;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,12 +16,12 @@ public class LogWriter implements Job, Closeable {
     private final long fd = -1;//TODO Files.getStdOutFdInternal();
     private final int level;
     private final RingQueue<LogRecordUtf8Sink> ring;
-    private final SCSequence subSeq;
+    private final SingleConsumerSeq subSeq;
     private LogInterceptor interceptor;
     private final QueueConsumer<LogRecordUtf8Sink> myConsumer = this::toStdOut;
 
 
-    public LogWriter(RingQueue<LogRecordUtf8Sink> ring, SCSequence subSeq, int level) {
+    public LogWriter(RingQueue<LogRecordUtf8Sink> ring, SingleConsumerSeq subSeq, int level) {
         this.ring = ring;
         this.subSeq = subSeq;
         this.level = level;

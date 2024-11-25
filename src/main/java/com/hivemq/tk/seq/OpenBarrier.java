@@ -1,4 +1,7 @@
-package com.hivemq.tk;
+package com.hivemq.tk.seq;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class OpenBarrier implements Barrier {
     public static final OpenBarrier INSTANCE = new OpenBarrier();
@@ -7,7 +10,7 @@ public final class OpenBarrier implements Barrier {
     }
 
     @Override
-    public long availableIndex(long lo) {
+    public long availableIndex(final long lo) {
         return Long.MAX_VALUE - 1;
     }
 
@@ -17,26 +20,26 @@ public final class OpenBarrier implements Barrier {
     }
 
     @Override
-    public WaitStrategy getWaitStrategy() {
+    public @NotNull WaitStrategy getWaitStrategy() {
         return NullWaitStrategy.INSTANCE;
     }
 
     @Override
-    public Barrier root() {
+    public @NotNull Barrier root() {
         return this;
     }
 
     @Override
-    public void setBarrier(Barrier barrier) {
+    public void setBarrier(final @NotNull Barrier barrier) {
     }
 
     @Override
-    public void setCurrent(long value) {
+    public void setCurrent(final long value) {
         // ignored
     }
 
     @Override
-    public Barrier then(Barrier barrier) {
+    public @Nullable Barrier then(final @NotNull Barrier barrier) {
         return null;
     }
 }

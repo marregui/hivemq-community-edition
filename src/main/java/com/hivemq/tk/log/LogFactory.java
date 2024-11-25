@@ -2,6 +2,11 @@ package com.hivemq.tk.log;
 
 import com.hivemq.tk.*;
 import com.hivemq.tk.ds.*;
+import com.hivemq.tk.seq.FanOut;
+import com.hivemq.tk.seq.MultiProducerSequence;
+import com.hivemq.tk.seq.RingQueue;
+import com.hivemq.tk.seq.SingleConsumerSeq;
+import com.hivemq.tk.seq.Seq;
 import com.hivemq.tk.time.MicrosClock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -189,7 +194,7 @@ public class LogFactory implements Closeable {
         final Constructor constructor;
         try {
             cl = Class.forName(clazz);
-            constructor = cl.getDeclaredConstructor(RingQueue.class, SCSequence.class, int.class);
+            constructor = cl.getDeclaredConstructor(RingQueue.class, SingleConsumerSeq.class, int.class);
         } catch (ClassNotFoundException e) {
             throw new LogError("Class not found " + clazz, e);
         } catch (NoSuchMethodException e) {
@@ -801,16 +806,16 @@ public class LogFactory implements Closeable {
     }
 
     private static class Holder implements Closeable {
-        private final Sequence lSeq;
+        private final Seq lSeq;
         private final RingQueue<LogRecordUtf8Sink> ring;
         private FanOut fanOut;
-        private SCSequence wSeq;
+        private SingleConsumerSeq wSeq;
 
         public Holder(int queueDepth, final int recordLength) {
             this.ring = new RingQueue<>(LogRecordUtf8Sink::new,
                     Numbers.ceilPow2(recordLength),
                     queueDepth);
-            this.lSeq = new MPSequence(queueDepth);
+            this.lSeq = new MultiProducerSequence(queueDepth);
         }
 
         @Override
@@ -1027,13 +1032,13 @@ public class LogFactory implements Closeable {
                 if (h.wSeq != null) {
                     // yes, it was
                     if (h.fanOut == null) {
-                        h.fanOut = FanOut.to(h.wSeq).and(h.wSeq = new SCSequence());
+                        h.fanOut = FanOut.to(h.wSeq).and(h.wSeq = new SingleConsumerSeq());
                     } else {
-                        h.fanOut.and(h.wSeq = new SCSequence());
+                        h.fanOut.and(h.wSeq = new SingleConsumerSeq());
                     }
                 } else {
                     // we are here first!
-                    h.wSeq = new SCSequence();
+                    h.wSeq = new SingleConsumerSeq();
                 }
                 // now h.wSeq contains out writer's sequence
                 jobs.add(c.getFactory().createLogWriter(h.ring, h.wSeq, c.getLevel()));

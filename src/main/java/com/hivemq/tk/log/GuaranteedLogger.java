@@ -1,7 +1,7 @@
 package com.hivemq.tk.log;
 
-import com.hivemq.tk.RingQueue;
-import com.hivemq.tk.Sequence;
+import com.hivemq.tk.seq.RingQueue;
+import com.hivemq.tk.seq.Seq;
 import com.hivemq.tk.time.MicrosClock;
 
 /**
@@ -13,15 +13,15 @@ public final class GuaranteedLogger extends AbstractLogRecord {
             MicrosClock clock,
             CharSequence name,
             RingQueue<LogRecordUtf8Sink> debugRing,
-            Sequence debugSeq,
+            Seq debugSeq,
             RingQueue<LogRecordUtf8Sink> infoRing,
-            Sequence infoSeq,
+            Seq infoSeq,
             RingQueue<LogRecordUtf8Sink> errorRing,
-            Sequence errorSeq,
+            Seq errorSeq,
             RingQueue<LogRecordUtf8Sink> criticalRing,
-            Sequence criticalSeq,
+            Seq criticalSeq,
             RingQueue<LogRecordUtf8Sink> advisoryRing,
-            Sequence advisorySeq
+            Seq advisorySeq
     ) {
         super(
                 clock,

@@ -1,13 +1,15 @@
-package com.hivemq.tk;
+package com.hivemq.tk.seq;
 
-//single consumer or producer sequence
-abstract class AbstractSSequence extends AbstractSequence implements Sequence {
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-    AbstractSSequence(WaitStrategy waitStrategy) {
+abstract class AbstractSingleSeq extends AbstractSeq implements Seq {
+
+    AbstractSingleSeq(final @Nullable WaitStrategy waitStrategy) {
         super(waitStrategy);
     }
 
-    AbstractSSequence() {
+    AbstractSingleSeq() {
         this(NullWaitStrategy.INSTANCE);
     }
 
@@ -21,17 +23,17 @@ abstract class AbstractSSequence extends AbstractSequence implements Sequence {
     }
 
     @Override
-    public Barrier root() {
+    public @NotNull Barrier root() {
         return barrier != OpenBarrier.INSTANCE ? barrier.root() : this;
     }
 
     @Override
-    public void setBarrier(Barrier barrier) {
+    public void setBarrier(final @NotNull Barrier barrier) {
         this.barrier = barrier;
     }
 
     @Override
-    public Barrier then(Barrier barrier) {
+    public @NotNull Barrier then(final @NotNull Barrier barrier) {
         barrier.setBarrier(this);
         return barrier;
     }

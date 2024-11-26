@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 public final class Utf8s {
     public static final int VARCHAR_INLINED_PREFIX_BYTES = 6;
     public static final long VARCHAR_INLINED_PREFIX_MASK = (1L << 8 * VARCHAR_INLINED_PREFIX_BYTES) - 1L;
-    private static final ThreadLocal<StringSink> tlSink = ThreadLocal.withInitial(() -> new StringSink());
+    private static final ThreadLocal<StringSink> tlSink = new ThreadLocal(StringSink::new);
 
     private Utf8s() {
     }

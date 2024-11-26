@@ -47,6 +47,10 @@ public class DateLocale {
         }
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String getAMPM(int index) {
         return ampmArray[index];
     }
@@ -57,6 +61,10 @@ public class DateLocale {
 
     public String getMonth(int index) {
         return monthArray[index];
+    }
+
+    public TimeZoneRules getRules(CharSequence timeZoneName, int resolution) throws NumericException {
+        return getZoneRules(Numbers.decodeLowInt(matchZone(timeZoneName, 0, timeZoneName.length())), resolution);
     }
 
     public String getShortMonth(int index) {

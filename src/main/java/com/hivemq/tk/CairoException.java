@@ -16,7 +16,7 @@ public class CairoException extends RuntimeException implements Sinkable {
     public static final int PARTITION_MANIPULATION_RECOVERABLE = METADATA_VALIDATION_RECOVERABLE - 1;
     public static final int NON_CRITICAL = -1;
     private static final StackTraceElement[] EMPTY_STACK_TRACE = {};
-    private static final ThreadLocal<CairoException> tlException = ThreadLocal.withInitial(()->new CairoException());
+    private static final ThreadLocal<CairoException> tlException = new ThreadLocal(CairoException::new);
     protected final StringSink message = new StringSink();
     protected int errno;
     private boolean authorizationError = false;

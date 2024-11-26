@@ -32,6 +32,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
@@ -39,9 +43,95 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public final class TestUtils {
-    private static final ThreadLocal<StringSink> tlSink = ThreadLocal.withInitial(() -> new StringSink());
+    private static final ThreadLocal<StringSink> tlSink = new ThreadLocal(StringSink::new);
 
     private TestUtils() {
+    }
+
+    public static void writeStringToFile(File file, String s) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(s.getBytes(Files.UTF_8));
+        }
+    }
+
+    public static void assertEquals(File a, File b) {
+        try (Path path = new Path()) {
+            path.of(a.getAbsolutePath());
+            long fda = Files.openRO(path.$());
+            Assert.assertNotEquals(-1, fda);
+
+            try {
+                path.of(b.getAbsolutePath());
+                long fdb = Files.openRO(path.$());
+                Assert.assertNotEquals(-1, fdb);
+                try {
+
+                    Assert.assertEquals(Files.length(fda), Files.length(fdb));
+
+                    long bufa = Unsafe.malloc(4096);
+                    long bufb = Unsafe.malloc(4096);
+
+                    long offset = 0;
+                    try {
+
+                        while (true) {
+                            long reada = Files.read(fda, bufa, 4096, offset);
+                            long readb = Files.read(fdb, bufb, 4096, offset);
+                            Assert.assertEquals(reada, readb);
+
+                            if (reada == 0) {
+                                break;
+                            }
+
+                            offset += reada;
+
+                            for (int i = 0; i < reada; i++) {
+                                Assert.assertEquals(Unsafe.UNSAFE.getByte(bufa + i), Unsafe.UNSAFE.getByte(bufb + i));
+                            }
+                        }
+                    } finally {
+                        Unsafe.free(bufa);
+                        Unsafe.free(bufb);
+                    }
+                } finally {
+                    Files.close(fdb);
+                }
+            } finally {
+                Files.close(fda);
+            }
+        }
+    }
+
+    public static void assertContains(CharSequence sequence, CharSequence term) {
+        assertContains(null, sequence, term);
+    }
+
+    public static String readStringFromFile(File file) {
+        try {
+            try (FileInputStream fis = new FileInputStream(file)) {
+                byte[] buffer = new byte[(int) fis.getChannel().size()];
+                int totalRead = 0;
+                int read;
+                while (totalRead < buffer.length &&
+                        (read = fis.read(buffer, totalRead, buffer.length - totalRead)) > 0) {
+                    totalRead += read;
+                }
+                return new String(buffer, Files.UTF_8);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot read from " + file.getAbsolutePath(), e);
+        }
+    }
+
+    public static void assertContains(String message, CharSequence sequence, CharSequence term) {
+        // Assume that "" is contained in any string.
+        if (term.length() == 0) {
+            return;
+        }
+        if (Chars.contains(sequence, term)) {
+            return;
+        }
+        Assert.fail((message != null ? message + ": '" : "'") + sequence + "' does not contain: " + term);
     }
 
 
@@ -62,6 +152,35 @@ public final class TestUtils {
         rnd.nextBoolean();
         return rnd;
     }
+
+    public static void assertEqualsIgnoreCase(CharSequence expected, CharSequence actual) {
+        assertEqualsIgnoreCase(null, expected, actual);
+    }
+
+    public static void assertEqualsIgnoreCase(String message, CharSequence expected, CharSequence actual) {
+        if (expected == null && actual == null) {
+            return;
+        }
+
+        if (expected != null && actual == null) {
+            Assert.fail("Expected: \n`" + expected + "`but have NULL");
+        }
+
+        if (expected == null) {
+            Assert.fail("Expected: NULL but have \n`" + actual + "`\n");
+        }
+
+        if (expected.length() != actual.length()) {
+            Assert.assertEquals(message, expected, actual);
+        }
+
+        for (int i = 0; i < expected.length(); i++) {
+            if (Character.toLowerCase(expected.charAt(i)) != Character.toLowerCase(actual.charAt(i))) {
+                Assert.assertEquals(message, expected, actual);
+            }
+        }
+    }
+
 
     public static void assertEquals(CharSequence expected, Sinkable actual) {
         StringSink sink = getTlSink();

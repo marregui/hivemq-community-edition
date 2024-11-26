@@ -1,38 +1,41 @@
 package com.hivemq.tk.log;
 
+import com.hivemq.tk.Files;
 import com.hivemq.tk.Job;
-import com.hivemq.tk.QueueConsumer;
 import com.hivemq.tk.seq.RingQueue;
 import com.hivemq.tk.seq.SingleConsumerSeq;
 import com.hivemq.tk.Unsafe;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Closeable;
 
 public class LogWriter implements Job, Closeable {
-    private static final long LOCKED_OFFSET = Unsafe.fieldOffset(LogWriter.class, "locked");
+    protected static final long LOCKED_OFFSET = Unsafe.fieldOffset(LogWriter.class, "locked");
+    protected long fd;
+    protected final int level;
+    protected final @NotNull RingQueue<LogRecordUtf8Sink> ring;
+    protected final @NotNull SingleConsumerSeq subSeq;
+    protected volatile int locked;
+    protected @Nullable LogInterceptor interceptor;
 
-    private volatile int locked = 0;
-    private final long fd = -1;//TODO Files.getStdOutFdInternal();
-    private final int level;
-    private final RingQueue<LogRecordUtf8Sink> ring;
-    private final SingleConsumerSeq subSeq;
-    private LogInterceptor interceptor;
-    private final QueueConsumer<LogRecordUtf8Sink> myConsumer = this::toStdOut;
-
-
-    public LogWriter(RingQueue<LogRecordUtf8Sink> ring, SingleConsumerSeq subSeq, int level) {
+    public LogWriter(
+            final @NotNull RingQueue<LogRecordUtf8Sink> ring,
+            final @NotNull SingleConsumerSeq subSeq,
+            final int level) {
         this.ring = ring;
         this.subSeq = subSeq;
         this.level = level;
+        this.fd = Files.getStdOutFdInternal();
     }
 
     @Override
     public void close() {
+        // no-op
     }
 
     @Override
-    public boolean run(final int workerId,final @NotNull RunStatus runStatus) {
+    public boolean run(final int workerId, final @NotNull RunStatus runStatus) {
         if (Unsafe.UNSAFE.compareAndSwapInt(this, LOCKED_OFFSET, 0, 1)) {
             try {
                 return runSerially();
@@ -43,26 +46,25 @@ public class LogWriter implements Job, Closeable {
         return false;
     }
 
-    public boolean runSerially() {
-        return subSeq.consumeAll(ring, myConsumer);
+    protected boolean runSerially() {
+        return subSeq.consumeAll(ring, this::toStdOut);
     }
 
-    public void setInterceptor(LogInterceptor interceptor) {
+    public void setInterceptor(final @Nullable LogInterceptor interceptor) {
         this.interceptor = interceptor;
     }
 
-    private void toStdOut(LogRecordUtf8Sink sink) {
+    private void toStdOut(final @NotNull LogRecordUtf8Sink sink) {
         if ((sink.getLevel() & this.level) != 0) {
             if (interceptor != null) {
                 interceptor.onLog(sink);
             }
-            // TODO
-            //Files.append(fd, sink.ptr(), sink.size());
+            Files.append(fd, sink.ptr(), sink.size());
         }
     }
 
     @FunctionalInterface
     public interface LogInterceptor {
-        void onLog(LogRecordUtf8Sink sink);
+        void onLog(final @NotNull LogRecordUtf8Sink sink);
     }
 }

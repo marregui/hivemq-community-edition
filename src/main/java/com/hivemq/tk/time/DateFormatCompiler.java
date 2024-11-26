@@ -6,6 +6,8 @@ import com.hivemq.tk.ds.IntList;
 import com.hivemq.tk.ds.LongList;
 import com.hivemq.tk.ds.ObjList;
 
+import java.lang.ThreadLocal;
+
 public class DateFormatCompiler {
     static final int OP_AM_PM = 14;
     static final int OP_DAY_GREEDY = 139;

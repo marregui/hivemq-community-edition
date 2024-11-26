@@ -7,7 +7,7 @@ public class SqlException extends Exception implements Sinkable {
 
     private static final StackTraceElement[] EMPTY_STACK_TRACE = {};
 
-    private static final ThreadLocal<SqlException> tlException = ThreadLocal.withInitial(() -> new SqlException());
+    private static final ThreadLocal<SqlException> tlException = new ThreadLocal(SqlException::new);
     private final StringSink message = new StringSink();
     private int position;
 

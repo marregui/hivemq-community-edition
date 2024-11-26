@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public final class Misc {
     public static final @NotNull String EOL = "\r\n";
-    private static final @NotNull ThreadLocal<StringSink> tlSink = ThreadLocal.withInitial(StringSink::new);
+    private static final @NotNull ThreadLocal<StringSink> tlSink = new ThreadLocal(StringSink::new);
 
 
     private Misc() {

@@ -298,6 +298,67 @@ public final class Numbers {
         }
     }
 
+    public static int parseIntSize(CharSequence sequence) throws NumericException {
+        int lim = sequence.length();
+
+        if (lim == 0) {
+            throw NumericException.INSTANCE;
+        }
+
+        boolean negative = sequence.charAt(0) == '-';
+        int i = 0;
+        if (negative) {
+            i++;
+        }
+
+        if (i >= lim) {
+            throw NumericException.INSTANCE;
+        }
+
+        int val = 0;
+        int r;
+        EX:
+        for (; i < lim; i++) {
+            int c = sequence.charAt(i);
+            if (c < '0' || c > '9') {
+                if (i == lim - 1) {
+                    switch (c) {
+                        case 'K':
+                        case 'k':
+                            r = val * 1024;
+                            if (r > val) {
+                                throw NumericException.INSTANCE;
+                            }
+                            val = r;
+                            break EX;
+                        case 'M':
+                        case 'm':
+                            r = val * 1024 * 1024;
+                            if (r > val) {
+                                throw NumericException.INSTANCE;
+                            }
+                            val = r;
+                            break EX;
+                        default:
+                            break;
+                    }
+                }
+                throw NumericException.INSTANCE;
+            }
+            // val * 10 + (c - '0')
+            r = (val << 3) + (val << 1) - (c - '0');
+            if (r > val) {
+                throw NumericException.INSTANCE;
+            }
+            val = r;
+        }
+
+        if (val == Integer.MIN_VALUE && !negative) {
+            throw NumericException.INSTANCE;
+        }
+        return negative ? val : -val;
+    }
+
     public static void append(final CharSink<?> sink, final int value) {
         int i = value;
         if (i < 0) {

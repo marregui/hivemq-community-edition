@@ -13,6 +13,11 @@ public class FixedTimeZoneRule implements TimeZoneRules {
     }
 
     @Override
+    public long getNextDST(long utcEpoch) {
+        return Long.MAX_VALUE;
+    }
+
+    @Override
     public long getOffset(long utcEpoch, int year, boolean leap) {
         return offset;
     }

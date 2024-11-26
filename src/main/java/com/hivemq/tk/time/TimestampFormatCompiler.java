@@ -6,6 +6,8 @@ import com.hivemq.tk.ds.IntList;
 import com.hivemq.tk.ds.LongList;
 import com.hivemq.tk.ds.ObjList;
 
+import java.lang.ThreadLocal;
+
 public class TimestampFormatCompiler {
     static final int OP_AM_PM = 14;
     static final int OP_DAY_GREEDY = 139;
@@ -127,6 +129,18 @@ public class TimestampFormatCompiler {
 
     public DateFormat compile(CharSequence pattern, boolean generic) {
         return compile(pattern, 0, pattern.length(), generic);
+    }
+
+    public static int getOpCode(String opName) {
+        return opMap.get(opName);
+    }
+
+    public static String getOpName(int index) {
+        return opList.getQuick(index);
+    }
+
+    public static int getOpCount() {
+        return opList.size();
     }
 
     public DateFormat compile(CharSequence pattern, int lo, int hi, boolean generic) {

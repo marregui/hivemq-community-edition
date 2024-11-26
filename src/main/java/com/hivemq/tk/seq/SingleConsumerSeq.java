@@ -1,8 +1,9 @@
 package com.hivemq.tk.seq;
 
-import com.hivemq.tk.QueueConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
 
 public class SingleConsumerSeq extends AbstractSingleSeq {
 
@@ -27,7 +28,7 @@ public class SingleConsumerSeq extends AbstractSingleSeq {
         return this.value;
     }
 
-    public <T> boolean consumeAll(final @NotNull RingQueue<T> queue, final @NotNull QueueConsumer<T> consumer) {
+    public <T> boolean consumeAll(final @NotNull RingQueue<T> queue, final @NotNull Consumer<T> consumer) {
         long cursor = next();
         if (cursor < 0) {
             return false;
@@ -37,7 +38,7 @@ public class SingleConsumerSeq extends AbstractSingleSeq {
             if (cursor > -1) {
                 final long available = available();
                 while (cursor < available) {
-                    consumer.consume(queue.get(cursor++));
+                    consumer.accept(queue.get(cursor++));
                 }
                 done(available - 1);
             }

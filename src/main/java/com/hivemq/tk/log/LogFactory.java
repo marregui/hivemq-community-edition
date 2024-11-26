@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 
 public class LogFactory implements Closeable {
 
@@ -125,11 +126,7 @@ public class LogFactory implements Closeable {
     }
 
     public static Log getLog(Class<?> clazz) {
-        return getLog(clazz.getName());
-    }
-
-    public static Log getLog(String key) {
-        return getInstance().create(key);
+        return getInstance().create(clazz.getName());
     }
 
     public static synchronized void haltInstance() {
@@ -137,10 +134,6 @@ public class LogFactory implements Closeable {
         if (logFactory != null) {
             logFactory.haltThread();
         }
-    }
-
-    @SuppressWarnings({"EmptyMethod", "unused"})
-    public static void init() {
     }
 
     /**
@@ -327,6 +320,7 @@ public class LogFactory implements Closeable {
 
         for (int i = 0, n = jobs.size(); i < n; i++) {
             LogWriter job = jobs.get(i);
+            job.bindProperties();
             workerPool.assign(job);
         }
     }
@@ -661,6 +655,14 @@ public class LogFactory implements Closeable {
         }
     }
 
+    @FunctionalInterface
+    public interface LogWriterFactory {
+        @NotNull LogWriter createLogWriter(
+                final @NotNull RingQueue<LogRecordUtf8Sink> ring,
+                final @NotNull SingleConsumerSeq seq,
+                final int level);
+    }
+
     private static class DeferredLogger implements Log {
 
         private static final NoOpLogRecord noOpRecord = new NoOpLogRecord();
@@ -811,10 +813,8 @@ public class LogFactory implements Closeable {
         private FanOut fanOut;
         private SingleConsumerSeq wSeq;
 
-        public Holder(int queueDepth, final int recordLength) {
-            this.ring = new RingQueue<>(LogRecordUtf8Sink::new,
-                    Numbers.ceilPow2(recordLength),
-                    queueDepth);
+        Holder(int queueDepth, final int recordLength) {
+            this.ring = new RingQueue<>(LogRecordUtf8Sink::new, Numbers.ceilPow2(recordLength), queueDepth);
             this.lSeq = new MultiProducerSeq(queueDepth);
         }
 
@@ -1041,7 +1041,7 @@ public class LogFactory implements Closeable {
                     h.wSeq = new SingleConsumerSeq();
                 }
                 // now h.wSeq contains out writer's sequence
-                jobs.add(c.getFactory().createLogWriter(h.ring, h.wSeq, c.getLevel()));
+                jobs.add(c.createLogWriter(h.ring, h.wSeq, c.getLevel()));
             }
 
             // and the last step is to link dependent sequences
@@ -1128,6 +1128,37 @@ public class LogFactory implements Closeable {
 
         private Holder getHolder(int index) {
             return holderMap.get(channels[index]);
+        }
+    }
+
+    public static class LogWriterConfig {
+        private final @NotNull LogWriterFactory factory;
+        private final @NotNull String scope;
+        private final int level;
+
+        public LogWriterConfig(final int level, final @NotNull LogWriterFactory factory) {
+            this("", level, factory);
+        }
+
+        public LogWriterConfig(final @NotNull String scope, final int level, final @NotNull LogWriterFactory factory) {
+            this.scope = scope == null ? "" : scope;
+            this.level = level;
+            this.factory = factory;
+        }
+
+        public @NotNull LogWriter createLogWriter(
+                final @NotNull RingQueue<LogRecordUtf8Sink> ring,
+                final @NotNull SingleConsumerSeq seq,
+                final int level) {
+            return factory.createLogWriter(ring, seq, level);
+        }
+
+        public int getLevel() {
+            return level;
+        }
+
+        public @NotNull String getScope() {
+            return scope;
         }
     }
 }

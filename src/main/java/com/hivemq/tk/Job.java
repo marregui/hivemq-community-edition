@@ -20,6 +20,10 @@ public interface Job {
         return run(workerId, RUNNING_STATUS);
     }
 
+    default void bindProperties() {
+        // no-op
+    }
+
     @FunctionalInterface
     interface RunStatus {
         boolean isTerminating();

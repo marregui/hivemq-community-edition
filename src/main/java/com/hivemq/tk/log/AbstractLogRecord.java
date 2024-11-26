@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.lang.ThreadLocal;
 import java.util.Set;
 
 abstract class AbstractLogRecord implements LogRecord, Log {

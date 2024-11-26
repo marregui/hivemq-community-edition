@@ -1,6 +1,7 @@
 package com.hivemq.tk.time;
 
 import com.hivemq.tk.*;
+import com.hivemq.tk.ds.BinarySearch;
 import com.hivemq.tk.ds.LongList;
 import com.hivemq.tk.ds.ObjList;
 
@@ -100,6 +101,12 @@ public abstract class AbstractTimeZoneRules implements TimeZoneRules {
     }
 
     @Override
+    public long getNextDST(long utcEpoch) {
+        final int y = getYear(utcEpoch);
+        return getNextDST(utcEpoch, y, isLeapYear(y));
+    }
+
+    @Override
     public long getOffset(long utcEpoch, int year, boolean leap) {
         if (standardOffset != Long.MIN_VALUE) {
             return standardOffset;
@@ -122,7 +129,7 @@ public abstract class AbstractTimeZoneRules implements TimeZoneRules {
     }
 
     private long dstFromHistory(long epoch) {
-        int index = historicTransitions.binarySearch(epoch, -1);
+        int index = historicTransitions.binarySearch(epoch, BinarySearch.SCAN_UP);
         if (index == -1) {
             return Long.MAX_VALUE;
         }
@@ -200,7 +207,7 @@ public abstract class AbstractTimeZoneRules implements TimeZoneRules {
     }
 
     private long offsetFromHistory(long epoch) {
-        int index = historicTransitions.binarySearch(epoch, -1);
+        int index = historicTransitions.binarySearch(epoch, BinarySearch.SCAN_UP);
         if (index == -1) {
             return firstWall;
         }

@@ -121,8 +121,6 @@ public class FilesTest {
             }
     }
 
-
-
     @Test
     public void testWriteFails() throws Exception {
             File temp = temporaryFolder.newFile();

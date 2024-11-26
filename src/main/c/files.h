@@ -6,6 +6,12 @@
 #include <sys/file.h>
 #include <string.h>
 
+#ifndef _Included_com_questdb_std_Files
+#define _Included_com_questdb_std_Files
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // On Linux, read() (and similar system calls) will transfer at most 0x7ffff000 (2,147,479,552) bytes,
 // returning the number of bytes actually transferred or -1 depending on the platforms
 #define MAX_RW_COUNT 0x7ffff000
@@ -143,3 +149,8 @@ JNIEXPORT jboolean JNICALL Java_com_hivemq_tk_Files_truncate
  */
 JNIEXPORT jlong JNICALL Java_com_hivemq_tk_Files_write
         (JNIEnv *e, jclass cl, jint fd, jlong address, jlong len, jlong offset);
+
+#ifdef __cplusplus
+}
+#endif
+#endif

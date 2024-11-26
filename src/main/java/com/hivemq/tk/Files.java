@@ -35,7 +35,7 @@ public final class Files {
             final String path = Files.class.getResource(resource).getPath();
             System.out.printf("Loading %s... ", path);
             System.load(path);
-            System.out.printf("Ok%n");
+            System.out.printf("Ok[%d]%n", getStdOutFd());
         }
     }
 

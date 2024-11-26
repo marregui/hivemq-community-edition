@@ -55,4 +55,22 @@ public class TimeZoneRuleFactory {
     public TimeZoneRules getTimeZoneRulesQuick(int index, int resolution) {
         return ruleList.getQuick(2 * index + resolution);
     }
+
+    private static class FixedTimeZoneRule implements TimeZoneRules {
+        private final long offset;
+
+        public FixedTimeZoneRule(long offset) {
+            this.offset = offset;
+        }
+
+        @Override
+        public long getOffset(long utcEpoch, int year, boolean leap) {
+            return offset;
+        }
+
+        @Override
+        public long getOffset(long utcEpoch) {
+            return offset;
+        }
+    }
 }

@@ -3,7 +3,7 @@ package com.hivemq.tk;
 import com.hivemq.tk.ds.ObjHashSet;
 import com.hivemq.tk.ds.SOCountDownLatch;
 import com.hivemq.tk.log.Log;
-import com.hivemq.tk.time.MicrosClock;
+import com.hivemq.tk.time.Timestamps;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Worker extends Thread {
-    private static final MicrosClock CLOCK_MICROS = MicrosClock.INSTANCE;
     private final @NotNull String criticalErrorLine;
     private final @NotNull SOCountDownLatch haltLatch;
     private final @NotNull AtomicLong jobStartMicros = new AtomicLong();
@@ -77,7 +76,7 @@ public class Worker extends Thread {
                 while (lifecycle.get() == Lifecycle.RUNNING) {
                     boolean runAsap = false;
                     // measure latency of all jobs tick
-                    jobStartMicros.lazySet(CLOCK_MICROS.getTicks());
+                    jobStartMicros.lazySet(Timestamps.currentTimeMicros());
                     for (int i = 0, n = jobs.size(); i < n; i++) {
                         Unsafe.UNSAFE.loadFence();
                         try {

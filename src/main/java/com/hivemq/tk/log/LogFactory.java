@@ -7,7 +7,6 @@ import com.hivemq.tk.seq.MultiProducerSeq;
 import com.hivemq.tk.seq.RingQueue;
 import com.hivemq.tk.seq.SingleConsumerSeq;
 import com.hivemq.tk.seq.Seq;
-import com.hivemq.tk.time.MicrosClock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
@@ -19,7 +18,6 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Function;
 
 public class LogFactory implements Closeable {
 
@@ -48,7 +46,6 @@ public class LogFactory implements Closeable {
         reserved.add("level");
     }
 
-    private final MicrosClock clock;
     private final AtomicBoolean closed = new AtomicBoolean();
     private final ObjList<DeferredLogger> deferredLoggers = new ObjList<>();
     private final ObjHashSet<LogWriter> jobs = new ObjHashSet<>();
@@ -61,12 +58,7 @@ public class LogFactory implements Closeable {
     private int queueDepth = DEFAULT_QUEUE_DEPTH;
     private int recordLength = DEFAULT_MSG_SIZE;
 
-    public LogFactory() {
-        this(MicrosClock.INSTANCE);
-    }
-
-    private LogFactory(MicrosClock clock) {
-        this.clock = clock;
+    LogFactory() {
         workerPool = new WorkerPool("logging", 1);
     }
 
@@ -374,18 +366,7 @@ public class LogFactory implements Closeable {
 
         final ScopeConfiguration scopeConfiguration = find(key);
         if (scopeConfiguration == null) {
-            return new Logger(clock,
-                    compressScope(key, sink),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null);
+            return new Logger(compressScope(key, sink), null, null, null, null, null, null, null, null, null, null);
         }
         final Holder dbg = scopeConfiguration.getHolder(Numbers.msb(LogLevel.DEBUG));
         final Holder inf = scopeConfiguration.getHolder(Numbers.msb(LogLevel.INFO));
@@ -593,8 +574,7 @@ public class LogFactory implements Closeable {
             Holder err,
             Holder cri,
             Holder adv) {
-        return new GuaranteedLogger(clock,
-                compressScope(key, sink),
+        return new GuaranteedLogger(compressScope(key, sink),
                 dbg == null ? null : dbg.ring,
                 dbg == null ? null : dbg.lSeq,
                 inf == null ? null : inf.ring,
@@ -609,8 +589,7 @@ public class LogFactory implements Closeable {
 
     @NotNull
     private Logger createLogger(String key, Holder dbg, Holder inf, Holder err, Holder cri, Holder adv) {
-        return new Logger(clock,
-                compressScope(key, sink),
+        return new Logger(compressScope(key, sink),
                 dbg == null ? null : dbg.ring,
                 dbg == null ? null : dbg.lSeq,
                 inf == null ? null : inf.ring,

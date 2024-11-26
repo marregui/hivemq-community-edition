@@ -4,7 +4,6 @@ import com.hivemq.tk.ds.CharSequenceIntHashMap;
 import com.hivemq.tk.ds.ObjIntHashMap;
 import com.hivemq.tk.log.Log;
 import com.hivemq.tk.log.LogFactory;
-import com.hivemq.util.Bytes;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.FileOutputStream;
@@ -12,6 +11,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class BytecodeAssembler {
+
 
     private static final int ACC_PRIVATE = 0x02;
     private static final int ACC_PUBLIC = 0x01;
@@ -66,6 +66,19 @@ public class BytecodeAssembler {
     public BytecodeAssembler() {
         this.buf = ByteBuffer.allocate(1024 * 1024).order(ByteOrder.BIG_ENDIAN);
         this.poolCount = 1;
+    }
+
+    public static int checkedLoHiSize(long lo, long hi, int baseSize) {
+        final long additional = hi - lo;
+        if (additional < 0) {
+            throw new IllegalArgumentException("lo > hi");
+        }
+        final long size = baseSize + additional;
+
+        if (size > (long) Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("size exceeds 2GiB limit");
+        }
+        return (int) additional;
     }
 
     public void aload(int value) {
@@ -172,7 +185,7 @@ public class BytecodeAssembler {
         int len = position() - codeStart;
         if (len > 64 * 1024) {
             LOG.error().$("Too much input to generate ").$(host.getName()).$(". Bytecode is too long").$();
-            throw new RuntimeException("Error in bytecode");
+            throw new RuntimeException();
         }
         putInt(codeStart - 4, position() - codeStart);
     }
@@ -428,7 +441,7 @@ public class BytecodeAssembler {
             return x.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             LOG.critical().$("could not create an instance of ").$(host.getName()).$(", cause: ").$(e).$();
-            throw new RuntimeException("Error in bytecode");
+            throw new RuntimeException();
         }
     }
 
@@ -646,11 +659,9 @@ public class BytecodeAssembler {
 
         // add standard stuff
         objectClassIndex = poolClass(Object.class);
-        defaultConstructorMethodIndex = poolMethod(objectClassIndex, poolNameAndType(
-                        defaultConstructorNameIndex = poolUtf8("<init>"),
-                        defaultConstructorDescIndex = poolUtf8("()V")
-                )
-        );
+        defaultConstructorMethodIndex = poolMethod(objectClassIndex,
+                poolNameAndType(defaultConstructorNameIndex = poolUtf8("<init>"),
+                        defaultConstructorDescIndex = poolUtf8("()V")));
         codeAttributeIndex = poolUtf8("Code");
     }
 
@@ -845,9 +856,10 @@ public class BytecodeAssembler {
             return this;
         }
 
+
         @Override
         public Utf8Appender putNonAscii(long lo, long hi) {
-            Bytes.checkAddressingOverflow(lo, hi, BytecodeAssembler.this.position());
+            checkedLoHiSize(lo, hi, BytecodeAssembler.this.position());
             for (long p = lo; p < hi; p++) {
                 BytecodeAssembler.this.putByte(Unsafe.UNSAFE.getByte(p));
             }

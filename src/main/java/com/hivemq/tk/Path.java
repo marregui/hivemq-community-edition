@@ -366,7 +366,12 @@ public class Path implements Utf8Sink, NativeChunk, Closeable {
 
     @Override
     public Path putNonAscii(long lo, long hi) {
-        throw new UnsupportedOperationException();
+        ascii = false;
+        final int size = checkedLoHiSize(lo, hi, this.size());
+        checkExtend(size);
+        Files.memcpy(tailPtr, lo, size);
+        tailPtr += size;
+        return this;
     }
 
     public Path seekZ() {

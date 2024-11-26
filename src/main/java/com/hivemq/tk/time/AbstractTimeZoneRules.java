@@ -11,7 +11,8 @@ import java.time.zone.ZoneRules;
 
 public abstract class AbstractTimeZoneRules implements TimeZoneRules {
     public static final long LAST_RULES = Unsafe.fieldOffset(ZoneRules.class, "lastRules");
-    public static final long SAVING_INSTANT_TRANSITION = Unsafe.fieldOffset(ZoneRules.class, "savingsInstantTransitions");
+    public static final long SAVING_INSTANT_TRANSITION =
+            Unsafe.fieldOffset(ZoneRules.class, "savingsInstantTransitions");
     public static final long STANDARD_OFFSETS = Unsafe.fieldOffset(ZoneRules.class, "standardOffsets");
     public static final long WALL_OFFSETS = Unsafe.fieldOffset(ZoneRules.class, "wallOffsets");
     private final long cutoffTransition;
@@ -81,39 +82,63 @@ public abstract class AbstractTimeZoneRules implements TimeZoneRules {
     }
 
     @Override
-    public long getNextDST(long utcEpoch, int year, boolean leap) {
-        if (standardOffset != Long.MIN_VALUE) {
-            // when we have standard offset the next DST does not exist
-            // since we are trying to avoid unnecessary offset lookup the max long
-            // should ensure all timestamps stay below next DST
-            return Long.MAX_VALUE;
-        }
-
-        if (ruleCount > 0 && utcEpoch >= cutoffTransition) {
-            return dstFromRules(utcEpoch, year, leap);
-        }
-
-        if (utcEpoch < cutoffTransition) {
-            return dstFromHistory(utcEpoch);
-        }
-
-        return Long.MAX_VALUE;
-    }
-
-    @Override
-    public long getNextDST(long utcEpoch) {
-        final int y = getYear(utcEpoch);
-        return getNextDST(utcEpoch, y, isLeapYear(y));
-    }
-
-    @Override
     public long getOffset(long utcEpoch, int year, boolean leap) {
         if (standardOffset != Long.MIN_VALUE) {
             return standardOffset;
         }
 
         if (ruleCount > 0 && utcEpoch > cutoffTransition) {
-            return offsetFromRules(utcEpoch, year, leap);
+            // offset from rules
+            int offsetBefore;
+            int offsetAfter = 0;
+
+            for (int i = 0; i < ruleCount; i++) {
+                TransitionRule zr = rules.getQuick(i);
+                offsetBefore = zr.offsetBefore;
+                offsetAfter = zr.offsetAfter;
+
+                int dom = zr.dom;
+                int month = zr.month;
+
+                int dow = zr.dow;
+                long date;
+                if (dom < 0) {
+                    date = toEpoch(year, leap, month, getDaysPerMonth(month, leap) + 1 + dom, zr.hour, zr.minute) +
+                            zr.second * multiplier;
+                    if (dow > -1) {
+                        date = previousOrSameDayOfWeek(date, dow);
+                    }
+                } else {
+                    assert month > 0;
+                    date = toEpoch(year, leap, month, dom, zr.hour, zr.minute) + zr.second * multiplier;
+                    if (dow > -1) {
+                        date = nextOrSameDayOfWeek(date, dow);
+                    }
+                }
+
+                if (zr.midnightEOD) {
+                    date = addDays(date, 1);
+                }
+
+                switch (zr.timeDef) {
+                    case TransitionRule.UTC:
+                        date += (offsetBefore - ZoneOffset.UTC.getTotalSeconds()) * multiplier;
+                        break;
+                    case TransitionRule.STANDARD:
+                        date += (offsetBefore - zr.standardOffset) * multiplier;
+                        break;
+                    default:  // WALL
+                        break;
+                }
+
+                // go back to epoch epoch
+                date -= offsetBefore * multiplier;
+
+                if (utcEpoch < date) {
+                    return offsetBefore * multiplier;
+                }
+            }
+            return offsetAfter * multiplier;
         }
 
         if (utcEpoch > cutoffTransition) {
@@ -128,84 +153,6 @@ public abstract class AbstractTimeZoneRules implements TimeZoneRules {
         return getOffset(utcEpoch, y, isLeapYear(y));
     }
 
-    private long dstFromHistory(long epoch) {
-        int index = historicTransitions.binarySearch(epoch, BinarySearch.SCAN_UP);
-        if (index == -1) {
-            return Long.MAX_VALUE;
-        }
-
-        if (index < 0) {
-            index = -index - 2;
-        }
-        return historicTransitions.getQuick(index + 1);
-    }
-
-    private long dstFromRules(long epoch, int year, boolean leap) {
-
-        for (int i = 0; i < ruleCount; i++) {
-            long date = getDSTFromRule(year, leap, i);
-            if (epoch < date) {
-                return date;
-            }
-        }
-
-        if (ruleCount > 0) {
-            return getDSTFromRule(year + 1, isLeapYear(year + 1), 0);
-        }
-
-        return Long.MAX_VALUE;
-    }
-
-    private long getDSTFromRule(int year, boolean leap, int i) {
-        int offsetBefore;
-        TransitionRule zr = rules.getQuick(i);
-        offsetBefore = zr.offsetBefore;
-
-        int dom = zr.dom;
-        int month = zr.month;
-
-        int dow = zr.dow;
-        long date;
-        if (dom < 0) {
-            date = toEpoch(
-                    year,
-                    leap,
-                    month,
-                    getDaysPerMonth(month, leap) + 1 + dom,
-                    zr.hour,
-                    zr.minute
-            ) + zr.second * multiplier;
-            if (dow > -1) {
-                date = previousOrSameDayOfWeek(date, dow);
-            }
-        } else {
-            assert month > 0;
-            date = toEpoch(year, leap, month, dom, zr.hour, zr.minute) + zr.second * multiplier;
-            if (dow > -1) {
-                date = nextOrSameDayOfWeek(date, dow);
-            }
-        }
-
-        if (zr.midnightEOD) {
-            date = addDays(date, 1);
-        }
-
-        switch (zr.timeDef) {
-            case TransitionRule.UTC:
-                date += (offsetBefore - ZoneOffset.UTC.getTotalSeconds()) * multiplier;
-                break;
-            case TransitionRule.STANDARD:
-                date += (offsetBefore - zr.standardOffset) * multiplier;
-                break;
-            default:  // WALL
-                break;
-        }
-
-        // go back to epoch epoch
-        date -= offsetBefore * multiplier;
-        return date;
-    }
-
     private long offsetFromHistory(long epoch) {
         int index = historicTransitions.binarySearch(epoch, BinarySearch.SCAN_UP);
         if (index == -1) {
@@ -216,67 +163,6 @@ public abstract class AbstractTimeZoneRules implements TimeZoneRules {
             index = -index - 2;
         }
         return wallOffsets[index + 1] * multiplier;
-    }
-
-    private long offsetFromRules(long epoch, int year, boolean leap) {
-
-        int offsetBefore;
-        int offsetAfter = 0;
-
-        for (int i = 0; i < ruleCount; i++) {
-            TransitionRule zr = rules.getQuick(i);
-            offsetBefore = zr.offsetBefore;
-            offsetAfter = zr.offsetAfter;
-
-            int dom = zr.dom;
-            int month = zr.month;
-
-            int dow = zr.dow;
-            long date;
-            if (dom < 0) {
-                date = toEpoch(
-                        year,
-                        leap,
-                        month,
-                        getDaysPerMonth(month, leap) + 1 + dom,
-                        zr.hour,
-                        zr.minute
-                ) + zr.second * multiplier;
-                if (dow > -1) {
-                    date = previousOrSameDayOfWeek(date, dow);
-                }
-            } else {
-                assert month > 0;
-                date = toEpoch(year, leap, month, dom, zr.hour, zr.minute) + zr.second * multiplier;
-                if (dow > -1) {
-                    date = nextOrSameDayOfWeek(date, dow);
-                }
-            }
-
-            if (zr.midnightEOD) {
-                date = addDays(date, 1);
-            }
-
-            switch (zr.timeDef) {
-                case TransitionRule.UTC:
-                    date += (offsetBefore - ZoneOffset.UTC.getTotalSeconds()) * multiplier;
-                    break;
-                case TransitionRule.STANDARD:
-                    date += (offsetBefore - zr.standardOffset) * multiplier;
-                    break;
-                default:  // WALL
-                    break;
-            }
-
-            // go back to epoch epoch
-            date -= offsetBefore * multiplier;
-
-            if (epoch < date) {
-                return offsetBefore * multiplier;
-            }
-        }
-
-        return offsetAfter * multiplier;
     }
 
     abstract protected long addDays(long epoch, int days);

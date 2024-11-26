@@ -411,5 +411,4 @@ public final class Dates {
             MAX_MONTH_OF_YEAR_MILLIS[i + 1] = maxSum;
         }
     }
-
 }

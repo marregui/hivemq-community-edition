@@ -32,7 +32,6 @@ import com.hivemq.tk.Sinkable;
 import com.hivemq.tk.StringSink;
 import com.hivemq.tk.ds.LongList;
 import com.hivemq.tk.ds.SOCountDownLatch;
-import com.hivemq.tk.time.MicrosClock;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -761,25 +760,6 @@ public class LogFactoryTest {
 
             File logFile = Paths.get(temp.getRoot().getPath(), "log\\test.log").toFile();
             Assert.assertEquals(logFile.getAbsolutePath(), isCreated, logFile.exists());
-        }
-    }
-
-    private static class TestMicrosClock extends MicrosClock {
-        private final long limit;
-        private final long speed;
-        private final long start;
-        private long k;
-
-        public TestMicrosClock(long start, long speed, long limit) {
-            this.start = start;
-            this.speed = speed;
-            this.limit = limit - 1;
-            this.k = 0;
-        }
-
-        @Override
-        public long getTicks() {
-            return Math.min(start + (k++) * speed, limit);
         }
     }
 }

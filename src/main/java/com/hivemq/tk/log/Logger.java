@@ -2,7 +2,6 @@ package com.hivemq.tk.log;
 
 import com.hivemq.tk.seq.RingQueue;
 import com.hivemq.tk.seq.Seq;
-import com.hivemq.tk.time.MicrosClock;
 
 /**
  * Builds and sends log messages to writer thread. Log messages are constructed using "builder" pattern,
@@ -24,7 +23,6 @@ import com.hivemq.tk.time.MicrosClock;
  */
 public final class Logger extends AbstractLogRecord implements Log {
     Logger(
-            MicrosClock clock,
             CharSequence name,
             RingQueue<LogRecordUtf8Sink> debugRing,
             Seq debugSeq,
@@ -38,7 +36,6 @@ public final class Logger extends AbstractLogRecord implements Log {
             Seq advisorySeq
     ) {
         super(
-                clock,
                 name,
                 debugRing,
                 debugSeq,

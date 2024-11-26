@@ -4,8 +4,8 @@ import com.hivemq.tk.*;
 import com.hivemq.tk.ds.ObjHashSet;
 import com.hivemq.tk.seq.RingQueue;
 import com.hivemq.tk.seq.Seq;
-import com.hivemq.tk.time.MicrosClock;
 import com.hivemq.tk.time.TimestampFormatUtils;
+import com.hivemq.tk.time.Timestamps;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,11 +26,9 @@ abstract class AbstractLogRecord implements LogRecord, Log {
     protected final RingQueue<LogRecordUtf8Sink> infoRing;
     protected final Seq infoSeq;
     protected final ThreadLocalCursor tl = new ThreadLocalCursor();
-    private final MicrosClock clock;
     private final CharSequence name;
 
     AbstractLogRecord(
-            MicrosClock clock,
             CharSequence name,
             RingQueue<LogRecordUtf8Sink> debugRing,
             Seq debugSeq,
@@ -44,7 +42,6 @@ abstract class AbstractLogRecord implements LogRecord, Log {
             Seq advisorySeq
     ) {
         this.name = name;
-        this.clock = clock;
         this.debugRing = debugRing;
         this.debugSeq = debugSeq;
         this.infoRing = infoRing;
@@ -334,7 +331,7 @@ abstract class AbstractLogRecord implements LogRecord, Log {
 
     @Override
     public LogRecord ts() {
-        sink().putISODate(clock.getTicks());
+        sink().putISODate(Timestamps.currentTimeMicros());
         return this;
     }
 

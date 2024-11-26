@@ -13,8 +13,8 @@ public interface NativeChunk {
     }
 
     /**
-     * For off-heap sequences returns address of the first character.
-     * For on-heap sequences returns -1.
+     * off-heap sequences: address of the first character
+     * on-heap sequences: -1.
      */
     default long ptr() {
         return -1;

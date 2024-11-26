@@ -455,4 +455,8 @@ public class Path implements Utf8Sink, NativeChunk, Closeable {
         }
     }
 
+    static {
+        Files.init();
+    }
+
 }

@@ -6,29 +6,112 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.net.URL;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Files {
-    public static final int DT_FILE = 8;
+public final class Files {
     public static final char SLASH = File.separatorChar;
     private static final @NotNull AtomicInteger OPEN_FILE_COUNT = new AtomicInteger();
-    private static final @NotNull AtomicInteger fdCounter = new AtomicInteger();
+    private static final @NotNull AtomicInteger UNIQUE_FD = new AtomicInteger();
     private static final @NotNull LongHashSet openFds = new LongHashSet();
+    private static final @NotNull AtomicBoolean inited = new AtomicBoolean();
 
     static {
-        final String os = System.getProperty("os.name");
-        if (!(os.contains("Linux") || os.contains("Mac"))) {
-            throw new Error("Unsupported: " + os);
+        init();
+    }
+
+    static void init() {
+        if (inited.compareAndSet(false, true)) {
+            final String os = System.getProperty("os.name");
+            final String resource;
+            if (os.contains("Linux")) {
+                resource = "/files.so";
+            } else if (os.contains("Mac")) {
+                resource = "/libfiles.dylib";
+            } else {
+                inited.set(false);
+                throw new Error("Unsupported OS: " + os);
+            }
+            final String path = Files.class.getResource(resource).getPath();
+            System.out.printf("Loading %s... ", path);
+            System.load(path);
+            System.out.printf("Ok%n");
         }
     }
 
-    private Files() {
-        // Prevent construction.
+    public static long append(final long fd, final long address, final long len) {
+        return append(osFd(fd), address, len);
     }
 
-    public static void memcpy(long dst, long src, long len) {
-        // the split length was determined experimentally
-        // using 'MemCopyBenchmark' bench
+    public static int close(final long fd) {
+        // do not close `stdin` and `stdout`
+        final int osFd;
+        if (fd > 0 && (osFd = osFd(fd)) > 2) {
+            if (openFds.remove(fd) == -1) {
+                throw new IllegalStateException("fd already closed: " + fd);
+            }
+            final int res = close0(osFd);
+            if (res == 0) {
+                OPEN_FILE_COUNT.decrementAndGet();
+            }
+            return res;
+        }
+        return -1;
+    }
+
+    public static long uniqueFd(final int fd) {
+        if (fd != -1) {
+            if (fd < 0) {
+                throw new IllegalStateException("fd not valid: " + fd);
+            }
+            final int id = UNIQUE_FD.getAndIncrement();
+            final long uniqueFd = Numbers.encodeLowHighInts(id, fd);
+            openFds.add(uniqueFd);
+            OPEN_FILE_COUNT.incrementAndGet();
+            return uniqueFd;
+        }
+        return fd;
+    }
+
+    public static boolean exists(final long fd) {
+        return exists(osFd(fd));
+    }
+
+    public static boolean exists(final @Nullable NativeChunk chunk) {
+        return chunk != null && exists0(chunk.ptr());
+    }
+
+    public static @NotNull String getResourcePath(final @Nullable URL url) {
+        assert url != null;
+        final String file = url.getFile();
+        assert file != null;
+        assert !file.isEmpty();
+        return file;
+    }
+
+    public synchronized static long getStdOutFdInternal() {
+        final long uniqueFd = Numbers.encodeLowHighInts(0, getStdOutFd());
+        openFds.add(uniqueFd);
+        return uniqueFd;
+    }
+
+    public static long length(final @NotNull NativeChunk NativeChunk) {
+        return length0(NativeChunk.ptr());
+    }
+
+    public static long length(final long fd) {
+        return length(osFd(fd));
+    }
+
+    public static int lock(final long fd) {
+        return lock(osFd(fd));
+    }
+
+    public static long openAppend(final @NotNull NativeChunk NativeChunk) {
+        return uniqueFd(openAppend(NativeChunk.ptr()));
+    }
+
+    public static void memcpy(final long dst, final long src, final long len) {
         if (len < 4096) {
             Unsafe.UNSAFE.copyMemory(src, dst, len);
         } else {
@@ -36,337 +119,66 @@ public class Files {
         }
     }
 
-    private static native void memcpy0(long src, long dst, long len);
-
-    public static long append(long fd, long address, long len) {
-        return append(toOsFd(fd), address, len);
+    public static long openRO(final @NotNull NativeChunk NativeChunk) {
+        return uniqueFd(openRO(NativeChunk.ptr()));
     }
 
-    public static int close(long fd) {
-        // do not close `stdin` and `stdout`
-        int osFd;
-        if (fd > 0 && (osFd = toOsFd(fd)) > 2) {
-            auditClose(fd);
-            int res = close0(osFd);
-            if (res == 0) {
-                OPEN_FILE_COUNT.decrementAndGet();
-            }
-            return res;
-        }
-        // failed to close
-        return -1;
+    public static long openRW(final @NotNull NativeChunk NativeChunk) {
+        return uniqueFd(openRW(NativeChunk.ptr()));
     }
 
-    public static int copy(NativeChunk from, NativeChunk to) {
-        return copy(from.ptr(), to.ptr());
+    public static long read(final long fd, final long address, final long len, final long offset) {
+        return read(osFd(fd), address, len, offset);
     }
 
-    public static long createUniqueFd(int fd) {
-        if (fd != -1) {
-            long uniqueFd = auditOpen(fd);
-            OPEN_FILE_COUNT.incrementAndGet();
-            return uniqueFd;
-        }
-        return fd;
-    }
-
-    public static boolean exists(long fd) {
-        return exists(toOsFd(fd));
-    }
-
-    public static boolean exists(NativeChunk NativeChunk) {
-        return NativeChunk != null && exists0(NativeChunk.ptr());
-    }
-
-    public native static void findClose(long findPtr);
-
-    public static long findFirst(NativeChunk NativeChunk) {
-        return findFirst(NativeChunk.ptr());
-    }
-
-    public native static long findName(long findPtr);
-
-    public native static int findNext(long findPtr);
-
-    public native static int findType(long findPtr);
-
-    public static long getDirSize(Path path) {
-        long pFind = findFirst(path.$().ptr());
-        if (pFind > 0L) {
-            int len = path.size();
-            try {
-                long totalSize = 0L;
-                do {
-                    long nameUtf8Ptr = findName(pFind);
-                    path.trimTo(len).concat(nameUtf8Ptr).$();
-                    if (findType(pFind) == Files.DT_FILE) {
-                        totalSize += length(path.$());
-                    } else if (notDots(nameUtf8Ptr)) {
-                        totalSize += getDirSize(path);
-                    }
-                } while (findNext(pFind) > 0);
-                return totalSize;
-            } finally {
-                findClose(pFind);
-                path.trimTo(len);
-            }
-        }
-        return 0L;
-    }
-
-    public static long getDiskFreeSpace(NativeChunk path) {
-        if (path != null) {
-            return getDiskSize(path.ptr());
-        }
-        // current directory
-        return 0L;
-    }
-
-    /**
-     * Returns fs.file-max kernel limit on Linux or 0 on other OSes.
-     */
-    public native static long getFileLimit();
-
-    public static long getLastModified(NativeChunk NativeChunk) {
-        return getLastModified(NativeChunk.ptr());
-    }
-
-
-    public static @NotNull String getResourcePath(@Nullable URL url) {
-        assert url != null;
-        String file = url.getFile();
-        assert file != null;
-        assert !file.isEmpty();
-        return file;
-    }
-
-    public synchronized static long getStdOutFdInternal() {
-        int stdoutFd = getStdOutFd();
-        long uniqueFd = Numbers.encodeLowHighInts(0, stdoutFd);
-        openFds.add(uniqueFd);
-        return uniqueFd;
-    }
-
-    public static native int hardLink(long DirectUtf8SequenceSrc, long DirectUtf8SequenceHardLink);
-
-    public static int hardLink(NativeChunk src, NativeChunk hardLink) {
-        return hardLink(src.ptr(), hardLink.ptr());
-    }
-
-    public static boolean isDirOrSoftLinkDir(NativeChunk path) {
-        return isDir(path.ptr());
-    }
-
-    public native static boolean isSoftLink(long DirectUtf8SequencePath);
-
-    public static boolean isSoftLink(NativeChunk path) {
-        return isSoftLink(path.ptr());
-    }
-
-    public static long length(NativeChunk NativeChunk) {
-        return length0(NativeChunk.ptr());
-    }
-
-    public static long length(long fd) {
-        return length(toOsFd(fd));
-    }
-
-    public static int lock(long fd) {
-        return lock(toOsFd(fd));
-    }
-
-    public static int mkdir(NativeChunk path, int mode) {
-        return mkdir(path.ptr(), mode);
-    }
-
-    public static int mkdirs(Path path, int mode) {
-        for (int i = 0, n = path.size(); i < n; i++) {
-            byte b = path.byteAt(i);
-            if (b == Files.SLASH) {
-                // do not attempt to create '/' on linux or 'C:\' on Windows
-                if (i == 0) {
-                    continue;
-                }
-
-                // replace separator we just found with \0
-                // temporarily truncate path to the directory we need to create
-                path.$at(i);
-                NativeChunk NativeChunk = path.$();
-                if (path.size() > 0 && !Files.exists(NativeChunk)) {
-                    int r = Files.mkdir(NativeChunk, mode);
-                    if (r != 0) {
-                        path.put(i, (byte) Files.SLASH);
-                        return r;
-                    }
-                }
-                path.put(i, (byte) Files.SLASH);
-            }
-        }
-        return 0;
-    }
-
-    private static boolean notDots(long pUtf8NameZ) {
-        final byte b0 = Unsafe.UNSAFE.getByte(pUtf8NameZ);
-        if (b0 != '.') {
-            return true;
-        }
-        final byte b1 = Unsafe.UNSAFE.getByte(pUtf8NameZ + 1);
-        return b1 != 0 && (b1 != '.' || Unsafe.UNSAFE.getByte(pUtf8NameZ + 2) != 0);
-    }
-
-    public static long openAppend(NativeChunk NativeChunk) {
-        return createUniqueFd(openAppend(NativeChunk.ptr()));
-    }
-
-    public static long openCleanRW(NativeChunk NativeChunk, long size) {
-        return createUniqueFd(openCleanRW(NativeChunk.ptr(), size));
-    }
-
-    public native static int openCleanRW(long DirectUtf8SequenceName, long size);
-
-    public static long openRO(NativeChunk NativeChunk) {
-        return createUniqueFd(openRO(NativeChunk.ptr()));
-    }
-
-    public static long openRW(NativeChunk NativeChunk) {
-        return createUniqueFd(openRW(NativeChunk.ptr()));
-    }
-
-    public static long openRW(NativeChunk NativeChunk, long opts) {
-        return createUniqueFd(openRWOpts(NativeChunk.ptr(), opts));
-    }
-
-    public static long read(long fd, long address, long len, long offset) {
-        return read(toOsFd(fd), address, len, offset);
-    }
-
-    public static boolean remove(NativeChunk NativeChunk) {
+    public static boolean remove(final @NotNull NativeChunk NativeChunk) {
         return remove(NativeChunk.ptr());
     }
 
-    public static int rename(NativeChunk oldName, NativeChunk newName) {
-        return rename(oldName.ptr(), newName.ptr());
-    }
-
-    public static native int softLink(long DirectUtf8SequenceSrc, long DirectUtf8SequenceSoftLink);
-
-    public static int toOsFd(long fd) {
-        int osFd = Numbers.decodeHighInt(fd);
+    private static int osFd(final long fd) {
+        final int osFd = Numbers.decodeHighInt(fd);
         // 0 FD can be closed, but no other operation is allowed
         assert fd == -1 || osFd > 0;
         return osFd;
     }
 
-    public static boolean touch(NativeChunk NativeChunk) {
-        long fd = openRW(NativeChunk);
-        boolean result = fd > 0;
-        if (result) {
-            close(fd);
-        }
-        return result;
+    public static boolean truncate(final long fd, final long size) {
+        return truncate(osFd(fd), size);
     }
 
-    public static boolean truncate(long fd, long size) {
-        return truncate(toOsFd(fd), size);
+    public static long write(final long fd, final long address, final long len, final long offset) {
+        return write(osFd(fd), address, len, offset);
     }
 
-    public static void walk(Path path, FindVisitor func) {
-        int len = path.size();
-        long p = findFirst(path.$());
-        if (p > 0) {
-            try {
-                do {
-                    long name = findName(p);
-                    if (notDots(name)) {
-                        int type = findType(p);
-                        path.trimTo(len);
-                        if (type == Files.DT_FILE) {
-                            func.onFind(name, type);
-                        } else {
-                            walk(path.concat(name), func);
-                        }
-                    }
-                } while (findNext(p) > 0);
-            } finally {
-                findClose(p);
-            }
-        }
-    }
+    public native static long append(int fd, long address, long len);
 
-    public static long write(long fd, long address, long len, long offset) {
-        return write(toOsFd(fd), address, len, offset);
-    }
+    public native static int close0(int fd);
 
-    private native static long append(int fd, long address, long len);
+    public static native boolean exists(int fd);
 
-    private static synchronized void auditClose(long fd) {
-        if (openFds.remove(fd) == -1) {
-            throw new IllegalStateException("fd " + fd + " is already closed!");
-        }
-    }
+    public static native boolean exists0(long ptr);
 
-    private static synchronized long auditOpen(int fd) {
-        if (fd < 0) {
-            throw new IllegalStateException("Invalid fd " + fd);
-        }
-        int index = fdCounter.getAndIncrement();
-        long uniqueFd = Numbers.encodeLowHighInts(index, fd);
-        openFds.add(uniqueFd);
-        return uniqueFd;
-    }
+    public native static int getStdOutFd();
 
-    private static synchronized void checkFdOpen(long fd) {
-        if (!openFds.contains(fd)) {
-            throw new IllegalStateException("fd " + fd + " is not open!");
-        }
-    }
+    public native static long length(int fd);
 
-    private native static int close0(int fd);
+    public native static long length0(long DirectUtf8SequenceName);
 
-    private static native int copy(long from, long to);
+    public static native int lock(int fd);
 
-    private static native boolean exists(int fd);
+    public static native void memcpy0(long src, long dst, long len);
 
-    private static native boolean exists0(long NativeChunk);
+    public native static int openAppend(long DirectUtf8SequenceName);
 
-    // caller must call findClose to free allocated struct
-    private native static long findFirst(long DirectUtf8SequenceName);
+    public native static int openRO(long DirectUtf8SequenceName);
 
-    private static native int fsync(int fd);
+    public native static int openRW(long DirectUtf8SequenceName);
 
-    private static native long getDiskSize(long DirectUtf8SequencePath);
+    public native static long read(int fd, long address, long len, long offset);
 
-    private native static long getLastModified(long DirectUtf8SequenceName);
+    public native static boolean remove(long NativeChunk);
 
-    private native static int getStdOutFd();
+    public native static boolean truncate(int fd, long size);
 
-    private native static boolean isDir(long pUtf8PathZ);
-
-    private native static long length(int fd);
-
-    private native static long length0(long DirectUtf8SequenceName);
-
-    private static native int lock(int fd);
-
-    private native static int mkdir(long DirectUtf8SequencePath, int mode);
-
-    private native static int openAppend(long DirectUtf8SequenceName);
-
-    private native static int openRO(long DirectUtf8SequenceName);
-
-    private native static int openRW(long DirectUtf8SequenceName);
-
-    private native static int openRWOpts(long DirectUtf8SequenceName, long opts);
-
-    private native static long read(int fd, long address, long len, long offset);
-
-    private native static boolean remove(long NativeChunk);
-
-    private static native int rename(long DirectUtf8SequenceOld, long DirectUtf8SequenceNew);
-
-    private native static boolean rmdir(long NativeChunk);
-
-    private native static boolean truncate(int fd, long size);
-
-    private native static long write(int fd, long address, long len, long offset);
+    public native static long write(int fd, long address, long len, long offset);
 }

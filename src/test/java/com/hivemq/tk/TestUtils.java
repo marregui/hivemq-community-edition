@@ -124,6 +124,7 @@ public final class TestUtils {
         }
     }
 
+
     public static void assertContains(String message, CharSequence sequence, CharSequence term) {
         // Assume that "" is contained in any string.
         if (term.length() == 0) {

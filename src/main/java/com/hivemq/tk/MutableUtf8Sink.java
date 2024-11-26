@@ -1,4 +1,4 @@
 package com.hivemq.tk;
 
-public interface MutableUtf8Sink extends Utf8Sink, Utf8Sequence, MutableCharSink<Utf8Sink> {
+public interface MutableUtf8Sink extends Utf8Sink, NativeChunk, MutableCharSink<Utf8Sink> {
 }

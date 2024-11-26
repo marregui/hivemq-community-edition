@@ -797,7 +797,7 @@ public class BytecodeAssembler {
         }
 
         @Override
-        public Utf8Sink put(@Nullable Utf8Sequence us) {
+        public Utf8Sink put(@Nullable NativeChunk us) {
             if (us != null) {
                 int size = us.size();
                 for (int i = 0; i < size; i++) {

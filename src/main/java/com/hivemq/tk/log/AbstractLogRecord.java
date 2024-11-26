@@ -70,17 +70,7 @@ abstract class AbstractLogRecord implements LogRecord, Log {
     }
 
     @Override
-    public LogRecord $(@Nullable Utf8Sequence sequence) {
-        if (sequence == null) {
-            sink().putAscii("null");
-        } else {
-            sink().put(sequence);
-        }
-        return this;
-    }
-
-    @Override
-    public LogRecord $(@Nullable DirectUtf8Sequence sequence) {
+    public LogRecord $(@Nullable NativeChunk sequence) {
         if (sequence == null) {
             sink().putAscii("null");
         } else {
@@ -231,7 +221,7 @@ abstract class AbstractLogRecord implements LogRecord, Log {
     }
 
     @Override
-    public LogRecord $substr(int from, @Nullable DirectUtf8Sequence sequence) {
+    public LogRecord $substr(int from, @Nullable NativeChunk sequence) {
         if (sequence == null) {
             sink().putAscii("null");
         } else {
@@ -331,7 +321,7 @@ abstract class AbstractLogRecord implements LogRecord, Log {
     }
 
     @Override
-    public Utf8Sink put(@Nullable Utf8Sequence us) {
+    public Utf8Sink put(@Nullable NativeChunk us) {
         sink().put(us);
         return this;
     }

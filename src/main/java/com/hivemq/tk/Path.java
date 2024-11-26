@@ -30,14 +30,15 @@ import org.jetbrains.annotations.Nullable;
 import java.io.Closeable;
 
 /**
- * Builder class that allows JNI layer access CharSequence without copying memory. It is typically used
- * to create file system paths for files and directories and passing them to {@link Files} static methods, those
- * that accept @link {@link LPSZ} as input.
+ * Builder class that allows JNI layer access CharSequence without copying memory. It is typically used to create file
+ * system paths for files and directories and passing them to {@link Files} static methods, those that accept @link
+ * {@link NativeChunk} as input.
  * <p>
- * Instances of this class can be re-cycled for creating many different paths and
- * must be closed when no longer required.
+ * Instances of this class can be re-cycled for creating many different paths and must be closed when no longer
+ * required.
  */
-public class Path implements Utf8Sink, DirectUtf8Sequence, Closeable {
+public class Path implements Utf8Sink, NativeChunk, Closeable {
+
     private static final byte NULL = (byte) 0;
     private static final int OVERHEAD = 4;
     private static final boolean PARANOIA_MODE = false;
@@ -46,11 +47,26 @@ public class Path implements Utf8Sink, DirectUtf8Sequence, Closeable {
     public static final Closeable THREAD_LOCAL_CLEANER = Path::clearThreadLocals;
     private static final ThreadLocal<StringSink> tlSink = new ThreadLocal<>(StringSink::new);
     private final AsciiCharSequence asciiCharSequence = new AsciiCharSequence();
-    private final LPSZ lpsz = new PathLPSZ();
     private boolean ascii;
     private int capacity;
     private long headPtr;
     private long tailPtr;
+    private final NativeChunk directUtf8Sequence = new NativeChunk() {
+        @Override
+        public @NotNull CharSequence asAsciiCharSequence() {
+            return Path.this.asAsciiCharSequence();
+        }
+
+        @Override
+        public long ptr() {
+            return headPtr;
+        }
+
+        @Override
+        public int size() {
+            return (int) (tailPtr - headPtr);
+        }
+    };
 
     public Path() {
         this(255);
@@ -79,13 +95,13 @@ public class Path implements Utf8Sink, DirectUtf8Sequence, Closeable {
         return PATH.get().of(root);
     }
 
-    public static Path getThreadLocal(Utf8Sequence root) {
+    public static Path getThreadLocal(NativeChunk root) {
         return PATH.get().of(root);
     }
 
     /**
-     * Creates path from another instance of Path. The assumption is that
-     * the source path is already UTF8 encoded and does not require re-encoding.
+     * Creates path from another instance of Path. The assumption is that the source path is already UTF8 encoded and
+     * does not require re-encoding.
      *
      * @param root path
      * @return copy of root path
@@ -102,11 +118,24 @@ public class Path implements Utf8Sink, DirectUtf8Sequence, Closeable {
         return PATH2.get().of(root);
     }
 
-    public LPSZ $() {
+    public static int checkedLoHiSize(long lo, long hi, int baseSize) {
+        final long additional = hi - lo;
+        if (additional < 0) {
+            throw new IllegalArgumentException("lo > hi");
+        }
+        final long size = baseSize + additional;
+
+        if (size > (long) Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("size exceeds 2GiB limit");
+        }
+        return (int) additional;
+    }
+
+    public NativeChunk $() {
         if (tailPtr == headPtr || Unsafe.UNSAFE.getByte(tailPtr) != NULL) {
             Unsafe.UNSAFE.putByte(tailPtr, NULL);
         }
-        return this.lpsz;
+        return directUtf8Sequence;
     }
 
     public void $at(int index) {
@@ -133,7 +162,7 @@ public class Path implements Utf8Sink, DirectUtf8Sequence, Closeable {
         return concat(str, 0, str.length());
     }
 
-    public Path concat(Utf8Sequence str) {
+    public Path concat(NativeChunk str) {
         ensureSeparator();
         return put(str);
     }
@@ -186,7 +215,7 @@ public class Path implements Utf8Sink, DirectUtf8Sequence, Closeable {
         return concat(str);
     }
 
-    public Path of(Utf8Sequence str) {
+    public Path of(NativeChunk str) {
         ascii = str.isAscii();
         checkClosed();
         if (str == this) {
@@ -200,10 +229,10 @@ public class Path implements Utf8Sink, DirectUtf8Sequence, Closeable {
 
     public Path of(Path other) {
         ascii = other.isAscii();
-        return of((Utf8Sequence) other);
+        return of((NativeChunk) other);
     }
 
-    public Path of(LPSZ other, boolean isAscii) {
+    public Path of(NativeChunk other, boolean isAscii) {
         this.ascii = isAscii;
         // This is different from of(CharSequence str) because
         // another Path is already UTF8 encoded and cannot be treated as CharSequence.
@@ -234,13 +263,13 @@ public class Path implements Utf8Sink, DirectUtf8Sequence, Closeable {
         if (tailPtr > headPtr) {
             long p = tailPtr - 1;
             byte last = Unsafe.UNSAFE.getByte(p);
-            if (last == Files.SEPARATOR || last == NULL) {
+            if (last == Files.SLASH || last == NULL) {
                 if (p < headPtr + 2) {
                     return this;
                 }
                 p--;
             }
-            while (p > headPtr && Unsafe.UNSAFE.getByte(p) != Files.SEPARATOR) {
+            while (p > headPtr && Unsafe.UNSAFE.getByte(p) != Files.SLASH) {
                 p--;
             }
             tailPtr = p;
@@ -259,7 +288,7 @@ public class Path implements Utf8Sink, DirectUtf8Sequence, Closeable {
     }
 
     @Override
-    public Path put(@Nullable Utf8Sequence us) {
+    public Path put(@Nullable NativeChunk us) {
         if (us != null) {
             ascii &= us.isAscii();
             int size = us.size();
@@ -340,19 +369,6 @@ public class Path implements Utf8Sink, DirectUtf8Sequence, Closeable {
         throw new UnsupportedOperationException();
     }
 
-    public static int checkedLoHiSize(long lo, long hi, int baseSize) {
-        final long additional = hi - lo;
-        if (additional < 0) {
-            throw new IllegalArgumentException("lo > hi");
-        }
-        final long size = baseSize + additional;
-
-        if (size > (long) Integer.MAX_VALUE) {
-            throw new IllegalArgumentException("size exceeds 2GiB limit");
-        }
-        return (int) additional;
-    }
-
     public Path seekZ() {
         int count = 0;
         while (count < capacity) {
@@ -375,7 +391,7 @@ public class Path implements Utf8Sink, DirectUtf8Sequence, Closeable {
         return this;
     }
 
-    public LPSZ slash$() {
+    public NativeChunk slash$() {
         ensureSeparator();
         return $();
     }
@@ -434,25 +450,9 @@ public class Path implements Utf8Sink, DirectUtf8Sequence, Closeable {
     }
 
     protected final void ensureSeparator() {
-        if (tailPtr > headPtr && Unsafe.UNSAFE.getByte(tailPtr - 1) != Files.SEPARATOR) {
-            putByte0((byte) Files.SEPARATOR);
+        if (tailPtr > headPtr && Unsafe.UNSAFE.getByte(tailPtr - 1) != Files.SLASH) {
+            putByte0((byte) Files.SLASH);
         }
     }
 
-    private class PathLPSZ implements LPSZ {
-        @Override
-        public @NotNull CharSequence asAsciiCharSequence() {
-            return Path.this.asAsciiCharSequence();
-        }
-
-        @Override
-        public long ptr() {
-            return headPtr;
-        }
-
-        @Override
-        public int size() {
-            return (int) (tailPtr - headPtr);
-        }
-    }
 }

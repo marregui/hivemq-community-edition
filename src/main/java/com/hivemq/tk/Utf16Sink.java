@@ -11,14 +11,14 @@ public interface Utf16Sink extends CharSink<Utf16Sink> {
         return CharSinkEncoding.UTF16;
     }
 
-    default Utf16Sink put(@Nullable Utf8Sequence us) {
+    default Utf16Sink put(@Nullable NativeChunk us) {
         if (us != null) {
             Utf8s.utf8ToUtf16(us, this);
         }
         return this;
     }
 
-    default Utf16Sink put(@Nullable Utf8Sequence us, int lo, int hi) {
+    default Utf16Sink put(@Nullable NativeChunk us, int lo, int hi) {
         if (us != null) {
             Utf8s.utf8ToUtf16(us, lo, hi, this);
         }

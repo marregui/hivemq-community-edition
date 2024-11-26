@@ -56,7 +56,7 @@ public interface CharSink<T extends CharSink<?>> {
      * If the sequence's `isAscii` status is false, this sink's `isAscii`
      * status drops to false as well.
      */
-    T put(@Nullable Utf8Sequence us);
+    T put(@Nullable NativeChunk us);
 
     /**
      * Appends a string representation of the supplied number to this sink.

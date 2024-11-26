@@ -1,8 +1,7 @@
 package com.hivemq.tk.log;
 
-import com.hivemq.tk.DirectUtf8Sequence;
+import com.hivemq.tk.NativeChunk;
 import com.hivemq.tk.Sinkable;
-import com.hivemq.tk.Utf8Sequence;
 import com.hivemq.tk.Utf8Sink;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,17 +25,12 @@ final class NullLogRecord implements LogRecord {
     }
 
     @Override
-    public LogRecord $(@Nullable Utf8Sequence sequence) {
+    public LogRecord $(@Nullable NativeChunk sequence) {
         return this;
     }
 
     @Override
-    public LogRecord $(@Nullable DirectUtf8Sequence sequence) {
-        return this;
-    }
-
-    @Override
-    public LogRecord $substr(int from, @Nullable DirectUtf8Sequence sequence) {
+    public LogRecord $substr(int from, @Nullable NativeChunk sequence) {
         return this;
     }
 
@@ -141,7 +135,7 @@ final class NullLogRecord implements LogRecord {
     }
 
     @Override
-    public Utf8Sink put(@Nullable Utf8Sequence us) {
+    public Utf8Sink put(@Nullable NativeChunk us) {
         return this;
     }
 

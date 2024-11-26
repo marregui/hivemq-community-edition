@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
@@ -50,7 +51,7 @@ public final class TestUtils {
 
     public static void writeStringToFile(File file, String s) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(file)) {
-            fos.write(s.getBytes(Files.UTF_8));
+            fos.write(s.getBytes(StandardCharsets.UTF_8));
         }
     }
 
@@ -116,7 +117,7 @@ public final class TestUtils {
                         (read = fis.read(buffer, totalRead, buffer.length - totalRead)) > 0) {
                     totalRead += read;
                 }
-                return new String(buffer, Files.UTF_8);
+                return new String(buffer, StandardCharsets.UTF_8);
             }
         } catch (IOException e) {
             throw new RuntimeException("Cannot read from " + file.getAbsolutePath(), e);
@@ -188,13 +189,13 @@ public final class TestUtils {
         assertEquals(null, expected, sink);
     }
 
-    public static void assertEquals(CharSequence expected, Utf8Sequence actual) {
+    public static void assertEquals(CharSequence expected, NativeChunk actual) {
         StringSink sink = getTlSink();
         Utf8s.utf8ToUtf16(actual, sink);
         assertEquals(null, expected, sink);
     }
 
-    public static void assertEquals(byte[] expected, Utf8Sequence actual) {
+    public static void assertEquals(byte[] expected, NativeChunk actual) {
         if (expected == null && actual == null) {
             return;
         }
@@ -218,7 +219,7 @@ public final class TestUtils {
         }
     }
 
-    public static void assertEquals(Utf8Sequence expected, Utf8Sequence actual) {
+    public static void assertEquals(NativeChunk expected, NativeChunk actual) {
         if (expected == null && actual == null) {
             return;
         }

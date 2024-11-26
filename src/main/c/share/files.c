@@ -137,8 +137,8 @@ JNIEXPORT jlong JNICALL Java_com_hivemq_tk_Files_readNonNegativeLong
 }
 
 JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_openRO
-        (JNIEnv *e, jclass cl, jlong lpszName) {
-    return open((const char *) lpszName, O_RDONLY);
+        (JNIEnv *e, jclass cl, jlong DirectUtf8SequenceName) {
+    return open((const char *) DirectUtf8SequenceName, O_RDONLY);
 }
 
 JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_close0
@@ -147,21 +147,21 @@ JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_close0
 }
 
 JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_openRW
-        (JNIEnv *e, jclass cl, jlong lpszName) {
+        (JNIEnv *e, jclass cl, jlong DirectUtf8SequenceName) {
     umask(0);
-    return open((const char *) lpszName, O_CREAT | O_RDWR, 0644);
+    return open((const char *) DirectUtf8SequenceName, O_CREAT | O_RDWR, 0644);
 }
 
 JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_openRWOpts
-        (JNIEnv *e, jclass cl, jlong lpszName, jlong opts) {
+        (JNIEnv *e, jclass cl, jlong DirectUtf8SequenceName, jlong opts) {
     umask(0);
-    return open((const char *) lpszName, O_CREAT | O_RDWR | opts, 0644);
+    return open((const char *) DirectUtf8SequenceName, O_CREAT | O_RDWR | opts, 0644);
 }
 
 JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_openAppend
-        (JNIEnv *e, jclass cl, jlong lpszName) {
+        (JNIEnv *e, jclass cl, jlong DirectUtf8SequenceName) {
     umask(0);
-    return open((const char *) lpszName, O_CREAT | O_WRONLY | O_APPEND, 0644);
+    return open((const char *) DirectUtf8SequenceName, O_CREAT | O_WRONLY | O_APPEND, 0644);
 }
 
 JNIEXPORT jlong JNICALL Java_com_hivemq_tk_Files_length0
@@ -258,13 +258,13 @@ JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_sync(JNIEnv *e, jclass cl) {
 }
 
 JNIEXPORT jboolean JNICALL Java_com_hivemq_tk_Files_remove
-        (JNIEnv *e, jclass cl, jlong lpsz) {
-    return (jboolean) (remove((const char *) lpsz) == 0);
+        (JNIEnv *e, jclass cl, jlong NativeChunk) {
+    return (jboolean) (remove((const char *) NativeChunk) == 0);
 }
 
 JNIEXPORT jboolean JNICALL Java_com_hivemq_tk_Files_rmdir
-        (JNIEnv *e, jclass cl, jlong lpsz) {
-    return (jboolean) (rmdir((const char *) lpsz) == 0);
+        (JNIEnv *e, jclass cl, jlong NativeChunk) {
+    return (jboolean) (rmdir((const char *) NativeChunk) == 0);
 }
 
 typedef struct {
@@ -279,12 +279,12 @@ void setFind(FIND *find, struct dirent *entry) {
 }
 
 JNIEXPORT jlong JNICALL Java_com_hivemq_tk_Files_findFirst
-        (JNIEnv *e, jclass cl, jlong lpszName) {
+        (JNIEnv *e, jclass cl, jlong DirectUtf8SequenceName) {
 
     DIR *dir;
     struct dirent *entry;
 
-    dir = opendir((const char *) lpszName);
+    dir = opendir((const char *) DirectUtf8SequenceName);
     if (!dir) {
         if (errno == ENOENT) {
             return 0;
@@ -350,8 +350,8 @@ JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_lock
 }
 
 JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_openCleanRW
-        (JNIEnv *e, jclass cl, jlong lpszName, jlong size) {
-    jint fd = open((const char *) lpszName, O_CREAT | O_RDWR, 0644);
+        (JNIEnv *e, jclass cl, jlong DirectUtf8SequenceName, jlong size) {
+    jint fd = open((const char *) DirectUtf8SequenceName, O_CREAT | O_RDWR, 0644);
     if (fd < 0) {
         // error opening / creating file
         return fd;
@@ -409,8 +409,8 @@ JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_openCleanRW
 }
 
 JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_rename
-        (JNIEnv *e, jclass cls, jlong lpszOld, jlong lpszNew) {
-    int err = rename((const char *) lpszOld, (const char *) lpszNew);
+        (JNIEnv *e, jclass cls, jlong DirectUtf8SequenceOld, jlong DirectUtf8SequenceNew) {
+    int err = rename((const char *) DirectUtf8SequenceOld, (const char *) DirectUtf8SequenceNew);
     if (err != 0) {
         return errno == EXDEV ? FILES_RENAME_ERR_EXDEV : FILES_RENAME_ERR_OTHER;
     }
@@ -418,6 +418,6 @@ JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_rename
 }
 
 JNIEXPORT jboolean JNICALL Java_com_hivemq_tk_Files_exists0
-        (JNIEnv *e, jclass cls, jlong lpsz) {
-    return access((const char *) lpsz, F_OK) == 0;
+        (JNIEnv *e, jclass cls, jlong NativeChunk) {
+    return access((const char *) NativeChunk, F_OK) == 0;
 }

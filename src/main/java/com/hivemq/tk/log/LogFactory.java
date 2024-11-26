@@ -852,12 +852,7 @@ public class LogFactory implements Closeable {
         }
 
         @Override
-        public LogRecord $(@Nullable Utf8Sequence sequence) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $(@Nullable DirectUtf8Sequence sequence) {
+        public LogRecord $(@Nullable NativeChunk sequence) {
             return this;
         }
 
@@ -937,7 +932,7 @@ public class LogFactory implements Closeable {
         }
 
         @Override
-        public LogRecord $substr(int from, @Nullable DirectUtf8Sequence sequence) {
+        public LogRecord $substr(int from, @Nullable NativeChunk sequence) {
             return this;
         }
 
@@ -967,7 +962,7 @@ public class LogFactory implements Closeable {
         }
 
         @Override
-        public LogRecord put(@Nullable Utf8Sequence us) {
+        public LogRecord put(@Nullable NativeChunk us) {
             return this;
         }
 

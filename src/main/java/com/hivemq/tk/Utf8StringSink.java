@@ -54,12 +54,7 @@ public class Utf8StringSink implements MutableUtf8Sink {
     }
 
     @Override
-    public long longAt(int offset) {
-        return Unsafe.byteArrayGetLong(buffer, offset);
-    }
-
-    @Override
-    public Utf8StringSink put(@Nullable Utf8Sequence us) {
+    public Utf8StringSink put(@Nullable NativeChunk us) {
         if (us != null) {
             ascii &= us.isAscii();
             int s = us.size();

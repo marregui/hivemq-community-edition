@@ -1,8 +1,7 @@
 package com.hivemq.tk.log;
 
-import com.hivemq.tk.DirectUtf8Sequence;
+import com.hivemq.tk.NativeChunk;
 import com.hivemq.tk.Sinkable;
-import com.hivemq.tk.Utf8Sequence;
 import com.hivemq.tk.Utf8Sink;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,9 +14,7 @@ public interface LogRecord extends Utf8Sink {
 
     LogRecord $(@Nullable CharSequence sequence);
 
-    LogRecord $(@Nullable Utf8Sequence sequence);
-
-    LogRecord $(@Nullable DirectUtf8Sequence sequence);
+    LogRecord $(@Nullable NativeChunk sequence);
 
     LogRecord $(@NotNull CharSequence sequence, int lo, int hi);
 
@@ -49,7 +46,7 @@ public interface LogRecord extends Utf8Sink {
 
     LogRecord $size(long memoryBytes);
 
-    LogRecord $substr(int from, @Nullable DirectUtf8Sequence sequence);
+    LogRecord $substr(int from, @Nullable NativeChunk sequence);
 
     LogRecord $ts(long x);
 

@@ -3,12 +3,7 @@ package com.hivemq.tk;
 import org.jetbrains.annotations.NotNull;
 
 public final class Utf8s {
-    public static final int VARCHAR_INLINED_PREFIX_BYTES = 6;
-    public static final long VARCHAR_INLINED_PREFIX_MASK = (1L << 8 * VARCHAR_INLINED_PREFIX_BYTES) - 1L;
     private static final ThreadLocal<StringSink> tlSink = new ThreadLocal(StringSink::new);
-
-    private Utf8s() {
-    }
 
     public static int encodeUtf16Char(@NotNull Utf8Sink sink, @NotNull CharSequence cs, int hi, int i, char c) {
         if (c < 2048) {
@@ -28,7 +23,7 @@ public final class Utf8s {
         return b1 << 18 ^ b2 << 12 ^ b3 << 6 ^ b4 ^ 3678080;
     }
 
-    public static void strCpy(@NotNull Utf8Sequence src, int destLen, long destAddr) {
+    public static void strCpy(@NotNull NativeChunk src, int destLen, long destAddr) {
         for (int i = 0; i < destLen; i++) {
             Unsafe.UNSAFE.putByte(destAddr + i, src.byteAt(i));
         }
@@ -53,7 +48,7 @@ public final class Utf8s {
         return b.toString();
     }
 
-    public static String stringFromUtf8Bytes(final @NotNull Utf8Sequence seq) {
+    public static String stringFromUtf8Bytes(final @NotNull NativeChunk seq) {
         if (seq.size() == 0) {
             return "";
         }
@@ -112,7 +107,7 @@ public final class Utf8s {
      * @param sink  destination sink
      * @return true if input is proper UTF-8 and false otherwise.
      */
-    public static boolean utf8ToUtf16(final @NotNull Utf8Sequence seq, int seqLo, int seqHi, @NotNull Utf16Sink sink) {
+    public static boolean utf8ToUtf16(final @NotNull NativeChunk seq, int seqLo, int seqHi, @NotNull Utf16Sink sink) {
         int i = seqLo;
         while (i < seqHi) {
             byte b = seq.byteAt(i);
@@ -137,33 +132,9 @@ public final class Utf8s {
      *
      * @return true if input is proper UTF-8 and false otherwise.
      */
-    public static boolean utf8ToUtf16(final @NotNull Utf8Sequence seq, @NotNull Utf16Sink sink) {
+    public static boolean utf8ToUtf16(final @NotNull NativeChunk seq, @NotNull Utf16Sink sink) {
         return utf8ToUtf16(seq, 0, seq.size(), sink);
     }
-
-    /**
-     * Returns up to 6 initial bytes of the given UTF-8 sequence (less if it's shorter)
-     * packed into a zero-padded long value, in little-endian order. This prefix is
-     * stored inline in the auxiliary vector of a VARCHAR column, so asking for it is a
-     * matter of optimized data access. This is not a general access method, it
-     * shouldn't be called unless looking to optimize the access of the VARCHAR column.
-     *
-     * @param seq UTF8 sequence
-     * @return up to 6 initial bytes
-     */
-    public static long zeroPaddedSixPrefix(final @NotNull Utf8Sequence seq) {
-        final int size = seq.size();
-        if (size >= Long.BYTES) {
-            return seq.longAt(0) & VARCHAR_INLINED_PREFIX_MASK;
-        }
-        final long limit = Math.min(size, VARCHAR_INLINED_PREFIX_BYTES);
-        long result = 0;
-        for (int i = 0; i < limit; i++) {
-            result |= (seq.byteAt(i) & 0xffL) << (8 * i);
-        }
-        return result;
-    }
-
 
     private static int encodeUtf16Surrogate(@NotNull Utf8Sink sink, char c, @NotNull CharSequence in, int pos, int hi) {
         int dword;
@@ -215,7 +186,7 @@ public final class Utf8s {
         return b > 64 && b < 91 ? (byte) (b + 32) : b;
     }
 
-    private static int utf8Decode2Bytes(final @NotNull Utf8Sequence seq, int index, int b1, @NotNull Utf16Sink sink) {
+    private static int utf8Decode2Bytes(final @NotNull NativeChunk seq, int index, int b1, @NotNull Utf16Sink sink) {
         if (seq.size() - index < 2) {
             return -1;
         }
@@ -260,7 +231,7 @@ public final class Utf8s {
         return utf8Decode3Byte0(b1, sink, b2, b3);
     }
 
-    private static int utf8Decode3Bytes(final @NotNull Utf8Sequence seq, int index, byte b1, @NotNull Utf16Sink sink) {
+    private static int utf8Decode3Bytes(final @NotNull NativeChunk seq, int index, byte b1, @NotNull Utf16Sink sink) {
         if (seq.size() - index < 3) {
             return -1;
         }
@@ -279,7 +250,7 @@ public final class Utf8s {
         return utf8Decode4Bytes0(b, sink, b2, b3, b4);
     }
 
-    private static int utf8Decode4Bytes(final @NotNull Utf8Sequence seq, int index, int b, @NotNull Utf16Sink sink) {
+    private static int utf8Decode4Bytes(final @NotNull NativeChunk seq, int index, int b, @NotNull Utf16Sink sink) {
         if (b >> 3 != -2 || seq.size() - index < 4) {
             return -1;
         }
@@ -303,7 +274,7 @@ public final class Utf8s {
     }
 
     private static int utf8DecodeMultiByte(
-            final @NotNull Utf8Sequence seq,
+            final @NotNull NativeChunk seq,
             int index,
             byte b,
             @NotNull Utf16Sink sink) {

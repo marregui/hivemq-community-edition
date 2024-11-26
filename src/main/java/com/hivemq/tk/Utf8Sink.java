@@ -33,14 +33,14 @@ public interface Utf8Sink extends CharSink<Utf8Sink> {
         return this;
     }
 
-    default @NotNull Utf8Sink put(final @Nullable DirectUtf8Sequence dus) {
+    default @NotNull Utf8Sink put(final @Nullable NativeChunk dus) {
         if (dus != null) {
             putNonAscii(dus.lo(), dus.hi());
         }
         return this;
     }
 
-    default @NotNull Utf8Sink put(final Utf8Sequence seq, final int lo, final int hi) {
+    default @NotNull Utf8Sink put(final NativeChunk seq, final int lo, final int hi) {
         if (seq != null) {
             if (seq.isAscii()) {
                 putAscii(seq.asAsciiCharSequence(), lo, hi);
@@ -71,7 +71,7 @@ public interface Utf8Sink extends CharSink<Utf8Sink> {
         return put(b);
     }
 
-    default @NotNull Utf8Sink putAny(final Utf8Sequence seq, final int lo, final int hi) {
+    default @NotNull Utf8Sink putAny(final NativeChunk seq, final int lo, final int hi) {
         for (int i = lo; i < hi; i++) {
             putAny(seq.byteAt(i));
         }

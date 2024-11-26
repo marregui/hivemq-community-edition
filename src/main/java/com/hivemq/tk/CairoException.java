@@ -201,7 +201,7 @@ public class CairoException extends RuntimeException implements Sinkable {
         return this;
     }
 
-    public CairoException put(@Nullable Utf8Sequence us) {
+    public CairoException put(@Nullable NativeChunk us) {
         message.put(us);
         return this;
     }

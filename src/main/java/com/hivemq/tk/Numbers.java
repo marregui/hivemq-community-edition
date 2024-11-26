@@ -627,7 +627,7 @@ public final class Numbers {
         return c < '0' || c > '9';
     }
 
-    public static int parseInt(Utf8Sequence sequence) throws NumericException {
+    public static int parseInt(NativeChunk sequence) throws NumericException {
         if (sequence == null) {
             throw NumericException.INSTANCE;
         }

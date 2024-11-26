@@ -4,7 +4,7 @@ import com.hivemq.tk.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class LogRecordUtf8Sink implements Utf8Sink, DirectUtf8Sequence, Sinkable, Mutable {
+public class LogRecordUtf8Sink implements Utf8Sink, NativeChunk, Sinkable, Mutable {
     public static final int EOL_LENGTH = Misc.EOL.length();
     private final static int UTF8_BYTE_CLASS_BAD = -1;
     private final static int UTF8_BYTE_CLASS_CONTINUATION = 0;
@@ -46,7 +46,7 @@ public class LogRecordUtf8Sink implements Utf8Sink, DirectUtf8Sequence, Sinkable
     }
 
     @Override
-    public Utf8Sink put(@Nullable Utf8Sequence us) {
+    public Utf8Sink put(@Nullable NativeChunk us) {
         if (us != null) {
             final int rem = (int) (lim - _wptr - EOL_LENGTH);
             final int size = us.size();

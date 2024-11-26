@@ -22,11 +22,11 @@ public interface MemoryR extends Closeable {
 
     char getChar(long offset);
 
-    default DirectUtf8Sequence getDirectVarcharA(long offset, int size, boolean ascii) {
+    default NativeChunk getDirectVarcharA(long offset, int size, boolean ascii) {
         throw new UnsupportedOperationException();
     }
 
-    default DirectUtf8Sequence getDirectVarcharB(long offset, int size, boolean ascii) {
+    default NativeChunk getDirectVarcharB(long offset, int size, boolean ascii) {
         throw new UnsupportedOperationException();
     }
 

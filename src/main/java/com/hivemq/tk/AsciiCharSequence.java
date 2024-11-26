@@ -3,11 +3,11 @@ package com.hivemq.tk;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A view on top of an ASCII-only {@link Utf8Sequence}.
+ * A view on top of an ASCII-only {@link NativeChunk}.
  */
 public class AsciiCharSequence implements CharSequence {
     private int len;
-    private Utf8Sequence original;
+    private NativeChunk original;
     private int start;
     private AsciiCharSequence subSequence;
 
@@ -21,14 +21,14 @@ public class AsciiCharSequence implements CharSequence {
         return len;
     }
 
-    public AsciiCharSequence of(Utf8Sequence original) {
+    public AsciiCharSequence of(NativeChunk original) {
         this.original = original;
         this.start = 0;
         this.len = original.size();
         return this;
     }
 
-    public AsciiCharSequence of(Utf8Sequence original, int start, int len) {
+    public AsciiCharSequence of(NativeChunk original, int start, int len) {
         this.original = original;
         this.start = start;
         this.len = len;

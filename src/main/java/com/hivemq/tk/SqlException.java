@@ -111,7 +111,7 @@ public class SqlException extends Exception implements Sinkable {
         return this;
     }
 
-    public SqlException put(@Nullable Utf8Sequence cs) {
+    public SqlException put(@Nullable NativeChunk cs) {
         if (cs != null) {
             message.put(cs);
         }

@@ -106,7 +106,7 @@ JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_lock
  * Signature: (JJ)I
  */
 JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_openCleanRW
-        (JNIEnv *e, jclass cl, jlong lpszName, jlong size);
+        (JNIEnv *e, jclass cl, jlong DirectUtf8SequenceName, jlong size);
 
 /*
  * Class:     com_hivemq_tk_Files
@@ -194,7 +194,7 @@ JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_close0
  * Signature: (JJ)I
  */
 JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_copy
-        (JNIEnv *e, jclass cls, jlong lpszFrom, jlong lpszTo);
+        (JNIEnv *e, jclass cls, jlong DirectUtf8SequenceFrom, jlong DirectUtf8SequenceTo);
 
 /*
  * Class:     com_hivemq_tk_Files

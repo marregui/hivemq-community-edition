@@ -72,9 +72,37 @@ application {
                                  'jdk.management/com.sun.management.internal=ALL-UNNAMED',
                                  '--add-exports',
                                  'java.base/jdk.internal.misc=ALL-UNNAMED',
+                                 '--add-exports',
+                                 'java.base/jdk.internal.math=ALL-UNNAMED',
                                  '-Djava.net.preferIPv4Stack=true',
-                                 '-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.port=9010', '-Dcom.sun.management.jmxremote.local.only=false', '-Dcom.sun.management.jmxremote.authenticate=false', '-Dcom.sun.management.jmxremote.ssl=false', '-noverify']
+                                 '-Dcom.sun.management.jmxremote',
+                                 '-Dcom.sun.management.jmxremote.port=9010',
+                                 '-Dcom.sun.management.jmxremote.local.only=false',
+                                 '-Dcom.sun.management.jmxremote.authenticate=false',
+                                 '-Dcom.sun.management.jmxremote.ssl=false',
+                                 '-noverify']
 }
+
+//tasks.test {
+//    useJUnitPlatform()
+//    minHeapSize = "128m"
+//    maxHeapSize = "2048m"
+//    jvmArgs("-Dfile.encoding=UTF-8",
+//            "-Duser.language=en",
+//            "-Duser.region=US",
+//            "--add-opens",
+//            "java.base/java.lang=ALL-UNNAMED",
+//            "--add-opens",
+//            "java.base/java.nio=ALL-UNNAMED",
+//            "--add-opens",
+//            "java.base/sun.nio.ch=ALL-UNNAMED",
+//            "--add-opens",
+//            "jdk.management/com.sun.management.internal=ALL-UNNAMED",
+//            "--add-exports",
+//            "java.base/jdk.internal.misc=ALL-UNNAMED",
+//            '--add-exports',
+//            'java.base/jdk.internal.math=ALL-UNNAMED')
+//}
 
 wrapper {
     gradleVersion = '8.10.2'

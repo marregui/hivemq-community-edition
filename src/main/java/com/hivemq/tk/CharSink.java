@@ -4,19 +4,10 @@ import com.hivemq.tk.time.TimestampFormatUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * A sink that does not expose its storage format. Users of this interface must
- * not make any assumptions about the storage format.
- */
 @SuppressWarnings("unchecked")
 public interface CharSink<T extends CharSink<?>> {
 
-    /**
-     * Assumes the char is ASCII and appends it to the sink n times.
-     * If the char is non-ASCII, it may append a corrupted char, depending
-     * on the implementation.
-     */
-    default void fillAscii(char c, int n) {
+    default void fillAscii(final char c, final int n) {
         for (int i = 0; i < n; i++) {
             putAscii(c);
         }
@@ -24,14 +15,14 @@ public interface CharSink<T extends CharSink<?>> {
 
     int getEncoding();
 
-    default T put(@NotNull CharSequence cs, int lo, int hi) {
+    default @NotNull T put(final @NotNull CharSequence cs, final int lo, final int hi) {
         for (int i = lo; i < hi; i++) {
             put(cs.charAt(i));
         }
         return (T) this;
     }
 
-    default T put(@Nullable Sinkable sinkable) {
+    default @NotNull T put(final @Nullable Sinkable sinkable) {
         if (sinkable != null) {
             sinkable.toSink(this);
         }
@@ -40,7 +31,7 @@ public interface CharSink<T extends CharSink<?>> {
 
     T put(char c);
 
-    default T put(@Nullable CharSequence cs) {
+    default @NotNull T put(final @Nullable CharSequence cs) {
         if (cs != null) {
             for (int i = 0, n = cs.length(); i < n; i++) {
                 put(cs.charAt(i));
@@ -56,12 +47,12 @@ public interface CharSink<T extends CharSink<?>> {
      * If the sequence's `isAscii` status is false, this sink's `isAscii`
      * status drops to false as well.
      */
-    T put(@Nullable NativeChunk us);
+    T put(final @Nullable NativeChunk us);
 
     /**
      * Appends a string representation of the supplied number to this sink.
      */
-    default T put(int value) {
+    default T put(final int value) {
         Numbers.append(this, value);
         return (T) this;
     }
@@ -69,39 +60,7 @@ public interface CharSink<T extends CharSink<?>> {
     /**
      * Appends a string representation of the supplied number to this sink.
      */
-    default T put(long value) {
-        Numbers.append(this, value);
-        return (T) this;
-    }
-
-    /**
-     * Appends a string representation of the supplied number to this sink.
-     */
-    default T put(float value) {
-        Numbers.append(this, value);
-        return (T) this;
-    }
-
-    /**
-     * Appends a string representation of the supplied number to this sink.
-     */
-    default T put(float value, int scale) {
-        Numbers.append(this, value, scale);
-        return (T) this;
-    }
-
-    /**
-     * Appends a string representation of the supplied number to this sink.
-     */
-    default T put(double value) {
-        Numbers.append(this, value);
-        return (T) this;
-    }
-
-    /**
-     * Appends a string representation of the supplied number to this sink.
-     */
-    default T put(double value, int scale) {
+    default T put(final long value) {
         Numbers.append(this, value);
         return (T) this;
     }
@@ -165,15 +124,4 @@ public interface CharSink<T extends CharSink<?>> {
      * Drops the `isAscii` status of this sink.
      */
     T putNonAscii(long lo, long hi);
-
-    default CharSink putSize(long bytes) {
-        long b = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
-        return b < 1024L ? put(bytes).put(' ').put('B')
-                : b <= 0xfffccccccccccccL >> 40 ? put(Math.round(bytes / 0x1p10 * 1000.0) / 1000.0).put(" KiB")
-                : b <= 0xfffccccccccccccL >> 30 ? put(Math.round(bytes / 0x1p20 * 1000.0) / 1000.0).put(" MiB")
-                : b <= 0xfffccccccccccccL >> 20 ? put(Math.round(bytes / 0x1p30 * 1000.0) / 1000.0).put(" GiB")
-                : b <= 0xfffccccccccccccL >> 10 ? put(Math.round(bytes / 0x1p40 * 1000.0) / 1000.0).put(" TiB")
-                : b <= 0xfffccccccccccccL ? put(Math.round((bytes >> 10) / 0x1p40 * 1000.0) / 1000.0).put(" PiB")
-                : put(Math.round((bytes >> 20) / 0x1p40 * 1000.0) / 1000.0).put(" EiB");
-    }
 }

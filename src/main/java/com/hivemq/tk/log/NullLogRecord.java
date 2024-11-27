@@ -45,11 +45,6 @@ final class NullLogRecord implements LogRecord {
     }
 
     @Override
-    public LogRecord $(double x) {
-        return this;
-    }
-
-    @Override
     public LogRecord $(long l) {
         return this;
     }
@@ -106,11 +101,6 @@ final class NullLogRecord implements LogRecord {
 
     @Override
     public LogRecord $ip(long ip) {
-        return this;
-    }
-
-    @Override
-    public LogRecord $size(long memoryBytes) {
         return this;
     }
 

@@ -1,12 +1,11 @@
 package com.hivemq.tk.time;
 
 import com.hivemq.tk.*;
+import com.hivemq.tk.ThreadLocal;
 import com.hivemq.tk.ds.CharSequenceIntHashMap;
 import com.hivemq.tk.ds.IntList;
 import com.hivemq.tk.ds.LongList;
 import com.hivemq.tk.ds.ObjList;
-
-import java.lang.ThreadLocal;
 
 public class DateFormatCompiler {
     static final int OP_AM_PM = 14;
@@ -94,7 +93,7 @@ public class DateFormatCompiler {
     private static final int P_LO = 2;
     private static final int P_LOCALE = 4;
     private static final ObjList<String> opList;
-    private final static ThreadLocal<StringSink> tlSink = ThreadLocal.withInitial(() -> new StringSink());
+    private final static ThreadLocal<StringSink> tlSink = new ThreadLocal<>(StringSink::new);
     private final BytecodeAssembler asm = new BytecodeAssembler();
     private final IntList delimiterIndexes = new IntList();
     private final ObjList<String> delimiters = new ObjList<>();
@@ -107,6 +106,18 @@ public class DateFormatCompiler {
         for (int i = 0, n = opList.size(); i < n; i++) {
             lexer.defineSymbol(opList.getQuick(i));
         }
+    }
+
+    public static int getOpCode(String opName) {
+        return opMap.get(opName);
+    }
+
+    public static int getOpCount() {
+        return opList.size();
+    }
+
+    public static String getOpName(int index) {
+        return opList.getQuick(index);
     }
 
     public DateFormat compile(CharSequence pattern) {
@@ -1183,7 +1194,7 @@ public class DateFormatCompiler {
         asm.setupPool();
         int thisClassIndex = asm.poolClass(asm.poolUtf8("io/questdb/std/datetime/DateFormatAsm"));
         int stackMapTableIndex = asm.poolUtf8("StackMapTable");
-        int superclassIndex = asm.poolClass(DateFormat.class);
+        int superclassIndex = asm.poolClass(AbstractDateFormat.class);
         int dateLocaleClassIndex = asm.poolClass(DateLocale.class);
         int charSequenceClassIndex = asm.poolClass(CharSequence.class);
         int minLongIndex = asm.poolLongConst(Long.MIN_VALUE);

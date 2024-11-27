@@ -846,11 +846,6 @@ public class LogFactory implements Closeable {
         }
 
         @Override
-        public LogRecord $(double x) {
-            return this;
-        }
-
-        @Override
         public LogRecord $(long l) {
             return this;
         }
@@ -902,11 +897,6 @@ public class LogFactory implements Closeable {
 
         @Override
         public LogRecord $ip(long ip) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $size(long memoryBytes) {
             return this;
         }
 

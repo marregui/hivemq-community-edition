@@ -20,8 +20,6 @@ public interface LogRecord extends Utf8Sink {
 
     LogRecord $(int x);
 
-    LogRecord $(double x);
-
     LogRecord $(long l);
 
     LogRecord $(boolean x);
@@ -43,8 +41,6 @@ public interface LogRecord extends Utf8Sink {
     LogRecord $hexPadded(long value);
 
     LogRecord $ip(long ip);
-
-    LogRecord $size(long memoryBytes);
 
     LogRecord $substr(int from, @Nullable NativeChunk sequence);
 

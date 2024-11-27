@@ -61,12 +61,6 @@ abstract class AbstractLogRecord implements LogRecord, Log {
     }
 
     @Override
-    public LogRecord $(double x) {
-        sink().put(x);
-        return this;
-    }
-
-    @Override
     public LogRecord $(@Nullable NativeChunk sequence) {
         if (sequence == null) {
             sink().putAscii("null");
@@ -208,12 +202,6 @@ abstract class AbstractLogRecord implements LogRecord, Log {
 
     @Override
     public LogRecord $ip(long ip) {
-        return this;
-    }
-
-    @Override
-    public LogRecord $size(long memoryBytes) {
-        sink().putSize(memoryBytes);
         return this;
     }
 

@@ -133,11 +133,6 @@ public class SqlException extends Exception implements Sinkable {
         return this;
     }
 
-    public SqlException put(double value) {
-        message.put(value);
-        return this;
-    }
-
     public SqlException put(Sinkable sinkable) {
         message.put(sinkable);
         return this;

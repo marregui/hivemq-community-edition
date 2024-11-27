@@ -31,7 +31,6 @@ public class Unsafe {
                 throw new InstantiationException("failed to initialize class definer");
             }
             anonymousClassDefiner = classDefiner;
-
         } catch (ReflectiveOperationException e) {
             throw new ExceptionInInitializerError(e);
         }

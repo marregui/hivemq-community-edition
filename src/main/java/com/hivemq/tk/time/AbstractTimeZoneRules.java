@@ -88,7 +88,6 @@ public abstract class AbstractTimeZoneRules implements TimeZoneRules {
         }
 
         if (ruleCount > 0 && utcEpoch > cutoffTransition) {
-            // offset from rules
             int offsetBefore;
             int offsetAfter = 0;
 
@@ -131,7 +130,7 @@ public abstract class AbstractTimeZoneRules implements TimeZoneRules {
                         break;
                 }
 
-                // go back to epoch epoch
+                // go back to epoch
                 date -= offsetBefore * multiplier;
 
                 if (utcEpoch < date) {

@@ -16,6 +16,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import com.hivemq.tk.ds.SOCountDownLatch;
 
+import static com.hivemq.tk.Files.pause;
+
 public class PathTest {
 
     @Rule
@@ -29,7 +31,7 @@ public class PathTest {
 
     @After
     public void tearDown() {
-        path = Misc.free(path);
+        path = Files.free(path);
     }
 
     @Test
@@ -492,13 +494,6 @@ public class PathTest {
                 deadline -= t2 - t;
                 t = t2;
             }
-        }
-    }
-
-    public static void pause() {
-        try {
-            Thread.sleep(0);
-        } catch (InterruptedException ignore) {
         }
     }
 

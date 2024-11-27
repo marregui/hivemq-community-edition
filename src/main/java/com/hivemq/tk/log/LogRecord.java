@@ -42,9 +42,9 @@ public interface LogRecord extends Utf8Sink {
         $(']').$();
     }
 
-    boolean isEnabled();
-
     LogRecord ts();
 
     LogRecord utf8(@Nullable CharSequence sequence);
+
+    LogRecord $utf8(long lo, long hi);
 }

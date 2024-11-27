@@ -236,11 +236,6 @@ abstract class AbstractLogRecord implements LogRecord, Log {
     }
 
     @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @Override
     public LogRecord put(char c) {
         sink().put(c);
         return this;
@@ -281,6 +276,12 @@ abstract class AbstractLogRecord implements LogRecord, Log {
     }
 
     @Override
+    public LogRecord $utf8(long lo, long hi) {
+        sink().putNonAscii(lo, hi);
+        return this;
+    }
+
+    @Override
     public LogRecord xDebugW() {
         return nextWaiting(debugSeq, debugRing, LogLevel.DEBUG);
     }
@@ -315,7 +316,7 @@ abstract class AbstractLogRecord implements LogRecord, Log {
                 sink.putAscii("(Unknown Source)");
             }
         }
-        sink.put(Misc.EOL);
+        sink.put(Files.EOL);
     }
 
     private static void put(

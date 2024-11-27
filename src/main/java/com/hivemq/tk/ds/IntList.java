@@ -183,7 +183,7 @@ public class IntList implements Mutable, Sinkable {
 
     @Override
     public String toString() {
-        Utf16Sink b = Misc.getThreadLocalSink();
+        Utf16Sink b = Files.getThreadLocalSink();
         toSink(b);
         return b.toString();
     }

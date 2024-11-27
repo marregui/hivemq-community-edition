@@ -322,7 +322,7 @@ public class GenericLexer implements ImmutableIterator<CharSequence> {
         @NotNull
         @Override
         public String toString() {
-            final Utf16Sink b = Misc.getThreadLocalSink();
+            final Utf16Sink b = Files.getThreadLocalSink();
             b.put(cs0);
             if (sep != NO_SEPARATOR) {
                 b.put(sep);

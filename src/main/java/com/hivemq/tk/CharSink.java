@@ -3,8 +3,6 @@ package com.hivemq.tk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.text.SimpleDateFormat;
-
 @SuppressWarnings("unchecked")
 public interface CharSink<T extends CharSink<?>> {
 
@@ -109,7 +107,7 @@ public interface CharSink<T extends CharSink<?>> {
     }
 
     default T putEOL() {
-        return putAscii(Misc.EOL);
+        return putAscii(Files.EOL);
     }
 
     default T putISODate(long micros) {

@@ -899,7 +899,7 @@ public final class Chars {
             return "";
         }
 
-        final Utf16Sink b = Misc.getThreadLocalSink();
+        final Utf16Sink b = Files.getThreadLocalSink();
         for (int i = 0; i < len; i++) {
             b.put(toLowerCaseAscii(value.charAt(i)));
         }
@@ -958,13 +958,13 @@ public final class Chars {
     }
 
     public static String toString(CharSequence cs, int start, int end) {
-        final Utf16Sink b = Misc.getThreadLocalSink();
+        final Utf16Sink b = Files.getThreadLocalSink();
         b.put(cs, start, end);
         return b.toString();
     }
 
     public static String toString(@NotNull CharSequence cs, int start, int end, char unescape) {
-        final Utf16Sink b = Misc.getThreadLocalSink();
+        final Utf16Sink b = Files.getThreadLocalSink();
         final int lastChar = end - 1;
         for (int i = start; i < end; i++) {
             char c = cs.charAt(i);

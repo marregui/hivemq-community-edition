@@ -14,7 +14,7 @@ public class ThreadLocal<T> extends java.lang.ThreadLocal<T> implements Closeabl
 
     @Override
     public void close() {
-        Misc.freeIfCloseable(super.get());
+        Files.freeIfCloseable(super.get());
         remove();
     }
 

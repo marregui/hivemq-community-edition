@@ -4,7 +4,9 @@ import com.hivemq.tk.ds.LongHashSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Closeable;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -14,6 +16,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class Files {
     public static final char SLASH = File.separatorChar;
+    public static final @NotNull String EOL = "\r\n";
+    public static final int EOL_LENGTH = EOL.length();
     private static final long MICROS_IN_SECOND = 1_000_000;
     private static final @NotNull DateTimeFormatter DT_FORMAT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS'Z'").withZone(ZoneId.of("UTC"));
@@ -21,14 +25,14 @@ public final class Files {
     private static final @NotNull AtomicInteger UNIQUE_FD = new AtomicInteger();
     private static final @NotNull LongHashSet openFds = new LongHashSet();
     private static final @NotNull AtomicBoolean inited = new AtomicBoolean();
+    private static final @NotNull ThreadLocal<StringSink> tlSink = new ThreadLocal(StringSink::new);
 
     static {
         init();
     }
 
     public static @NotNull String microsToStr(final long micros) {
-        return DT_FORMAT.format(Instant.ofEpochSecond(micros / MICROS_IN_SECOND,
-                (micros % MICROS_IN_SECOND) * 1_000));
+        return DT_FORMAT.format(Instant.ofEpochSecond(micros / MICROS_IN_SECOND, (micros % MICROS_IN_SECOND) * 1_000));
     }
 
     static void init() {
@@ -161,6 +165,28 @@ public final class Files {
         return write(osFd(fd), address, len, offset);
     }
 
+    public static void pause() {
+        try {
+            Thread.sleep(0);
+        } catch (InterruptedException ignore) {
+        }
+    }
+
+    public static void sleep(final long millis) {
+        long t = System.currentTimeMillis();
+        long deadline = millis;
+        while (deadline > 0) {
+            try {
+                Thread.sleep(deadline);
+                break;
+            } catch (final @NotNull InterruptedException e) {
+                final long t2 = System.currentTimeMillis();
+                deadline -= t2 - t;
+                t = t2;
+            }
+        }
+    }
+
     public native static long append(int fd, long address, long len);
 
     public native static int close0(int fd);
@@ -194,4 +220,33 @@ public final class Files {
     public native static long write(int fd, long address, long len, long offset);
 
     public static native long currentTimeMicros();
+
+    public static <T extends Closeable> @Nullable T free(final @Nullable T object) {
+        if (object != null) {
+            try {
+                object.close();
+            } catch (final IOException e) {
+                throw new Error(e);
+            }
+        }
+        return null;
+    }
+
+    // same as free() but can be used when input object type is not guaranteed to be Closeable
+    public static <T> @Nullable T freeIfCloseable(final @Nullable T object) {
+        if (object instanceof Closeable) {
+            try {
+                ((Closeable) object).close();
+            } catch (final IOException e) {
+                throw new Error(e);
+            }
+        }
+        return null;
+    }
+
+    public static @NotNull StringSink getThreadLocalSink() {
+        final StringSink b = tlSink.get();
+        b.clear();
+        return b;
+    }
 }

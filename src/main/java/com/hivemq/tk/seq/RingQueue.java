@@ -1,9 +1,6 @@
 package com.hivemq.tk.seq;
 
-import com.hivemq.tk.DirectObjectFactory;
-import com.hivemq.tk.Misc;
-import com.hivemq.tk.Numbers;
-import com.hivemq.tk.Unsafe;
+import com.hivemq.tk.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,7 +57,7 @@ public class RingQueue<T> implements Closeable {
     @Override
     public void close() {
         for (int i = 0, n = buf.length; i < n; i++) {
-            buf[i] = Misc.freeIfCloseable(buf[i]);
+            buf[i] = Files.freeIfCloseable(buf[i]);
         }
         if (memory != 0) {
             memory = Unsafe.free(memory);

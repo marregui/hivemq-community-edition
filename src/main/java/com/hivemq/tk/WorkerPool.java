@@ -44,7 +44,7 @@ public class WorkerPool implements Closeable {
     private static <T extends Closeable> void freeObjListAndClear(final @Nullable ObjList<T> list) {
         if (list != null) {
             for (int i = 0, n = list.size(); i < n; i++) {
-                Misc.free(list.getQuick(i));
+                Files.free(list.getQuick(i));
             }
             list.clear();
         }

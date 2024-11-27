@@ -12,7 +12,7 @@ final class NullLogRecord implements LogRecord {
 
     public static final NullLogRecord INSTANCE = new NullLogRecord();
 
-    private NullLogRecord() {
+    NullLogRecord() {
     }
 
     @Override
@@ -85,11 +85,6 @@ final class NullLogRecord implements LogRecord {
     }
 
     @Override
-    public boolean isEnabled() {
-        return false;
-    }
-
-    @Override
     public Utf8Sink put(@Nullable NativeChunk us) {
         return this;
     }
@@ -116,6 +111,11 @@ final class NullLogRecord implements LogRecord {
 
     @Override
     public LogRecord utf8(@Nullable CharSequence sequence) {
+        return this;
+    }
+
+    @Override
+    public LogRecord $utf8(final long lo, final long hi) {
         return this;
     }
 }

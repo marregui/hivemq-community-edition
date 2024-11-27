@@ -2,13 +2,9 @@
 
 package com.hivemq.tk.seq;
 
+import static com.hivemq.tk.Files.pause;
+
 public class YieldingWaitStrategy extends AbstractWaitStrategy {
-    public static void pause() {
-        try {
-            Thread.sleep(0);
-        } catch (InterruptedException ignore) {
-        }
-    }
 
     @Override
     public boolean acceptSignal() {

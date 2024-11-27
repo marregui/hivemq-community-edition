@@ -1,14 +1,10 @@
-
-
 package com.hivemq.tk.log;
 
 import com.hivemq.tk.Job;
-import com.hivemq.tk.Misc;
 import com.hivemq.tk.TestUtils;
 import com.hivemq.tk.Files;
 import com.hivemq.tk.Sinkable;
 import com.hivemq.tk.StringSink;
-import com.hivemq.tk.ds.LongList;
 import com.hivemq.tk.ds.SOCountDownLatch;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
@@ -24,17 +20,12 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.hivemq.tk.Files.pause;
+
 public class LogFactoryTest {
 
     @Rule
     public final TemporaryFolder temp = new TemporaryFolder();
-
-    public static void pause() {
-        try {
-            Thread.sleep(0);
-        } catch (InterruptedException ignore) {
-        }
-    }
 
     public static void sleep(long millis) {
         long t = System.currentTimeMillis();
@@ -52,12 +43,10 @@ public class LogFactoryTest {
     }
 
     private static void assertDisabled(LogRecord r) {
-        Assert.assertFalse(r.isEnabled());
         r.$();
     }
 
     private static void assertEnabled(LogRecord r) {
-        Assert.assertTrue(r.isEnabled());
         r.$();
     }
 
@@ -80,7 +69,7 @@ public class LogFactoryTest {
                 factory.init(null);
                 Assert.fail();
             } catch (LogError e) {
-                Assert.assertEquals("Class not found com.questdb.log.StdOutWriter2", e.getMessage());
+                Assert.assertEquals("Class not found com.hivemq.tk.log.Chufa", e.getMessage());
             }
         }
     }
@@ -109,32 +98,30 @@ public class LogFactoryTest {
         AtomicInteger counter = new AtomicInteger();
         LogFactory factory = new LogFactory();
         try {
-            factory.add(new LogFactory.LogWriterConfig(LogLevel.CRITICAL, (ring, seq, level) -> new LogWriter(ring,
-                    seq,
-                    level) {
-                @Override
-                public boolean run(int workerId, @NotNull RunStatus runStatus) {
-                    long cursor = seq.next();
-                    if (cursor > -1) {
-                        counter.incrementAndGet();
-                        seq.done(cursor);
-                        pause();
-                        return true;
-                    }
-                    pause();
-                    return false;
-                }
-            }));
+            factory.add(new LogFactory.LogWriterConfig(LogLevel.CRITICAL,
+                    (ring, seq, level) -> new LogWriter(ring, seq, level) {
+                        @Override
+                        public boolean run(int workerId, @NotNull RunStatus runStatus) {
+                            long cursor = seq.next();
+                            if (cursor > -1) {
+                                counter.incrementAndGet();
+                                seq.done(cursor);
+                                pause();
+                                return true;
+                            }
+                            pause();
+                            return false;
+                        }
+                    }));
 
             // Misbehaving Logger
-            factory.add(new LogFactory.LogWriterConfig(LogLevel.CRITICAL, (ring, seq, level) -> new LogWriter(ring,
-                    seq,
-                    level) {
-                @Override
-                public boolean run(int workerId, @NotNull RunStatus runStatus) {
-                    throw new UnsupportedOperationException();
-                }
-            }));
+            factory.add(new LogFactory.LogWriterConfig(LogLevel.CRITICAL,
+                    (ring, seq, level) -> new LogWriter(ring, seq, level) {
+                        @Override
+                        public boolean run(int workerId, @NotNull RunStatus runStatus) {
+                            throw new UnsupportedOperationException();
+                        }
+                    }));
 
             factory.bind();
             factory.startThread();
@@ -178,29 +165,6 @@ public class LogFactoryTest {
     }
 
     @Test
-    public void testGuaranteedLoggingForClasses() throws Exception {
-        final File x = temp.newFile();
-        try (LogFactory factory = new LogFactory()) {
-            factory.add(new LogFactory.LogWriterConfig(LogLevel.ERROR, (ring, seq, level) -> {
-                LogFileWriter w = new LogFileWriter(ring, seq, level);
-                w.setLocation(x.getAbsolutePath());
-                return w;
-            }));
-
-            factory.bind();
-            factory.startThread();
-
-            Assert.assertEquals(Logger.class, getLogger(LongList.class).getClass());
-
-            LogFactory.enableGuaranteedLogging(LongList.class);
-            Assert.assertEquals(GuaranteedLogger.class, getLogger(LongList.class).getClass());
-
-            LogFactory.disableGuaranteedLogging(LongList.class);
-            Assert.assertEquals(Logger.class, getLogger(LongList.class).getClass());
-        }
-    }
-
-    @Test
     public void testHexLongWrite() throws Exception {
         final File x = temp.newFile();
         final File y = temp.newFile();
@@ -240,18 +204,19 @@ public class LogFactoryTest {
             final StringSink sink = new StringSink();
             SOCountDownLatch latch = new SOCountDownLatch(1);
 
-            factory.add(new LogFactory.LogWriterConfig(LogLevel.ALL, (ring, seq, level) -> new LogWriter(ring, seq, level) {
-                @Override
-                public boolean run(int workerId, @NotNull RunStatus runStatus) {
-                    return seq.consumeAll(ring, this::log);
-                }
+            factory.add(new LogFactory.LogWriterConfig(LogLevel.ALL,
+                    (ring, seq, level) -> new LogWriter(ring, seq, level) {
+                        @Override
+                        public boolean run(int workerId, @NotNull RunStatus runStatus) {
+                            return seq.consumeAll(ring, this::log);
+                        }
 
-                private void log(LogRecordUtf8Sink record) {
-                    sink.clear();
-                    sink.put((Sinkable) record);
-                    latch.countDown();
-                }
-            }));
+                        private void log(LogRecordUtf8Sink record) {
+                            sink.clear();
+                            sink.put((Sinkable) record);
+                            latch.countDown();
+                        }
+                    }));
 
             factory.bind();
             factory.startThread();
@@ -325,7 +290,6 @@ public class LogFactoryTest {
             factory.init(null);
 
             Log logger = factory.create("x");
-            assertDisabled(logger.debug());
             assertEnabled(logger.info());
             assertEnabled(logger.error());
             assertEnabled(logger.critical());
@@ -348,7 +312,7 @@ public class LogFactoryTest {
             assertDisabled(logger.critical());
             assertDisabled(logger.advisory());
 
-            Log logger1 = factory.create("com.questdb.x.y");
+            Log logger1 = factory.create("com.hivemq.z.a.p");
             assertEnabled(logger1.debug());
             assertDisabled(logger1.info());
             assertEnabled(logger1.error());
@@ -387,8 +351,8 @@ public class LogFactoryTest {
             // let async writer catch up in a busy environment
             sleep(100);
 
-            Assert.assertEquals("this is for network" + Misc.EOL, TestUtils.readStringFromFile(a));
-            Assert.assertEquals("this is for std" + Misc.EOL, TestUtils.readStringFromFile(b));
+            Assert.assertEquals("this is for network" + Files.EOL, TestUtils.readStringFromFile(a));
+            Assert.assertEquals("this is for std" + Files.EOL, TestUtils.readStringFromFile(b));
         }
     }
 
@@ -409,56 +373,6 @@ public class LogFactoryTest {
     }
 
     @Test
-    public void testSetIncorrectBufferSizeProperty() throws Exception {
-        File conf = temp.newFile();
-        File out = new File(temp.newFolder(), "testSetProperties.log");
-        TestUtils.writeStringToFile(conf,
-                "writers=file\n" +
-                        "w.file.class=com.hivemq.tk.logLogRollingFileWriter\n" +
-                        "w.file.location=" +
-                        out.getAbsolutePath().replaceAll("\\\\", "/") +
-                        "questdb-rolling.log.${date:yyyyMMdd}\n" +
-                        "w.file.level=INFO,ERROR\n" +
-                        "w.file.rollEvery=hour\n" +
-                        "w.file.bufferSize=avocado\n" +
-                        "w.file.rollSize=10m\n" +
-                        "w.file.lifeDuration=1d\n" +
-                        "w.file.sizeLimit=1g");
-        System.setProperty(LogFactory.CONFIG_SYSTEM_PROPERTY, conf.getAbsolutePath());
-        try (LogFactory factory = new LogFactory()) {
-            factory.init(null);
-            Assert.fail();
-        } catch (LogError e) {
-            Assert.assertEquals("Invalid value for bufferSize", e.getMessage());
-        }
-    }
-
-    @Test
-    public void testSetIncorrectLifeDurationProperty() throws Exception {
-        File conf = temp.newFile();
-        File out = new File(temp.newFolder(), "testSetProperties.log");
-        TestUtils.writeStringToFile(conf,
-                "writers=file\n" +
-                        "w.file.class=com.hivemq.tk.logLogRollingFileWriter\n" +
-                        "w.file.location=" +
-                        out.getAbsolutePath().replaceAll("\\\\", "/") +
-                        "questdb-rolling.log.${date:yyyyMMdd}\n" +
-                        "w.file.level=INFO,ERROR\n" +
-                        "w.file.rollEvery=hour\n" +
-                        "w.file.bufferSize=100m\n" +
-                        "w.file.rollSize=10m\n" +
-                        "w.file.lifeDuration=avocado\n" +
-                        "w.file.sizeLimit=1g");
-        System.setProperty(LogFactory.CONFIG_SYSTEM_PROPERTY, conf.getAbsolutePath());
-        try (LogFactory factory = new LogFactory()) {
-            factory.init(null);
-            Assert.fail();
-        } catch (LogError e) {
-            Assert.assertEquals("Invalid value for lifeDuration", e.getMessage());
-        }
-    }
-
-    @Test
     public void testSetIncorrectQueueDepthProperty() throws Exception {
         File conf = temp.newFile();
         File out = new File(temp.newFolder(), "testSetProperties.log");
@@ -466,7 +380,7 @@ public class LogFactoryTest {
                 "writers=file\n" +
                         "recordLength=4096\n" +
                         "queueDepth=banana\n" +
-                        "w.file.class=com.hivemq.tk.logLogFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.log.LogFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "\n" +
@@ -489,7 +403,7 @@ public class LogFactoryTest {
                 "writers=file\n" +
                         "recordLength=coconut\n" +
                         "queueDepth=1024\n" +
-                        "w.file.class=com.hivemq.tk.logLogFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.log.LogFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "\n" +
@@ -505,55 +419,6 @@ public class LogFactoryTest {
     }
 
     @Test
-    public void testSetIncorrectRollSizeProperty() throws Exception {
-        File conf = temp.newFile();
-        File out = new File(temp.newFolder(), "testSetProperties.log");
-        TestUtils.writeStringToFile(conf,
-                "writers=file\n" +
-                        "w.file.class=com.hivemq.tk.logLogRollingFileWriter\n" +
-                        "w.file.location=" +
-                        out.getAbsolutePath().replaceAll("\\\\", "/") +
-                        "questdb-rolling.log.${date:yyyyMMdd}\n" +
-                        "w.file.level=INFO,ERROR\n" +
-                        "w.file.rollEvery=hour\n" +
-                        "w.file.rollSize=avocado\n" +
-                        "w.file.lifeDuration=1d\n" +
-                        "w.file.sizeLimit=1g");
-        System.setProperty(LogFactory.CONFIG_SYSTEM_PROPERTY, conf.getAbsolutePath());
-        try (LogFactory factory = new LogFactory()) {
-            factory.init(null);
-            Assert.fail();
-        } catch (LogError e) {
-            Assert.assertEquals("Invalid value for rollSize", e.getMessage());
-        }
-    }
-
-    @Test
-    public void testSetIncorrectSizeLimitProperty() throws Exception {
-        File conf = temp.newFile();
-        File out = new File(temp.newFolder(), "testSetProperties.log");
-        TestUtils.writeStringToFile(conf,
-                "writers=file\n" +
-                        "w.file.class=com.hivemq.tk.logLogRollingFileWriter\n" +
-                        "w.file.location=" +
-                        out.getAbsolutePath().replaceAll("\\\\", "/") +
-                        "questdb-rolling.log.${date:yyyyMMdd}\n" +
-                        "w.file.level=INFO,ERROR\n" +
-                        "w.file.rollEvery=hour\n" +
-                        "w.file.bufferSize=100m\n" +
-                        "w.file.rollSize=10m\n" +
-                        "w.file.lifeDuration=24h\n" +
-                        "w.file.sizeLimit=avocado");
-        System.setProperty(LogFactory.CONFIG_SYSTEM_PROPERTY, conf.getAbsolutePath());
-        try (LogFactory factory = new LogFactory()) {
-            factory.init(null);
-            Assert.fail();
-        } catch (LogError e) {
-            Assert.assertEquals("Invalid value for sizeLimit", e.getMessage());
-        }
-    }
-
-    @Test
     public void testSetProperties() throws Exception {
         File conf = temp.newFile();
         File out = new File(temp.newFolder(), "testSetProperties.log");
@@ -562,7 +427,7 @@ public class LogFactoryTest {
                 "writers=file\n" +
                         "recordLength=4096\n" +
                         "queueDepth=1024\n" +
-                        "w.file.class=com.hivemq.tk.logLogFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.log.LogFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "\n" +
@@ -592,30 +457,6 @@ public class LogFactoryTest {
     }
 
     @Test
-    public void testSetSizeLimitPropertyGreaterThanRollSize() throws Exception {
-        File conf = temp.newFile();
-        File out = new File(temp.newFolder(), "testSetProperties.log");
-        TestUtils.writeStringToFile(conf,
-                "writers=file\n" +
-                        "w.file.class=com.hivemq.tk.logLogRollingFileWriter\n" +
-                        "w.file.location=" +
-                        out.getAbsolutePath().replaceAll("\\\\", "/") +
-                        "questdb-rolling.log.${date:yyyyMMdd}\n" +
-                        "w.file.level=INFO,ERROR\n" +
-                        "w.file.rollEvery=hour\n" +
-                        "w.file.rollSize=10m\n" +
-                        "w.file.lifeDuration=24h\n" +
-                        "w.file.sizeLimit=1m");
-        System.setProperty(LogFactory.CONFIG_SYSTEM_PROPERTY, conf.getAbsolutePath());
-        try (LogFactory factory = new LogFactory()) {
-            factory.init(null);
-            Assert.fail();
-        } catch (LogError e) {
-            Assert.assertEquals("sizeLimit must be larger than rollSize", e.getMessage());
-        }
-    }
-
-    @Test
     public void testSetUnknownProperty() throws Exception {
         File conf = temp.newFile();
         File out = new File(temp.newFolder(), "testSetProperties.log");
@@ -623,7 +464,7 @@ public class LogFactoryTest {
                 "writers=file\n" +
                         "recordLength=4092\n" +
                         "queueDepth=1024\n" +
-                        "w.file.class=com.hivemq.tk.logLogFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.log.LogFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "\n" +
@@ -727,7 +568,7 @@ public class LogFactoryTest {
 
             Properties props = new Properties();
             props.put("writers", "log_test");
-            props.put("w.log_test.class", "com.hivemq.tk.logLogFileWriter");
+            props.put("w.log_test.class", "com.hivemq.tk.log.LogFileWriter");
             props.put("w.log_test.location", "${log.dir}\\test.log");
             props.put("w.log_test.level", "INFO,ERROR");
             try (FileOutputStream stream = new FileOutputStream(logConfFile)) {

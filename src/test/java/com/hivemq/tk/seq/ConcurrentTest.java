@@ -23,6 +23,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.hivemq.tk.Files.pause;
+
 public class ConcurrentTest {
     private final static Log LOG = LogFactory.getLog(ConcurrentTest.class);
 
@@ -30,13 +32,6 @@ public class ConcurrentTest {
         long cursor = sequence.nextBully();
         queue.get(cursor).value = Integer.MIN_VALUE;
         sequence.done(cursor);
-    }
-
-    public static void pause() {
-        try {
-            Thread.sleep(0);
-        } catch (InterruptedException ignore) {
-        }
     }
 
     @Test

@@ -6,9 +6,10 @@ import com.hivemq.tk.log.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.hivemq.tk.Files.pause;
 
 public class Worker extends Thread {
     private final @NotNull String criticalErrorLine;
@@ -104,9 +105,9 @@ public class Worker extends Thread {
                         ticker = sleepThreshold + 1; // overflow
                     }
                     if (ticker > sleepThreshold) {
-                        sleep(sleepMs);
+                        Files.sleep(sleepMs);
                     } else if (ticker > 10) {
-                        sleep();
+                        pause();
                     }
                 }
             }
@@ -116,7 +117,7 @@ public class Worker extends Thread {
         } finally {
             if (onHaltAction != null) {
                 try {
-                    onHaltAction.run(Objects.requireNonNull(ex));
+                    onHaltAction.run(ex);
                     if (log != null) {
                         log.info().$("cleaned worker [name=").$(poolName).$(", worker=").$(workerId).I$();
                     }
@@ -127,28 +128,6 @@ public class Worker extends Thread {
             haltLatch.countDown();
             if (log != null) {
                 log.info().$("os scheduled worker stopped [name=").$(getName()).I$();
-            }
-        }
-    }
-
-    private static void sleep() {
-        try {
-            Thread.sleep(0);
-        } catch (final @NotNull InterruptedException ignore) {
-        }
-    }
-
-    public static void sleep(final long millis) {
-        long t = System.currentTimeMillis();
-        long deadline = millis;
-        while (deadline > 0) {
-            try {
-                Thread.sleep(deadline);
-                break;
-            } catch (final @NotNull InterruptedException e) {
-                final long t2 = System.currentTimeMillis();
-                deadline -= t2 - t;
-                t = t2;
             }
         }
     }

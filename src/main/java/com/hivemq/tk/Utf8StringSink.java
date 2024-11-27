@@ -43,6 +43,11 @@ public class Utf8StringSink implements MutableUtf8Sink {
         this.ascii = true;
     }
 
+    public void resetCapacity() {
+        this.buffer = new byte[initialCapacity];
+        clear();
+    }
+
     @TestOnly
     public long getCapacity() {
         return buffer.length;

@@ -107,7 +107,7 @@ JNIEXPORT void JNICALL Java_com_hivemq_tk_Files_memcpy0
  * Method:    openAppend
  * Signature: (J)I
  */
-JNIEXPORT jint JNICALL Java_io_questdb_std_Files_openAppend
+JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_openAppend
         (JNIEnv *e, jclass cl, jlong lpszName);
 
 /*

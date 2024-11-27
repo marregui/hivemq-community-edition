@@ -60,5 +60,4 @@ public final class GuaranteedLogger extends AbstractLogRecord {
     public LogRecord xinfo() {
         return xInfoW();
     }
-
 }

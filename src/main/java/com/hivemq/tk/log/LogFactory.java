@@ -340,11 +340,11 @@ public class LogFactory implements Closeable {
                         }
                     }
                 } finally {
-                    Misc.freeIfCloseable(job);
+                    Files.freeIfCloseable(job);
                 }
             }
             for (int i = 0, n = scopeConfigs.size(); i < n; i++) {
-                Misc.free(scopeConfigs.getQuick(i));
+                Files.free(scopeConfigs.getQuick(i));
             }
         }
     }
@@ -644,7 +644,7 @@ public class LogFactory implements Closeable {
 
     private static class DeferredLogger implements Log {
 
-        private static final NoOpLogRecord noOpRecord = new NoOpLogRecord();
+        private static final NullLogRecord noOpRecord = new NullLogRecord();
 
         private final String key;
         private Log delegate;
@@ -799,7 +799,7 @@ public class LogFactory implements Closeable {
 
         @Override
         public void close() {
-            Misc.free(ring);
+            Files.free(ring);
         }
     }
 
@@ -819,112 +819,6 @@ public class LogFactory implements Closeable {
         }
     }
 
-    private static class NoOpLogRecord implements LogRecord {
-
-        @Override
-        public void $() {
-        }
-
-        @Override
-        public LogRecord $(@Nullable CharSequence sequence) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $(@Nullable NativeChunk sequence) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $(@NotNull CharSequence sequence, int lo, int hi) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $(int x) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $(long l) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $(boolean x) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $(char c) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $(@Nullable Throwable e) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $(@Nullable File x) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $(@Nullable Object x) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $(@Nullable Sinkable x) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $hex(long value) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $ts(long x) {
-            return this;
-        }
-
-        @Override
-        public boolean isEnabled() {
-            return false;
-        }
-
-        @Override
-        public LogRecord put(@Nullable NativeChunk us) {
-            return this;
-        }
-
-        @Override
-        public LogRecord put(byte b) {
-            return this;
-        }
-
-        @Override
-        public LogRecord put(char c) {
-            return this;
-        }
-
-        @Override
-        public LogRecord putNonAscii(long lo, long hi) {
-            return this;
-        }
-
-        @Override
-        public LogRecord ts() {
-            return this;
-        }
-
-        @Override
-        public LogRecord utf8(@Nullable CharSequence sequence) {
-            return this;
-        }
-    }
 
     private static class ScopeConfiguration implements Closeable {
         private final int[] channels;
@@ -987,7 +881,7 @@ public class LogFactory implements Closeable {
         @Override
         public void close() {
             for (int i = 0, n = holderList.size(); i < n; i++) {
-                Misc.free(holderList.getQuick(i));
+                Files.free(holderList.getQuick(i));
             }
         }
 

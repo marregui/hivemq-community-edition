@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class LogRecordUtf8Sink implements Utf8Sink, NativeChunk, Sinkable, Mutable {
-    public static final int EOL_LENGTH = Misc.EOL.length();
     private final static int UTF8_BYTE_CLASS_BAD = -1;
     private final static int UTF8_BYTE_CLASS_CONTINUATION = 0;
     protected final long address;
@@ -48,7 +47,7 @@ public class LogRecordUtf8Sink implements Utf8Sink, NativeChunk, Sinkable, Mutab
     @Override
     public Utf8Sink put(@Nullable NativeChunk us) {
         if (us != null) {
-            final int rem = (int) (lim - _wptr - EOL_LENGTH);
+            final int rem = (int) (lim - _wptr - Files.EOL_LENGTH);
             final int size = us.size();
             if (rem >= size) {
                 // Common case where the buffer fits the available space.
@@ -79,7 +78,7 @@ public class LogRecordUtf8Sink implements Utf8Sink, NativeChunk, Sinkable, Mutab
 
     @Override
     public Utf8Sink put(byte b) {
-        final long left = lim - _wptr - EOL_LENGTH;
+        final long left = lim - _wptr - Files.EOL_LENGTH;
         if (left >= 4) { // 4 is the maximum byte length for a UTF-8 character.
             Unsafe.UNSAFE.putByte(_wptr++, b);
             return this;
@@ -124,16 +123,16 @@ public class LogRecordUtf8Sink implements Utf8Sink, NativeChunk, Sinkable, Mutab
     @Override
     public Utf8Sink putEOL() {
         int rem = (int) (lim - _wptr);
-        int len = Misc.EOL.length();
+        int len = Files.EOL.length();
         int n = Math.min(rem, len);
-        Utf8s.strCpyAscii(Misc.EOL, n, _wptr);
+        Utf8s.strCpyAscii(Files.EOL, n, _wptr);
         _wptr += n;
         return this;
     }
 
     @Override
     public Utf8Sink putNonAscii(long lo, long hi) {
-        final long rem = (lim - _wptr - EOL_LENGTH);
+        final long rem = (lim - _wptr - Files.EOL_LENGTH);
         final long size = hi - lo;
         if (rem >= size) {
             // Common case where the buffer fits the available space.

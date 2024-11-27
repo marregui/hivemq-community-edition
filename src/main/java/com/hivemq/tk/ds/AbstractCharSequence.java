@@ -1,15 +1,12 @@
 package com.hivemq.tk.ds;
 
-import com.hivemq.tk.Chars;
-import com.hivemq.tk.CloneableMutable;
-import com.hivemq.tk.Misc;
-import com.hivemq.tk.Utf16Sink;
+import com.hivemq.tk.*;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractCharSequence implements CharSequence, CloneableMutable {
 
     public static String getString(CharSequence cs) {
-        final Utf16Sink b = Misc.getThreadLocalSink();
+        final Utf16Sink b = Files.getThreadLocalSink();
         b.put(cs);
         return b.toString();
     }

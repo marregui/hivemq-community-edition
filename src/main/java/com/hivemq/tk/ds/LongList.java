@@ -334,7 +334,7 @@ public class LongList implements Mutable, Sinkable, LongVec {
      */
     @Override
     public String toString() {
-        final Utf16Sink sb = Misc.getThreadLocalSink();
+        final Utf16Sink sb = Files.getThreadLocalSink();
         toSink(sb);
         return sb.toString();
     }

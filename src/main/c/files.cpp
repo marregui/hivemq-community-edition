@@ -66,7 +66,7 @@ JNIEXPORT void JNICALL Java_com_hivemq_tk_Files_memcpy0
     memcpy((void *)dst, (void *)src, (size_t)len);
 }
 
-JNIEXPORT jint JNICALL Java_io_questdb_std_Files_openAppend
+JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_openAppend
         (JNIEnv *e, jclass cl, jlong lpszName) {
     umask(0);
     return open((const char *) lpszName, O_CREAT | O_WRONLY | O_APPEND, 0644);

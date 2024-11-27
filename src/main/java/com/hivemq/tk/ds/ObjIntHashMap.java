@@ -39,6 +39,10 @@ public class ObjIntHashMap<K> implements Iterable<ObjIntHashMap.Entry<K>>, Mutab
         clear();
     }
 
+    public int capacity() {
+        return capacity;
+    }
+
     @Override
     public final void clear() {
         if (free != capacity) {
@@ -77,12 +81,35 @@ public class ObjIntHashMap<K> implements Iterable<ObjIntHashMap.Entry<K>>, Mutab
         putAt(keyIndex(key), key, value);
     }
 
+    public void putAll(ObjIntHashMap<K> other) {
+        K[] otherKeys = other.keys;
+        int[] otherValues = other.values;
+        for (int i = 0, n = otherKeys.length; i < n; i++) {
+            if (otherKeys[i] != noEntryValue) {
+                put(otherKeys[i], otherValues[i]);
+            }
+        }
+    }
+
     public void putAt(int index, K key, int value) {
         if (index < 0) {
             values[-index - 1] = value;
             return;
         }
         putAt0(index, key, value);
+    }
+
+    public boolean putIfAbsent(K key, int value) {
+        final int index = keyIndex(key);
+        if (index > -1) {
+            putAt(index, key, value);
+            return true;
+        }
+        return false;
+    }
+
+    public int size() {
+        return capacity - free;
     }
 
     public int valueAt(int index) {
@@ -150,7 +177,9 @@ public class ObjIntHashMap<K> implements Iterable<ObjIntHashMap.Entry<K>>, Mutab
 
         @Override
         public Entry<K> next() {
-            index++;
+            entry.key = keys[index];
+            int index1 = index++;
+            entry.value = values[index1];
             return entry;
         }
 

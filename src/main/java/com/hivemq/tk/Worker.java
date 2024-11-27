@@ -3,7 +3,6 @@ package com.hivemq.tk;
 import com.hivemq.tk.ds.ObjHashSet;
 import com.hivemq.tk.ds.SOCountDownLatch;
 import com.hivemq.tk.log.Log;
-import com.hivemq.tk.time.Timestamps;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,7 +75,7 @@ public class Worker extends Thread {
                 while (lifecycle.get() == Lifecycle.RUNNING) {
                     boolean runAsap = false;
                     // measure latency of all jobs tick
-                    jobStartMicros.lazySet(Timestamps.currentTimeMicros());
+                    jobStartMicros.lazySet(Files.currentTimeMicros());
                     for (int i = 0, n = jobs.size(); i < n; i++) {
                         Unsafe.UNSAFE.loadFence();
                         try {

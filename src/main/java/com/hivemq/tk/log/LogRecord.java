@@ -34,29 +34,15 @@ public interface LogRecord extends Utf8Sink {
 
     LogRecord $(@Nullable Sinkable x);
 
-    LogRecord $256(long a, long b, long c, long d);
-
     LogRecord $hex(long value);
 
-    LogRecord $hexPadded(long value);
-
-    LogRecord $ip(long ip);
-
-    LogRecord $substr(int from, @Nullable NativeChunk sequence);
-
     LogRecord $ts(long x);
-
-    LogRecord $utf8(long lo, long hi);
-
-    LogRecord $uuid(long lo, long hi);
 
     default void I$() {
         $(']').$();
     }
 
     boolean isEnabled();
-
-    LogRecord microTime(long x);
 
     LogRecord ts();
 

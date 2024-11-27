@@ -30,11 +30,6 @@ final class NullLogRecord implements LogRecord {
     }
 
     @Override
-    public LogRecord $substr(int from, @Nullable NativeChunk sequence) {
-        return this;
-    }
-
-    @Override
     public LogRecord $(@NotNull CharSequence sequence, int lo, int hi) {
         return this;
     }
@@ -75,17 +70,7 @@ final class NullLogRecord implements LogRecord {
     }
 
     @Override
-    public LogRecord $uuid(long lo, long hi) {
-        return this;
-    }
-
-    @Override
     public LogRecord $(@Nullable Sinkable x) {
-        return this;
-    }
-
-    @Override
-    public LogRecord $256(long a, long b, long c, long d) {
         return this;
     }
 
@@ -95,33 +80,13 @@ final class NullLogRecord implements LogRecord {
     }
 
     @Override
-    public LogRecord $hexPadded(long value) {
-        return this;
-    }
-
-    @Override
-    public LogRecord $ip(long ip) {
-        return this;
-    }
-
-    @Override
     public LogRecord $ts(long x) {
-        return this;
-    }
-
-    @Override
-    public LogRecord $utf8(long lo, long hi) {
         return this;
     }
 
     @Override
     public boolean isEnabled() {
         return false;
-    }
-
-    @Override
-    public LogRecord microTime(long x) {
-        return this;
     }
 
     @Override

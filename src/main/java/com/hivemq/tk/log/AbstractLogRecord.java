@@ -4,8 +4,6 @@ import com.hivemq.tk.*;
 import com.hivemq.tk.ds.ObjHashSet;
 import com.hivemq.tk.seq.RingQueue;
 import com.hivemq.tk.seq.Seq;
-import com.hivemq.tk.time.TimestampFormatUtils;
-import com.hivemq.tk.time.Timestamps;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -184,59 +182,14 @@ abstract class AbstractLogRecord implements LogRecord, Log {
     }
 
     @Override
-    public LogRecord $256(long a, long b, long c, long d) {
-        return this;
-    }
-
-    @Override
     public LogRecord $hex(long value) {
         Numbers.appendHex(sink(), value, false);
         return this;
     }
 
     @Override
-    public LogRecord $hexPadded(long value) {
-        Numbers.appendHex(sink(), value, true);
-        return this;
-    }
-
-    @Override
-    public LogRecord $ip(long ip) {
-        return this;
-    }
-
-    @Override
-    public LogRecord $substr(int from, @Nullable NativeChunk sequence) {
-        if (sequence == null) {
-            sink().putAscii("null");
-        } else {
-            if (from > -1 && sequence.size() > from) {
-                sink().putNonAscii(sequence.lo() + from, sequence.hi());
-            } else {
-                sink()
-                        .put("WTF? substr? [from:").put(from)
-                        .put(", sequence=").put(sequence)
-                        .put(", size=").put(sequence.size())
-                        .put(']');
-            }
-        }
-        return this;
-    }
-
-    @Override
     public LogRecord $ts(long x) {
         sink().putISODate(x);
-        return this;
-    }
-
-    @Override
-    public LogRecord $utf8(long lo, long hi) {
-        sink().putNonAscii(lo, hi);
-        return this;
-    }
-
-    @Override
-    public LogRecord $uuid(long lo, long hi) {
         return this;
     }
 
@@ -288,12 +241,6 @@ abstract class AbstractLogRecord implements LogRecord, Log {
     }
 
     @Override
-    public LogRecord microTime(long x) {
-        TimestampFormatUtils.appendDateTimeUSec(sink(), x);
-        return this;
-    }
-
-    @Override
     public LogRecord put(char c) {
         sink().put(c);
         return this;
@@ -319,7 +266,7 @@ abstract class AbstractLogRecord implements LogRecord, Log {
 
     @Override
     public LogRecord ts() {
-        sink().putISODate(Timestamps.currentTimeMicros());
+        sink().putISODate(Files.currentTimeMicros());
         return this;
     }
 

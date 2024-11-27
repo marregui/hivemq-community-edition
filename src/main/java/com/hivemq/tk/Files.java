@@ -6,11 +6,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.net.URL;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class Files {
     public static final char SLASH = File.separatorChar;
+    private static final long MICROS_IN_SECOND = 1_000_000;
+    private static final @NotNull DateTimeFormatter DT_FORMAT =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS'Z'").withZone(ZoneId.of("UTC"));
     private static final @NotNull AtomicInteger OPEN_FILE_COUNT = new AtomicInteger();
     private static final @NotNull AtomicInteger UNIQUE_FD = new AtomicInteger();
     private static final @NotNull LongHashSet openFds = new LongHashSet();
@@ -18,6 +24,11 @@ public final class Files {
 
     static {
         init();
+    }
+
+    public static @NotNull String microsToStr(final long micros) {
+        return DT_FORMAT.format(Instant.ofEpochSecond(micros / MICROS_IN_SECOND,
+                (micros % MICROS_IN_SECOND) * 1_000));
     }
 
     static void init() {
@@ -181,4 +192,6 @@ public final class Files {
     public native static boolean truncate(int fd, long size);
 
     public native static long write(int fd, long address, long len, long offset);
+
+    public static native long currentTimeMicros();
 }

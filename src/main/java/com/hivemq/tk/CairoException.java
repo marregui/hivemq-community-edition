@@ -1,6 +1,5 @@
 package com.hivemq.tk;
 
-import com.hivemq.tk.time.TimestampFormatUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -249,11 +248,6 @@ public class CairoException extends RuntimeException implements Sinkable {
     @Override
     public void toSink(@NotNull CharSink<?> sink) {
         sink.putAscii('[').put(errno).putAscii("]: ").put(message);
-    }
-
-    public CairoException ts(long timestamp) {
-        TimestampFormatUtils.appendDateTime(message, timestamp);
-        return this;
     }
 
     private static CairoException instance(int errno) {

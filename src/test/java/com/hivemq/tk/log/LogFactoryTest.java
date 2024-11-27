@@ -414,7 +414,7 @@ public class LogFactoryTest {
         File out = new File(temp.newFolder(), "testSetProperties.log");
         TestUtils.writeStringToFile(conf,
                 "writers=file\n" +
-                        "w.file.class=io.questdb.log.LogRollingFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.logLogRollingFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "questdb-rolling.log.${date:yyyyMMdd}\n" +
@@ -439,7 +439,7 @@ public class LogFactoryTest {
         File out = new File(temp.newFolder(), "testSetProperties.log");
         TestUtils.writeStringToFile(conf,
                 "writers=file\n" +
-                        "w.file.class=io.questdb.log.LogRollingFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.logLogRollingFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "questdb-rolling.log.${date:yyyyMMdd}\n" +
@@ -466,7 +466,7 @@ public class LogFactoryTest {
                 "writers=file\n" +
                         "recordLength=4096\n" +
                         "queueDepth=banana\n" +
-                        "w.file.class=io.questdb.log.LogFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.logLogFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "\n" +
@@ -489,7 +489,7 @@ public class LogFactoryTest {
                 "writers=file\n" +
                         "recordLength=coconut\n" +
                         "queueDepth=1024\n" +
-                        "w.file.class=io.questdb.log.LogFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.logLogFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "\n" +
@@ -510,7 +510,7 @@ public class LogFactoryTest {
         File out = new File(temp.newFolder(), "testSetProperties.log");
         TestUtils.writeStringToFile(conf,
                 "writers=file\n" +
-                        "w.file.class=io.questdb.log.LogRollingFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.logLogRollingFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "questdb-rolling.log.${date:yyyyMMdd}\n" +
@@ -534,7 +534,7 @@ public class LogFactoryTest {
         File out = new File(temp.newFolder(), "testSetProperties.log");
         TestUtils.writeStringToFile(conf,
                 "writers=file\n" +
-                        "w.file.class=io.questdb.log.LogRollingFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.logLogRollingFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "questdb-rolling.log.${date:yyyyMMdd}\n" +
@@ -562,7 +562,7 @@ public class LogFactoryTest {
                 "writers=file\n" +
                         "recordLength=4096\n" +
                         "queueDepth=1024\n" +
-                        "w.file.class=io.questdb.log.LogFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.logLogFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "\n" +
@@ -597,7 +597,7 @@ public class LogFactoryTest {
         File out = new File(temp.newFolder(), "testSetProperties.log");
         TestUtils.writeStringToFile(conf,
                 "writers=file\n" +
-                        "w.file.class=io.questdb.log.LogRollingFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.logLogRollingFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "questdb-rolling.log.${date:yyyyMMdd}\n" +
@@ -623,7 +623,7 @@ public class LogFactoryTest {
                 "writers=file\n" +
                         "recordLength=4092\n" +
                         "queueDepth=1024\n" +
-                        "w.file.class=io.questdb.log.LogFileWriter\n" +
+                        "w.file.class=com.hivemq.tk.logLogFileWriter\n" +
                         "w.file.location=" +
                         out.getAbsolutePath().replaceAll("\\\\", "/") +
                         "\n" +
@@ -727,7 +727,7 @@ public class LogFactoryTest {
 
             Properties props = new Properties();
             props.put("writers", "log_test");
-            props.put("w.log_test.class", "io.questdb.log.LogFileWriter");
+            props.put("w.log_test.class", "com.hivemq.tk.logLogFileWriter");
             props.put("w.log_test.location", "${log.dir}\\test.log");
             props.put("w.log_test.level", "INFO,ERROR");
             try (FileOutputStream stream = new FileOutputStream(logConfFile)) {

@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/file.h>
+#include <sys/time.h>
 #include <string.h>
 
 #ifndef _Included_com_questdb_std_Files
@@ -36,6 +37,13 @@ JNIEXPORT jlong JNICALL Java_com_hivemq_tk_Files_append
 JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_close0
         (JNIEnv *e, jclass cl, jint fd);
 
+/*
+ * Class:     com_hivemq_tk_Files
+ * Method:    currentTimeMicros
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_com_hivemq_tk_Files_currentTimeMicros
+        (JNIEnv *, jclass);
 
 /*
  * Class:     com_hivemq_tk_Files

@@ -12,6 +12,13 @@ JNIEXPORT jint JNICALL Java_com_hivemq_tk_Files_close0
     return close((int) fd);
 }
 
+JNIEXPORT jlong JNICALL Java_com_hivemq_tk_Files_currentTimeMicros
+        (JNIEnv *, jclass) {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return tv.tv_sec * 1000000 + tv.tv_usec;
+}
+
 JNIEXPORT jboolean JNICALL Java_com_hivemq_tk_Files_exists
         (JNIEnv *e, jclass cl, jint fd) {
     struct stat st;

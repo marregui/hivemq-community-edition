@@ -122,7 +122,7 @@ public final class TestUtils {
     @NotNull
     public static Rnd generateRandom(final @Nullable Log log, final long s0, final long s1) {
         if (log != null) {
-            log.info().$("random seeds: ").$(s0).$("L, ").$(s1).$('L').$();
+//            log.info().$("random seeds: ").$(s0).$("L, ").$(s1).$('L').$();
         }
         System.out.printf("random seeds: %dL, %dL%n", s0, s1);
         Rnd rnd = new Rnd(s0, s1);

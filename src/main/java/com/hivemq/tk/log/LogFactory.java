@@ -881,27 +881,7 @@ public class LogFactory implements Closeable {
         }
 
         @Override
-        public LogRecord $256(long a, long b, long c, long d) {
-            return this;
-        }
-
-        @Override
         public LogRecord $hex(long value) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $hexPadded(long value) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $ip(long ip) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $substr(int from, @Nullable NativeChunk sequence) {
             return this;
         }
 
@@ -911,23 +891,8 @@ public class LogFactory implements Closeable {
         }
 
         @Override
-        public LogRecord $utf8(long lo, long hi) {
-            return this;
-        }
-
-        @Override
-        public LogRecord $uuid(long lo, long hi) {
-            return this;
-        }
-
-        @Override
         public boolean isEnabled() {
             return false;
-        }
-
-        @Override
-        public LogRecord microTime(long x) {
-            return this;
         }
 
         @Override

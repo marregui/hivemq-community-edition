@@ -1,8 +1,9 @@
 package com.hivemq.tk;
 
-import com.hivemq.tk.time.TimestampFormatUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.text.SimpleDateFormat;
 
 @SuppressWarnings("unchecked")
 public interface CharSink<T extends CharSink<?>> {
@@ -111,10 +112,11 @@ public interface CharSink<T extends CharSink<?>> {
         return putAscii(Misc.EOL);
     }
 
-    default T putISODate(long value) {
-        TimestampFormatUtils.appendDateTimeUSec(this, value);
+    default T putISODate(long micros) {
+        putAscii(Files.microsToStr(micros));
         return (T) this;
     }
+    //"yyyy-MM-ddTHH:mm:ss.SSSUUUz";
 
     /**
      * Accepts a range of memory addresses from lo to hi (exclusive), expecting it to

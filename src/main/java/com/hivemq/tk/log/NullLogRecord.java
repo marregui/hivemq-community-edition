@@ -1,8 +1,8 @@
 package com.hivemq.tk.log;
 
-import com.hivemq.tk.NativeChunk;
-import com.hivemq.tk.Sinkable;
-import com.hivemq.tk.Utf8Sink;
+import com.hivemq.tk.str.NativeChunk;
+import com.hivemq.tk.str.Sinkable;
+import com.hivemq.tk.str.Utf8Sink;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,16 +71,6 @@ final class NullLogRecord implements LogRecord {
 
     @Override
     public LogRecord $(@Nullable Sinkable x) {
-        return this;
-    }
-
-    @Override
-    public LogRecord $hex(long value) {
-        return this;
-    }
-
-    @Override
-    public LogRecord $ts(long x) {
         return this;
     }
 

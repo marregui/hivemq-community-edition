@@ -1,6 +1,8 @@
 package com.hivemq.tk;
 
 import com.hivemq.tk.ds.LongHashSet;
+import com.hivemq.tk.str.NativeChunk;
+import com.hivemq.tk.str.StringSink;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

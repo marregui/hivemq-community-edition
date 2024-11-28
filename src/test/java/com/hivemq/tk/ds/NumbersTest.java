@@ -5,14 +5,12 @@ package com.hivemq.tk.ds;
 import com.hivemq.tk.Numbers;
 import com.hivemq.tk.NumericException;
 import com.hivemq.tk.Rnd;
-import com.hivemq.tk.StringSink;
+import com.hivemq.tk.str.StringSink;
 import com.hivemq.tk.TestUtils;
-import com.hivemq.tk.Utf8String;
+import com.hivemq.tk.str.Utf8String;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Random;
 
 public class NumbersTest {
     private StringSink sink;

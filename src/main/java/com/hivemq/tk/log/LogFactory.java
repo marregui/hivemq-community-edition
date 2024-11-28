@@ -7,6 +7,8 @@ import com.hivemq.tk.seq.MultiProducerSeq;
 import com.hivemq.tk.seq.RingQueue;
 import com.hivemq.tk.seq.SingleConsumerSeq;
 import com.hivemq.tk.seq.Seq;
+import com.hivemq.tk.str.Chars;
+import com.hivemq.tk.str.StringSink;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
@@ -801,9 +803,11 @@ public class LogFactory implements Closeable {
         public void close() {
             Files.free(ring);
         }
+
     }
 
     private static class LengthDescendingComparator implements Comparator<CharSequence>, Serializable {
+
         @Override
         public int compare(CharSequence o1, CharSequence o2) {
             int l1, l2;

@@ -1,4 +1,4 @@
-package com.hivemq.tk;
+package com.hivemq.tk.ds;
 
 import org.jetbrains.annotations.NotNull;
 

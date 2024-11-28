@@ -1,8 +1,8 @@
 package com.hivemq.tk.log;
 
-import com.hivemq.tk.NativeChunk;
-import com.hivemq.tk.Sinkable;
-import com.hivemq.tk.Utf8Sink;
+import com.hivemq.tk.str.NativeChunk;
+import com.hivemq.tk.str.Sinkable;
+import com.hivemq.tk.str.Utf8Sink;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,10 +33,6 @@ public interface LogRecord extends Utf8Sink {
     LogRecord $(@Nullable Object x);
 
     LogRecord $(@Nullable Sinkable x);
-
-    LogRecord $hex(long value);
-
-    LogRecord $ts(long x);
 
     default void I$() {
         $(']').$();

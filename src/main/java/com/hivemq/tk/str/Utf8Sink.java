@@ -1,4 +1,4 @@
-package com.hivemq.tk;
+package com.hivemq.tk.str;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -69,13 +69,6 @@ public interface Utf8Sink extends CharSink<Utf8Sink> {
 
     default @NotNull Utf8Sink putAny(final byte b) {
         return put(b);
-    }
-
-    default @NotNull Utf8Sink putAny(final NativeChunk seq, final int lo, final int hi) {
-        for (int i = lo; i < hi; i++) {
-            putAny(seq.byteAt(i));
-        }
-        return this;
     }
 
     @Override

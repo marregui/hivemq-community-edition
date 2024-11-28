@@ -1,9 +1,11 @@
-package com.hivemq.tk;
+package com.hivemq.tk.str;
 
+import com.hivemq.tk.ThreadLocal;
+import com.hivemq.tk.Unsafe;
 import org.jetbrains.annotations.NotNull;
 
 public final class Utf8s {
-    private static final ThreadLocal<StringSink> tlSink = new ThreadLocal(StringSink::new);
+    private static final com.hivemq.tk.ThreadLocal<StringSink> tlSink = new ThreadLocal(StringSink::new);
 
     public static int encodeUtf16Char(@NotNull Utf8Sink sink, @NotNull CharSequence cs, int hi, int i, char c) {
         if (c < 2048) {
@@ -72,12 +74,6 @@ public final class Utf8s {
         return (char) (b1 << 12 ^ b2 << 6 ^ b3 ^ -123008);
     }
 
-    /**
-     * Decodes bytes between lo,hi addresses into sink.
-     * Note: operation might fail in the middle and leave sink in inconsistent state.
-     *
-     * @return true if input is proper UTF-8 and false otherwise.
-     */
     public static boolean utf8ToUtf16(long lo, long hi, @NotNull Utf16Sink sink) {
         long p = lo;
         while (p < hi) {
@@ -97,16 +93,6 @@ public final class Utf8s {
         return true;
     }
 
-    /**
-     * Decodes bytes from the given UTF-8 sink into char sink.
-     * Note: operation might fail in the middle and leave sink in inconsistent state.
-     *
-     * @param seq   input sequence
-     * @param seqLo character bytes start in input sequence
-     * @param seqHi character bytes end in input sequence (exclusive)
-     * @param sink  destination sink
-     * @return true if input is proper UTF-8 and false otherwise.
-     */
     public static boolean utf8ToUtf16(final @NotNull NativeChunk seq, int seqLo, int seqHi, @NotNull Utf16Sink sink) {
         int i = seqLo;
         while (i < seqHi) {
@@ -126,12 +112,6 @@ public final class Utf8s {
         return true;
     }
 
-    /**
-     * Decodes bytes from the given UTF-8 sink into char sink.
-     * Note: operation might fail in the middle and leave sink in inconsistent state.
-     *
-     * @return true if input is proper UTF-8 and false otherwise.
-     */
     public static boolean utf8ToUtf16(final @NotNull NativeChunk seq, @NotNull Utf16Sink sink) {
         return utf8ToUtf16(seq, 0, seq.size(), sink);
     }

@@ -1,6 +1,9 @@
 package com.hivemq.tk.ds;
 
 import com.hivemq.tk.*;
+import com.hivemq.tk.str.Chars;
+import com.hivemq.tk.str.CloneableMutable;
+import com.hivemq.tk.str.Utf16Sink;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractCharSequence implements CharSequence, CloneableMutable {

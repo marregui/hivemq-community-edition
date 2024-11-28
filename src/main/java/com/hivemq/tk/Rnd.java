@@ -1,5 +1,7 @@
 package com.hivemq.tk;
 
+import com.hivemq.tk.str.*;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -122,12 +124,6 @@ public class Rnd {
         }
     }
 
-    public void nextChars(final long address, int len) {
-        for (int i = 0; i < len; i++) {
-            Unsafe.UNSAFE.putChar(address + i * 2L, nextChar());
-        }
-    }
-
     public boolean nextBoolean() {
         return nextLong() >>> (64 - 1) != 0;
     }
@@ -168,11 +164,6 @@ public class Rnd {
 
     public final void reset() {
         reset(0xdeadbeef, 0xdee4c0ed);
-    }
-
-    public void syncWith(Rnd other) {
-        this.s0 = other.s0;
-        this.s1 = other.s1;
     }
 
     private byte nextUtf8Byte(int wipe, int set) {

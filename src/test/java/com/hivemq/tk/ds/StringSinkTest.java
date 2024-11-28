@@ -2,9 +2,9 @@
 
 package com.hivemq.tk.ds;
 
-import com.hivemq.tk.StringSink;
+import com.hivemq.tk.str.StringSink;
 import com.hivemq.tk.TestUtils;
-import com.hivemq.tk.Utf8StringSink;
+import com.hivemq.tk.str.Utf8StringSink;
 import org.junit.Assert;
 import org.junit.Test;
 

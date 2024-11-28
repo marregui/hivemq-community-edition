@@ -1,9 +1,9 @@
-package com.hivemq.tk;
+package com.hivemq.tk.str;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class StringSink implements MutableUtf16Sink, CharSequence, CloneableMutable, Utf16Sink {
+public class StringSink implements Utf16Sink, CharSequence, Mutable, CloneableMutable {
 
     private char[] buffer;
     private int pos;
@@ -137,7 +137,6 @@ public class StringSink implements MutableUtf16Sink, CharSequence, CloneableMuta
         return new String(buffer, lo, hi - lo);
     }
 
-    /* Either IDEA or FireBug complain, annotation galore */
     @NotNull
     @Override
     public String toString() {

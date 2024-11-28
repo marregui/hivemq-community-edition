@@ -1,4 +1,4 @@
-package com.hivemq.tk;
+package com.hivemq.tk.str;
 
 public interface BinarySequence {
 

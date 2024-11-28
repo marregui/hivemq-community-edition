@@ -1,6 +1,6 @@
 package com.hivemq.tk.log;
 
-import com.hivemq.tk.Chars;
+import com.hivemq.tk.str.Chars;
 import com.hivemq.tk.Files;
 import com.hivemq.tk.Job;
 import com.hivemq.tk.NumericException;

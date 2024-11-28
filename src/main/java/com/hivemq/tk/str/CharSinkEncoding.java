@@ -1,4 +1,4 @@
-package com.hivemq.tk;
+package com.hivemq.tk.str;
 
 public final class CharSinkEncoding {
     public static final int UTF16 = 16;

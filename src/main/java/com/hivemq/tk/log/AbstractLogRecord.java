@@ -4,6 +4,9 @@ import com.hivemq.tk.*;
 import com.hivemq.tk.ds.ObjHashSet;
 import com.hivemq.tk.seq.RingQueue;
 import com.hivemq.tk.seq.Seq;
+import com.hivemq.tk.str.NativeChunk;
+import com.hivemq.tk.str.Sinkable;
+import com.hivemq.tk.str.Utf8Sink;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -179,18 +182,6 @@ abstract class AbstractLogRecord implements LogRecord, Log {
         sink().putEOL();
         Holder h = tl.get();
         h.seq.done(h.cursor);
-    }
-
-    @Override
-    public LogRecord $hex(long value) {
-        Numbers.appendHex(sink(), value, false);
-        return this;
-    }
-
-    @Override
-    public LogRecord $ts(long x) {
-        sink().putISODate(x);
-        return this;
     }
 
     public LogRecord advisory() {

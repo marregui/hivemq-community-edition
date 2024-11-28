@@ -1,5 +1,6 @@
-package com.hivemq.tk;
+package com.hivemq.tk.str;
 
+import com.hivemq.tk.Unsafe;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,24 +62,11 @@ public interface Utf16Sink extends CharSink<Utf16Sink> {
         }
     }
 
-    /**
-     * UTF16 sink stores ASCII character just like any other, as 16bit representation.
-     *
-     * @param c ascii character to write out.
-     * @return this sink for daisy-chaining
-     */
     @Override
     default Utf16Sink putAscii(char c) {
         return put(c);
     }
 
-    /**
-     * UTF16 sink does not make any special provisions for ASCII string. It will be stored just like any
-     * other UTF16 encoded string.
-     *
-     * @param cs UTF16 encoded ASCII string
-     * @return this sink for daisy-chaining
-     */
     @Override
     default Utf16Sink putAscii(@Nullable CharSequence cs) {
         return put(cs);

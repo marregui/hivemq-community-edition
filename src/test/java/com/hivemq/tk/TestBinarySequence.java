@@ -25,6 +25,8 @@
 package com.hivemq.tk;
 
 
+import com.hivemq.tk.str.BinarySequence;
+
 public class TestBinarySequence implements BinarySequence {
     private byte[] array;
 

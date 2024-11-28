@@ -35,8 +35,8 @@ package com.hivemq.tk.ds;
  * http://creativecommons.org/publicdomain/zero/1.0/
  */
 
-import com.hivemq.tk.Chars;
-import com.hivemq.tk.CloneableMutable;
+import com.hivemq.tk.str.Chars;
+import com.hivemq.tk.str.CloneableMutable;
 import com.hivemq.tk.Unsafe;
 import org.jetbrains.annotations.NotNull;
 

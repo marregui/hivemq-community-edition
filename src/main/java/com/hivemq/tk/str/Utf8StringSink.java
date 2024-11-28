@@ -1,5 +1,6 @@
-package com.hivemq.tk;
+package com.hivemq.tk.str;
 
+import com.hivemq.tk.Unsafe;
 import com.hivemq.util.Bytes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

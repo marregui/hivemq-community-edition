@@ -24,6 +24,8 @@
 
 package com.hivemq.tk;
 
+import com.hivemq.tk.str.StringSink;
+import com.hivemq.tk.str.Utf8StringSink;
 import org.junit.Assert;
 import org.junit.Test;
 

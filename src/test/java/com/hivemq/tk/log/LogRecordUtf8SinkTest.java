@@ -24,11 +24,11 @@
 
 package com.hivemq.tk.log;
 
-import com.hivemq.tk.StringSink;
+import com.hivemq.tk.str.StringSink;
 import com.hivemq.tk.TestUtils;
 import com.hivemq.tk.Files;
 import com.hivemq.tk.Unsafe;
-import com.hivemq.tk.Utf8String;
+import com.hivemq.tk.str.Utf8String;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

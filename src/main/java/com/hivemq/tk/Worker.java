@@ -59,18 +59,6 @@ public class Worker extends Thread {
                 if (log != null) {
                     log.info().$("os scheduled worker started [name=").$(workerName).I$();
                 }
-                // setup eager jobs
-                for (int i = 0, n = jobs.size(); i < n; i++) {
-                    Unsafe.UNSAFE.loadFence();
-                    try {
-                        final Job job = jobs.get(i);
-                        if (job instanceof EagerThreadSetup) {
-                            ((EagerThreadSetup) job).setup();
-                        }
-                    } finally {
-                        Unsafe.UNSAFE.storeFence();
-                    }
-                }
                 // enter main loop
                 long ticker = 0L;
                 while (lifecycle.get() == Lifecycle.RUNNING) {

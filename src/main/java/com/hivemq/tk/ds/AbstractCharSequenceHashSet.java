@@ -1,7 +1,7 @@
 package com.hivemq.tk.ds;
 
-import com.hivemq.tk.Chars;
-import com.hivemq.tk.Mutable;
+import com.hivemq.tk.str.Chars;
+import com.hivemq.tk.str.Mutable;
 import com.hivemq.tk.Numbers;
 import org.jetbrains.annotations.NotNull;
 

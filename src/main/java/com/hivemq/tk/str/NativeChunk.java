@@ -1,5 +1,6 @@
-package com.hivemq.tk;
+package com.hivemq.tk.str;
 
+import com.hivemq.tk.Unsafe;
 import org.jetbrains.annotations.NotNull;
 
 public interface NativeChunk {

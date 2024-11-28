@@ -1,18 +1,17 @@
-package com.hivemq.tk;
+package com.hivemq.tk.str;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * A view on top of an ASCII-only {@link NativeChunk}.
- */
+
 public class AsciiCharSequence implements CharSequence {
-    private int len;
-    private NativeChunk original;
+    private @NotNull NativeChunk original;
     private int start;
-    private AsciiCharSequence subSequence;
+    private int len;
+    private @Nullable AsciiCharSequence subSequence;
 
     @Override
-    public char charAt(int i) {
+    public char charAt(final int i) {
         return (char) original.byteAt(i + start);
     }
 
@@ -21,14 +20,14 @@ public class AsciiCharSequence implements CharSequence {
         return len;
     }
 
-    public AsciiCharSequence of(NativeChunk original) {
+    public @NotNull AsciiCharSequence of(final @NotNull NativeChunk original) {
         this.original = original;
         this.start = 0;
         this.len = original.size();
         return this;
     }
 
-    public AsciiCharSequence of(NativeChunk original, int start, int len) {
+    public @NotNull AsciiCharSequence of(final @NotNull NativeChunk original, final int start, final int len) {
         this.original = original;
         this.start = start;
         this.len = len;
@@ -36,7 +35,7 @@ public class AsciiCharSequence implements CharSequence {
     }
 
     @Override
-    public @NotNull CharSequence subSequence(int start, int end) {
+    public @NotNull CharSequence subSequence(final int start, final int end) {
         if (subSequence == null) {
             subSequence = new AsciiCharSequence();
         }

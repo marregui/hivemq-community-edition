@@ -1,9 +1,9 @@
 package com.hivemq.tk.ds;
 
-import com.hivemq.tk.CharSink;
-import com.hivemq.tk.Chars;
+import com.hivemq.tk.str.CharSink;
+import com.hivemq.tk.str.Chars;
 import com.hivemq.tk.Numbers;
-import com.hivemq.tk.Sinkable;
+import com.hivemq.tk.str.Sinkable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,12 +1,9 @@
-package com.hivemq.tk;
+package com.hivemq.tk.str;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
 
-/**
- * An immutable on-heap sequence of UTF-8 bytes.
- */
 public class Utf8String implements NativeChunk {
     public static final Utf8String EMPTY = new Utf8String("");
     private final boolean ascii;
@@ -21,16 +18,6 @@ public class Utf8String implements NativeChunk {
     public Utf8String(@NotNull String str) {
         this.bytes = str.getBytes(StandardCharsets.UTF_8);
         this.ascii = (str.length() == bytes.length);
-    }
-
-    public Utf8String(char ch) {
-        this.bytes = String.valueOf(ch).getBytes(StandardCharsets.UTF_8);
-        this.ascii = (bytes.length == 1);
-    }
-
-    public Utf8String(@NotNull CharSequence seq) {
-        this.bytes = seq.toString().getBytes(StandardCharsets.UTF_8);
-        this.ascii = (seq.length() == bytes.length);
     }
 
     public static Utf8String newInstance(@NotNull NativeChunk src) {
@@ -49,10 +36,6 @@ public class Utf8String implements NativeChunk {
     @Override
     public byte byteAt(int index) {
         return bytes[index];
-    }
-
-    public int intAt(int index) {
-        return Unsafe.byteArrayGetInt(bytes, index);
     }
 
     @Override

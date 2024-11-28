@@ -2,6 +2,9 @@
 
 package com.hivemq.tk;
 
+import com.hivemq.tk.str.Chars;
+import com.hivemq.tk.str.Utf8String;
+import com.hivemq.tk.str.Utf8s;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 

@@ -8,7 +8,7 @@ import java.io.Closeable;
 import java.util.function.Supplier;
 
 public class RingQueue<T> implements Closeable {
-    private final @Nullable T@NotNull [] buf;
+    private final @Nullable T @NotNull [] buf;
     private final int mask;
     private long memory;
     private long memorySize;
@@ -71,5 +71,10 @@ public class RingQueue<T> implements Closeable {
 
     public int getCycle() {
         return buf.length;
+    }
+
+    @FunctionalInterface
+    public interface DirectObjectFactory<T> {
+        T newInstance(final long address, long addressSize);
     }
 }

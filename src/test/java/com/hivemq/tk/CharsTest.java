@@ -25,6 +25,9 @@
 package com.hivemq.tk;
 
 
+import com.hivemq.tk.str.Chars;
+import com.hivemq.tk.str.StringSink;
+import com.hivemq.tk.str.Utf8StringSink;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -145,8 +148,8 @@ public class CharsTest {
         buffer.clear();
         try {
             Chars.base64UrlDecode("a", buffer);
-        } catch (CairoException e) {
-            TestUtils.assertContains(e.getFlyweightMessage(), "invalid base64 encoding");
+        } catch (IllegalArgumentException e) {
+            TestUtils.assertContains(e.getMessage(), "invalid base64 encoding");
         }
 
         // empty string with padding
@@ -160,8 +163,8 @@ public class CharsTest {
         try {
             Chars.base64UrlDecode("a\u00A0", buffer);
             Assert.fail();
-        } catch (CairoException e) {
-            TestUtils.assertContains(e.getFlyweightMessage(), "non-ascii character while decoding base64");
+        } catch (IllegalArgumentException e) {
+            TestUtils.assertContains(e.getMessage(), "non-ascii character while decoding base64");
         }
 
         // ascii but not base64
@@ -169,8 +172,8 @@ public class CharsTest {
         try {
             Chars.base64UrlDecode("a\u0001", buffer);
             Assert.fail();
-        } catch (CairoException e) {
-            TestUtils.assertContains(e.getFlyweightMessage(), "invalid base64 character [ch=\u0001]");
+        } catch (IllegalArgumentException e) {
+            TestUtils.assertContains(e.getMessage(), "invalid base64 character: \u0001");
         }
 
         // random part
@@ -217,8 +220,8 @@ public class CharsTest {
         sink.clear();
         try {
             Chars.base64UrlDecode("a", sink);
-        } catch (CairoException e) {
-            TestUtils.assertContains(e.getFlyweightMessage(), "invalid base64 encoding");
+        } catch (IllegalArgumentException e) {
+            TestUtils.assertContains(e.getMessage(), "invalid base64 encoding");
         }
 
         // empty string with padding
@@ -231,8 +234,8 @@ public class CharsTest {
         try {
             Chars.base64UrlDecode("a\u00A0", sink);
             Assert.fail();
-        } catch (CairoException e) {
-            TestUtils.assertContains(e.getFlyweightMessage(), "non-ascii character while decoding base64");
+        } catch (IllegalArgumentException e) {
+            TestUtils.assertContains(e.getMessage(), "non-ascii character while decoding base64");
         }
 
         // ascii but not base64
@@ -240,8 +243,8 @@ public class CharsTest {
         try {
             Chars.base64UrlDecode("a\u0001", sink);
             Assert.fail();
-        } catch (CairoException e) {
-            TestUtils.assertContains(e.getFlyweightMessage(), "invalid base64 character [ch=\u0001]");
+        } catch (IllegalArgumentException e) {
+            TestUtils.assertContains(e.getMessage(), "invalid base64 character: \u0001");
         }
     }
 

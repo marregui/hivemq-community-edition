@@ -2,6 +2,7 @@
 
 package com.hivemq.tk;
 
+import com.hivemq.tk.str.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -441,5 +442,4 @@ public class Path implements Utf8Sink, NativeChunk, Closeable {
     static {
         Files.init();
     }
-
 }

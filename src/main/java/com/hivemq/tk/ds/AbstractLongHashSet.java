@@ -2,7 +2,7 @@
 
 package com.hivemq.tk.ds;
 
-import com.hivemq.tk.Mutable;
+import com.hivemq.tk.str.Mutable;
 import com.hivemq.tk.Numbers;
 
 import java.util.Arrays;

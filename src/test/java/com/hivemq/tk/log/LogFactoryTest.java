@@ -3,8 +3,8 @@ package com.hivemq.tk.log;
 import com.hivemq.tk.Job;
 import com.hivemq.tk.TestUtils;
 import com.hivemq.tk.Files;
-import com.hivemq.tk.Sinkable;
-import com.hivemq.tk.StringSink;
+import com.hivemq.tk.str.Sinkable;
+import com.hivemq.tk.str.StringSink;
 import com.hivemq.tk.ds.SOCountDownLatch;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
@@ -161,40 +161,6 @@ public class LogFactoryTest {
 
             final Log logger2 = factory.create("x");
             Assert.assertEquals(Logger.class, logger2.getClass());
-        }
-    }
-
-    @Test
-    public void testHexLongWrite() throws Exception {
-        final File x = temp.newFile();
-        final File y = temp.newFile();
-
-        try (LogFactory factory = new LogFactory()) {
-
-            factory.add(new LogFactory.LogWriterConfig(LogLevel.INFO | LogLevel.DEBUG, (ring, seq, level) -> {
-                LogFileWriter w = new LogFileWriter(ring, seq, level);
-                w.setLocation(x.getAbsolutePath());
-                return w;
-            }));
-
-            factory.add(new LogFactory.LogWriterConfig(LogLevel.DEBUG | LogLevel.ERROR, (ring, seq, level) -> {
-                LogFileWriter w = new LogFileWriter(ring, seq, level);
-                w.setLocation(y.getAbsolutePath());
-                return w;
-            }));
-
-            factory.bind();
-            factory.startThread();
-
-            Log logger = factory.create("x");
-            for (int i = 0; i < 64; i++) {
-                logger.xerror().$("test ").$hex(i).$();
-            }
-
-            sleep(100);
-
-            Assert.assertEquals(0, x.length());
-            Assert.assertEquals(576, y.length());
         }
     }
 

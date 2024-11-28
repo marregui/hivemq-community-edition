@@ -1,6 +1,10 @@
 package com.hivemq.tk.ds;
 
 import com.hivemq.tk.*;
+import com.hivemq.tk.str.CharSink;
+import com.hivemq.tk.str.Mutable;
+import com.hivemq.tk.str.Sinkable;
+import com.hivemq.tk.str.Utf16Sink;
 import org.jetbrains.annotations.NotNull;
 
 public class IntList implements Mutable, Sinkable {
